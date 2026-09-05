@@ -5,25 +5,50 @@ import path from "node:path";
 import { test } from "node:test";
 
 import { buildAnchorReplacementPlan } from "../src/arsu-converter/anchors/match.js";
-import { ARSU_RUNTIME_POLICY_CATALOG, FORBIDDEN_ACTIVE_GUIDANCE } from "../src/arsu-converter/runtime-policy/catalog.js";
+import { ARSU_RUNTIME_POLICY_CATALOG, FORBIDDEN_ACTIVE_GUIDANCE, RUNTIME_POLICY_SOURCE_COMMIT } from "../src/arsu-converter/runtime-policy/catalog.js";
 import { buildRuntimePolicyPlan } from "../src/arsu-converter/runtime-policy/planner.js";
 import { validateCombinedRewritePlan } from "../src/arsu-converter/source-rewrite.js";
 import { ArsuConverterError } from "../src/arsu-converter/types.js";
 
-const COMMIT = "828ef3b613b0e8b91830da3328a1e33d4eb5ab4c";
+const COMMIT = RUNTIME_POLICY_SOURCE_COMMIT;
 
-void test("runtime-policy catalog completely classifies ARS v3.19.0", async () => {
+void test("runtime-policy catalog completely classifies ARS v3.21.1", async () => {
   const sourceRoot = path.resolve("vendor/ars");
   const plan = await buildRuntimePolicyPlan(process.cwd(), sourceRoot, COMMIT);
   const anchors = await buildAnchorReplacementPlan(process.cwd(), sourceRoot, COMMIT);
 
-  assert.equal(plan.classified_source_count, 33);
+  assert.equal(plan.classified_source_count, 41);
   assert.equal(plan.adapted_source_count + plan.retained_source_count, plan.classified_source_count);
-  assert.equal(new Set(ARSU_RUNTIME_POLICY_CATALOG.entries.map((entry) => entry.source_path)).size, 33);
+  assert.equal(new Set(ARSU_RUNTIME_POLICY_CATALOG.entries.map((entry) => entry.source_path)).size, 41);
   assert.deepEqual(
     plan.checker_closure.map((item) => item.source_path).sort(),
-    ["scripts/check_panel_synthesis.py", "scripts/check_sprint_contract.py"],
+    [
+      "scripts/check_panel_synthesis.py",
+      "scripts/check_phase_conformance.py",
+      "scripts/check_sprint_contract.py",
+      "scripts/recompute_receipts.py",
+      "scripts/review_panel_provenance.py",
+    ],
   );
+  const provenanceRewrite = plan.spans_by_source.get("scripts/review_panel_provenance.py")?.[0];
+  assert.equal(provenanceRewrite?.replacement_text, 'REPO_ROOT = Path(__file__).resolve().parent.parent / "assets"');
+  assert.equal(plan.records.find((record) => record.rewrite_id === "checker-reviewer-assets-root")?.disposition, "adapt");
+  assert.deepEqual(
+    ARSU_RUNTIME_POLICY_CATALOG.unavailable_runtime_references.map((item) => `${item.source_path}:${item.reference}`).sort(),
+    [
+      "academic-pipeline/SKILL.md:docs/design/2026-08-10-673-cross-run-adjudication-activity-spec.md",
+      "academic-pipeline/SKILL.md:docs/design/2026-08-17-743-inquiry-branch-ledger-design.md",
+      "academic-pipeline/SKILL.md:scripts/build_cross_document_consistency_advisory.py",
+      "academic-pipeline/SKILL.md:scripts/check_re_review_synthesis.py",
+      "academic-pipeline/SKILL.md:scripts/inquiry_branch_ledger.py",
+      "deep-research/SKILL.md:scripts/build_cross_document_consistency_advisory.py",
+    ],
+  );
+  for (const item of ARSU_RUNTIME_POLICY_CATALOG.unavailable_runtime_references) {
+    const rewriteId = `unavailable-${item.source_path.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase()}-${item.reference.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase()}`;
+    assert.equal(plan.records.find((record) => record.rewrite_id === rewriteId)?.disposition, "adapt");
+    assert.match(item.replacement, /unresolved|not_checked/);
+  }
   assert.equal(plan.records.find((record) => record.source_path === "shared/agents/compliance_agent.md")?.disposition, "adapt");
   assert.deepEqual(validateCombinedRewritePlan(anchors, plan), []);
 });

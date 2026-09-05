@@ -4,7 +4,7 @@ ARS 提取工件（Extraction Artifact）— M2 写作段
 ══════════════════════════════════════════════
 工件类型: capability
 能力/包 ID: CAP-M2-03 argument-blueprint（论证蓝图）
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/ars/academic-paper/agents/argument_builder_agent.md（全文）
@@ -12,7 +12,8 @@ ARS 提取工件（Extraction Artifact）— M2 写作段
     1. [保留] 上游全文逐字节保留。
     2. [标注] Plan Mode: Socratic Collaboration 段（含 4 级论证强度评分、STOP 弱论证指标）属 M5 苏格拉底路径，原文保留。
     3. [保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    4. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文。
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->
@@ -122,6 +123,18 @@ Conclusion: Thesis restated -> Implications -> Future research
 | Policy | Problem -> Evidence -> Options -> Recommendation |
 
 ## Output Format
+
+## Review-criteria continuity (#684)
+
+When the approved outline carries a `FORMATIVE` binding receipt, reuse its
+exact target-review authority and criterion-id coverage plan. Do not re-resolve
+the target, copy registry statements, collapse interdisciplinary conflicts, or
+create another receipt. A criterion may identify an argument or evidence need;
+it does not license invented evidence, results, methods, or a silent change to
+the author's thesis. Keep scientific validity, venue fit, and submission
+readiness distinct. When the outline discloses
+`criteria_binding_unavailable`, retain that disclosure and make no venue-fit
+claim.
 
 ```markdown
 ## Argument Blueprint

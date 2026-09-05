@@ -44,5 +44,5 @@ provenance:
     - KP-M4-05
   upstream_sources:
     - path: authoring/ars/m4-revision-finalize/capabilities/03_format_rendering.md
-      sha256: d766385558dbac6fef8338bcf9463f195c7f942a33be7a96a5dae429798f2dcb
+      sha256: d9c687ffd07584886afa42565b68a109f2968a3f0e49ca935a7531fc8879af29
 license: CC BY-NC 4.0

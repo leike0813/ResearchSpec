@@ -6,6 +6,13 @@
       "type": "string",
       "const": "2.0"
     },
+    "authorization_context": {
+      "type": "string",
+      "enum": [
+        "review_roadmap",
+        "integrity_correction"
+      ]
+    },
     "revision_round": {
       "type": "integer",
       "exclusiveMinimum": 0,
@@ -65,6 +72,58 @@
                   "required": [
                     "annotation_set_id",
                     "annotation_id"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "claim_strength_changes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "claim_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    },
+                    "change_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    },
+                    "from_strength": {
+                      "type": "string",
+                      "enum": [
+                        "tentative",
+                        "supported",
+                        "strong"
+                      ]
+                    },
+                    "to_strength": {
+                      "type": "string",
+                      "enum": [
+                        "tentative",
+                        "supported",
+                        "strong"
+                      ]
+                    },
+                    "direction": {
+                      "type": "string",
+                      "enum": [
+                        "strengthen",
+                        "weaken"
+                      ]
+                    },
+                    "rationale": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "claim_id",
+                    "change_id",
+                    "from_strength",
+                    "to_strength",
+                    "direction",
+                    "rationale"
                   ],
                   "additionalProperties": false
                 }
@@ -135,6 +194,58 @@
                       "additionalProperties": false
                     }
                   },
+                  "claim_strength_changes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "claim_id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                        },
+                        "change_id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                        },
+                        "from_strength": {
+                          "type": "string",
+                          "enum": [
+                            "tentative",
+                            "supported",
+                            "strong"
+                          ]
+                        },
+                        "to_strength": {
+                          "type": "string",
+                          "enum": [
+                            "tentative",
+                            "supported",
+                            "strong"
+                          ]
+                        },
+                        "direction": {
+                          "type": "string",
+                          "enum": [
+                            "strengthen",
+                            "weaken"
+                          ]
+                        },
+                        "rationale": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "claim_id",
+                        "change_id",
+                        "from_strength",
+                        "to_strength",
+                        "direction",
+                        "rationale"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
                   "op": {
                     "type": "string",
                     "const": "insert_after"
@@ -199,6 +310,58 @@
                       "additionalProperties": false
                     }
                   },
+                  "claim_strength_changes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "claim_id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                        },
+                        "change_id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                        },
+                        "from_strength": {
+                          "type": "string",
+                          "enum": [
+                            "tentative",
+                            "supported",
+                            "strong"
+                          ]
+                        },
+                        "to_strength": {
+                          "type": "string",
+                          "enum": [
+                            "tentative",
+                            "supported",
+                            "strong"
+                          ]
+                        },
+                        "direction": {
+                          "type": "string",
+                          "enum": [
+                            "strengthen",
+                            "weaken"
+                          ]
+                        },
+                        "rationale": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "claim_id",
+                        "change_id",
+                        "from_strength",
+                        "to_strength",
+                        "direction",
+                        "rationale"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
                   "op": {
                     "type": "string",
                     "const": "insert_after"
@@ -256,6 +419,58 @@
                   "required": [
                     "annotation_set_id",
                     "annotation_id"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "claim_strength_changes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "claim_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    },
+                    "change_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    },
+                    "from_strength": {
+                      "type": "string",
+                      "enum": [
+                        "tentative",
+                        "supported",
+                        "strong"
+                      ]
+                    },
+                    "to_strength": {
+                      "type": "string",
+                      "enum": [
+                        "tentative",
+                        "supported",
+                        "strong"
+                      ]
+                    },
+                    "direction": {
+                      "type": "string",
+                      "enum": [
+                        "strengthen",
+                        "weaken"
+                      ]
+                    },
+                    "rationale": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "claim_id",
+                    "change_id",
+                    "from_strength",
+                    "to_strength",
+                    "direction",
+                    "rationale"
                   ],
                   "additionalProperties": false
                 }

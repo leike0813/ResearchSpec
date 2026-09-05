@@ -62,6 +62,24 @@ function validPatch() {
   };
 }
 
+function patchWithClaimStrengthChange() {
+  const patch = validPatch();
+  return {
+    ...patch,
+    ops: patch.ops.map((operation, index) => index === 0 ? {
+      ...operation,
+      claim_strength_changes: [{
+        claim_id: "claim-introduction",
+        change_id: "change-review-round-1",
+        from_strength: "tentative",
+        to_strength: "supported",
+        direction: "strengthen",
+        rationale: "The accepted ResearchSpec change adds the requested supporting evidence.",
+      }],
+    } : operation),
+  };
+}
+
 void test("adapted ARSU patch applies only after all preconditions pass", () => {
   const result = applyRevisionPatch({ baseText: BASE, patch: validPatch() });
   assert.equal(result.ok, true);
@@ -92,6 +110,31 @@ void test("stale targets, unknown blocks, and incomplete annotation mappings fai
   const validation = validateRevisionPatch(incomplete);
   assert.equal(validation.ok, false);
   if (!validation.ok) assert.ok(validation.diagnostics.some((item) => item.code === "annotation_mapping_incomplete"));
+});
+
+void test("integrity correction context cannot declare claim strength changes", () => {
+  const reviewPatch = patchWithClaimStrengthChange();
+  const operation = reviewPatch.ops[0];
+  assert.ok(operation && "claim_strength_changes" in operation);
+  const changes = operation.claim_strength_changes;
+  assert.ok(changes?.[0]);
+  changes[0].claim_id = "claim:one";
+  changes[0].change_id = "change";
+  changes.push({ ...changes[0], claim_id: "claim", change_id: "one:change" });
+  const reviewValidation = validateRevisionPatch(reviewPatch);
+  assert.equal(reviewValidation.ok, true);
+  if (reviewValidation.ok) assert.equal(reviewValidation.patch.authorization_context, undefined);
+
+  const integrityValidation = validateRevisionPatch({
+    ...reviewPatch,
+    authorization_context: "integrity_correction",
+  });
+  assert.equal(integrityValidation.ok, false);
+  if (!integrityValidation.ok) assert.ok(integrityValidation.diagnostics.some((item) => item.code === "authorization_invalid"));
+
+  const nullContextValidation = validateRevisionPatch({ ...validPatch(), authorization_context: null });
+  assert.equal(nullContextValidation.ok, false);
+  if (!nullContextValidation.ok) assert.ok(nullContextValidation.diagnostics.some((item) => item.code === "authorization_invalid"));
 });
 
 void test("QMD review and revision preserve frontmatter, fences, and fenced marker examples", () => {
@@ -158,6 +201,19 @@ void test("standalone helper creates output atomically and emits no file on reje
     assert.equal(failed.status, 4, failed.stderr);
     assert.equal(await readOptional(outputPath), undefined);
     assert.ok((JSON.parse(failed.stderr) as { diagnostics: Array<{ code: string }> }).diagnostics.some((item) => item.code === "old_hash_stale"));
+
+    const integrityPatch = { ...patchWithClaimStrengthChange(), authorization_context: "integrity_correction" as const };
+    await writeFile(patchPath, `${JSON.stringify(integrityPatch, null, 2)}\n`, "utf8");
+    const integrityFailed = spawnSync(process.execPath, [helperPath, "--base", basePath, "--patch", patchPath, "--output", outputPath], { encoding: "utf8" });
+    assert.equal(integrityFailed.status, 4, integrityFailed.stderr);
+    assert.equal(await readOptional(outputPath), undefined);
+    assert.ok((JSON.parse(integrityFailed.stderr) as { diagnostics: Array<{ code: string }> }).diagnostics.some((item) => item.code === "authorization_invalid"));
+
+    await writeFile(patchPath, `${JSON.stringify({ ...validPatch(), authorization_context: null }, null, 2)}\n`, "utf8");
+    const nullContextFailed = spawnSync(process.execPath, [helperPath, "--base", basePath, "--patch", patchPath, "--output", outputPath], { encoding: "utf8" });
+    assert.equal(nullContextFailed.status, 4, nullContextFailed.stderr);
+    assert.equal(await readOptional(outputPath), undefined);
+    assert.ok((JSON.parse(nullContextFailed.stderr) as { diagnostics: Array<{ code: string }> }).diagnostics.some((item) => item.code === "authorization_invalid"));
 
     await writeFile(patchPath, `${JSON.stringify(validPatch(), null, 2)}\n`, "utf8");
     const applied = spawnSync(process.execPath, [helperPath, "--base", basePath, "--patch", patchPath, "--output", outputPath, "--report", reportPath], { encoding: "utf8" });

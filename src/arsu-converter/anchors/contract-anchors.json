@@ -1,7 +1,7 @@
 {
   "schema_version": "researchspec.arsu.contract-anchors.v4",
   "upstream_source": "vendor/ars",
-  "audited_commit": "828ef3b613b0e8b91830da3328a1e33d4eb5ab4c",
+  "audited_commit": "127ff85e4bbfcdd10b95040537b6c6bd7ad17aeb",
   "anchors": [
     {
       "id": "STATE-002",
@@ -116,7 +116,7 @@
       "replacement_shape": "protocol_block",
       "replacement_scope": {
         "start_snippet": "state_tracker` stages a new `kind: boundary` entry",
-        "end_snippet": "Non-POSIX implementations that cannot provide OS-level exclusion MUST refuse to resume rather than degrade silently"
+        "end_snippet": "surface an explicit error."
       }
     },
     {
@@ -166,12 +166,15 @@
       "match_hints": {
         "snippets": [
           "the writer's deliverable is a **patch document**",
+          "the integrity correction list is only the round's proposed requirements",
+          "Normative order per revision round",
           "scripts/ars_anchorize_draft.py",
           "scripts/ars_apply_revision_patch.py"
         ],
         "keywords": [
-          "revision_patch_round",
-          "apply report"
+          "apply report",
+          "authorization_context: integrity_correction",
+          "revision-evidence-bundle"
         ]
       },
       "semantic_role": "revision_patch_protocol",
@@ -184,7 +187,7 @@
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
         "start_snippet": "When a revision stage dispatches `academic-paper` revision mode",
-        "end_snippet": "there is no partial apply to clean up."
+        "end_snippet": "6. **Complete Schema 8 mechanical fields**, including `change_block_ids` from the apply report, append the exact review round to `revision-evidence-bundle/1.0`, and validate it with `scripts/revision_roadmap.py validate-bundle`. Only a valid continuous bundle moves forward."
       }
     },
     {
@@ -274,7 +277,7 @@
       "replacement_shape": "protocol_block",
       "replacement_scope": {
         "start_snippet": "Material Passport ledger (`compliance_history[]` + new `reset_boundary` entries) is append-only",
-        "end_snippet": "Resume consumption MUST hold an exclusive advisory lock on the passport file for the entire read-check-append sequence."
+        "end_snippet": "Non-POSIX implementations that cannot provide OS-level exclusion MUST refuse to resume rather than degrade silently."
       }
     },
     {
@@ -503,12 +506,13 @@
         "snippets": [
           "In revision mode, `draft_writer_agent` does NOT re-emit the complete paper",
           "**Anchorize** the draft (`scripts/ars_anchorize_draft.py`",
-          "The writer emits a patch document",
-          "The `academic-paper full` in-pair Phase 6→4 loop is NOT patch-adopted"
+          "The writer emits current patch 1.1",
+          "The `academic-paper full` in-pair Phase 6→4 loop is outside this standalone/pipeline revision contract."
         ],
         "keywords": [
           "shared/contracts/patch/revision_patch.schema.json",
-          "apply report"
+          "revision-evidence-bundle/1.0",
+          "integrity-correction"
         ]
       },
       "semantic_role": "revision_patch_protocol",
@@ -522,7 +526,7 @@
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
         "start_snippet": "In revision mode, `draft_writer_agent` does NOT re-emit the complete paper.",
-        "end_snippet": "Item 9 boundary, spec §5.2/§7)."
+        "end_snippet": "The `academic-paper full` in-pair Phase 6→4 loop is outside this standalone/pipeline revision contract."
       }
     },
     {
@@ -684,11 +688,14 @@
       "match_hints": {
         "snippets": [
           "Write the patch as a sidecar file",
+          "Copy hashes/bindings, never compute them.",
+          "Explicit arrays.",
           "You emit; you never apply"
         ],
         "keywords": [
           "revision_patch_round",
-          "roadmap_item_ids"
+          "roadmap_item_ids",
+          "claim_strength_changes[]"
         ]
       },
       "semantic_role": "revision_patch_protocol",
@@ -701,7 +708,7 @@
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
         "start_snippet": "In **revision mode** (standalone `academic-paper` revision",
-        "end_snippet": "the caller's routing, per the orchestrator's integrity-correction variant)."
+        "end_snippet": "provisional Schema 8 response items are forbidden on\nthis branch."
       }
     },
     {
@@ -778,12 +785,15 @@
       "match_hints": {
         "snippets": [
           "**Spec:** `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md`",
+          "The apply report shares the revised draft's lifecycle",
+          "Integrity-correction variant (one revision round)",
           "Toolchain:",
-          "The apply report shares the revised draft's lifecycle"
+          "Mode B command sequence (one revision round)"
         ],
         "keywords": [
           "ars_anchorize_draft.py",
-          "ars_apply_revision_patch.py"
+          "ars_apply_revision_patch.py",
+          "integrity-correction-authorization-input/1.0"
         ]
       },
       "semantic_role": "revision_patch_protocol",
@@ -797,7 +807,7 @@
       "replacement_shape": "patch_protocol_block",
       "replacement_scope": {
         "start_snippet": "**Spec:** `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md`",
-        "end_snippet": "record the round as `mode: full_reemission_escalated`."
+        "end_snippet": "Review-roadmap authority arguments are forbidden on this branch."
       }
     },
     {
@@ -809,7 +819,7 @@
       "severity": "required",
       "match_hints": {
         "snippets": [
-          "R&R Traceability Matrix (Schema 11)",
+          "R&R Traceability Matrix (Schema 11 + machine-readable sidecar)",
           "Author's Claim + Verified? columns"
         ],
         "keywords": [
@@ -837,12 +847,13 @@
       "severity": "required",
       "match_hints": {
         "snippets": [
-          "Schema 13 sprint contract",
+          "Schema 13.2 sprint contract",
           "Validator: `scripts/check_sprint_contract.py`"
         ],
         "keywords": [
-          "panel_size",
-          "acceptance_dimensions"
+          "eligible_roles",
+          "owner_role",
+          "what_triggers_fatal"
         ]
       },
       "semantic_role": "generator_evaluator_contract",
@@ -852,8 +863,8 @@
       ],
       "replacement_shape": "checklist",
       "replacement_scope": {
-        "start_snippet": "Schema 13 sprint contract",
-        "end_snippet": "Schema 13 sprint contract"
+        "start_snippet": "Schema 13.2 sprint contract",
+        "end_snippet": "Schema 13.2 sprint contract"
       }
     },
     {
@@ -1582,12 +1593,13 @@
           "v3.6.2 Sprint Contract Hard Gate"
         ],
         "snippets": [
-          "Panel self-consistency checker (#510)",
+          "Executable conformance + panel checkers.",
           "scripts/check_panel_synthesis.py"
         ],
         "keywords": [
           "check_sprint_contract.py",
-          "failure_conditions"
+          "dimension_verdicts",
+          "DA-CRITICAL"
         ]
       },
       "semantic_role": "gate_policy",
@@ -1597,8 +1609,8 @@
       ],
       "replacement_shape": "gate_rule_block",
       "replacement_scope": {
-        "start_snippet": "Panel self-consistency checker (#510)",
-        "end_snippet": "Panel self-consistency checker (#510)"
+        "start_snippet": "Executable conformance + panel checkers.",
+        "end_snippet": "Executable conformance + panel checkers."
       }
     },
     {

@@ -1,6 +1,6 @@
 ---
 name: design-manuscript-structure-design
-description: "Designs paper structure, outline, word budget and evidence mapping."
+description: "Designs paper structure, outline, word budget, evidence mapping, and formative review-criteria coverage."
 metadata:
   capability_id: design-manuscript-structure-design
   node_kind: producer
@@ -43,6 +43,9 @@ You are the Structure Architect Agent. You select the optimal paper structure, d
 3. Proportional emphasis: word count allocation reflects the importance of each section.
 4. Evidence-driven: every section must have assigned evidence from the literature inputs.
 5. Flexibility: adapt standard patterns to the paper's specific needs.
+6. Pointer-bound target awareness: when supplied, use exact review-criteria IDs
+   and digest by pointer; never copy registry prose, infer a target, or turn
+   venue fit into scientific validity.
 
 ## Structure Selection
 
@@ -121,6 +124,23 @@ Each section row also names the RQ Brief sub-question it serves. When the RQ Bri
 ### Step 6: Define Transition Logic
 
 For each section boundary specify how the current section leads into the next, what the reader should understand before moving on, and the connecting themes or arguments.
+
+### Step 7: Map Review Criteria Without Inventing Content
+
+When a `ReviewCriteriaBindingManifest` and Target Criteria Brief are supplied,
+preserve the exact `target_review_id`, context and registry bindings,
+`resolved_digest`, ordered criterion IDs, and every `parallel_conflicts[]` group.
+Map each criterion ID to planned sections, evidence needs, or an explicit
+unresolved applicability check. Keep scientific validity, venue fit, and
+submission readiness separate. Review criteria do not authorize invented data,
+results, methods, citations, or contributions.
+
+Append one exact `criteria_parallel_conflicts: <canonical compact JSON array>`
+line and the exact role `FORMATIVE` binding marker to the completed outline;
+record this supplied-binding observation in the external outline. It does not
+create a validated registry receipt or workflow record. If no binding is
+available, disclose `criteria_binding_unavailable` and make no venue-alignment
+claim.
 
 ## Detailed Execution Algorithm
 
@@ -225,6 +245,14 @@ When planning chapter summaries are available: map each chapter summary to a sec
 ### Overview
 [1-paragraph summary of the paper's flow]
 
+### Review Criteria Coverage Plan
+| Criterion ID | Planned section(s) | Evidence need / unresolved check | Dimension |
+|---|---|---|---|
+| [pointer only] | [...] | [...] | scientific_validity / venue_fit / submission_readiness |
+
+[Preserve every interdisciplinary parallel-conflict group without averaging
+or selecting a preferred criterion.]
+
 ### Detailed Outline
 
 #### 1. [Section Title] (~[N] words)
@@ -238,6 +266,9 @@ When planning chapter summaries are available: map each chapter summary to a sec
   - [Key point C]
 **Sources**: [Author1, Author2]
 **Transition to next**: [how this connects to the next section]
+
+[Exact `criteria_parallel_conflicts:` line plus `FORMATIVE` review-target
+binding marker, or `criteria_binding_unavailable`]
 
 #### 2. [Section Title] (~[N] words)
 ...
@@ -256,6 +287,7 @@ When planning chapter summaries are available: map each chapter summary to a sec
 - Every source in the evidence map must be tagged supports/opposes/neutral where a prior strategy already tagged it; otherwise assign a neutral tag.
 - Never silently widen a section beyond its inherited sub-question scope; obtain user approval first.
 - Do not write prose, draft sections, build CER chains, or produce the argument blueprint in this node.
+
 
 ## Completion
 

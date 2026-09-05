@@ -38,8 +38,8 @@ export async function buildRuntimePolicyPlan(
 
   const duplicatePaths = duplicates(catalog.entries.map((entry) => entry.source_path));
   if (duplicatePaths.length > 0) errors.push(...duplicatePaths.map((item) => `duplicate runtime-policy entry: ${item}`));
-  if (canonical && catalog.entries.length !== 33) errors.push(`runtime-policy catalog must classify exactly 33 source files, found ${String(catalog.entries.length)}`);
-  if (canonical && catalog.checker_closure.length !== 2) errors.push("runtime-policy checker closure must contain exactly two files");
+  if (canonical && catalog.entries.length !== 41) errors.push(`runtime-policy catalog must classify exactly 41 source files, found ${String(catalog.entries.length)}`);
+  if (canonical && catalog.checker_closure.length !== 5) errors.push("runtime-policy checker closure must contain exactly five files");
 
   const catalogPaths = new Set(catalog.entries.map((entry) => entry.source_path));
   const exclusions = new Set<string>(catalog.excluded_non_runtime_paths);
@@ -104,6 +104,10 @@ export async function buildRuntimePolicyPlan(
   if (catalog.checker_closure.some((item) => item.adaptation === "sprint_schema_path")) {
     await addSprintSchemaRewrite(sourceRoot, spansBySource, records, errors);
   }
+  if (catalog.checker_closure.some((item) => item.adaptation === "reviewer_assets_root")) {
+    await addReviewerAssetsRootRewrite(sourceRoot, spansBySource, records, errors);
+  }
+  await addUnavailableRuntimeRewrites(sourceRoot, spansBySource, records, errors, catalog);
   await validateCheckerClosure(sourceRoot, catalog, errors);
   if (errors.length > 0) {
     throw new ArsuConverterError(
@@ -269,6 +273,107 @@ async function addSprintSchemaRewrite(
   }
 }
 
+async function addReviewerAssetsRootRewrite(
+  sourceRoot: string,
+  spansBySource: Map<string, RuntimePolicyRewriteSpan[]>,
+  records: RuntimePolicyAdaptationRecord[],
+  errors: string[],
+): Promise<void> {
+  const sourcePath = "scripts/review_panel_provenance.py";
+  const sourceFile = path.join(sourceRoot, sourcePath);
+  const oldLine = "REPO_ROOT = Path(__file__).resolve().parent.parent";
+  const newLine = "REPO_ROOT = Path(__file__).resolve().parent.parent / \"assets\"";
+  try {
+    const text = await readFile(sourceFile, "utf8");
+    const matches = allIndices(text, oldLine);
+    if (matches.length !== 1) {
+      errors.push(`reviewer provenance assets root matched ${String(matches.length)} times`);
+      return;
+    }
+    const span = makeSpan("checker-reviewer-assets-root", sourcePath, matches[0], matches[0] + oldLine.length, newLine);
+    spansBySource.set(sourcePath, [span]);
+    records.push({
+      rewrite_id: span.rewrite_id,
+      source_path: sourcePath,
+      disposition: "adapt",
+      rationale: "Point the reviewer provenance checker at the generated package's static assets tree.",
+      matched: true,
+      adapted: false,
+      output_paths: [],
+      before_sha256: sha256Text(oldLine),
+      before_text: oldLine,
+    });
+  } catch (error) {
+    errors.push(`reviewer provenance checker missing: ${formatError(error)}`);
+  }
+}
+
+async function addUnavailableRuntimeRewrites(
+  sourceRoot: string,
+  spansBySource: Map<string, RuntimePolicyRewriteSpan[]>,
+  records: RuntimePolicyAdaptationRecord[],
+  errors: string[],
+  catalog: RuntimePolicyCatalog,
+): Promise<void> {
+  const additions = new Map<string, RuntimePolicyRewriteSpan[]>();
+  for (const item of catalog.unavailable_runtime_references) {
+    const sourceFile = path.join(sourceRoot, item.source_path);
+    let text: string;
+    try {
+      text = await readFile(sourceFile, "utf8");
+    } catch (error) {
+      errors.push(`unavailable runtime source missing: ${item.source_path}: ${formatError(error)}`);
+      continue;
+    }
+    const matches = allIndices(text, item.reference);
+    if (matches.length !== 1) {
+      errors.push(`unavailable runtime reference matched ${String(matches.length)} times: ${item.source_path} -> ${item.reference}`);
+      continue;
+    }
+    const referenceOffset = matches[0];
+    const paragraphStartBoundary = text.lastIndexOf("\n\n", referenceOffset - 1);
+    const paragraphEndBoundary = text.indexOf("\n\n", referenceOffset);
+    const start = paragraphStartBoundary < 0 ? 0 : paragraphStartBoundary + 2;
+    const end = paragraphEndBoundary < 0 ? text.length : paragraphEndBoundary;
+    const existing = [
+      ...(spansBySource.get(item.source_path) ?? []),
+      ...(additions.get(item.source_path) ?? []),
+    ];
+    const overlappingIds = new Set(
+      existing
+        .filter((span) => span.start < end && start < span.end)
+        .map((span) => span.rewrite_id),
+    );
+    if (overlappingIds.size > 0) {
+      const retained = (spansBySource.get(item.source_path) ?? [])
+        .filter((span) => !overlappingIds.has(span.rewrite_id));
+      spansBySource.set(item.source_path, retained);
+      for (let index = records.length - 1; index >= 0; index -= 1) {
+        if (overlappingIds.has(records[index]?.rewrite_id ?? "")) records.splice(index, 1);
+      }
+    }
+    const rewriteId = `unavailable-${policyId(item.source_path)}-${policyId(item.reference)}`;
+    const span = makeSpan(rewriteId, item.source_path, start, end, item.replacement);
+    const sourceSpans = additions.get(item.source_path) ?? [];
+    sourceSpans.push(span);
+    additions.set(item.source_path, sourceSpans);
+    records.push({
+      rewrite_id: rewriteId,
+      source_path: item.source_path,
+      disposition: "adapt",
+      rationale: item.rationale,
+      matched: true,
+      adapted: false,
+      output_paths: [],
+      before_sha256: sha256Text(text.slice(start, end)),
+      before_text: text.slice(start, end),
+    });
+  }
+  for (const [sourcePath, spans] of additions) {
+    spansBySource.set(sourcePath, [...(spansBySource.get(sourcePath) ?? []), ...spans].sort((left, right) => left.start - right.start));
+  }
+}
+
 async function validateCheckerClosure(sourceRoot: string, catalog: RuntimePolicyCatalog, errors: string[]): Promise<void> {
   const expected = new Set(catalog.checker_closure.map((item) => item.source_path));
   for (const item of catalog.checker_closure) {
@@ -277,6 +382,13 @@ async function validateCheckerClosure(sourceRoot: string, catalog: RuntimePolicy
       const text = await readFile(path.join(sourceRoot, item.source_path), "utf8");
       if (item.source_path.endsWith("check_panel_synthesis.py") && !/^import check_sprint_contract\b/m.test(text)) {
         errors.push("panel checker no longer imports check_sprint_contract");
+      }
+      if (item.source_path.endsWith("check_phase_conformance.py")
+        && (!/^import check_panel_synthesis\b/m.test(text) || !/^import recompute_receipts\b/m.test(text))) {
+        errors.push("phase conformance checker no longer imports its approved local closure");
+      }
+      if (item.source_path.endsWith("review_panel_provenance.py") && !text.includes('CONTRACT_ID = "reviewer/reviewer_full/v2"')) {
+        errors.push("reviewer provenance checker is not bound to reviewer_full v2");
       }
     } catch (error) {
       errors.push(`checker closure source missing: ${item.source_path}: ${formatError(error)}`);

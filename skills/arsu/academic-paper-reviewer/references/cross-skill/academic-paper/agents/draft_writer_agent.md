@@ -155,27 +155,37 @@ Acceptable deviation: +/-15% per section, +/-10% overall.
 When receiving feedback from peer_reviewer_agent (Phase 6 -> back to Phase 4):
 
 ### Revision Round 1
-1. **Read** all feedback items
-2. **Categorize** by severity: Critical > Major > Minor > Suggestion
-3. **Address** all Critical and Major items
-4. **Attempt** Minor items if word count allows
-5. **Document** changes in a revision log
+1. **Read** the immutable roadmap, exact claim surfaces, and complete author adjudication
+2. **Preserve** reviewer severity and editorial obligation as independent metadata; neither is work order
+3. **Edit only** `will_address` items and only their exact authorized target/operation subsets
+4. **Leave declined items untouched** unless the exact overlap has separate collateral authority
+5. **Document** every patch operation and authorization in a revision log
 
 ### Revision Round 2 (if needed)
-1. Address remaining Major and Minor items
-2. Incorporate viable Suggestions
-3. Document items not addressed as "Acknowledged Limitations"
+1. Consume a new round-specific immutable roadmap and complete explicit author sidecar
+2. Apply only that round's exact authority; never carry an earlier choice forward by implication
+3. Preserve declined reasons and document no-op rounds without manufacturing an edit
 
 ### Revision Log Format
 ```markdown
-| # | Source | Severity | Feedback | Section | Action Taken | Status |
-|---|--------|----------|----------|---------|-------------|--------|
-| 1 | Reviewer | Critical | Weak methodology justification | 3.1 | Added 2 paragraphs | Resolved |
-| 2 | Reviewer | Major | Missing counter-argument | 5.2 | Added rebuttal para | Resolved |
-| 3 | Reviewer | Minor | Awkward transition | 4->5 | Rewritten | Resolved |
+| # | Source | Severity | Obligation class | Author triage | Exact target/op | Action Taken |
+|---|--------|----------|------------------|---------------|-----------------|--------------|
+| 1 | Reviewer | critical | must_fix | will_address | B0007/replace_block | Added the authorized methods detail |
+| 2 | Reviewer | major | should_fix | wont_address | — | No manuscript edit; reason preserved in sidecar |
 ```
 
 ## Output Format
+
+## Review-criteria continuity (#684)
+
+When the upstream outline carries a `FORMATIVE` binding receipt, use its exact
+criterion-id coverage plan as a writing constraint. Do not re-resolve the
+target, copy registry prose, manufacture supporting evidence or result values,
+or silently alter the author's research intent. Parallel interdisciplinary
+criteria remain separate. This phase does not create a new criteria receipt;
+the Phase 2 formative artifact remains the authority. If the binding is
+unavailable, preserve `criteria_binding_unavailable` and make no venue-
+alignment claim.
 
 > Applies to **Phase 4 drafting** and to a **`full_reemission_escalated` Phase 6 round only** (§3.6). A normal Phase 6 revision round emits a patch document instead — see § Patch-Document Revision Emission (#390); do NOT emit a complete draft in that case.
 
@@ -287,7 +297,7 @@ Total word count monitoring (after assembly):
 | Paragraph structure | >=80% of paragraphs follow TEEL structure | Rewrite non-compliant paragraphs |
 | Transition completeness | Every adjacent section pair has a Transition | Write missing transition paragraphs |
 | Register consistency | Uniform register throughout (no colloquial mixing) | Fix inconsistent paragraphs |
-| Revision response (Round 1/2) | All Critical + Major items addressed | Continue processing until complete |
+| Revision authority (Round 1/2) | Every edit is within a `will_address` exact scope; declined items are untouched absent exact collateral authority | Reject the patch and return to explicit author adjudication |
 
 ### Failure Handling Strategies
 
@@ -639,6 +649,15 @@ the caller. Validate the document against
 the closed `replace_block`/`insert_after`/`delete_block` vocabulary, a revision
 rationale, and non-empty roadmap traceability.
 
+Omit `authorization_context` for ordinary local review patches; that is the
+review-roadmap default. Use `integrity_correction` only for a supplied
+correction proposal, citing its IDs through `roadmap_item_ids` and carrying no
+claim-strength changes. A review claim-strength declaration must name the
+accepted ResearchSpec `change_id`, both stable strengths, the direction, and a
+rationale. The schema and helper validate this structure, while the Agent
+checks that the referenced change is actually accepted and that the manuscript
+evidence supports the move.
+
 When annotations are in scope, each implemented annotation must be referenced
 by an operation and represented in `annotation_mapping`. Non-edit dispositions
 carry the answer, reason, or successor required by the schema and must not be
@@ -677,12 +696,12 @@ External motivation: Ren et al. (2026, arXiv:2607.13104 §7.4) — scientific-di
 
 Revision under reviewer pressure is where scientific claims silently drift: a comment like "the contribution feels underpowered" or "the writing is too tentative" invites converting `is associated with` into `leads to`, or dropping "may" / "preliminary" / "in this sample" — prose improves, the science is corrupted. This section governs the epistemic interior of a revised block. Full ladder + move/not-a-move criteria + field-relativity: `../../../shared/references/claim_strength_ladder.md`.
 
-**Epistemic status:** advisory. It does not gate; it makes your edits' claim-strength effects explicit so the integrity gate and the user can judge them.
+**Epistemic status:** exact registered surfaces are mechanically gated by #670; unregistered semantic drift remains an explicitly disclosed E6 review boundary rather than a claimed universal detector.
 
 Rules (revision mode):
 
-1. **No silent move.** Do not move any epistemic claim along the ladder — in either direction — unless a roadmap item authorizes changing that claim's strength. Positioning/emphasis prose is fine while the verb's rung stays put; a rung change (`associated with` → causal verb, `may support` → `supports`, or the reverse) is not, absent authorization. Dropping a design-based causal caveat, a scope/status hedge, or a null result is a move.
-2. **A patch op that changes a claim's rung must name the authorizing item.** The op's `roadmap_item_ids` (already required, §6 of the patch rules above) must include a roadmap item that actually authorizes the strength change — not merely an item that authorizes touching the block for another reason. A "clarify wording" item does not authorize `associated with` → `causes`.
+1. **No silent registered move.** Preserve every registered surface byte-exactly unless the sidecar names its exact manifest/claim/surface/block, original hash, replacement text/hash, rungs, and direction.
+2. **The exact authorizing item must be cited.** The claim authorization belongs to a `will_address` item in the op and is single-use. A wording/target authorization alone does not authorize `associated with` → `causes`.
 3. **When a reviewer asks for more confidence, strengthen the WRITING, not the CLAIM.** Active voice, main result first, tighter syntax — yes. Removing the qualifier that bounds the finding — no; surface it back to the user instead. This mirrors the hedge-drop failure the 2026-07-22 baseline measured (`evals/heldout/revision_claim_drift/`).
 4. **Marked hedges are ladder invariants.** Any phrase on the paper's `protected_hedges` roster (`../../../shared/references/protected_hedging_phrases.md`) is non-negotiable during revision exactly as it is during abstract compression.
 

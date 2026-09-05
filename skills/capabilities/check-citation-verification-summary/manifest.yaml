@@ -1,7 +1,7 @@
 schema_version: "1"
 capability_id: check-citation-verification-summary
 title: Citation Verification Summary
-description: Deterministic citation verification summary.
+description: Deterministic citation verification summary preserving resolver states.
 maturity: operational
 class: verification
 node_kind: checker
@@ -11,7 +11,9 @@ inputs:
   - role: citation_verification_report
     schema_ref: citation-existence.v1
     required: true
-    source_policy: node_output
+    source_policy:
+      - handoff
+      - node_output
 outputs:
   - role: citation_summary
     schema_ref: citation-summary.v1
@@ -36,11 +38,16 @@ validators:
       argv0: python3
       args_template:
         - validators/citation-verification-summary.py
+        - summary
         - "{outputs_json}"
 knowledge_refs:
   - knowledge_id: degradation-registry
     path: knowledge/degradation-registry.json
-    content_hash: a81253cb7a8558718008669d43e915a08181c9202484bbc08e03d550a295fef9
+    content_hash: fe65921b08efba7e014fa142065ad697bf418e9bf684a0105651b7eef812d74e
+    license: CC BY-NC 4.0
+  - knowledge_id: validators-citations.py
+    path: validators/citations.py
+    content_hash: 8ac1e07e32c3533421ecf310bd66db604ce09055b91d109647b7a31aabe3e5db
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -50,5 +57,5 @@ provenance:
     - KP-M4-03
   upstream_sources:
     - path: authoring/ars/m5-side-branches/capabilities/13_citation_verification_summary.py
-      sha256: 23a1a1a32b306e3c465b9a3ab5a368c426521772951aab57c2cea0c7c314c06f
+      sha256: 15dd7ab0e03244f213380e9f4c4193a5f3ae75c585e950d86b1a6155c5c05e70
 license: CC BY-NC 4.0

@@ -14,7 +14,8 @@ export interface AuthoringKnowledgeSource {
 }
 
 export interface AuthoringPackageAsset {
-  extraction_artifact_id: string;
+  extraction_artifact_id?: string;
+  source_path?: string;
   output_path: string;
 }
 
@@ -45,8 +46,8 @@ export interface CapabilityAuthoringSource {
     validator_id: string;
     entrypoint_path: string;
     args_template: string[];
-    /** Optional authored wrapper path; defaults to the primary extraction artifact. */
-    source_path?: string;
+    /** Authored executable implementing the ResearchSpec submission contract. */
+    source_path: string;
   };
   /** Non-validator script/tool files copied into the package, e.g. parsers invoked by the procedure. */
   package_assets?: AuthoringPackageAsset[];
@@ -119,14 +120,16 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
   }
 
   for (const asset of source.package_assets ?? []) {
-    const assetArtifact = byId.get(asset.extraction_artifact_id);
-    if (!assetArtifact) throw new Error(`Missing extraction artifact: ${asset.extraction_artifact_id}`);
-    const assetSourceText = await readFile(assetArtifact.path, "utf8");
-    const assetText = asset.output_path.endsWith(".py") ? stripExtractionHeader(assetSourceText) : assetSourceText;
+    const assetArtifact = asset.extraction_artifact_id ? byId.get(asset.extraction_artifact_id) : undefined;
+    const assetSourcePath = asset.source_path ?? assetArtifact?.path;
+    if (!assetSourcePath) throw new Error(`Missing package asset source: ${asset.output_path}`);
+    const assetSourceText = await readFile(path.resolve(assetSourcePath), "utf8");
+    const assetText = !asset.source_path && asset.output_path.endsWith(".py") ? stripExtractionHeader(assetSourceText) : assetSourceText;
     const assetPath = path.join(packageRoot, ...asset.output_path.split("/"));
     await mkdir(path.dirname(assetPath), { recursive: true });
     await writeFile(assetPath, assetText, "utf8");
     files.push(path.relative(packageRoot, assetPath).split(path.sep).join("/"));
+    if (asset.source_path) knowledgeRefs.push({ knowledge_id: asset.output_path.replaceAll("/", "-"), path: asset.output_path, content_hash: sha256(assetText), license: source.license });
   }
 
   const validators: CapabilityManifest["validators"] = [{
@@ -137,10 +140,7 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
     error_codes: ["output_roles_invalid"],
   }];
   if (source.script_validator) {
-    const scriptArtifact = byId.get(source.script_validator.source_path ? "" : source.extraction_artifact_id);
-    const scriptText = source.script_validator.source_path
-      ? await readFile(path.resolve(source.script_validator.source_path), "utf8")
-      : (scriptArtifact ? await readFile(scriptArtifact.path, "utf8") : "");
+    const scriptText = await readFile(path.resolve(source.script_validator.source_path), "utf8");
     if (!scriptText) throw new Error(`Missing script source for ${source.script_validator.validator_id}`);
     const entrypointPath = source.script_validator.entrypoint_path;
     const scriptPath = path.join(packageRoot, ...entrypointPath.split("/"));
@@ -259,10 +259,28 @@ ${manifest.outputs.map((item) => `- \`${item.role}\` (${item.schema_ref})`).join
 ## Knowledge
 
 ${manifest.knowledge_refs.map((item) => `- Load knowledge ID \`${item.knowledge_id}\` from \`${item.path}\`.`).join("\n")}
-${(source.package_assets ?? []).length > 0 ? `\n## Tools\n\n${(source.package_assets ?? []).map((item) => `- \`${item.output_path}\` is packaged from extraction artifact \`${item.extraction_artifact_id}\`; invoke it only through the declared runner and arguments.`).join("\n")}\n` : ""}
+${(source.package_assets ?? []).length > 0 ? `\n## Tools\n\n${(source.package_assets ?? []).map((item) => `- \`${item.output_path}\` ${item.source_path ? "implements the package's authored computation" : `is packaged from extraction artifact \`${item.extraction_artifact_id ?? ""}\``}; invoke it only through the declared runner and arguments.`).join("\n")}\n` : ""}
 ## Procedure
 
 ${procedureText.trim() ? procedureText.trim() : "Perform only the procedure described by the referenced knowledge and extraction artifacts."}
+${source.script_validator ? `
+## Executable report contract
+
+Use Python 3 with PyYAML for YAML inputs; PDF parsing additionally needs pypdf.
+Use the host's already configured Python environment. Missing dependencies must
+be reported; never install them without user authorization.
+
+Create an external request JSON with \`inputs: [{"role": "<input role>", "path": "<absolute material path>"}]\`
+from the paths returned by \`researchspec instructions\`. Run:
+
+\`python3 ${source.script_validator.entrypoint_path} ${source.script_validator.args_template[0]} /absolute/request.json --generate\`
+
+Save stdout unchanged as the declared external JSON report. The validator used by
+\`advance\` recomputes the report from the graph's current resolved inputs and
+rejects altered results. It does not write reports or mutate inputs. A valid
+report can contain FAIL, UNAVAILABLE or not_checked findings: these remain
+visible evidence for the owning human Gate, never a scientific clearance.
+` : ""}
 
 ## Completion
 

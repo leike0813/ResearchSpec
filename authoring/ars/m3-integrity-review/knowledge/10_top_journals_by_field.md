@@ -4,21 +4,22 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 ══════════════════════════════════════════════
 工件类型: knowledge-pack
 能力/包 ID: KP-M3-10 top-journals-by-field（各领域顶级期刊表）
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/ars/academic-paper-reviewer/references/top_journals_by_field.md（全文）
 变更台账（ledger）:
     1. [保留] 全文逐字节保留。
     2. [标注-新增] **决策清单外新增**：field_analyst（评审团配置）与 eic 均引用本表，属 M3 评审配置所需。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->
 
 # Top Journals by Field — Key Academic Discipline Journal Directory
 
-This document is used by `field_analyst_agent` and `eic_agent` as a reference for calibrating EIC identity and assessing journal fit.
+This document is used by `field_analyst_agent` and `eic_agent` as a reference for calibrating the Journal-Fit Reviewer identity and assessing journal fit.
 
 ---
 
@@ -169,7 +170,7 @@ This document is used by `field_analyst_agent` and `eic_agent` as a reference fo
 
 ## Usage Guide
 
-### Logic for Selecting Journals for EIC
+### Logic for Selecting Journals for the Journal-Fit Reviewer
 
 1. **Match the discipline first**: Find the corresponding journal list from the paper's primary discipline
 2. **Then match quality**: Select an appropriate tier of journal based on the paper's quality

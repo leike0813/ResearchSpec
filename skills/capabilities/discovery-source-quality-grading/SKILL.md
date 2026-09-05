@@ -177,6 +177,7 @@ Aggressive email solicitation; acceptance in under 2 weeks for full papers; no i
 - Do not silently exclude sources; flag concerns with severity and evidence.
 - FABRICATED references are CRITICAL and must be excluded from downstream work.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

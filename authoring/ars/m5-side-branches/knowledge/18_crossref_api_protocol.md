@@ -4,14 +4,15 @@ ARS 提取工件（Extraction Artifact）— M5 支线段
 ══════════════════════════════════════════════
 工件类型: knowledge-pack
 能力/包 ID: KP-M5-18 crossref-api-protocol
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/ars/deep-research/references/crossref_api_protocol.md（全文）
 变更台账（ledger）:
     1. [保留] 全文逐字节保留。
     2. [标注-清尾] 清尾批次：此前登记于【M1】未提取依赖清单；引用方【CAP-M1-01 引用】。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->
@@ -59,6 +60,18 @@ GET /works?query.title={url_encoded_title}&rows=5
 - DOI absent: title search alone returns no match meeting threshold.
 
 The check fires only when `obtained_via != 'manual'`.
+
+## `retraction_status` observation (#651)
+
+For a DOI-matched record, retain both top-level and relation-form
+`updated-by`/`update-to` metadata. The #651 resolver recognizes an update only
+when `updated-by` belongs to the cited DOI or an update notice's `update-to`
+points to the cited DOI. It preserves source, record id, notice DOI and date,
+and handles a later reinstatement without treating the earlier retraction as
+current. The full record already returned by `GET /works/{doi}` is sufficient
+for the common `updated-by` path; optional notice records may be supplied for
+the inverse `update-to` path and reason enrichment. Manual entries with a DOI
+use this path; DOI-less entries remain unresolved rather than title-matched.
 
 ## Degradation handling
 

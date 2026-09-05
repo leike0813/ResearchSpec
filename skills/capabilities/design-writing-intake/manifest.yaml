@@ -1,7 +1,8 @@
 schema_version: "1"
 capability_id: design-writing-intake
 title: Writing Intake
-description: Collects paper configuration and style calibration for writing work.
+description: Collects paper configuration, preregistration handoff,
+  review-target context, domain profile, and style calibration for writing work.
 maturity: operational
 class: design
 node_kind: producer
@@ -29,13 +30,18 @@ knowledge_refs:
     path: knowledge/style-calibration.md
     content_hash: f4bb4fbad7c996a97fff36bf5de05aa1b53902976d3a8987b2a58cc71a91a622
     license: CC BY-NC 4.0
+  - knowledge_id: preregistration-guide
+    path: knowledge/preregistration-guide.md
+    content_hash: de71e76d03767a1f6bbc33b0d294af3f8e0ffb8a60b33d53cf420b653b26ebf4
+    license: CC BY-NC 4.0
 gate_policy: required
 provenance:
   origin: ars-derived
   extraction_artifact_ids:
     - CAP-M2-01
     - KP-M2-06
+    - KP-M5-22
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/01_writing_intake.md
-      sha256: e5f1d2ac137945b680cedb6b38ac4c53eb8b60265a665c47cf4508254241b369
+      sha256: 0e7bd02b8caa2b3ca5de12ca4bd1571b8dfbec07c2011233af126d6393b14311
 license: CC BY-NC 4.0

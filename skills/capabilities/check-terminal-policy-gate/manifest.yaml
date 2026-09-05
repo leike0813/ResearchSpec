@@ -27,7 +27,7 @@ validators:
 knowledge_refs:
   - knowledge_id: terminal-firm-rules
     path: knowledge/terminal-firm-rules.md
-    content_hash: ef29b0ab4e4d7a568c060f20b4b010cd9e44aca5f6ac6ed6ee949d822c3f0d74
+    content_hash: 872afe1f842fa6496b444aaf116d410d030e072fef631629a3e6d8528ad49225
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:

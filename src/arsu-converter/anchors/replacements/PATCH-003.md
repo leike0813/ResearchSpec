@@ -21,6 +21,15 @@ One bounded mechanical application is:
 4. On any preflight failure, correct the inputs or revise manually. The helper
    creates no partial output and never changes a run and node state or handoff.
 
+An omitted `authorization_context` means review-roadmap semantics. An
+`integrity_correction` patch cites the supplied correction IDs through
+`roadmap_item_ids` and cannot declare `claim_strength_changes`. A review claim
+strength declaration names an accepted ResearchSpec `change_id`, old and new
+stable strengths, direction, and rationale; the helper checks only that shape,
+so the Agent must inspect the accepted change and evidence. Local annotation
+mapping remains the author-disposition record; upstream author-adjudication and
+passport/hash-chain sidecars are outside this contract.
+
 Untouched anchored blocks remain byte-identical under helper application. That
 mechanical guarantee says nothing about whether edited text answers the review.
 For QMD, YAML frontmatter, fenced code, cell options, and Quarto metadata are

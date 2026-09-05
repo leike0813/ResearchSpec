@@ -271,6 +271,7 @@ Language models are trained toward agreeable responses, which violates the Socra
 - Preserve scope and wording boundaries; never invent a research question on the user's behalf.
 - Never block progression; the wording advisory and all probing are optional for the user to decline.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

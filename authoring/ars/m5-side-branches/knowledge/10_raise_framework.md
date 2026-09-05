@@ -4,14 +4,15 @@ ARS 提取工件（Extraction Artifact）— M5 支线段
 ══════════════════════════════════════════════
 工件类型: knowledge-pack
 能力/包 ID: KP-M5-10 raise-framework（RAISE 框架）
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/ars/shared/raise_framework.md（全文）
 变更台账（ledger）:
     1. [保留] 全文逐字节保留。
     2. [标注] 支线能力 CAP-M5-07 的直接知识包；原文保留，authoring 阶段改引用。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->
@@ -98,7 +99,7 @@ Used when `raise.mode == "full"` (SR and other_evidence_synthesis). Each role ca
 1. Adhere to open science practice when researching and evaluating AI systems.
 2. Commit to independent evaluations and validation of AI systems.
 
-**ARS self-declaration:** ARS cross-model verification per `cross_model_verification.md` provides one form of independent validation — integrity sample checks, independent DA critique, and blind disagreement checkpoints at the two irreversible decisions. The once-planned sixth-reviewer design was retired in #518 (its failure modes matched ARS's documented anti-patterns).
+**ARS self-declaration:** ARS cross-model verification per `cross_model_verification.md` provides blind, typed-provenance cross-model checks — integrity samples, DA critique, and disagreement checkpoints at two irreversible decisions. Different model families may reduce one source of correlated error, but these checks are not a claim of independent validation or improved accuracy. The once-planned sixth-reviewer design was retired in #518 (its failure modes matched ARS's documented anti-patterns).
 
 ### Role 4 — Publishers of evidence synthesis
 

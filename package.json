@@ -89,7 +89,7 @@
     "capability:assessment-html": "node scripts/generate-arsu-graph-match-assessment-html.mjs",
     "capability:gap-review-html": "node scripts/generate-arsu-gap-semantic-review-html.mjs",
     "arsu-maintenance:baseline": "node scripts/arsu-maintenance.mjs baseline",
-    "arsu-maintenance:check": "node scripts/arsu-maintenance.mjs check v3.19.0-828ef3b",
+    "arsu-maintenance:check": "node scripts/arsu-maintenance.mjs check",
     "finrobot-maintenance:artifacts": "node scripts/finrobot-maintenance.mjs artifacts",
     "finrobot-maintenance:records": "node scripts/finrobot-maintenance.mjs records",
     "finrobot-maintenance:baseline": "node scripts/finrobot-maintenance.mjs baseline",

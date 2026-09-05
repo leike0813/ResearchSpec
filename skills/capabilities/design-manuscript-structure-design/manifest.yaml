@@ -1,7 +1,8 @@
 schema_version: "1"
 capability_id: design-manuscript-structure-design
 title: Manuscript Structure Design
-description: Designs paper structure, outline, word budget and evidence mapping.
+description: Designs paper structure, outline, word budget, evidence mapping,
+  and formative review-criteria coverage.
 maturity: operational
 class: design
 node_kind: producer
@@ -44,5 +45,5 @@ provenance:
     - KP-M2-08
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/02_manuscript_structure_design.md
-      sha256: 958afd16c3cad380a40ea1dffbb22370458d5324f2feb882ecfe7cda47f794c1
+      sha256: c3f50d54b0f58b1fc065a8c2b6a955f86ffea6f37521c9f915c6ce19f7ef8a16
 license: CC BY-NC 4.0

@@ -149,6 +149,7 @@ Consume the draft's closing protected-hedges comment and any dispatch-context he
 - Preserve protected hedges; never compress them away.
 - Do not edit the manuscript body, format the paper, or perform review in this node.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

@@ -1,4 +1,5 @@
 import type { CapabilityAuthoringSource } from "./author.js";
+import { checkerSource } from "./checker-source.js";
 
 const CC = "CC BY-NC 4.0";
 
@@ -39,7 +40,7 @@ export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     inputs: [{ role: "revision_patch", schema_ref: "revision-patch.v1", required: true, source_policy: "node_output" }],
     outputs: [
       { role: "patched_manuscript", schema_ref: "patched-manuscript.v1", required: true },
-      { role: "response_to_reviewers", schema_ref: "response-to-reviewers.v1", required: true },
+      { role: "response_to_reviewers", schema_ref: "response-to-reviewers.v1", required: false },
     ],
   },
   {
@@ -83,9 +84,13 @@ export const M4_AUTHORING_SOURCES: readonly CapabilityAuthoringSource[] = [
     gate_policy: "required",
     license: CC,
     extraction_artifact_id: "CAP-M4-05",
-    script_validator: { validator_id: "temporal-integrity-script", entrypoint_path: "validators/temporal-integrity.py", args_template: ["{outputs_json}"] },
+    ...checkerSource("temporal", "temporal", "temporal-integrity", "temporal-integrity-script"),
     knowledge_sources: [{ knowledge_id: "degradation-registry", extraction_artifact_id: "KP-M4-03", output_path: "knowledge/degradation-registry.json" }],
-    inputs: [{ role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: "node_output" }],
+    inputs: [
+      { role: "manuscript_draft", schema_ref: "manuscript-draft.v1", required: true, source_policy: ["handoff", "node_output"] },
+      { role: "timeline", schema_ref: "timeline.v1", required: false, source_policy: ["handoff", "node_output"] },
+      { role: "citation_provenance", schema_ref: "citation-provenance.v1", required: false, source_policy: ["handoff", "node_output"] },
+    ],
     outputs: [{ role: "temporal_audit_report", schema_ref: "temporal-audit.v1", required: true }],
   }
 ];

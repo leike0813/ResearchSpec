@@ -4,14 +4,15 @@ ARS 提取工件（Extraction Artifact）— M5 支线段
 ══════════════════════════════════════════════
 工件类型: knowledge-pack
 能力/包 ID: KP-M5-17 openalex-api-protocol
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/ars/deep-research/references/openalex_api_protocol.md（全文）
 变更台账（ledger）:
     1. [保留] 全文逐字节保留。
     2. [标注-清尾] 清尾批次：此前登记于【M1】未提取依赖清单；引用方【CAP-M1-01 污染信号三角测量引用】。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->
@@ -38,7 +39,7 @@ OpenAlex coverage complements Semantic Scholar for OA venues, monographs, and wo
 ### Pattern 1: DOI Lookup with Title Cross-Check (primary when DOI is available)
 
 ```
-GET /works/doi:{doi}?select=id,title,authorships,publication_year,doi,primary_location
+GET /works/doi:{doi}?select=id,title,authorships,publication_year,doi,primary_location,is_retracted
 ```
 
 **Matching rule (mirrors S2 `DOI_MISMATCH` pattern):** DOI lookup hits are gated by a Levenshtein 0.70 title cross-check. If the returned `title` field fails the threshold against the entry's canonical title, the DOI hit is rejected (DOI_MISMATCH — a known hallucination pattern where a fabricated DOI resolves to an unrelated paper). The caller falls through to title search.
@@ -46,7 +47,7 @@ GET /works/doi:{doi}?select=id,title,authorships,publication_year,doi,primary_lo
 ### Pattern 2: Title Search (fallback when DOI absent or DOI_MISMATCH)
 
 ```
-GET /works?search={url_encoded_title}&per-page=5&select=id,title,authorships,publication_year,doi,primary_location
+GET /works?search={url_encoded_title}&per-page=5&select=id,title,authorships,publication_year,doi,primary_location,is_retracted
 ```
 
 **Matching rule:** Compute Levenshtein similarity between query title and each result title (case-insensitive, punctuation stripped) per `_normalize_title` in the client. Accept if similarity >= 0.70 (matching PaperOrchestra threshold). If multiple candidates pass, prefer matching-year tiebreaker, then highest similarity, then candidate with populated DOI.
@@ -58,6 +59,16 @@ GET /works?search={url_encoded_title}&per-page=5&select=id,title,authorships,pub
 - DOI absent: title search alone returns no match meeting threshold.
 
 The check fires only when `obtained_via != 'manual'` (manual entries are user-vouched per spec v3.9.0 §3.1).
+
+## `retraction_status` observation (#651)
+
+The same matched Works response retains `is_retracted`; this adds no request.
+The value is a named-resolver observation carried in
+`bibliographic_integrity_signals[]`, not a claim about the work's scientific
+soundness. Retraction checking is DOI-keyed: a manual entry with a DOI is
+attemptable and follows this path, while an entry without a DOI remains
+explicitly unresolved. OpenAlex disagreement with Crossref is preserved by
+the resolver and never reduced to clean.
 
 ## Degradation handling
 

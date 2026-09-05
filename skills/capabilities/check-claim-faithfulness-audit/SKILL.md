@@ -205,6 +205,7 @@ When a gold-set path is configured, assert three tiers:
 - Never mutate citation or anchor markers.
 - Do not judge experiment-backed claims and do not decide whether the paper passes.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

@@ -27,7 +27,7 @@ validators:
 knowledge_refs:
   - knowledge_id: socratic-protocol
     path: knowledge/socratic-protocol.md
-    content_hash: 1422501923381108cb8fb94246b41017c902c0ebb461b38b11c74ab6b13484c7
+    content_hash: 5ada79e320fd040d75d51186872fe93cea6fe0883f2284d4651c7e6c62531474
     license: CC BY-NC 4.0
   - knowledge_id: socratic-framework
     path: knowledge/socratic-framework.md
@@ -42,5 +42,5 @@ provenance:
     - KP-M5-04
   upstream_sources:
     - path: authoring/ars/m5-side-branches/capabilities/03_socratic_mentoring.dr-variant.md
-      sha256: 6d9218971f0787603f0453693af63b2f36c894e4655ccd365aa868bcbd8748c0
+      sha256: 7c841fe486dfb47ee19ba4d3a3a95c929929c1a96b7e0ff8b998e3f774fa66d2
 license: CC BY-NC 4.0

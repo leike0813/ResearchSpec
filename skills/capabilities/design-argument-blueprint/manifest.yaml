@@ -47,5 +47,5 @@ provenance:
     - KP-M2-08
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/03_argument_blueprint.md
-      sha256: e8ddd724f2836df3e26d0012a93b9068632b77c1cbeabfaa5edf1f43d8fe2735
+      sha256: 54c855027859dd9c4f3db59e3eb89d5ef31e14260b52b90f5bd17d2552266b58
 license: CC BY-NC 4.0

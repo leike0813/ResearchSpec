@@ -1,151 +1,90 @@
-<!--
-══════════════════════════════════════════════
-ARS 提取工件（Extraction Artifact）— M5 支线段
-══════════════════════════════════════════════
-工件类型: capability
-能力/包 ID: CAP-M5-10 passport-verifier（脚本资产）
-提取日期: 2026-08-15
-提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
-来源对照（source mapping）:
-    - vendor/ars/scripts/verify_passport.py（全文）
-变更台账（ledger）:
-    1. [保留] 脚本全文逐字节保留。
-    2. [标注-清尾] M4 未提取依赖（Passport 校验器）；吸收后归引擎侧验证器资产（Q6）。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
-      一律推迟到 authoring 阶段，并另行记录。
-══════════════════════════════════════════════
--->
+"""ResearchSpec report generation and read-only submission verification.
 
-#!/usr/bin/env python3
-"""verify_passport CLI — ad-hoc citation existence verification (Delta 5).
-
-    python -m scripts.verify_passport <passport.yaml>
-
-Loads a Material Passport YAML, runs verification_gate.verify_passport over its
-literature_corpus[], and prints the list of per-citation summaries as JSON. A
-standalone entry point for ad-hoc verification, separate from the Stage 4->5
-audit pipeline.
-
-ref_slug note (#332): both the ref_slug AND the anchor live in writer prose (the
-<!--ref:slug--> / <!--anchor:...--> markers), not in literature_corpus. The
-summary contract REQUIRES a non-null string ref_slug, so a passport-only CLI
-cannot honestly emit a summary — by default it REFUSES (nonzero exit). Pass
-`--synthetic-ref-slug citation_key` to synthesize ref_slug from citation_key for
-DIAGNOSTIC output (warned on stderr, not a real prose join). The real
-{citation_key: ref_slug} + {ref_slug: anchor} joins are wired by the Stage 4->5
-pipeline / formatter batch, not by this standalone tool.
-
-Spec: docs/design/2026-05-21-v3.10-182-promote-citation-gate-spec.md §2 Delta 5.
+ResearchSpec-authored adapter, CC BY-NC 4.0. Algorithms are attributed in
+the accompanying modules. No model services or workflow mutation.
 """
-from __future__ import annotations
-
 import argparse
-import os
+import importlib
 import json
-import sys
 from pathlib import Path
+import sys
 
-import yaml
+sys.dont_write_bytecode = True
 
-try:
-    from verification_gate import verify_passport
-except ImportError:  # pragma: no cover
-    from scripts.verification_gate import verify_passport
+CHECKS = {
+    "temporal": ("temporal", "compute", "temporal_audit_report"),
+    "pdf": ("pdf", "compute", "pdf_preflight_report"),
+    "passport": ("documents", "compute_passport", "passport_report"),
+    "submission": ("documents", "compute_submission", "submission_package_report"),
+    "existence": ("citations", "compute_existence", "citation_verification_report"),
+    "summary": ("citations", "compute_summary", "citation_summary"),
+    "contamination": ("citations", "compute_contamination", "contamination_report"),
+}
 
 
-def _real_clients() -> dict:
-    """Construct the four production resolver clients. Imported lazily so the
-    CLI module loads without network deps and tests can inject a stub factory.
-    Dual-path import: under `python -m scripts.verify_passport` the repo root is
-    on sys.path (not scripts/), so the bare imports fall back to scripts.*."""
+def strict_json(text):
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError("Duplicate JSON key")
+            result[key] = value
+        return result
+    def constant(value):
+        raise ValueError("Non-finite JSON number: " + value)
+    return json.loads(text, object_pairs_hook=pairs, parse_constant=constant)
+
+
+def paths(rows):
+    if not isinstance(rows, list):
+        raise ValueError("Expected role/path array")
+    result = {}
+    for row in rows:
+        if not isinstance(row, dict) or not isinstance(row.get("role"), str) or not isinstance(row.get("path"), str):
+            raise ValueError("Each input needs a role and path")
+        if row["role"] in result or not row["role"]:
+            raise ValueError("Duplicate or empty role")
+        p = Path(row["path"])
+        if not p.is_absolute():
+            raise ValueError("Use absolute material paths")
+        if not p.exists():
+            raise ValueError("Material does not exist: " + str(p))
+        result[row["role"]] = p
+    return result
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("check", choices=CHECKS)
+    parser.add_argument("submission", type=Path, help="JSON with inputs and, for validation, outputs role/path arrays")
+    parser.add_argument("--generate", action="store_true", help="Print computed JSON report; never write workflow files")
+    args = parser.parse_args()
     try:
-        from crossref_client import CrossrefClient
-        from openalex_client import OpenAlexClient
-        from arxiv_client import ArxivClient
-        from semantic_scholar_client import SemanticScholarClient
-    except ImportError:  # pragma: no cover - exercised via `python -m`
-        from scripts.crossref_client import CrossrefClient
-        from scripts.openalex_client import OpenAlexClient
-        from scripts.arxiv_client import ArxivClient
-        from scripts.semantic_scholar_client import SemanticScholarClient
-    return {
-        "crossref": CrossrefClient(),
-        "openalex": OpenAlexClient(),
-        "semantic_scholar": SemanticScholarClient(),
-        "arxiv": ArxivClient(),
-    }
-
-
-def run(argv: list[str] | None = None, *, clients_factory=_real_clients) -> int:
-    parser = argparse.ArgumentParser(
-        prog="verify_passport",
-        description="Verify citation existence across a Material Passport.",
-    )
-    parser.add_argument("passport", help="Path to the passport YAML file.")
-    parser.add_argument(
-        "--synthetic-ref-slug", choices=["citation_key"], default=None,
-        help="Synthesize ref_slug from each entry's citation_key for DIAGNOSTIC "
-             "output (the tool refuses by default; this is not a real prose "
-             "join, #332).")
-    parser.add_argument(
-        "--no-cache", action="store_true",
-        help="#541: run fully live, bypassing the persistent verification "
-             "cache. Default: cache-through is ON (rows served/populated at "
-             "~/.cache/ars/verification.db or ARS_VERIFICATION_CACHE_PATH), "
-             "and summaries carry cache_age_days/cache_stale_advisory when "
-             "served from cache. ARS_CACHE_REVALIDATE=1 additionally "
-             "re-verifies stale rows live (cost scales with stale-row count).")
-    args = parser.parse_args(argv)
-
-    path = Path(args.passport)
-    if not path.is_file():
-        print(f"[verify_passport ERROR] passport not found: {path}",
-              file=sys.stderr)
+        request = strict_json(args.submission.read_text(encoding="utf-8"))
+        if not isinstance(request, dict):
+            raise ValueError("Request must be an object")
+        inputs = paths(request.get("inputs"))
+        module, function, output_role = CHECKS[args.check]
+        payload = getattr(importlib.import_module(module), function)(inputs)
+        expected = {"schema_version": "1", "check": args.check,
+                    "sources": {role: str(p) for role, p in inputs.items()}, "result": payload}
+        if args.generate:
+            print(json.dumps(expected, ensure_ascii=False, sort_keys=True, indent=2, allow_nan=False))
+            return 0
+        outputs = paths(request.get("outputs"))
+        if output_role not in outputs:
+            raise ValueError("Missing report role: " + output_role)
+        actual = strict_json(outputs[output_role].read_text(encoding="utf-8"))
+        canonical = lambda value: json.dumps(value, sort_keys=True, ensure_ascii=False, allow_nan=False)
+        if canonical(actual) != canonical(expected):
+            raise ValueError("Report does not match computation over current inputs")
+        # Findings, including UNAVAILABLE, remain report data. Formal Gates
+        # decide whether the scientific result permits progression.
+        return 0
+    except (OSError, ValueError, TypeError, KeyError, ImportError) as exc:
+        print(json.dumps({"code": "checker_input_invalid", "detail": str(exc)}), file=sys.stderr)
         return 1
-    try:
-        passport = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    except yaml.YAMLError as e:
-        print(f"[verify_passport ERROR] could not parse YAML: {e}",
-              file=sys.stderr)
-        return 1
-
-    # Refuse by default — a passport alone carries no prose <!--ref:slug--> join,
-    # so it cannot produce a contract-valid summary (see module docstring, #332).
-    corpus = passport.get("literature_corpus") or []
-    if args.synthetic_ref_slug is None:
-        print(
-            "[verify_passport ERROR] cannot emit citation_verification_summary "
-            "from a passport alone: ref_slug is a prose-sourced join "
-            "(<!--ref:slug--> markers) that a passport does not carry. Run the "
-            "Stage 4->5 pipeline (which supplies the prose join), or pass "
-            "--synthetic-ref-slug citation_key for diagnostic output.",
-            file=sys.stderr)
-        return 2
-
-    # synthetic mode: ref_slug := citation_key. Diagnostic only.
-    ref_slug_by_key = {
-        e.get("citation_key"): e.get("citation_key") for e in corpus
-    }
-    print(
-        "[verify_passport WARNING] --synthetic-ref-slug citation_key: ref_slug "
-        "synthesized from citation_key. Output is DIAGNOSTIC, not a real prose "
-        "join — do NOT feed it to a consumer that expects prose-joined ref_slugs.",
-        file=sys.stderr)
-
-    cache = None
-    if not args.no_cache:
-        try:
-            from verification_cache import VerificationCache
-        except ImportError:  # pragma: no cover - dual-path import
-            from scripts.verification_cache import VerificationCache
-        cache = VerificationCache()
-    revalidate = os.environ.get("ARS_CACHE_REVALIDATE") == "1"
-    outcomes = verify_passport(
-        passport, clients=clients_factory(), ref_slug_by_key=ref_slug_by_key,
-        cache=cache, revalidate_stale=revalidate)
-    print(json.dumps(outcomes, indent=2))
-    return 0
 
 
 if __name__ == "__main__":
-    sys.exit(run())
+    sys.exit(main())

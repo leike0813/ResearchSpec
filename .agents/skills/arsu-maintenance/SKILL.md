@@ -15,7 +15,7 @@ description: Maintain the upstream ARS project absorption path through analysis,
 
 ## 输入与前置条件
 
-- 已 pin 的 `vendor/ars` 子模块（当前首锚点：`v3.19.0` @ `828ef3b613b0e8b91830da3328a1e33d4eb5ab4c`）。
+- 已 pin 的 `vendor/ars` 子模块（当前维护版本：`v3.21.1` @ `127ff85e4bbfcdd10b95040537b6c6bd7ad17aeb`）。
 - 项目依赖安装完成（`pnpm install`）。
 - 工作区干净或仅包含本次维护改动；子模块必须处于预期 commit。
 - 生成链路可用：`pnpm extraction:index`、`pnpm arsu:author`、`pnpm capability:parity`、`pnpm capability:review-html`、`pnpm capability:assessment-html`。
@@ -31,7 +31,7 @@ description: Maintain the upstream ARS project absorption path through analysis,
 
 ## 锚点命名
 
-`<version>-<short_commit>`，例如 `v3.19.0-828ef3b`。目录：
+`<version>-<short_commit>`，例如 `v3.21.1-127ff85`。目录：
 
 ```
 audits/arsu/<anchor>/
@@ -90,6 +90,7 @@ audits/arsu/<anchor>/
    - `pnpm arsu:check`。
    - `pnpm check`、`pnpm lint`。
    - 全量测试：`UV_CACHE_DIR=/tmp/researchspec-uv-cache pnpm test`。
+   - 涉及脚本能力时，运行真实生成/提交验证测试及 `node scripts/verify-arsu-checkers.mjs`；该检查使用已安装的依赖，不执行依赖安装。静态 operational 标签不证明脚本可执行。
 4. 将结果写入 `audits/arsu/<anchor>/03-conversion.md`：变更 capability/manifest/graph 清单、generated tree hash、测试结果。
 
 ## 阶段四：审阅
@@ -128,7 +129,7 @@ audits/arsu/<anchor>/
 - 先 `diff` 后改文件；未变化的 extraction artifact 不得重写。
 - Mode 增删改先改 `vendor/ars/MODE_REGISTRY.md` 的上游事实记录，再改 `src/arsu-converter/routing/catalog.ts`。
 - capability 重命名或删除属于破坏性变更，必须同步 graph profiles、tests、docs、审阅工件与 OpenSpec change。
-- 上游脚本/示例文件只做审计或参考，不执行、不打包。
+- 上游脚本/示例文件只做审计或参考，不执行、不直接打包。显式审阅的 ResearchSpec 派生计算模块由 authoring sources 声明；提交验证器必须实现本地输入/输出合同，不能直接使用带说明头的提取正文。
 
 ## 审计文件格式
 

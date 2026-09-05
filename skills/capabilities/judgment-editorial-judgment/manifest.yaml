@@ -36,7 +36,11 @@ validators:
 knowledge_refs:
   - knowledge_id: editorial-decision-standards
     path: knowledge/editorial-decision-standards.md
-    content_hash: 64ade215d2ed45ca663065e0d5bd202439827e978ef2d3c6fc26a6f3103b1f50
+    content_hash: 7d5fc45a5032dbb4a2262d3357b7c067f98b282b4d39776745d6afdd3f61f27f
+    license: CC BY-NC 4.0
+  - knowledge_id: sprint-contract
+    path: knowledge/sprint-contract.md
+    content_hash: a032f0782146538d70ac81b997ee675c9bf643d2674b0d9a91c74128a02bb84d
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -44,7 +48,8 @@ provenance:
   extraction_artifact_ids:
     - CAP-M3-03
     - KP-M3-04
+    - KP-M3-06
   upstream_sources:
     - path: authoring/ars/m3-integrity-review/capabilities/03_editorial_judgment.reviewer-variant.md
-      sha256: c7c0e16c0a9af9d981322b4f1a4e258dbe12376848375ddb1caec576a6e42812
+      sha256: c5ec3150c7e7cc4c89358853d13af0bde8f211e0a735bcd8c72330d1f931943d
 license: CC BY-NC 4.0

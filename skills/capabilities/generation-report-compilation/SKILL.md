@@ -245,6 +245,7 @@ A claim whose manifest entry carries `planned_experiment_ids[]` is backed by the
 - Parametric knowledge may be used for framing only, never for factual claims.
 - Do not perform editorial review, revision-round management, or final formatting in this node.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

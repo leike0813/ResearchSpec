@@ -8,6 +8,13 @@ export interface RuntimePolicyCatalogEntry {
   adaptation?: RuntimePolicyAdaptation;
 }
 
+export interface RuntimePolicyUnavailableReference {
+  source_path: string;
+  reference: string;
+  rationale: string;
+  replacement: string;
+}
+
 export interface RuntimePolicyCatalog {
   schema_version: "researchspec.arsu.runtime-policy.v1";
   catalog_id: string;
@@ -15,13 +22,14 @@ export interface RuntimePolicyCatalog {
   excluded_non_runtime_paths: readonly string[];
   match_keywords: readonly string[];
   entries: readonly RuntimePolicyCatalogEntry[];
+  unavailable_runtime_references: readonly RuntimePolicyUnavailableReference[];
   checker_closure: readonly RuntimePolicyCheckerFile[];
 }
 
 export interface RuntimePolicyCheckerFile {
   source_path: string;
   output_path: string;
-  adaptation: "copy" | "sprint_schema_path";
+  adaptation: "copy" | "sprint_schema_path" | "reviewer_assets_root";
 }
 
 export interface RuntimePolicyRewriteSpan {

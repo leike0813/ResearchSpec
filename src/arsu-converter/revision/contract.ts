@@ -1,8 +1,47 @@
 import { z } from "zod";
 
+import { ClaimRecordSchema } from "../../core/contracts/stable-specs.js";
+
 const SafeIdSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/);
 const Hash12Schema = z.string().regex(/^[a-f0-9]{12}$/);
 const BlockIdSchema = z.string().regex(/^B[0-9]{4,}$/);
+const ClaimStrengthSchema = ClaimRecordSchema.shape.strength;
+const ClaimStrengthRank = {
+  tentative: 0,
+  supported: 1,
+  strong: 2,
+} as const;
+
+export const RevisionAuthorizationContextSchema = z.enum([
+  "review_roadmap",
+  "integrity_correction",
+]);
+
+export const RevisionClaimStrengthChangeSchema = z.strictObject({
+  claim_id: SafeIdSchema,
+  change_id: SafeIdSchema,
+  from_strength: ClaimStrengthSchema,
+  to_strength: ClaimStrengthSchema,
+  direction: z.enum(["strengthen", "weaken"]),
+  rationale: z.string().trim().min(1),
+}).superRefine((change, context) => {
+  if (change.from_strength === change.to_strength) {
+    context.addIssue({ code: "custom", message: "Claim strength changes must change strength.", path: ["to_strength"] });
+    return;
+  }
+  const delta = ClaimStrengthRank[change.to_strength] - ClaimStrengthRank[change.from_strength];
+  const expectedDirection = delta > 0 ? "strengthen" : "weaken";
+  if (change.direction !== expectedDirection) {
+    context.addIssue({ code: "custom", message: `Claim strength direction must be ${expectedDirection}.`, path: ["direction"] });
+  }
+});
+
+const ClaimStrengthChangesSchema = z.array(RevisionClaimStrengthChangeSchema).superRefine((values, context) => {
+  const keys = values.map((value) => JSON.stringify([value.claim_id, value.change_id]));
+  if (new Set(keys).size !== keys.length) {
+    context.addIssue({ code: "custom", message: "Claim strength changes must be unique per claim and change." });
+  }
+}).optional();
 
 export const RevisionAnnotationReferenceSchema = z.strictObject({
   annotation_set_id: SafeIdSchema,
@@ -49,6 +88,7 @@ const RevisionOperationCoreSchema = z.strictObject({
     if (new Set(values).size !== values.length) context.addIssue({ code: "custom", message: "Roadmap item IDs must be unique." });
   }),
   annotation_refs: AnnotationReferencesSchema.optional(),
+  claim_strength_changes: ClaimStrengthChangesSchema,
 });
 
 const ReplaceBlockOperationSchema = RevisionOperationCoreSchema.extend({
@@ -86,6 +126,7 @@ export const RevisionPatchOperationSchema = z.union([
 
 export const RevisionPatchSchema = z.strictObject({
   patch_format_version: z.literal("2.0"),
+  authorization_context: RevisionAuthorizationContextSchema.optional(),
   revision_round: z.number().int().positive(),
   base_draft_hash: Hash12Schema,
   revision_rationale: z.string().trim().min(1),
@@ -103,7 +144,7 @@ export const RevisionPatchSchema = z.strictObject({
 });
 
 export interface RevisionPatchDiagnostic {
-  code: "schema_invalid" | "annotation_mapping_incomplete" | "annotation_mapping_invalid";
+  code: "schema_invalid" | "authorization_invalid" | "annotation_mapping_incomplete" | "annotation_mapping_invalid";
   path?: Array<string | number>;
   message: string;
 }
@@ -124,14 +165,35 @@ export function validateRevisionPatch(value: unknown): RevisionPatchValidationRe
       diagnostics: parsed.error.issues.map((issue) => ({
         code: issue.path.includes("annotation_mapping") || issue.path.includes("annotation_refs")
           ? "annotation_mapping_invalid" as const
-          : "schema_invalid" as const,
+          : issue.path.includes("authorization_context") || issue.path.includes("claim_strength_changes")
+            ? "authorization_invalid" as const
+            : "schema_invalid" as const,
         path: issue.path.map((item) => typeof item === "symbol" ? String(item) : item),
         message: issue.message,
       })),
     };
   }
-  const diagnostics = validateAnnotationMapping(parsed.data);
+  const diagnostics = [
+    ...validateAuthorization(parsed.data),
+    ...validateAnnotationMapping(parsed.data),
+  ];
   return diagnostics.length ? { ok: false, diagnostics } : { ok: true, patch: parsed.data };
+}
+
+function validateAuthorization(patch: RevisionPatch): RevisionPatchDiagnostic[] {
+  const diagnostics: RevisionPatchDiagnostic[] = [];
+  for (const [index, operation] of patch.ops.entries()) {
+    const changes = operation.claim_strength_changes ?? [];
+    if (!changes.length) continue;
+    if (patch.authorization_context === "integrity_correction") {
+      diagnostics.push({
+        code: "authorization_invalid",
+        path: ["ops", index, "claim_strength_changes"],
+        message: "Integrity-correction patches cannot declare claim strength changes.",
+      });
+    }
+  }
+  return diagnostics;
 }
 
 export function revisionPatchJsonSchema(): string {

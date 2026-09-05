@@ -36,15 +36,19 @@ validators:
 knowledge_refs:
   - knowledge_id: quality-rubrics
     path: knowledge/quality-rubrics.md
-    content_hash: c3b26597621ab55ddc7d83c0edefd7696ad082c916b55c765bfeb6a04ba2b36b
+    content_hash: 6a4754576441a775c258aa77efb4b54c9e5f58d93bf478190924e89eb33932ff
     license: CC BY-NC 4.0
   - knowledge_id: review-criteria
     path: knowledge/review-criteria.md
-    content_hash: 0616804f8027e44ecfbd3d4ade5bfc958de757bcb5f316a5f199f4628f4f098d
+    content_hash: e72f94a67297e9747139e7737c7b22e068d55c4831e3b385c9c005ca937e1596
     license: CC BY-NC 4.0
   - knowledge_id: statistical-reporting
     path: knowledge/statistical-reporting.md
-    content_hash: 6f731231a04dd9abf87714157c8d4f9f8dc9a294e59b34a66589d9b7847ee82f
+    content_hash: 4123a125cf6385b9f4ce062ec6dd391cfe5e50e6737dd4cba356effe21fd89d2
+    license: CC BY-NC 4.0
+  - knowledge_id: sprint-contract
+    path: knowledge/sprint-contract.md
+    content_hash: a032f0782146538d70ac81b997ee675c9bf643d2674b0d9a91c74128a02bb84d
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -54,7 +58,8 @@ provenance:
     - KP-M3-02a
     - KP-M3-02b
     - KP-M3-03
+    - KP-M3-06
   upstream_sources:
     - path: authoring/ars/m3-integrity-review/capabilities/04_specialist_review.r3-variant.md
-      sha256: 4bd9c67c8d1c3ad9e7abe75da4c3cb19cef59200be3b92bf1dbc0278d0dcdbdb
+      sha256: 49bb946547593a918bd60faee88555d46a2a10b39f2857ef94163eef65920d81
 license: CC BY-NC 4.0

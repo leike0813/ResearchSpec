@@ -1,11 +1,11 @@
 ---
 name: academic-paper-reviewer
-description: "Independent manuscript peer review, focused methodology assessment, guided review, and revision verification. Routes: academic-paper-reviewer:full, academic-paper-reviewer:re-review, academic-paper-reviewer:quick, academic-paper-reviewer:methodology-focus, academic-paper-reviewer:guided, academic-paper-reviewer:calibration. Use for: peer-review an academic manuscript; verify a revised manuscript; focus on methodology; calibrate reviewer judgments. Near-miss routing: verify facts or claims in a research report -> deep-research:fact-check; write or revise manuscript prose -> academic-paper:revision; audit only the response letter -> academic-paper:rebuttal-audit. Before each start, present stable-spec and handoff prerequisites, boundary outputs, formal Gates, risk, cost, and obtain an instance-scoped confirmation."
+description: "Role-scoped, contract-governed manuscript peer review with focused methodology assessment, guided review, and revision verification. Routes: academic-paper-reviewer:full, academic-paper-reviewer:re-review, academic-paper-reviewer:quick, academic-paper-reviewer:methodology-focus, academic-paper-reviewer:guided, academic-paper-reviewer:calibration. Use for: peer-review an academic manuscript; verify a revised manuscript; focus on methodology; calibrate reviewer judgments. Near-miss routing: verify facts or claims in a research report -> deep-research:fact-check; write or revise manuscript prose -> academic-paper:revision; audit only the response letter -> academic-paper:rebuttal-audit. Before each start, present stable-spec and handoff prerequisites, boundary outputs, formal Gates, risk, cost, and obtain an instance-scoped confirmation."
 metadata:
-  version: "1.10.0"
-  last_updated: "2026-07-11"
+  version: "1.11.1"
+  last_updated: "2026-08-15"
   status: active
-  data_access_level: verified_only
+  data_access_level: raw
   task_type: open-ended
   related_skills:
     - academic-paper
@@ -81,9 +81,9 @@ This generated block uses profile researchspec-preflight-v11 for
 academic-paper-reviewer and the current file-based protocol:
 status -> instructions <selector> -> start/decide/advance -> status.
 
-# Academic Paper Reviewer v1.10.0 — Multi-Perspective Academic Paper Review Agent Team
+# Academic Paper Reviewer v1.11.1 — Multi-Perspective Academic Paper Review Agent Team
 
-Simulates a complete international journal peer review process: automatically identifies the paper's field, dynamically configures 5 reviewers (Editor-in-Chief + 3 peer reviewers + Devil's Advocate) who review from four non-overlapping perspectives — methodology, domain expertise, cross-disciplinary viewpoints, and core argument challenges — ultimately producing a structured Editorial Decision and Revision Roadmap.
+Simulates a complete international journal peer review process: automatically identifies the paper's field, dynamically configures 4 card-backed identities (Journal-Fit Reviewer + 3 peer reviewers), and adds the fixed Devil's Advocate as the fifth execution seat. The five role-separated perspectives cover journal fit, methodology, domain expertise, cross-disciplinary viewpoints, and core argument challenges; a separate editorial synthesizer produces the structured Editorial Decision and Revision Roadmap.
 
 **v1.1 Improvements**:
 1. Added Devil's Advocate Reviewer — specifically challenges core arguments, detects logical fallacies, and identifies the strongest counter-arguments
@@ -103,8 +103,8 @@ Review this paper: [paste paper or provide file]
 
 **Output:**
 1. Automatically identifies the paper's field and methodology type
-2. Dynamically configures the specific identities and expertise of 5 reviewers
-3. 5 independent review reports (each from a different perspective)
+2. Dynamically configures four card-backed reviewer identities; the fixed Devil's Advocate is the fifth execution seat
+3. 5 role-separated review reports (4 configuration cards plus the fixed Devil's Advocate, with typed execution provenance)
 4. 1 Editorial Decision Letter + Revision Roadmap
 
 ---
@@ -136,11 +136,11 @@ Review this paper: [paste paper or provide file]
 | Quick quality assessment (15 min) | quick | fidelity |
 | Focus only on methods/statistics | methodology-focus | fidelity |
 | Want to learn by doing (guided review) | guided | originality |
-| Want to know this reviewer's own error profile before trusting its scores | calibration | fidelity |
+| Want to measure this reviewer's bounded decision-error profile on an adjudicated target set | calibration | fidelity |
 
 **Spectrum** (v3.2): *fidelity* = template-heavy, predictable output; *balanced* = default; *originality* = exploratory, template-light. See `references/shared/mode_spectrum.md` for the full cross-skill spectrum table.
 
-Not sure? Use `full` for pre-submission review, `re-review` for post-revision verification. `calibration` is opt-in — run it once per domain when you want to know the reviewer's FNR/FPR before relying on its rubric scores.
+Not sure? Use `full` for pre-submission review, `re-review` for post-revision verification. Current live reviews and Schema 6 packages declare `NOT_CALIBRATED`; a full-tier calibration run may produce a bounded candidate profile, but live-profile application remains unavailable until its closed artifact and replay validator ship. `calibration` is opt-in: its default full tier measures bounded decision-level FNR/FPR, while the explicitly selected 3-paper directional tier gives only a low-cost Minor/Major boundary signal and remains `NOT_CALIBRATED`.
 
 ---
 
@@ -148,13 +148,15 @@ Not sure? Use `full` for pre-submission review, `re-review` for post-revision ve
 
 | # | Agent | Role | Phase |
 |---|-------|------|-------|
-| 1 | `field_analyst_agent` | Analyzes the paper's field, dynamically configures 5 reviewer identities | Phase 0 |
-| 2 | `eic_agent` | Journal Editor-in-Chief — journal fit, originality, overall quality | Phase 1 |
+| 1 | `field_analyst_agent` | Analyzes the paper's field and dynamically configures 4 card-backed identities; the Devil's Advocate remains a fixed fifth seat | Phase 0 |
+| 2 | `eic_agent` | Journal-Fit Reviewer — journal fit, originality, overall quality; one panel card, no final-decision authority | Phase 1 |
 | 3 | `methodology_reviewer_agent` | Peer Reviewer 1 — research design, statistical validity, reproducibility | Phase 1 |
 | 4 | `domain_reviewer_agent` | Peer Reviewer 2 — literature coverage, theoretical framework, domain contribution | Phase 1 |
 | 5 | `perspective_reviewer_agent` | Peer Reviewer 3 — cross-disciplinary connections, practical impact, challenging fundamental assumptions | Phase 1 |
 | 6 | **`devils_advocate_reviewer_agent`** | **Devil's Advocate — core argument challenges, logical fallacy detection, strongest counter-arguments** | **Phase 1** |
 | 7 | `editorial_synthesizer_agent` | Synthesizes all reviews, identifies consensus and disagreements, makes editorial decision | Phase 2 |
+
+**Role-name compatibility (#611):** the public display name is **Journal-Fit Reviewer**. The stable implementation identifiers remain `eic_agent` (agent), `eic` (`contract_role` / dispatch role), and `EIC` (serialized reviewer/source ID, including `EIC-W<n>`). Those compatibility tokens do not select a Stage 3' agent file: `editorial_synthesizer_agent` emits first-round decisions, while contract-governed re-review uses its three dedicated calls and checker-derived outcome.
 
 ---
 
@@ -165,24 +167,24 @@ User: "Review this paper"
      |
 === Phase 0: FIELD ANALYSIS & PERSONA CONFIGURATION ===
      |
-     +-> [field_analyst_agent] -> Reviewer Configuration Card (x5)
+     +-> [field_analyst_agent] -> Reviewer Configuration Card (x4)
          - Reads the complete paper
          - Identifies: primary discipline, secondary discipline, research paradigm, methodology type, target journal tier, paper maturity
-         - Dynamically generates specific identities for 5 reviewers:
-           * EIC: Which journal's editor, area of expertise, review preferences
+         - Dynamically generates specific identities for 4 card-backed reviewers:
+           * Journal-Fit Reviewer (internal `EIC`): which journal/editor perspective, area of expertise, review preferences
            * Reviewer 1 (Methodology): Methodological expertise, what they particularly focus on
            * Reviewer 2 (Domain): Domain expertise, research interests
            * Reviewer 3 (Perspective): Cross-disciplinary angle, what unique perspective they bring
-           * Devil's Advocate: Specifically challenges core arguments, detects logical gaps
+         - The fifth execution seat is the fixed Devil's Advocate, which receives no dynamic configuration card
      |
      ** Presents Reviewer Configuration to user for confirmation (adjustable) **
      |
 === Phase 1: PARALLEL MULTI-PERSPECTIVE REVIEW ===
      |
-     |-> [eic_agent] -------> EIC Review Report
+     |-> [eic_agent] -------> Journal-Fit Review Report
      |   - Journal fit, originality, significance, relevance to readership
      |   - Does not go deep into methodology (that's Reviewer 1's job)
-     |   - Sets the review tone
+     |   - One role-separated card among five — no peer-output channel before commitment (Iron Rule #2)
      |
      |-> [methodology_reviewer_agent] -> Methodology Review Report
      |   - Research design rigor, sampling strategy, data collection
@@ -217,7 +219,7 @@ User: "Review this paper"
          - Arbitration and argumentation for disputed issues
          - Devil's Advocate CRITICAL issues are specially flagged in the Editorial Decision
          - Editorial Decision Letter
-         - Revision Roadmap (prioritized, can be directly input to academic-paper revision mode)
+         - Immutable non-ranking Revision Roadmap core (directly consumed with a separate explicit author sidecar)
      |
 === Phase 2.5: REVISION COACHING (Socratic Revision Guidance) ===
      |
@@ -232,13 +234,13 @@ User: "Review this paper"
             there), anchored to what the manuscript already claims ("the revised
             paper"). Questions only — never propose, substitute, rank, expand, or
             select a contribution claim (Kong L2 verb test); the user answers.
-         4. Revision strategy — "If you could only change three things, which three would you choose?"
+         4. Explicit author triage — records `will_address`, `wont_address`, or `not_on_point` for every source-ordered item, with no inferred work order
          5. Counter-argument response — Guides user to think about how to respond to Devil's Advocate challenges
-         6. Implementation planning — Helps prioritize revisions
+         6. Implementation planning — confirms exact block/operation scope and any registered-claim or declined-overlap authorization
      |
      +-> After dialogue ends, produces:
          - User's self-formulated revision strategy
-         - Reprioritized Revision Roadmap
+         - Immutable Roadmap unchanged + complete `author-adjudication/1.0` sidecar
      |
      ** User can say "just fix it" to skip guidance **
 ```
@@ -261,6 +263,35 @@ reasoning. Treat disagreement as a reason for targeted review. Do not vote,
 average results, or let the subagent silently rewrite the frozen judgment. If
 the host cannot dispatch the confirmed model or the result is structurally
 invalid, disclose the limitation and continue with a single-model result.
+
+### Review-target criteria binding (#684)
+
+When the caller supplies the author-confirmed #683 `ReviewTargetContext`, this
+skill consumes one unchanged pointer-only `ReviewCriteriaBindingManifest` per
+target review. It never resolves a target from the manuscript, reviewer
+preference, or model memory. The lifecycle is normative in
+`references/shared/references/review_criteria_consumer_protocol.md`.
+
+- The paper-content-blind Phase 1 payload for each seat includes the same
+  manifest, Target Criteria Brief, and a role-specific marker: `EIC`, `R1`,
+  `R2`, `R3`, or `DA`. Each output commits the ordered criterion ids and keeps
+  every interdisciplinary `parallel_conflicts[]` group separate; it does not
+  decide manuscript applicability.
+- Phase 2 receives the unchanged Phase 1 artifact plus manuscript content. It
+  may then assess applicability. Every Critical/Major bound finding also
+  follows the closed constructive sidecar contract: exact pointers, typed
+  manuscript anchor, separate scholarly/target relevance, minimum remedy,
+  optional stronger option, costs/trade-offs, and author-choice status.
+- Before synthesis, all five Phase 1 artifacts are recorded as the single
+  `external_panel` receipt. The synthesizer requires matching markers for all
+  five seats and never silently substitutes a field-general target.
+
+Scientific validity, venue fit, and submission readiness remain separate. No
+reviewer may invent evidence/results or replace author intent. Binding
+conformance may stop a mismatched handoff but never supplies a severity,
+editorial verdict, failure condition, checkpoint decision, or author triage.
+Without a resolved binding, every seat discloses
+`criteria_binding_unavailable` and the panel makes no venue-alignment claim.
 
 ---
 
@@ -334,6 +365,7 @@ invalid, disclose the limitation and continue with a single-model result.
 "Verification review" / "Check revisions"-> re-review
 "How accurate is your review scoring?"   -> calibration
 "Calibrate against these 10 papers"      -> calibration
+"Run directional calibration on these 3 papers" -> calibration (directional tier)
 ```
 
 ---
@@ -378,7 +410,7 @@ Current ResearchSpec owners:
 
 ## Guided Mode (Socratic Guided Review)
 
-Helps authors understand problems themselves through progressive revelation. EIC opens with strengths, then gradually introduces deeper issues from each reviewer perspective.
+Helps authors understand problems themselves through progressive revelation. The Journal-Fit Reviewer opens with genuine strengths when they exist (never manufactured, #574 A1/B1), then gradually introduces deeper issues from each reviewer perspective.
 
 > See `references/guided_mode_protocol.md` for dialogue flow, rules, and progressive revelation sequence.
 
@@ -425,6 +457,7 @@ The Devil's Advocate uses a dedicated format, not the standard reviewer template
 ## Editorial Decision Format
 
 The Editorial Decision Letter structure is detailed in `templates/editorial_decision_template.md`.
+The canonical per-mode decision authority table is `references/editorial_decision_standards.md` §0. Under a sprint contract, its mechanical v2 engine governs; no qualitative matrix overrides a fired action.
 
 ### Host-native alternate-model review
 
@@ -443,6 +476,8 @@ average results, or let the subagent silently rewrite the frozen judgment. If
 the host cannot dispatch the confirmed model or the result is structurally
 invalid, disclose the limitation and continue with a single-model result.
 
+For every `reviewer_full` run, the dispatching layer records actual seat-level observations and builds then replay-validates `review-panel-provenance/1.0` using `scripts/review_panel_provenance.py` before synthesis. Missing observations remain `unknown`; an intended route, persona label, or configured provider never fills them. The Editorial Decision Letter renders all six axes separately and includes the derived same-family or family-unknown correlated-error disclosure when required. A dispatch failure records the actual fallback execution, never a silent or inferred swap. The artifact proves only its named provenance dimensions; it never establishes independent error processes.
+
 ---
 
 ## Integration
@@ -460,8 +495,12 @@ deep-research --> academic-paper --> [integrity check] --> academic-paper-review
 |----------------------|-------------|
 | **Upstream: academic-paper -> reviewer** | Receives the complete paper output from `academic-paper` full mode, directly enters Phase 0 |
 | **Upstream: integrity check -> reviewer** | In the Pipeline, the paper must pass integrity check before entering reviewer |
-| **Downstream: reviewer -> academic-paper** | The Revision Roadmap format can be directly used as reviewer feedback input for `academic-paper` revision mode |
+| **Downstream: reviewer -> academic-paper** | `revision-roadmap/1.0` remains immutable; revision mode additionally requires the exact claim-surface manifest and complete explicit `author-adjudication/1.0` sidecar |
 | **Downstream: reviewer (re-review) -> integrity** | After re-review completes, proceeds to final integrity verification |
+
+The upstream handoff also carries the exact #684 context/manifest/brief when a
+criteria-aware target review is active. Re-review preserves that authority by
+pointer; a changed target starts a new, explicitly non-comparable review id.
 
 ### Pipeline Usage Example
 
@@ -488,14 +527,16 @@ deep-research --> academic-paper --> [integrity check] --> academic-paper-review
 | Reference | Purpose | Used By |
 |-----------|---------|---------|
 | `references/review_criteria_framework.md` | Structured review criteria framework (differentiated by paper type) | all reviewers |
-| `references/top_journals_by_field.md` | Top journal lists for major academic fields (EIC role calibration) | field_analyst, eic |
+| `references/top_journals_by_field.md` | Top journal lists for major academic fields (Journal-Fit Reviewer role calibration) | field_analyst, eic |
 | `references/editorial_decision_standards.md` | Accept/Minor/Major/Reject criteria and decision matrix | eic, editorial_synthesizer |
 | `references/statistical_reporting_standards.md` | Statistical reporting standards + APA 7.0 format quick reference + red flag list | methodology_reviewer |
-| `references/quality_rubrics.md` | Calibrated 0-100 scoring rubrics for 7 review dimensions with decision mapping | all reviewers |
+| `references/quality_rubrics.md` | Criterion-bound narrative judgement for 7 review dimensions; every current live seat and Schema 6 package remains `NOT_CALIBRATED` because candidate-profile application is not wired | all reviewers |
 | `references/review_quality_thinking.md` | Cognitive framework for review quality: three lenses (internal validity, external validity, contribution), common reviewer traps, calibration questions | all reviewers |
-| `references/re_review_mode_protocol.md` | Full re-review verification logic, R&R traceability output format, Socratic guidance after re-review | eic, editorial_synthesizer |
+| `references/re_review_mode_protocol.md` | Full re-review verification logic (three-gate contract), R&R traceability output format, Socratic guidance after re-review | orchestrating layer; routed-seat Phase 1/2A calls; Phase 2B integration call |
 | `references/guided_mode_protocol.md` | Guided mode dialogue flow, progressive revelation sequence, dialogue rules | all reviewers |
-| `references/calibration_mode_protocol.md` | Calibration mode: FNR/FPR/balanced accuracy measurement against user-supplied gold set, 5x ensembling, session-scoped confidence disclosure (v3.2) | all reviewers |
+| `references/calibration_mode_protocol.md` | Calibration mode: explicit 3-paper directional tier plus the default 5-20-paper full measurement tier, Minor/Major boundary matrix, and tier-scoped session disclosure | all reviewers |
+| `references/review_panel_provenance_protocol.md` | Closed six-axis execution-provenance semantics, correlated-error disclosure, and deterministic build/replay rules; no binary independence reduction | dispatcher, editorial_synthesizer, re-review consumer |
+| `references/reviewer_sprint_prompt_source.md` | Canonical marked source for the five inline sprint-reviewer Phase 1/2 prompt fragments and the synthesizer protocol; runtime mirrors stay inline for bare dispatch and are exact-sync linted | five panel reviewers, editorial_synthesizer |
 | `references/integration_guide.md` | Complete 9-step pipeline usage example | — |
 | `references/changelog.md` | Full version history | — |
 
@@ -506,7 +547,7 @@ deep-research --> academic-paper --> [integrity check] --> academic-paper-review
 | Template | Purpose |
 |----------|---------|
 | `templates/peer_review_report_template.md` | Review report template used by each reviewer |
-| `templates/editorial_decision_template.md` | EIC final decision letter template |
+| `templates/editorial_decision_template.md` | Editorial Decision Letter template (produced by `editorial_synthesizer_agent` in Phase 2 — not by the Journal-Fit Reviewer, #574 C2) |
 | `templates/revision_response_template.md` | Revision response template for authors (R->A->C format) |
 
 ---
@@ -527,10 +568,10 @@ Explicit prohibitions to prevent common failure modes, especially during long co
 | # | Anti-Pattern | Why It Fails | Correct Behavior |
 |---|-------------|-------------|-----------------|
 | 1 | **Fabricating review comments** | Synthesizer invents critique not in any reviewer report | Every synthesis point must trace to a specific Phase 1 reviewer report |
-| 2 | **Duplicate criticisms across reviewers** | R1/R2/R3 raise identical points = fake diversity | Each reviewer has a distinct perspective; overlapping topics get different angles |
-| 3 | **Ignoring Devil's Advocate CRITICAL findings** | Editorial Decision says Accept despite DA flagging critical issues | If DA finds CRITICAL → Decision cannot be Accept (Checkpoint Rule #4) |
+| 2 | **Overlap suppression** | Reviewer omits or rewords a real finding to avoid duplicating peers — unexecutable under blindness (Iron Rule #2) and destroys the corroboration signal | Report what you find from your assigned angle; the synthesizer deduplicates and counts corroboration (#574 P0-3). Panel angle diversity is field_analyst's config-time job |
+| 3 | **Ignoring Devil's Advocate CRITICAL findings** | Editorial Decision silently bypasses a DA CRITICAL without adjudicating it | Every DA CRITICAL is adjudicated visibly (Checkpoint Rule #4): a validated or genuinely unresolved one blocks Accept; one the Journal-Fit Reviewer adjudicates and rejects is recorded with rationale and does not veto by itself (#574 B1 — an unvalidated negative claim carries no more decision power than an unvalidated positive one) |
 | 4 | **Rubber-stamp re-review** | Re-review says "all addressed" without verification | Each concern must be independently verified against the revised manuscript |
-| 5 | **Sycophantic score inflation** | Giving 8/10 to mediocre work to avoid conflict | Scores must be evidence-based; a paper with methodology gaps cannot score >6 on rigor |
+| 5 | **Sycophantic judgement inflation** | Marking a criterion met to avoid conflict despite contrary manuscript evidence | Apply the named criterion to anchored evidence; report `PARTLY_MEETS`, `DOES_NOT_MEET`, or `NOT_ASSESSED` when that is what the evidence supports |
 | 6 | **Editing the manuscript** | Reviewer "helpfully" fixes the paper directly | READ-ONLY: produce reports, never modify the paper (Checkpoint Rule #6) |
 | 7 | **Generic feedback** | "The methodology could be stronger" without specifics | Every criticism must include: what's wrong, where it is, and a proposed fix |
 
@@ -540,15 +581,15 @@ Explicit prohibitions to prevent common failure modes, especially during long co
 
 | Dimension | Requirement |
 |-----------|-------------|
-| Perspective differentiation | Each reviewer's review must come from a different angle; no duplicate criticisms |
-| Evidence-based | EIC's decision must be based on specific reviewer comments; no fabrication |
-| Specificity | Reviews must cite specific passages, data, or page numbers from the paper; no vague comments |
-| Balance | Strengths and Weaknesses must be balanced; cannot only criticize without affirming |
+| Perspective differentiation | Each reviewer reviews from their assigned angle (config-time assignment diversity); overlapping findings may corroborate one another, but role/persona separation is not evidence of independent errors — deduplication happens at synthesis, never by reviewers self-censoring (#574 P0-3/#740) |
+| Evidence-based | The Journal-Fit Reviewer's recommendation signal and the synthesizer's decision must be based on specific reviewer comments; no fabrication |
+| Specificity | Every finding carries a typed evidence anchor (`templates/peer_review_report_template.md` § Evidence Anchor Types); no vague comments (#574 A2) |
+| Evidence-driven balance | Findings follow the evidence in both directions — genuine merits acknowledged, no manufactured balance and no finding quotas (#574 A1/B1) |
 | Professional tone | Review tone must be professional and constructive; avoid personal attacks or demeaning language |
 | Actionability | Each weakness must include specific improvement suggestions |
 | Format consistency | All reports must follow the template structure; no freestyle |
 | **Devil's Advocate completeness** | **Devil's Advocate must produce the strongest counter-argument; cannot be omitted** |
-| **CRITICAL threshold** | **⚠️ IRON RULE: Devil's Advocate CRITICAL issues cannot be ignored by the Editorial Decision** |
+| **CRITICAL threshold** | **⚠️ IRON RULE: Devil's Advocate CRITICAL issues cannot be ignored by the Editorial Decision — every one is adjudicated visibly (validated/unresolved blocks Accept; adjudicated-and-rejected is recorded with rationale, never silently bypassed — #574 B1)** |
 
 ---
 
@@ -577,15 +618,18 @@ Follows the paper's language. Academic terms remain in English. User can overrid
 
 Replacement scope: `REVIEW-002` for `academic-paper-reviewer`.
 
-- **Sprint contract.** Resolve the mode-specific frozen contract JSON through
-  `researchspec/runs/<run-id>/handoff.md`, then deep-copy it for permitted
-  invocation fields. Preserve `panel_size`, `acceptance_dimensions`, severity
-  and cross-reviewer quantifiers, measurement procedure, override ladder, and
-  bounded amendments. Return the instantiated contract and each phase output to
-  the producing node for handoff recording; send lint, panel-cardinality,
-  and failure-condition results to the review Gate helper for
-  `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`. The following synthesizer
-  protocol and mode-specific panel sizes remain unchanged.
+- **Reviewer v2 sprint contract.** Resolve the mode-specific frozen contract JSON through
+   `researchspec/runs/<run-id>/handoff.md`, then deep-copy it for permitted
+   invocation fields. Preserve `panel_size`, `acceptance_dimensions`, each
+   dimension's `eligible_roles` and `owner_role`, fatal versus repairable
+   blocks, severity and cross-reviewer quantifiers, measurement procedure,
+   override ladder, and bounded amendments. Bind full and methodology contracts
+   to their v2 identifiers; do not infer a role score for an ineligible
+   dimension. Return the instantiated contract and each phase output to the
+   producing node for handoff recording; send lint, panel-cardinality,
+   and conformance results to the review Gate helper for
+   `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`. The following synthesizer
+   protocol and mode-specific panel sizes remain contract-defined.
 
 Current ResearchSpec owners:
 
@@ -602,15 +646,24 @@ prerequisites: do not install, upgrade, or fetch them. If either prerequisite is
 missing, pause the panel flow and report the missing prerequisite. Agent judgment
 cannot replace the deterministic checks.
 
-1. Validate the sprint contract with
+1. Validate the role-scoped v2 sprint contract with
    `scripts/check_sprint_contract.py <contract.json>`.
-2. After all reviewer reports and the synthesis exist, run
+2. Before synthesis, run role and phase conformance with
+   `scripts/check_phase_conformance.py --contract <contract.json> --role
+   <dispatch-role> --phase1 <phase1.md> --phase2 <phase2.md> --manuscript
+   <paper> --metadata <metadata.json>`.
+3. After all reviewer reports and the synthesis exist, run
    `scripts/check_panel_synthesis.py --contract <contract.json> --report
-   <r1.md> ... --report <rN.md> --synthesis <synthesis.md>`.
-3. Treat a nonzero exit as a failed candidate check and follow the bounded retry
+   <r1.md> ... --report <rN.md> --synthesis <synthesis.md>`. For a
+   `reviewer_full` panel, build and replay-validate the provenance artifact
+   with `scripts/review_panel_provenance.py` before synthesis; bind it to the
+   `reviewer/reviewer_full/v2` contract and the exact five-seat roster.
+4. Treat a nonzero exit as a failed candidate check and follow the bounded retry
    or abort behavior reported by the checker. Never rewrite a checker verdict or
-   accept a malformed candidate by inspection.
-4. Record accepted review and synthesis files as boundary outputs in
+   accept a malformed candidate by inspection. Role eligibility, fatal versus
+   repairable blocks, and the closed decision enum remain contract data; a
+   passing checker does not decide a ResearchSpec Gate.
+5. Record accepted review and synthesis files as boundary outputs in
    `researchspec/runs/<run-id>/handoff.md`. A passing checker establishes
    only mechanical self-consistency. It does not confirm a formal ResearchSpec
    Gate; Verify prepares that judgment and only a human-confirmed Decide action
@@ -619,12 +672,20 @@ cannot replace the deterministic checks.
 The packaged checker closure is exactly:
 
 - `scripts/check_sprint_contract.py`
+- `scripts/check_phase_conformance.py`
 - `scripts/check_panel_synthesis.py`
+- `scripts/recompute_receipts.py`
+- `scripts/review_panel_provenance.py`
 - `assets/shared/sprint_contract.schema.json`
+- `assets/shared/contracts/reviewer/full.json`
+- `assets/shared/contracts/reviewer/methodology_focus.json`
+- `assets/shared/contracts/reviewer/review_panel_provenance_input.schema.json`
+- `assets/shared/contracts/reviewer/review_panel_provenance.schema.json`
+- `assets/shared/contracts/reviewer/review_panel_provenance_carrier.schema.json`
 <!--/rs:REVIEW-016-->
-- **Synthesizer three-step mechanical protocol.** Build cross-reviewer matrix → evaluate each failure_condition with panel-relative quantifier + expression vocabulary → resolve precedence by severity. Forbidden operations explicit in `agents/editorial_synthesizer_agent.md`.
-- **methodology_focus reduced panel.** `reviewer_methodology_focus` mode runs a 2-reviewer panel (EIC + methodology only) instead of the default 5.
-- **Templates:** `assets/shared/contracts/reviewer/full.json` (panel 5) and `assets/shared/contracts/reviewer/methodology_focus.json` (panel 2). Reserved modes (`reviewer_re_review`, `reviewer_calibration`, `reviewer_guided`) keep pre-v3.6.2 behaviour until follow-up patch templates land.
+- **Synthesizer three-step mechanical protocol.** Build per-dimension eligible-seat matrix → apply each condition's quantifier per dimension, then its dimension quantifier → resolve precedence by severity. Majority with one assessed eligible seat means that seat decides. Forbidden operations are explicit in `agents/editorial_synthesizer_agent.md`.
+- **methodology_focus reduced panel.** `reviewer_methodology_focus` mode runs a 2-reviewer panel (Journal-Fit Reviewer, internal role `eic`, + methodology only) instead of the default 5.
+- **Templates:** `assets/shared/contracts/reviewer/full.json` (panel 5) and `assets/shared/contracts/reviewer/methodology_focus.json` (panel 2). Reserved modes (`reviewer_calibration`, `reviewer_guided`) keep pre-v3.6.2 behaviour until follow-up patch templates land; `reviewer_re_review` left the Schema 13 enum with #576 Spec B and is governed by the dedicated contract family `shared/contracts/re_review/`.
 
 ---
 
@@ -651,8 +712,8 @@ invalid, disclose the limitation and continue with a single-model result.
 
 | Item | Content |
 |------|---------|
-| Skill Version | 1.10.0 |
-| Last Updated | 2026-07-11 |
+| Skill Version | 1.11.1 |
+| Last Updated | 2026-08-15 |
 | Maintainer | Cheng-I Wu |
 | Dependent Skills | academic-paper v1.0+ (upstream/downstream integration) |
 | Role | Multi-perspective academic paper review simulator |

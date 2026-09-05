@@ -47,9 +47,13 @@ function manifest(validatorOverrides: Partial<CapabilityManifest["validators"][n
 
 async function packageRoot(): Promise<string> {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-validators-"));
+  await writeFile(path.join(root, "project.md"), "Project intent\n", "utf8");
   await writeFile(path.join(root, "validator.js"), [
     "const fs = require('node:fs');",
+    "const path = require('node:path');",
     "const input = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));",
+    "const projectIntent = input.inputs.find((item) => item.role === 'project_intent');",
+    "if (!projectIntent || !path.isAbsolute(projectIntent.path) || !fs.statSync(projectIntent.path).isFile()) process.exit(1);",
     "if (!input.outputs.some((item) => item.role === 'rq_brief' && item.path.endsWith('.md'))) process.exit(1);",
     "",
   ].join("\n"), "utf8");
@@ -59,7 +63,7 @@ async function packageRoot(): Promise<string> {
 void test("script validator passes a compliant submission", async () => {
   const root = await packageRoot();
   try {
-    const result = await runCapabilityValidators(manifest(), root, { run_id: "run-1", node_id: "rq", submitted_at: "2026-08-15T12:00:00+08:00", outputs: [{ role: "rq_brief", path: "rq.md" }] });
+    const result = await runCapabilityValidators(manifest(), root, { run_id: "run-1", node_id: "rq", submitted_at: "2026-08-15T12:00:00+08:00", inputs: [{ role: "project_intent", path: path.join(root, "project.md") }], outputs: [{ role: "rq_brief", path: "rq.md" }] });
     assert.equal(result.ok, true);
     assert.deepEqual(result.results.map((item) => item.status), ["pass"]);
   } finally { await rm(root, { recursive: true, force: true }); }
@@ -68,7 +72,7 @@ void test("script validator passes a compliant submission", async () => {
 void test("script validator fails an invalid submission", async () => {
   const root = await packageRoot();
   try {
-    const result = await runCapabilityValidators(manifest(), root, { run_id: "run-1", node_id: "rq", submitted_at: "2026-08-15T12:00:00+08:00", outputs: [{ role: "other", path: "other.md" }] });
+    const result = await runCapabilityValidators(manifest(), root, { run_id: "run-1", node_id: "rq", submitted_at: "2026-08-15T12:00:00+08:00", inputs: [{ role: "project_intent", path: path.join(root, "project.md") }], outputs: [{ role: "other", path: "other.md" }] });
     assert.equal(result.ok, false);
     assert.equal(result.results[0]?.status, "fail");
   } finally { await rm(root, { recursive: true, force: true }); }
@@ -77,7 +81,7 @@ void test("script validator fails an invalid submission", async () => {
 void test("network validator failure returns degraded, never pass", async () => {
   const root = await packageRoot();
   try {
-    const result = await runCapabilityValidators(manifest({ network: true, degraded_verdict: "unresolvable", runner: { argv0: "definitely-missing-validator", args_template: [] } }), root, { run_id: "run-1", node_id: "rq", submitted_at: "2026-08-15T12:00:00+08:00", outputs: [{ role: "rq_brief", path: "rq.md" }] });
+    const result = await runCapabilityValidators(manifest({ network: true, degraded_verdict: "unresolvable", runner: { argv0: "definitely-missing-validator", args_template: [] } }), root, { run_id: "run-1", node_id: "rq", submitted_at: "2026-08-15T12:00:00+08:00", inputs: [{ role: "project_intent", path: path.join(root, "project.md") }], outputs: [{ role: "rq_brief", path: "rq.md" }] });
     assert.equal(result.ok, false);
     assert.equal(result.results[0]?.status, "degraded");
   } finally { await rm(root, { recursive: true, force: true }); }
@@ -86,7 +90,7 @@ void test("network validator failure returns degraded, never pass", async () => 
 void test("unknown policy and unresolved schema validators fail closed", async () => {
   const root = await packageRoot();
   try {
-    const submission = { run_id: "run-1", node_id: "rq", submitted_at: "2026-08-15T12:00:00+08:00", outputs: [{ role: "rq_brief", path: "rq.md" }] };
+    const submission = { run_id: "run-1", node_id: "rq", submitted_at: "2026-08-15T12:00:00+08:00", inputs: [{ role: "project_intent", path: path.join(root, "project.md") }], outputs: [{ role: "rq_brief", path: "rq.md" }] };
     const unknownPolicy = manifest({ validator_id: "capability.policy.unknown", kind: "policy", runner: undefined });
     const unresolvedSchema = manifest({ validator_id: "schema.unknown", kind: "schema", runner: undefined });
     assert.deepEqual((await runCapabilityValidators(unknownPolicy, root, submission)).results.map((item) => item.code), ["policy_validator_unknown"]);
@@ -148,4 +152,24 @@ void test("submitGraphNode runs declared capability validators from a registry",
     await rm(workspaceRoot, { recursive: true, force: true });
     await rm(packageBase, { recursive: true, force: true });
   }
+});
+
+void test("output policy permits omitted optional roles", async () => {
+  const root = await packageRoot();
+  try {
+    const base = manifest();
+    const optional = {
+      ...base,
+      outputs: [...base.outputs, { role: "optional_trace", schema_ref: "trace.v1", required: false }],
+    } satisfies CapabilityManifest;
+    const result = await runCapabilityValidators(optional, root, {
+      run_id: "run-1",
+      node_id: "rq",
+      submitted_at: "2026-08-15T12:00:00+08:00",
+      inputs: [{ role: "project_intent", path: path.join(root, "project.md") }],
+      outputs: [{ role: "rq_brief", path: "rq.md" }],
+    });
+    assert.equal(result.ok, true);
+    assert.equal(result.results[0]?.status, "pass");
+  } finally { await rm(root, { recursive: true, force: true }); }
 });

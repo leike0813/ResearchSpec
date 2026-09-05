@@ -1518,7 +1518,7 @@
     {
       "skill_id": "academic-paper-reviewer",
       "title": "Academic Paper Reviewer",
-      "summary": "Independent manuscript peer review, focused methodology assessment, guided review, and revision verification.",
+      "summary": "Role-scoped, contract-governed manuscript peer review with focused methodology assessment, guided review, and revision verification.",
       "intents": [
         "peer-review an academic manuscript",
         "verify a revised manuscript",
@@ -1917,9 +1917,9 @@
         },
         {
           "route_ref": "academic-paper-reviewer:calibration",
-          "title": "Reviewer calibration",
+          "title": "Tiered reviewer calibration",
           "intents": [
-            "measure reviewer accuracy against a gold set"
+            "measure reviewer accuracy against a gold set with an explicit directional or full tier and scoped disclosure"
           ],
           "boundary_outputs": [
             {

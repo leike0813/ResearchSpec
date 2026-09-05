@@ -1,6 +1,6 @@
 ---
 name: check-contamination-signals
-description: "Deterministic contamination signal computation."
+description: "Deterministic contamination signal computation for advisory findings."
 metadata:
   capability_id: check-contamination-signals
   node_kind: checker
@@ -24,21 +24,58 @@ Execute exactly one ResearchSpec capability node.
 ## Knowledge
 
 - Load knowledge ID `degradation-registry` from `knowledge/degradation-registry.json`.
+- Load knowledge ID `validators-citations.py` from `validators/citations.py`.
+
+## Tools
+
+- `validators/citations.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 
 ## Procedure
 
 # Procedure
 
-Run the bundled `validators/contamination-signals.py` with the current submission JSON.
+Generate the report with `validators/contamination-signals.py` using the executable report contract below.
 
-1. Compute contamination signals from corpus and model-output evidence.
-2. Do not infer contamination from style alone.
-3. Report advisory scores and the evidence used.
-4. Never block output on advisory signals alone.
+Supply structured corpus records with venue, year, source pointer and any host-obtained resolver observations. Missing observations remain missing or degraded; computation never contacts services.
+
+Use JSON/YAML `{entries: [...]}` (or a root array), with citation_key, year,
+venue or source_pointer, and optional resolver_outcomes. Resolver observations
+use status matched/unmatched with queried_by id/title, or unreachable/skipped
+with queried_by null. Manual acquisition remains an explicit exemption;
+missing and unreachable observations do not become false signals.
+
+1. Compute bounded contamination signals from corpus and model-output evidence;
+   report the exact input surface and resolver state used.
+2. Do not infer contamination from style alone, and do not turn an unavailable,
+   skipped, or title-only lookup into a positive match.
+3. Keep heuristic, deterministic, and process signals distinct. Report advisory
+   scores, evidence, and any unresolved/degraded state without relabelling it
+   clean or failed.
+4. This capability emits an advisory observation only. It never mints citation
+   markers, changes a terminal policy, blocks output, or recommends replacement
+   prose.
 
 ## Output Format
 
 Structured verifier findings from the script.
+
+## Executable report contract
+
+Use Python 3 with PyYAML for YAML inputs; PDF parsing additionally needs pypdf.
+Use the host's already configured Python environment. Missing dependencies must
+be reported; never install them without user authorization.
+
+Create an external request JSON with `inputs: [{"role": "<input role>", "path": "<absolute material path>"}]`
+from the paths returned by `researchspec instructions`. Run:
+
+`python3 validators/contamination-signals.py contamination /absolute/request.json --generate`
+
+Save stdout unchanged as the declared external JSON report. The validator used by
+`advance` recomputes the report from the graph's current resolved inputs and
+rejects altered results. It does not write reports or mutate inputs. A valid
+report can contain FAIL, UNAVAILABLE or not_checked findings: these remain
+visible evidence for the owning human Gate, never a scientific clearance.
+
 
 ## Completion
 

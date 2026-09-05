@@ -4,14 +4,15 @@ ARS 提取工件（Extraction Artifact）— M4 修订与定稿段
 ══════════════════════════════════════════════
 工件类型: capability
 能力/包 ID: CAP-M4-05 temporal-integrity-verification（脚本资产 2/2：防漂移 lint）
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/ars/scripts/check_v3_9_4_temporal_verification.py（全文）
 变更台账（ledger）:
     1. [保留] 脚本全文逐字节保留。
     2. [标注] 上游对时间验证表面（写入方铁律 + 验证器）的镜像一致性 lint；吸收后归引擎侧验证器资产（Q6）。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->
@@ -57,7 +58,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS = REPO_ROOT / "shared/contracts/passport"
 
 BIBLIOGRAPHY_AGENT_PATH = REPO_ROOT / "deep-research/agents/bibliography_agent.md"
-BIBLIOGRAPHY_AGENT_SHA256 = "885ef79f7a37cc03e0fcb9c4a7deecb9bb9f9bbae5b98ce2c7c9e42804e76dea"  # #548 baseline: added the "Last Searched" line to the Search Strategy output template (Schema 2 last_searched_at emission); NO temporal/M6/M5 logic touched, ownership invariant intact. (Previous #511 Part A baseline; F2 ownership guard per spec §3.4 + §3.6. The #511 apply added ONLY the "Omission reason-provenance" paragraph to the Triangulation Extension § Per-API degradation area (contamination_signal_omissions emission contract); NO M6 citation-provenance / M5 version-family / temporal logic added, so the ownership invariant the hash protects is intact. (Previous baseline 39370675… was the #489 harness-retirement B4-F01 state.)
+BIBLIOGRAPHY_AGENT_SHA256 = "d6dc70e8775a188b3d51ea7ee43b5a58fc5013119086166516f05cf006b15ad5"  # #738 baseline: the /ars-mark-read example now supplies required --scope; NO temporal/M6/M5 logic touched, ownership invariant intact. Previous accepted #660/#651/#548/#511 additions remain covered by the same rule.
 
 
 def _validate(yaml_path: Path, schema_path: Path) -> list[str]:

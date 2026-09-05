@@ -1,7 +1,7 @@
 schema_version: "1"
 capability_id: judgment-devils-advocate-stress-test
 title: Devil's Advocate Stress Test
-description: Attacks the strongest claims without scoring.
+description: Stress-tests claims and assesses only DA-eligible contract dimensions.
 maturity: operational
 class: judgment
 node_kind: checker
@@ -38,13 +38,18 @@ knowledge_refs:
     path: knowledge/logical-fallacies.md
     content_hash: 5282c4e968f35aa67b58905d7629d147bc9b432aec1773cf494b2ca79af72bc9
     license: CC BY-NC 4.0
+  - knowledge_id: sprint-contract
+    path: knowledge/sprint-contract.md
+    content_hash: a032f0782146538d70ac81b997ee675c9bf643d2674b0d9a91c74128a02bb84d
+    license: CC BY-NC 4.0
 gate_policy: required
 provenance:
   origin: ars-derived
   extraction_artifact_ids:
     - CAP-M3-05
     - KP-M3-08
+    - KP-M3-06
   upstream_sources:
     - path: authoring/ars/m3-integrity-review/capabilities/05_devils_advocate.reviewer-variant.md
-      sha256: 1faf3a87101d16cc14e0c2d2e6f5962f670cbcbef04a381c947998497dd166cc
+      sha256: b42eb5559bf91c8767f85e532dfa240e5e30feb92ae3fc0be96f20058acfcf6a
 license: CC BY-NC 4.0

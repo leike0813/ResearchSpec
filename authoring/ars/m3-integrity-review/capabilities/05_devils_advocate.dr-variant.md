@@ -4,7 +4,7 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 ══════════════════════════════════════════════
 工件类型: capability
 能力/包 ID: CAP-M3-05 devils-advocate-stress-test（deep-research 变体）
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/ars/deep-research/agents/devils_advocate_agent.md（全文）
@@ -14,7 +14,8 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
     3. [标注] 内嵌 Concession Threshold Protocol 段已另存 KP-M3-05a，原文保留，authoring 阶段改引用。
     4. [标注] Three Mandatory Checkpoints 段的 checkpoint 语义属流程层（Q6），原文保留。
     5. [保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    6. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->
@@ -191,7 +192,7 @@ When the user or another agent rebuts a DA finding, the DA **must not automatica
 
 ### Cross-Model DA (Optional, v3.0)
 
-When `ARS_CROSS_MODEL` is set, do not send the reviewed material automatically. First ask for explicit user consent and identify the external provider, model, and content class that would be sent. If the user approves, after completing each checkpoint report, send only the reviewed material needed for an independent critique (without your own DA findings — to prevent anchoring) to the cross-model. Add any novel findings as `[CROSS-MODEL-FINDING]`. If the cross-model API fails or consent is not granted, log `[CROSS-MODEL-SKIPPED]` or `[CROSS-MODEL-ERROR]` as appropriate and continue with single-model DA. See `shared/cross_model_verification.md` for setup and API patterns. When not set, standard single-model DA operates unchanged.
+When `ARS_CROSS_MODEL` is set, do not send the reviewed material automatically. First ask for explicit user consent and identify the external provider, model, and content class that would be sent. If the user approves, after completing each checkpoint report, send only the reviewed material needed for a blind, separately executed critique (without your own DA findings — to prevent anchoring) to the cross-model. Add any novel findings as `[CROSS-MODEL-FINDING]`. Blinding and separate execution are typed facts, not proof of independent errors. If the cross-model API fails or consent is not granted, log `[CROSS-MODEL-SKIPPED]` or `[CROSS-MODEL-ERROR]` as appropriate and continue with single-model DA. See `shared/cross_model_verification.md` for setup and API patterns. When not set, standard single-model DA operates unchanged.
 
 ### Relationship to Reviewer DA
 

@@ -1,33 +1,29 @@
 # Procedure
 
-Run the bundled `validators/passport-verifier.py` with the current submission JSON.
+Generate the report with `validators/passport-verifier.py` using the executable report contract below.
 
-1. Parse the material passport.
-2. Verify required fields, source bindings, and schema version.
-3. Report missing or invalid entries.
-4. Never infer missing provenance.
+Supply material_passport as JSON/YAML with literature_corpus entries. Computation checks required citation key, title, source pointer, year, CSL authors, unique keys and acquisition/audit consistency. Source truth, citation existence and full upstream runtime schema validation remain explicitly not_checked.
 
-## Reset Boundary Verification
+1. Parse the material passport and validate the current schema and required
+   source bindings.
+2. Report missing or invalid entries, preserving unknown, stale, degraded, and
+   not-checked states as such. Never infer missing provenance, review, consent,
+   or authorization from a schema-shaped document.
+3. The passport is a supplied evidence record. This verifier does not mutate it,
+   append compliance history, grant a Gate, or decide whether a workflow may
+   advance.
 
-When the submission carries a passport resume request, also verify the reset ledger:
+## ResearchSpec boundary
 
-1. Locate the `kind: boundary` entry by the requested 12-hex `resume_from_passport` hash; mismatch is a hard error.
-2. Verify no later `kind: resume` entry already carries `consumes_hash` equal to that hash; a second resume is forbidden.
-3. Compute `awaiting_resume`: a boundary entry is awaiting resume iff no later resume entry consumes its hash.
-4. Validate `verification_status`: STALE or UNVERIFIED requires a warning and human re-verification; VERIFIED may proceed.
-5. Validate pending decision options: if `pending_decision` is present, every option must carry `value`, `next_stage`, and optional `next_mode`; never auto-advance from the advisory `next` field.
-6. Verify ledger append-only semantics and boundary hash chain placeholders before accepting the resume request.
+Treat the passport as optional, read-only evidence. This capability validates its
+shape and source pointers only. It does not interpret `resume_from_passport`,
+consume boundary/resume entries, append a ledger, acquire a lock sidecar, or
+create a hash chain. If those upstream fields are supplied, report them as
+unconsumed context rather than acting on them. Resume routing, Gate verdicts, and
+run completion remain the authority of the ResearchSpec CLI, the frozen graph,
+the owning node instance, and the external handoff.
 
 ## Output Format
 
-Structured verifier findings from the script, plus:
-
-```markdown
-## Passport Resume Verification
-- boundary_hash: [...]
-- awaiting_resume: true | false
-- consumed_already: true | false
-- verification_status: [...]
-- pending_decision: none | [...]
-- verdict: pass | fail | needs_decision
-```
+Structured verifier findings from the script, with unconsumed upstream resume
+context clearly labelled when present.

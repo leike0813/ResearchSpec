@@ -19,7 +19,7 @@ import type { CapabilityGraphProfile, GraphDecision, GraphGate } from "../contra
 import { executeWritePlan, planDirectFileEdit, sha256, type PlannedWrite } from "../workspace/write-plan.js";
 import type { GraphNodeScanRecord, GraphRunScanRecord, GraphWorkspaceIndex } from "./graph-workspace-index.js";
 import { BoundaryPathError, resolveBoundaryPath } from "./boundary-path.js";
-import { runCapabilityValidators } from "../../capabilities/validators.js";
+import { runCapabilityValidators, type ValidatorInput } from "../../capabilities/validators.js";
 import { STABLE_SPEC_PATHS, validateGraphAgainstCapabilityRegistry, type LoadedCapabilityRegistry } from "../../capabilities/registry.js";
 import type { CapabilityManifest } from "../contracts/capability-manifest.js";
 
@@ -505,11 +505,12 @@ export async function submitGraphNode(input: SubmitGraphNodeInput): Promise<Subm
       nodeId: input.nodeId, round: input.round,
       manifest: registered.manifest,
     });
-    await consumeGraphNodeInputs(input.index, inputs);
+    const validatorInputs = await consumeGraphNodeInputs(input.index, inputs);
     const validation = await runCapabilityValidators(registered.manifest, registered.packageRoot, {
       run_id: input.runId,
       node_id: input.nodeId,
       submitted_at: input.submittedAt,
+      inputs: validatorInputs,
       outputs: validatorOutputs,
     });
     if (!validation.ok) {
@@ -895,27 +896,34 @@ function requireGraphInputContract(registry: LoadedCapabilityRegistry, graph: Ca
   if (diagnostics.length > 0) throw new GraphRunError("profile_capability_invalid", "Graph capability input contract is invalid.", "domain", diagnostics);
 }
 
-async function consumeGraphNodeInputs(index: GraphWorkspaceIndex, inputs: readonly ResolvedGraphNodeInput[]): Promise<void> {
+async function consumeGraphNodeInputs(index: GraphWorkspaceIndex, inputs: readonly ResolvedGraphNodeInput[]): Promise<ValidatorInput[]> {
+  const consumed: ValidatorInput[] = [];
   for (const input of inputs) {
-    if (input.source === "parameter") continue;
+    if (input.source === "parameter") {
+      consumed.push({ role: input.role, value: input.value });
+      continue;
+    }
     if (input.source === "stable_spec") {
       const relativePath = input.path?.slice("researchspec/".length);
       if (!relativePath || !index.files.has(relativePath)
         || index.diagnostics.some((diagnostic) => diagnostic.blocking && diagnostic.path === path.join(index.workspace, relativePath))) {
         throw new GraphRunError("node_input_unresolved", `Stable specification is unavailable for ${input.role}.`, "conflict", { role: input.role });
       }
+      consumed.push({ role: input.role, path: path.join(index.workspace, relativePath) });
       continue;
     }
     try {
-      await resolveBoundaryPath(index.projectRoot, input.path ?? "", "consume-input", input.path_kind);
+      const resolved = await resolveBoundaryPath(index.projectRoot, input.path ?? "", "consume-input", input.path_kind);
       if (input.path_kind === "directory") {
         await resolveBoundaryPath(index.projectRoot, `${input.path ?? ""}/${input.entry_path ?? ""}`, "consume-input");
       }
+      consumed.push({ role: input.role, path: resolved.absolutePath });
     } catch (error) {
       if (error instanceof BoundaryPathError) throw new GraphRunError(error.code, error.message, "conflict", { role: input.role, path: input.path });
       throw error;
     }
   }
+  return consumed;
 }
 
 function resolveChildHandoffInputs(

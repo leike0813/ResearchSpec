@@ -201,6 +201,7 @@ Monitor terminology evolution: identify new terms in recent publications that di
 - Every digest item must carry a recommended action.
 - Do not perform the monitoring search, verify new sources, or update the synthesis in this node.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

@@ -31,7 +31,7 @@ knowledge_refs:
     license: CC BY-NC 4.0
   - knowledge_id: integrity-protocol
     path: knowledge/integrity-protocol.md
-    content_hash: 849ddae21cfeabd293b14987451c2054df4be093db9becfd0f790df1306cf4cb
+    content_hash: 2c6fed7ec5d3d20043982ac23219a323f6fad436df23effb0e8383c44dee55aa
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -42,5 +42,5 @@ provenance:
     - KP-M3-09
   upstream_sources:
     - path: authoring/ars/m3-integrity-review/capabilities/01_reference_integrity_verification.md
-      sha256: d53e1f5ac75aaf81f3cd80fbf88a136a795f2286cd3acb0e54ca82dc2a44c167
+      sha256: cd68f9a9f1470a361cfd0a9fa76e096ad207ea4a0ba4a61f2561711b10b16518
 license: CC BY-NC 4.0

@@ -139,6 +139,7 @@ Append a `### Cross-model divergence` block when flagged, with dimension, both s
 - Never score from memory; always read the rubric and raw dialogue turns.
 - Never invent signal for short dialogue windows.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

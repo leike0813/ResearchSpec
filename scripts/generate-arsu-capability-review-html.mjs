@@ -8,7 +8,7 @@ const ROOT = process.cwd();
 const ARS = path.join(ROOT, "vendor", "ars");
 const CAPABILITIES = path.join(ROOT, "skills", "capabilities");
 const PROFILE_ROOT = path.join(ROOT, "skills", "arsu", "profiles");
-const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.19.0-828ef3b";
+const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.21.1-127ff85";
 const OUT = process.argv[2] ? path.resolve(process.argv[2]) : path.join(ROOT, "audits", "arsu", DEFAULT_ANCHOR, "artifacts", "arsu-mode-capability-review.html");
 
 const esc = (text) => String(text ?? "")
@@ -61,8 +61,8 @@ const PAPER_AGENT_PURPOSE = {
   revision_coach_agent: "评审意见解析、revision roadmap 与回应信骨架",
 };
 const REVIEWER_AGENT_PURPOSE = {
-  field_analyst_agent: "论文学科定位与 5 张评审人配置卡",
-  eic_agent: "EIC 鸟瞰视角：期刊匹配、原创性、总体裁决",
+  field_analyst_agent: "论文学科定位与 4 张配置卡，另设固定 DA 席位",
+  eic_agent: "Journal-Fit Reviewer：已确认投稿目标、原创性与贡献",
   methodology_reviewer_agent: "R1 方法学深度评审",
   domain_reviewer_agent: "R2 领域文献与理论评审",
   perspective_reviewer_agent: "R3 跨学科 / 实践视角评审",
@@ -90,6 +90,8 @@ const pipelineRef = (name, purpose) => ref(PIPELINE, name, purpose);
 const DR_COMMON_REFS = [
   drRef("mode_selection_guide.md", "mode 选择流程图与对比表"),
   drRef("cross_agent_quality_definitions.md", "跨 agent 的证据等级、时效与严重度统一定义"),
+  sharedRef("references/human_subjects_authority_protocol.md", "明确机构权限、适用范围与未决状态"),
+  sharedRef("references/evidence_row_protocol.md", "证据观察、来源范围与推断分离"),
 ];
 const PAPER_COMMON_REFS = [
   paperRef("mode_selection_guide.md", "academic-paper mode 选择指南"),
@@ -98,7 +100,10 @@ const PAPER_COMMON_REFS = [
 ];
 const REVIEWER_COMMON_REFS = [
   reviewerRef("review_criteria_framework.md", "按论文类型区分的结构化评审标准"),
-  reviewerRef("quality_rubrics.md", "7 维 0-100 评分 rubric 与 decision mapping"),
+  reviewerRef("quality_rubrics.md", "角色限定的定性标准与决定边界"),
+  sharedRef("references/review_criteria_consumer_protocol.md", "作者确认目标与形成性、内部及外部评审的共同标准"),
+  reviewerRef("reviewer_sprint_prompt_source.md", "角色评分、fatal/repairable 与编辑综合协议"),
+  reviewerRef("review_panel_provenance_protocol.md", "评审来源与相关误差边界"),
 ];
 
 const MODE_DEFINITIONS = [
@@ -321,6 +326,7 @@ const MODE_DEFINITIONS = [
       ...PAPER_COMMON_REFS,
       paperRef("failure_paths.md", "解析失败与歧义处理"),
       paperRef("revision_patch_protocol.md", "下游 revision 使用的 roadmap 契约"),
+      paperRef("committee_correspondence_protocol.md", "显式真实委员会意见、来源追踪与占位回应"),
     ],
     converted: { capabilities: ["transform-revision-roadmap-parsing"], note: "单能力 mode。" },
   },
@@ -473,12 +479,12 @@ const MODE_DEFINITIONS = [
     upstream: [
       skillDoc(REVIEWER), modeRegistryDoc,
       ...reviewerAgents("field_analyst_agent", "eic_agent", "methodology_reviewer_agent", "domain_reviewer_agent", "perspective_reviewer_agent", "devils_advocate_reviewer_agent", "editorial_synthesizer_agent"),
-      reviewerRef("calibration_mode_protocol.md", "FNR/FPR/AUC 测量、5x ensembling、置信披露"),
+      reviewerRef("calibration_mode_protocol.md", "三篇定向读数或完整校准、分层误差与范围披露"),
       reviewerRef("quality_rubrics.md", "gold set 评分 rubric"),
       reviewerRef("sprint_contract_protocol.md", "校准结果与硬门关系"),
       template(REVIEWER, "peer_review_report_template.md", "校准 gold set 评分模板"),
     ],
-    converted: { capabilities: ["check-pre-submission-self-check", "judgment-specialist-review"], note: "尚无 calibration capability；当前使用可评分 checker 作为最近似节点。" },
+    converted: { capabilities: ["check-pre-submission-self-check", "judgment-specialist-review"], note: "尚无 calibration capability；列出的评审节点仅用于对照，不提供校准实验。" },
   },
 
   // ---------- academic-pipeline ----------

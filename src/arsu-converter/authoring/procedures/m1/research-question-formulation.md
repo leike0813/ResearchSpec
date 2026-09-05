@@ -59,7 +59,21 @@ Record each considered candidate and why it was not selected.
 
 ## Socratic Collaboration
 
-When the user is still exploring rather than requesting a full brief, use guiding questions before generating candidates. Candidate RQs are offered only after convergence or explicit user request.
+When `mode = socratic`, help the user derive the research-question direction
+instead of producing the full RQ Brief. Use FINER as a guidance framework, not
+as a scoring table, and read `knowledge/finer-socratic-questions.md` for the
+available prompts.
+
+- Never turn non-convergence into candidate generation. Summarize only the
+  directions and preferences the user expressed, leave unresolved choices
+  unresolved, and continue with a focused question or suggest `lit-review`.
+- Candidate generation requires an explicit user request for the system to
+  propose candidate RQs. Before any candidate appears, state that the response
+  has left non-generation Socratic guidance and emit this exact standalone
+  marker: `[SOCRATIC-NON-GENERATION-EXIT: explicit_user_request]`.
+- After that marker, apply the full-mode generation and FINER steps, label the
+  candidates as AI-generated starting points, and do not treat them as
+  user-derived insights or silently resume Socratic mode.
 
 ## Quality Criteria
 

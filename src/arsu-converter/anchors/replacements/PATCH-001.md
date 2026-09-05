@@ -9,6 +9,16 @@ patch schema. It preserves stable operation IDs, block IDs and `old_hash`
 preconditions, replace/insert/delete operations, annotation dispositions,
 revision rationale, and roadmap traceability.
 
+The optional `authorization_context` defaults to review-roadmap semantics when
+omitted. An explicit `integrity_correction` context is limited to the supplied
+correction IDs in `roadmap_item_ids` and must leave `claim_strength_changes`
+empty. Review-driven claim-strength changes carry the claim ID, an accepted
+ResearchSpec `change_id`, the old and new stable claim strengths, a direction,
+and a concrete rationale. Structural validation checks their shape only; the
+Agent must inspect the accepted change and supporting evidence before applying
+them. The local contract does not import upstream roadmap, passport, hash-chain,
+or author-adjudication sidecars.
+
 The selected manuscript may be Markdown or QMD. Treat QMD as
 Markdown-compatible text and preserve its YAML frontmatter, fenced code,
 cell-option comments, citations, cross-references, and Quarto metadata outside

@@ -204,6 +204,7 @@ Every script must define an APA theme (minimal base, bold left-aligned title, bl
 - Never use pie charts, 3D effects, rainbow palettes, or unmarked truncated axes.
 - Do not verify figure rendering or run VLM checks in this node; emit code and trace metadata.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

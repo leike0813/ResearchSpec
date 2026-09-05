@@ -1,8 +1,8 @@
 schema_version: "1"
 capability_id: generation-manuscript-drafting
 title: Manuscript Drafting
-description: Writes manuscript sections and revision patches from outline and
-  argument blueprint.
+description: Writes manuscript sections and scope-authorized revision patches
+  from outline and argument blueprint.
 maturity: operational
 class: generation
 node_kind: producer

@@ -135,41 +135,71 @@ Current ResearchSpec owners:
 - Severity: `required`
 - Semantic role: `revision_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `c6b8b8b63486c8374f5982ab166b21b2eeb6b066c33eb793029757027722ae2b`
+- Replacement body SHA-256: `0c2ed02a77ffc3f671917b06f4755ecc10ed8434c65787e15676a890c4ffc983`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
-- Before SHA-256: `303cf33ae73e69553a6cc6b2da370857fe0640a3a418fd7648e018d9cff493fd`
-- After SHA-256: `9131e153433197450bfaf95c322be2e3d6ceadc38419211b1493dcdd970f5ba5`
+- Before SHA-256: `c6e3a8f853bb04f0299cec336bc853ddb597cac8f7ee7cec71bea53c8e2dcd37`
+- After SHA-256: `9778df2ac817625399e47b2f320791f9384afb8dad7f5a6975616fe3c4443515`
 
 #### Before
 
 ````markdown
-In **revision mode** (standalone `academic-paper` revision, which is also what pipeline revision stages dispatch), your draft deliverable is NOT a re-emitted complete paper. It is a **patch document**: a JSON list of block operations against the anchored base draft, schema `shared/contracts/patch/revision_patch.schema.json`. Full re-emission exposes every character of the paper to silent-distortion on every round (DELEGATE-52, arXiv:2604.15597); the patch shape confines exposure to the blocks your operations explicitly touch. Spec: `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md` §3.2/§3.5/§3.6. Protocol: `academic-paper/references/revision_patch_protocol.md`. This section governs revision-mode invocations only — Phase 4 initial drafting and `academic-paper full` in-pair Phase 6→4 loops are unchanged (the full-mode loop is the Item 9 boundary, spec §5.2).
+In **revision mode** (standalone `academic-paper` revision, which is also what pipeline revision stages dispatch), your deliverable is a current **patch document** against the anchored base draft. `shared/contracts/patch/revision_patch.schema.json` accepts only `patch_format_version: 1.1`; current review writes use `authorization_context: review_roadmap`. Full re-emission exposes every character to silent distortion and cannot produce a current #670 authorization witness or Revision-Evidence Bundle round. Historical 1.0 replay is isolated under `shared/contracts/patch/legacy/v1_0/` and `scripts/legacy/` and is never a current write path.
 
-Your revision-invocation context carries the **anchored draft** (every block stamped `<!--block:BNNNN-->`) and its **block manifest** (`<draft>.block-manifest.json`: `base_draft_hash` + one `{block_id, old_hash, first_line_excerpt}` entry per block). The manifest is the ONLY legitimate source for every hash you emit.
+For a review-roadmap round, your revision-invocation context carries the
+**anchored draft**, its exact **block manifest**, immutable
+`revision-roadmap/1.0`, exact `claim-surface-manifest/1.0`, complete
+`author-adjudication/1.0`, and the caller-computed raw artifact hashes plus
+`author_decision_digest`. Copy those supplied bindings; do not compute or
+invent them. An integrity-correction round instead carries the anchored draft,
+manifest, and exact `integrity-correction-list/1.0` proposal plus its
+caller-computed binding. It never carries review-roadmap authority.
 
 **Emission rules (all machine-checked at apply time — a violation rejects the whole patch):**
 
 1. **Write the patch as a sidecar file**, not fenced chat JSON: `phase6_*/revision_patch_round<N>.json` inside your write fence (#424 emission-format decision). Your chat output carries the human-facing revision log (the existing Revision Log table) and your provisional response items — never the patch body.
-2. **Copy hashes, never compute them.** `base_draft_hash` and every per-op `old_hash` are mechanical copies from the block manifest. You cannot compute SHA-256 (all Bash denied, #134) — an invented or "remembered" hash fails at apply exactly like a stale one. Use `first_line_excerpt` to sanity-check you are naming the block you think you are.
+2. **Copy hashes/bindings, never compute them.** Copy `base_draft_hash`, per-op `old_hash`, `roadmap_sha256`, `author_adjudication_sha256`, `author_decision_digest`, and `claim_surface_manifest_sha256` from the deterministic handoff. An invented or remembered value fails like a stale one.
 3. **Closed op vocabulary**: `replace_block` / `insert_after` / `delete_block`. Each `block_id` appears in at most ONE op, in any role. Multi-block insertion goes inside one `insert_after.new_text`. No move op — express relocation as `delete_block` + `insert_after` (byte-identical relocations are machine-recognized as `pure_move`).
 4. **`insert_after` carries the anchor's `old_hash`** (position is meaningful only relative to the anchor's content). The `DOC-BODY-START` sentinel (insert before the first body block) is the ONLY legal hash-less op shape.
 5. **`new_text` MUST NOT contain `<!--block:` markers** — ID assignment is the apply script's exclusive authority. Citation discipline is NOT relaxed: every new citation in `new_text` carries the v3.7.1/v3.7.3 `<!--ref:slug--><!--anchor:kind:value-->` layers; the finalizer resolves them on its normal post-apply pass.
-6. **`roadmap_item_ids` is required and non-empty on every op** — each edit publicly claims which reviewer concern it serves (Anti-Pattern 7 made visible).
+6. **Exact author scope.** `roadmap_item_ids` is non-empty and contains only `will_address` items. The operation's block/op must be inside every cited item's exact authorized subset.
+7. **Explicit arrays.** Every op carries `claim_strength_changes[]` and `collateral_authorization_ids[]`, even when empty. A registered claim move repeats the exact approved authorization projection and exact replacement bytes; normal `will_address` is insufficient. A declined-overlap touch cites every exact required collateral authorization.
 
-**Pre-drafting escalation classification (§3.6 trigger layer 1).** BEFORE emitting any op, classify the round's roadmap items. If any item demands restructuring — section split/merge/reorder, a commitment with `commitment_type: restructure`, or a change you cannot express in the op vocabulary — do NOT emit a patch and do NOT silently fall back to a full draft. Emit only:
+**Pre-drafting escalation classification (§3.6 trigger layer 1).** If an accepted item cannot be expressed inside its exact authorized targets/operations, do not broaden scope or silently fall back to a full draft. Emit only:
 
 ```
 [PATCH-ESCALATION-REQUIRED: layer=pre_drafting, items=<comma-separated roadmap item IDs>, reason=<one line per item>]
 ```
 
-and return control to the caller. The escalation decision (re-emit in full vs narrow the items) belongs to the user at the orchestrator's MANDATORY checkpoint, never to you. Only when the caller explicitly re-dispatches you with full re-emission confirmed do you produce a complete draft (that round is provenance-stamped `mode: full_reemission_escalated` downstream).
+and return control to the caller. The author may narrow the change or explicitly adjudicate a new exact scope in a new sidecar. Leaving the current #670 contract for a legacy full re-emission is a separate, visible workflow and cannot be recorded as a current authorized bundle round.
 
 **Apply-failure retry (once).** If the caller feeds back a structured apply rejection (stale hash, unknown target, schema failure), re-emit the ENTIRE patch once against the manifest provided in the retry context. Do not patch the patch. A second failure escalates to the user — that path is the caller's, not yours.
 
 **Role boundary (§3.5).** You emit; you never apply. You cannot run `ars_apply_revision_patch.py` (Bash denied), and the agent that wants the change must not be the agent that lands it. Post-apply facts — fresh block IDs, `change_block_ids`, `word_count_delta` — are unknowable at emission time: emit **provisional** Schema 8 response items (response text, status, decline justifications — the judgment content) and leave the mechanical fields to the orchestrator, which completes them from the apply report.
 
-**Integrity-correction rounds (#89 Item 8).** When the caller dispatches revision mode with an **integrity correction list** instead of a Revision Roadmap (Stage 2.5 / 4.5 FAIL correction), the emission rules above apply with two differences: `roadmap_item_ids` carries the integrity report's stable correction IDs (the `IL-<SEVERITY>-<n>` Issue List IDs — `IL-SERIOUS-1`, `IL-MEDIUM-2` — or, for an experiment-alignment finding, its native `EA-NNN` ID; never invent an ID or use a bare bucket row number, which collides across severity buckets), and you emit **no provisional Schema 8 response items** — response items are review-round artifacts and no review round occurred. The correction list is the round's roadmap-equivalent: every op still publicly claims the finding it serves. Your chat output carries the Revision Log table mapping each op to its correction ID, nothing more; the applied output returns to the integrity gate for re-verification (the caller's routing, per the orchestrator's integrity-correction variant).
+**Integrity-correction rounds (#89 Item 8/#670).** The gate's
+`integrity-correction-list/1.0` contains only `proposed_targets`: it is a patch
+proposal input, never write authority, and the integrity FAIL/PASS result does
+not authorize an edit either. First emit the exact patch bytes using the
+disjoint `authorization_context: integrity_correction` branch and copy the
+supplied list binding as `issue_list_sha256`. Every `roadmap_item_ids` entry is
+an exact correction ID, every target/operation stays within that issue's
+`proposed_targets`, and `claim_strength_changes[]` plus
+`collateral_authorization_ids[]` remain empty.
+
+The orchestrator then shows those exact bytes and their deterministic SHA-256
+to the author. Only explicit
+`integrity-correction-authorization-input/1.0`—binding that exact
+`revision_patch_sha256`, one decision per issue, and the exact authorized
+targets/operations—can feed the deterministic builder that emits the
+hash-bound `integrity-correction-authorization/1.0` sidecar. You do not create,
+infer, or revise that author input. `stop_without_write` grants no scope; if
+the exact patch is not approved, nothing is written. Any patch-byte change
+requires a fresh explicit approval. The applier must later receive both
+`--integrity-issue-list` and `--integrity-authorization`; the list, gate, or
+your proposed patch alone can never substitute for the sidecar. Review-roadmap
+artifacts/arguments and provisional Schema 8 response items are forbidden on
+this branch.
 ````
 
 #### After
@@ -186,6 +216,15 @@ the caller. Validate the document against
 `operation_id` values, block IDs, twelve-character `old_hash` preconditions,
 the closed `replace_block`/`insert_after`/`delete_block` vocabulary, a revision
 rationale, and non-empty roadmap traceability.
+
+Omit `authorization_context` for ordinary local review patches; that is the
+review-roadmap default. Use `integrity_correction` only for a supplied
+correction proposal, citing its IDs through `roadmap_item_ids` and carrying no
+claim-strength changes. A review claim-strength declaration must name the
+accepted ResearchSpec `change_id`, both stable strengths, the direction, and a
+rationale. The schema and helper validate this structure, while the Agent
+checks that the referenced change is actually accepted and that the manuscript
+evidence supports the move.
 
 When annotations are in scope, each implemented annotation must be referenced
 by an operation and represented in `annotation_mapping`. Non-edit dispositions
@@ -462,11 +501,11 @@ Current ResearchSpec owners:
 - Severity: `required`
 - Semantic role: `revision_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `0ef1924ae50262c5055740410db898ac42c5cce5a8043a5382c8151ed8f2c41d`
+- Replacement body SHA-256: `8d3f6e26c07ef3bab2a812b5baf63ba52296c65ef13b45b4edfb6bfc60b34c58`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `work/annotation-intake/`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-paper/references/revision_patch_protocol.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `deep-research/references/cross-skill/academic-paper/references/revision_patch_protocol.md`
-- Before SHA-256: `18dba4bb77ed7bc1b408655dfff094f53bc726e9575395c7d6c4d19b75f32cb3`
-- After SHA-256: `57e7fc7d5d705459cc3bf6dfded85c5afc86fecee65d873d3ff245b54a8e1658`
+- Before SHA-256: `3b147a3ce4426019de8238ba490c9d11e26426e07ef7970eaf0238d3ac81cdc8`
+- After SHA-256: `055521bb815e38dc48c7b45c567a72c942bfc86776b0ba2026b1821440fa9d07`
 
 #### Before
 
@@ -485,11 +524,18 @@ Current ResearchSpec owners:
 |---|---|---|
 | Anchored draft | `ars_anchorize_draft.py` (in place) | every block carries `<!--block:BNNNN-->`; IDs never renumbered |
 | Block manifest | same run, sidecar | `<draft>.block-manifest.json` — `base_draft_hash` + `{block_id, old_hash, first_line_excerpt}` per block; the ONLY legitimate hash source for a patch |
-| Patch document | `draft_writer_agent` (revision invocation) | `phase6_*/revision_patch_round<N>.json`, schema `shared/contracts/patch/revision_patch.schema.json` |
+| Immutable roadmap | editorial synthesizer / confirmed standalone adapter | `revision-roadmap/1.0`, exact draft + block-manifest bindings |
+| Claim surface manifest | deterministic registry builder | `claim-surface-manifest/1.0`, exact Claim Intent + UTF-8 surface bindings |
+| Author adjudication | `scripts/revision_roadmap.py build-adjudication` from explicit choices | `author-adjudication/1.0`; complete choices and exact authority only |
+| Integrity correction list | issuing integrity gate | `integrity-correction-list/1.0`; correction descriptions and exact `proposed_targets` only — a proposal, never write authority |
+| Integrity author input | author, from the exact proposed patch shown in-session | `integrity-correction-authorization-input/1.0`; explicit event receipts, one decision per issue, authorized targets/operations, and the author-approved `revision_patch_sha256` |
+| Integrity authorization | `scripts/revision_roadmap.py build-integrity-authorization` | `integrity-correction-authorization/1.0`; a deterministic sidecar that copies the author-approved patch hash and adds exact base/list/round bindings |
+| Patch document | `draft_writer_agent` (revision invocation) | current `patch_format_version: 1.1`, schema `shared/contracts/patch/revision_patch.schema.json` |
 | Revised draft | `ars_apply_revision_patch.py` | `--output` MUST be a new file (versioned artifact; the base is never modified) |
-| Apply report | same run, sidecar | `<output>.apply-report.json` — ops applied, fresh block IDs, structural flags, `preserved_ratio` |
+| Apply report | same run, sidecar | `<output>.apply-report.json`, format 1.3 — exact patch/pre/post bindings, replayed authorization witness, per-op claim/collateral declarations, structural and byte-preservation facts |
+| Revision-Evidence Bundle | orchestrator | `revision-evidence-bundle/1.0`, continuous chain from exact integrity PASS through every write/no-op round to final draft |
 
-The apply report shares the revised draft's lifecycle: it is a **required input to re-review and the Stage 4.5 integrity gate** — re-reviewers read it to see exactly which blocks changed (`ops_applied[]`, `fresh_block_ids`, `pure_move_pairs`) and which are machine-guaranteed untouched.
+The apply report shares the revised draft's lifecycle: it is a **required input to re-review and the Stage 4.5 integrity gate** — re-reviewers read it to see exactly which blocks changed (`ops_applied[]`, `fresh_block_ids`, `pure_move_pairs`) and which are machine-guaranteed untouched. Consumers verify report-to-artifact freshness by the #576 §11 ORDERED-CHAIN rule (which supersedes the old single-report `output_draft_hash`-vs-handed-draft check — that rule is wrong for multi-round sequences and misses base-link breaks): with reports ordered as applied, the FIRST report's `base_draft_hash` must equal the original (pre-revision) draft's hash prefix, each subsequent report's `base_draft_hash` its predecessor's `output_draft_hash`, and the LAST report's `output_draft_hash` — and only the last's — the handed revised draft's hash prefix. Any broken link means some patch ran against a different text than the chain claims (a rewritten-after-apply draft breaks the last link; a wrong base skews every diff-supported judgment) — treat the affected report(s) as stale and re-derive provenance before relying on them (the same report-to-artifact freshness class as the submission verifier's `STALE-REPORT` guard in `scripts/verify_submission_package.py`; at Stage 3' the chain is checker-enforced as `apply_chain_witness`, `manifest_hash_mismatch` on breakage).
 
 ## Mode B command sequence (one revision round)
 
@@ -499,13 +545,24 @@ The apply report shares the revised draft's lifecycle: it is a **required input 
 #    any rewrite (including a finalizer pass) invalidates the manifest.
 python scripts/ars_anchorize_draft.py draft.md
 
-# 2. Hand the writer its revision context:
-#    draft.md + draft.md.block-manifest.json + the round's Revision Roadmap.
-#    The writer emits phase6_*/revision_patch_round1.json (never a full draft).
+# 2. Validate the immutable roadmap, registered claim surfaces, and explicit
+#    author sidecar. The writer receives all exact artifacts/bindings and emits
+#    phase6_*/revision_patch_round1.json (current format 1.1, never a full draft).
+python scripts/revision_roadmap.py validate-adjudication \
+    roadmap.json author-adjudication.json \
+    --base draft.md \
+    --block-manifest draft.md.block-manifest.json \
+    --claim-surface claim-surface-manifest.json \
+    --artifact-root revision-authority/
 
 # 3. Apply — two-phase fail-closed; output must be a NEW file.
 python scripts/ars_apply_revision_patch.py draft.md \
     phase6_revision/revision_patch_round1.json \
+    --block-manifest draft.md.block-manifest.json \
+    --roadmap roadmap.json \
+    --author-adjudication author-adjudication.json \
+    --claim-surface-manifest claim-surface-manifest.json \
+    --artifact-root revision-authority/ \
     --output draft.rev1.md
 
 # 4. Run your normal post-revision steps (finalizer / citation checks)
@@ -515,18 +572,69 @@ python scripts/ars_apply_revision_patch.py draft.md \
 
 Exit codes: `0` applied · `2` Phase 1 rejection (structured failure report on stdout; base byte-untouched) · `3` structural refusal (see escalation) · `4` post-write self-check bug.
 
-**On exit 2 (stale hash / unknown target / schema failure):** feed the failure report back to the writer for ONE re-emission of the whole patch against the current manifest. On a second failure, stop and decide: re-anchorize and retry the round, escalate to full re-emission, or abort. Never hand-edit a patch to force it through — a hash mismatch means the writer was looking at different text than the file holds.
+**On exit 2 (stale hash / unknown target / authorization/schema failure):** feed the failure report back to the writer for ONE re-emission of the whole patch against the same exact authority artifacts, unless the failure shows that author scope must change. On a second failure, stop: re-anchorize and rebuild the bound authority chain, collect a new explicit author adjudication, narrow the round, or abort. Never hand-edit a patch to force it through — a mismatch means the writer and gate did not share the same exact evidence.
 
 **On exit 3 (structural flags):** the patch touches structure — heading rewrites/deletes, net section-count change, or `touched_ratio` strictly above **0.6** (the #424 ship decision; `insert_after` merely *anchored* on a heading is exempt — inserting body text under a section heading is routine, not structural). Read the flags in the refusal output, then either narrow the patch, or — if the structural change is intended — re-run with the acknowledgment recorded:
 
 ```bash
 python scripts/ars_apply_revision_patch.py draft.md patch.json \
+    --block-manifest draft.md.block-manifest.json \
+    --roadmap roadmap.json \
+    --author-adjudication author-adjudication.json \
+    --claim-surface-manifest claim-surface-manifest.json \
+    --artifact-root revision-authority/ \
     --output draft.rev1.md --acknowledge-structural
 ```
 
 `--acknowledge-structural` is a deliberate user decision, never a default; the flags stay recorded in the apply report either way. `--touched-ratio-threshold 1.0` disables the ratio trigger (the comparator is strict `>`); overriding 0.6 in pipeline runs requires a recorded user decision.
 
-**Full re-emission (escalated rounds only):** when a round genuinely demands restructuring, the round runs as legacy full re-emission after explicit confirmation — never as a silent fallback. Afterwards, re-anchorize from scratch (a NEW ID generation; the old manifest and any old patches are dead) and record the round as `mode: full_reemission_escalated`.
+### Integrity-correction variant (one revision round)
+
+An integrity FAIL and its `integrity-correction-list/1.0` identify work to
+propose; neither the gate verdict nor the list authorizes a write. The list
+contains only `proposed_targets`. The writer first emits an exact patch 1.1
+with `authorization_context: integrity_correction`, the supplied exact
+`issue_list_sha256`, correction IDs in `roadmap_item_ids`, and empty
+`claim_strength_changes[]` / `collateral_authorization_ids[]`. It does not
+create or infer author approval.
+
+Present those exact patch bytes and their deterministically computed SHA-256
+to the author. Collect `integrity-correction-authorization-input/1.0` with the
+same `revision_patch_sha256`, one explicit `authorize` or
+`stop_without_write` decision per issue, and the exact authorized target and
+operation subset for every `authorize` decision. A `stop_without_write`
+decision grants no scope. If the author does not approve the exact patch, stop
+without writing; any changed proposal is new bytes and requires a new explicit
+input.
+
+The deterministic builder validates the input against the exact patch and
+copies the author-approved digest into a hash-bound sidecar:
+
+```bash
+python scripts/revision_roadmap.py build-integrity-authorization \
+    integrity-correction-list.json \
+    --base draft.md \
+    --patch phase6_revision/integrity_patch_round1.json \
+    --author-choices integrity-author-input.json \
+    --output integrity-authorization.json
+```
+
+Only then may apply run, and both integrity artifacts are mandatory:
+
+```bash
+python scripts/ars_apply_revision_patch.py draft.md \
+    phase6_revision/integrity_patch_round1.json \
+    --block-manifest draft.md.block-manifest.json \
+    --integrity-issue-list integrity-correction-list.json \
+    --integrity-authorization integrity-authorization.json \
+    --output draft.integrity-rev1.md
+```
+
+The apply gate replays the exact patch hash, list/base/round bindings, author
+events and decisions, and target/operation subsets before structural analysis
+or output creation. An op citing `stop_without_write`, an op outside the exact
+authorized subset, or even a one-byte change to the patch rejects the whole
+write. Review-roadmap authority arguments are forbidden on this branch.
 ````
 
 #### After
@@ -555,6 +663,15 @@ One bounded mechanical application is:
    diagnostic summary is useful.
 4. On any preflight failure, correct the inputs or revise manually. The helper
    creates no partial output and never changes a run and node state or handoff.
+
+An omitted `authorization_context` means review-roadmap semantics. An
+`integrity_correction` patch cites the supplied correction IDs through
+`roadmap_item_ids` and cannot declare `claim_strength_changes`. A review claim
+strength declaration names an accepted ResearchSpec `change_id`, old and new
+stable strengths, direction, and rationale; the helper checks only that shape,
+so the Agent must inspect the accepted change and evidence. Local annotation
+mapping remains the author-disposition record; upstream author-adjudication and
+passport/hash-chain sidecars are outside this contract.
 
 Untouched anchored blocks remain byte-identical under helper application. That
 mechanical guarantee says nothing about whether edited text answers the review.
@@ -647,23 +764,24 @@ Current ResearchSpec owners:
 - Severity: `required`
 - Semantic role: `revision_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `885608878e092e254f2076a17a6c5aeecafc63aea65474555c33adef4b7fd007`
+- Replacement body SHA-256: `1059f4d766f26412f6d7eed79b5c029eca1e95f821a9a78254078f83cd0ed9bd`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `work/annotation-intake/`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
-- Before SHA-256: `3746fd60636d23f14f9740192da44549c9fa0427537852d370a54d20acbdcde2`
-- After SHA-256: `8ab7e535b67c7ab6172a8f4220dbcabd68d339a048d4c657bf7f02c40e213b8c`
+- Before SHA-256: `4abd93d35463c59f585ba7adb1e55abe9f1d29abce91c343719e1d4c777e8d0f`
+- After SHA-256: `104b7461f3a8f99f8ea922a8b60d0e0a07c1115d9152babb850987a1faa83559`
 
 #### Before
 
 ````markdown
 In revision mode, `draft_writer_agent` does NOT re-emit the complete paper. The round runs **anchorize → patch → deterministic apply → finalizer**, confining the regeneration surface to the blocks the revision explicitly touches (DELEGATE-52 blast-radius containment; spec `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md`):
 
-1. **Anchorize** the draft (`scripts/ars_anchorize_draft.py` — idempotent, content-neutral): every block gets a stable `<!--block:BNNNN-->` marker; a block manifest (`base_draft_hash` + per-block `old_hash`) is regenerated. Nothing may rewrite the draft between this step and apply.
-2. **The writer emits a patch document** (`shared/contracts/patch/revision_patch.schema.json`) as a sidecar file in its `phase6_*/` fence — block ops with hash preconditions copied from the manifest, each op tracing to `roadmap_item_ids`. See `agents/draft_writer_agent.md` § Patch-Document Revision Emission.
-3. **Deterministic apply** (`scripts/ars_apply_revision_patch.py`): two-phase fail-closed — one stale hash rejects the whole patch with the base byte-untouched; untouched blocks are preserved byte-identical by construction. Structural shapes (heading rewrites/deletes, section-count change, touched-ratio > 0.6) refuse without an explicit acknowledge that only the §3.6 escalation checkpoint may grant. The apply report (`preserved_ratio`, ops, fresh block IDs, structural flags) is a **required input to re-review** alongside the revised draft.
-4. **Escalation, never silent fallback:** restructure-demanding rounds go to a MANDATORY user checkpoint; a confirmed full re-emission round is provenance-stamped `mode: full_reemission_escalated` and the draft is re-anchorized afterwards (new ID generation).
+1. **Anchorize** the draft (`scripts/ars_anchorize_draft.py` — idempotent, content-neutral): every block gets a stable `<!--block:BNNNN-->` marker and an exact manifest. Nothing rewrites the draft before apply.
+2. **Bind explicit authority (#670):** validate the immutable `revision-roadmap/1.0`, exact registered claim surfaces, and complete `author-adjudication/1.0`. The roadmap keeps severity, obligation, cost scope, and bounded consequence independent; author triage and exact targets live only in the separate explicit sidecar.
+3. **The writer emits current patch 1.1** (`shared/contracts/patch/revision_patch.schema.json`) as a sidecar — every op cites only `will_address` items, stays inside exact target/operation scopes, and explicitly declares claim/collateral arrays. Registered claim movement needs an exact author-approved replacement; declined overlap needs exact collateral authority.
+4. **Deterministic apply** (`scripts/ars_apply_revision_patch.py`) replays every binding before structural analysis or write. Current report format 1.3 carries the mechanically derived authorization witness and the honest `unregistered_claim_drift_review_required` E6 boundary. If E6 later detects a drift on an unregistered surface, the checkpoint has no default-open route: the author must explicitly choose `restore`, `authorize_with_reason`, or `pause`. Build and replay validation bind each choice to one explicitly named run-local raw session-event artifact; the sidecar retains its recomputed digest but neither path nor message. Untouched blocks remain byte-identical.
+5. **Continuous evidence:** every review write, all-declined no-op, and integrity-correction round enters `revision-evidence-bundle/1.0`, from an exact integrity-PASS draft to the exact final draft. A scope escalation requires a new explicit sidecar or a narrower patch; legacy full re-emission cannot claim current authorization PASS.
 
-Orchestrated runs follow `pipeline_orchestrator_agent.md` § Revision-Round Patch Sequencing; Mode B (phase-by-phase manual) users run the same scripts by hand — exact commands in `references/revision_patch_protocol.md`. Honest boundary, stated once: patch mode removes the silent-distortion channel for text the revision does not touch; it does not make the revision itself better. The `academic-paper full` in-pair Phase 6→4 loop is NOT patch-adopted (its Phase 4b lint requires a full `## Draft Body`; Item 9 boundary, spec §5.2/§7).
+Orchestrated runs follow `pipeline_orchestrator_agent.md` § Revision-Round Patch Sequencing; Mode B users run the same scripts by hand — exact commands in `references/revision_patch_protocol.md`. Honest boundary: registered surfaces and exact edit authority are machine-replayed, but unregistered semantic drift still requires E6 review. `scripts/claim_strength_drift_disposition.py` closes explicit handling of reported rows only; it does not make model-mediated detection deterministic or complete. The `academic-paper full` in-pair Phase 6→4 loop is outside this standalone/pipeline revision contract.
 ````
 
 #### After
@@ -680,6 +798,16 @@ instead of rewriting the complete manuscript. The adapted ARSU contract at
 patch schema. It preserves stable operation IDs, block IDs and `old_hash`
 preconditions, replace/insert/delete operations, annotation dispositions,
 revision rationale, and roadmap traceability.
+
+The optional `authorization_context` defaults to review-roadmap semantics when
+omitted. An explicit `integrity_correction` context is limited to the supplied
+correction IDs in `roadmap_item_ids` and must leave `claim_strength_changes`
+empty. Review-driven claim-strength changes carry the claim ID, an accepted
+ResearchSpec `change_id`, the old and new stable claim strengths, a direction,
+and a concrete rationale. Structural validation checks their shape only; the
+Agent must inspect the accepted change and supporting evidence before applying
+them. The local contract does not import upstream roadmap, passport, hash-chain,
+or author-adjudication sidecars.
 
 The selected manuscript may be Markdown or QMD. Treat QMD as
 Markdown-compatible text and preserve its YAML frontmatter, fenced code,
@@ -1109,7 +1237,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `7d006dff272819f6e4d0337f4ad6ccd5540785ff0c637109ce0c7a18f78aefb4`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`
-- Before SHA-256: `7c8c2df7ae376490050837455ab372d71a8f81db66ccfb4cc29c6cb7f27f888c`
+- Before SHA-256: `c4858a0daae0ca170ba55fcb2e754bfe38ec0f6cbcd99fd0f245f22a60e49586`
 - After SHA-256: `d357858e96315a2a155e770467ca6a3fea741679fff0e18f96f910e17f54793b`
 
 #### Before
@@ -1117,7 +1245,7 @@ Current ResearchSpec owners:
 ````markdown
 ### Commitment Ledger Verification (Kong A1 / v3.11)
 
-This step runs **for every Schema 11 row** (any priority) that carries a non-empty `commitment_extracted` list from `revision_coach_agent` Step 3.5. It is independent of the Priority 1/2/3 Traceability Rule above — every parsed reviewer comment may produce commitments, and every commitment must be verified, regardless of the parent concern's priority.
+This step runs **for every Schema 11 row** (any obligation_class) that carries a non-empty `commitment_extracted` list from `revision_coach_agent` Step 3.5. It is independent of the must_fix/should_fix/consider verification above — every parsed reviewer comment may produce commitments, and every commitment must be verified, regardless of the parent concern's obligation_class. Under the three-gate contract this pass runs at Phase 2B (its evidence source for `acknowledgment_only` IS the letter).
 
 For each commitment, verify per-commitment `fulfillment_status`:
 
@@ -1185,7 +1313,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `1f8eda2b2f041b361301a2878fdac64858f273ead9dc6601569b6873880812db`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`, `academic-paper-reviewer/references/sprint_contract_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`
-- Before SHA-256: `18f2761d610a2273d90963b19f490963f8600c8aa8b581e60fcab15c153f799c`
+- Before SHA-256: `168193b937c339902ae460cdbc801b4f7b4f10f6d20341a2381c7b7553103b2c`
 - After SHA-256: `8c04736671b603873604d434189869fc3de4b3ecee4b197a7d35f7085877f1c0`
 
 #### Before
@@ -1197,7 +1325,7 @@ This protocol exists to destroy the "read the paper, then rationalise the scorin
 
 ## 2. Two-phase reviewer call
 
-For each reviewer in `range(panel_size)`:
+For each role-separated review seat in `range(panel_size)`, using a fresh invocation context and withholding peer outputs until the seat commits. These are execution requirements whose actual status must be recorded in `review-panel-provenance/1.0`; they do not establish independent error processes:
 
 1. **Prepare contract.** Load template from `shared/contracts/<domain>/<mode>.json`. Populate `generated_at` (ISO-8601 UTC). Optionally populate `agent_amendments` (field-specific notes from `field_analyst_agent`). Run `check_sprint_contract.py` on the in-memory object; abort on error.
 2. **Phase 1 call (paper-content-blind).**
@@ -1207,9 +1335,9 @@ For each reviewer in `range(panel_size)`:
 3. **Phase 1 output lint.** See §4 below.
 4. **Phase 2 call (paper-visible).**
    - System prompt: the `### Phase 2 — Paper-visible review` sub-section of the same `## v3.6.2 Sprint Contract Protocol` block.
-   - User content: contract JSON (re-injected) + Phase 1 output wrapped in `<phase1_output>...</phase1_output>` data delimiter + full paper.
-   - Expected output: optional `## Scoring Plan Dissent`, `## Dimension Scores`, `## Failure Condition Checks`, `## Review Body`, `## Editorial Decision`.
-5. **Phase 2 output lint.** See §5 below.
+   - User content: contract JSON (re-injected) + Phase 1 output wrapped in `<phase1_output>...</phase1_output>` data delimiter + full paper wrapped in `<paper_content>...</paper_content>` data delimiter (#574 A6 — the manuscript is author-supplied untrusted material; the reviewer prompts carry the matching data-not-instructions rule).
+   - Expected output: optional `## Scoring Plan Dissent`, `## Dimension Scores`, `## Review Body`. Per-seat `## Failure Condition Checks` and `## Editorial Decision` are retired in v2 and fail loudly if present.
+5. **Phase 2 output lint.** Run `scripts/check_phase_conformance.py --contract <C> --role <dispatch-role> --phase1 <P1> --phase2 <P2> --manuscript <paper> --metadata <metadata.json>` before synthesis. Exit 3 emits `[PROTOCOL-VIOLATION: phase_conformance=<check>]` and makes the seat unusable; exit 2 is an infra abort. See §5.
 6. **Panel cardinality invariant.** After all reviewers complete, verify `len(usable_phase2_outputs) == panel_size`. If any reviewer was dropped, emit `[PANEL-SHRUNK]` and abort the round (see §6).
 7. Feed usable Phase 2 outputs into synthesizer (see §7).
 ````
@@ -1332,16 +1460,16 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `ec0e2738bf341fb84f2da4fc2d4d9412993cf4c21f802c962b7d6c1af8d281fa`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
-- Before SHA-256: `717bc6b1a277ccb027d68adb55cdd8122245f9b2cda05f232031c60ba83a6b74`
+- Before SHA-256: `fcc45e1c49c1e8af07a7c9b09c29eeb5b08c2a418c2674da51f631e58354c8a2`
 - After SHA-256: `b99943003cd7980a2512fc336b42d1fb43319ccd53b618187f0a3a6cccb244e6`
 
 #### Before
 
 ````markdown
-Dedicated mode for Pipeline Stage 3' — verifies whether revisions address first-round review comments. Uses R&R Traceability Matrix (Schema 11) with Author's Claim + Verified? columns.
+Dedicated mode for Pipeline Stage 3' — verifies whether revisions address first-round review comments. Uses R&R Traceability Matrix (Schema 11 + machine-readable sidecar) with Author's Claim + Verified? columns. Runs under the #576 three-gate evidence-before-persuasion contract: Phase 1 criteria commitment (revision-blind) → Phase 2A evidence verdict (persuasion-blind) → Phase 2B claim matching (letter revealed), checker-verified before any outcome surfaces.
 
-**Input**: Original Revision Roadmap + Revised manuscript + Response to Reviewers (optional) + Editorial Decision Letter (optional, #539 — its Review Panel Provenance block feeds the Judge Record)
-**Output**: Verification Review Report with traceability matrix + new issues + Decision
+**Input**: Original immutable Revision Roadmap + exact author-adjudication sidecar + Revision-Evidence Bundle + Original pre-revision draft (Phase 2A comparison base) + Revised manuscript + Response to Reviewers (optional; withheld until Phase 2B) + Editorial Decision Letter (optional) + Round-1 findings/cards + current patch 1.1/apply-report 1.3 chain. The #576 current 1.1 manifest hard-requires original, revised, roadmap, author, and bundle artifacts; mixed legacy/current chains fail.
+**Output**: Verification Review Report with traceability matrix + new issues + Decision (or `user_review_required` deferral / fail-closed abort)
 
 > See `references/re_review_mode_protocol.md` for full verification logic, output format template, and Socratic guidance details.
 ````
@@ -1392,16 +1520,16 @@ Current ResearchSpec owners:
 - Severity: `required`
 - Semantic role: `generator_evaluator_contract`
 - Replacement shape: `checklist`
-- Replacement body SHA-256: `17462c9b722f8ae6f660165f6652e9a6548fe630b8cff33d7c41b8865283b47a`
+- Replacement body SHA-256: `ddc676984bbc3eecf1f7bfa6bcc399fd271e92777eb26843fdbe81e13a25bddd`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
-- Before SHA-256: `298ff2410ac39704bbef06179f6b97818d0716e074aedbf4c28719aee43ede2e`
-- After SHA-256: `453ae8d8658df458e3a2fad036811adde38e469412290f6d5b7f494a6f1e0472`
+- Before SHA-256: `28e1591ebed9e51e25977eefb07c688c78bde8713748ef131170fd9485a67ea3`
+- After SHA-256: `b7d0073e2d5a8740c0fb22cdded128826ab06f8bec4bee79ea9d065a990a3dc7`
 
 #### Before
 
 ````markdown
-- **Schema 13 sprint contract.** Template-driven acceptance criteria with `panel_size`, `acceptance_dimensions`, `failure_conditions` (with `severity` precedence + `cross_reviewer_quantifier` panel-relative thresholds), `measurement_procedure`, optional `override_ladder`, bounded `agent_amendments`. Validator: `scripts/check_sprint_contract.py`. Schema: `shared/sprint_contract.schema.json`.
+- **Schema 13.2 sprint contract.** Each dimension carries `eligible_roles` and `owner_role`; reviewer Phase 1 commits only eligible scoring plans, while Phase 2 marks ineligible dimensions `not_assessed`. Mandatory dimensions pre-commit `what_triggers_fatal`; fatality is never synthesized post hoc. Validator: `scripts/check_sprint_contract.py`. Schema: `shared/sprint_contract.schema.json`.
 ````
 
 #### After
@@ -1412,15 +1540,18 @@ Current ResearchSpec owners:
 
 Replacement scope: `REVIEW-002` for `academic-paper-reviewer`.
 
-- **Sprint contract.** Resolve the mode-specific frozen contract JSON through
-  `researchspec/runs/<run-id>/handoff.md`, then deep-copy it for permitted
-  invocation fields. Preserve `panel_size`, `acceptance_dimensions`, severity
-  and cross-reviewer quantifiers, measurement procedure, override ladder, and
-  bounded amendments. Return the instantiated contract and each phase output to
-  the producing node for handoff recording; send lint, panel-cardinality,
-  and failure-condition results to the review Gate helper for
-  `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`. The following synthesizer
-  protocol and mode-specific panel sizes remain unchanged.
+- **Reviewer v2 sprint contract.** Resolve the mode-specific frozen contract JSON through
+   `researchspec/runs/<run-id>/handoff.md`, then deep-copy it for permitted
+   invocation fields. Preserve `panel_size`, `acceptance_dimensions`, each
+   dimension's `eligible_roles` and `owner_role`, fatal versus repairable
+   blocks, severity and cross-reviewer quantifiers, measurement procedure,
+   override ladder, and bounded amendments. Bind full and methodology contracts
+   to their v2 identifiers; do not infer a role score for an ineligible
+   dimension. Return the instantiated contract and each phase output to the
+   producing node for handoff recording; send lint, panel-cardinality,
+   and conformance results to the review Gate helper for
+   `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`. The following synthesizer
+   protocol and mode-specific panel sizes remain contract-defined.
 
 Current ResearchSpec owners:
 
@@ -1437,16 +1568,16 @@ Current ResearchSpec owners:
 - Severity: `required`
 - Semantic role: `gate_policy`
 - Replacement shape: `gate_rule_block`
-- Replacement body SHA-256: `2faaf844aee6a9d1c16315aa2a40d8d3cd22bd56008922e0ee6a0a141c549abe`
+- Replacement body SHA-256: `277ede8804851e3d2080b0617cc846a4a739a2eb11ca9bff27b2272b2a895732`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
-- Before SHA-256: `52749b227c759a48c537e03d7c7b47d00925e1db065bce22edaeb843e33af56a`
-- After SHA-256: `3456ae1967ded4490916cf822f922f2ac57a2471f1dc4ab164f5dc0b6daf4735`
+- Before SHA-256: `68cb6e247eb5f1f28b4ac877b08017c4fddb6c38d23fff7322d9c15e253a09a5`
+- After SHA-256: `409a3fe3385e35d9281eb40658946d62db182d04ecdcd1679969aa02af56d9d2`
 
 #### Before
 
 ````markdown
-- **Panel self-consistency checker (#510).** After synthesis, the orchestrator runs `scripts/check_panel_synthesis.py` to recompute each reviewer's decision and the panel decision from the emitted scores (protocol §8.1). A synthesis mismatch voids the synthesis (one retry); an inconsistent reviewer report is unusable (`[PANEL-SHRUNK]`).
+- **Executable conformance + panel checkers.** Before synthesis, `scripts/check_phase_conformance.py` verifies role binding, plan grammar, manuscript blindness, trigger binding, dissent cap, and evidence anchors. After synthesis, `scripts/check_panel_synthesis.py` recomputes role-scoped two-stage arithmetic, verifies `dimension_verdicts`, and enforces the DA-CRITICAL terminal gate.
 ````
 
 #### After
@@ -1462,15 +1593,24 @@ prerequisites: do not install, upgrade, or fetch them. If either prerequisite is
 missing, pause the panel flow and report the missing prerequisite. Agent judgment
 cannot replace the deterministic checks.
 
-1. Validate the sprint contract with
+1. Validate the role-scoped v2 sprint contract with
    `scripts/check_sprint_contract.py <contract.json>`.
-2. After all reviewer reports and the synthesis exist, run
+2. Before synthesis, run role and phase conformance with
+   `scripts/check_phase_conformance.py --contract <contract.json> --role
+   <dispatch-role> --phase1 <phase1.md> --phase2 <phase2.md> --manuscript
+   <paper> --metadata <metadata.json>`.
+3. After all reviewer reports and the synthesis exist, run
    `scripts/check_panel_synthesis.py --contract <contract.json> --report
-   <r1.md> ... --report <rN.md> --synthesis <synthesis.md>`.
-3. Treat a nonzero exit as a failed candidate check and follow the bounded retry
+   <r1.md> ... --report <rN.md> --synthesis <synthesis.md>`. For a
+   `reviewer_full` panel, build and replay-validate the provenance artifact
+   with `scripts/review_panel_provenance.py` before synthesis; bind it to the
+   `reviewer/reviewer_full/v2` contract and the exact five-seat roster.
+4. Treat a nonzero exit as a failed candidate check and follow the bounded retry
    or abort behavior reported by the checker. Never rewrite a checker verdict or
-   accept a malformed candidate by inspection.
-4. Record accepted review and synthesis files as boundary outputs in
+   accept a malformed candidate by inspection. Role eligibility, fatal versus
+   repairable blocks, and the closed decision enum remain contract data; a
+   passing checker does not decide a ResearchSpec Gate.
+5. Record accepted review and synthesis files as boundary outputs in
    `researchspec/runs/<run-id>/handoff.md`. A passing checker establishes
    only mechanical self-consistency. It does not confirm a formal ResearchSpec
    Gate; Verify prepares that judgment and only a human-confirmed Decide action
@@ -1479,8 +1619,16 @@ cannot replace the deterministic checks.
 The packaged checker closure is exactly:
 
 - `scripts/check_sprint_contract.py`
+- `scripts/check_phase_conformance.py`
 - `scripts/check_panel_synthesis.py`
+- `scripts/recompute_receipts.py`
+- `scripts/review_panel_provenance.py`
 - `assets/shared/sprint_contract.schema.json`
+- `assets/shared/contracts/reviewer/full.json`
+- `assets/shared/contracts/reviewer/methodology_focus.json`
+- `assets/shared/contracts/reviewer/review_panel_provenance_input.schema.json`
+- `assets/shared/contracts/reviewer/review_panel_provenance.schema.json`
+- `assets/shared/contracts/reviewer/review_panel_provenance_carrier.schema.json`
 <!--/rs:REVIEW-016-->
 ````
 
@@ -1677,62 +1825,25 @@ Current ResearchSpec owners:
 - Severity: `required`
 - Semantic role: `revision_patch_protocol`
 - Replacement shape: `patch_protocol_block`
-- Replacement body SHA-256: `7df8e7052f5476abb463789ef7b203db57ebcd1bd429e1962eed803c91538633`
+- Replacement body SHA-256: `9246697b076111e7ded59e8117da55873431e00dd01557d2a3987b51ff557054`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `fa6f54ea01dfda113c1d0c2c1271466070c508cc9b17bb3a74e3fcd9251a8d9a`
-- After SHA-256: `334e129e0649f2594e38786e99669cdb41b156e00defd5adc3475ff103b2c44e`
+- Before SHA-256: `52f2d90db140e14e467f9302eb96da3eaec0e4bc622a837161bba2ab6375089a`
+- After SHA-256: `03e5de6a54ced326974e873aef0d3ee22ccd63c10fba6be1495566dcbc39b20f`
 
 #### Before
 
 ````markdown
-When a revision stage dispatches `academic-paper` revision mode (Stage 3 → 4 / 3' → 4'; "Resolved next stage: 4 (mode: revision)" — and equally the integrity-FAIL correction rounds, Stage 2.5 FAIL → 2 and Stage 4.5 FAIL → 5 (revision), where the integrity correction list serves as the round's revision requirements; #89 Item 8, destination differences in the integrity-correction variant below — note the FAIL arrow lands on Stage 5's **revision** sub-step, not the PASS-path Stage 4.5 → 5 finalization handoff, and re-verification by the issuing gate is mandatory before finalization), the writer's deliverable is a **patch document**, not a re-emitted draft, and the orchestrator owns the deterministic steps around it. Spec: `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md` §3.3–§3.6. Protocol + exact commands: `academic-paper/references/revision_patch_protocol.md`. The toolchain is Slice A (#423): `scripts/ars_anchorize_draft.py` + `scripts/ars_apply_revision_patch.py`.
+When a revision stage dispatches `academic-paper` revision mode (Stage 3 → 4 / 3' → 4'; "Resolved next stage: 4 (mode: revision)" — and equally the integrity-FAIL correction rounds, Stage 2.5 FAIL → 2 and Stage 4.5 FAIL → 5 (revision), where the integrity correction list is only the round's proposed requirements; #89 Item 8, destination differences in the integrity-correction variant below — note the FAIL arrow lands on Stage 5's **revision** sub-step, not the PASS-path Stage 4.5 → 5 finalization handoff, and re-verification by the issuing gate is mandatory before finalization), the writer's deliverable is a **patch document**, not a re-emitted draft, and the orchestrator owns the deterministic steps around it. Spec: `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md` §3.3–§3.6. Protocol + exact commands: `academic-paper/references/revision_patch_protocol.md`. The toolchain is Slice A (#423): `scripts/ars_anchorize_draft.py` + `scripts/ars_apply_revision_patch.py`.
 
 **Normative order per revision round — nothing may rewrite the draft between steps 1 and 3:**
 
-1. **Anchorize (manifest refresh):** `python scripts/ars_anchorize_draft.py <draft.md>` — idempotent, content-neutral; stamps any unlabeled blocks and regenerates `<draft>.block-manifest.json`. Run it at every round entry (including legacy pre-anchor drafts at revision-mode intake) so the manifest matches the exact text the writer is about to see.
-2. **Dispatch the writer** with the anchored draft + the block manifest + the round's Revision Roadmap in context. The writer emits the patch as `phase6_*/revision_patch_round<N>.json` plus provisional Schema 8 response items (see `draft_writer_agent.md` § Patch-Document Revision Emission).
-3. **Apply:** `python scripts/ars_apply_revision_patch.py <draft.md> <patch.json> --output <draft.rev<N>.md>` — two-phase fail-closed; the output is a NEW versioned artifact (supersession convention above) and the apply report lands beside it. The touched-ratio trigger defaults to the #424 ship decision (0.6, strict `>`); do not pass a different threshold without a recorded user decision.
-3a. **Token-conservation advisory (#570):** `python scripts/check_revision_token_conservation.py patch --patch <patch.json> --base <draft.md>` on the same patch, before the finalizer pass (append `--protected-terms "<phrase1>,<phrase2>"` from the paper's `protected_hedges` roster when one is in context, so hedge-phrase deltas are covered too). Deterministic complement to the E6 claim-strength check (#569). What it does — and does NOT — do: it emits one `ADV-REV-<n>` row for **every op whose numeric/citation/protected-term multiset changed**, each row carrying that op's own `roadmap_item_ids` verbatim. It does NOT judge whether the roadmap actually authorized the change — that authorization judgment is E6's job (it reads the same patch bundle). The `ADV-REV` row is the deterministic *signal* ("this op moved tokens; here are the items it claimed"); E6 supplies the *verdict*. Advisory only — it never blocks the apply and never re-runs the apply script's fail-closed gate (that is step 3's job); its rows join the Integrity Report advisory table and are displayed per-row at the MANDATORY checkpoint like any `ADV-*` family. A conserved patch emits no rows.
-4. **Finalizer pass:** the Cite-Time Provenance Finalizer runs on the apply OUTPUT, resolving any newly inserted bare `<!--ref:-->` markers per its shipped contract. A finalizer pass between steps 1 and 3 would legitimately mutate `<!--ref:-->` status tokens and produce spurious hash mismatches at apply — the sequencing exists to make every hash mismatch MEAN staleness, not pipeline noise.
-5. **Complete Schema 8 mechanical fields** from the apply report (§3.5 role split): `change_block_ids` per response item (including fresh insert IDs from `ops_applied[].new_block_ids` / `fresh_block_ids`), `word_count_delta`, counters. The writer's provisional items carry the judgment content; the orchestrator fills in the post-apply facts. Then the response moves to re-review with the **apply report named as a required input** alongside it.
-6. **Surface `preserved_ratio`** from the apply report's counters next to the accumulated round-trip count in the stage checkpoint line (the #389 interaction-count budget surface; advisory, one line — e.g. `round-trips: 3/9 · preserved_ratio: 0.91`).
-
-**Revision-Evidence Bundle (#569 — feeds E6).** Each revision round already writes its patch sidecar (`phase6_*/revision_patch_round<N>.json`) and its pre-round anchored draft as durable artifacts (steps 1–3). Accumulate them: the orchestrator carries the **complete chain** of `{round N: patch sidecar, pre-round anchored draft, Revision Roadmap (or FAIL-correction Issue List)}` — every round since the last integrity PASS, not just the latest — and names it in the Stage 4/4'→4.5 (and Stage 2.5/4.5 FAIL re-verification) dispatch context under this declaration. This is what makes the bundle a *declared* artifact, satisfying context hygiene: E6 (`claim_verification_protocol.md` § E6) consumes it to audit claim-strength drift per round, and #570 step 3a already ran on each patch as it landed. When no chain exists (first-pass audit, standalone run), the bundle is absent and E6 SKIPs — no reconstruction.
-
-**Integrity-correction variant (Stage 2.5 / 4.5 FAIL rounds, #89 Item 8).** A correction round follows steps 1–4 and 6 unchanged, with two destination differences. (a) **No Schema 8 response items in this round** — response items are review-round artifacts and no review round occurred; the writer maps each patch op's `roadmap_item_ids` to the integrity report's stable correction IDs instead (the `IL-<SEVERITY>-<n>` Issue List IDs, or a finding's native `EA-NNN`; see `integrity_verification_agent.md` § Issue List and `draft_writer_agent.md` § Patch-Document Revision Emission), and step 5's mechanical completion is skipped. (b) **The applied output returns to the SAME integrity gate that issued the FAIL** (Stage 2.5 or 4.5) for re-verification — never forward to review or finalization on the strength of the apply report alone; the apply report is a required input to that re-verification, not a substitute for it. The integrity gate's own caps are unchanged (max 3 correction rounds; abort after the 2nd Stage 4.5 FAIL).
-
-**Escalation gate (§3.6) — the only road to full re-emission, and it runs through the user.** Two trigger layers:
-
-- **Layer 1 (pre-drafting):** the writer returns `[PATCH-ESCALATION-REQUIRED: layer=pre_drafting, ...]` instead of a patch — a roadmap item demands restructuring.
-- **Layer 2 (apply-time):** the apply script exits 3 (`refused_structural`) — heading-block ops, section-count change, or touched-ratio above threshold on an emitted patch (the writer misclassified a structural change as local). Note the heading-anchor exemption (#424): an `insert_after` merely anchored on a heading does not flag; rewriting/deleting a heading or inserting heading-bearing text does.
-
-On either trigger, STOP and present the MANDATORY checkpoint:
-
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚠️ MANDATORY CHECKPOINT — Structural revision detected (#390)
-
-Trigger: [pre-drafting classification: items REV-00X (reason) |
-          apply-time shape flags: heading ops at indexes [...], section_count_delta=N, touched_ratio=0.NN > 0.6]
-
-Proceeding by full re-emission exposes the ENTIRE document to the
-silent-distortion risk patch mode exists to remove (DELEGATE-52) —
-for this round, every untouched paragraph is regenerated by the model.
-
-Your options:
-  (a) narrow — drop/defer the structural items, re-dispatch the writer
-      on the remaining local items as a normal patch round
-  (b) [layer 2 only] acknowledge — apply this patch as-is; the flags are
-      recorded in the apply report (--acknowledge-structural)
-  (c) re-emit in full — this round runs as legacy full re-emission,
-      provenance-stamped mode: full_reemission_escalated
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-Only on explicit user choice (c) does a round run as full re-emission; afterwards **re-anchorize from scratch** (new ID generation — old patches never apply across a re-emission boundary) and record `mode: full_reemission_escalated` in the round's report so provenance never pretends a patch round happened. NEVER auto-fallback to full re-emission — not on structural flags, not on apply failure. MVP granularity is per-round, binary (one confirmed restructure item ⇒ the whole round re-emits; mixed rounds are deferred forward-scope, spec §9.3).
-
-**Apply-failure path (distinct from escalation):** a Phase 1 rejection (exit 2 — stale hash, unknown target, schema failure) feeds the structured failure report back to the writer for ONE patch re-emission against the current base (retry-once, v3.6.6 convention). Second failure → escalate to the user with three options: re-anchorize + retry the round / escalated full re-emission (checkpoint above) / abort. The base draft is byte-untouched on every rejection — there is no partial apply to clean up.
+1. **Anchorize and chain-start:** `python scripts/ars_anchorize_draft.py <draft.md>`. The first round since integrity verification also binds the exact zero-open-issue PASS receipt. Nothing rewrites the draft before apply.
+2. **Build/validate explicit authority:** keep `revision-roadmap/1.0` immutable; build exact claim surfaces; collect one explicit author choice per item; run `scripts/revision_roadmap.py build-adjudication` and `validate-adjudication`. A user view is presentation-only. If every choice is declined, append a byte-identical `review_noop` bundle round and skip writer/apply.
+3. **Dispatch the writer** with the anchored draft, manifest, immutable roadmap, claim surfaces, complete author sidecar, and deterministic exact hashes/digest. It emits current patch 1.1 plus provisional Schema 8 items.
+4. **Apply with full authority arguments:** `python scripts/ars_apply_revision_patch.py <draft.md> <patch.json> --block-manifest <manifest.json> --roadmap <roadmap.json> --author-adjudication <author.json> --claim-surface-manifest <claims.json> --artifact-root <root> --output <draft.rev<N>.md>`. Authorization replays before structural analysis/write; report 1.3 lands beside the output.
+5. **Token-conservation + finalizer:** run `scripts/check_revision_token_conservation.py` on the exact patch, then the Cite-Time Provenance Finalizer on the apply output. Token rows remain advisory. Exact registered claim authority is already fail-closed at apply; E6 still reviews unregistered semantic drift.
+6. **Complete Schema 8 mechanical fields**, including `change_block_ids` from the apply report, append the exact review round to `revision-evidence-bundle/1.0`, and validate it with `scripts/revision_roadmap.py validate-bundle`. Only a valid continuous bundle moves forward.
 ````
 
 #### After
@@ -1757,6 +1868,15 @@ validates all operations and annotation mappings before atomically creating the
 destination. It does not read the pipeline profile, mutate the owning node instance or
 `handoff.md`, or decide whether the revision is academically complete. Manual
 revision remains valid.
+
+An omitted `authorization_context` uses review-roadmap semantics. An explicit
+`integrity_correction` patch carries only supplied correction IDs through
+`roadmap_item_ids`, carries no claim-strength changes, and emits no response
+items because no review round occurred. Review claim-strength changes must
+reference an accepted ResearchSpec `change_id` and state the stable strength
+move with rationale; the Agent checks acceptance and evidence, while the
+stateless helper checks structure only. ResearchSpec retains Gate and Decision
+authority and does not adopt upstream lifecycle or hash-chain sidecars.
 
 Each revision child has its own start confirmation and formal Gates. After the
 producer finishes, the current manuscript and relevant boundary evidence return
@@ -1785,7 +1905,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `9c73d0533f98a86e26b5bd48e6cc23887242f1dd12e2e71d0dcd744aaf51b249`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `2bd3d8eeecf46005d627d4e05935f09059225cd8ee92a060e209b8393f4cf627`
+- Before SHA-256: `a75c54a895a2208b2a2e75262289c2b03e75cd1b963146d80db315b1e9bb9221`
 - After SHA-256: `ff32b144b8c4c69079bdd9814c467f50d0907e9fe461ea003bb85d798deb2f2a`
 
 #### Before
@@ -1820,7 +1940,16 @@ Current ResearchSpec owners:
 6. A `boundary` is consumed only by appending a `kind: resume` entry with matching `consumes_hash`. Double-resume (second resume of an already-consumed boundary) is a hard error.
 7. MANDATORY checkpoints (Stage 2.5 / 4.5, review decisions, the Stage 5 entry gate) remain MANDATORY even when reset co-occurs. Integrity gates are never diluted. If the boundary carries `pending_decision`, resume must re-prompt the user; `next` is advisory. Actual routing comes from the matched option's `next_stage`/`next_mode`, not from the boundary `next` field.
 8. `collaboration_depth_agent` observer fires on FULL checkpoints as before; its output is included in the checkpoint notification regardless of reset state. Observer state does NOT cross reset boundaries.
-9. Resume consumption MUST hold an exclusive advisory lock on the passport file for the entire read-check-append sequence (acquire the lock on the "Acquire passport lock" obligation, hold across the read-ledger, no-prior-resume check, and resume-entry append steps, release only after the append is durable). Releasing the lock between the no-prior-resume check and the resume-entry append reopens the double-resume race this rule exists to prevent. Non-POSIX implementations that cannot provide OS-level exclusion MUST refuse to resume rather than degrade silently (fail with an explicit error surfaced to the user). See §"Concurrency model" in the protocol doc.
+9. Resume consumption MUST hold an exclusive advisory lock on the adjacent
+   stable `.<passport-basename>.lock` sidecar for the entire
+   read-check-append sequence. Acquire it at the "Acquire passport lock"
+   obligation, hold it across the read-ledger, no-prior-resume check, and
+   resume-entry append, and release only after the append is durable. Every
+   other passport read-modify-write uses the same sidecar; locking the
+   replaceable passport inode is non-conforming. Releasing the sidecar lock
+   between the check and append reopens the double-resume race. A non-POSIX
+   implementation without OS-level exclusion MUST refuse to resume and
+   surface an explicit error. See §"Concurrency model" in the protocol doc.
 ````
 
 #### After
@@ -1851,7 +1980,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `03680c49396762a40cbc321865f131186e6c3421ce9c2a79dd7355aa1f219199`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `c8adfde9beb5b3fac35351b03b749cbd4102b469601dae18a026480f5b53a758`
+- Before SHA-256: `0e6926eecb1cf821d7414a79cff1aa13ebd958c2c9ef45df9aefebb0e2afab2b`
 - After SHA-256: `915174ffaa9c09b821fb90f92f7b3822c1efd927559ff32a5f1e602a7e71cc8f`
 
 #### Before
@@ -1862,7 +1991,7 @@ Current ResearchSpec owners:
 **Contract:** full spec in [`../references/passport_as_reset_boundary.md`](../references/passport_as_reset_boundary.md) §"`resume_from_passport` mode contract".
 
 **Orchestrator obligations:**
-1. **Acquire passport lock.** Before reading the ledger or checking for a prior consuming entry, acquire an exclusive advisory lock on the passport file (see `references/passport_as_reset_boundary.md` §"Concurrency model"). Hold the lock across the read, the no-prior-resume check, and the append. Release after the append is durable on disk. Do NOT release between steps.
+1. **Acquire passport lock.** Before reading the ledger or checking for a prior consuming entry, acquire an exclusive advisory lock on the adjacent stable `.<passport-basename>.lock` sidecar (see `references/passport_as_reset_boundary.md` §"Concurrency model"). Every passport writer uses this same sidecar; never lock the replaceable passport inode. Hold the lock across the read, the no-prior-resume check, and the append. Release after the append is durable on disk. Do NOT release between steps.
 2. Parse `<hash>` from user input. Validate `^[0-9a-f]{12}$`.
 3. Locate passport file: prefer explicit path in user input; else look in `./passports/` or `./material_passport*.yaml` relative to CWD; else ask the user for the path.
 4. Load `reset_boundary[]`. Find the entry with `kind: boundary` and matching `hash`. No match → hard error: "Passport hash `<hash>` not found in `<path>`. Cannot resume."
@@ -1935,7 +2064,7 @@ Current ResearchSpec owners:
 - Replacement shape: `artifact_projection_block`
 - Replacement body SHA-256: `f2c8bed252eae89ff2bc78fae905927067c01dccd77a70d8e5665c09ebcf29f0`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-pipeline/agents/state_tracker_agent.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-pipeline/agents/state_tracker_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`
 - Before SHA-256: `eb48ce56ef73b0581071ff2d2d383a45f562b4258980ce910035f67cf2fe1cfd`
 - After SHA-256: `f622aa923c031546d21e4cc13094a268bc62a5e70c5055df85352734074a3ea7`
 
@@ -1994,8 +2123,8 @@ Current ResearchSpec owners:
 - Replacement shape: `protocol_block`
 - Replacement body SHA-256: `80e3f6bd0f3a7debba664caaa50977d4dab696828a1743f0c3dbe03cc7bb4844`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-pipeline/agents/state_tracker_agent.md`
-- Before SHA-256: `19f8d3da92612e67552e99a6c6f0b9033f5e7d599b4e73becb885eb26c7576a7`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-pipeline/agents/state_tracker_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`
+- Before SHA-256: `64d7001c063328c4ce92b68d9397df3764c07ff0ad2843e23551cd651890ed40`
 - After SHA-256: `92808f7d24ea01b973d563a06a48bd7020c3c16e98f6204a256c7b9ad2258bd7`
 
 #### Before
@@ -2020,6 +2149,116 @@ For every stage transition, the tracker records a `dialogue_log_ref` containing 
 ### `collaboration_depth_history[]`
 
 Append-only list. Each entry is an observer report produced at a FULL/SLIM checkpoint or during Stage 6 record compilation (the whole-pipeline pass). Entries never gate state transitions — they are stored for the final Process Record's "Collaboration Depth Trajectory" chapter only. The tracker must reject any write request that attempts to turn observer output into a blocking condition.
+
+### Adjudication-activity metadata (#673; authoritative producer/state contract)
+
+Adjudication activity is an opt-in, local, deterministic, **advisory-only**
+side channel. At run initialization the tracker receives one explicit `run_id`
+matching `^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$`; it stores that value at the
+state root and never regenerates, changes, or infers it from a clock, path,
+conversation, artifact content, or filesystem metadata.
+
+The tracker is sole writer for two internal root fields:
+
+- `pending_adjudication_activity_bindings[]` is a non-authoritative staging
+  inventory with exactly the five canonical source-family rows. Through the
+  sole-writer API, a producer may best-effort append a captured artifact binding
+  to its row only **after** it has durably applied the user's ordinary
+  routing/state effect. Captured pending bindings carry only artifact id, role,
+  group id, `artifact_group_stage`, and relative path—never a caller-computed
+  hash. A not-applicable or unavailable row has empty artifacts plus its closed
+  reason. A failed append emits an advisory diagnostic and cannot refuse, roll
+  back, or alter the ordinary effect.
+- `adjudication_activity_sources` is absent until post-terminal sealing. Once
+  sealed, it is the exact five-row inventory, in frozen-spec order, and is never
+  inferred or rebuilt. The terminal state file's root `run_id` plus this sealed
+  root inventory are the exact source/run authority. Pending bindings are not
+  authority.
+
+Action-time producers use only closed receipts from the #673 spec:
+
+1. Author adjudication captures one or two complete two-artifact groups
+   (`author_adjudication_input`, then `author_adjudication`). Each group uses
+   `artifact_group_stage`, with Stage 3 before Stage 3-prime when both exist.
+   The author occurrence identity is the run-scoped `author_event_id`; its
+   interaction digest is derived from `run_id` plus that occurrence id, never
+   from content.
+2. Compliance captures each report group. A plain PASS/WARN report without
+   `user_override` is a valid report-only captured-zero group. Only a qualifying
+   blocking compliance override receives the paired
+   `compliance_override_action_receipt`; a non-qualifying report must not receive
+   one.
+3. Re-review capture binds the exact manifest/precommitment/verdict/traceability
+   quartet after that existing producer has completed.
+4. Explicit-request and MANDATORY-checkpoint logs are written only by the
+   structured action handler at occurrence time, never reconstructed from
+   transcript prose. The complete receipt-stage enum is
+   `pipeline_stage_1 | pipeline_stage_2 | pipeline_stage_2_5 |
+   pipeline_stage_3 | pipeline_stage_3_prime | pipeline_stage_4 |
+   pipeline_stage_4_prime | pipeline_stage_4_5 | pipeline_stage_5 |
+   pipeline_stage_6`. There is no Stage 0. An attempted MANDATORY `skip` first
+   follows the existing refusal path and leaves pipeline state unchanged; only
+   afterward may the best-effort receipt store `skip_refused`.
+
+Terminal writes are strictly ordered. The tracker first durably performs the
+existing terminal transition without reading or depending on any activity
+metadata. Only if the user selected a store may the orchestrator then call the
+deterministic post-terminal helper
+`seal_terminal_inventory(state_path, artifact_root, pending_bindings)` with the
+explicit state path, artifact-root path, and explicitly passed five-row
+`pending_adjudication_activity_bindings[]`. The helper does not read that field
+from state, infer roles, paths, groups, stages, or reasons, or scan for artifacts.
+It may append/seal `adjudication_activity_sources` in the already-terminal state
+file, but must leave terminal `pipeline_state`, current stage, and stage status
+byte-semantically unchanged. Seal/build/append/render failure is advisory,
+creates no substitute store record, and never changes the durable terminal
+outcome. `build-input` projects only the sealed inventory; it accepts no
+caller-reported paths or hashes and performs no ambient scan. `append-run` treats
+an identical `run_id` plus input-receipt digest as idempotent success with no
+write, revision/sequence allocation, or metadata change; a different digest is
+a conflict. Artifact hashes are byte bindings, not identities, and may legally
+repeat within or across retained runs. Optional renderer output is a standalone
+user-facing advisory: its exact limitation and coverage strings are surfaced
+verbatim and never rewritten by the orchestrator.
+
+Neither pending bindings, sealed inventory, selected-store information, store
+contents, renderer output, nor diagnostics may enter a Material Passport,
+stage handoff, Process Record, reviewer/model/observer input, compliance
+decision, gate, verdict, or checkpoint input. Producers and terminal helpers use
+no live model, judge, eval, network/API, ambient clock, directory scan, or glob.
+The frozen design spec and activity schemas remain authoritative for receipt
+shapes, capture-state reasons, group/role ordering, hashing, and replay.
+
+### Review-criteria binding pointer (#684)
+
+The tracker may store one non-authoritative root index named
+`review_criteria_binding`:
+
+```json
+{
+  "status": "active",
+  "manifest_ref": "phase0/review_criteria_binding.json",
+  "target_review_id": "review-001"
+}
+```
+
+`status` is `active` or `unavailable`; the latter carries null reference/id and
+means the explicit field-general path. This index only tells the orchestrator
+which explicitly named manifest to validate. The manifest itself is the sole
+context/criterion/receipt authority; the tracker never copies selected ids,
+hashes, digest, conflict groups, or receipts into state and never reconstructs
+them from prompt output or the filesystem.
+
+Only the tracker writes the index, after deterministic `init` succeeds or the
+caller explicitly chooses the unavailable path. A target/profile change under
+one `target_review_id` is rejected by the builder; a new id records a
+non-comparable predecessor. Before a criteria-aware handoff, the orchestrator
+validates the explicitly referenced manifest and named context/registry. This
+check may refuse only that mismatched criteria-aware handoff. It never supplies
+or alters a severity, editorial verdict, pipeline stage decision, checkpoint,
+or author triage. Consumer receipts are written only by the deterministic
+recorder after their ordinary artifacts exist; no missing consumer is
+fabricated for a skipped or mid-entry stage.
 
 ### State Update Protocol
 
@@ -2124,7 +2363,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `7e7fc2f1e5360a8e02320c879e0e375ff0a3003dd2b898a230f6d45eb13bd244`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`, `academic-pipeline/references/passport_as_reset_boundary.md`, `deep-research/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`
-- Before SHA-256: `f5373d307584b4ace1e95535a60b5b54f489d30a47bb67a2d00ee9454b8114aa`
+- Before SHA-256: `65bfadf9c3398d2e5f683e1af991edf12239c54b2e20a8154bf4239a143ef326`
 - After SHA-256: `de32ef72323f5bcc6f6366016517f7f5b2131570d3565e2f3e9fba278dcec845`
 
 #### Before
@@ -2149,15 +2388,17 @@ Resume consumption is a three-step read-modify-write on the passport ledger:
 2. Verify no `resume` entry later in the ledger carries `consumes_hash` equal to that hash.
 3. Append a new `resume` entry.
 
-Without coordination, two processes can complete step 2 in parallel before either reaches step 3, both observe "no prior resume", and both append. The append-only-ledger invariant survives, but the "one boundary, one resume" invariant breaks. To prevent this, every compliant orchestrator implementation MUST hold an exclusive advisory lock on the passport file for the entire read-check-append sequence.
+Without coordination, two processes can complete step 2 in parallel before either reaches step 3, both observe "no prior resume", and both append. The append-only-ledger invariant survives, but the "one boundary, one resume" invariant breaks. To prevent this, every compliant orchestrator implementation MUST hold an exclusive advisory lock on the passport's stable sidecar `.<passport-basename>.lock` for the entire read-check-append sequence. Every ARS passport writer, including the #743 inquiry-ledger transaction, uses that same sidecar domain.
 
-**POSIX requirement.** On POSIX systems the lock is an `fcntl` exclusive advisory lock (`fcntl.flock(fd, fcntl.LOCK_EX)` in Python, `flock(fd, LOCK_EX)` in C). Acquire before step 1, release after step 3. Do not release between steps under any circumstance. Releasing between steps 2 and 3 reopens the exact race this rule prevents.
+**POSIX requirement.** On POSIX systems, open or create the adjacent sidecar as a regular non-symlink file and take an `fcntl` exclusive advisory lock on that stable descriptor (`fcntl.flock(fd, fcntl.LOCK_EX)` in Python, `flock(fd, LOCK_EX)` in C). Acquire before step 1, release after step 3 is durable, and do not release between steps. Locking the passport inode is forbidden: compliant transactions may atomically replace that inode, which would split writers across two lock domains.
 
 **Lock timeout.** Acquisition MUST use a bounded timeout not exceeding 60 seconds; 30 seconds is RECOMMENDED. The passport write is a few-KB append and fsync, so this bound is two orders of magnitude above any reasonable write latency. 60 s is the hard ceiling because a user waiting longer will assume the orchestrator hung; 30 s leaves slack for slow fsync on NFS or sandboxed filesystems. A timeout at this scale indicates a stuck or crashed peer rather than lock contention. Timeout is a hard error; the orchestrator surfaces it to the user with a "passport locked by another session" message and does NOT retry automatically.
 
 **Non-POSIX (Windows).** `fcntl` is unavailable. Compliant implementations use `msvcrt.locking` with `LK_NBLCK`/`LK_LOCK`, or a cross-platform library like `portalocker`. Implementations that cannot provide OS-level exclusion MUST fail loudly on resume with a "concurrency protection unavailable on this platform" error and refuse to consume the boundary. Silent best-effort is forbidden.
 
-**Observability.** The lock is advisory: external readers that don't honor the protocol can still read the passport. Only cooperating writers get safety. This is acceptable because the passport is intended to be consumed by one tool family (ARS-compatible orchestrators).
+**Compatibility amendment (2026-08-24, #743).** Implementations built from the earlier text that lock the passport inode are not concurrency-compatible with atomic passport replacement. They must be upgraded before running alongside a sidecar-aware writer; acquiring both locks cannot bridge the rename race. A current implementation must never advertise mixed-version writer safety.
+
+**Observability.** The sidecar lock is advisory: external readers and pre-amendment writers that do not honor the protocol can still access the passport. Only current cooperating writers get safety. This is acceptable because the passport is intended to be consumed by one tool family (ARS-compatible orchestrators), and the mixed-version exclusion is explicit.
 
 ## Iron rules
 
@@ -2169,7 +2410,7 @@ Without coordination, two processes can complete step 2 in parallel before eithe
 6. MANDATORY checkpoints are not downgraded by reset; they co-occur.
 7. Hash is computed over the entry with the canonical placeholder `"000000000000"` in the `hash` field, serialized per the byte rules in §"The reset boundary protocol" step 2. `kind: resume` entries are never included in a `boundary` hash computation — the hash covers only prior `boundary` entries plus the new boundary entry itself. Any other convention (exclude-field, variable-length placeholder, post-hoc mutation, including resume entries) breaks cross-implementation interoperability and is forbidden.
 8. A `boundary` entry is "consumed" only by appending a `resume` entry with matching `consumes_hash`. If a `boundary` entry has `pending_decision` set, the orchestrator MUST re-prompt the user on resume and MUST NOT auto-advance using `next`. Each option in `pending_decision.options[]` carries its own routing (`next_stage`/`next_mode`); the boundary entry's `next` field is advisory only and MAY be `null` when all branches terminate or no sensible default exists. Actual routing on resume comes from the matched option's `next_stage`/`next_mode`, not from the boundary `next` field.
-9. Resume consumption MUST hold an exclusive advisory lock on the passport file for the entire read-check-append sequence. Releasing the lock between the no-prior-resume check and the resume-entry append reopens the double-resume race the rule exists to prevent. Non-POSIX implementations that cannot provide OS-level exclusion MUST refuse to resume rather than degrade silently.
+9. Resume consumption and every other passport read-modify-write MUST hold the exclusive advisory lock on the adjacent stable `.<passport-basename>.lock` sidecar for the entire operation. Locking the replaceable passport inode is non-conforming. Releasing the sidecar lock between the no-prior-resume check and the resume-entry append reopens the double-resume race the rule exists to prevent. Non-POSIX implementations that cannot provide OS-level exclusion MUST refuse to resume rather than degrade silently.
 ````
 
 #### After
@@ -2201,13 +2442,13 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `2fcb0a7114a32e1c4b63f030a6dacdd2642417686b4c645ebf77c53d25f0525c`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-pipeline/references/team_collaboration_protocol.md`
-- Before SHA-256: `b7b3d15b245fd412b906ce9f391fd247a21b2e54fe3eed96fe6bbb1036c4a1aa`
+- Before SHA-256: `ea34978587e939c4c78919b611206cb9645b64ed649414c117a389b85e9fed57`
 - After SHA-256: `5eb579bbc71a362e7be85d33223676cf1de1553d0391f3329f21c7370305c117`
 
 #### Before
 
 ````markdown
-| **Handoff checklist** | All Material Passports (Schema 9) attached; Bibliography minimum source count met; Synthesis has 3+ themes |
+| **Handoff checklist** | All Material Passports (Schema 9) attached; bibliography coverage is assessed against the planned claims and field-specific evidence needs; synthesis structure fits the material rather than a fixed theme count |
 ````
 
 #### After
@@ -2957,7 +3198,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `b4f26c6ec6bfde43834a38e28357d62ab114b2e01734081662ffb6a81b35862f`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
 - Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
-- Before SHA-256: `e1bc4e6eec4c6a6b12d5645553e7b93dc589076b9bf8a8d6554b0b0c0f7de557`
+- Before SHA-256: `de088b731b086973f1be09b4330debb476fe894f3a6ecac76673eb32cc7b9d47`
 - After SHA-256: `cff1b1d8ce62974fab0c7a23f9ead2a8b10292e995912a55e1fc5fbbf2f6969b`
 
 #### Before
@@ -2966,7 +3207,7 @@ Current ResearchSpec owners:
 4. **Version tracking**: Each handoff artifact MUST carry a Material Passport (Schema 9) with a version label. Version labels must be monotonically increasing within a pipeline run
 5. **Failure on missing**: If a required field is missing, return `HANDOFF_INCOMPLETE` with a list of missing fields; do NOT proceed with partial data
 6. **Producer validation**: Producing agent must validate output against its schema BEFORE handoff
-7. **Consumer validation**: Consuming agent should validate input on receipt and request re-generation if schema violations are found
+7. **Consumer validation**: Consuming agent should validate input on receipt and request re-generation if schema violations are found. For a current #672 chain this includes exact byte replay of the one `preregistration-artifact/1.0` sidecar and its explicitly named companion when provided. Absence, substitution, a repaired digest, or a changed companion is `HANDOFF_INCOMPLETE`/contract failure, never an inferred unavailable receipt.
 8. **Integrity gating**: Artifacts that have passed through integrity verification (Schema 5) must have their Material Passport updated with `verification_status: "VERIFIED"` and `integrity_pass_date`
 9. **Staleness detection**: If an upstream artifact is modified after a downstream artifact was produced, the downstream artifact's Material Passport should be updated to `verification_status: "STALE"`
 10. **Passport freshness**: A Material Passport's integrity results are considered STALE if `integrity_pass_date` is more than 24 hours old relative to the current timestamp. Stale passports require re-verification before proceeding

@@ -28,6 +28,7 @@ const FIXTURE_RUNTIME_POLICY_CATALOG: RuntimePolicyCatalog = {
   excluded_non_runtime_paths: [],
   match_keywords: ["ARS_CROSS_MODEL", "ARS_MODEL_TIERING", "cross-model", "cross_model", "model tiering"],
   entries: [],
+  unavailable_runtime_references: [],
   checker_closure: [],
 };
 

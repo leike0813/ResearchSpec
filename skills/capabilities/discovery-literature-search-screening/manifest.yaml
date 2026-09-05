@@ -2,7 +2,8 @@ schema_version: "1"
 capability_id: discovery-literature-search-screening
 title: Literature Search And Screening
 description: Runs a systematic, reproducible search and screening process and
-  produces an annotated bibliography with PRISMA-style documentation.
+  produces an annotated bibliography with claim-specific coverage and
+  PRISMA-style documentation.
 maturity: operational
 class: discovery
 node_kind: producer
@@ -37,7 +38,7 @@ knowledge_refs:
     license: CC BY-NC 4.0
   - knowledge_id: corpus-iron-rules
     path: knowledge/corpus-iron-rules.md
-    content_hash: 2596fb3218d5a745eaf22fda39f840869e76d8c99e8a1a6249a5740969716639
+    content_hash: ca05a8be5093e45a68d201642dc0bfb719e46817879c6d9007952bb7d0f38b32
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -48,5 +49,5 @@ provenance:
     - KP-M1-04
   upstream_sources:
     - path: authoring/ars/m1-research/capabilities/01_literature_search_screening.dr-variant.md
-      sha256: 885ef79f7a37cc03e0fcb9c4a7deecb9bb9f9bbae5b98ce2c7c9e42804e76dea
+      sha256: d6dc70e8775a188b3d51ea7ee43b5a58fc5013119086166516f05cf006b15ad5
 license: CC BY-NC 4.0

@@ -2,6 +2,10 @@
 
 Work from `manuscript_draft` and available timeline/citation provenance. Produce `temporal_audit_report`.
 
+Use the executable report contract below. manuscript_draft is the actual text
+file; optional timeline and citation_provenance inputs are explicit JSON/YAML
+files. Missing metadata leaves the affected checks visibly unresolved.
+
 1. Run the five deterministic passes:
    - P1 future-as-past arithmetic
    - P2 version-as-evidence anachronism

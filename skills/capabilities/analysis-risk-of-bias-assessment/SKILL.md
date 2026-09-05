@@ -196,6 +196,7 @@ Assess risk of bias separately for each review outcome; objective and subjective
 - Never skip signaling questions or override the aggregation algorithm.
 - Do not compute effect sizes, GRADE ratings, or compile the PRISMA report in this node.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

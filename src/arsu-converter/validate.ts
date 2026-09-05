@@ -473,6 +473,39 @@ async function validateRuntimePolicyOutput(outputRoot: string, manifest: Convers
   if (catalog.checker_closure.some((item) => item.adaptation === "sprint_schema_path") && !(await pathExists(path.join(outputRoot, "academic-paper-reviewer/assets/shared/sprint_contract.schema.json")))) {
     errors.push("Reviewer checker closure is missing assets/shared/sprint_contract.schema.json");
   }
+  const provenanceChecker = catalog.checker_closure.find((item) => item.adaptation === "reviewer_assets_root");
+  const provenanceCheckerPath = path.join(outputRoot, provenanceChecker?.output_path ?? "academic-paper-reviewer/scripts/review_panel_provenance.py");
+  if (provenanceChecker) {
+    if (!(await pathExists(provenanceCheckerPath))) {
+      errors.push(`Reviewer checker closure is missing ${provenanceChecker.output_path}`);
+    } else {
+      const checkerText = await readUtf8(provenanceCheckerPath);
+      if (!checkerText.includes('parent.parent / "assets"')) {
+        errors.push("Generated reviewer provenance checker does not reuse the package assets root");
+      }
+    }
+  }
+  const requiresReviewerV2Contracts = catalog.entries.some((entry) => entry.source_path.startsWith("academic-paper-reviewer/"))
+    || catalog.checker_closure.some((item) => item.output_path.startsWith("academic-paper-reviewer/"));
+  if (requiresReviewerV2Contracts) {
+    const reviewerContractPaths = [
+      ["academic-paper-reviewer/assets/shared/contracts/reviewer/full.json", "reviewer/reviewer_full/v2"],
+      ["academic-paper-reviewer/assets/shared/contracts/reviewer/methodology_focus.json", "reviewer/reviewer_methodology_focus/v2"],
+    ] as const;
+    for (const [relativePath, expectedContractId] of reviewerContractPaths) {
+      const contractPath = path.join(outputRoot, relativePath);
+      if (!(await pathExists(contractPath))) {
+        errors.push(`Reviewer v2 contract is missing: ${relativePath}`);
+        continue;
+      }
+      try {
+        const contract = JSON.parse(await readUtf8(contractPath)) as { contract_id?: unknown };
+        if (contract.contract_id !== expectedContractId) errors.push(`Reviewer contract binding mismatch: ${relativePath}`);
+      } catch (error) {
+        errors.push(`Reviewer v2 contract is invalid JSON: ${relativePath}: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    }
+  }
 
   const activePaths = new Set(catalog.entries.filter((entry) => entry.disposition === "adapt").map((entry) => entry.source_path));
   for (const file of manifest.output_files) {

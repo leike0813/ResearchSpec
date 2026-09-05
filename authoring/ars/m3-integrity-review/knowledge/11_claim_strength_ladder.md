@@ -4,14 +4,15 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 ══════════════════════════════════════════════
 工件类型: knowledge-pack
 能力/包 ID: KP-M3-11 claim-strength-ladder（claim 强度阶梯）
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/ars/shared/references/claim_strength_ladder.md（全文）
 变更台账（ledger）:
     1. [保留] 全文逐字节保留。
     2. [标注-新增] **决策清单外新增**：integrity E6（STRENGTH-DRIFTED 检测）声明本文件为权威，属 CAP-M3-01 所需。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->
@@ -26,11 +27,13 @@ does not check. Mechanism shape borrowed from
 [Yila-AI/sci-ssci-skills](https://github.com/Yila-AI/sci-ssci-skills) by
 @MissOrangePeel (`sci-ssci-polishing`, `references/invariants.md`).
 
-**Epistemic status:** advisory / interpretive guidance for revision surfaces. It
-does NOT gate, does NOT block, and makes no runtime-enforcement claim. Detection is
-a judgment the revising agent and the integrity gate perform; there is no script
-that verifies claim strength (the deterministic sibling, `#570`, conserves only
-numbers and citation tokens — see `scripts/check_revision_token_conservation.py`).
+**Epistemic status:** the field-relative ladder remains advisory / interpretive
+guidance. Since #670, exact claim surfaces that were explicitly registered and
+hash-bound are mechanically preserved or replaced only by exact author-approved
+bytes in current patch 1.1; the runtime does not infer a rung from prose and does
+not detect unregistered semantic movement. E6 therefore remains mandatory for
+unregistered prose. The deterministic sibling `#570` separately conserves
+numbers and citation tokens; see `scripts/check_revision_token_conservation.py`.
 
 ## The ladder
 
@@ -89,10 +92,15 @@ NOT a move — no authorization needed:
 ## Where this is consumed
 
 - `draft_writer_agent` § Claim-Strength Ladder (#569) — revision mode: a patch op
-  touching a claim-bearing block records whether claim strength moved and, if so,
-  which `roadmap_item_ids` authorized it.
+  touching a registered claim surface carries its exact #670 authorization when
+  movement is author-approved; unregistered surfaces remain explicit E6 scope.
 - Stage 4.5 integrity audit — the audit vocabulary names the drift class so a
   reviewer/gate can flag it; advisory rows only, never terminal.
+- #672 cross-document consistency advisory — semantic callers may use the ladder
+  for field-relative abstract/results or discussion/results rung observations.
+  The deterministic finalizer implements no keyword matcher or numeric ranker;
+  the `LLM-ADVISORY` / `UNMEASURED` result grants no revision authority and
+  cannot change Stage 4.5 or Stage-5 routing.
 
 ## Measurement
 

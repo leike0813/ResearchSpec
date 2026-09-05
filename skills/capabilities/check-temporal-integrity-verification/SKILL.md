@@ -16,6 +16,8 @@ Execute exactly one ResearchSpec capability node.
 ## Inputs
 
 - `manuscript_draft` (manuscript-draft.v1)
+- `timeline` (timeline.v1)
+- `citation_provenance` (citation-provenance.v1)
 
 ## Outputs
 
@@ -24,12 +26,21 @@ Execute exactly one ResearchSpec capability node.
 ## Knowledge
 
 - Load knowledge ID `degradation-registry` from `knowledge/degradation-registry.json`.
+- Load knowledge ID `validators-temporal.py` from `validators/temporal.py`.
+
+## Tools
+
+- `validators/temporal.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 
 ## Procedure
 
 # Procedure
 
 Work from `manuscript_draft` and available timeline/citation provenance. Produce `temporal_audit_report`.
+
+Use the executable report contract below. manuscript_draft is the actual text
+file; optional timeline and citation_provenance inputs are explicit JSON/YAML
+files. Missing metadata leaves the affected checks visibly unresolved.
 
 1. Run the five deterministic passes:
    - P1 future-as-past arithmetic
@@ -48,6 +59,24 @@ Work from `manuscript_draft` and available timeline/citation provenance. Produce
 | pass | finding | claim | severity |
 |---|---|---|---|
 ```
+
+## Executable report contract
+
+Use Python 3 with PyYAML for YAML inputs; PDF parsing additionally needs pypdf.
+Use the host's already configured Python environment. Missing dependencies must
+be reported; never install them without user authorization.
+
+Create an external request JSON with `inputs: [{"role": "<input role>", "path": "<absolute material path>"}]`
+from the paths returned by `researchspec instructions`. Run:
+
+`python3 validators/temporal-integrity.py temporal /absolute/request.json --generate`
+
+Save stdout unchanged as the declared external JSON report. The validator used by
+`advance` recomputes the report from the graph's current resolved inputs and
+rejects altered results. It does not write reports or mutate inputs. A valid
+report can contain FAIL, UNAVAILABLE or not_checked findings: these remain
+visible evidence for the owning human Gate, never a scientific clearance.
+
 
 ## Completion
 

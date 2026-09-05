@@ -116,8 +116,10 @@ function applyRevisionPatch(baseText, baseBytes, value) {
 function validatePatch(value) {
   const diagnostics = [];
   if (!record(value)) return [diagnostic("schema_invalid", "Patch must be an object.")];
-  exactKeys(value, ["patch_format_version", "revision_round", "base_draft_hash", "revision_rationale", "emitted_by", "ops", "annotation_mapping"], diagnostics, "patch");
+  exactKeys(value, ["patch_format_version", "authorization_context", "revision_round", "base_draft_hash", "revision_rationale", "emitted_by", "ops", "annotation_mapping"], diagnostics, "patch");
   if (value.patch_format_version !== "2.0") diagnostics.push(diagnostic("schema_invalid", "patch_format_version must be 2.0."));
+  const authorizationContext = value.authorization_context === undefined ? "review_roadmap" : value.authorization_context;
+  if (!["review_roadmap", "integrity_correction"].includes(authorizationContext)) diagnostics.push(diagnostic("authorization_invalid", "authorization_context must be review_roadmap or integrity_correction."));
   if (!Number.isInteger(value.revision_round) || value.revision_round < 1) diagnostics.push(diagnostic("schema_invalid", "revision_round must be a positive integer."));
   if (!hash12(value.base_draft_hash)) diagnostics.push(diagnostic("schema_invalid", "base_draft_hash must be 12 lowercase hex characters."));
   if (!nonempty(value.revision_rationale) || !nonempty(value.emitted_by)) diagnostics.push(diagnostic("schema_invalid", "revision_rationale and emitted_by are required."));
@@ -127,8 +129,8 @@ function validatePatch(value) {
   for (const operation of value.ops) {
     if (!record(operation)) { diagnostics.push(diagnostic("schema_invalid", "Each operation must be an object.")); continue; }
     const allowed = operation.op === "delete_block"
-      ? ["operation_id", "op", "block_id", "roadmap_item_ids", "annotation_refs", "old_hash"]
-      : ["operation_id", "op", "block_id", "roadmap_item_ids", "annotation_refs", "old_hash", "new_text"];
+      ? ["operation_id", "op", "block_id", "roadmap_item_ids", "annotation_refs", "claim_strength_changes", "old_hash"]
+      : ["operation_id", "op", "block_id", "roadmap_item_ids", "annotation_refs", "claim_strength_changes", "old_hash", "new_text"];
     exactKeys(operation, allowed, diagnostics, "operation");
     if (!safeId(operation.operation_id) || operationIds.has(operation.operation_id)) diagnostics.push(diagnostic("schema_invalid", "operation_id must be safe and unique.", operation));
     operationIds.add(operation.operation_id);
@@ -139,6 +141,7 @@ function validatePatch(value) {
     if (bodyStart && "old_hash" in operation) diagnostics.push(diagnostic("schema_invalid", "DOC-BODY-START cannot carry old_hash.", operation));
     if (operation.op !== "delete_block" && !nonempty(operation.new_text)) diagnostics.push(diagnostic("schema_invalid", `${operation.op} requires new_text.`, operation));
     if (!uniqueSafeIds(operation.roadmap_item_ids)) diagnostics.push(diagnostic("schema_invalid", "roadmap_item_ids must be a non-empty unique ID list.", operation));
+    validateClaimStrengthChanges(operation.claim_strength_changes, operation, authorizationContext, diagnostics);
     if (operation.annotation_refs !== undefined) {
       if (!Array.isArray(operation.annotation_refs) || operation.annotation_refs.length === 0) diagnostics.push(diagnostic("annotation_mapping_invalid", "annotation_refs must be a non-empty array.", operation));
       else {
@@ -150,6 +153,39 @@ function validatePatch(value) {
   }
   validateMapping(value.annotation_mapping, references, diagnostics);
   return diagnostics;
+}
+
+function validateClaimStrengthChanges(changes, operation, authorizationContext, diagnostics) {
+  if (changes === undefined) return;
+  if (!Array.isArray(changes)) {
+    diagnostics.push(diagnostic("authorization_invalid", "claim_strength_changes must be an array.", operation));
+    return;
+  }
+  if (changes.length > 0 && authorizationContext === "integrity_correction") {
+    diagnostics.push(diagnostic("authorization_invalid", "Integrity-correction patches cannot declare claim strength changes.", operation));
+  }
+  const keys = new Set();
+  for (const change of changes) {
+    if (!record(change)) {
+      diagnostics.push(diagnostic("authorization_invalid", "Each claim strength change must be an object.", operation));
+      continue;
+    }
+    exactKeys(change, ["claim_id", "change_id", "from_strength", "to_strength", "direction", "rationale"], diagnostics, "claim strength change");
+    const key = safeId(change.claim_id) && safeId(change.change_id) ? JSON.stringify([change.claim_id, change.change_id]) : "";
+    if (!key || keys.has(key)) diagnostics.push(diagnostic("authorization_invalid", "Claim strength changes must be valid and unique per claim and change.", operation));
+    else keys.add(key);
+    const fromRank = claimStrengthRank(change.from_strength);
+    const toRank = claimStrengthRank(change.to_strength);
+    if (fromRank === undefined || toRank === undefined) {
+      diagnostics.push(diagnostic("authorization_invalid", "Claim strength must be tentative, supported, or strong.", operation));
+    } else if (fromRank === toRank) {
+      diagnostics.push(diagnostic("authorization_invalid", "Claim strength changes must change strength.", operation));
+    } else {
+      const expectedDirection = toRank > fromRank ? "strengthen" : "weaken";
+      if (change.direction !== expectedDirection) diagnostics.push(diagnostic("authorization_invalid", `Claim strength direction must be ${expectedDirection}.`, operation));
+    }
+    if (!nonempty(change.rationale)) diagnostics.push(diagnostic("authorization_invalid", "Claim strength changes require rationale.", operation));
+  }
 }
 
 function validateMapping(mapping, references, diagnostics) {
@@ -306,9 +342,15 @@ function safeId(value) { return typeof value === "string" && /^[A-Za-z0-9][A-Za-
 function blockId(value) { return typeof value === "string" && /^B[0-9]{4,}$/.test(value); }
 function hash12(value) { return typeof value === "string" && /^[a-f0-9]{12}$/.test(value); }
 function uniqueSafeIds(value) { return Array.isArray(value) && value.length > 0 && value.every(safeId) && new Set(value).size === value.length; }
+function claimStrengthRank(value) {
+  if (value === "tentative") return 0;
+  if (value === "supported") return 1;
+  if (value === "strong") return 2;
+  return undefined;
+}
 function annotationKey(value) { return record(value) && safeId(value.annotation_set_id) && safeId(value.annotation_id) ? `${value.annotation_set_id}:${value.annotation_id}` : ""; }
 function sha256(value) { return createHash("sha256").update(value).digest("hex"); }
-function exactKeys(value, allowed, diagnostics, label) { for (const key of Object.keys(value)) if (!allowed.includes(key)) diagnostics.push(diagnostic(key.includes("annotation") ? "annotation_mapping_invalid" : "schema_invalid", `Unexpected ${label} field: ${key}`)); }
+function exactKeys(value, allowed, diagnostics, label) { for (const key of Object.keys(value)) if (!allowed.includes(key)) diagnostics.push(diagnostic("schema_invalid", `Unexpected ${label} field: ${key}`)); }
 function assertDistinctPaths(paths) { if (new Set(paths).size !== paths.length) throw failure("usage_error", "Input, output and report paths must be distinct.", EXIT.usage); }
 async function assertMissing(target) { try { await access(target); throw failure("output_exists", `Output already exists: ${target}`, EXIT.output); } catch (error) { if (error instanceof HelperFailure) throw error; if (error?.code !== "ENOENT") throw failure("output_write_failed", message(error), EXIT.output); } }
 async function safeUnlink(target) { try { await unlink(target); } catch (error) { if (error?.code !== "ENOENT") throw error; } }

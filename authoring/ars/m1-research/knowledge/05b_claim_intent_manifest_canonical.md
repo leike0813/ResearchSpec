@@ -4,14 +4,15 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 ══════════════════════════════════════════════
 工件类型: knowledge-pack
 能力/包 ID: KP-M1-05b claim-intent-manifest（firm_rules canonical 块）
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
-    - vendor/ars/shared/references/firm_rules.md §Claim Intent Manifest emission firm rules (R-CIM-*)（L53-77）
+    - vendor/ars/shared/references/firm_rules.md §Claim Intent Manifest emission firm rules (R-CIM-*)（L58-82）
 变更台账（ledger）:
     1. [保留] 原文逐字节保留。
     2. [标注] 上游声明本块是 single source of truth，镜像按 ID 引用；authoring 阶段以此为准。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文。
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->

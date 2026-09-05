@@ -4,12 +4,12 @@ import path from "node:path";
 import process from "node:process";
 
 const ROOT = process.cwd();
-const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.19.0-828ef3b";
+const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.21.1-127ff85";
 const AUDIT_ARTIFACTS = path.join(ROOT, "audits", "arsu", DEFAULT_ANCHOR, "artifacts");
-const REVIEW_HTML = path.join(AUDIT_ARTIFACTS, "arsu-mode-capability-review.html");
 const ARS = path.join(ROOT, "vendor", "ars");
 const CAPABILITIES = path.join(ROOT, "skills", "capabilities");
 const OUT = process.argv[2] ? path.resolve(process.argv[2]) : path.join(AUDIT_ARTIFACTS, "arsu-mode-graph-match-assessment.html");
+const REVIEW_HTML = path.join(path.dirname(OUT), "arsu-mode-capability-review.html");
 
 const esc = (text) => String(text ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 const norm = (text) => String(text ?? "").toLowerCase().replace(/\s+/g, " ");
@@ -181,7 +181,7 @@ const ANCHORS = {
   "academic-paper-reviewer:calibration": [
     A("漏检率", "FNR"),
     A("误报率", "FPR"),
-    A("曲线下面积", "AUC"),
+    A("禁止以 AUC 表示连续质量评分", "AUC"),
     A("黄金集", "gold set"),
   ],
   "academic-pipeline:end-to-end": [
@@ -480,7 +480,7 @@ footer{padding:20px 22px 40px;color:var(--muted);font-size:12px;max-width:1800px
 </details>
 <nav class="tabbar" id="tabbar">${groupedTabs}</nav>
 <main>${panels}</main>
-<footer>生成器：<code>scripts/generate-arsu-graph-match-assessment-html.mjs</code>。修复前缺口语义复核快照见 <a href="arsu-mode-gap-semantic-review.html">arsu-mode-gap-semantic-review.html</a>。状态含义：<span class="status status-ok">已保留</span> = 上游与转换侧均命中；<span class="status status-bad">存在缺口</span> = 上游有、转换侧未命中；<span class="status status-warn">仅转换侧</span> = 仅转换侧命中；<span class="status status-info">流程锚点·已引擎化</span> = 上游流程词已由 graph profile/Gate 承担，预期不出现在 capability SKILL；<span class="status status-muted">双侧缺失</span> = 两侧均未命中。必读/选读规则：SKILL/REGISTRY/AGENT/TEMPLATE 为必读；mode selection、spectrum、intent clarification、integration guide、mode advisor 与各 API protocol 为选读。</footer>
+<footer>生成器：<code>scripts/generate-arsu-graph-match-assessment-html.mjs</code>。本锚点的 Agent 语义审阅见 <a href="arsu-mode-gap-semantic-review.html">arsu-mode-gap-semantic-review.html</a>。状态含义：<span class="status status-ok">已保留</span> = 上游与转换侧均命中；<span class="status status-bad">存在缺口</span> = 上游有、转换侧未命中；<span class="status status-warn">仅转换侧</span> = 仅转换侧命中；<span class="status status-info">流程锚点·已引擎化</span> = 上游流程词已由 graph profile/Gate 承担，预期不出现在 capability SKILL；<span class="status status-muted">双侧缺失</span> = 两侧均未命中。必读/选读规则：SKILL/REGISTRY/AGENT/TEMPLATE 为必读；mode selection、spectrum、intent clarification、integration guide、mode advisor 与各 API protocol 为选读。</footer>
 <script>
 const tabs=[...document.querySelectorAll('.tab')];
 const panels=[...document.querySelectorAll('.mode-panel')];

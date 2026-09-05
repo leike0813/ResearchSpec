@@ -77,6 +77,7 @@ Policy reading stays single-homed: ResearchSpec is the sole reader of `terminal_
 - Never run more than two formatter fix rounds for a TERMINAL-BLOCK token.
 - Do not modify manuscript bytes, formatted artifacts, or the policy.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

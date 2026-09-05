@@ -13,8 +13,15 @@ export interface ValidatorSubmission {
   run_id: string;
   node_id: string;
   submitted_at: string;
+  inputs: ValidatorInput[];
   outputs: Array<{ role: string; path: string }>;
   evidence?: Array<{ role: string; path: string }>;
+}
+
+export interface ValidatorInput {
+  role: string;
+  path?: string;
+  value?: string | number | boolean | null;
 }
 
 export interface CapabilityValidatorResult {
@@ -52,8 +59,9 @@ export async function runCapabilityValidators(
 function runPolicyValidator(manifest: CapabilityManifest, validatorId: string, submission: ValidatorSubmission): CapabilityValidatorResult {
   if (validatorId === "capability.policy.output_roles") {
     const expected = new Set(manifest.outputs.map((item) => item.role));
+    const required = new Set(manifest.outputs.filter((item) => item.required !== false).map((item) => item.role));
     const actual = new Set(submission.outputs.map((item) => item.role));
-    const missing = [...expected].filter((role) => !actual.has(role));
+    const missing = [...required].filter((role) => !actual.has(role));
     const unknown = [...actual].filter((role) => !expected.has(role));
     if (missing.length > 0 || unknown.length > 0) {
       return { validator_id: validatorId, status: "fail", code: "output_roles_invalid", detail: `missing=[${missing.join(",")}] unknown=[${unknown.join(",")}]` };
@@ -78,6 +86,7 @@ async function runScriptValidator(
     run_id: submission.run_id,
     node_id: submission.node_id,
     submitted_at: submission.submitted_at,
+    inputs: submission.inputs,
     outputs: submission.outputs,
     evidence: submission.evidence ?? [],
   }, null, 2)}\n`, "utf8");

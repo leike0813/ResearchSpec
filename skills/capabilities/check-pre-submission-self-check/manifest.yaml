@@ -40,7 +40,15 @@ validators:
 knowledge_refs:
   - knowledge_id: quality-rubrics
     path: knowledge/quality-rubrics.md
-    content_hash: c3b26597621ab55ddc7d83c0edefd7696ad082c916b55c765bfeb6a04ba2b36b
+    content_hash: 6a4754576441a775c258aa77efb4b54c9e5f58d93bf478190924e89eb33932ff
+    license: CC BY-NC 4.0
+  - knowledge_id: sprint-contract
+    path: knowledge/sprint-contract.md
+    content_hash: a032f0782146538d70ac81b997ee675c9bf643d2674b0d9a91c74128a02bb84d
+    license: CC BY-NC 4.0
+  - knowledge_id: re-review-protocol
+    path: knowledge/re-review-protocol.md
+    content_hash: 735b76d6593c5237a1cd590818494bf7bd72c5323cbba07f8656881bfb65390b
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -48,7 +56,9 @@ provenance:
   extraction_artifact_ids:
     - CAP-M3-07
     - KP-M3-02a
+    - KP-M3-06
+    - KP-M5-15
   upstream_sources:
     - path: authoring/ars/m3-integrity-review/capabilities/07_pre_submission_self_check.md
-      sha256: c80fbbf1537df93c29b4361f8fc4d962191e05b56fd2b481357d44f9fd4be49e
+      sha256: ed37055a86a8d95bbbd0c3148936d690a98440f96417a3a066222c4a7b1aa415
 license: CC BY-NC 4.0

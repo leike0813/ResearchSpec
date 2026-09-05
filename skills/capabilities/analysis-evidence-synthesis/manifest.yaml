@@ -32,7 +32,7 @@ knowledge_refs:
     license: CC BY-NC 4.0
   - knowledge_id: claim-intent-canonical
     path: knowledge/claim-intent-canonical.md
-    content_hash: f7a346eedc9011bde6ebf40375a52e708f5171deb30d81463137791894e014fa
+    content_hash: 5b566633074b2cb94b3e78c50b105971c234d412029042ccabdac36d980ba391
     license: CC BY-NC 4.0
   - knowledge_id: three-layer-citation
     path: knowledge/three-layer-citation.md

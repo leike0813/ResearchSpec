@@ -1,99 +1,90 @@
-<!--
-══════════════════════════════════════════════
-ARS 提取工件（Extraction Artifact）— M5 支线段
-══════════════════════════════════════════════
-工件类型: capability
-能力/包 ID: CAP-M5-13 citation-verification-summary（验证摘要脚本）
-提取日期: 2026-08-15
-提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
-来源对照（source mapping）:
-    - vendor/ars/scripts/citation_verification_summary.py（全文）
-变更台账（ledger）:
-    1. [保留] 脚本全文逐字节保留。
-    2. [标注-清尾] 清尾批次：【M4】未提取依赖；引用方与归属【KP-M4-03 降级注册表 authority 锚点指向本脚本】。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
-      一律推迟到 authoring 阶段，并另行记录。
-══════════════════════════════════════════════
--->
+"""ResearchSpec report generation and read-only submission verification.
 
-#!/usr/bin/env python3
-"""Citation verification summary reducer (Delta 4) — SINGLE SOURCE OF TRUTH.
-
-Reduces per-resolver outcomes to the 3-class `lookup_verified` value using the
-v3.11 narrowed-false definition (C-V6(a)): `false` requires at least one
-ID-keyed unmatched (a DOI/arXiv ID that provably fails to resolve = fabrication
-evidence); a title-only unmatched (no resolvable identifier to key on) is a
-coverage gap and reduces to `unresolvable`, never `false`.
-
-run_evals.py imports `reduce_lookup_verified` from here; there is exactly one
-reducer implementation in the repo (the old un-narrowed copy in run_evals.py
-was removed when this landed).
-
-OQ-5 recall limit (user-facing surfacing deferred). The narrowed-false rule
-means a fabricated citation that carries NO resolvable identifier (no DOI /
-arXiv ID, only a bogus title) reduces to `unresolvable`, NOT `false`, so the
-citation-existence gate does not block it — it is indistinguishable from a
-legitimately unindexed (regional / non-English / pre-digital) paper. This is an
-accepted recall limit, caught instead by the v3.8 claim-faithfulness audit +
-human review. The user-facing explanation of this limit (in docs/ARCHITECTURE.md
-and the user guide) and the policy that consumes this verdict
-(`terminal_policies.citation_existence`, enum {advisory, strict}) both land with
-the Delta 3 / C-V6 policy batch — this data-layer batch only computes the
-verdict; it does not gate on it. Gold fixture 051 (the OQ-5 by-design
-false-negative: a no-identifier fabrication) pins that a title-only unmatched
-reduces to unresolvable, never false. The complementary real-but-unindexed
-canary remains unfilled (issue #250).
-
-Spec: docs/design/2026-05-21-v3.10-182-promote-citation-gate-spec.md
-§2 Delta 4 + §0(4a) + INVARIANT C-V6(a).
+ResearchSpec-authored adapter, CC BY-NC 4.0. Algorithms are attributed in
+the accompanying modules. No model services or workflow mutation.
 """
-from __future__ import annotations
+import argparse
+import importlib
+import json
+from pathlib import Path
+import sys
 
-from typing import Any, Mapping
+sys.dont_write_bytecode = True
 
-STATUS_MATCHED = "matched"
-STATUS_UNMATCHED = "unmatched"
-STATUS_UNREACHABLE = "unreachable"
-STATUS_SKIPPED = "skipped"
+CHECKS = {
+    "temporal": ("temporal", "compute", "temporal_audit_report"),
+    "pdf": ("pdf", "compute", "pdf_preflight_report"),
+    "passport": ("documents", "compute_passport", "passport_report"),
+    "submission": ("documents", "compute_submission", "submission_package_report"),
+    "existence": ("citations", "compute_existence", "citation_verification_report"),
+    "summary": ("citations", "compute_summary", "citation_summary"),
+    "contamination": ("citations", "compute_contamination", "contamination_report"),
+}
 
-QUERIED_BY_ID = "id"
+
+def strict_json(text):
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError("Duplicate JSON key")
+            result[key] = value
+        return result
+    def constant(value):
+        raise ValueError("Non-finite JSON number: " + value)
+    return json.loads(text, object_pairs_hook=pairs, parse_constant=constant)
 
 
-def reduce_lookup_verified(resolver_outcomes: Mapping[str, Any]) -> str:
-    """Reduce per-resolver outcomes to a 3-class lookup_verified value.
+def paths(rows):
+    if not isinstance(rows, list):
+        raise ValueError("Expected role/path array")
+    result = {}
+    for row in rows:
+        if not isinstance(row, dict) or not isinstance(row.get("role"), str) or not isinstance(row.get("path"), str):
+            raise ValueError("Each input needs a role and path")
+        if row["role"] in result or not row["role"]:
+            raise ValueError("Duplicate or empty role")
+        p = Path(row["path"])
+        if not p.is_absolute():
+            raise ValueError("Use absolute material paths")
+        if not p.exists():
+            raise ValueError("Material does not exist: " + str(p))
+        result[row["role"]] = p
+    return result
 
-    Each value in `resolver_outcomes` is a dict with at least `status`, and
-    (for unmatched rows) `queried_by` ∈ {'id', 'title', None}.
 
-    Rules (symmetric 3-class; `unresolvable` is NEVER collapsed into `false`):
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("check", choices=CHECKS)
+    parser.add_argument("submission", type=Path, help="JSON with inputs and, for validation, outputs role/path arrays")
+    parser.add_argument("--generate", action="store_true", help="Print computed JSON report; never write workflow files")
+    args = parser.parse_args()
+    try:
+        request = strict_json(args.submission.read_text(encoding="utf-8"))
+        if not isinstance(request, dict):
+            raise ValueError("Request must be an object")
+        inputs = paths(request.get("inputs"))
+        module, function, output_role = CHECKS[args.check]
+        payload = getattr(importlib.import_module(module), function)(inputs)
+        expected = {"schema_version": "1", "check": args.check,
+                    "sources": {role: str(p) for role, p in inputs.items()}, "result": payload}
+        if args.generate:
+            print(json.dumps(expected, ensure_ascii=False, sort_keys=True, indent=2, allow_nan=False))
+            return 0
+        outputs = paths(request.get("outputs"))
+        if output_role not in outputs:
+            raise ValueError("Missing report role: " + output_role)
+        actual = strict_json(outputs[output_role].read_text(encoding="utf-8"))
+        canonical = lambda value: json.dumps(value, sort_keys=True, ensure_ascii=False, allow_nan=False)
+        if canonical(actual) != canonical(expected):
+            raise ValueError("Report does not match computation over current inputs")
+        # Findings, including UNAVAILABLE, remain report data. Formal Gates
+        # decide whether the scientific result permits progression.
+        return 0
+    except (OSError, ValueError, TypeError, KeyError, ImportError) as exc:
+        print(json.dumps({"code": "checker_input_invalid", "detail": str(exc)}), file=sys.stderr)
+        return 1
 
-    * `skipped` outcomes are EXCLUDED from classification (resolver
-      applicability / policy, not adjudication). "applicable" = not skipped.
-    * `true` iff >=1 applicable resolver is `matched` (matched WINS — true even
-      if another applicable resolver is `unmatched`).
-    * `false` (v3.11 narrowed, C-V6(a)) iff NO applicable resolver is `matched`
-      AND >=1 applicable resolver is an **ID-keyed** `unmatched`
-      (status=unmatched AND queried_by='id'). A bogus DOI/arXiv ID that
-      provably fails to resolve is fabrication evidence. Anti-fabrication bias:
-      one ID-keyed unmatched stands even alongside an `unreachable` (a transient
-      outage does not cancel positive non-existence evidence).
-    * `unresolvable` otherwise — every applicable resolver `unreachable` (total
-      outage), OR every resolver `skipped` (empty adjudicating set, manual
-      exempt), OR the only negative signals are title-only `unmatched`
-      (queried_by != 'id' — no resolvable identifier to key on = coverage gap,
-      the real-but-unindexed paper; C-V6(a)/(f) + OQ-5 by-design FN).
-    """
-    outcomes = [v or {} for v in resolver_outcomes.values()]
-    applicable = [o for o in outcomes if o.get("status") != STATUS_SKIPPED]
 
-    if any(o.get("status") == STATUS_MATCHED for o in applicable):
-        return "true"
-
-    id_keyed_unmatched = any(
-        o.get("status") == STATUS_UNMATCHED and o.get("queried_by") == QUERIED_BY_ID
-        for o in applicable
-    )
-    if id_keyed_unmatched:
-        return "false"
-
-    return "unresolvable"
+if __name__ == "__main__":
+    sys.exit(main())

@@ -30,7 +30,7 @@ validators:
 knowledge_refs:
   - knowledge_id: raise-framework
     path: knowledge/raise-framework.md
-    content_hash: 488439b016cff013b4ce122a1239f21825f1b7b204240e746f6068dd567ad9ea
+    content_hash: 3231a0a49684e8704ccf64d456c5d35f9cf9644605c60f7e16287d262cc547dc
     license: CC BY-NC 4.0
   - knowledge_id: prisma-traice
     path: knowledge/prisma-traice.md

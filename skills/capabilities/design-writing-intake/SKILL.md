@@ -1,6 +1,6 @@
 ---
 name: design-writing-intake
-description: "Collects paper configuration and style calibration for writing work."
+description: "Collects paper configuration, preregistration handoff, review-target context, domain profile, and style calibration for writing work."
 metadata:
   capability_id: design-writing-intake
   node_kind: producer
@@ -24,6 +24,7 @@ Execute exactly one ResearchSpec capability node.
 ## Knowledge
 
 - Load knowledge ID `style-calibration` from `knowledge/style-calibration.md`.
+- Load knowledge ID `preregistration-guide` from `knowledge/preregistration-guide.md`.
 
 ## Procedure
 
@@ -48,17 +49,43 @@ You are the Intake Agent. You conduct a structured configuration interview to es
 
 ### Detection Logic
 
-Check the available inputs for materials produced by deep research. Identification markers (any occurrence): Research Question Brief, Methodology Blueprint, Annotated Bibliography (APA 7.0 format), Synthesis Report, and INSIGHT Collection.
+Check the available inputs for materials produced by deep research. Identification markers (any occurrence): Research Question Brief, Methodology Blueprint, Annotated Bibliography (APA 7.0 format), Synthesis Report, INSIGHT Collection, a `preregistration-artifact/1.0` sidecar, and (when its status is `provided`) its explicitly named completed-artifact companion.
 
 ### When Handoff Materials Are Detected
 
+Before auto-populating prose fields, inspect the explicitly supplied
+preregistration declaration and its source bindings. Consume a validated
+sidecar only when the caller supplies evidence of the required exact-byte
+replay. This node has no bundled sidecar builder or replay checker: absent
+verification stays unresolved and must not be relabelled verified. Never
+follow an inferred path, repair a digest, infer an absent status or substitute
+a repository template. Preserve supplied evidence without modifying it and
+record its external location and validation limits in the handoff.
+
 1. Auto-populate existing parameters: research question from the RQ brief; discipline from material content; method from the methodology blueprint; existing materials from the material list.
 2. Skip redundant questions: skip Topic & Research Question and the parts of Existing Materials already available. Still confirm paper type, citation format, output format, and language.
-3. Notify the user exactly which parameters were auto-populated and ask for confirmation.
+3. Notify the user exactly which parameters were auto-populated, including the preregistration receipt status and companion replay status, and ask for confirmation.
 
 ### When No Handoff Materials Are Detected
 
 Run the full interview steps below.
+
+## Review Target Context Handoff
+
+When the author confirms a venue, track, or article type, pass that exact
+declaration to the deterministic review-target resolver. Do not infer missing
+target metadata from manuscript quality, journal reputation, or model memory.
+Persist the pointer-only `ReviewTargetContext`, initialize a
+`ReviewCriteriaBindingManifest`, and hand both artifacts plus the rendered
+Target Criteria Brief to the orchestrator.
+
+Propagate the same `target_review_id`, context and registry raw hashes,
+`resolved_digest`, and ordered criterion IDs to every criteria-aware consumer.
+A substantive target change receives a new review ID and is not comparable to
+the prior profile. If no resolved context exists, record
+`criteria_binding_unavailable`; downstream work stays field-general and makes
+no venue-alignment claim. This handoff supplies configuration authority only;
+it does not set verdict, severity, checkpoint, or triage state.
 
 ## Simplified Interview
 
@@ -165,6 +192,26 @@ Ask the user to choose citation-verification policy:
 - Answer `mark only`, or no answer -> record `advisory (mark only, default)` and write nothing to the passport.
 - This step records the declared policy; it never evaluates it.
 
+### Step 14: Retraction Terminal Policy
+
+Retraction detection is unconditional and remains visible in Bibliographic
+Integrity Advisories. Ask:
+
+> "Retracted-reference policy: **mark only** (default — show the resolver
+> evidence and judgment context) / **strict** (block finalization for a current,
+> undisputed retraction unless an explicit legitimate-use declaration is paired
+> with a cited retraction notice)."
+
+- `strict` records `terminal_policies.retraction: strict`; intake records the
+  policy but never evaluates a retraction row.
+- `mark only`, or no answer, records `advisory (mark only, default)` and writes
+  no passport key because absence is advisory.
+- Retraction and citation-existence policies are independent. A source may
+  exist and be retracted, and the policies may produce separate terminal
+  signals.
+- Plan mode is exempt, as for the domain profile and citation-verification
+  steps.
+
 ## Request Classification
 
 Classify the request for the record:
@@ -209,6 +256,7 @@ For revision, format-convert, and citation-check requests, existing paper conten
 | Style Profile | [attached / null] |
 | Domain Evidence Profile | [effective value, or unknown_user_defined (requested: reserved)] |
 | Citation Verification | [strict / advisory (mark only, default)] |
+| Retraction Policy | [strict / advisory (mark only, default), or absent if Step 14 not run] |
 | Operational Mode | [full / outline-only / revision / abstract-only / lit-review / format-convert / citation-check / plan] |
 
 ### Notes
@@ -217,7 +265,9 @@ For revision, format-convert, and citation-check requests, existing paper conten
 
 ## Quality Criteria
 
-- All parameters must be populated (journal can be "General"; co-authors can be "single-author"; funding can be "no funding"; style profile can be "null").
+- All applicable core parameters and the two independent citation-policy rows
+  must be populated (journal can be "General"; co-authors can be
+  "single-author"; funding can be "no funding"; style profile can be "null").
 - Word count must be realistic for the paper type.
 - Citation format must match discipline conventions; warn on mismatch.
 - Require explicit user confirmation of the final record.
@@ -227,6 +277,7 @@ For revision, format-convert, and citation-check requests, existing paper conten
 - Never fill a venue or layout field from memory of the journal, institution, or filename.
 - Never auto-activate a domain evidence profile; the scholar must confirm.
 - Do not start drafting, outlining, searching, or reviewing in this node.
+
 
 ## Completion
 

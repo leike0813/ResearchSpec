@@ -4,14 +4,15 @@ ARS 提取工件（Extraction Artifact）— M4 修订与定稿段
 ══════════════════════════════════════════════
 工件类型: capability
 能力/包 ID: CAP-M4-04 terminal-policy-gate（投稿包终检门 #394）
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
-    - vendor/ars/academic-pipeline/agents/pipeline_orchestrator_agent.md §Submission-Package Terminal Gate (#394 slice 4 — Stage 5, post-formatter)（L956-982）
+    - vendor/ars/academic-pipeline/agents/pipeline_orchestrator_agent.md §Submission-Package Terminal Gate (#394 slice 4 — Stage 5, post-formatter)（L1353-1379）
 变更台账（ledger）:
     1. [保留] 原文逐字节保留。
     2. [标注] package 级终端门（verify_submission_package.py 分发、TERMINAL-BLOCK / VERIFICATION-INCOMPLETE stdout 令牌语义）；原文保留，authoring 阶段归 terminal-policy-gate 家族。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->

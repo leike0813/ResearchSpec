@@ -1,7 +1,7 @@
 schema_version: "1"
 capability_id: check-pdf-read-preflight
 title: PDF Read Preflight
-description: Deterministic PDF extraction preflight.
+description: Deterministic PDF extraction preflight with a separate content advisory.
 maturity: operational
 class: verification
 node_kind: checker
@@ -11,7 +11,9 @@ inputs:
   - role: pdf_path
     schema_ref: pdf.v1
     required: true
-    source_policy: node_output
+    source_policy:
+      - handoff
+      - node_output
 outputs:
   - role: pdf_preflight_report
     schema_ref: pdf-preflight.v1
@@ -36,11 +38,16 @@ validators:
       argv0: python3
       args_template:
         - validators/pdf-read-preflight.py
+        - pdf
         - "{outputs_json}"
 knowledge_refs:
   - knowledge_id: degradation-registry
     path: knowledge/degradation-registry.json
-    content_hash: a81253cb7a8558718008669d43e915a08181c9202484bbc08e03d550a295fef9
+    content_hash: fe65921b08efba7e014fa142065ad697bf418e9bf684a0105651b7eef812d74e
+    license: CC BY-NC 4.0
+  - knowledge_id: validators-pdf.py
+    path: validators/pdf.py
+    content_hash: 22676c84f09c7d0d55c0c1cb75e9c8bd1a069aa74eafac2a70e4f79419f4af96
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -50,5 +57,5 @@ provenance:
     - KP-M4-03
   upstream_sources:
     - path: authoring/ars/m5-side-branches/capabilities/12_pdf_read_preflight.py
-      sha256: e4a2431fe2f2525ec755877869a93ee4ff2dd13a44f294d38ceb2e0736b5af16
+      sha256: b4239af423a18cce6c7473c880b8d125653c107919a31173a198b8dc8210827e
 license: CC BY-NC 4.0

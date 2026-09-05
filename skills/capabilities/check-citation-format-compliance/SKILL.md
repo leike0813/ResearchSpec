@@ -287,6 +287,7 @@ Conference papers may use IEEE numbered citations; law and history may use footn
 - Never auto-correct a semantic mismatch; flag it for human review.
 - Do not rewrite prose, produce the abstract, or perform editorial review in this node.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

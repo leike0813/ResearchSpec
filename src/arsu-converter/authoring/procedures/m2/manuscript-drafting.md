@@ -82,21 +82,43 @@ Every table/figure must be referenced in text, carry an APA-format number and de
 
 When review feedback is an input:
 
-1. Categorize each feedback item: Critical / Major / Minor / Suggestion.
-2. Track all items in a revision log.
-3. Address all Critical and Major items in the first revision.
-4. Address Minor items and viable Suggestions next.
-5. Document items not addressed as "Acknowledged Limitations".
+### Revision Round 1
+
+1. Read the supplied roadmap, affected claims and recorded author decisions.
+2. Preserve reviewer severity and editorial obligation as independent metadata;
+   neither is work order.
+3. Edit only author-accepted items within their authorized scope. Changes to
+   research intent, claim strength or stable contracts require the accepted
+   ResearchSpec change, not a reviewer recommendation alone.
+4. Preserve declined items and unrelated manuscript content.
+5. Document every patch operation and authorization in a revision log.
+
+### Revision Round 2 (if needed)
+
+1. Consume the current round's roadmap and explicit author decisions.
+2. Apply only that round's exact authority; never carry an earlier choice
+   forward by implication.
+3. Preserve declined reasons and document no-op rounds without manufacturing an
+   edit.
 
 ### Revision Log Format
 
 ```
-| # | Source | Severity | Feedback | Action Taken | Status |
-|---|--------|----------|----------|-------------|--------|
-| 1 | Editor | Critical | ... | ... | Resolved |
-| 2 | Ethics | Major | ... | ... | Resolved |
-| 3 | Devil's Advocate | Minor | ... | ... | Acknowledged |
+| # | Source | Severity | Obligation class | Author triage | Exact target/op | Action Taken |
+|---|--------|----------|------------------|---------------|-----------------|--------------|
+| 1 | Reviewer | critical | must_fix | will_address | B0007/replace_block | Added the authorized methods detail |
+| 2 | Reviewer | major | should_fix | wont_address | — | No manuscript edit; reason preserved in author decision record |
 ```
+
+## Review-criteria continuity
+
+When the upstream outline carries a `FORMATIVE` binding receipt, use its exact
+criterion-ID coverage plan as a writing constraint. Do not re-resolve the
+target, copy registry prose, manufacture supporting evidence or result values,
+or silently alter the author's research intent. Keep parallel interdisciplinary
+criteria separate. This phase does not create a new criteria receipt; the
+formative artifact remains the authority. If the binding is unavailable,
+preserve `criteria_binding_unavailable` and make no venue-alignment claim.
 
 ## AI Disclosure Statement (Mandatory)
 
@@ -120,6 +142,13 @@ throughout the process.
 - Do not post-process or audit your own citation markers.
 
 ## Output Format
+
+Produce this node's declared manuscript output. When patch material is supplied,
+consume only the ResearchSpec-owned revision contract and its accepted author
+decisions; upstream patch-format identities and authorization sidecars are not
+local authority. Patch application belongs to the separately declared revision
+capability. If the authorized scope is insufficient, report the unresolved item
+and required author decision without broadening the edit.
 
 A complete manuscript Markdown file with section headings, inline structured citations, and a reference list:
 
@@ -165,6 +194,9 @@ A claim whose manifest entry carries `planned_experiment_ids[]` is backed by the
 - Word count within declared limits.
 - AI disclosure statement present.
 - Revision log present when review feedback was supplied.
+- Every revision stays within the author-accepted scope and preserves declined
+  items and unrelated content; insufficient authority requires an explicit
+  author decision before editing.
 
 ## Rules
 

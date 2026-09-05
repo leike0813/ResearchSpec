@@ -4,7 +4,7 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 ══════════════════════════════════════════════
 工件类型: capability
 能力/包 ID: CAP-M1-04 research-question-formulation（研究问题构建）
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/ars/deep-research/agents/research_question_agent.md（全文）
@@ -13,7 +13,8 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
     2. [标注] Phase Boundary 段属流程层（Q6），原文保留。
     3. [标注] 内嵌 FINER 框架与引导问题已另存知识包（KP-M1-02/02b），原文保留，authoring 阶段改引用。
     4. [保留-待定] Socratic Mode Branch 属 socratic 模式路径（M5 苏格拉底引擎）；原文保留，authoring 阶段归属。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    5. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文。
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->
@@ -157,7 +158,19 @@ In Socratic mode the deliverable shifts from producing the RQ to helping the use
 
 - **Guide the user to derive the RQ themselves** — the RQ Brief is a full-mode output; here you use guiding questions to help the user discover the contours of their own question.
 - **Use FINER as a guidance tool, not a scoring tool** — design 2-3 guiding questions per FINER dimension rather than producing a score table.
-- **Withhold candidate RQs** until the user cannot converge after 5+ rounds in Layer 1 (the `failure_paths F1` escape hatch); only then offer candidates.
+- **Never turn non-convergence into candidate generation.** After any number of
+  rounds, summarize only the directions and preferences the user already
+  expressed, leave unresolved choices unresolved, and either continue with a
+  focused question or suggest `lit-review` before returning to Layer 1.
+- **Candidate generation requires a visible mode exit.** Only when the user
+  explicitly asks the system itself to propose candidate RQs may you leave the
+  non-generation branch. Before any candidate appears, tell the user that the
+  response is no longer non-generation Socratic guidance and emit this exact
+  standalone marker:
+  `[SOCRATIC-NON-GENERATION-EXIT: explicit_user_request]`. Only then apply the
+  full-mode candidate-generation steps, labeling the results as AI-generated
+  starting points. Do not treat them as user-derived insights or silently
+  resume Socratic mode.
 
 #### FINER Guiding Questions
 

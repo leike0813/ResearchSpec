@@ -4,14 +4,15 @@ ARS 提取工件（Extraction Artifact）— M5 支线段
 ══════════════════════════════════════════════
 工件类型: capability
 能力/包 ID: CAP-M5-13 citation-verification-summary（验证摘要脚本）
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/ars/scripts/citation_verification_summary.py（全文）
 变更台账（ledger）:
     1. [保留] 脚本全文逐字节保留。
     2. [标注-清尾] 清尾批次：【M4】未提取依赖；引用方与归属【KP-M4-03 降级注册表 authority 锚点指向本脚本】。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->
@@ -41,8 +42,10 @@ and the user guide) and the policy that consumes this verdict
 the Delta 3 / C-V6 policy batch — this data-layer batch only computes the
 verdict; it does not gate on it. Gold fixture 051 (the OQ-5 by-design
 false-negative: a no-identifier fabrication) pins that a title-only unmatched
-reduces to unresolvable, never false. The complementary real-but-unindexed
-canary remains unfilled (issue #250).
+reduces to unresolvable, never false. The absent genuine all-resolver-unmatched
+canary is #250's accepted corpus-representativeness limit, not a client-test
+gap; #431/#432 cover title-match behavior directly and there is no current
+gold-tuple action item.
 
 Spec: docs/design/2026-05-21-v3.10-182-promote-citation-gate-spec.md
 §2 Delta 4 + §0(4a) + INVARIANT C-V6(a).
@@ -80,8 +83,10 @@ def reduce_lookup_verified(resolver_outcomes: Mapping[str, Any]) -> str:
     * `unresolvable` otherwise — every applicable resolver `unreachable` (total
       outage), OR every resolver `skipped` (empty adjudicating set, manual
       exempt), OR the only negative signals are title-only `unmatched`
-      (queried_by != 'id' — no resolvable identifier to key on = coverage gap,
-      the real-but-unindexed paper; C-V6(a)/(f) + OQ-5 by-design FN).
+      (queried_by != 'id' — no resolvable identifier to key on = the
+      coverage-safe class for a potentially real-but-unindexed paper;
+      C-V6(a)/(f) + OQ-5 by-design FN). The static fixture is not claimed to be
+      a representative genuine unindexed work (#250).
     """
     outcomes = [v or {} for v in resolver_outcomes.values()]
     applicable = [o for o in outcomes if o.get("status") != STATUS_SKIPPED]

@@ -201,6 +201,7 @@ For each outcome, start HIGH for RCTs or LOW for observational and rate down for
 - Every pooled estimate must carry a GRADE certainty assessment.
 - Do not compile the full PRISMA report, editorial review, or revision work in this node.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

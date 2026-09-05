@@ -4,14 +4,15 @@ ARS 提取工件（Extraction Artifact）— M5 支线段
 ══════════════════════════════════════════════
 工件类型: knowledge-pack
 能力/包 ID: KP-M5-14 guided-mode-protocol（引导模式协议）
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/ars/academic-paper-reviewer/references/guided_mode_protocol.md（全文）
 变更台账（ledger）:
     1. [保留] 全文逐字节保留。
     2. [标注] M3 未提取依赖（reviewer 引导模式）；原文保留，authoring 阶段改引用。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->
@@ -30,7 +31,7 @@ Phase 2: Does not produce full Editorial Decision; enters dialogue mode instead
 
 ### Dialogue Flow
 
-1. **EIC opens**: First points out 1-2 core strengths of the paper (building confidence), then raises the most critical structural issue
+1. **Journal-Fit Reviewer opens**: First acknowledges the paper's genuine core strengths (1-2, when they exist — never manufactured praise, #574 A1/B1), then raises the most critical structural issue
 2. **Wait for author response**: Author thinks, responds, or asks questions
 3. **Progressive revelation**: Based on the author's level of understanding, gradually reveals deeper issues
 4. **Methodology focus**: When author is ready, introduce Reviewer 1's methodology perspective

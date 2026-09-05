@@ -527,6 +527,24 @@ schemas are allowed only when the Skill actually uses and documents them.
 ARSU is a skill package and converter project. ResearchSpec is the framework
 layer that should eventually own it.
 
+The ARS maintenance target is `v3.21.1` at
+`127ff85e4bbfcdd10b95040537b6c6bd7ad17aeb`; its audit lives under
+`audits/arsu/v3.21.1-127ff85/`. Follow `.agents/skills/arsu-maintenance/SKILL.md`
+for incremental extraction, conversion and semantic review. ResearchSpec owns
+the current revision-patch contract; upstream revision authorization and
+role-scoped reviewer criteria are adapted without importing upstream passport,
+model-transport or optional workflow-ledger authority. Audit generators render
+observations; command success and semantic fitness require actual verification
+recorded in `05-semantic-review.md`.
+
+The seven deterministic ARS checker packages use ResearchSpec-authored
+report computations and read-only recomputation validators under
+`src/arsu-converter/authoring/checkers/`. Executable validator sources must be
+explicit; extraction text is provenance, not an executable submission contract.
+The runtime passes graph-resolved input materials through the shared input
+consumer. Validating a report never clears its scientific findings or replaces
+a human Gate. See `docs/user/deterministic-checkers.md` for invocation and scope.
+
 When working on this repository, treat ARSU as the main capability payload:
 
 - `deep-research`

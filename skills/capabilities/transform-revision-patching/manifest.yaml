@@ -18,7 +18,7 @@ outputs:
     required: true
   - role: response_to_reviewers
     schema_ref: response-to-reviewers.v1
-    required: true
+    required: false
 validators:
   - validator_id: capability.policy.output_roles
     kind: policy
@@ -30,7 +30,7 @@ validators:
 knowledge_refs:
   - knowledge_id: revision-patch-protocol
     path: knowledge/revision-patch-protocol.md
-    content_hash: 69ada4993ca454e8f5bfb9509df606b3abe0e260b10357b66b94d18da0434e60
+    content_hash: 37cf8f72fb5c7119f18429c23fade66bcaf8ee6c999a9833dc9d1dc1edda7a19
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -40,5 +40,5 @@ provenance:
     - KP-M4-01
   upstream_sources:
     - path: authoring/ars/m4-revision-finalize/capabilities/02_revision_patching_apply.py
-      sha256: 00b991433fb89ab6b35c4270ce5d9f75c9a7862af014b74a88ebf69bbaf2b4d9
+      sha256: 9aa84eb23c1b10f5c23008ff51d2feb6e64440834b48b090c833fe44669014b3
 license: CC BY-NC 4.0

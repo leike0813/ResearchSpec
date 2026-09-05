@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 
@@ -28,11 +29,29 @@ void test("first ARSU anchor HTML artifacts live in the unified audit directory"
   await readFile(path.join(dir, "arsu-mode-gap-semantic-review.html"), "utf8");
 });
 
-void test("first ARSU anchor audit check passes", () => {
+void test("current ARSU anchor audit check passes", () => {
   const stdout = execFileSync(process.execPath, [
     "scripts/arsu-maintenance.mjs",
     "check",
-    "v3.19.0-828ef3b",
   ], { encoding: "utf8" });
-  assert.match(stdout, /^OK v3\.19\.0-828ef3b/);
+  assert.match(stdout, /^OK /);
+});
+
+void test("semantic review rendering uses the selected anchor and reports missing review", async () => {
+  const dir = await mkdtemp(path.join(os.tmpdir(), "arsu-review-"));
+  try {
+    const artifacts = path.join(dir, "artifacts");
+    await mkdir(artifacts);
+    const output = path.join(artifacts, "review.html");
+    const render = () => execFileSync(process.execPath, ["scripts/generate-arsu-gap-semantic-review-html.mjs", output]);
+    render();
+    assert.match(await readFile(output, "utf8"), /\[NOT-COMPLETED\]/);
+    await writeFile(path.join(dir, "05-semantic-review.md"), "# Review\n\nEvidence: SELECTED-ANCHOR <script>alert(1)</script>\n");
+    render();
+    const html = await readFile(output, "utf8");
+    assert.match(html, /SELECTED-ANCHOR/);
+    assert.doesNotMatch(html, /\[NOT-COMPLETED\]|<script>/);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
 });

@@ -24,6 +24,15 @@ One bounded mechanical application is:
 4. On any preflight failure, correct the inputs or revise manually. The helper
    creates no partial output and never changes a run and node state or handoff.
 
+An omitted `authorization_context` means review-roadmap semantics. An
+`integrity_correction` patch cites the supplied correction IDs through
+`roadmap_item_ids` and cannot declare `claim_strength_changes`. A review claim
+strength declaration names an accepted ResearchSpec `change_id`, old and new
+stable strengths, direction, and rationale; the helper checks only that shape,
+so the Agent must inspect the accepted change and evidence. Local annotation
+mapping remains the author-disposition record; upstream author-adjudication and
+passport/hash-chain sidecars are outside this contract.
+
 Untouched anchored blocks remain byte-identical under helper application. That
 mechanical guarantee says nothing about whether edited text answers the review.
 For QMD, YAML frontmatter, fenced code, cell options, and Quarto metadata are
@@ -46,6 +55,45 @@ Current ResearchSpec owners:
 - `researchspec/runs/<run-id>/handoff.md`
 - `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:PATCH-003-->
+
+**Structural scope escalation:** current #670 rounds remain patch-based. If the
+authorized scopes cannot express the intended change, stop and collect a new
+explicit author sidecar with exact expanded targets, or narrow the edit.
+Historical full re-emission remains a visibly separate legacy workflow; it
+cannot emit a current 1.3 authorization PASS witness or appear as a current
+Revision-Evidence Bundle round.
+
+## Current authorization rules (#670)
+
+- The current CLI rejects patch 1.0. Archived 1.0 schema/runtime live only
+  under `shared/contracts/patch/legacy/v1_0/` and `scripts/legacy/`.
+- Every review op cites only `will_address` items and stays inside their exact
+  authorized block/operation subsets.
+- Declined items authorize neither work nor claim movement. An overlapping
+  target requires an exact, single-use collateral authorization for every
+  declined item on that target.
+- Every registered claim surface remains exact or uses one exact single-use
+  author-approved replacement (manifest, claim, surface, block, hashes, text,
+  rungs, direction). `will_address` alone is not claim authority.
+- The report always discloses
+  `unregistered_claim_drift_review_required: true`; unregistered semantic
+  movement remains an E6 review surface.
+- An all-declined round is a `review_noop`: no patch/report and byte-identical
+  pre/post drafts.
+- An integrity correction list and an integrity-gate result are proposal
+  evidence only. The exact writer-emitted patch must be separately approved
+  through explicit author input binding its `revision_patch_sha256` and exact
+  targets/operations.
+- Integrity apply requires both `--integrity-issue-list` and
+  `--integrity-authorization`. `stop_without_write` grants no operation, and a
+  substituted patch invalidates the hash-bound sidecar before any write.
+
+Validate the accumulated bundle before re-review/final integrity:
+
+```bash
+python scripts/revision_roadmap.py validate-bundle \
+    revision-evidence-bundle.json --root revision-authority/
+```
 
 ## Marker lifecycle (one rule for all marker kinds)
 

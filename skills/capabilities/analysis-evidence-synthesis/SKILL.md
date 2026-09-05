@@ -227,6 +227,7 @@ Use the referenced knowledge packs as the single source of truth for two-layer a
 - Never self-assign `confirmed` or `disputed` scholar confirmations.
 - Never invent a precise locator the context does not support.
 
+
 ## Completion
 
 When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.

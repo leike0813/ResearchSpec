@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
-import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { parse as parseYaml } from "yaml";
+import { fileSha, sha256 } from "./lib/vendor-maintenance.mjs";
 
 const ROOT = process.cwd();
 const ARS_DIR = path.join(ROOT, "vendor", "ars");
@@ -24,8 +24,6 @@ function assessmentHtmlPath() { return path.join(auditArtifactsDir(currentAnchor
 function gapReviewHtmlPath() { return path.join(auditArtifactsDir(currentAnchorForRecords), "arsu-mode-gap-semantic-review.html"); }
 const RECORD_FILES = ["01-analysis.md", "02-ingestion.md", "03-conversion.md", "04-review.md", "05-semantic-review.md"];
 
-function sha256(text) { return createHash("sha256").update(text, "utf8").digest("hex"); }
-function fileSha(pathName) { return sha256(readFileSync(pathName, "utf8")); }
 function json(pathName) { return JSON.parse(readFileSync(pathName, "utf8")); }
 function esc(text) { return String(text ?? "").replaceAll("|", "\\|").replaceAll("\n", " "); }
 
@@ -276,10 +274,8 @@ ${profileMd}
 
 ## Verification
 
-- [x] \`pnpm arsu:author\` twice: byte-identical
-- [x] \`pnpm arsu:check\`
-- [x] \`pnpm check\` / \`pnpm lint\`
-- [x] full test suite
+Actual command outcomes and repeated-generation evidence are recorded by the
+maintainer in \`05-semantic-review.md\`. This inventory does not execute those checks.
 `;
 
   const review = `# ARSU Anchor Review — ${anchorId}
@@ -316,12 +312,10 @@ ${parityMd}
 | graph-match assessment HTML | \`${path.relative(ROOT, assessmentHtmlPath())}\` | \`${state.review.assessment_html_sha256}\` |
 | gap semantic review HTML | \`${path.relative(ROOT, gapReviewHtmlPath())}\` | \`${state.review.gap_review_html_sha256}\` |
 
-## Human Confirmation
+## Semantic Review
 
-- [x] 27 modes 全部可见并可折叠审阅。
-- [x] 上游指令 / references / templates 与转换后节点并列。
-- [x] capability SKILL 不含 next-node / next-phase 指令。
-- [x] 命名、registry、审阅工件、锚点 manifest 四层身份一致。
+Mode coverage, flow authority and identity conclusions belong to
+\`05-semantic-review.md\`; this generated table does not establish human confirmation.
 `;
 
   const semanticReviewPath = path.join(dir, "05-semantic-review.md");
@@ -503,10 +497,11 @@ function artifacts(anchorId) {
   currentAnchorForRecords = anchorId;
   const dir = auditArtifactsDir(anchorId);
   mkdirSync(dir, { recursive: true });
-  execFileSync(process.execPath, [path.join(ROOT, "scripts", "audit-capability-parity.mjs"), "--json", PARITY_REPORT], { stdio: "inherit" });
-  execFileSync(process.execPath, [path.join(ROOT, "scripts", "generate-arsu-capability-review-html.mjs"), reviewHtmlPath()], { stdio: "inherit" });
-  execFileSync(process.execPath, [path.join(ROOT, "scripts", "generate-arsu-graph-match-assessment-html.mjs"), assessmentHtmlPath()], { stdio: "inherit" });
-  execFileSync(process.execPath, [path.join(ROOT, "scripts", "generate-arsu-gap-semantic-review-html.mjs"), gapReviewHtmlPath()], { stdio: "inherit" });
+  const options = { stdio: "inherit", env: { ...process.env, ARSU_ANCHOR: anchorId } };
+  execFileSync(process.execPath, [path.join(ROOT, "scripts", "audit-capability-parity.mjs"), "--json", PARITY_REPORT], options);
+  execFileSync(process.execPath, [path.join(ROOT, "scripts", "generate-arsu-capability-review-html.mjs"), reviewHtmlPath()], options);
+  execFileSync(process.execPath, [path.join(ROOT, "scripts", "generate-arsu-graph-match-assessment-html.mjs"), assessmentHtmlPath()], options);
+  execFileSync(process.execPath, [path.join(ROOT, "scripts", "generate-arsu-gap-semantic-review-html.mjs"), gapReviewHtmlPath()], options);
   process.stdout.write(`wrote ${dir}\n`);
 }
 
@@ -522,7 +517,7 @@ function diff(oldAnchor, newAnchor) {
 
 const args = process.argv.slice(2);
 const command = args[0];
-const anchor = command === "diff" ? args[1] : (args[1] ?? process.env.ARSU_ANCHOR ?? "v3.19.0-828ef3b");
+const anchor = command === "diff" ? args[1] : (args[1] ?? process.env.ARSU_ANCHOR ?? "v3.21.1-127ff85");
 if (command === "baseline" && anchor) baseline(anchor);
 else if (command === "records" && anchor) records(anchor);
 else if (command === "artifacts" && anchor) artifacts(anchor);

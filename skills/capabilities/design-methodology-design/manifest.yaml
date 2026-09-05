@@ -2,7 +2,8 @@ schema_version: "1"
 capability_id: design-methodology-design
 title: Methodology Design
 description: Selects a paradigm, methods, data strategy and analysis framework
-  coherent with the confirmed research question.
+  coherent with the confirmed research question, with bounded human-subjects
+  administration and preregistration handoff.
 maturity: operational
 class: design
 node_kind: producer
@@ -28,15 +29,19 @@ validators:
 knowledge_refs:
   - knowledge_id: irb-decision-tree
     path: knowledge/irb-decision-tree.md
-    content_hash: c64ba675f5afd28f46d34d33ef1308d003293da223aa37fcf9bb36d07c11ce92
+    content_hash: 39683f4baf7c7c445e3a85207ce64bb12e766ff983d929b185ba896ae0eb4b78
+    license: CC BY-NC 4.0
+  - knowledge_id: irb-terminology-glossary
+    path: knowledge/irb-terminology-glossary.md
+    content_hash: 2d6089179f0feba08ea7b1ad1599fbffa72ed5ac4e1f20fb91729080b30b8737
     license: CC BY-NC 4.0
   - knowledge_id: equator-guidelines
     path: knowledge/equator-guidelines.md
-    content_hash: 66c844623f67a1de63483bc7d804529c6ae5041077e1f8fb05f590584d0eb72f
+    content_hash: 61cd12b797a82317ec0d677996be7e86f63f3b4b6efbde8d8df91df102323863
     license: CC BY-NC 4.0
   - knowledge_id: preregistration-guide
     path: knowledge/preregistration-guide.md
-    content_hash: 279a989de4b5bbbcaeba0cef037526ee6eb2b3f952ac760270eec0ba572630dd
+    content_hash: de71e76d03767a1f6bbc33b0d294af3f8e0ffb8a60b33d53cf420b653b26ebf4
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -44,9 +49,10 @@ provenance:
   extraction_artifact_ids:
     - CAP-M1-05
     - KP-M5-20
+    - KP-M5-23
     - KP-M5-21
     - KP-M5-22
   upstream_sources:
     - path: authoring/ars/m1-research/capabilities/05_methodology_design.md
-      sha256: 438a7f09d669193c1256c5a36601787d64a03eecded4b65f3128e9ca27732a8c
+      sha256: 0799efca117e19d662ca28bd692d95a6587cc88fcc19290067a023ff4136314e
 license: CC BY-NC 4.0

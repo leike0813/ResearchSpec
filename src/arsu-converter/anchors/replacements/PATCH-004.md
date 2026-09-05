@@ -17,6 +17,15 @@ destination. It does not read the pipeline profile, mutate the owning node insta
 `handoff.md`, or decide whether the revision is academically complete. Manual
 revision remains valid.
 
+An omitted `authorization_context` uses review-roadmap semantics. An explicit
+`integrity_correction` patch carries only supplied correction IDs through
+`roadmap_item_ids`, carries no claim-strength changes, and emits no response
+items because no review round occurred. Review claim-strength changes must
+reference an accepted ResearchSpec `change_id` and state the stable strength
+move with rationale; the Agent checks acceptance and evidence, while the
+stateless helper checks structure only. ResearchSpec retains Gate and Decision
+authority and does not adopt upstream lifecycle or hash-chain sidecars.
+
 Each revision child has its own start confirmation and formal Gates. After the
 producer finishes, the current manuscript and relevant boundary evidence return
 through the handoff. A human records the revision Gate verdict in the owning

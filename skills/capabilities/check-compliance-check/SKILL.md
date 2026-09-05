@@ -55,7 +55,7 @@ user_metadata:
 
 ## Output Contract
 
-A compliance report conforming to the compliance report schema, appended to the passport's compliance history.
+A separate compliance report at the output path supplied by instructions. Exchange it through the owning run handoff; the supplied passport is read-only context.
 
 ## Dispatch Logic
 
@@ -117,7 +117,7 @@ Document self-check pass/fail in the agent log, not in the compliance report.
 
 ## Invocation Protocol
 
-The caller passes the input contract and validates the serialized report against the schema before appending it to the passport.
+The caller supplies the materials and validates the serialized report before recording its external path through the ResearchSpec CLI handoff command.
 
 ## AI Disclosure And Responsible-Use Review
 
@@ -129,15 +129,25 @@ When the submitted material is a research text or manuscript for pre-submission 
 2. Attribution Integrity: authorship, prior-work attribution, and AI assistance attribution are complete and accurate.
 3. Dual-Use Screening: assess dual-use potential and negative externalities; subject matter alone never blocks.
 4. Fair Representation: sources and perspectives are represented without distortion or silencing.
-5. Data Ethics: consent, privacy, and data provenance are declared where applicable.
+5. Data Ethics: identify the actual actors, personal-data collection/access/disclosure flows, applicable authority and unresolved legal or institutional basis; consent alone is neither a universal nor sufficient basis.
 6. Conflict of Interest: financial, institutional, intellectual, personal, and political COIs are disclosed.
-7. Human Subjects Ethics: IRB/ethics approval or exemption is stated when human subjects or sensitive data are involved.
+7. Human Subjects Ethics: report administrative readiness separately from documented authorization. Use `institutional determination required` for the pathway; do not select an exemption or review level.
+
+### Human-Subjects Administrative Status
+
+Use only user-identified authority context and supplied institutional evidence. Do not infer jurisdiction or authority from language, affiliation or manuscript prose. Profile-dependent conclusions require exact context and evidence of the required replay validation; a schema-shaped document alone is insufficient. If that evidence is unavailable, report `submission_readiness: unresolved`, `profile_dependent_result_allowed: false` and `review_pathway: institutional determination required`.
+
+When validated requirement rows are supplied, preserve requirement IDs, obligated actors, consumer scopes and source pointers. Assign a requirement only to its actual responsible actor; committee responsibilities remain external dependencies. Keep parallel authorities separate. Candidate pathway traces are display-only observations, never permission or a workflow input.
+
+Report `authorization_status` independently as `documented`, `not_provided` or `cannot_verify`. Located packet structure and advisory content coverage do not prove adequacy, institutional acceptance or permission. Missing content is `not_checked`, not a fabricated negative finding. Do not claim to have executed an unavailable resolver or checker.
+
+For journal-source retraction information, preserve the supplied citation-integrity result, including retracted, reinstated, disputed, stale and unresolved states. Do not infer it from an older generic retraction field or independently escalate its severity. Distinguish an author's declared legitimate use with a retraction notice from human judgment that the manuscript actually discusses that retraction.
 
 ### Verdict And Override
 
-- Verdict: CLEARED / CONDITIONAL / BLOCKED.
+- Verdict: CLEARED / CONDITIONAL / BLOCKED for AI-assisted research integrity only; it never grants human-subjects authorization.
 - BLOCKED is reserved for integrity failures (for example, no AI disclosure) and is always overridable by the user with recorded reasoning.
-- Record each CONDITIONAL or BLOCKED item the user acts on in an ethics decision log; do not re-block the same item after an override.
+- Record each acted-on item and the user's stated reasoning in the external ethics report. A formal Gate override requires its own human-confirmed CLI action in the owning node; this report cannot grant it.
 - Subject matter alone never blocks: public-interest, government-critical, institution-critical, and politically sensitive research are not blocking conditions.
 
 ### Output
@@ -145,7 +155,7 @@ When the submitted material is a research text or manuscript for pre-submission 
 ```markdown
 ## Ethics Review Report
 
-### Verdict: [CLEARED / CONDITIONAL / BLOCKED]
+### AI-Assisted Research-Integrity Verdict: [CLEARED / CONDITIONAL / BLOCKED]
 
 ### Dimension Assessment
 | Dimension | pass/warn/fail | Evidence |
@@ -164,6 +174,15 @@ When the submitted material is a research text or manuscript for pre-submission 
 
 ### Ethics Decision Log
 [one row per CONDITIONAL or BLOCKED item the user acted on]
+
+### Human-Subjects Administrative Status
+- submission_readiness: gaps_located / no_listed_gaps_located / unresolved
+- authorization_status: documented / not_provided / cannot_verify
+- review_pathway: institutional determination required
+- authority context and evidence: [explicit source or unavailable]
+- profile_dependent_result_allowed: true / false
+
+This output does not authorize recruitment, consent, access to identifiable data, intervention, or data collection.
 ```
 
 ## Output Format
@@ -190,9 +209,10 @@ When the submitted material is a research text or manuscript for pre-submission 
 
 ## Rules
 
-- Warn-only surface: never alter the manuscript; never write disclosures into the manuscript.
+- Report findings without altering the manuscript. Formal workflow outcomes remain with the owning graph and human-confirmed Gates.
 - Missing material must be tagged; never hallucinate missing items.
 - Do not re-evaluate prior compliance reports.
+
 
 ## Completion
 

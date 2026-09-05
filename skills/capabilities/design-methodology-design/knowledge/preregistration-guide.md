@@ -4,14 +4,15 @@ ARS 提取工件（Extraction Artifact）— M5 支线段
 ══════════════════════════════════════════════
 工件类型: knowledge-pack
 能力/包 ID: KP-M5-22 preregistration-guide
-提取日期: 2026-08-15
+提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/ars/deep-research/references/preregistration_guide.md（全文）
 变更台账（ledger）:
     1. [保留] 全文逐字节保留。
     2. [标注-清尾] 清尾批次：此前登记于【M1】未提取依赖清单；引用方【CAP-M1-05 引用】。
-说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
+    3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
+说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改；本轮按 v3.21.1 刷新受影响正文
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
 -->
@@ -308,3 +309,35 @@ Publication
 3. **Fill in the 21-item checklist**: Use the `templates/preregistration_template.md` template
 
 > Preregistration is not a perfect solution, but it is currently the most practical transparency tool. Even an imperfect preregistration is better than no preregistration at all.
+
+---
+
+## Completed-artifact handoff boundary (#672)
+
+The templates in this guide help an author plan or disclose a preregistration.
+They are never evidence that a study was preregistered and must not be supplied
+as a completed artifact. Cross-document comparison may use only a completed
+artifact explicitly supplied by the caller in the current handoff.
+
+The non-shell research architect records only the caller-declared status
+(`provided`, `not_provided`, `access_failed`, or `retrieval_failed`) and, for
+`provided`, the explicitly named companion handle. It does not compute a digest
+or construct a sidecar. Before handoff, a shell-capable orchestrator runs the
+deterministic `build-preregistration-artifact` subcommand in
+`scripts/build_cross_document_consistency_advisory.py` with an explicit RFC3339
+`declared_at`. That builder emits exactly one closed
+`preregistration-artifact/1.0`, including an explicit unavailable receipt.
+
+The sidecar and provided companion bytes are validated and carried unchanged
+through academic-paper and every pipeline handoff. Later explicit user supply
+requires a new builder-produced, fully bound sidecar; omission or silent
+substitution is invalid. A manuscript/preregistration advisory may identify an
+undisclosed deviation only with exact manuscript and preregistration quotes plus
+an exact named manuscript disclosure scope checked for that same deviation.
+Missing, blank, generic, incomplete, or inaccessible scope means not checked.
+
+#672 does not judge whether preregistration was required, timely, authentic,
+complete, or whether a deviation was justified. Its output is
+`LLM-ADVISORY` / `UNMEASURED`, not a score, gate, agreement certificate, or
+revision instruction. Consent/protocol comparison stays under the separate
+#667/#681 human-subjects authority path.

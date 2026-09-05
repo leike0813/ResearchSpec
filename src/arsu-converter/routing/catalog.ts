@@ -111,7 +111,7 @@ const rawCatalog = {
     {
       skill_id: "academic-paper-reviewer",
       title: "Academic Paper Reviewer",
-      summary: "Independent manuscript peer review, focused methodology assessment, guided review, and revision verification.",
+      summary: "Role-scoped, contract-governed manuscript peer review with focused methodology assessment, guided review, and revision verification.",
       intents: ["peer-review an academic manuscript", "verify a revised manuscript", "focus on methodology", "calibrate reviewer judgments"],
       default_route_ref: "academic-paper-reviewer:full",
       near_misses: [
@@ -125,7 +125,7 @@ const rawCatalog = {
         mode({ route_ref: "academic-paper-reviewer:quick", title: "Quick review", intents: ["identify the most important manuscript issues quickly"], output_types: ["eic_quick_assessment"], prerequisite_groups: [manuscript, paperDraft()], risk_level: "low", gate_policy: none, cost: cost("low", "single_pass") }),
         mode({ route_ref: "academic-paper-reviewer:methodology-focus", title: "Methodology-focused review", intents: ["assess research design and methodology in depth"], output_types: ["methodology_review"], prerequisite_groups: [project, manuscript, paperDraft()], risk_level: "high", gate_policy: gate("required", "methodology_quality"), cost: cost("medium", "single_pass") }),
         mode({ route_ref: "academic-paper-reviewer:guided", title: "Guided review", intents: ["work through manuscript issues through Socratic dialogue"], output_types: ["guided_review_notes"], prerequisite_groups: [manuscript, paperDraft()], risk_level: "medium", gate_policy: none, cost: cost("variable", "iterative") }),
-        mode({ route_ref: "academic-paper-reviewer:calibration", title: "Reviewer calibration", intents: ["measure reviewer accuracy against a gold set"], output_types: ["calibration_report", "confidence_disclosure"], prerequisite_groups: [group("all_of", [userInput("calibration_gold_set")])], risk_level: "low", gate_policy: none, cost: cost("high", "long_horizon") }),
+        mode({ route_ref: "academic-paper-reviewer:calibration", title: "Tiered reviewer calibration", intents: ["measure reviewer accuracy against a gold set with an explicit directional or full tier and scoped disclosure"], output_types: ["calibration_report", "confidence_disclosure"], prerequisite_groups: [group("all_of", [userInput("calibration_gold_set")])], risk_level: "low", gate_policy: none, cost: cost("high", "long_horizon") }),
       ],
     },
     {

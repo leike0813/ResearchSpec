@@ -32,7 +32,7 @@ knowledge_refs:
     license: CC BY-NC 4.0
   - knowledge_id: finer-socratic-questions
     path: knowledge/finer-socratic-questions.md
-    content_hash: fabcfe7743dc643df3f24c0c9bf07f8dc1104c34dada003f41955adfb1a31737
+    content_hash: 559d4a436f5d9aaca8442625295f9c34a5362df43ef0959c2b2093543ae4c5e3
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -43,5 +43,5 @@ provenance:
     - KP-M1-02b
   upstream_sources:
     - path: authoring/ars/m1-research/capabilities/04_research_question_formulation.md
-      sha256: d5d8df51f7fbe54ddec08ba335346c1c49a5264a1a1b0cd1ef680c026092523e
+      sha256: dbcae40c6c8b862de622571828a74e06f651f4e98ed9ec99290d0e5ce809fd83
 license: CC BY-NC 4.0
