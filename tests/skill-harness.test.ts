@@ -4,7 +4,7 @@ import type { AddressInfo } from "node:net";
 import path from "node:path";
 import { test } from "node:test";
 
-import { COMPANION_INTENTS, renderCompanionSkill } from "../src/adapters/companion/index.js";
+import { COMPANION_INTENTS, renderCompanionSkill, renderCompanionSkillFiles } from "../src/adapters/companion/index.js";
 import { LITERATURE_ADAPTER_SKILL_IDS } from "../src/literature-adapters/catalog.js";
 import { loadProcedureCatalog } from "../src/procedures/catalog.js";
 import { loadHarnessCatalog, readHarnessFile, validateHarnessSkillRoot, type HarnessFileTreeNode } from "../harness/catalog.js";
@@ -35,11 +35,15 @@ void test("harness separates visible entries from the complete hidden procedure 
   assert.ok(loaded.catalog.procedures.some((skill) => skill.family === "plugin" && skill.resolved_domain_ids.length > 1));
   assert.deepEqual(loaded.catalog.visible_entries.filter((item) => item.family !== "literature-adapter").map((item) => item.skill_id), ["researchspec-navigate"]);
   assert.equal(loaded.catalog.procedures.some((item) => item.skill_id === "researchspec-navigate"), false);
+  assert.equal(loaded.catalog.procedures.some((item) => item.skill_id === "researchspec-cli-handbook"), false);
   for (const skill of [...loaded.catalog.visible_entries, ...loaded.catalog.procedures]) {
     assert.deepEqual(treeFilePaths(skill.file_tree).sort(), skill.files.map((file) => file.path).sort());
   }
   assert.ok(loaded.catalog.procedures.find((skill) => skill.family === "arsu")?.file_tree.some((node) => node.node_type === "directory"));
   assert.deepEqual(loaded.catalog.procedures.find((skill) => skill.family === "companion")?.files.map((file) => file.path), ["LICENSE", "SKILL.md"]);
+  const navigate = loaded.catalog.visible_entries.find((skill) => skill.skill_id === "researchspec-navigate");
+  assert.ok(navigate);
+  assert.deepEqual(navigate.files.map((file) => file.path).sort(), ["LICENSE", "SKILL.md", "references/arsu-routes.md", "references/cli-handbook.md"].sort());
   for (const domain of loaded.catalog.domains) {
     const direct = new Set(domain.direct_procedure_ids);
     const dependencyOnly = domain.resolved_procedure_ids.filter((skillId) => !direct.has(skillId));
@@ -53,6 +57,13 @@ void test("harness separates visible entries from the complete hidden procedure 
   assert.equal(rendered?.bytes.toString("utf8"), renderCompanionSkill(companion));
   assert.equal(await readHarnessFile(loaded, companion.skillId, "references/../SKILL.md"), undefined);
   assert.equal(await readHarnessFile(loaded, companion.skillId, "missing.md"), undefined);
+
+  const navigateIntent = COMPANION_INTENTS.find((item) => item.id === "navigate");
+  assert.ok(navigateIntent);
+  for (const expected of renderCompanionSkillFiles(navigateIntent)) {
+    const actual = await readHarnessFile(loaded, navigateIntent.skillId, expected.path);
+    assert.equal(actual?.bytes.toString("utf8"), expected.content);
+  }
 });
 
 void test("Markdown rendering disables raw HTML and rewrites local resources", () => {

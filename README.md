@@ -122,7 +122,7 @@ researchspec init . --tools codex --literature-adapters zotero-library
 
 > I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, boundary outputs, formal Gates, risks, and cost. Do not start a route until I confirm it.
 
-ResearchSpec 默认只投影 `researchspec-navigate`。四个 ARSU 工作流、其余 Companion、47 个 core capability 与 332 个 plugin extension 通过 `list/show/instructions procedure` 按需发现和加载；预设 graph profiles 保持可组合。
+ResearchSpec 默认只投影 `researchspec-navigate`。它自带从 typed catalog 生成的 CLI handbook 和 ARSU route reference：主文件负责完整控制流程，详细参数与路由表按需读取。四个 ARSU 工作流、其余三个 Companion、47 个 core capability 与 332 个 plugin extension 通过 `list/show/instructions procedure` 按需发现和加载；预设 graph profiles 保持可组合。
 
 可选的 [Zotero 文献系统 Adapter](docs/user/literature-adapters.md) 会额外安装七个 Skill、项目级 `.zotero-bridge` runtime 和配置模板。`update --literature-adapters none` 可取消选择；未修改的托管文件会被移除，发生 drift 的文件会保留并报告。初始化及状态检查阶段不与 Zotero 通信。
 
@@ -147,7 +147,7 @@ researchspec --help
 [CLI handbook](docs/user/cli-handbook.md)。当问题涉及当前 workspace 时，Agent 先读取 status，
 再请求当前 selector 的 instructions。
 
-Selector family 包括 `profile:`、`run:`、`node:`、`gate:`、`decision:` 和 `change:`。CLI 是 run/node 文件中 Gate、Decision、frontier 和 transition 的唯一写入者；
+Selector family 包括 `procedure:`、`profile:`、`run:`、`node:`、`gate:`、`decision:` 和 `change:`。CLI 是 run/node 文件中 Gate、Decision、frontier 和 transition 的唯一写入者；
 ARSU producer 负责 `researchspec/` 外的语义文件和自己的 handoff。`doctor` 只读诊断当前
 owner，不执行修复事务。
 

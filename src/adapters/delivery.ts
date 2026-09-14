@@ -2,10 +2,9 @@ import path from "node:path";
 
 import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, type PlannedWrite, sha256 } from "../core/workspace/write-plan.js";
-import { COMPANION_INTENTS, renderCompanionSkill } from "./companion/index.js";
+import { COMPANION_INTENTS, renderCompanionSkillFiles } from "./companion/index.js";
 import { COMMAND_WRAPPER_CONTENTS, renderCommand } from "./command-renderer.js";
 import { getTool, resolveToolIdAlias, sharedSkillTarget, toolSkillsRoot, type DeliveryMode, type ToolDefinition } from "./tools.js";
-import { MIT_LICENSE_TEXT } from "../licensing.js";
 import type { LoadedPluginRegistry } from "../plugins/registry.js";
 import { installationKey, type ManagedInstallation, type ManagedInstallationSource } from "./installations.js";
 import { resolveManagedTarget, validateManagedTarget } from "./managed-target.js";
@@ -57,15 +56,14 @@ export async function planToolDelivery(input: {
       if (writesSkills) {
         const root = toolSkillsRoot(tool, input.projectRoot);
         await planSharedMarker(tool, root.root);
-        for (const intent of [navigate]) {
-          const skillRoot = path.join(root.root, intent.skillId);
+        const skillRoot = path.join(root.root, navigate.skillId);
+        for (const file of renderCompanionSkillFiles(navigate)) {
           await addSkill(
-            path.join(skillRoot, "SKILL.md"),
-            renderCompanionSkill(intent),
-            { kind: "companion-skill", skill_id: intent.skillId },
+            path.join(skillRoot, file.path),
+            file.content,
+            { kind: "companion-skill", skill_id: navigate.skillId },
             tool,
           );
-          await addSkill(path.join(skillRoot, "LICENSE"), MIT_LICENSE_TEXT, { kind: "companion-skill", skill_id: intent.skillId }, tool);
         }
       }
 

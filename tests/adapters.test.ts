@@ -4,10 +4,12 @@ import path from "node:path";
 import { test } from "node:test";
 
 import { COMMAND_WRAPPER_CONTENTS, renderCommand } from "../src/adapters/command-renderer.js";
-import { COMPANION_INTENTS, COMPANION_WORKFLOW_IDS, renderCompanionSkill } from "../src/adapters/companion/index.js";
+import { COMPANION_INTENTS, COMPANION_WORKFLOW_IDS, renderCompanionSkillFiles } from "../src/adapters/companion/index.js";
+import { renderNavigateRoutingProjection } from "../src/arsu-converter/routing/navigation-projection.js";
 import { planWorkspaceDelivery } from "../src/adapters/workspace-delivery.js";
 import { TOOL_IDS, TOOLS, detectTools, getTool, parseToolExpression } from "../src/adapters/tools.js";
 import { CLI_TOP_LEVEL_COMMANDS } from "../src/cli/command-catalog.js";
+import { renderCliHandbook } from "../src/cli/handbook.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
 
 void test("tool registry contains the exact 36-tool surface and 28 command adapters", () => {
@@ -79,35 +81,27 @@ void test("command delivery exposes one Navigate wrapper while the public CLI st
   }
 });
 
-void test("companion manifest renders five fixed self-contained Skills", () => {
-  assert.deepEqual(COMPANION_WORKFLOW_IDS, ["navigate", "propose", "decide", "verify", "cli-handbook"]);
+void test("companion manifest renders four fixed self-contained Skills", () => {
+  assert.deepEqual(COMPANION_WORKFLOW_IDS, ["navigate", "propose", "decide", "verify"]);
   assert.deepEqual(COMPANION_INTENTS.map((intent) => intent.skillId), [
     "researchspec-navigate",
     "researchspec-propose",
     "researchspec-decide",
     "researchspec-verify",
-    "researchspec-cli-handbook",
   ]);
   for (const intent of COMPANION_INTENTS) {
-    const rendered = renderCompanionSkill(intent);
-    assert.match(rendered, new RegExp(`^---\\nname: ${intent.skillId}\\n`, "m"));
-    assert.doesNotMatch(rendered, /<<|Authoring hint/);
-    assert.doesNotMatch(rendered, /instructions route:|advance subflow:|instructions subflow:|list subflows|researchspec\/subflows|control\.yaml/i);
+    assert.deepEqual(
+      renderCompanionSkillFiles(intent).map((file) => file.path),
+      intent.id === "navigate"
+        ? ["LICENSE", "SKILL.md", "references/arsu-routes.md", "references/cli-handbook.md"]
+        : ["LICENSE", "SKILL.md"],
+    );
   }
   const navigate = COMPANION_INTENTS.find((intent) => intent.skillId === "researchspec-navigate");
   assert.ok(navigate);
-  const renderedNavigate = renderCompanionSkill(navigate);
-  assert.match(renderedNavigate, /host-native subagents/);
-  assert.match(renderedNavigate, /content category, and cost/);
-  assert.match(renderedNavigate, /list procedures --query/);
-  assert.match(renderedNavigate, /standalone activation/);
-  assert.match(renderedNavigate, /persistence, resume/);
-  assert.doesNotMatch(renderedNavigate, /API key|endpoint|curl/i);
-  const handbook = COMPANION_INTENTS.find((intent) => intent.skillId === "researchspec-cli-handbook");
-  assert.ok(handbook);
-  assert.match(handbook.description, /whenever using, invoking, explaining, inspecting, troubleshooting, or modifying ResearchSpec/);
-  assert.match(renderCompanionSkill(handbook), /GraphRunStartCommandSchema/);
-  assert.match(renderCompanionSkill(handbook), /RunHandoffSchema/);
+  const files = new Map(renderCompanionSkillFiles(navigate).map((file) => [file.path, file.content]));
+  assert.equal(files.get("references/cli-handbook.md"), renderCliHandbook());
+  assert.equal(files.get("references/arsu-routes.md"), renderNavigateRoutingProjection());
 });
 
 void test("Copilot uses its explicit detection paths", async () => {
@@ -147,7 +141,10 @@ void test("delivery projects one Navigate entry per selected channel", async () 
       assert.equal(skillIds.size, 1, toolId);
       assert.deepEqual([...skillIds], ["researchspec-navigate"], toolId);
     }
-    assert.equal(delivery.installations.some((item) => item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/references/cli-handbook.md")), false);
+    const navigateFiles = delivery.installations.filter((item) => item.source.kind === "companion-skill" && item.source.skill_id === "researchspec-navigate");
+    assert.equal(navigateFiles.length, new Set(navigateFiles.map((item) => item.tool_id)).size * 4);
+    assert.equal(navigateFiles.some((item) => item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/references/cli-handbook.md")), true);
+    assert.equal(navigateFiles.some((item) => item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/references/arsu-routes.md")), true);
     assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 8);
   } finally {
     if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME");

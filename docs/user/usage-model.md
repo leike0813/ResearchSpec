@@ -89,9 +89,11 @@ catalog；独立的扩展 profile 可以直接使用自身声明的 entry。`ins
 route 或 profile 摘要、可选入口节点、前置条件、边界输出、Gates、Decisions 和成本提示。Agent
 不能只凭相似文件名或记忆拼装入口。
 
-固定用户可见 Agent 表面只有 `researchspec-navigate`。四个 ARSU 工作流、其余四个 Companion、
-47 个 core capability 和 plugin extensions 都属于隐藏 Procedure inventory；它们从已有 registry
-即时派生，不投影进宿主 Skill catalog。可选 Zotero Adapter 仍增加七个显式 Skills。
+固定用户可见 Agent 表面只有 `researchspec-navigate`。它的 `SKILL.md` 包含可独立执行的完整控制
+流程，并按需读取同目录下由 canonical renderer 生成的 `references/cli-handbook.md` 与
+`references/arsu-routes.md`。四个 ARSU 工作流、其余三个 Companion、47 个 core capability 和
+plugin extensions 都属于隐藏 Procedure inventory；它们从已有 registry 即时派生，不投影进宿主
+Skill catalog。可选 Zotero Adapter 仍增加七个显式 Skills。
 
 ## 3. 一次确认授权一张冻结图
 

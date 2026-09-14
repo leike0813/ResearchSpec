@@ -97,7 +97,9 @@ The locked direction is:
   model service.
 
 The fixed base user-visible Agent surface is exactly one Skill:
-`researchspec-navigate`. ARSU Skills, the other four Companion workflows, the
+`researchspec-navigate`. Its generated `references/cli-handbook.md` and
+`references/arsu-routes.md` provide progressive CLI and ARSU route detail from
+their canonical renderers. ARSU Skills, the other three Companion workflows, the
 47 bundled core capabilities, and all registered plugin extensions are hidden
 Procedures discovered from their existing registries and loaded on demand with
 `list procedures`, `show procedure:<id>`, and

@@ -154,23 +154,23 @@ The CLI SHALL expose bounded static procedure discovery through `list procedures
 
 #### Scenario: Root, command, and plugin help require no workspace
 - **WHEN** help is requested for any public command path
-- **THEN** catalog-backed usage remains available without workspace discovery
+- **THEN** catalog-backed usage remains available without workspace discovery or mutation
 
 #### Scenario: Packaged handbook is derived static discovery
-- **WHEN** the CLI handbook procedure is rendered
-- **THEN** it uses the same command and payload catalogs as static help
+- **WHEN** the Navigate Skill tree is rendered
+- **THEN** `references/cli-handbook.md` uses the same command and payload catalogs as static help
 
 ### Requirement: Static Discovery Does Not Authorize Runtime Actions
 
-Global procedure discovery SHALL remain read-only. `instructions procedure:<id>` SHALL require a current schema `"2"` workspace and SHALL validate plugin-domain selection before returning an executable packet.
+Global procedure discovery and generated handbook guidance SHALL remain read-only. `instructions procedure:<id>` SHALL require a current schema `"2"` workspace and SHALL validate plugin-domain selection before returning an executable packet.
 
 #### Scenario: Activation is requested outside a workspace
 - **WHEN** a caller requests procedure instructions without a current workspace
 - **THEN** the CLI returns a workspace-required diagnostic without writing files
 
 #### Scenario: Handbook precedes a runtime write
-- **WHEN** handbook guidance leads to a requested graph mutation
-- **THEN** the caller must still obtain current status and graph instructions
+- **WHEN** generated handbook guidance leads to a requested graph mutation
+- **THEN** the caller must still obtain current status and exact graph instructions
 
 ### Requirement: Contextual Usage And Complete Selector-Family Hints
 
@@ -200,15 +200,18 @@ Decision and change selector families.
 ### Requirement: Generated CLI Documentation Has One Durable Owner
 
 The typed command and payload catalogs SHALL generate the canonical handbook at
-`docs/user/cli-handbook.md`. Package verification and user-facing links SHALL
-resolve that path; no second maintained handbook SHALL exist.
+`docs/user/cli-handbook.md` and the byte-identical Navigate reference at
+`references/cli-handbook.md`. Package verification and user-facing links SHALL
+resolve those generated projections; no hand-maintained handbook or handbook
+procedure SHALL exist.
 
 #### Scenario: The CLI catalog changes
 
 - **WHEN** command or payload metadata changes
 - **THEN** the handbook check compares the generated content with
   `docs/user/cli-handbook.md`
-- **AND** documentation navigation points to that file
+- **AND** Navigate delivery and package verification compare its local reference
+  with the same generated content
 
 ### Requirement: Every CLI Input Has a Catalog-Backed Payload Contract
 

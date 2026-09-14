@@ -3,13 +3,13 @@ Define the five generated Companion Skills and their authority boundaries over c
 
 ## Requirements
 
-### Requirement: Canonical Five-Workflow Manifest
+### Requirement: Canonical Four-Workflow Manifest
 
-ResearchSpec SHALL keep five canonical Companion identities but SHALL expose only `researchspec-navigate` as a host-visible Skill. Propose, Decide, Verify, and the CLI handbook SHALL be hidden procedures in the runtime-derived catalog.
+ResearchSpec SHALL keep four canonical Companion identities but SHALL expose only `researchspec-navigate` as a host-visible Skill. Propose, Decide, and Verify SHALL be hidden procedures in the runtime-derived catalog.
 
 #### Scenario: Companion catalog is loaded
 - **WHEN** Agent delivery and procedure discovery read the Companion catalog
-- **THEN** delivery selects only Navigate while procedure discovery includes the other four identities exactly once
+- **THEN** delivery selects only Navigate while procedure discovery includes the other three identities exactly once
 
 #### Scenario: Manifest is the only companion registry
 - **WHEN** delivery and procedure discovery resolve Companions
@@ -17,19 +17,25 @@ ResearchSpec SHALL keep five canonical Companion identities but SHALL expose onl
 
 ### Requirement: Self-Contained Workflow Skills
 
-Each installed companion SHALL be usable from its own `SKILL.md` without a runtime companion reference or companion-owned executable.
+Each installed companion SHALL be usable from its own `SKILL.md` without a runtime companion reference or companion-owned executable. Navigate SHALL include generated CLI-handbook and ARSU-route references for progressive detail.
 
 #### Scenario: Installed skill contains actionable guidance
 
 - **WHEN** a companion is rendered
-- **THEN** its `SKILL.md` SHALL contain Mission, When to Use, Do Not Use, Inputs, CLI Examples, Workflow, Decision Table, Failure Recovery, Output Contract, Guardrails, and Completion sections
-- **AND** required common CLI discipline and any catalog-derived capability guidance SHALL be inlined at build time
-- **AND** it SHALL NOT install companion scripts, state, assets, `agents/openai.yaml`, or `references/cli-discipline.md`
+- **THEN** its `SKILL.md` SHALL contain its complete ordinary execution flow, input/output contract, authority boundaries, failure recovery, reference-loading rules, and completion criteria
+- **AND** required common CLI discipline and safety-critical source-policy guidance SHALL be inlined at build time
+- **AND** it SHALL NOT install companion scripts, state, assets, or `agents/openai.yaml`
+
+#### Scenario: Navigate references are rendered
+
+- **WHEN** Navigate is rendered
+- **THEN** its tree SHALL include `references/cli-handbook.md` from the typed CLI catalogs and `references/arsu-routes.md` from the converter-owned routing catalog
+- **AND** the main `SKILL.md` SHALL identify the exact conditions under which each reference is read
 
 #### Scenario: Near-miss routes to the correct owner
 
 - **WHEN** a request belongs to an ARSU producer, deterministic check, control mutation, or archive transaction
-- **THEN** the skill SHALL route to that ARSU workflow or existing CLI command instead of expanding its own responsibility
+- **THEN** the skill SHALL route to that procedure or existing CLI command instead of expanding its own responsibility
 
 ### Requirement: Navigate Distinguishes Research And Zotero Tasks
 
@@ -76,35 +82,27 @@ or managed-library behavior applies.
 
 ### Requirement: Navigate Provides Progressive CLI Discovery
 
-Navigate SHALL be a compact entry procedure that uses CLI procedure search, metadata, and instruction packets. It SHALL NOT embed a generated route catalog, full CLI handbook, or full literature policy.
+Navigate SHALL be the complete entry controller for standalone procedure selection and graph-governed work. It SHALL use compact CLI discovery first and SHALL load its generated references only when the current request needs their detail.
 
 #### Scenario: Request is ambiguous
 - **WHEN** the user asks for broad or cross-capability work
-- **THEN** Navigate reads bounded status when a workspace exists and searches compact procedure cards before selecting one body
+- **THEN** Navigate reads bounded status when a workspace exists, loads `references/arsu-routes.md`, and searches compact procedure cards before selecting one body
 
 #### Scenario: Detailed CLI help is needed
-- **WHEN** Navigate cannot construct a payload from compact command metadata
-- **THEN** it loads the CLI handbook procedure on demand
+- **WHEN** Navigate must construct a nontrivial payload, explain the complete CLI, or troubleshoot syntax, options, or error classes
+- **THEN** it reads `references/cli-handbook.md` before acting
 
 #### Scenario: User asks which command or option to use
 - **WHEN** the user asks a CLI discovery question
-- **THEN** Navigate starts with compact catalog help and loads the handbook only when needed
+- **THEN** Navigate starts with compact catalog help and reads its local handbook only when complete detail is needed
+
+#### Scenario: Compact discovery is sufficient
+- **WHEN** command metadata or procedure cards fully resolve the request
+- **THEN** Navigate proceeds without loading an unnecessary reference
 
 #### Scenario: Static discovery reaches a workspace action
 - **WHEN** static discovery leads to a graph action
-- **THEN** Navigate reads current status and exact instructions before acting
-
-### Requirement: Independent CLI Handbook Companion
-
-The CLI handbook SHALL remain a canonical Companion procedure with one generated content owner and SHALL NOT be installed as a separate Skill.
-
-#### Scenario: Handbook procedure is activated
-- **WHEN** a caller requests `instructions procedure:researchspec-cli-handbook`
-- **THEN** the returned procedure body is generated from the same command and payload catalogs as CLI help
-
-#### Scenario: ResearchSpec use triggers the handbook Skill
-- **WHEN** detailed CLI operation guidance is required
-- **THEN** the hidden handbook procedure is activated on demand rather than projected
+- **THEN** Navigate reads current status and exact selector instructions before acting
 
 ### Requirement: Companions Use Current File Contracts
 Navigate, Propose, Decide and Verify SHALL use stable specs, graph profiles, run/node files, run

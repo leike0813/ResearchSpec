@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { parse } from "yaml";
 
-import { COMPANION_INTENTS, renderCompanionSkill } from "../src/adapters/companion/index.js";
+import { COMPANION_INTENTS, renderCompanionSkillFiles } from "../src/adapters/companion/index.js";
 import { checkArsuOutput } from "../src/arsu-converter/converter.js";
 import { MIT_LICENSE_TEXT } from "../src/licensing.js";
 import { LITERATURE_ADAPTER_CATALOG } from "../src/literature-adapters/catalog.js";
@@ -298,7 +298,7 @@ async function loadProcedures(
 function loadNavigate(skills: HarnessSkill[], fileSources: Map<string, ReadonlyMap<string, HarnessFileSource>>): void {
   const intent = COMPANION_INTENTS.find((item) => item.id === "navigate");
   if (!intent) throw new Error("Navigate Companion definition is missing.");
-  const virtual = virtualSkill(renderCompanionSkill(intent));
+  const virtual = virtualFiles(renderCompanionSkillFiles(intent));
   const files = [...virtual.entries()]
     .map(([filePath, source]) => metadataFor(filePath, source.type === "virtual" ? source.content.byteLength : 0))
     .sort((left, right) => compareText(left.path, right.path));
@@ -361,10 +361,14 @@ async function loadDomains(
 }
 
 function virtualSkill(content: string): Map<string, HarnessFileSource> {
-  return new Map<string, HarnessFileSource>([
-    ["LICENSE", { type: "virtual", content: Buffer.from(MIT_LICENSE_TEXT, "utf8") }],
-    ["SKILL.md", { type: "virtual", content: Buffer.from(content, "utf8") }],
+  return virtualFiles([
+    { path: "LICENSE", content: MIT_LICENSE_TEXT },
+    { path: "SKILL.md", content },
   ]);
+}
+
+function virtualFiles(files: readonly { path: string; content: string }[]): Map<string, HarnessFileSource> {
+  return new Map(files.map((file) => [file.path, { type: "virtual" as const, content: Buffer.from(file.content, "utf8") }]));
 }
 
 async function diskSources(root: string): Promise<Map<string, HarnessFileSource>> {

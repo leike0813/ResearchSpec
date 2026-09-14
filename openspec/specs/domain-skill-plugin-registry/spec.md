@@ -182,8 +182,8 @@ hard-dependency arrays, and advisory-only relationships.
 
 #### Scenario: Education domain is installed
 - **WHEN** a user selects one of the three reviewed education domains
-- **THEN** configured Agent tools receive the direct approved Skill trees
-- **AND** the fixed eight base Skills, eight wrappers, and sixteen public commands remain unchanged
+- **THEN** the reviewed Education procedures become eligible through the domain registry without host Skill projection
+- **AND** the one-Skill Navigate base surface, configured Navigate wrappers, and sixteen public commands remain unchanged
 
 ### Requirement: Packaged Skill Discovery Metadata
 ResearchSpec SHALL derive each registered Skill's semantic description and entry

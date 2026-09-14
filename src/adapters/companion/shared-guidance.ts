@@ -39,4 +39,4 @@ export const SHARED_CLI_GUIDANCE = `## Shared CLI Discipline
 | 3 | Write conflict | Preserve current bytes, reread the owner, and retry only with current intent. |
 | 4 | Internal failure | Stop and report the reproducible command and structured error. |
 
-Capability Skills execute exactly one graph node and return control to ResearchSpec. Companions help the user navigate, propose, decide, and verify graph contracts without taking scholarly or human authority.`;
+Procedures execute only the standalone or graph packet that activated them and return control to ResearchSpec. Companions help the user navigate, propose, decide, and verify contracts without taking scholarly or human authority.`;

@@ -37,15 +37,16 @@ ARSU workflow packages SHALL remain bundled and available to procedure activatio
 
 ### Requirement: Complete Companion Skill Delivery
 
-Every selected Agent host SHALL receive only the Navigate Companion for Skill delivery. Propose, Decide, Verify, and the CLI handbook SHALL remain bundled on-demand procedures.
+Every selected Agent host SHALL receive only the Navigate Companion for Skill delivery. Propose, Decide, and Verify SHALL remain bundled on-demand procedures. The Navigate tree SHALL include its generated CLI-handbook and ARSU-route references.
 
 #### Scenario: Every tool receives the base surface
 - **WHEN** a registered Skill-capable tool is selected
 - **THEN** its base Skill tree contains `researchspec-navigate` and no other Companion
+- **AND** Navigate contains `SKILL.md`, `LICENSE`, `references/cli-handbook.md`, and `references/arsu-routes.md`
 
 #### Scenario: Every tool receives the fixed base surface
 - **WHEN** a registered tool receives Skill delivery
-- **THEN** its fixed base surface is the single Navigate Skill
+- **THEN** its fixed base surface is the single complete Navigate Skill tree
 
 #### Scenario: Selected Adapter reaches every tool
 - **WHEN** `zotero-library` and Agent tools are selected
@@ -140,19 +141,19 @@ unknown paths SHALL be preserved. Allowlisted historical Codex prompts under
 
 ### Requirement: Installed Skill License Retention
 
-ResearchSpec SHALL deliver applicable license and attribution files with every independently copied ARSU, Companion, and Literature Adapter Skill without weakening generated-file ownership or drift protection.
+ResearchSpec SHALL deliver applicable license and attribution files with every independently copied Companion and Literature Adapter Skill without weakening generated-file ownership or drift protection.
 
 #### Scenario: ARSU Skill is installed
 
-- **WHEN** a selected tool receives an ARSU Skill tree
-- **THEN** the tree SHALL include the converter-owned CC BY-NC 4.0 license and upstream attribution notice
-- **AND** those files SHALL be recorded and reconciled through the normal installation manifest
+- **WHEN** a bundled ARSU procedure package is inspected or activated
+- **THEN** its converter-owned CC BY-NC 4.0 license and upstream attribution notice SHALL remain in the packaged tree
+- **AND** the package SHALL remain hidden from host Skill roots
 
 #### Scenario: Companion Skill is installed
 
 - **WHEN** a selected tool receives a generated Companion Skill
 - **THEN** the Companion directory SHALL include canonical MIT license text attributed to `ResearchSpec contributors`
-- **AND** the license file SHALL follow the same manifest hash, drift-preservation, and safe-retirement rules as its `SKILL.md`
+- **AND** every generated file in the tree SHALL follow the same manifest hash, drift-preservation, and safe-retirement rules as its `SKILL.md`
 
 #### Scenario: Literature Adapter Skill is installed
 
@@ -192,22 +193,6 @@ Optional plugin procedures SHALL NOT create tool command wrappers or Skill entri
 #### Scenario: Command-capable tool receives plugins
 - **WHEN** selected plugin procedures are available to a command-capable tool
 - **THEN** the tool still receives only its one Navigate wrapper
-
-### Requirement: Independent CLI Handbook Skill Delivery
-
-The CLI handbook SHALL be an on-demand Companion procedure and SHALL NOT be delivered as an independent host-visible Skill.
-
-#### Scenario: Handbook help is requested
-- **WHEN** Navigate needs detailed CLI payload guidance
-- **THEN** it activates the bundled CLI handbook procedure through the same procedure instruction API
-
-#### Scenario: Selected tool receives the handbook Skill
-- **WHEN** a selected tool receives Skill delivery
-- **THEN** the handbook remains hidden and Navigate is the only projected Companion Skill
-
-#### Scenario: Handbook Skill has drifted
-- **WHEN** an obsolete managed handbook projection differs from its recorded bytes
-- **THEN** update preserves and diagnoses it under the common drift policy
 
 ### Requirement: Core Capability And Profile Projections Share Managed Ownership
 

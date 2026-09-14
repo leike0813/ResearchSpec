@@ -15,6 +15,11 @@ void test("procedure catalog is derived, ranked, and progressively disclosed", a
     loadPluginExtensionRegistry(),
   ]);
   assert.equal(catalog.size, ARSU_SKILL_IDS.length + COMPANION_INTENTS.length - 1 + core.capabilities.size + extensions.capabilities.size);
+  assert.deepEqual(
+    [...catalog.values()].filter((item) => item.kind === "companion").map((item) => item.id).sort(),
+    ["researchspec-decide", "researchspec-propose", "researchspec-verify"],
+  );
+  assert.equal(catalog.has("researchspec-cli-handbook"), false);
   assert.deepEqual(searchProcedures(catalog, "deep research").slice(0, 1).map((item) => item.id), ["deep-research"]);
   const procedure = catalog.get("deep-research");
   assert.ok(procedure);

@@ -334,10 +334,17 @@ async function verifyInstalledGuidance(installedPackageRoot, projectRoot, handbo
   for (const skill of expectedArsuSkills) {
     assert(contracts.skill_groups?.[skill]?.profile_id === "researchspec-preflight-v11", `Installed ARSU profile is not v11: ${skill}`);
   }
-  const navigateSkill = await readFile(path.join(projectRoot, ".agents", "skills", "researchspec-navigate", "SKILL.md"), "utf8");
   const packagedHandbook = await readFile(path.join(installedPackageRoot, "docs", "user", "cli-handbook.md"), "utf8");
-  assert(navigateSkill.includes("list procedures") && navigateSkill.includes("instructions procedure:"), "Installed Navigate Skill lacks procedure discovery guidance.");
-  assert(!await pathExists(path.join(projectRoot, ".agents", "skills", "researchspec-navigate", "references", "cli-handbook.md")), "Installed Navigate still contains the retired handbook reference.");
+  const companionManifest = await import(`${pathToFileURL(path.join(installedPackageRoot, "dist", "src", "adapters", "companion", "manifest.js")).href}?guidance=${Date.now().toString()}`);
+  const companionRenderer = await import(`${pathToFileURL(path.join(installedPackageRoot, "dist", "src", "adapters", "companion", "render.js")).href}?guidance=${Date.now().toString()}`);
+  const navigate = companionManifest.COMPANION_INTENTS.find((item) => item.id === "navigate");
+  assert(navigate, "Installed Companion manifest lacks Navigate.");
+  for (const expected of companionRenderer.renderCompanionSkillFiles(navigate)) {
+    const actual = await readFile(path.join(projectRoot, ".agents", "skills", "researchspec-navigate", expected.path), "utf8");
+    assert(actual === expected.content, `Installed Navigate file differs from its renderer: ${String(expected.path)}.`);
+  }
+  const navigateHandbook = await readFile(path.join(projectRoot, ".agents", "skills", "researchspec-navigate", "references", "cli-handbook.md"), "utf8");
+  assert(navigateHandbook === packagedHandbook, "Installed Navigate CLI handbook differs from the packaged handbook.");
   assert(handbookDigest === sha256(Buffer.from(packagedHandbook, "utf8")), "Packaged handbook digest changed during delivery verification.");
 }
 
@@ -395,20 +402,23 @@ async function verifyAllProjectToolDelivery(projectRoot, handbookDigest) {
   const installations = Array.isArray(manifest.installations) ? manifest.installations : [];
   assert(equal(manifest.literature_adapter_resolutions, []), "Default all-tool init unexpectedly installed a literature adapter.");
   assert(!await pathExists(path.join(projectRoot, ".zotero-bridge")), "Default all-tool init unexpectedly created .zotero-bridge.");
-  const navigateSkills = installations.filter((item) =>
+  const navigateFiles = installations.filter((item) =>
     item?.source?.kind === "companion-skill"
     && item.source.skill_id === "researchspec-navigate"
-    && typeof item?.target?.path === "string"
-    && item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/SKILL.md"));
+    && typeof item?.target?.path === "string");
+  const navigateSkills = navigateFiles.filter((item) => item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/SKILL.md"));
   assert(navigateSkills.length === expectedProjectSkillWriterIds.length, `Navigate Skill projection count mismatch: ${String(navigateSkills.length)}.`);
+  assert(navigateFiles.length === expectedProjectSkillWriterIds.length * 4, `Navigate file projection count mismatch: ${String(navigateFiles.length)}.`);
   assert(equal([...new Set(navigateSkills.map((item) => item.tool_id))].sort(), expectedProjectSkillWriterIds), "Navigate Skill projections do not cover every project-scoped physical Skill writer.");
-  for (const reference of navigateSkills) {
+  for (const reference of navigateFiles) {
     const absolute = reference.target.scope === "project"
       ? path.join(projectRoot, reference.target.path)
       : reference.target.path;
     const bytes = await readFile(absolute);
-    assert(sha256(bytes) === reference.sha256, `CLI handbook Skill bytes differ for ${String(reference.tool_id)}.`);
-    assert(bytes.includes(Buffer.from("list procedures", "utf8")), `Navigate Skill lacks procedure discovery for ${String(reference.tool_id)}.`);
+    assert(sha256(bytes) === reference.sha256, `Navigate file bytes differ for ${String(reference.tool_id)}: ${String(reference.target.path)}.`);
+    if (reference.target.path.replaceAll("\\", "/").endsWith("/references/cli-handbook.md")) {
+      assert(reference.sha256 === handbookDigest, `Navigate handbook digest differs for ${String(reference.tool_id)}.`);
+    }
   }
   assert(handbookDigest.length === 64, "CLI handbook digest is invalid.");
 

@@ -6,7 +6,7 @@ Define dialogue-first ARSU capability selection, graph-entry confirmation and co
 
 ### Requirement: Dialogue Starts Academic Work
 
-User-Agent dialogue SHALL choose between standalone and graph activation by required lifecycle guarantees. Bounded one-shot work SHALL prefer standalone procedures; persistence, resume, formal Gates or Decisions, parallel joins, or audit state SHALL require a graph route.
+User-Agent dialogue SHALL choose between standalone and graph activation by required lifecycle guarantees. Bounded one-shot work SHALL prefer standalone procedures; persistence, resume, formal Gates or Decisions, parallel joins, or audit state SHALL require a graph route. Navigate SHALL use its generated ARSU route reference when intent is vague or crosses capabilities.
 
 #### Scenario: User asks for bounded work
 - **WHEN** the request can be completed through ordinary files without workflow state
@@ -18,7 +18,7 @@ User-Agent dialogue SHALL choose between standalone and graph activation by requ
 
 #### Scenario: Vague goal enters Navigate
 - **WHEN** the user provides a vague academic goal
-- **THEN** Navigate discovers candidate procedures and chooses standalone or graph mode from lifecycle needs
+- **THEN** Navigate loads its ARSU route reference, discovers candidate procedures, and chooses standalone or graph mode from lifecycle needs
 
 #### Scenario: Expert request names a capability
 - **WHEN** the user explicitly names a procedure or capability
@@ -92,21 +92,21 @@ The root entry summary SHALL describe source policy and Adapter readiness expect
 - **THEN** failure to establish live readiness pauses that provider operation
 - **AND** the Agent does not silently change the source policy
 
-### Requirement: Natural-Language CLI Discovery Loads The Handbook Companion
+### Requirement: Natural-Language CLI Discovery Loads Navigate References
 
-Natural-language routing SHALL start with compact procedure discovery. The hidden CLI handbook procedure SHALL be loaded only when detailed command or payload guidance is needed.
+Natural-language routing SHALL start with compact procedure and command discovery. Navigate SHALL load its local CLI handbook only when detailed command or payload guidance is needed and its local ARSU route catalog when semantic route comparison is needed.
 
 #### Scenario: Compact discovery is sufficient
 - **WHEN** candidate cards and selected procedure metadata resolve the user's intent
-- **THEN** Navigate proceeds without loading the handbook body
+- **THEN** Navigate proceeds without loading either reference body
 
 #### Scenario: Payload detail is needed
 - **WHEN** a graph or governance payload cannot be constructed from compact metadata
-- **THEN** Navigate activates the CLI handbook procedure before acting
+- **THEN** Navigate reads `references/cli-handbook.md` before acting
 
 #### Scenario: User asks for a CLI operation manual
 - **WHEN** the user explicitly requests full CLI usage guidance
-- **THEN** Navigate activates the hidden CLI handbook procedure
+- **THEN** Navigate answers from its generated CLI handbook reference
 
 #### Scenario: CLI discovery becomes a runtime action question
 - **WHEN** static help leads to a requested workflow mutation

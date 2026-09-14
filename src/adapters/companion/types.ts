@@ -1,4 +1,4 @@
-export const COMPANION_WORKFLOW_IDS = ["navigate", "propose", "decide", "verify", "cli-handbook"] as const;
+export const COMPANION_WORKFLOW_IDS = ["navigate", "propose", "decide", "verify"] as const;
 export type CompanionWorkflowId = typeof COMPANION_WORKFLOW_IDS[number];
 export type CompanionSkillId = `researchspec-${CompanionWorkflowId}`;
 

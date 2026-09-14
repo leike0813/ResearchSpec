@@ -1,23 +1,4 @@
-# Skill Browser Harness
-
-## Purpose
-
-Provide a repository-local, read-only browser for inspecting the current
-production Skill surface and its source files without expanding the public CLI
-or executing bundled Skill content.
-
-## Requirements
-
-### Requirement: Repository-local harness startup
-The project SHALL provide a development command that compiles the current production TypeScript sources and harness sources into an ignored development output before starting a web server bound to all IPv4 interfaces. The harness MUST remain outside the public ResearchSpec CLI and published runtime output, and its documentation MUST identify the unauthenticated trusted-development-network boundary.
-
-#### Scenario: Developer starts the harness
-- **WHEN** a developer runs `pnpm dev:harness` from the repository
-- **THEN** the current sources are compiled into `.harness-dist/` and the server listens on `0.0.0.0` using the configured or default port
-
-#### Scenario: Production build remains separate
-- **WHEN** the normal ResearchSpec production build runs
-- **THEN** harness sources and static assets are not added to the production `dist` output or public command surface
+## MODIFIED Requirements
 
 ### Requirement: Production Skill projection
 
@@ -79,28 +60,3 @@ The harness SHALL present a visible-entry view and a hidden-procedure view. Hidd
 - **WHEN** a developer reloads after changing catalog inputs
 - **THEN** the visible and hidden views rebuild from current repository files
 
-### Requirement: Read-only file boundary
-The harness MUST accept only read requests and MUST serve only files that belong to a cataloged Skill's enumerated root. It MUST reject path traversal, unknown files, symbolic links, and resolved paths outside that root.
-
-#### Scenario: Mutation request is attempted
-- **WHEN** a client sends a non-GET request
-- **THEN** the server returns method-not-allowed without changing repository state
-
-#### Scenario: Unsafe file path is requested
-- **WHEN** a request contains traversal segments, references an unknown file, or targets a symbolic link
-- **THEN** the server refuses the file without reading content outside the enumerated Skill tree
-
-### Requirement: Safe content rendering
-The harness MUST disable raw HTML in Markdown, rewrite relative Skill links to harness routes, restrict inline images to safe raster formats, and return executable or unknown formats only as source or attachment. Responses MUST include a restrictive content security policy and MIME-sniffing protection.
-
-#### Scenario: Markdown contains raw HTML
-- **WHEN** a Skill Markdown file contains an HTML or script element
-- **THEN** the preview renders it as non-executable text rather than active markup
-
-#### Scenario: Bundled executable resource is opened
-- **WHEN** a developer selects HTML, JavaScript, SVG, or another non-raster resource
-- **THEN** the harness does not embed or execute it and offers only a source view or raw attachment
-
-#### Scenario: Large text file is opened
-- **WHEN** a text resource exceeds the configured 1 MiB preview limit
-- **THEN** the harness returns file metadata and a raw-file link without placing the full text in the preview payload

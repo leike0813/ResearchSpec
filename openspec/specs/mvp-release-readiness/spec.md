@@ -41,7 +41,7 @@ ResearchSpec SHALL build its npm distribution from a clean production-only TypeS
 
 ### Requirement: Installed Tarball Verification
 
-ResearchSpec SHALL provide a cross-platform release verifier that derives the fixed Agent surface from packaged ARSU, Companion and capability registries, inspects and exercises a real npm tarball, and verifies the optional literature Adapter in isolated temporary directories.
+ResearchSpec SHALL provide a cross-platform release verifier that derives the fixed Agent surface from packaged Companion and Adapter registries, inspects and exercises a real npm tarball, and verifies the optional literature Adapter in isolated temporary directories.
 
 #### Scenario: Release tarball is verified
 
@@ -51,14 +51,14 @@ ResearchSpec SHALL provide a cross-platform release verifier that derives the fi
 #### Scenario: Default installed delivery is smoke tested
 
 - **WHEN** the installed tarball initializes with explicit Codex selection and no Adapter
-- **THEN** the project receives four ARSU Skills, five Companion Skills and every packaged capability registry entry
+- **THEN** the project receives exactly one base Skill, `researchspec-navigate`, with its generated CLI-handbook and ARSU-route references
 - **AND** the project receives no `.zotero-bridge` files
-- **AND** the handbook SHALL be `researchspec-cli-handbook/SKILL.md`, not a Navigate reference
+- **AND** no independent handbook Skill or hidden procedure is projected
 
 #### Scenario: Opted-in Codex delivery is smoke tested
 
 - **WHEN** the installed tarball initializes with Codex and `zotero-library`
-- **THEN** the project receives the registry-derived fixed surface plus seven Adapter Skills and the current-platform Adapter runtime/profile
+- **THEN** the project receives Navigate plus seven Adapter Skills and the current-platform Adapter runtime/profile
 - **AND** the installed CLI SHALL expose sixteen top-level commands and pass strict checking
 
 ### Requirement: Supported Release Runtime Matrix
@@ -113,7 +113,7 @@ The npm release SHALL contain the admitted Scientific Agent Skills generated tre
 - **WHEN** the release verifier packs and installs the npm tarball
 - **THEN** Scientific Agent Skills convert-derived assets are present and registry-valid
 - **AND** the vendor checkout and audit policy inputs are absent
-- **AND** default initialization still emits only the eight base Skills and eight wrappers
+- **AND** default initialization still emits only the one-Skill Navigate base surface and the configured Navigate wrappers
 
 ### Requirement: Third-Vendor Release Assets
 The npm release SHALL contain the seven approved complete
@@ -180,7 +180,7 @@ generated caches.
 - **WHEN** the approved package is packed and installed
 - **THEN** representative teacher-facing and student-facing Education Skills are present and registry-valid
 - **AND** unresolved markers and attribution files are retained
-- **AND** default initialization still installs only the fixed eight base Skills and wrappers
+- **AND** default initialization still installs only the one-Skill Navigate base surface and configured wrappers
 
 ### Requirement: Fixed Zotero Release Assets
 
@@ -197,12 +197,13 @@ optional and excluding maintainer-only and unconsumed upstream surfaces.
 
 ### Requirement: Release Surface And Guidance Are Converged
 
-The release SHALL contain the four ARSU Skills, five Companion Skills, every packaged capability registry entry, optional seven-Skill Zotero surface, sixteen-command CLI, current graph profiles and current graph-only guidance.
+The release SHALL contain one host-visible Navigate Companion Skill with its generated references, hidden procedure packages derived from current registries, the optional seven-Skill Zotero surface, sixteen-command CLI, current graph profiles, and current graph-only guidance.
 
 #### Scenario: Package is verified
 
 - **WHEN** the packed tarball is installed and exercised
-- **THEN** default init SHALL omit Adapter files and explicit opt-in SHALL install them
+- **THEN** default init SHALL project only Navigate and omit Adapter files, while explicit Adapter opt-in SHALL additionally install seven Adapter Skills
+- **AND** Navigate's handbook and ARSU-route references SHALL match their canonical renderers
 - **AND** no public Skill, wrapper, payload catalog or handbook contains retired runtime selector or state-file guidance
 
 ### Requirement: Authored Whitespace Is Checked Without Rewriting Reviewed Bytes
