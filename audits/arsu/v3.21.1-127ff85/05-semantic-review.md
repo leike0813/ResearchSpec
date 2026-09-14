@@ -99,6 +99,12 @@ reviewer calibration 的专用图能力缺口单独保留；当前四个 ARSU �
 
 收尾远端复查发现 v3.21.2（`8fa3d651ad45da9e02762a6ba1fa3d1f231f91b6`，另有 51 文件变化）。本次遵循已确认设计中的 v3.21.1 发布边界；v3.21.2 尚未吸纳，不将本次版本称为最新发布版。
 
+## 按需激活复核（2026-09-14）
+
+- 范围：38 个 ARSU-derived capability 与四个 ARSU 入口 preflight。逐包程序正文、输入输出、knowledge、validator、安全边界和 profile 保持原审阅结论；本轮语义变化只把固定 graph 完成动作改为服从 activation packet。
+- Standalone packet 只允许返回 researchspec/ 外的普通输出路径，禁止 run、node、handoff、Gate、Decision、override 和 transition 写入；graph packet 才提供 owning handoff 与精确 advance selector。
+- 生成路径与静态受审树均已核对；全库 47/47 core 与 332/332 extension 包含 mode-neutral Completion，旧 advance node:<run>/<node> Completion 为 0。该适配保留既有领域步骤和证据义务，未引入新的流程权威。
+
 ## 结论
 
 declared-fit-with-notes：七个脚本能力的实际执行缺口已修复并通过真实报告与打包 CLI 验证，支持声明范围内的使用。完整上游护照/投稿检查和 reviewer empirical calibration 不在当前确定性实现的承诺内；报告及指令明确保留未检查状态，不能以运行完成代替科学通过或人类 Gate。

@@ -190,6 +190,9 @@ Do not flag in isolation: perfect grammar, mixed registers, one transition word,
 
 Unless the user explicitly places it in scope, do not alter verbatim quotations, bibliography data, identifiers, URLs, code, math, citation keys, labels, cross-references, raw markup, or examples under discussion. In Markdown protect frontmatter, fences, inline code, HTML, link destinations, image paths, and formatting markers. In Quarto also protect shortcodes, citation and cross-reference identifiers, attributes, and fenced div markers. In LaTeX protect commands, environment syntax, formulas, keys, and identifiers. If syntax and prose cannot be separated confidently, keep the span unchanged and report the ambiguity.
 
+
 ## Completion
 
-When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.
+Return the declared outputs and follow the active procedure packet. In standalone
+mode, report ordinary output paths without modifying ResearchSpec workflow state.
+In graph mode, use only the packet's handoff and exact advance selector.

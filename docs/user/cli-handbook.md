@@ -38,6 +38,7 @@ A valid selector shape does not imply that the action is available in the curren
 | `spec` | `spec:project`<br>`spec:sources`<br>`spec:claims`<br>`spec:manuscript` |
 | `profile` | `profile:<profile-id>` |
 | `tool` | `tool:<tool-id>` |
+| `procedure` | `procedure:<procedure-id>` |
 
 ## Bootstrap
 
@@ -107,7 +108,7 @@ No command payload. Reads the nearest current workspace and returns a bounded sn
 
 ### `researchspec instructions <selector>`
 
-Show profile, run, node, Gate, Decision, or change instructions
+Show procedure, profile, run, node, Gate, Decision, or change instructions
 
 - Workspace: `required`
 - Static effect: `read`
@@ -115,11 +116,11 @@ Show profile, run, node, Gate, Decision, or change instructions
 
 #### Input shape
 
-One exact graph control or inspection selector.
+One exact procedure or graph control/inspection selector.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `selector` | `profile:... \| run:... \| node:<run>/<node>[@round] \| gate:... \| decision:... \| change:...` | yes | Current item whose action contract is needed. |
+| `selector` | `procedure:... \| profile:... \| run:... \| node:<run>/<node>[@round] \| gate:... \| decision:... \| change:...` | yes | Procedure or current graph item whose action contract is needed. |
 
 ### `researchspec start <profile-id|node-selector>`
 
@@ -221,9 +222,9 @@ An optional validation target and strictness flag.
 
 ### `researchspec list [type]`
 
-List profiles, runs, nodes, changes, or diagnostics
+List procedures, profiles, runs, nodes, changes, or diagnostics
 
-- Workspace: `required`
+- Workspace: `optional`
 - Static effect: `read`
 - Related commands: `show`, `status`
 
@@ -231,6 +232,7 @@ List profiles, runs, nodes, changes, or diagnostics
 | --- | --- | --- |
 | `--limit <count>` | no | page size from 1 to 50 |
 | `--cursor <cursor>` | no | opaque cursor returned by the prior page |
+| `--query <text>` | no | lexical procedure search terms |
 
 #### Input shape
 
@@ -238,15 +240,16 @@ An optional collection type with cursor pagination.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `type` | `profiles \| runs \| nodes \| changes \| diagnostics` | no | Collection to list; defaults to runs. |
-| `--limit` | `integer 1..50` | no | Page size; defaults to 20. |
+| `type` | `procedures \| profiles \| runs \| nodes \| changes \| diagnostics` | no | Collection to list; defaults to runs. |
+| `--limit` | `integer 1..50` | no | Page size; procedures default to 10, other collections to 20. |
 | `--cursor` | `opaque base64url cursor` | no | Cursor returned by the immediately preceding page for the same unchanged collection. |
+| `--query` | `string` | no | Lexical search terms used only with procedures. |
 
 ### `researchspec show <selector>`
 
-Show one exact profile, run, node, or project change
+Show one exact procedure, profile, run, node, or project change
 
-- Workspace: `required`
+- Workspace: `optional`
 - Static effect: `read`
 - Related commands: `list`, `check`
 
@@ -256,7 +259,7 @@ One exact stable spec, profile, run, node, Gate, Decision, change, handoff, or t
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `selector` | `profile:... \| run:... \| node:... \| change:...` | yes | Exact item to inspect. |
+| `selector` | `procedure:... \| profile:... \| run:... \| node:... \| change:...` | yes | Exact item to inspect. |
 
 ## Recovery
 
@@ -418,7 +421,7 @@ Inspect and manage bundled domain Skill plugins
 
 - Workspace: `optional`
 - Static effect: `conditional-write`
-- Related commands: `plugin list`, `plugin show`, `plugin install`, `plugin uninstall`, `plugin update`, `plugin instructions`
+- Related commands: `plugin list`, `plugin show`, `plugin install`, `plugin uninstall`, `plugin update`
 
 #### Input shape
 
@@ -523,19 +526,3 @@ Zero or more installed domain IDs.
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
 | `plugin-ids` | `domain ID[]` | no | Specific selections to refresh; omission updates all selected domains. |
-
-### `researchspec plugin instructions <skill-id>`
-
-Read an installed hash-clean plugin Skill for immediate advisory use
-
-- Workspace: `required`
-- Static effect: `read`
-- Related commands: `plugin list`, `plugin show`
-
-#### Input shape
-
-One installed, projected, hash-clean Skill ID.
-
-| Field or option | Type | Required | Meaning |
-| --- | --- | --- | --- |
-| `skill-id` | `Skill ID` | yes | Plugin Skill whose advisory instructions are requested. |

@@ -55,8 +55,7 @@ export type CliCommandId =
   | "plugin-show"
   | "plugin-install"
   | "plugin-uninstall"
-  | "plugin-update"
-  | "plugin-instructions";
+  | "plugin-update";
 
 export interface CliGlobalOptionDefinition {
   key: string;
@@ -86,7 +85,7 @@ const definitions: readonly CliCommandDefinition[] = [
     option("literatureAdapters", "--literature-adapters <ids>", "replace selected literature Adapters"),
   ], ["init", "status", "doctor"]),
   command("status", ["status"], "status", "control-plane", "Show derived schema 2 run/node status", "required", "read", [], ["instructions", "show", "list"]),
-  command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show profile, run, node, Gate, Decision, or change instructions", "required", "read", [], ["status", "start", "advance", "decide"]),
+  command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show procedure, profile, run, node, Gate, Decision, or change instructions", "required", "read", [], ["status", "start", "advance", "decide"]),
   command("start", ["start"], "start <profile-id|node-selector>", "control-plane", "Start a confirmed root run or one graph-authorized child run", "required", "write", [
     option("input", "--input <start.yaml|json>", "schema 2 root Start input"),
     option("confirmedBy", "--confirmed-by <name>", "human who confirmed this exact root run"),
@@ -100,11 +99,12 @@ const definitions: readonly CliCommandDefinition[] = [
     option("strict", "--strict", "treat warnings as failures"),
   ], ["status", "doctor", "show"]),
   command("doctor", ["doctor"], "doctor", "recovery", "Diagnose current workspace contracts without modifying them", "required", "read", [], ["check", "status"]),
-  command("list", ["list"], "list [type]", "inspection", "List profiles, runs, nodes, changes, or diagnostics", "required", "read", [
+  command("list", ["list"], "list [type]", "inspection", "List procedures, profiles, runs, nodes, changes, or diagnostics", "optional", "read", [
     option("limit", "--limit <count>", "page size from 1 to 50"),
     option("cursor", "--cursor <cursor>", "opaque cursor returned by the prior page"),
+    option("query", "--query <text>", "lexical procedure search terms"),
   ], ["show", "status"]),
-  command("show", ["show"], "show <selector>", "inspection", "Show one exact profile, run, node, or project change", "required", "read", [], ["list", "check"]),
+  command("show", ["show"], "show <selector>", "inspection", "Show one exact procedure, profile, run, node, or project change", "optional", "read", [], ["list", "check"]),
   command("handoff", ["handoff"], "handoff <run-selector>", "context", "Render or replace one directly editable run handoff", "required", "conditional-write", [
     option("input", "--input <handoff.yaml|json>", "semantic inputs, outputs, and optional Markdown body"),
   ], ["pack", "status"]),
@@ -127,7 +127,7 @@ const definitions: readonly CliCommandDefinition[] = [
   ], ["instructions", "show", "archive"]),
   command("archive", ["archive"], "archive <change-id>", "governance", "Archive an applied, rejected, deferred, or superseded project change", "required", "write", [], ["list", "show"]),
   command("plugin", ["plugin"], "plugin", "plugins", "Inspect and manage bundled domain Skill plugins", "optional", "conditional-write", [], [
-    "plugin-list", "plugin-show", "plugin-install", "plugin-uninstall", "plugin-update", "plugin-instructions",
+    "plugin-list", "plugin-show", "plugin-install", "plugin-uninstall", "plugin-update",
   ]),
   command("plugin-list", ["plugin", "list"], "list", "plugins", "List bundled domain Skill plugins", "optional", "read", [
     option("installed", "--installed", "show only workspace-selected plugins"),
@@ -141,7 +141,6 @@ const definitions: readonly CliCommandDefinition[] = [
   ], ["plugin-list", "plugin-show", "plugin-uninstall", "plugin-update"]),
   command("plugin-uninstall", ["plugin", "uninstall"], "uninstall <plugin-ids...>", "plugins", "Remove selected plugins from the current workspace", "required", "write", [], ["plugin-list", "plugin-install"]),
   command("plugin-update", ["plugin", "update"], "update [plugin-ids...]", "plugins", "Refresh selected plugins, or all when IDs are omitted", "required", "write", [], ["plugin-list", "plugin-show"]),
-  command("plugin-instructions", ["plugin", "instructions"], "instructions <skill-id>", "plugins", "Read an installed hash-clean plugin Skill for immediate advisory use", "required", "read", [], ["plugin-list", "plugin-show"]),
 ];
 
 export const CLI_COMMAND_CATALOG: readonly CliCommandDefinition[] = definitions;

@@ -21,56 +21,63 @@ The project SHALL provide a development command that compiles the current produc
 
 ### Requirement: Production Skill projection
 
-The harness SHALL derive ARSU, all five Companion Skills, Literature Adapter Skills, and plugin Skills from their production catalogs and renderers without running converters or Adapter assets.
+The harness SHALL distinguish the host-visible production surface from the hidden procedure inventory. It SHALL derive the Navigate Skill, unchanged Literature Adapter Skills, and all hidden ARSU, Companion, core, and plugin procedure packages from production catalogs and renderers without running converters or assets.
+
+#### Scenario: Visible surface is loaded
+- **WHEN** the harness builds its delivery view
+- **THEN** it exposes one base Navigate Skill and seven fixed Literature Adapter Skills
 
 #### Scenario: Complete base surface is loaded
-
 - **WHEN** the harness builds its catalog
-- **THEN** it SHALL expose exactly four ARSU, five dynamically rendered Companion and seven fixed Literature Adapter Skills
-- **AND** `researchspec-cli-handbook` content SHALL come from the production Companion renderer
+- **THEN** it distinguishes the one-Skill base surface from hidden procedures and fixed Adapter Skills
+
+#### Scenario: Hidden procedure inventory is loaded
+- **WHEN** the harness builds its procedure view
+- **THEN** it exposes every runtime-derived procedure grouped by family and domain without implying host projection
 
 #### Scenario: Plugin catalog is loaded
-
 - **WHEN** the harness builds its plugin view
-- **THEN** it SHALL validate the in-memory assembled registry and expose every available reviewed domain and Skill without writing generated files
+- **THEN** it validates and exposes every reviewed domain and plugin procedure without writing files
 
 #### Scenario: Checked-in registry has drift
-
-- **WHEN** in-memory plugin assembly differs from `skills/plugins/registry.json`
-- **THEN** the harness SHALL report drift without writing either source
+- **WHEN** in-memory registry assembly differs from a checked-in source registry
+- **THEN** the harness reports drift without writing either source
 
 #### Scenario: Adapter runner is browsed
-
-- **WHEN** a user selects an Adapter runtime metadata asset
-- **THEN** the harness MAY render its content read-only
-- **AND** it SHALL NOT execute or interpret the asset
+- **WHEN** a user selects Adapter runtime metadata
+- **THEN** the harness renders it read-only without execution
 
 ### Requirement: Interactive Skill browsing
-The harness SHALL present Skills through three expandable top-level branches named ARSU, Companion, and Plugin. ARSU and Companion SHALL contain their Skills directly. Plugin SHALL contain domain branches that separate direct members from dependency-only members. Search MUST preserve and filter this hierarchy, and the UI MUST include an explicit option to reveal empty domains.
+
+The harness SHALL present a visible-entry view and a hidden-procedure view. Hidden procedures SHALL be grouped by ARSU, Companion, Core, and Plugin families; Plugin SHALL preserve domain branches and direct/dependency distinctions. Search SHALL preserve hierarchy and the UI SHALL offer an explicit empty-domain option.
 
 #### Scenario: Browse the top-level hierarchy
-- **WHEN** a developer opens the Skill navigation
-- **THEN** ARSU, Companion, and Plugin are the only top-level branches and Skills are not flattened into one cross-family list
+- **WHEN** a developer opens procedure navigation
+- **THEN** visible entries are separated from hidden procedure families
 
 #### Scenario: Browse an available domain
-- **WHEN** a developer selects an available domain
-- **THEN** the domain contains separate Direct Skills and Dependencies groups whose non-overlapping members combine to the resolved Skill closure
+- **WHEN** a developer selects an available plugin domain
+- **THEN** direct and dependency-only procedures remain separate groups
 
 #### Scenario: Search the hierarchy
-- **WHEN** a developer searches for a Skill or domain
-- **THEN** only matching branches remain visible and their ancestor family and domain nodes are automatically expanded
+- **WHEN** a developer searches for a procedure or domain
+- **THEN** matching branches remain visible with ancestors expanded
+
+#### Scenario: Open a procedure workspace
+- **WHEN** a developer selects a procedure
+- **THEN** the UI loads its validated package file tree and selects its procedure body by default
 
 #### Scenario: Open a Skill workspace
-- **WHEN** a developer selects a Skill entry
-- **THEN** the UI loads a file-tree and file-preview workspace and selects `SKILL.md` by default
+- **WHEN** a developer selects a visible Skill entry
+- **THEN** the UI loads its file tree and selects `SKILL.md` by default
 
 #### Scenario: Inspect a Skill file
-- **WHEN** a developer selects an enumerated Skill file
-- **THEN** the file tree retains its real directory hierarchy and the preview shows Markdown and source, plain text, a safe raster image, or non-executable binary metadata according to the file type
+- **WHEN** a developer selects an enumerated file
+- **THEN** the preview uses the existing safe rendering rules for its file type
 
 #### Scenario: Reload changed sources
-- **WHEN** a developer reloads the catalog after changing a Skill tree or registry input
-- **THEN** the file tree and catalog are rebuilt from the current repository files without restarting converters
+- **WHEN** a developer reloads after changing catalog inputs
+- **THEN** the visible and hidden views rebuild from current repository files
 
 ### Requirement: Read-only file boundary
 The harness MUST accept only read requests and MUST serve only files that belong to a cataloged Skill's enumerated root. It MUST reject path traversal, unknown files, symbolic links, and resolved paths outside that root.

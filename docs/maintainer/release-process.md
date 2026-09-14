@@ -39,8 +39,8 @@ git diff --check
 ```
 
 `release:verify` packs and installs the real tarball in a temporary directory with installation scripts
-disabled. It verifies the registry-derived fixed base Skills, the explicitly selected seven-Skill Zotero Adapter, sixteen top-level commands, sixteen
-wrappers for each of 28 command-capable tools when `delivery` includes commands, selected Zotero runtime metadata, a fresh schema `"2"` workspace, unsupported-workspace zero-write
+disabled. It verifies Navigate-only base delivery, the explicitly selected seven-Skill Zotero Adapter, sixteen top-level commands, one
+Navigate wrapper for each command-capable tool when `delivery` includes commands, selected Zotero runtime metadata, a fresh schema `"2"` workspace, unsupported-workspace zero-write
 behavior, packaged current documentation, and absence of retired public runtime modules.
 
 The installed CLI completes both the minimal graph and an academic pipeline with research, writing,

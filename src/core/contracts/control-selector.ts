@@ -11,6 +11,7 @@ export const ChangeControlSelectorSchema = z.templateLiteral(["change:", StableI
 export const SpecInspectionSelectorSchema = z.enum(["spec:project", "spec:sources", "spec:claims", "spec:manuscript"]);
 export const ProfileInspectionSelectorSchema = z.templateLiteral(["profile:", StableIdSchema]);
 export const ToolInspectionSelectorSchema = z.templateLiteral(["tool:", StableIdSchema]);
+export const ProcedureInspectionSelectorSchema = z.templateLiteral(["procedure:", StableIdSchema]);
 
 export const ControlSelectorSchema = z.union([
   RunControlSelectorSchema,
@@ -29,6 +30,7 @@ export const InspectionSelectorSchema = z.union([
   SpecInspectionSelectorSchema,
   ProfileInspectionSelectorSchema,
   ToolInspectionSelectorSchema,
+  ProcedureInspectionSelectorSchema,
 ]);
 
 export type ControlSelector = z.infer<typeof ControlSelectorSchema>;
@@ -47,4 +49,5 @@ export const INSPECTION_SELECTOR_FAMILY_DISPLAYS = [
   { id: "spec", patterns: ["spec:project", "spec:sources", "spec:claims", "spec:manuscript"] },
   { id: "profile", patterns: ["profile:<profile-id>"] },
   { id: "tool", patterns: ["tool:<tool-id>"] },
+  { id: "procedure", patterns: ["procedure:<procedure-id>"] },
 ] as const;

@@ -12,15 +12,15 @@
 
 | capability_id | package tree SHA-256 | profile SHA-256 | tool files | tools byte-identical | required fields bound |
 |---|---|---|---|---|---|
-| `plugin-historical-research` | `f67b1df818b9fab28bfa1191d78c93c6c3176bffb0ca91f0ee08f1f61802397e` | `9de5e5d7a7d5aa8bd9048adda7aef9034afe0245bab503813d6feafc99568514` | 4 | yes | yes |
-| `plugin-historical-source-analysis` | `2c04c0c5ccba9284a406e572608bd37ff06d2358c8dda476cb0b2254969c628d` | `bee9383586e32c2d2d986a8ab91a43b4f835e79b500cb74eeaf1d34f15c80098` | 4 | yes | yes |
-| `plugin-historical-source-identification` | `08efc81316ce58b016dc7c4724cb164a34b20f50cdd0738886d32ca60905e286` | `5eaa68ce89bb944cafbae6bf91ecef83ae4f2f7915c9bbaa1197aabe88fcda21` | 4 | yes | yes |
+| `plugin-historical-research` | `ff240ed257c38984ab1e7e30f2b5bdd919a8d6f30d71e77e3a3b013eff7a3e82` | `9de5e5d7a7d5aa8bd9048adda7aef9034afe0245bab503813d6feafc99568514` | 4 | yes | yes |
+| `plugin-historical-source-analysis` | `c9a62c7ccbe6f67ee609096cf132cae2552da02c651ac875cf81a07dee04ce6b` | `bee9383586e32c2d2d986a8ab91a43b4f835e79b500cb74eeaf1d34f15c80098` | 4 | yes | yes |
+| `plugin-historical-source-identification` | `1fcb60e0b6d9b8ade6f1e574ba18ce909687783d98193029c85e9723e6ea07e2` | `5eaa68ce89bb944cafbae6bf91ecef83ae4f2f7915c9bbaa1197aabe88fcda21` | 4 | yes | yes |
 
 ## Machine Review Artifact
 
 | artifact | path | sha256 |
 |---|---|---|
-| extension review | `audits/histagent/snapshot-47bbe21/artifacts/extension-review.json` | `f4cc7a777dc047e9c4143b178d06d10b743a58472dc9a6ca01134088dc4a45ce` |
+| extension review | `audits/histagent/snapshot-47bbe21/artifacts/extension-review.json` | `e527f83eb6d3b02e0e83b7b8d85c6755f0993c4e6e0121281ebc79ce8a3d7218` |
 
 ## Human Confirmation
 

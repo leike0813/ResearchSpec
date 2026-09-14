@@ -6,12 +6,11 @@ ResearchSpec 把一次学术工作看成一张在启动时冻结的能力图：
 
 ```text
 用户意图
-  -> Agent 选择 route 绑定的 profile entry
-  -> 用户确认整张入口摘要
-  -> ResearchSpec 冻结 graph 并给出 frontier
-  -> Agent/Skills 生成 researchspec/ 外的论文、报告与评审文件
-  -> CLI 记录 node、Gate、Decision 和下一步 frontier
-  -> completion_ready
+  -> Navigate 检索 Procedure 卡片
+  -> standalone：按需加载一个 Procedure，返回普通项目文件
+  -> graph：选择 profile entry，确认后冻结 graph
+            -> 按 node 加载同一 Procedure 包
+            -> CLI 记录 node、Gate、Decision 和 frontier
 ```
 
 这里有三个容易混淆的角色：
@@ -19,7 +18,7 @@ ResearchSpec 把一次学术工作看成一张在启动时冻结的能力图：
 | 角色 | 负责什么 |
 | --- | --- |
 | 用户与宿主 Agent | 对话、选择入口、确认成本和关键决定、执行语义工作 |
-| Capability Skills | 读取研究合同和 handoff，产出论文、报告、评审等项目文件 |
+| Procedures | 按激活包读取必要输入，产出论文、报告、评审等项目文件 |
 | ResearchSpec CLI | 唯一负责 run、node、Gate、Decision 和 graph transition 的持久化 |
 
 ResearchSpec 不调用 Agent API，不替代用户选择的 Agent，也不接管 Zotero 或论文文件。文件就是接口。
@@ -61,10 +60,23 @@ researchspec/
 和 review-response 策略等高影响变更，经 `propose -> decide -> 实际修改 specs -> archive` 完成。
 `accepted` 只代表用户接受方案；stable specs 修改并通过检查后，change 才能成为 `applied`。
 
-## 2. 从对话选择图入口
+## 2. 从一个入口按需选择 Procedure
 
 用户通常描述目标，不必先记 CLI。模糊、跨能力、恢复、解释和导出请求先交给
-`researchspec-navigate`。明确指定 capability 时可以直接路由，但 Agent 仍需检查当前 workspace：
+`researchspec-navigate`。Navigate 先做三阶段披露，不把完整程序提前塞入 Agent catalog：
+
+```text
+list procedures --query <意图> --json
+  -> show procedure:<id> --json
+  -> instructions procedure:<id> --json
+```
+
+`list` 只返回紧凑卡片，`show` 返回单项元数据，`instructions` 才加载完整 Procedure、资源引用和
+激活包。发现可以在 workspace 外只读执行；激活要求当前 schema 2 workspace。
+
+简单、一次性、无需恢复或审计的任务使用 standalone 模式：Procedure 只能写 `researchspec/` 外的
+普通项目文件，完成时把路径返回调用者，不创建或修改 run、node、handoff、Gate 或 Decision。
+需要持久恢复、并行/join、正式确认、重复轮次或审计时进入 graph 模式：
 
 ```text
 status --json
@@ -77,15 +89,9 @@ catalog；独立的扩展 profile 可以直接使用自身声明的 entry。`ins
 route 或 profile 摘要、可选入口节点、前置条件、边界输出、Gates、Decisions 和成本提示。Agent
 不能只凭相似文件名或记忆拼装入口。
 
-固定用户可见 Agent 表面包括：
-
-- 四个 ARSU Skills：`deep-research`、`academic-paper`、
-  `academic-paper-reviewer`、`academic-pipeline`；
-- 五个 Companion Skills：`researchspec-navigate`、`researchspec-propose`、
-  `researchspec-decide`、`researchspec-verify`、`researchspec-cli-handbook`；
-- `skills/capabilities/registry.json` 登记的 capability packages。
-
-可选 Zotero Adapter 和 domain Skills 只提供辅助能力，不取得 graph 或研究合同的写入权。
+固定用户可见 Agent 表面只有 `researchspec-navigate`。四个 ARSU 工作流、其余四个 Companion、
+47 个 core capability 和 plugin extensions 都属于隐藏 Procedure inventory；它们从已有 registry
+即时派生，不投影进宿主 Skill catalog。可选 Zotero Adapter 仍增加七个显式 Skills。
 
 ## 3. 一次确认授权一张冻结图
 
@@ -124,7 +130,8 @@ Decision、轮次和 subgraph binding；任何具体研究流程都由 profile �
 `status` 和 `instructions` 根据 frozen graph 与 node instances 即时计算 frontier。一个节点只有在
 依赖、分支、Gate、Decision、输入和交付条件满足后才会 eligible。
 
-执行节点完成语义工作后，Agent 用
+`instructions node:...` 会返回与 standalone 相同的 Procedure 内容和 package hash，但换成 graph
+authority、已解析输入、预期输出、handoff 要求和唯一合法的 advance selector。执行节点完成后，Agent 用
 `advance node:<run-id>/<node-id>[@round]` 提交声明的输出。CLI 校验 capability、输入、输出与
 validator，通过后才更新 node 状态。
 
@@ -213,9 +220,10 @@ instructions。多个候选由用户选择，Agent 不能猜“最近一个”�
 - `gate:<run-id>/<gate-id>[@round]`；
 - `decision:<run-id>/<decision-id>[@round]`；
 - `change:<change-id>`。
+- `procedure:<procedure-id>`（全局发现，workspace 内激活）。
 
-`list` 与 `check` 还接受 stable spec、handoff 和 tool 等 inspection selector；`show` 当前只展示
-profile、run、node 或 project change。机器调用必须使用命令实际声明的稳定 selector。
+`list` 与 `check` 还接受 stable spec、handoff 和 tool 等 inspection selector；`show` 也可展示
+Procedure 卡片。机器调用必须使用命令实际声明的稳定 selector。
 
 `list` 的 cursor 来自稳定排序后的扫描结果；同一 workspace 未变化时可重复分页。`pack` 可以按
 specs、profiles、runs、changes 或单个 owner 生成有界上下文包，不复制 handoff 指向的外部文件。
@@ -242,4 +250,4 @@ decide      archive     doctor      plugin
 instructions 要求的外部 producer 文件，不能直接写 run、node、Gate、Decision、frozen graph 或
 生成 profile。最低覆盖包括 fresh init、根 entry、授权 child、全部 mid-entry、Gate/Decision、
 failed-Gate override、动态轮次、安全路径、handoff 漂移、只读命令、owner pack、Plugin/Zotero
-边界和 registry-derived Agent 投影。
+边界、按需 Procedure 激活和 Navigate-only Agent 投影。

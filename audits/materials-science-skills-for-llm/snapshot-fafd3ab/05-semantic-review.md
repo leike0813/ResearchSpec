@@ -137,6 +137,12 @@ Atomsk 按审核决定不携带 reference。所有 package 均为 `execution_typ
 - `research_brief` 是 minimal JSON contract；后续 schema-backed output 应保持本锚点的
   required fields 作为证据门。
 
+## 按需激活复核（2026-09-14）
+
+- 范围：7 个 Materials-Science extension。逐包程序正文、输入输出、knowledge、validator、安全边界和 profile 保持原审阅结论；本轮语义变化只把固定 graph 完成动作改为服从 activation packet。
+- Standalone packet 只允许返回 researchspec/ 外的普通输出路径，禁止 run、node、handoff、Gate、Decision、override 和 transition 写入；graph packet 才提供 owning handoff 与精确 advance selector。
+- 生成路径与静态受审树均已核对；全库 47/47 core 与 332/332 extension 包含 mode-neutral Completion，旧 advance node:<run>/<node> Completion 为 0。该适配保留既有领域步骤和证据义务，未引入新的流程权威。
+
 ## 结论
 
 `declared-fit-with-notes`：七个 extension capability 保留了上游 reviewed 的

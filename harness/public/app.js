@@ -40,7 +40,7 @@ function renderHealth() {
   const { summary, diagnostics } = state.catalog;
   const summaryNode = document.createElement("p");
   summaryNode.className = "summary-line";
-  summaryNode.textContent = `${summary.arsu_skills} ARSU · ${summary.companion_skills} Companion · ${summary.literature_adapter_skills} literature Adapter · ${summary.plugin_skills} plugin Skills · ${summary.available_domains}/${summary.domains} available domains`;
+  summaryNode.textContent = `${summary.visible_entries} visible entries · ${summary.procedures} hidden procedures · ${summary.available_domains}/${summary.domains} available domains`;
   const nodes = [summaryNode];
   for (const diagnostic of diagnostics) {
     nodes.push(message(diagnostic.severity, `${diagnostic.source} · ${diagnostic.code}: ${diagnostic.message}`));
@@ -51,12 +51,19 @@ function renderHealth() {
 function renderNavigation() {
   if (!state.catalog) return;
   const query = elements.search.value.trim().toLowerCase();
-  const skillsById = new Map(state.catalog.skills.map((skill) => [skill.skill_id, skill]));
+  const entries = [...state.catalog.visible_entries, ...state.catalog.procedures];
+  const skillsById = new Map(entries.map((skill) => [skill.skill_id, skill]));
   const branches = [];
   let visibleEntries = 0;
 
-  for (const definition of [{ family: "arsu", label: "ARSU" }, { family: "companion", label: "Companion" }, { family: "literature-adapter", label: "Literature Adapter" }]) {
-    const allSkills = state.catalog.skills.filter((skill) => skill.family === definition.family);
+  const visibleMatches = state.catalog.visible_entries.filter((entry) => matchesSkill(entry, query));
+  if (!query || visibleMatches.length > 0) {
+    visibleEntries += visibleMatches.length;
+    branches.push(familyBranch("Visible entries", "visible", state.catalog.visible_entries.length, visibleMatches, Boolean(query)));
+  }
+
+  for (const definition of [{ family: "arsu", label: "ARSU Procedures" }, { family: "companion", label: "Companion Procedures" }, { family: "capability", label: "Core Procedures" }]) {
+    const allSkills = state.catalog.procedures.filter((skill) => skill.family === definition.family);
     const familyMatches = matchesText(query, definition.label, definition.family);
     const visibleSkills = familyMatches ? allSkills : allSkills.filter((skill) => matchesSkill(skill, query));
     if (query && visibleSkills.length === 0) continue;
@@ -69,13 +76,13 @@ function renderNavigation() {
     visibleEntries += pluginBranch.visibleEntries;
     branches.push(pluginBranch.node);
   }
-  elements.navigationCount.textContent = query ? `${visibleEntries} matching entries` : "Browse by family and domain";
+  elements.navigationCount.textContent = query ? `${visibleEntries} matching entries` : "Visible entries and hidden procedures";
   elements.skillNavigation.replaceChildren(...branches);
 }
 
 function familyBranch(label, family, total, skills, searchActive) {
   const branch = detailsNode("family-branch");
-  branch.open = searchActive || state.selectedSkill?.family === family;
+  branch.open = searchActive || skills.some((skill) => skill.skill_id === state.selectedSkill?.skill_id);
   branch.append(summaryNode(label, total));
   const list = document.createElement("div");
   list.className = "tree-list";
@@ -90,9 +97,9 @@ function buildPluginBranch(query, skillsById) {
   const domainNodes = [];
   let visibleEntries = 0;
   for (const domain of domains) {
-    const directSkills = domain.direct_skill_ids.flatMap((id) => skillsById.get(id) ?? []);
-    const directIds = new Set(domain.direct_skill_ids);
-    const dependencySkills = domain.resolved_skill_ids.filter((id) => !directIds.has(id)).flatMap((id) => skillsById.get(id) ?? []);
+    const directSkills = domain.direct_procedure_ids.flatMap((id) => skillsById.get(id) ?? []);
+    const directIds = new Set(domain.direct_procedure_ids);
+    const dependencySkills = domain.resolved_procedure_ids.filter((id) => !directIds.has(id)).flatMap((id) => skillsById.get(id) ?? []);
     const domainMatches = pluginMatches || matchesText(query, domain.domain_id, domain.title, domain.description);
     const visibleDirect = domainMatches ? directSkills : directSkills.filter((skill) => matchesSkill(skill, query));
     const visibleDependencies = domainMatches ? dependencySkills : dependencySkills.filter((skill) => matchesSkill(skill, query));
@@ -104,7 +111,7 @@ function buildPluginBranch(query, skillsById) {
 
   const branch = detailsNode("family-branch plugin-branch");
   branch.open = Boolean(query) || state.selectedSkill?.family === "plugin";
-  branch.append(summaryNode("Plugin", domains.filter((domain) => domain.available).length));
+  branch.append(summaryNode("Plugin Procedures", domains.filter((domain) => domain.available).length));
   const list = document.createElement("div");
   list.className = "domain-list";
   if (domainNodes.length) list.append(...domainNodes);
@@ -115,15 +122,15 @@ function buildPluginBranch(query, skillsById) {
 
 function domainBranch(domain, directSkills, dependencySkills, searchActive) {
   const branch = detailsNode("domain-branch");
-  const selected = state.selectedSkill && domain.resolved_skill_ids.includes(state.selectedSkill.skill_id);
+  const selected = state.selectedSkill && domain.resolved_procedure_ids.includes(state.selectedSkill.skill_id);
   branch.open = searchActive || Boolean(selected);
-  branch.append(summaryNode(domain.title, domain.resolved_skill_ids.length, domain.domain_id));
+  branch.append(summaryNode(domain.title, domain.resolved_procedure_ids.length, domain.domain_id));
   const content = document.createElement("div");
   content.className = "domain-content";
   if (!domain.available) {
     content.append(emptyTreeMessage("No reviewed Skills are currently available."));
   } else {
-    content.append(skillGroup("Direct Skills", directSkills));
+    content.append(skillGroup("Direct Procedures", directSkills));
     if (dependencySkills.length) content.append(skillGroup("Dependencies", dependencySkills));
   }
   branch.append(content);
@@ -182,7 +189,7 @@ function renderSkillWorkspace() {
   const metadataPanel = document.createElement("details");
   metadataPanel.className = "metadata-panel";
   const metadataSummary = document.createElement("summary");
-  metadataSummary.textContent = "Skill metadata";
+  metadataSummary.textContent = skill.visibility === "visible-entry" ? "Visible entry metadata" : "Procedure metadata";
   const metadata = document.createElement("dl");
   metadata.className = "metadata";
   addDefinition(metadata, "License", skill.license || "Not declared");

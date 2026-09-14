@@ -7,6 +7,15 @@ participant "ARSU producer" as ARSU
 participant "Verify / Decide" as Companion
 participant "ResearchSpec CLI" as CLI
 database "Workspace files" as Files
+Agent -> CLI : list procedures --query <intent>
+CLI --> Agent : compact Procedure cards
+Agent -> CLI : show procedure:<id>
+CLI --> Agent : one Procedure card
+alt standalone work
+  Agent -> CLI : instructions procedure:<id>
+  CLI --> Agent : standalone packet + package
+  Agent -> Files : ordinary outputs outside researchspec/
+else governed graph work
 Agent -> CLI : status
 CLI -> Files : scan current owners
 CLI --> Agent : active instances + selectors
@@ -29,4 +38,5 @@ Agent -> CLI : advance node:<run>/<node>
 CLI -> Files : validate profile + control + handoff
 CLI -> Files : append transition atomically
 CLI --> Agent : current status
+end
 @enduml

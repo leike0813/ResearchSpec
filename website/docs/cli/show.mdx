@@ -1,17 +1,17 @@
 ---
 sidebar_position: 9
 title: "show"
-description: "Show one exact profile, run, node, or project change"
+description: "Show one exact procedure, profile, run, node, or project change"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 # `researchspec show <selector>`
 
-Show one exact profile, run, node, or project change
+Show one exact procedure, profile, run, node, or project change
 
 - **Group**: Inspection
-- **Workspace**: `required`
+- **Workspace**: `optional`
 - **Effect**: `read`
 - **Related**: [`list`](./list), [`check`](./check)
 
@@ -21,4 +21,4 @@ One exact stable spec, profile, run, node, Gate, Decision, change, handoff, or t
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `selector` | `profile:... \| run:... \| node:... \| change:...` | yes | Exact item to inspect. |
+| `selector` | `procedure:... \| profile:... \| run:... \| node:... \| change:...` | yes | Exact item to inspect. |

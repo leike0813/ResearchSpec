@@ -1,17 +1,17 @@
 ---
 sidebar_position: 8
 title: "list"
-description: "List profiles, runs, nodes, changes, or diagnostics"
+description: "List procedures, profiles, runs, nodes, changes, or diagnostics"
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
 # `researchspec list [type]`
 
-List profiles, runs, nodes, changes, or diagnostics
+List procedures, profiles, runs, nodes, changes, or diagnostics
 
 - **Group**: Inspection
-- **Workspace**: `required`
+- **Workspace**: `optional`
 - **Effect**: `read`
 - **Related**: [`show`](./show), [`status`](./status)
 
@@ -19,6 +19,7 @@ List profiles, runs, nodes, changes, or diagnostics
 | --- | --- | --- |
 | `--limit <count>` | no | page size from 1 to 50 |
 | `--cursor <cursor>` | no | opaque cursor returned by the prior page |
+| `--query <text>` | no | lexical procedure search terms |
 
 #### Input shape
 
@@ -26,6 +27,7 @@ An optional collection type with cursor pagination.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `type` | `profiles \| runs \| nodes \| changes \| diagnostics` | no | Collection to list; defaults to runs. |
-| `--limit` | `integer 1..50` | no | Page size; defaults to 20. |
+| `type` | `procedures \| profiles \| runs \| nodes \| changes \| diagnostics` | no | Collection to list; defaults to runs. |
+| `--limit` | `integer 1..50` | no | Page size; procedures default to 10, other collections to 20. |
 | `--cursor` | `opaque base64url cursor` | no | Cursor returned by the immediately preceding page for the same unchanged collection. |
+| `--query` | `string` | no | Lexical search terms used only with procedures. |

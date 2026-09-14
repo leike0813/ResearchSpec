@@ -1,15 +1,13 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-import { selectSkillWriters } from "../adapters/delivery.js";
-import { getTool, toolSkillsRoot } from "../adapters/tools.js";
 import { capabilityIds, loadCapabilityRegistry, validateGraphAgainstCapabilityRegistry } from "../capabilities/registry.js";
 import type { CapabilityManifest } from "../core/contracts/capability-manifest.js";
 import type { GraphWorkspaceIndex } from "../core/runtime/graph-workspace-index.js";
 import type { Diagnostic } from "../core/validation/types.js";
 import { sha256 } from "../core/workspace/write-plan.js";
 import { loadPluginExtensionRegistry, resolveDomainExtensions } from "./extensions.js";
-import { domainIsAvailable, filesForSkill, loadPluginRegistry, resolveDomainSelection } from "./registry.js";
+import { domainIsAvailable, loadPluginRegistry, resolveDomainSelection } from "./registry.js";
 
 export async function pluginWorkspaceDiagnostics(index: GraphWorkspaceIndex, alwaysLoad = false): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
@@ -142,49 +140,6 @@ export async function pluginWorkspaceDiagnostics(index: GraphWorkspaceIndex, alw
           recorded_profiles: snapshot.resolved_profile_ids ?? [],
         },
       });
-    }
-  }
-
-  const skillToolIds = selectSkillWriters(index.config.agent_tools.selected, index.config.agent_tools.delivery);
-  const hasProjectionWork = resolution.resolvedSkillIds.length > 0 || resolvedExtensions.capabilityIds.length > 0 || resolvedExtensions.profileIds.length > 0;
-  if (hasProjectionWork && skillToolIds.length === 0) {
-    diagnostics.push({
-      severity: "warning",
-      code: "plugin_projection_deferred",
-      message: "Selected plugins have no skill-capable Agent tool configured for projection.",
-      blocking: false,
-    });
-    return diagnostics;
-  }
-
-  for (const toolId of skillToolIds) {
-    const tool = getTool(toolId);
-    if (!tool) continue;
-    const root = toolSkillsRoot(tool, index.projectRoot);
-    for (const skillId of resolution.resolvedSkillIds) {
-      for (const relativeAsset of filesForSkill(registry, skillId)) {
-        const target = path.join(root.root, skillId, relativeAsset);
-        const manifestPath = root.scope === "project" ? path.relative(index.projectRoot, target).split(path.sep).join("/") : target;
-        await checkProjectedFile(diagnostics, index, target, manifestPath, root.scope, {
-          kind: "domain-skill",
-          skill_id: skillId,
-        }, `Plugin Skill file: ${skillId}/${relativeAsset}`);
-      }
-    }
-    if (extensions) {
-      for (const capabilityId of resolvedExtensions.capabilityIds) {
-        const capability = extensions.capabilities.get(capabilityId);
-        if (!capability) continue;
-        for (const source of capability.files) {
-          const relativeAsset = path.relative(capability.packageRoot, source).split(path.sep).join("/");
-          const target = path.join(root.root, capabilityId, relativeAsset);
-          const manifestPath = root.scope === "project" ? path.relative(index.projectRoot, target).split(path.sep).join("/") : target;
-          await checkProjectedFile(diagnostics, index, target, manifestPath, root.scope, {
-            kind: "plugin-capability",
-            capability_id: capabilityId,
-          }, `Plugin capability file: ${capabilityId}/${relativeAsset}`);
-        }
-      }
     }
   }
 

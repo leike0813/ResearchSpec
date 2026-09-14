@@ -10,8 +10,8 @@
   "summary": {
     "total": 47,
     "operational": 47,
-    "avg_section_coverage": 0.9453378676060703,
-    "avg_rule_coverage": 0.9463518494045783,
+    "avg_section_coverage": 0.9456871931208453,
+    "avg_rule_coverage": 0.9445787997591882,
     "below_section_threshold": [],
     "below_rule_threshold": [],
     "output_missing": [],
@@ -22,7 +22,7 @@
     {
       "capability_id": "analysis-evidence-synthesis",
       "maturity": "operational",
-      "skill_lines": 234,
+      "skill_lines": 236,
       "knowledge_refs": 3,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,
@@ -44,7 +44,7 @@
     {
       "capability_id": "analysis-meta-analysis",
       "maturity": "operational",
-      "skill_lines": 208,
+      "skill_lines": 210,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -72,7 +72,7 @@
     {
       "capability_id": "analysis-review-response-manuscript-analysis",
       "maturity": "operational",
-      "skill_lines": 111,
+      "skill_lines": 114,
       "knowledge_refs": 4,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
@@ -94,7 +94,7 @@
     {
       "capability_id": "analysis-risk-of-bias-assessment",
       "maturity": "operational",
-      "skill_lines": 203,
+      "skill_lines": 205,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -117,7 +117,7 @@
     {
       "capability_id": "check-citation-existence-verification",
       "maturity": "operational",
-      "skill_lines": 87,
+      "skill_lines": 89,
       "knowledge_refs": 2,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -137,7 +137,7 @@
     {
       "capability_id": "check-citation-format-compliance",
       "maturity": "operational",
-      "skill_lines": 294,
+      "skill_lines": 296,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -160,7 +160,7 @@
     {
       "capability_id": "check-citation-verification-summary",
       "maturity": "operational",
-      "skill_lines": 75,
+      "skill_lines": 77,
       "knowledge_refs": 2,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -180,7 +180,7 @@
     {
       "capability_id": "check-claim-faithfulness-audit",
       "maturity": "operational",
-      "skill_lines": 212,
+      "skill_lines": 214,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -202,7 +202,7 @@
     {
       "capability_id": "check-collaboration-depth-observer",
       "maturity": "operational",
-      "skill_lines": 146,
+      "skill_lines": 148,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -222,7 +222,7 @@
     {
       "capability_id": "check-compliance-check",
       "maturity": "operational",
-      "skill_lines": 220,
+      "skill_lines": 222,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -244,7 +244,7 @@
     {
       "capability_id": "check-contamination-signals",
       "maturity": "operational",
-      "skill_lines": 83,
+      "skill_lines": 85,
       "knowledge_refs": 2,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -264,7 +264,7 @@
     {
       "capability_id": "check-paper-humanization-review",
       "maturity": "operational",
-      "skill_lines": 122,
+      "skill_lines": 125,
       "knowledge_refs": 3,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -288,7 +288,7 @@
     {
       "capability_id": "check-paper-humanization-verification",
       "maturity": "operational",
-      "skill_lines": 117,
+      "skill_lines": 120,
       "knowledge_refs": 3,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -308,7 +308,7 @@
     {
       "capability_id": "check-passport-verifier",
       "maturity": "operational",
-      "skill_lines": 86,
+      "skill_lines": 88,
       "knowledge_refs": 2,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -328,7 +328,7 @@
     {
       "capability_id": "check-pdf-read-preflight",
       "maturity": "operational",
-      "skill_lines": 78,
+      "skill_lines": 80,
       "knowledge_refs": 2,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -348,7 +348,7 @@
     {
       "capability_id": "check-pre-submission-self-check",
       "maturity": "operational",
-      "skill_lines": 248,
+      "skill_lines": 250,
       "knowledge_refs": 3,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,
@@ -358,8 +358,8 @@
       "covered_sections": 50,
       "section_coverage": 0.9090909090909091,
       "upstream_rules": 12,
-      "covered_rules": 11,
-      "rule_coverage": 0.9166666666666666,
+      "covered_rules": 10,
+      "rule_coverage": 0.8333333333333334,
       "uncovered_sections": [
         "5.1 Critical (blocks publication; must be fixed)",
         "Revision Suggestion Prioritization Mechanism",
@@ -368,7 +368,8 @@
         "Output Destinations"
       ],
       "uncovered_rules": [
-        "criterion pointers and digest; never infer a venue target or copy registry"
+        "criterion pointers and digest; never infer a venue target or copy registry",
+        "This block contains the exact text that becomes the **system prompt** for Phase 6a and Phase 6b model calls. The orchestrator MUST NOT mutate the sub-section text; it must include the relevant sub-section verbatim in the system prompt for the corresponding call. User content placement follows the SKILL.md block's \"System prompt vs user content discipline\"."
       ],
       "output_format_preserved": true,
       "flow_sections_retained": []
@@ -376,7 +377,7 @@
     {
       "capability_id": "check-reference-integrity-verification",
       "maturity": "operational",
-      "skill_lines": 318,
+      "skill_lines": 320,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -412,7 +413,7 @@
     {
       "capability_id": "check-submission-package-verifier",
       "maturity": "operational",
-      "skill_lines": 79,
+      "skill_lines": 81,
       "knowledge_refs": 3,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -432,7 +433,7 @@
     {
       "capability_id": "check-temporal-integrity-verification",
       "maturity": "operational",
-      "skill_lines": 84,
+      "skill_lines": 86,
       "knowledge_refs": 2,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -452,7 +453,7 @@
     {
       "capability_id": "check-terminal-policy-gate",
       "maturity": "operational",
-      "skill_lines": 84,
+      "skill_lines": 86,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -472,7 +473,7 @@
     {
       "capability_id": "design-argument-blueprint",
       "maturity": "operational",
-      "skill_lines": 259,
+      "skill_lines": 261,
       "knowledge_refs": 3,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,
@@ -495,7 +496,7 @@
     {
       "capability_id": "design-manuscript-structure-design",
       "maturity": "operational",
-      "skill_lines": 295,
+      "skill_lines": 297,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -518,7 +519,7 @@
     {
       "capability_id": "design-methodology-design",
       "maturity": "operational",
-      "skill_lines": 210,
+      "skill_lines": 212,
       "knowledge_refs": 4,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
@@ -548,7 +549,7 @@
     {
       "capability_id": "design-research-question-formulation",
       "maturity": "operational",
-      "skill_lines": 163,
+      "skill_lines": 165,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -571,7 +572,7 @@
     {
       "capability_id": "design-review-panel-config",
       "maturity": "operational",
-      "skill_lines": 183,
+      "skill_lines": 185,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -591,7 +592,7 @@
     {
       "capability_id": "design-review-response-intake",
       "maturity": "operational",
-      "skill_lines": 114,
+      "skill_lines": 117,
       "knowledge_refs": 4,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
@@ -611,7 +612,7 @@
     {
       "capability_id": "design-review-response-workboard-planning",
       "maturity": "operational",
-      "skill_lines": 103,
+      "skill_lines": 106,
       "knowledge_refs": 4,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
@@ -631,7 +632,7 @@
     {
       "capability_id": "design-writing-intake",
       "maturity": "operational",
-      "skill_lines": 285,
+      "skill_lines": 287,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -651,7 +652,7 @@
     {
       "capability_id": "discovery-literature-monitoring",
       "maturity": "operational",
-      "skill_lines": 208,
+      "skill_lines": 210,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -671,7 +672,7 @@
     {
       "capability_id": "discovery-literature-search-screening",
       "maturity": "operational",
-      "skill_lines": 293,
+      "skill_lines": 295,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -699,7 +700,7 @@
     {
       "capability_id": "discovery-source-quality-grading",
       "maturity": "operational",
-      "skill_lines": 184,
+      "skill_lines": 186,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -719,7 +720,7 @@
     {
       "capability_id": "generation-abstract-writing",
       "maturity": "operational",
-      "skill_lines": 156,
+      "skill_lines": 158,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -739,15 +740,15 @@
     {
       "capability_id": "generation-figure-generation",
       "maturity": "operational",
-      "skill_lines": 211,
+      "skill_lines": 213,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
       "knowledge_refs_referenced": 1,
       "knowledge_refs_unreferenced": [],
       "upstream_sections": 38,
-      "covered_sections": 29,
-      "section_coverage": 0.7631578947368421,
+      "covered_sections": 30,
+      "section_coverage": 0.7894736842105263,
       "upstream_rules": 9,
       "covered_rules": 6,
       "rule_coverage": 0.6666666666666666,
@@ -756,7 +757,6 @@
         "Collaboration Rules with Other Agents",
         "Input Sources",
         "Output Destinations",
-        "Handoff Format",
         "Figure Package: Figure [N]",
         "Placement Recommendation",
         "VLM Verification (v3.3, optional)",
@@ -773,7 +773,7 @@
     {
       "capability_id": "generation-format-rendering",
       "maturity": "operational",
-      "skill_lines": 344,
+      "skill_lines": 346,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -797,7 +797,7 @@
     {
       "capability_id": "generation-humanization-reference",
       "maturity": "operational",
-      "skill_lines": 196,
+      "skill_lines": 199,
       "knowledge_refs": 1,
       "knowledge_artifacts": 0,
       "knowledge_coverage": 1,
@@ -822,7 +822,7 @@
     {
       "capability_id": "generation-manuscript-drafting",
       "maturity": "operational",
-      "skill_lines": 244,
+      "skill_lines": 246,
       "knowledge_refs": 3,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,
@@ -844,7 +844,7 @@
     {
       "capability_id": "generation-report-compilation",
       "maturity": "operational",
-      "skill_lines": 252,
+      "skill_lines": 254,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -866,7 +866,7 @@
     {
       "capability_id": "generation-review-response-round",
       "maturity": "operational",
-      "skill_lines": 126,
+      "skill_lines": 129,
       "knowledge_refs": 5,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
@@ -891,19 +891,20 @@
     {
       "capability_id": "judgment-devils-advocate-stress-test",
       "maturity": "operational",
-      "skill_lines": 222,
+      "skill_lines": 224,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
       "knowledge_refs_referenced": 1,
       "knowledge_refs_unreferenced": [],
       "upstream_sections": 41,
-      "covered_sections": 37,
-      "section_coverage": 0.9024390243902439,
+      "covered_sections": 36,
+      "section_coverage": 0.8780487804878049,
       "upstream_rules": 18,
       "covered_rules": 15,
       "rule_coverage": 0.8333333333333334,
       "uncovered_sections": [
+        "Calibration Status",
         "Criterion-Bound Judgements",
         "Rebuttal Assessment (Before Any Response)",
         "Anti-Sycophancy Rules",
@@ -920,7 +921,7 @@
     {
       "capability_id": "judgment-editorial-judgment",
       "maturity": "operational",
-      "skill_lines": 182,
+      "skill_lines": 184,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -950,7 +951,7 @@
     {
       "capability_id": "judgment-review-synthesis",
       "maturity": "operational",
-      "skill_lines": 233,
+      "skill_lines": 235,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -990,7 +991,7 @@
     {
       "capability_id": "judgment-specialist-review",
       "maturity": "operational",
-      "skill_lines": 213,
+      "skill_lines": 215,
       "knowledge_refs": 4,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
@@ -1013,7 +1014,7 @@
     {
       "capability_id": "transform-paper-humanization-revision",
       "maturity": "operational",
-      "skill_lines": 86,
+      "skill_lines": 89,
       "knowledge_refs": 2,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -1033,7 +1034,7 @@
     {
       "capability_id": "transform-review-response-comment-atomization",
       "maturity": "operational",
-      "skill_lines": 109,
+      "skill_lines": 112,
       "knowledge_refs": 4,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
@@ -1053,7 +1054,7 @@
     {
       "capability_id": "transform-revision-patching",
       "maturity": "operational",
-      "skill_lines": 80,
+      "skill_lines": 82,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -1073,7 +1074,7 @@
     {
       "capability_id": "transform-revision-roadmap-parsing",
       "maturity": "operational",
-      "skill_lines": 275,
+      "skill_lines": 277,
       "knowledge_refs": 1,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
@@ -1101,15 +1102,15 @@
     {
       "capability_id": "transform-socratic-mentoring",
       "maturity": "operational",
-      "skill_lines": 278,
+      "skill_lines": 280,
       "knowledge_refs": 2,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
       "knowledge_refs_referenced": 1,
       "knowledge_refs_unreferenced": [],
       "upstream_sections": 69,
-      "covered_sections": 58,
-      "section_coverage": 0.8405797101449275,
+      "covered_sections": 59,
+      "section_coverage": 0.855072463768116,
       "upstream_rules": 24,
       "covered_rules": 19,
       "rule_coverage": 0.7916666666666666,
@@ -1123,7 +1124,6 @@
         "Activation",
         "Response Handling",
         "Banned Patterns",
-        "Compilation Output",
         "devils_advocate_agent"
       ],
       "uncovered_rules": [

@@ -1,8 +1,8 @@
 import type { ToolDefinition } from "./tools.js";
-import { CLI_TOP_LEVEL_COMMANDS, type CliCommandId } from "../cli/command-catalog.js";
+import { CLI_TOP_LEVEL_COMMANDS } from "../cli/command-catalog.js";
 
 export interface CommandContent {
-  id: CliCommandId;
+  id: "navigate";
   family: "cli";
   name: string;
   description: string;
@@ -11,7 +11,17 @@ export interface CommandContent {
   body: string;
 }
 
-export const COMMAND_WRAPPER_CONTENTS: readonly CommandContent[] = CLI_TOP_LEVEL_COMMANDS.map(commandContent);
+export const LEGACY_COMMAND_IDS = CLI_TOP_LEVEL_COMMANDS.map((command) => command.id);
+
+export const COMMAND_WRAPPER_CONTENTS: readonly CommandContent[] = [{
+  id: "navigate",
+  family: "cli",
+  name: "ResearchSpec Navigate",
+  description: "Discover and activate the smallest suitable ResearchSpec procedure without expanding the Agent catalog",
+  category: "researchspec",
+  tags: ["researchspec", "navigate", "procedures"],
+  body: "Route the user's request: {{arguments}}. Search with researchspec list procedures --query <terms> --json, inspect one candidate with researchspec show procedure:<id> --json, then request researchspec instructions procedure:<id> --json for bounded standalone work. Use researchspec status --json and graph selectors when the work needs persistence, resume, Gates, Decisions, parallel joins, or audit state. If no procedure fits, continue with native Agent capabilities and state that the work is outside a governed ResearchSpec run.",
+}];
 
 export function renderCommand(tool: ToolDefinition, content: CommandContent): string {
   if (!tool.command) throw new Error(`${tool.id} does not support commands.`);
@@ -37,19 +47,6 @@ export function renderCommand(tool: ToolDefinition, content: CommandContent): st
     case "trae": return `---\nname: ${yamlScalar(name)}\ndescription: ${description}\n---\n\n${body.trim()}\n`;
     case "named": return `---\nname: ${name}\ndescription: ${description}\ncategory: ${category}\ntags: [${tags}]\n---\n\n${body.trim()}\n`;
   }
-}
-
-function commandContent(command: (typeof CLI_TOP_LEVEL_COMMANDS)[number]): CommandContent {
-  const id = command.id;
-  return {
-    id,
-    family: "cli",
-    name: `ResearchSpec ${id}`,
-    description: command.description,
-    category: "researchspec",
-    tags: ["researchspec", "cli", id],
-    body: `Run \`researchspec ${id} {{arguments}}\` using the user's provided arguments. Use \`researchspec ${id} --help\` when syntax is uncertain. Preserve structured diagnostics and the current file-ownership boundaries; this wrapper is an adapter to the packaged CLI, not a separate workflow authority.`,
-  };
 }
 
 function yamlScalar(value: string): string {

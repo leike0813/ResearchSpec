@@ -4,6 +4,7 @@ ResearchSpec delivers complete ARSU Skill groups and tool-neutral command
 wrappers to a registry of selectable agent tools, with generated-file drift
 protection and explicit legacy migration. This capability is the generated
 tool delivery layer driven by `init` / `update`.
+
 ## Requirements
 
 ### Requirement: Complete Agent Tool Registry
@@ -29,57 +30,44 @@ supported by the bundled OpenSpec 1.5.0 reference.
 
 ### Requirement: Complete ARSU Skill Delivery
 
-Every selected Skill-capable tool SHALL receive complete packaged copies of the four ARSU
-Skill groups at its registered Skill root. Codex SHALL receive Skills even when
-the configured delivery mode is `commands`.
+ARSU workflow packages SHALL remain bundled and available to procedure activation but SHALL NOT be copied to selected Agent Skill roots.
+
+#### Scenario: Agent delivery is planned
+- **WHEN** a tool installation is reconciled
+- **THEN** no ARSU workflow package becomes a host-visible Skill entry
 
 #### Scenario: Skill trees are installed recursively
-
-- **WHEN** a tool installation is planned
-- **THEN** `deep-research`, `academic-paper`, `academic-paper-reviewer`, and
-  `academic-pipeline` SHALL include their packaged instructions, references,
-  assets, templates, agents, and other runtime files
+- **WHEN** an ARSU procedure is activated
+- **THEN** its complete bundled tree remains available inside the ResearchSpec package without host-root projection
 
 ### Requirement: Complete Companion Skill Delivery
 
-Every selected Skill-capable tool SHALL receive five generated ResearchSpec Companion Skills together with the four ARSU Skills and all registered capability packages projected for that tool. ResearchSpec SHALL deliver no separate Core Skill group. The handbook content SHALL be delivered as the `SKILL.md` of `researchspec-cli-handbook`; no Navigate-local `references/cli-handbook.md` file SHALL be generated.
+Every selected Agent host SHALL receive only the Navigate Companion for Skill delivery. Propose, Decide, Verify, and the CLI handbook SHALL remain bundled on-demand procedures.
+
+#### Scenario: Every tool receives the base surface
+- **WHEN** a registered Skill-capable tool is selected
+- **THEN** its base Skill tree contains `researchspec-navigate` and no other Companion
 
 #### Scenario: Every tool receives the fixed base surface
-
-- **WHEN** any registered tool is selected without optional Adapter selection
-- **THEN** it SHALL receive four ARSU Skills, five Companion Skills, and the registered capability packages supported by its delivery mode
-- **AND** desired projection counts and files SHALL be derived from their owning catalogs
+- **WHEN** a registered tool receives Skill delivery
+- **THEN** its fixed base surface is the single Navigate Skill
 
 #### Scenario: Selected Adapter reaches every tool
-
-- **WHEN** `zotero-library` and one or more Agent tools are selected
-- **THEN** all seven Adapter Skills SHALL be projected to every selected tool
-- **AND** their complete trees SHALL use the normal managed ownership records
+- **WHEN** `zotero-library` and Agent tools are selected
+- **THEN** all seven Adapter Skills are projected through normal managed ownership
 
 #### Scenario: Obsolete generated projections are cleaned safely
-
-- **WHEN** a manifest-owned project-local file is no longer desired
-- **THEN** init and update SHALL remove it only when its bytes match the
-  recorded hash
-- **AND** a modified file SHALL be preserved, reported as
-  `generated_file_drift`, and retained in the manifest
-- **AND** a missing stale file SHALL be removed from the manifest without error
+- **WHEN** a previously managed ARSU, hidden Companion, core capability, plugin Skill, or obsolete wrapper is no longer desired
+- **THEN** reconciliation removes it only when its bytes match the recorded hash
+- **AND** preserves and diagnoses modified files under the existing drift policy
 
 ### Requirement: Capability-Aware Command Delivery
-Each of the 28 command-capable registered tools SHALL receive wrapper projections for the sixteen current public commands when delivery includes commands. Skill-only tools SHALL receive only the fixed Skills, and Codex SHALL receive project Skills even in commands-only mode.
+
+Each command-capable tool SHALL receive one Navigate wrapper when delivery includes commands. Skill-only tools SHALL receive a Navigate Skill fallback in commands mode and report a non-blocking command-capability diagnostic.
 
 #### Scenario: Commands delivery follows tool capability
-- **WHEN** `commands` delivery selects one command-backed tool and one Skill-only tool
-- **THEN** the command-backed tool SHALL receive sixteen wrappers
-- **AND** the Skill-only tool SHALL report a non-blocking capability diagnostic
-- **AND** Codex SHALL still receive its project Skills when selected
-
-### Requirement: Delivery Mode
-`agent_tools.delivery` SHALL be `skills`, `commands`, or `both`, with new workspaces defaulting to `skills` and existing values preserved when the option is omitted.
-
-#### Scenario: Tool installation is planned
-- **WHEN** a user selects Agent tools during init or update
-- **THEN** delivery is derived from the current command and Skill catalogs without `submit`
+- **WHEN** `commands` selects one command-capable tool and one Skill-only tool
+- **THEN** the first receives one Navigate wrapper and the second receives one Navigate Skill
 
 ### Requirement: Interactive And Detected Selection
 
@@ -115,12 +103,6 @@ current-state `tool-installation-manifest.json` schema version `1`.
 - **THEN** the manifest SHALL record only successful paths through structured owner, source, target, executable and SHA-256 evidence
 - **AND** it SHALL record resolutions only for selected literature Adapters
 - **AND** it SHALL be committed after generated files
-
-#### Scenario: Optional Skill IDs are reserved
-
-- **WHEN** the plugin registry validates a vendor Skill ID
-- **THEN** it SHALL reject collisions with packaged literature Adapter Skill IDs even when the Adapter is not selected
-- **AND** reserved IDs SHALL NOT be counted as installed fixed Skills
 
 #### Scenario: Previous current config shape is read
 
@@ -178,137 +160,81 @@ ResearchSpec SHALL deliver applicable license and attribution files with every i
 - **AND** those files SHALL use the same managed ownership and drift rules
 
 ### Requirement: Optional Plugin Skill Delivery
-Every configured tool SHALL receive complete packaged copies of every currently available workspace-selected domain Skill in addition to the fixed base surface; empty or missing selected domains SHALL retain intent and snapshots but SHALL NOT produce desired files.
+
+Domain plugin selection SHALL retain resolution snapshots, package availability, graph profiles, and managed configuration without projecting raw vendor Skills or extension capability packages to Agent roots.
+
+#### Scenario: Domain is selected
+- **WHEN** one or more available non-empty domains are installed
+- **THEN** no plugin Skill files are added to any configured Agent root
+- **AND** their procedures become activation-eligible through the package registry
 
 #### Scenario: Plugin Skills reach all tool adapters
-- **WHEN** one or more available non-empty domains are selected and tools are configured
-- **THEN** all 37 supported tools SHALL be capable of receiving every registered resource under each resolved Skill root
-- **AND** projected paths SHALL be derived from registry IDs
+- **WHEN** available domains are selected
+- **THEN** plugin procedures become eligible without writing to Agent Skill roots
 
 #### Scenario: New tool receives prior selections
-- **WHEN** init or update adds a newly configured tool to a workspace whose selected domains are all available
-- **THEN** all selected domain Skills and dependency closures SHALL be projected to that tool automatically
+- **WHEN** a tool is added after domains were selected
+- **THEN** domain selection remains available through procedure activation without new plugin projections
 
 #### Scenario: Unavailable selection blocks refresh
-- **WHEN** init or update encounters a selected domain that is missing or empty
-- **THEN** it SHALL block projection refresh rather than deleting prior files
-- **AND** it SHALL preserve the last committed resolution snapshot
-
-### Requirement: Plugin Projection Ownership Evidence
-Plugin projection SHALL reuse the structured managed-installation manifest and record its domain, vendor release, Skill ID, Agent-tool owner, target path, executable contract, and SHA-256 without altering literature-adapter resolutions.
-
-#### Scenario: Plugin writes commit manifest last
-- **WHEN** plugin files are installed or refreshed successfully
-- **THEN** their structured source SHALL identify the owning domain/vendor Skill and their owner SHALL identify the target Agent tool
-- **AND** the manifest SHALL be committed after the resource writes
-- **AND** existing literature-adapter installations and resolutions SHALL be preserved
+- **WHEN** a selected domain is missing or empty
+- **THEN** its last resolution snapshot is retained and its procedures are not activation-eligible
 
 ### Requirement: Plugin Delivery Adds No Wrappers
-Optional plugin Skills SHALL NOT create tool command wrappers.
+
+Optional plugin procedures SHALL NOT create tool command wrappers or Skill entries.
+
+#### Scenario: Command-capable tool has selected domains
+- **WHEN** selected plugins are available to a command-capable host
+- **THEN** the host retains only its one Navigate wrapper for command delivery
 
 #### Scenario: Command-capable tool receives plugins
-- **WHEN** a selected plugin is projected to one of the 28 command-capable tools
-- **THEN** the tool SHALL still contain exactly the sixteen fixed wrappers managed by ResearchSpec
-- **AND** the plugin SHALL be invoked as an installed Skill
-
-### Requirement: Plugin Reconciliation Preserves Drift
-Plugin desired-file refresh and retirement SHALL use existing manifest hash and drift rules, with stricter whole-transaction preflight for explicit uninstall.
-
-#### Scenario: Desired plugin file is modified
-- **WHEN** install or update encounters a desired plugin file whose current bytes differ from the recorded hash
-- **THEN** it SHALL preserve and report the file by default
-- **AND** `--force` MAY refresh that desired file
-
-#### Scenario: Explicit uninstall contains drift
-- **WHEN** any requested plugin file has manifest-recorded ownership but modified bytes
-- **THEN** no file or selection in that uninstall transaction SHALL change
-
-### Requirement: Dependency-Resolved Domain Delivery
-Agent delivery SHALL project the sorted union of direct and transitive Skills resolved from selected domains and SHALL write each Skill at most once per configured tool.
-
-#### Scenario: Overlapping domain installation is deduplicated
-- **WHEN** multiple selected domains directly or transitively require the same Skill
-- **THEN** every configured Agent tool SHALL receive one copy of that Skill tree
-- **AND** the manifest SHALL retain its vendor and Skill ownership evidence
-
-### Requirement: Domain Resolution Snapshot Delivery
-Delivery reconciliation SHALL commit per-domain resolution snapshots with the installation manifest last and SHALL retain the last snapshot for every selected unavailable domain.
-
-#### Scenario: New Agent tool receives current closure
-- **WHEN** init or update adds a configured Agent tool after available domains were selected
-- **THEN** the tool SHALL receive every currently resolvable Skill in the selected-domain closure
-
-#### Scenario: Empty selected domain retains uninstall evidence
-- **WHEN** a selected domain becomes empty in a later package
-- **THEN** reconciliation SHALL retain its prior direct and resolved Skill snapshot
-- **AND** safe uninstall SHALL use that snapshot without deleting files still reachable from another selection
-
-### Requirement: Adapter Roles Control Projection Discovery
-
-Delivery SHALL preserve Adapter role, visibility, capability and hard dependency metadata without creating command wrappers for any Adapter Skill.
-
-#### Scenario: Command-capable tool and Adapter are selected
-
-- **WHEN** one of the 28 command-capable tools and `zotero-library` are selected
-- **THEN** the tool SHALL receive the registry-derived fixed base surface plus seven Adapter Skills and exactly sixteen ResearchSpec wrappers
-- **AND** the CLI mechanism SHALL remain available as a Skill dependency rather than another wrapper
-
-#### Scenario: Skills-only tool and Adapter are selected
-
-- **WHEN** a Skill-only tool and `zotero-library` are selected
-- **THEN** the tool SHALL receive the registry-derived fixed base surface plus all seven Adapter Skills
-- **AND** command absence SHALL remain a non-blocking diagnostic
-
-### Requirement: Adapter Runtime Metadata Is Delivered Statically
-
-Each projected Zotero Skill SHALL retain its admitted `runner.json` and
-`output.schema.json` when present, with ownership and hashes managed like other
-generated Skill files.
-
-#### Scenario: Projected runner has drifted
-
-- **WHEN** a projected runner differs from its recorded bytes
-- **THEN** update SHALL preserve the user-modified file under the common drift
-  policy
-- **AND** it SHALL report degraded projection without executing the file
+- **WHEN** selected plugin procedures are available to a command-capable tool
+- **THEN** the tool still receives only its one Navigate wrapper
 
 ### Requirement: Independent CLI Handbook Skill Delivery
 
-ResearchSpec SHALL deliver the generated CLI handbook as the `SKILL.md` of `researchspec-cli-handbook` through normal Companion ownership and reconciliation.
+The CLI handbook SHALL be an on-demand Companion procedure and SHALL NOT be delivered as an independent host-visible Skill.
+
+#### Scenario: Handbook help is requested
+- **WHEN** Navigate needs detailed CLI payload guidance
+- **THEN** it activates the bundled CLI handbook procedure through the same procedure instruction API
 
 #### Scenario: Selected tool receives the handbook Skill
-
-- **WHEN** a tool is selected during init or update with Skill delivery
-- **THEN** its managed Skill tree SHALL contain `researchspec-cli-handbook/SKILL.md`
-- **AND** its Navigate tree SHALL not contain `references/cli-handbook.md`
+- **WHEN** a selected tool receives Skill delivery
+- **THEN** the handbook remains hidden and Navigate is the only projected Companion Skill
 
 #### Scenario: Handbook Skill has drifted
-
-- **WHEN** the managed handbook Skill differs from its recorded bytes
-- **THEN** update SHALL preserve and diagnose it under the common generated-file drift policy
-- **AND** `--force` MAY refresh the desired generated Skill
-
-### Requirement: Framework Profile Projection Ownership
-The installation manifest SHALL identify every registry-owned graph profile as a project-level
-`framework-profile` projection with its source version and generated content identity.
-
-#### Scenario: Fresh workspace is initialized
-- **WHEN** init projects the current workspace
-- **THEN** the manifest contains one owner record for every projected profile
+- **WHEN** an obsolete managed handbook projection differs from its recorded bytes
+- **THEN** update preserves and diagnoses it under the common drift policy
 
 ### Requirement: Core Capability And Profile Projections Share Managed Ownership
 
-The capability packages and graph profiles projected by framework bootstrap SHALL participate in the same desired-file plan, conflict preflight, hash ownership manifest and commit-last behavior as ARSU, Companion, Adapter and plugin delivery.
-
-#### Scenario: Re-init encounters a modified capability Skill
-
-- **WHEN** a previously projected core capability file differs from its recorded bytes
-- **THEN** re-init and update preserve the file and report generated-file drift
+Graph profiles SHALL remain project-level managed projections. Core capability packages SHALL remain bundled runtime inputs and SHALL NOT be projected to Agent Skill roots.
 
 #### Scenario: Core projection succeeds
+- **WHEN** bootstrap reconciliation succeeds
+- **THEN** every framework profile is managed in the workspace and no core capability Skill is copied to an Agent root
 
-- **WHEN** all desired framework and Agent files pass preflight
-- **THEN** files are committed atomically and the ownership manifest is updated last
+#### Scenario: Re-init encounters a modified capability Skill
+- **WHEN** an obsolete managed capability projection differs from its recorded bytes
+- **THEN** re-init preserves and diagnoses it rather than deleting it
+
+### Requirement: Delivery Modes
+
+`config.yaml.agent_tools.delivery` SHALL remain `skills`, `commands`, or `both`. New workspaces SHALL default to `skills`; existing values SHALL be preserved unless explicitly changed.
+
+#### Scenario: Delivery mode is planned
+- **WHEN** a selected host supports Skills and commands
+- **THEN** `skills` plans one Navigate Skill, `commands` plans one Navigate wrapper, and `both` plans one of each
+
+#### Scenario: Command-only delivery targets a Skill-only host
+- **WHEN** `commands` selects a host without command support
+- **THEN** the host receives one Navigate Skill fallback without changing configured delivery intent
+
+#### Scenario: Commands-only keeps Codex Skills
+- **WHEN** a workspace uses `commands` delivery with Codex
+- **THEN** Codex receives the Navigate Skill in `.agents/skills` and no custom prompt target
 
 ### Requirement: Current Tool Catalog
 The catalog SHALL contain exactly 37 current tools, preserve `windsurf` as an alias for `devin`, and describe legacy Skill roots, global Skill roots, detection paths, and command capability from one source of truth.
@@ -316,14 +242,6 @@ The catalog SHALL contain exactly 37 current tools, preserve `windsurf` as an al
 #### Scenario: Catalog expressions resolve current IDs
 - **WHEN** a user selects `windsurf` or `all`
 - **THEN** `windsurf` SHALL resolve to `devin` and `all` SHALL resolve to exactly the 37 catalog IDs
-
-### Requirement: Delivery Modes
-`config.yaml.agent_tools.delivery` SHALL be `skills`, `commands`, or `both`. New workspaces SHALL default to `skills`; existing values SHALL be preserved unless explicitly changed. Codex SHALL always receive project `.agents/skills` Skills and SHALL never receive custom prompt files.
-
-#### Scenario: Commands-only keeps Codex Skills
-- **WHEN** a workspace uses `commands` delivery with Codex and a command-capable tool
-- **THEN** Codex SHALL receive `.agents/skills` and the command-capable tool SHALL receive wrappers
-- **AND** no Codex prompt target SHALL be created
 
 ### Requirement: Safe Reconciliation
 Init and update SHALL calculate one ownership-aware plan, migrate known Codex/Kimi legacy trees, remove only unmodified ResearchSpec-generated files, preserve drift and user files, and perform zero writes when any blocking conflict exists.

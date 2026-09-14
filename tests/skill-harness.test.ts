@@ -5,43 +5,49 @@ import path from "node:path";
 import { test } from "node:test";
 
 import { COMPANION_INTENTS, renderCompanionSkill } from "../src/adapters/companion/index.js";
-import { ARSU_SKILL_IDS } from "../src/arsu-converter/routing/contracts.js";
 import { LITERATURE_ADAPTER_SKILL_IDS } from "../src/literature-adapters/catalog.js";
+import { loadProcedureCatalog } from "../src/procedures/catalog.js";
 import { loadHarnessCatalog, readHarnessFile, validateHarnessSkillRoot, type HarnessFileTreeNode } from "../harness/catalog.js";
 import { createSkillHarnessServer, HARNESS_DEFAULT_HOST, renderHarnessMarkdown } from "../harness/server.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
 
 const REPO_ROOT = path.resolve(".");
 
-void test("harness catalog projects the production ARSU, Companion, and domain sources", async () => {
+void test("harness separates visible entries from the complete hidden procedure inventory", async () => {
   const loaded = await loadHarnessCatalog(REPO_ROOT);
-  assert.equal(loaded.catalog.summary.arsu_skills, ARSU_SKILL_IDS.length);
-  assert.equal(loaded.catalog.summary.companion_skills, COMPANION_INTENTS.length);
+  const procedureCatalog = await loadProcedureCatalog(REPO_ROOT);
+  assert.equal(loaded.catalog.summary.visible_entries, 1 + LITERATURE_ADAPTER_SKILL_IDS.length);
+  assert.equal(loaded.catalog.summary.procedures, procedureCatalog.size);
+  assert.equal(loaded.catalog.summary.arsu_procedures, 4);
+  assert.equal(loaded.catalog.summary.companion_procedures, COMPANION_INTENTS.length - 1);
+  assert.equal(loaded.catalog.summary.core_procedures, 47);
+  assert.equal(loaded.catalog.summary.plugin_procedures, 332);
   assert.equal(loaded.catalog.summary.literature_adapter_skills, LITERATURE_ADAPTER_SKILL_IDS.length);
-  const adapterSkills = loaded.catalog.skills.filter((skill) => skill.family === "literature-adapter");
+  const adapterSkills = loaded.catalog.visible_entries.filter((skill) => skill.family === "literature-adapter");
   assert.equal(adapterSkills.length, 7);
   assert.equal(adapterSkills.filter((skill) => skill.adapter?.role === "router").length, 1);
   assert.equal(adapterSkills.filter((skill) => skill.adapter?.role === "task").length, 5);
   assert.equal(adapterSkills.filter((skill) => skill.adapter?.role === "mechanism").length, 1);
   assert.equal(adapterSkills.every((skill) => skill.files.some((file) => file.path === "assets/runner.json")), true);
   assert.equal(loaded.catalog.summary.domains, 218);
-  assert.equal(loaded.catalog.summary.available_domains, loaded.catalog.domains.filter((domain) => domain.direct_skill_ids.length > 0).length);
-  assert.ok(loaded.catalog.summary.plugin_skills > 0);
-  assert.ok(loaded.catalog.domains.some((domain) => domain.available && domain.resolved_skill_ids.length >= domain.direct_skill_ids.length));
-  assert.ok(loaded.catalog.skills.some((skill) => skill.family === "plugin" && skill.resolved_domain_ids.length > 1));
-  for (const skill of loaded.catalog.skills) {
+  assert.equal(loaded.catalog.summary.available_domains, loaded.catalog.domains.filter((domain) => domain.direct_procedure_ids.length > 0).length);
+  assert.ok(loaded.catalog.domains.some((domain) => domain.available && domain.resolved_procedure_ids.length >= domain.direct_procedure_ids.length));
+  assert.ok(loaded.catalog.procedures.some((skill) => skill.family === "plugin" && skill.resolved_domain_ids.length > 1));
+  assert.deepEqual(loaded.catalog.visible_entries.filter((item) => item.family !== "literature-adapter").map((item) => item.skill_id), ["researchspec-navigate"]);
+  assert.equal(loaded.catalog.procedures.some((item) => item.skill_id === "researchspec-navigate"), false);
+  for (const skill of [...loaded.catalog.visible_entries, ...loaded.catalog.procedures]) {
     assert.deepEqual(treeFilePaths(skill.file_tree).sort(), skill.files.map((file) => file.path).sort());
   }
-  assert.ok(loaded.catalog.skills.find((skill) => skill.family === "arsu")?.file_tree.some((node) => node.node_type === "directory"));
-  assert.deepEqual(loaded.catalog.skills.find((skill) => skill.family === "companion")?.files.map((file) => file.path), ["LICENSE", "SKILL.md"]);
+  assert.ok(loaded.catalog.procedures.find((skill) => skill.family === "arsu")?.file_tree.some((node) => node.node_type === "directory"));
+  assert.deepEqual(loaded.catalog.procedures.find((skill) => skill.family === "companion")?.files.map((file) => file.path), ["LICENSE", "SKILL.md"]);
   for (const domain of loaded.catalog.domains) {
-    const direct = new Set(domain.direct_skill_ids);
-    const dependencyOnly = domain.resolved_skill_ids.filter((skillId) => !direct.has(skillId));
+    const direct = new Set(domain.direct_procedure_ids);
+    const dependencyOnly = domain.resolved_procedure_ids.filter((skillId) => !direct.has(skillId));
     assert.ok(dependencyOnly.every((skillId) => !direct.has(skillId)));
-    assert.deepEqual([...new Set([...domain.direct_skill_ids, ...dependencyOnly])].sort(), [...domain.resolved_skill_ids].sort());
+    assert.deepEqual([...new Set([...domain.direct_procedure_ids, ...dependencyOnly])].sort(), [...domain.resolved_procedure_ids].sort());
   }
 
-  const companion = COMPANION_INTENTS[0];
+  const companion = COMPANION_INTENTS.find((item) => item.id !== "navigate");
   assert.ok(companion);
   const rendered = await readHarnessFile(loaded, companion.skillId, "SKILL.md");
   assert.equal(rendered?.bytes.toString("utf8"), renderCompanionSkill(companion));
@@ -82,8 +88,9 @@ void test("HTTP harness is read-only and serves structured catalog and file prev
     const catalogResponse = await fetch(`${origin}/api/catalog`);
     assert.equal(catalogResponse.status, 200);
     assert.match(catalogResponse.headers.get("content-security-policy") ?? "", /default-src 'self'/);
-    const catalog = await catalogResponse.json() as { skills: Array<{ skill_id: string }> };
-    assert.ok(catalog.skills.some((skill) => skill.skill_id === "researchspec-navigate"));
+    const catalog = await catalogResponse.json() as { visible_entries: Array<{ skill_id: string }>; procedures: Array<{ skill_id: string }> };
+    assert.ok(catalog.visible_entries.some((skill) => skill.skill_id === "researchspec-navigate"));
+    assert.ok(catalog.procedures.some((procedure) => procedure.skill_id === "deep-research"));
 
     const detailResponse = await fetch(`${origin}/api/skills/researchspec-navigate`);
     assert.equal(detailResponse.status, 200);

@@ -61,7 +61,8 @@ async function handleRequest(publicRoot: string, catalog: (refresh?: boolean) =>
   const skillRoute = matchSkillRoute(url.pathname);
   if (skillRoute?.kind === "detail") {
     const loaded = await catalog();
-    const skill = loaded.catalog.skills.find((item) => item.skill_id === skillRoute.skillId);
+    const skill = [...loaded.catalog.visible_entries, ...loaded.catalog.procedures]
+      .find((item) => item.skill_id === skillRoute.skillId);
     if (!skill) sendJson(response, 404, { error: { code: "skill_not_found", message: "Unknown Skill." } });
     else sendJson(response, 200, skill);
     return;

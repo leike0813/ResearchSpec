@@ -241,14 +241,15 @@ void test("source-compiled CLI rejects schema 1 workspaces", async () => {
   }
 });
 
-void test("graph init projects authored capability skills into selected Agent tools", async () => {
+void test("graph init projects only Navigate into selected Agent tools", async () => {
   const root = await tempProject();
   try {
     const codexHome = path.join(root, "codex-home");
     const initialized = parseEnvelope<{ projected_capability_files: number }>(runCli(["init", root, "--tools", "codex", "--delivery", "skills", "--json"], root, { CODEX_HOME: codexHome }));
     assert.equal(initialized.ok, true);
-    assert.ok((initialized.data?.projected_capability_files ?? 0) > 0);
-    await access(path.join(root, ".agents", "skills", "design-research-question-formulation", "SKILL.md"));
+    assert.equal(initialized.data?.projected_capability_files ?? 0, 0);
+    await access(path.join(root, ".agents", "skills", "researchspec-navigate", "SKILL.md"));
+    await assert.rejects(access(path.join(root, ".agents", "skills", "design-research-question-formulation", "SKILL.md")));
   } finally {
     await cleanup(root);
   }

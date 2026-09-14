@@ -118,13 +118,12 @@ void test("plugin graph extensions project and run through the graph engine", as
     assert.equal(status.ok, true, JSON.stringify(status.error));
     assert.deepEqual(status.data?.plugins.resolved_capability_ids ?? [], ["plugin-ecology-biodiversity", "plugin-tooluniverse-ecology-biodiversity"]);
     assert.deepEqual(status.data?.plugins.resolved_profile_ids ?? [], ["plugin-ecology-biodiversity", "plugin-tooluniverse-ecology-biodiversity"]);
-    assert.deepEqual(status.data?.plugins.projected_capability_ids ?? [], ["plugin-ecology-biodiversity", "plugin-tooluniverse-ecology-biodiversity"]);
+    assert.deepEqual(status.data?.plugins.projected_capability_ids ?? [], []);
     assert.deepEqual(status.data?.plugins.projected_profile_ids ?? [], ["plugin-ecology-biodiversity", "plugin-tooluniverse-ecology-biodiversity"]);
 
-    const capabilityPath = path.join(root, ".agents/skills/plugin-ecology-biodiversity/manifest.yaml");
     const profilePath = path.join(root, "researchspec/profiles/plugin-ecology-biodiversity.yaml");
-    await readFile(capabilityPath, "utf8");
     await readFile(profilePath, "utf8");
+    await assert.rejects(readFile(path.join(root, ".agents/skills/plugin-ecology-biodiversity/manifest.yaml"), "utf8"), { code: "ENOENT" });
 
     const startInput = path.join(root, "start.yaml");
     await writeFile(path.join(root, "task.md"), "# Research task\n", "utf8");
@@ -144,9 +143,10 @@ void test("plugin graph extensions project and run through the graph engine", as
     const runId = started.data?.run_id ?? "";
     assert.match(runId, /^run-[a-f0-9]+$/);
 
-    const instructions = parseEnvelope<{ capability: { capability_id: string } }>(runCli(["instructions", `node:${runId}/research`, "--json"], root));
+    const instructions = parseEnvelope<{ capability: { capability_id: string }; procedure_packet: { procedure: { id: string } } }>(runCli(["instructions", `node:${runId}/research`, "--json"], root));
     assert.equal(instructions.ok, true, JSON.stringify(instructions.error));
     assert.equal(instructions.data?.capability.capability_id, "plugin-ecology-biodiversity");
+    assert.equal(instructions.data?.procedure_packet.procedure.id, "plugin-ecology-biodiversity");
 
     const advanceInput = path.join(root, "advance.yaml");
     await writeFile(advanceInput, stringify({ outputs: [{ role: "research_brief", path: "brief.md" }] }), "utf8");
@@ -156,7 +156,6 @@ void test("plugin graph extensions project and run through the graph engine", as
 
     const uninstalled = parseEnvelope(runCli(["plugin", "uninstall", "ecology", "--yes", "--json"], root));
     assert.equal(uninstalled.ok, true, JSON.stringify(uninstalled.error));
-    await assert.rejects(readFile(capabilityPath, "utf8"), { code: "ENOENT" });
     await assert.rejects(readFile(profilePath, "utf8"), { code: "ENOENT" });
   } finally {
     await cleanup(root);

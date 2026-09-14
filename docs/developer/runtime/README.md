@@ -15,8 +15,8 @@ change。
 
 ## 一句话模型
 
-> ResearchSpec CLI 是确定性 control writer；ARSU Skills 是语义生产者；宿主 Agent 负责解释
-> route、组织根图与关键节点所需的确认并调用二者；文件 owner 决定持久事实。
+> ResearchSpec CLI 是确定性 control writer；宿主只常驻 Navigate，并按需加载 Procedure；
+> standalone 返回普通文件，graph 模式按冻结图组织确认和状态；文件 owner 决定持久事实。
 
 ARSU 内部 agent、phase、checkpoint 和 panel parallelism 是学术执行方法，不会自行改变
 ResearchSpec frontier。图源位于 `diagrams/src/`，同名 SVG 位于 `diagrams/rendered/`；图是解释，

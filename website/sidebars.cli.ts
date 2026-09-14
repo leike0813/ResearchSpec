@@ -34,6 +34,5 @@ export const cliSidebar = [
     "cli/plugin-install",
     "cli/plugin-uninstall",
     "cli/plugin-update",
-    "cli/plugin-instructions",
   ] },
 ];

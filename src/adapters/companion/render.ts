@@ -11,8 +11,7 @@ export function renderCompanionSkill(intent: CompanionIntent): string {
     `# ${intent.name}`,
     "",
     intent.instructions.trim(),
-    "",
-    SHARED_CLI_GUIDANCE.trim(),
+    ...(intent.id === "navigate" ? [] : ["", SHARED_CLI_GUIDANCE.trim()]),
     "",
   ].join("\n");
 }

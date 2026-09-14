@@ -55,10 +55,8 @@ researchspec init
 The `init` command:
 
 - Creates the `researchspec/` workspace directory
-- Installs ARSU Skills (`deep-research`, `academic-paper`,
-  `academic-paper-reviewer`, `academic-pipeline`)
-- Installs companion Skills (`researchspec-navigate`,
-  `researchspec-propose`, `researchspec-decide`, `researchspec-verify`)
+- Installs the single base entry, `researchspec-navigate`
+- Keeps ARSU, Companion, core, and plugin Procedures available through on-demand CLI activation
 - Offers the optional seven-Skill Zotero literature Adapter after tool selection
 - Writes initial contract files (`specs/`, `config.yaml`)
 - Refuses a non-empty initialization target; use `update` for an existing workspace
@@ -68,7 +66,7 @@ The `init` command:
 | Flag | Behavior |
 |------|----------|
 | (interactive default) | Select detected Agent tools, then optionally select literature Adapters |
-| `--tools all` | Project the fixed base Skills to all 31 registered Agent tools |
+| `--tools all` | Project Navigate to all compatible registered Agent tools |
 | `--tools none` | Skip Agent tool projection |
 | `--tools codex,claude` | Select specific Agent tools |
 | `--literature-adapters zotero-library` | Install the optional Zotero Adapter |

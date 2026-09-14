@@ -5,10 +5,14 @@
 ## 1. 协议
 
 ```text
-status -> instructions <selector> -> start / decide / advance -> status
+list procedures -> show procedure:<id> -> instructions procedure:<id>
+                                      ├─ standalone -> return ordinary outputs
+                                      └─ graph -> status -> instructions <selector>
+                                                 -> start / decide / advance -> status
 ```
 
-`status` 和 `instructions` 只读。`start profile:` 在根 entry summary 获得确认后创建 run；
+Procedure 发现和 `instructions` 都只读。Standalone packet 禁止工作流写入；graph packet 包含已解析
+输入、handoff 约束和精确 advance selector。`start profile:` 在根 entry summary 获得确认后创建 run；
 `start node:` 启动冻结图已经授权的 child，不重复索取 run-level 确认。`decide` 记录 formal
 Gate、graph Decision、override 或 change decision；`advance` 单独验证 profile 与 owning files
 后推进。成功决定不会隐式 advance。
@@ -23,7 +27,7 @@ snapshot 和 probe summary；带 delivery requirement 的 format child 可在自
 
 ## 2. Boundary files
 
-ARSU producer 在显式安全路径写文件，并在自己的 handoff 中记录 role、type、path、purpose 和
+Procedure 在显式安全路径写文件；graph producer 还在自己的 handoff 中记录 role、type、path、purpose 和
 source/consumer。消费动作才检查文件存在与可读性。ResearchSpec 不复制外部 bytes，也不从文件名
 推断 role。
 

@@ -1,15 +1,8 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-
-import { selectSkillWriters } from "../../adapters/delivery.js";
-import { getTool, toolSkillsRoot } from "../../adapters/tools.js";
-import { validateManagedTarget } from "../../adapters/managed-target.js";
 import { loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
 import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
-import { sha256 } from "../../core/workspace/write-plan.js";
 import { PluginProjectionError, projectWorkspacePlugins } from "../../plugins/graph-delivery.js";
 import { loadPluginExtensionRegistry, resolveDomainExtensions, type LoadedPluginExtensionRegistry } from "../../plugins/extensions.js";
-import { domainIsAvailable, filesForSkill, loadPluginRegistry, pluginSkillRoot, resolveDomainSelection } from "../../plugins/registry.js";
+import { domainIsAvailable, loadPluginRegistry, resolveDomainSelection } from "../../plugins/registry.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 
 export interface PluginListOptions { installed?: boolean; summary?: boolean }
@@ -178,67 +171,4 @@ export async function handleGraphPluginUpdate(pluginIds: readonly string[], cont
       dry_run: context.dryRun,
     }, { stdout: `${context.dryRun ? "Would update" : "Updated"} ${requested.join(", ") || "no plugins"}.\n` });
   } catch (error) { throw projectionError(error); }
-}
-
-export async function handleGraphPluginInstructions(skillId: string, context: CommandContext): Promise<CommandResult> {
-  const workspace = await graphWorkspace(context);
-  const index = await loadPluginWorkspaceIndex(workspace);
-  const registry = await loadPluginRegistry();
-  const registered = registry.skills.get(skillId);
-  if (!registered) throw new CliError("plugin_skill_not_found", `Plugin Skill is not registered: ${skillId}`, 1);
-  const resolution = resolveDomainSelection(registry, index.config.plugins.selected);
-  if (!resolution.resolvedSkillIds.includes(skillId)) throw new CliError("plugin_not_installed", `Plugin Skill is not installed in this workspace: ${skillId}`, 1);
-
-  const metadata = registry.skillMetadata.get(skillId);
-  const skillRoot = pluginSkillRoot(registry.root, registered.vendor.vendor_id, registered.definition.skill_id);
-  const skillPath = path.join(skillRoot, "SKILL.md");
-  const text = await readFile(skillPath, "utf8");
-  if (!metadata || metadata.entrySha256 !== sha256(text)) throw new CliError("plugin_entry_hash_mismatch", `Plugin Skill entry hash does not match the validated registry: ${skillId}`, 1);
-
-  const projectedTools = selectSkillWriters(index.config.agent_tools.selected, index.config.agent_tools.delivery);
-  if (projectedTools.length === 0) throw new CliError("plugin_not_projected", `Plugin Skill is not projected because no skill-capable Agent tool is selected: ${skillId}`, 1, "Run `researchspec update --tools <tool-ids> --delivery skills|both` first.");
-  const missingFiles: string[] = [];
-  const projectedToolIds: string[] = [];
-  for (const toolId of projectedTools) {
-    const tool = getTool(toolId);
-    if (!tool) continue;
-    const root = toolSkillsRoot(tool, index.projectRoot);
-    let complete = true;
-    for (const relativeAsset of filesForSkill(registry, skillId)) {
-      const target = path.join(root.root, skillId, relativeAsset);
-      const manifestPath = root.scope === "project" ? path.relative(index.projectRoot, target).split(path.sep).join("/") : target;
-      const installation = index.manifest.installations.find((item) => item.target.scope === root.scope && item.target.path === manifestPath && item.source.kind === "domain-skill" && item.source.skill_id === skillId);
-      if (!installation) {
-        missingFiles.push(`${toolId}:${relativeAsset}`);
-        complete = false;
-        continue;
-      }
-      try {
-        await validateManagedTarget(index.projectRoot, installation);
-        if (sha256(await readFile(target)) !== installation.sha256) {
-          missingFiles.push(`${toolId}:${relativeAsset}`);
-          complete = false;
-        }
-      } catch {
-        missingFiles.push(`${toolId}:${relativeAsset}`);
-        complete = false;
-      }
-    }
-    if (complete) projectedToolIds.push(toolId);
-  }
-  if (missingFiles.length > 0) throw new CliError("plugin_projection_incomplete", `Plugin Skill projection is missing or drifted for: ${missingFiles.join(", ")}`, 1, "Run `researchspec plugin update` after restoring the owning tool projection.");
-  const providingDomains = index.config.plugins.selected.filter((domainId) => resolveDomainSelection(registry, [domainId]).resolvedSkillIds.includes(skillId));
-  const resources = filesForSkill(registry, skillId).filter((item) => item !== "SKILL.md").sort();
-
-  return success("plugin", {
-    action: "instructions",
-    workspace,
-    skill_id: skillId,
-    entry_sha256: metadata.entrySha256,
-    content: text,
-    providing_domains: providingDomains,
-    projected_tools: projectedToolIds,
-    resources,
-    authority: "advisory",
-  }, { stdout: text });
 }

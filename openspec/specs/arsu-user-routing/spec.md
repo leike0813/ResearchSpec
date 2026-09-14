@@ -6,23 +6,27 @@ Define dialogue-first ARSU capability selection, graph-entry confirmation and co
 
 ### Requirement: Dialogue Starts Academic Work
 
-ResearchSpec SHALL treat user-Agent dialogue as the entry to academic work and SHALL keep workspace initialization separate from root-run start.
+User-Agent dialogue SHALL choose between standalone and graph activation by required lifecycle guarantees. Bounded one-shot work SHALL prefer standalone procedures; persistence, resume, formal Gates or Decisions, parallel joins, or audit state SHALL require a graph route.
+
+#### Scenario: User asks for bounded work
+- **WHEN** the request can be completed through ordinary files without workflow state
+- **THEN** Navigate searches procedures and may activate one directly
 
 #### Scenario: Bootstrap does not start work
-
-- **WHEN** a user initializes a ResearchSpec workspace
-- **THEN** the system prepares workspace contracts and installs selected Skills
-- **AND** it does not select a graph entry or create a run
+- **WHEN** `researchspec init` completes
+- **THEN** it prepares the workspace without activating a procedure or starting a run
 
 #### Scenario: Vague goal enters Navigate
-
-- **WHEN** a request is vague, spans capabilities, resumes prior work, asks for state explanation or asks for context export
-- **THEN** the Agent uses `researchspec-navigate` and reads current status
+- **WHEN** the user provides a vague academic goal
+- **THEN** Navigate discovers candidate procedures and chooses standalone or graph mode from lifecycle needs
 
 #### Scenario: Expert request names a capability
+- **WHEN** the user explicitly names a procedure or capability
+- **THEN** Navigate validates its activation eligibility before returning instructions
 
-- **WHEN** the user specifies an unambiguous ARSU capability
-- **THEN** the Agent may invoke that producer directly after the same graph selector and prerequisite checks
+#### Scenario: User asks for governed work
+- **WHEN** the request needs a graph-owned lifecycle feature
+- **THEN** Navigate reads status and graph instructions before requesting any mutation
 
 ### Requirement: Profile Entry Summary Authorizes One Root Run
 
@@ -90,19 +94,23 @@ The root entry summary SHALL describe source policy and Adapter readiness expect
 
 ### Requirement: Natural-Language CLI Discovery Loads The Handbook Companion
 
-ResearchSpec SHALL load `researchspec-cli-handbook` for requests to use, discover, explain, inspect, troubleshoot or modify public CLI commands, payloads, selectors, status, checks, projections or workspace contracts. Navigate MAY also participate when the same request requires capability selection, resume, explanation or export.
+Natural-language routing SHALL start with compact procedure discovery. The hidden CLI handbook procedure SHALL be loaded only when detailed command or payload guidance is needed.
+
+#### Scenario: Compact discovery is sufficient
+- **WHEN** candidate cards and selected procedure metadata resolve the user's intent
+- **THEN** Navigate proceeds without loading the handbook body
+
+#### Scenario: Payload detail is needed
+- **WHEN** a graph or governance payload cannot be constructed from compact metadata
+- **THEN** Navigate activates the CLI handbook procedure before acting
 
 #### Scenario: User asks for a CLI operation manual
-
-- **WHEN** a user asks about a command, option, payload, plugin subcommand, selector family or workspace contract
-- **THEN** the Agent loads `researchspec-cli-handbook`
-- **AND** static guidance does not authorize a workspace write or start a run
+- **WHEN** the user explicitly requests full CLI usage guidance
+- **THEN** Navigate activates the hidden CLI handbook procedure
 
 #### Scenario: CLI discovery becomes a runtime action question
-
-- **WHEN** the request asks what action is currently available
-- **THEN** the Agent reads bounded status, selects a returned graph item and obtains its instructions
-- **AND** handbook text does not replace runtime authorization
+- **WHEN** static help leads to a requested workflow mutation
+- **THEN** Navigate returns to status and graph instructions before acting
 
 ### Requirement: Alternate-Model Consent Is Run-Node Bound
 

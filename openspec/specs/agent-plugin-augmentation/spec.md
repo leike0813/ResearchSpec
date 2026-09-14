@@ -6,62 +6,36 @@ advisory dispatch, and graceful fallback protocol for ResearchSpec ARSU workflow
 ## Requirements
 
 ### Requirement: Agent-Discovered Optional Augmentation
-ResearchSpec Agents SHALL evaluate reviewed domain plugin assistance from
-packaged compact metadata at new or materially changed route, ready-work, or
-explicit specialist-request boundaries without making plugins prerequisites for
-core ARSU work.
+
+ResearchSpec Agents SHALL discover reviewed plugin procedures from compact global metadata without making plugins prerequisites for core work or projecting them into the host catalog.
 
 #### Scenario: Missing plugin could materially help
-- **WHEN** the Agent identifies one or more specific reviewed Skills that fit the
-  current research need but their domains are not installed
-- **THEN** it SHALL present at most three domain suggestions with the matching
-  Skills, purpose, and direct/resolved installation counts
-- **AND** the canonical ARSU route SHALL remain independently executable
+- **WHEN** the Agent identifies relevant procedures whose domains are not selected
+- **THEN** it presents at most three domain suggestions with matching procedures, purpose, and direct/resolved installation counts
+- **AND** the canonical work remains independently executable
 
 #### Scenario: User declines augmentation
-- **WHEN** the user declines the proposed installation batch
-- **THEN** the Agent SHALL continue the core ARSU route
-- **AND** it SHALL suppress the same suggestion for the current conversation
-  without writing a Decision or workflow-state record
-
-### Requirement: Batch-Confirmed Agent Installation
-An Agent SHALL install a proposed domain batch only after showing the exact
-domain IDs and dry-run impact and receiving explicit human confirmation.
-
-#### Scenario: User confirms a batch
-- **WHEN** the user confirms the displayed domain batch and installation impact
-- **THEN** the Agent SHALL execute the same exact domain selection non-interactively with `--yes`
-- **AND** it SHALL reload plugin status before using the Skills
-
-#### Scenario: Installation fails
-- **WHEN** the requested domain selection changes, projection is blocked, or execution fails
-- **THEN** no stale confirmation SHALL authorize a different installation batch
-- **AND** the Agent SHALL continue core work without the augmentation
+- **WHEN** the user declines the proposed domain batch
+- **THEN** the Agent continues without installing or activating the plugin procedure
 
 ### Requirement: Nested Advisory Skill Dispatch
-An installed plugin Skill SHALL be invoked only as a bounded semantic helper of
-the current ARSU producer.
+
+An eligible plugin procedure SHALL be invoked from its extension capability package as a bounded semantic helper in standalone or graph mode. The same package SHALL be the content source in both modes and SHALL receive no workflow authority.
 
 #### Scenario: Plugin assists ready work
-- **WHEN** an installed Skill materially assists a ready ARSU work item
-- **THEN** the ARSU producer SHALL provide a helper brief containing the task,
-  necessary inputs, expected response, and forbidden authority writes
-- **AND** the plugin result SHALL return to the ARSU producer for review and
-  integration rather than becoming a workflow candidate by itself
+- **WHEN** a selected plugin procedure materially assists current work
+- **THEN** its activation packet identifies necessary inputs, expected outputs, and forbidden authority writes
+- **AND** its result returns to the requesting Agent or graph producer for review
 
 #### Scenario: Plugin proposes a high-impact change
-- **WHEN** plugin advice would change research scope, claim strength,
-  manuscript structure, workflow branch, or Gate outcome
-- **THEN** the existing Propose, Decide, or Verify owner SHALL handle that change
-- **AND** plugin invocation SHALL grant no additional authority
+- **WHEN** plugin advice would change scope, claim strength, structure, branch, or Gate outcome
+- **THEN** the existing Propose, Decide, Verify, or graph owner handles that change
 
 ### Requirement: Graceful Core Fallback
-Plugin discovery, installation, activation, and invocation failures SHALL be
-non-blocking for the fixed ResearchSpec runtime.
+
+Plugin discovery, selection, activation, and invocation failures SHALL be non-blocking for native standalone work and the graph runtime.
 
 #### Scenario: No plugin capability is usable
-- **WHEN** no relevant Skill is installed, projection is unavailable, or helper
-  execution cannot proceed safely
-- **THEN** the current ARSU producer SHALL continue using its base capability
-- **AND** status, frontier, producer identity, and workflow authority SHALL
-  remain unchanged
+- **WHEN** no relevant procedure is selected or available
+- **THEN** the Agent continues with a core procedure or host-native capability
+- **AND** graph authority and state remain unchanged

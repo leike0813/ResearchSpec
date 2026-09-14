@@ -6,7 +6,7 @@ import type { Diagnostic } from "../core/validation/types.js";
 import { hashPath, sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import { assertPathWithinRoot } from "../core/workspace/path-boundary.js";
 import { validateManagedTarget } from "./managed-target.js";
-import { COMMAND_WRAPPER_CONTENTS, renderCommand } from "./command-renderer.js";
+import { COMMAND_WRAPPER_CONTENTS, LEGACY_COMMAND_IDS, renderCommand } from "./command-renderer.js";
 import type { ManagedInstallation } from "./installations.js";
 import { getTool, toolSkillsRoot, type DeliveryMode } from "./tools.js";
 
@@ -195,7 +195,7 @@ function codexPromptDir(): string {
 }
 
 async function legacyCodexPrompts(): Promise<string[]> {
-  const allowed = new Set(COMMAND_WRAPPER_CONTENTS.map((item) => `researchspec-${item.id}.md`));
+  const allowed = new Set([...LEGACY_COMMAND_IDS, ...COMMAND_WRAPPER_CONTENTS.map((item) => item.id)].map((id) => `researchspec-${id}.md`));
   try {
     return (await readdir(codexPromptDir(), { withFileTypes: true }))
       .filter((entry) => allowed.has(entry.name))

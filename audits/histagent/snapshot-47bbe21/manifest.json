@@ -54,7 +54,7 @@
       "plugin-historical-source-identification"
     ],
     "registry_subset_sha256": "65331b9f4ec39c971e33380ea095525f6789f6c8f2150aaeb5b869336fb7f527",
-    "packages_tree_sha256": "4475e5e47b3e3db28251bc3ff375275bf3d8fed5aff5ce102f6c72ec715f2507",
+    "packages_tree_sha256": "20c1e3ce5cf4045ee9a23db06aff24b94822f6f2b1668fed80a388f68b4049eb",
     "profiles_tree_sha256": "67ff211f89c53f67ac273af1a47a125108a2584e53b750258b23b13514815a31",
     "rows": [
       {
@@ -80,7 +80,7 @@
           "synthesis"
         ],
         "required_ok": true,
-        "package_tree_sha256": "f67b1df818b9fab28bfa1191d78c93c6c3176bffb0ca91f0ee08f1f61802397e",
+        "package_tree_sha256": "ff240ed257c38984ab1e7e30f2b5bdd919a8d6f30d71e77e3a3b013eff7a3e82",
         "profile_sha256": "9de5e5d7a7d5aa8bd9048adda7aef9034afe0245bab503813d6feafc99568514",
         "manifest_sha256": "5200bb7ac8b4415f008106b27efd0da5d48b3b62f24239c69caeef4d12dde01d",
         "files": 7,
@@ -133,7 +133,7 @@
           "conclusions"
         ],
         "required_ok": true,
-        "package_tree_sha256": "2c04c0c5ccba9284a406e572608bd37ff06d2358c8dda476cb0b2254969c628d",
+        "package_tree_sha256": "c9a62c7ccbe6f67ee609096cf132cae2552da02c651ac875cf81a07dee04ce6b",
         "profile_sha256": "bee9383586e32c2d2d986a8ab91a43b4f835e79b500cb74eeaf1d34f15c80098",
         "manifest_sha256": "b0224e3b28a5d1eb1a13a9afd2367c6675477db4d4d48cdaca81a2aa3f599eae",
         "files": 7,
@@ -186,7 +186,7 @@
           "conclusions"
         ],
         "required_ok": true,
-        "package_tree_sha256": "08efc81316ce58b016dc7c4724cb164a34b20f50cdd0738886d32ca60905e286",
+        "package_tree_sha256": "1fcb60e0b6d9b8ade6f1e574ba18ce909687783d98193029c85e9723e6ea07e2",
         "profile_sha256": "5eaa68ce89bb944cafbae6bf91ecef83ae4f2f7915c9bbaa1197aabe88fcda21",
         "manifest_sha256": "021a7422a781cd8e6c1240952e7514dea1849f1b9b529ddd13d34bdd55058d75",
         "files": 7,
@@ -221,7 +221,7 @@
   },
   "review": {
     "artifact_path": "audits/histagent/snapshot-47bbe21/artifacts/extension-review.json",
-    "artifact_sha256": "f4cc7a777dc047e9c4143b178d06d10b743a58472dc9a6ca01134088dc4a45ce",
+    "artifact_sha256": "e527f83eb6d3b02e0e83b7b8d85c6755f0993c4e6e0121281ebc79ce8a3d7218",
     "tool_file_count": 12,
     "tools_byte_identical": true,
     "required_fields_bound": true
@@ -233,6 +233,6 @@
     "catalog_sha256": "628fb22f57903b22b16e8650d3be3db05c767fe50a6757e792465c5c2aee0e96",
     "audit_readme_path": "audits/histagent/README.md",
     "audit_readme_sha256": "a163bceb29ef352ce49d844b146c92eea8b864ad3b9b49fb771295512c8e82e0",
-    "record_sha256": "0af654a55c9a429cc9c4beadf99bbfe9c2d5ef80b8f269571ecc14c2d64644b8"
+    "record_sha256": "f9809c766ff58f3ea81e34c9a58f8ad090df846b03ea2f16d02370354aee63d5"
   }
 }

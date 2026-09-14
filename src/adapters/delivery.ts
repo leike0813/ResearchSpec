@@ -1,19 +1,14 @@
-import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, type PlannedWrite, sha256 } from "../core/workspace/write-plan.js";
 import { COMPANION_INTENTS, renderCompanionSkill } from "./companion/index.js";
 import { COMMAND_WRAPPER_CONTENTS, renderCommand } from "./command-renderer.js";
 import { getTool, resolveToolIdAlias, sharedSkillTarget, toolSkillsRoot, type DeliveryMode, type ToolDefinition } from "./tools.js";
-import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
-import { CORE_SKILL_IDS } from "../core-skills/catalog.js";
 import { MIT_LICENSE_TEXT } from "../licensing.js";
-import { filesForSkill, pluginSkillRoot, resolveDomainSelection, type LoadedPluginRegistry } from "../plugins/registry.js";
+import type { LoadedPluginRegistry } from "../plugins/registry.js";
 import { installationKey, type ManagedInstallation, type ManagedInstallationSource } from "./installations.js";
 import { resolveManagedTarget, validateManagedTarget } from "./managed-target.js";
-import { loadCapabilityRegistry } from "../capabilities/registry.js";
 
 export interface DeliveryPlan {
   operations: PlannedWrite[];
@@ -23,7 +18,6 @@ export interface DeliveryPlan {
   commandToolIds: string[];
 }
 
-const PACKAGE_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 const SHARED_TARGET_MARKER = ".researchspec-target";
 
 export async function planToolDelivery(input: {
@@ -44,8 +38,8 @@ export async function planToolDelivery(input: {
   const delivery = input.delivery ?? "both";
   const skillToolIds = selectSkillWriters(selected, delivery);
   const commandToolIds = selected.filter((id) => Boolean(getTool(id)?.command));
-  const pluginRegistry = input.pluginRegistry;
-  const capabilityRegistry = await loadCapabilityRegistry();
+  const navigate = COMPANION_INTENTS.find((intent) => intent.id === "navigate");
+  if (!navigate) throw new Error("Navigate Companion is unavailable.");
 
   for (const toolId of selected) {
     const tool = getTool(toolId);
@@ -63,15 +57,7 @@ export async function planToolDelivery(input: {
       if (writesSkills) {
         const root = toolSkillsRoot(tool, input.projectRoot);
         await planSharedMarker(tool, root);
-        for (const skillId of ARSU_SKILL_IDS) {
-          const sourceRoot = path.join(PACKAGE_ROOT, "skills/arsu", skillId);
-          for (const sourceFile of await walkFiles(sourceRoot)) await addSkillFile(tool, root, sourceRoot, sourceFile, { kind: "arsu-skill", skill_id: skillId });
-        }
-        for (const skillId of CORE_SKILL_IDS) {
-          const sourceRoot = path.join(PACKAGE_ROOT, "skills", skillId);
-          for (const sourceFile of await walkFiles(sourceRoot)) await addSkillFile(tool, root, sourceRoot, sourceFile, { kind: "core-skill", skill_id: skillId });
-        }
-        for (const intent of COMPANION_INTENTS) {
+        for (const intent of [navigate]) {
           const skillRoot = path.join(root.root, intent.skillId);
           await addSkill(
             path.join(skillRoot, "SKILL.md"),
@@ -80,31 +66,6 @@ export async function planToolDelivery(input: {
             tool,
           );
           await addSkill(path.join(skillRoot, "LICENSE"), MIT_LICENSE_TEXT, { kind: "companion-skill", skill_id: intent.skillId }, tool);
-        }
-        for (const registered of capabilityRegistry.capabilities.values()) {
-          for (const sourceFile of registered.files) {
-            await addSkill(
-              path.join(root.root, registered.entry.capability_id, path.relative(registered.packageRoot, sourceFile)),
-              await readFile(sourceFile),
-              { kind: "framework-capability", capability_id: registered.entry.capability_id },
-              tool,
-            );
-          }
-        }
-        if (pluginRegistry) {
-          const resolution = resolveDomainSelection(pluginRegistry, input.selectedPluginIds ?? []);
-          for (const registered of resolution.skills) {
-            const skill = registered.definition;
-            const sourceRoot = pluginSkillRoot(pluginRegistry.root, registered.vendor.vendor_id, skill.skill_id);
-            for (const relativeAsset of filesForSkill(pluginRegistry, skill.skill_id)) {
-              await addSkill(
-                path.join(root.root, skill.skill_id, relativeAsset),
-                await readFile(path.join(sourceRoot, relativeAsset)),
-                { kind: "domain-skill", vendor_id: registered.vendor.vendor_id, vendor_release: registered.vendor.release, skill_id: skill.skill_id },
-                tool,
-              );
-            }
-          }
         }
       }
 
@@ -129,10 +90,6 @@ export async function planToolDelivery(input: {
     const targetId = sharedSkillTarget(tool.id);
     if (!targetId) return;
     await addPlanned(target, root.scope === "project" ? relativeProject(target) : target, root.scope, `${targetId}\n`, { kind: "shared-skill-target", target_id: targetId }, tool.id);
-  }
-
-  async function addSkillFile(tool: ToolDefinition, root: ReturnType<typeof toolSkillsRoot>, sourceRoot: string, sourceFile: string, source: ManagedInstallationSource): Promise<void> {
-    await addSkill(path.join(root.root, path.basename(sourceRoot), path.relative(sourceRoot, sourceFile)), await readFile(sourceFile), source, tool);
   }
 
   async function addSkill(target: string, content: string | Uint8Array, source: ManagedInstallationSource, tool: ToolDefinition): Promise<void> {
@@ -166,21 +123,10 @@ export function selectSkillWriters(toolIds: readonly string[], delivery: Deliver
   const selected = [...new Set(toolIds.map(resolveToolIdAlias))];
   const candidates = selected.filter((id) => {
     const tool = getTool(id);
-    return Boolean(tool && (tool.skillsDir || tool.globalSkillsDir) && (delivery !== "commands" || id === "codex"));
+    return Boolean(tool && (tool.skillsDir || tool.globalSkillsDir) && (delivery !== "commands" || !tool.command));
   });
   if (candidates.includes("codex") && candidates.includes("agents")) return candidates.filter((id) => id !== "agents");
   return candidates;
-}
-
-async function walkFiles(root: string): Promise<string[]> {
-  const result: string[] = [];
-  const entries = await readdir(root, { withFileTypes: true });
-  for (const entry of entries) {
-    const target = path.join(root, entry.name);
-    if (entry.isDirectory()) result.push(...await walkFiles(target));
-    else if (entry.isFile()) result.push(target);
-  }
-  return result.sort();
 }
 
 function targetPath(value: string): string { return value.split(path.sep).join("/"); }

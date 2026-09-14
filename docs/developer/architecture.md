@@ -7,8 +7,9 @@ ResearchSpec 是 ARSU 面向的 Agent-neutral、spec-driven 文件框架。它�
 
 ```text
 用户与宿主 Agent
-  ├─ 读取 status / instructions
-  ├─ 调用 ARSU、Companion、Capability、Adapter、Plugin Skills
+  ├─ 通过 Navigate 检索 Procedure 卡片
+  ├─ 按需读取一个 activation packet
+  ├─ 调用宿主原生能力或显式 Adapter Skills
   └─ 取得人的确认
              │
              ▼
@@ -74,9 +75,11 @@ typed contracts
   -> CLI handlers and read models
   -> Agent delivery adapters
 
-ARSU route catalog + authored profile sources
-  -> projected profiles / Skills / registries
-  -> workspace installations
+现有 ARSU / Companion / capability / extension registries
+  -> runtime-derived Procedure catalog
+  -> standalone 或 graph activation packet
+
+authored profile sources -> projected profiles -> workspace runs
 ```
 
 Converter 的 TypeScript profile source 是 authored SSOT；仓库中的 profile YAML、registry 和 Agent
@@ -84,9 +87,9 @@ Converter 的 TypeScript profile source 是 authored SSOT；仓库中的 profile
 
 ## Agent 与扩展边界
 
-ARSU producer 读取 stable specs、route instructions 和 handoff inputs，生成外部语义文件并维护
-handoff。Navigate 负责路由与恢复；Propose 负责 project change；Verify 准备 Gate findings；
-Decide 在用户确认后请求 CLI 更新 owner。
+宿主只常驻 Navigate。Navigate 先读取紧凑卡片，选定后才加载完整 Procedure；Propose、Verify、
+Decide 与 ARSU/core/plugin 程序都走同一按需入口。Standalone Procedure 只返回普通项目文件；graph
+Procedure 读取 stable specs 与 handoff inputs，并仅通过激活包给出的 CLI selector 更新 owner。
 
 Domain Plugin 与 Zotero Adapter 只能返回有界辅助材料。它们不能修改 stable specs、run/node、
 handoff、Gate、Decision 或 transition。异模型复核也由宿主 Agent 执行，ResearchSpec 不保存模型

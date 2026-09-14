@@ -96,28 +96,25 @@ The locked direction is:
   ask again, and ResearchSpec never stores model consent or configures/calls a
   model service.
 
-The fixed base user-visible agent surface is exactly four ARSU Skills
-(`deep-research`, `academic-paper`, `academic-paper-reviewer`,
-`academic-pipeline`), five Companion Skills (`researchspec-navigate`,
-`researchspec-propose`, `researchspec-decide`, `researchspec-verify`,
-`researchspec-cli-handbook`), and the bundled capability packages projected
-from `skills/capabilities/registry.json` (currently 47, including the four
-paper-humanizer nodes and five review-response nodes). The optional
-`zotero-library` Adapter
-adds seven literature Skills when selected (`zotero-library-agent`,
+The fixed base user-visible Agent surface is exactly one Skill:
+`researchspec-navigate`. ARSU Skills, the other four Companion workflows, the
+47 bundled core capabilities, and all registered plugin extensions are hidden
+Procedures discovered from their existing registries and loaded on demand with
+`list procedures`, `show procedure:<id>`, and
+`instructions procedure:<id>`. The Procedure catalog is runtime-derived and is
+not another persisted registry. The optional `zotero-library` Adapter adds seven
+literature Skills when selected (`zotero-library-agent`,
 `zotero-library-query`, `zotero-literature-acquisition`,
 `zotero-literature-analysis`, `zotero-research-synthesis`,
-`zotero-library-curation`, `zotero-bridge-cli`). Skill-capable tools receive
-those fixed Skills plus all registered capability packages through the
-configured `skills`, `commands`, or `both` delivery mode; Codex remains
-Skill-capable in `commands` mode. The 28 command-capable tools receive the
-sixteen current command wrappers when commands are selected. Codex writes project `.agents/skills` and never generates global
+`zotero-library-curation`, `zotero-bridge-cli`). In `skills` mode, Skill-capable
+tools receive Navigate. In `commands` mode, command-capable tools receive one
+Navigate wrapper while Skill-only tools receive the Navigate Skill fallback. In
+`both` mode they receive both supported entry forms. Codex writes project `.agents/skills` and never generates global
 custom prompts; Kimi writes `.kimi-code/skills` and reads `.kimi` only for migration.
 `windsurf` remains an input alias for `devin`, and MiniMax Code uses the global
 `~/.minimax/skills` tree without workspace-exclusive ownership.
-Optional
-ResearchSpec-maintained domain plugin Skills may extend that base surface from
-`skills/plugins/registry.json`; they do not add Companion Skills or wrappers.
+Optional ResearchSpec-maintained domains select extension Procedures and graph
+profiles without projecting their raw or extension Skills into the host catalog.
 
 `src/literature-adapters/catalog.ts` is the installation SSOT for the optional
 `zotero-library` Adapter, while `config.yaml.literature_adapters.selected` is the
@@ -148,14 +145,13 @@ directly modify stable specs, graph runs, node state, handoffs, Gates,
 Decisions, or transitions. ResearchSpec distributes static reviewed
 content and never executes plugin scripts or installs their dependencies.
 
-At runtime, Navigate and the active ARSU producer may discover optional domain
-assistance from compact packaged Skill metadata. Suggest at most three domains
+At runtime, Navigate and the active producer may discover optional domain
+assistance from compact Procedure cards. Suggest at most three domains
 in one batch, keep plugin consent separate from root-run confirmation, preview the
 exact install, and require explicit domain IDs plus `--yes` for non-interactive
-execution. Use a newly projected Skill natively when the host has loaded it;
-otherwise use
-`plugin instructions <skill-id>` only after selection, availability, projection,
-and manifest-hash checks. The plugin is a bounded advisory helper whose result
+execution. Activate a selected extension with
+`instructions procedure:<procedure-id>` only after selection, availability, and
+manifest-hash checks. The plugin Procedure is a bounded advisory helper whose result
 returns to the original ARSU producer. Decline or failure must leave the core
 selector, producer, frontier, and workflow authority unchanged.
 

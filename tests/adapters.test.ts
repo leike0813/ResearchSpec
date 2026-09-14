@@ -7,7 +7,6 @@ import { COMMAND_WRAPPER_CONTENTS, renderCommand } from "../src/adapters/command
 import { COMPANION_INTENTS, COMPANION_WORKFLOW_IDS, renderCompanionSkill } from "../src/adapters/companion/index.js";
 import { planWorkspaceDelivery } from "../src/adapters/workspace-delivery.js";
 import { TOOL_IDS, TOOLS, detectTools, getTool, parseToolExpression } from "../src/adapters/tools.js";
-import { loadCapabilityRegistry } from "../src/capabilities/registry.js";
 import { CLI_TOP_LEVEL_COMMANDS } from "../src/cli/command-catalog.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
 
@@ -63,10 +62,10 @@ void test("registered command paths preserve per-tool conventions", () => {
   assert.equal(requireTool("minimax-code").globalSkillsDir, ".minimax");
 });
 
-void test("command wrappers derive exactly from the sixteen-command catalog", () => {
-  assert.deepEqual(COMMAND_WRAPPER_CONTENTS.map((item) => item.id), CLI_TOP_LEVEL_COMMANDS.map((item) => item.id));
-  assert.equal(COMMAND_WRAPPER_CONTENTS.length, 16);
-  assert.equal((COMMAND_WRAPPER_CONTENTS.map((item) => item.id) as string[]).includes("submit"), false);
+void test("command delivery exposes one Navigate wrapper while the public CLI stays complete", () => {
+  assert.deepEqual(COMMAND_WRAPPER_CONTENTS.map((item) => item.id), ["navigate"]);
+  assert.equal(CLI_TOP_LEVEL_COMMANDS.length, 16);
+  assert.equal((CLI_TOP_LEVEL_COMMANDS.map((item) => item.id) as string[]).includes("submit"), false);
   const content = COMMAND_WRAPPER_CONTENTS[0];
   assert.ok(content);
   assert.match(renderCommand(requireTool("gemini"), content), /^description = /);
@@ -98,11 +97,11 @@ void test("companion manifest renders five fixed self-contained Skills", () => {
   const navigate = COMPANION_INTENTS.find((intent) => intent.skillId === "researchspec-navigate");
   assert.ok(navigate);
   const renderedNavigate = renderCompanionSkill(navigate);
-  assert.match(renderedNavigate, /host's native subagent mechanism/);
+  assert.match(renderedNavigate, /host-native subagents/);
   assert.match(renderedNavigate, /content category, and cost/);
-  assert.match(renderedNavigate, /child nodes, branches, and revision rounds ask again/);
-  assert.match(renderedNavigate, /instructions profile:<profile-id>/);
-  assert.match(renderedNavigate, /node:<parent-run>\/<subgraph-node>/);
+  assert.match(renderedNavigate, /list procedures --query/);
+  assert.match(renderedNavigate, /standalone activation/);
+  assert.match(renderedNavigate, /persistence, resume/);
   assert.doesNotMatch(renderedNavigate, /API key|endpoint|curl/i);
   const handbook = COMPANION_INTENTS.find((intent) => intent.skillId === "researchspec-cli-handbook");
   assert.ok(handbook);
@@ -137,14 +136,13 @@ void test("global-only tools are detected only by managed skill files", async ()
   }
 });
 
-void test("delivery projects the fixed Skill surface and sixteen wrappers by default", async () => {
+void test("delivery projects one Navigate entry per selected channel", async () => {
   const root = await tempProject();
   const previousCodexHome = process.env.CODEX_HOME;
   const previousHome = process.env.HOME;
   process.env.CODEX_HOME = path.join(root, "codex-home");
   process.env.HOME = path.join(root, "home");
   try {
-    const capabilityRegistry = await loadCapabilityRegistry();
     const delivery = await planWorkspaceDelivery({
       projectRoot: root,
       toolIds: TOOL_IDS,
@@ -167,7 +165,8 @@ void test("delivery projects the fixed Skill surface and sixteen wrappers by def
         if (item.source.kind === "framework-capability") return [item.source.capability_id];
         return item.source.kind === "literature-adapter" && item.source.component === "skill" && item.source.skill_id ? [item.source.skill_id] : [];
       }));
-      assert.equal(skillIds.size, 9 + capabilityRegistry.capabilities.size, toolId);
+      assert.equal(skillIds.size, 1, toolId);
+      assert.deepEqual([...skillIds], ["researchspec-navigate"], toolId);
     }
     assert.equal(delivery.installations.some((item) => item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/references/cli-handbook.md")), false);
     assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 9);

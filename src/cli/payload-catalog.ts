@@ -42,8 +42,8 @@ export const CLI_PAYLOADS = {
     field("--literature-adapters", "all | none | comma-separated Adapter IDs", false, "Replace the selected Adapter set."),
   ]),
   status: none("No command payload. Reads the nearest current workspace and returns a bounded snapshot."),
-  instructions: payload("selector-options", "One exact graph control or inspection selector.", [
-    field("selector", "profile:... | run:... | node:<run>/<node>[@round] | gate:... | decision:... | change:...", true, "Current item whose action contract is needed."),
+  instructions: payload("selector-options", "One exact procedure or graph control/inspection selector.", [
+    field("selector", "procedure:... | profile:... | run:... | node:<run>/<node>[@round] | gate:... | decision:... | change:...", true, "Procedure or current graph item whose action contract is needed."),
   ]),
   start: payload("yaml-json", "A confirmed root profile selector with --input, or an eligible node selector for an inherited child run.", [
     field("selector", "<profile-id> | profile:<profile-id> | node:<run>/<subgraph>[@round]", true, "Root profile or exact pending subgraph start."),
@@ -76,12 +76,13 @@ export const CLI_PAYLOADS = {
   ]),
   doctor: none("No command payload. Runs the full current-workspace diagnostic report."),
   list: payload("options", "An optional collection type with cursor pagination.", [
-    field("type", "profiles | runs | nodes | changes | diagnostics", false, "Collection to list; defaults to runs."),
-    field("--limit", "integer 1..50", false, "Page size; defaults to 20."),
+    field("type", "procedures | profiles | runs | nodes | changes | diagnostics", false, "Collection to list; defaults to runs."),
+    field("--limit", "integer 1..50", false, "Page size; procedures default to 10, other collections to 20."),
     field("--cursor", "opaque base64url cursor", false, "Cursor returned by the immediately preceding page for the same unchanged collection."),
+    field("--query", "string", false, "Lexical search terms used only with procedures."),
   ]),
   show: payload("selector-options", "One exact stable spec, profile, run, node, Gate, Decision, change, handoff, or tool selector.", [
-    field("selector", "profile:... | run:... | node:... | change:...", true, "Exact item to inspect."),
+    field("selector", "procedure:... | profile:... | run:... | node:... | change:...", true, "Exact item to inspect."),
   ]),
   handoff: payload("yaml-json", "Optional YAML or JSON replacement payload supplied through --input; without it the command renders the current handoff.", [
     field("inputs", "HandoffInput[]", true, "Input role descriptors; each may add source_instance_id."),
@@ -126,7 +127,6 @@ export const CLI_PAYLOADS = {
   ], ["Non-interactive execution also requires the global --yes flag."]),
   "plugin-uninstall": payload("positional-list", "One or more installed domain IDs.", [field("plugin-ids", "domain ID[]", true, "Exact selections to remove.")]),
   "plugin-update": payload("positional-list", "Zero or more installed domain IDs.", [field("plugin-ids", "domain ID[]", false, "Specific selections to refresh; omission updates all selected domains.")]),
-  "plugin-instructions": payload("options", "One installed, projected, hash-clean Skill ID.", [field("skill-id", "Skill ID", true, "Plugin Skill whose advisory instructions are requested.")]),
 } as const satisfies Record<string, CliPayloadDefinition>;
 
 export function getCliPayloadDefinition(id: string): CliPayloadDefinition {

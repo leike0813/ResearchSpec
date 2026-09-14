@@ -64,46 +64,40 @@ specs, graph profiles, run files, node files, handoffs and changes without writi
 - **THEN** it produces no workspace mutation
 
 ### Requirement: Plugin Command Group
-The CLI SHALL expose `plugin list [--installed] [--summary]`,
-`plugin show <domain-id> [--summary]`, `plugin install <domain-ids...>`,
-`plugin uninstall <domain-ids...>`, `plugin update [domain-ids...]`, and
-`plugin instructions <skill-id>` while retaining `plugin` as one top-level
-command.
+
+The `plugin` command group SHALL provide domain discovery, installation, status, and uninstall operations but SHALL NOT expose a plugin-specific instruction API.
+
+#### Scenario: Retired plugin instructions are requested
+- **WHEN** a caller invokes `plugin instructions`
+- **THEN** the CLI returns catalog-backed guidance to use `instructions procedure:<id>` and performs no write
 
 #### Scenario: Domain catalog is listed outside a workspace
-- **WHEN** a user runs normal `plugin list` without a workspace
-- **THEN** the CLI SHALL list only stable non-empty domains without vendor names
-- **AND** empty internal domains SHALL be absent from human and JSON output
+- **WHEN** a caller lists plugin domains outside a workspace
+- **THEN** static domain discovery remains available
 
 #### Scenario: Empty domain is not installable
-- **WHEN** a user shows or installs an internally registered domain with no reviewed Skills
-- **THEN** the CLI SHALL reject it as unavailable without changing workspace state
+- **WHEN** a caller selects an empty domain
+- **THEN** installation is rejected without writes
 
 #### Scenario: Installed unavailable domain remains recoverable
-- **WHEN** an already selected domain is missing or empty and the user runs installed list or status
-- **THEN** machine and human output SHALL identify the selection as unavailable
-- **AND** uninstall SHALL remain available through saved resolution evidence while update SHALL block
+- **WHEN** an installed domain becomes unavailable
+- **THEN** status and uninstall retain its resolution evidence
 
 #### Scenario: Domain details expose provenance
-- **WHEN** a user runs `plugin show <domain-id>` for an available domain
-- **THEN** the CLI SHALL distinguish direct and resolved Skills
-- **AND** it MAY expose domain type, ANZSRC Group code, vendor, revision, license, and dependency provenance
+- **WHEN** a domain is shown
+- **THEN** its reviewed vendors and procedure identities are reported from catalog metadata
 
 #### Scenario: Machine output distinguishes intent and projection
-- **WHEN** plugin lifecycle or status JSON is requested
-- **THEN** it SHALL distinguish selected domains, available domains, unavailable selections, resolved Skills, and projected Skills
+- **WHEN** plugin status is requested as JSON
+- **THEN** configured domains, availability, and activation eligibility remain distinct fields
 
 #### Scenario: Compact catalog views are requested
-- **WHEN** `--summary` is used for list or show
-- **THEN** output SHALL omit full license and upstream provenance
-- **AND** it SHALL retain identity, availability, installation, projection,
-  counts, descriptions, dependencies, and entry hashes needed for Agent
-  discovery
+- **WHEN** plugin domains or vendors are listed
+- **THEN** results remain bounded and omit procedure bodies
 
 #### Scenario: Exact installed instructions are requested
-- **WHEN** the caller requests an eligible installed Skill
-- **THEN** the command SHALL return one versioned read-only instruction packet
-- **AND** it SHALL not enter the runtime selector protocol or modify workspace
+- **WHEN** a caller needs an installed plugin procedure body
+- **THEN** it uses `instructions procedure:<id>` rather than the plugin command group
 
 ### Requirement: Init And Update Reconcile Generated Agent Projections
 
@@ -113,7 +107,7 @@ desired and obsolete project-local Agent and literature-Adapter projections.
 #### Scenario: Existing selection converges through update
 
 - **WHEN** a current workspace records selected tools and literature Adapters
-- **THEN** update SHALL project the fixed ten-Skill surface and every selected Adapter Skill
+- **THEN** update SHALL project the Navigate Skill and every selected Adapter Skill
 - **AND** it SHALL produce manifest ownership facts equivalent to fresh init with the same selections
 
 #### Scenario: Reconciliation preserves user changes
@@ -148,32 +142,35 @@ live connection probe.
 
 ### Requirement: Catalog-Backed Static CLI Discovery
 
-ResearchSpec SHALL maintain one typed static CLI catalog for the seven global
-options, the exact sixteen top-level commands, and the `plugin` subcommands.
-The catalog SHALL provide the stable synopsis and help metadata used by
-Commander help and by the deterministic packaged CLI handbook. Handler binding
-and command execution MAY remain explicit, but they SHALL consume the same
-catalog identity rather than define a second public command surface.
+The CLI SHALL expose bounded static procedure discovery through `list procedures [--query <text>]`, stable pagination, and `show procedure:<id>` without requiring a workspace. Discovery SHALL read packaged catalogs and files only and SHALL NOT execute procedure content.
+
+#### Scenario: Procedures are listed globally
+- **WHEN** a caller runs `list procedures` outside a workspace
+- **THEN** the result returns compact cards with total, truncation, and opaque next cursor fields
+
+#### Scenario: Procedure metadata is shown globally
+- **WHEN** a caller runs `show procedure:<id>` outside a workspace
+- **THEN** the result returns bounded metadata and supported modes without the full procedure body
 
 #### Scenario: Root, command, and plugin help require no workspace
-
-- **WHEN** a user runs `researchspec --help`, `researchspec <command> --help`,
-  or `researchspec plugin --help` outside a ResearchSpec workspace
-- **THEN** the CLI SHALL render the applicable catalog-backed help without
-  attempting workspace discovery or mutation
-- **AND** root help SHALL list each of the sixteen top-level commands exactly
-  once
-- **AND** plugin help SHALL list only its declared subcommands
+- **WHEN** help is requested for any public command path
+- **THEN** catalog-backed usage remains available without workspace discovery
 
 #### Scenario: Packaged handbook is derived static discovery
+- **WHEN** the CLI handbook procedure is rendered
+- **THEN** it uses the same command and payload catalogs as static help
 
-- **WHEN** ResearchSpec packages its public documentation
-- **THEN** it SHALL include a deterministic CLI handbook derived from the
-  static catalog
-- **AND** the handbook SHALL identify global options, command and plugin
-  synopsis, selector-family discovery, and the boundary to runtime
-  instructions
-- **AND** it SHALL not require a workspace or encode live action availability
+### Requirement: Static Discovery Does Not Authorize Runtime Actions
+
+Global procedure discovery SHALL remain read-only. `instructions procedure:<id>` SHALL require a current schema `"2"` workspace and SHALL validate plugin-domain selection before returning an executable packet.
+
+#### Scenario: Activation is requested outside a workspace
+- **WHEN** a caller requests procedure instructions without a current workspace
+- **THEN** the CLI returns a workspace-required diagnostic without writing files
+
+#### Scenario: Handbook precedes a runtime write
+- **WHEN** handbook guidance leads to a requested graph mutation
+- **THEN** the caller must still obtain current status and graph instructions
 
 ### Requirement: Contextual Usage And Complete Selector-Family Hints
 
@@ -199,24 +196,6 @@ Decision and change selector families.
   surface
 - **AND** it SHALL not redirect the caller to an unrelated runtime selector or
   require a workspace merely to render usage guidance
-
-### Requirement: Static Discovery Does Not Authorize Runtime Actions
-
-Static help and the CLI handbook SHALL describe command shape and discovery
-only. They SHALL NOT expand the runtime selector grammar, create an action
-descriptor, reveal a live frontier, construct a semantic payload, or authorize
-a write. `status` and `instructions <runtime-selector>` remain the only public
-sources for current runtime action availability and descriptor-owned execution
-requirements.
-
-#### Scenario: Handbook precedes a runtime write
-
-- **WHEN** a user reads static help or the handbook and then intends a
-  workspace-bound write
-- **THEN** the guidance SHALL direct the caller to current `status` and the
-  selected runtime `instructions` packet
-- **AND** no `cli:<command>` selector or additional public command SHALL be
-  introduced
 
 ### Requirement: Generated CLI Documentation Has One Durable Owner
 
@@ -385,23 +364,47 @@ Instructions for a graph profile SHALL expose each legal entry as structured dat
 
 ### Requirement: Runtime Inspection And Packing Match The Typed Catalog
 
-`instructions` SHALL accept graph selectors and change selectors. `show` SHALL accept only profile, run, node, and change selectors. `pack` SHALL accept `all`, `specs`, `profiles`, `runs`, `changes`, `run:<id>`, and `change:<id>` scopes and SHALL exclude ordinary external deliverables.
+`instructions` SHALL accept graph selectors, change selectors, and `procedure:<id>`. `show` SHALL accept profile, run, node, change, and procedure selectors. `pack` scopes SHALL remain unchanged and exclude ordinary external deliverables.
+
+#### Scenario: Procedure instructions are requested
+- **WHEN** a caller requests `instructions procedure:<id>` in a current workspace
+- **THEN** the CLI returns one standalone activation packet
+
+#### Scenario: Procedure metadata is requested
+- **WHEN** a caller requests `show procedure:<id>`
+- **THEN** the CLI returns bounded catalog metadata without activating it
 
 #### Scenario: Change instructions are requested
-
 - **WHEN** a caller requests `instructions change:<id>`
-- **THEN** the CLI returns one bounded, read-only change action packet
+- **THEN** the CLI returns one bounded read-only change action packet
 
 #### Scenario: Unsupported show selector is supplied
-
-- **WHEN** a caller supplies a Gate, Decision, handoff, tool, or stable-spec selector to `show`
+- **WHEN** a caller supplies an unsupported selector to `show`
 - **THEN** the CLI returns catalog-backed usage guidance and performs no write
 
 #### Scenario: One owner is packed
-
 - **WHEN** a caller packs `run:<id>` or `change:<id>`
 - **THEN** the archive contains only ResearchSpec-owned files for that owner
-- **AND** missing owners return a stable not-found error
+
+### Requirement: Public Runtime Selectors Are Graph-Only
+
+Workflow-state discovery and mutation SHALL remain graph-only. Procedure selectors SHALL authorize semantic work over ordinary files but SHALL NOT become runtime selectors or workflow mutation owners.
+
+#### Scenario: Standalone procedure selector is used
+- **WHEN** a caller obtains `instructions procedure:<id>`
+- **THEN** no run, node, Gate, Decision, or handoff selector is created or mutated
+
+#### Scenario: Run is started
+- **WHEN** a user starts a confirmed profile entry
+- **THEN** the CLI creates one graph run and returns its run selector
+
+#### Scenario: Node selector is requested outside a run
+- **WHEN** node instructions target a non-current run
+- **THEN** the CLI returns a current-run diagnostic without writes
+
+#### Scenario: Retired selector is supplied
+- **WHEN** a retired runtime selector family is supplied
+- **THEN** the CLI returns current graph and procedure selector guidance
 
 ### Requirement: List Pagination Uses A Stable Opaque Cursor
 
@@ -477,28 +480,6 @@ Run checking SHALL verify frozen graph identity, parent bindings and node identi
 - **THEN** it fails before displaying configuration selectors or planning writes
 - **AND** all existing bytes remain unchanged
 
-### Requirement: Public Runtime Selectors Are Graph-Only
-
-Runtime discovery and mutation SHALL accept only profile, run, node, Gate and Decision selector
-families, plus change selectors for project governance. The public CLI, payload catalog, handbook and
-generated wrappers SHALL use those selectors through existing commands without adding a top-level
-command.
-
-#### Scenario: Run is started
-
-- **WHEN** a user runs `start profile:<profile-id>` after confirming the entry summary
-- **THEN** the CLI creates one run and returns its run selector
-
-#### Scenario: Node selector is requested outside a run
-
-- **WHEN** a caller requests `instructions node:<run-id>/<node-id>` for a non-current run
-- **THEN** the CLI returns a stable current-run diagnostic and performs no write
-
-#### Scenario: Retired selector is supplied
-
-- **WHEN** a caller supplies a retired runtime selector family
-- **THEN** the CLI returns a catalog-backed usage error with current graph selector families
-
 ### Requirement: Subgraph Nodes Start Bound Child Runs
 
 `start node:<parent-run>/<child-profile-node>[@round]` SHALL start or resolve the unique child run declared by an eligible child-profile node. The operation SHALL inherit the confirmed parent authorization, freeze the child profile and return the child run identity and parent binding.
@@ -528,20 +509,16 @@ All graph CLI inputs that identify project files SHALL use the same safe project
 
 ### Requirement: Node Instructions Expose A Bounded Card
 
-`instructions node:<run>/<node>` SHALL return one structured, versioned node card with node identity,
-capability ID or subgraph reference, bound input roles and paths, expected output roles, validator IDs,
-required Gate/Decision selectors, human-confirmation requirements and the next required read.
+`instructions node:<run>/<node>` SHALL return the existing versioned node card plus a graph-mode activation packet for the node's capability procedure. The packet SHALL contain only the eligible node's executable contract and exact completion selector.
 
 #### Scenario: Eligible node card is requested
-
-- **WHEN** a caller requests instructions for a currently eligible node
-- **THEN** the card contains only that node's executable contract
-- **AND** it does not embed a successor plan or upstream workflow prose
+- **WHEN** a caller requests instructions for a currently eligible capability node
+- **THEN** the response includes the node card and the shared procedure packet in graph mode
+- **AND** it does not embed a successor plan
 
 #### Scenario: Node card is generated from the typed catalog
-
-- **WHEN** help or the handbook renders the node-instructions payload
-- **THEN** it SHALL document the same field shapes and constraints used by the runtime schema
+- **WHEN** help or the handbook renders node instructions
+- **THEN** it documents the same card and activation-packet fields used at runtime
 
 ### Requirement: Advance Node Validates Before Writing
 

@@ -2,7 +2,7 @@
 
 - extension registry version: `0.7.0`
 - registry subset SHA-256: `8ed5f68818934d20769c2d6e91c9ea5b48d8345024df100407414a1b5fdd64b7`
-- packages tree SHA-256: `55116dab034263baa0d21940c70a9d0c22169a1aee18c27bf44183e62b470095`
+- packages tree SHA-256: `2f1d3b4da2adf88ef28ef630732eaffe1c3e3b848f8d9e1e1ced1bca7440c214`
 - profiles tree SHA-256: `3775aa27c4c626d6d68de1ec051d4d6832938ed8509583e194e4258c6796c27e`
 - capability count: 130 · mixed: 42 · llm: 88
 

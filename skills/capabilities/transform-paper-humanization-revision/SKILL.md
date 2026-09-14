@@ -80,6 +80,9 @@ If a writing sample or governing house style is available, record only acceptabl
 
 Do not submit when any pipeline command fails.
 
+
 ## Completion
 
-When finished, submit the declared outputs through `researchspec advance node:<run>/<node>`, then consult `researchspec status` for the next legal action. Do not choose, start, or advance another node, phase, mode, or run.
+Return the declared outputs and follow the active procedure packet. In standalone
+mode, report ordinary output paths without modifying ResearchSpec workflow state.
+In graph mode, use only the packet's handoff and exact advance selector.

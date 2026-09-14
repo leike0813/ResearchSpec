@@ -29,6 +29,7 @@ const expectedCommands = [
   "advance", "archive", "check", "decide", "doctor", "handoff", "init", "instructions", "list",
   "pack", "plugin", "propose", "show", "start", "status", "update",
 ];
+const expectedCommandWrappers = ["navigate"];
 const expectedDomains = [
   "accounting-auditing-and-accountability", "analytical-chemistry", "applied-mathematics", "artificial-intelligence", "astronomical-sciences",
   "biochemistry-and-cell-biology", "bioinformatics-and-computational-biology",
@@ -132,13 +133,9 @@ try {
   }
   const installedSkills = (await directoryNames(path.join(projectDirectory, ".agents", "skills"))).sort();
   assert(equal(installedSkills, expectedSkills), `Installed Skill surface mismatch: ${installedSkills.join(", ")}`);
-  for (const skill of [...expectedArsuSkills, ...expectedCompanionSkills, ...expectedAdapterSkills]) {
+  for (const skill of [...expectedBaseSkills, ...expectedAdapterSkills]) {
     const license = await readFile(path.join(projectDirectory, ".agents", "skills", skill, "LICENSE"), "utf8");
     assert(license.trim().length > 0, `Installed Skill license is empty: ${skill}`);
-  }
-  for (const skill of expectedCapabilitySkills) {
-    const manifest = parseYaml(await readFile(path.join(projectDirectory, ".agents", "skills", skill, "manifest.yaml"), "utf8"));
-    assert(manifest?.capability_id === skill && typeof manifest?.license === "string" && manifest.license.length > 0, `Installed capability metadata is incomplete: ${skill}`);
   }
   await verifyInstalledGuidance(installedPackageRoot, projectDirectory, handbookDigest);
   const adapterRoot = path.join(projectDirectory, ".zotero-bridge");
@@ -337,9 +334,9 @@ async function verifyInstalledGuidance(installedPackageRoot, projectRoot, handbo
   for (const skill of expectedArsuSkills) {
     assert(contracts.skill_groups?.[skill]?.profile_id === "researchspec-preflight-v11", `Installed ARSU profile is not v11: ${skill}`);
   }
-  const handbookSkill = await readFile(path.join(projectRoot, ".agents", "skills", "researchspec-cli-handbook", "SKILL.md"), "utf8");
+  const navigateSkill = await readFile(path.join(projectRoot, ".agents", "skills", "researchspec-navigate", "SKILL.md"), "utf8");
   const packagedHandbook = await readFile(path.join(installedPackageRoot, "docs", "user", "cli-handbook.md"), "utf8");
-  assert(handbookSkill.includes(packagedHandbook.trim()), "Installed Codex CLI handbook Skill does not contain the packaged handbook.");
+  assert(navigateSkill.includes("list procedures") && navigateSkill.includes("instructions procedure:"), "Installed Navigate Skill lacks procedure discovery guidance.");
   assert(!await pathExists(path.join(projectRoot, ".agents", "skills", "researchspec-navigate", "references", "cli-handbook.md")), "Installed Navigate still contains the retired handbook reference.");
   assert(handbookDigest === sha256(Buffer.from(packagedHandbook, "utf8")), "Packaged handbook digest changed during delivery verification.");
 }
@@ -398,25 +395,25 @@ async function verifyAllProjectToolDelivery(projectRoot, handbookDigest) {
   const installations = Array.isArray(manifest.installations) ? manifest.installations : [];
   assert(equal(manifest.literature_adapter_resolutions, []), "Default all-tool init unexpectedly installed a literature adapter.");
   assert(!await pathExists(path.join(projectRoot, ".zotero-bridge")), "Default all-tool init unexpectedly created .zotero-bridge.");
-  const handbookSkills = installations.filter((item) =>
+  const navigateSkills = installations.filter((item) =>
     item?.source?.kind === "companion-skill"
-    && item.source.skill_id === "researchspec-cli-handbook"
+    && item.source.skill_id === "researchspec-navigate"
     && typeof item?.target?.path === "string"
-    && item.target.path.replaceAll("\\", "/").endsWith("/researchspec-cli-handbook/SKILL.md"));
-  assert(handbookSkills.length === expectedProjectSkillWriterIds.length, `CLI handbook Skill projection count mismatch: ${String(handbookSkills.length)}.`);
-  assert(equal([...new Set(handbookSkills.map((item) => item.tool_id))].sort(), expectedProjectSkillWriterIds), "CLI handbook Skill projections do not cover every project-scoped physical Skill writer.");
-  for (const reference of handbookSkills) {
+    && item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/SKILL.md"));
+  assert(navigateSkills.length === expectedProjectSkillWriterIds.length, `Navigate Skill projection count mismatch: ${String(navigateSkills.length)}.`);
+  assert(equal([...new Set(navigateSkills.map((item) => item.tool_id))].sort(), expectedProjectSkillWriterIds), "Navigate Skill projections do not cover every project-scoped physical Skill writer.");
+  for (const reference of navigateSkills) {
     const absolute = reference.target.scope === "project"
       ? path.join(projectRoot, reference.target.path)
       : reference.target.path;
     const bytes = await readFile(absolute);
     assert(sha256(bytes) === reference.sha256, `CLI handbook Skill bytes differ for ${String(reference.tool_id)}.`);
-    assert(bytes.includes(Buffer.from("GraphRunStartCommandSchema", "utf8")), `CLI handbook Skill lacks graph Start schema detail for ${String(reference.tool_id)}.`);
+    assert(bytes.includes(Buffer.from("list procedures", "utf8")), `Navigate Skill lacks procedure discovery for ${String(reference.tool_id)}.`);
   }
   assert(handbookDigest.length === 64, "CLI handbook digest is invalid.");
 
   const commandInstallations = installations.filter((item) => item?.source?.kind === "command");
-  assert(commandInstallations.length === expectedCommandToolIds.length * expectedCommands.length, `Command-wrapper installation count mismatch: ${String(commandInstallations.length)}.`);
+  assert(commandInstallations.length === expectedCommandToolIds.length * expectedCommandWrappers.length, `Command-wrapper installation count mismatch: ${String(commandInstallations.length)}.`);
   const commandTools = new Map();
   for (const installation of commandInstallations) {
     const commands = commandTools.get(installation.tool_id) ?? new Set();
@@ -425,7 +422,7 @@ async function verifyAllProjectToolDelivery(projectRoot, handbookDigest) {
   }
   assert(equal([...commandTools.keys()].sort(), expectedCommandToolIds), "Command-wrapper installations do not cover the packaged command-capable tool catalog.");
   for (const [toolId, commands] of commandTools) {
-    assert(equal([...commands].sort(), expectedCommands), `Command wrapper surface differs for ${String(toolId)}.`);
+    assert(equal([...commands].sort(), expectedCommandWrappers), `Command wrapper surface differs for ${String(toolId)}.`);
   }
 
   const baseSkillsByTool = new Map();
@@ -456,7 +453,7 @@ async function loadPackagedSurface(root) {
   const toolModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "adapters", "tools.js")).href}?surface=${Date.now().toString()}`);
   const deliveryModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "adapters", "delivery.js")).href}?surface=${Date.now().toString()}`);
   const arsu = uniqueSorted(arsuManifest.generated_groups, "ARSU conversion manifest generated_groups");
-  const companions = uniqueSorted(companionModule.COMPANION_INTENTS?.map((item) => item.skillId), "Companion manifest Skills");
+  const companions = uniqueSorted(companionModule.COMPANION_INTENTS?.filter((item) => item.id === "navigate").map((item) => item.skillId), "visible Companion Skills");
   const capabilities = uniqueSorted(capabilityRegistry.capabilities?.map((item) => item.capability_id), "capability registry entries");
   const profiles = uniqueSorted(profileRegistry.profiles?.map((item) => item.profile_id), "profile registry entries");
   const adapters = uniqueSorted(adapterModule.LITERATURE_ADAPTER_SKILL_IDS, "literature Adapter catalog Skills");
@@ -472,7 +469,7 @@ async function loadPackagedSurface(root) {
     projectTools,
     projectSkillWriters,
     commandTools,
-    base: uniqueSorted([...arsu, ...companions, ...capabilities], "registry-derived fixed base Skills"),
+    base: companions,
   };
 }
 

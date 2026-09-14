@@ -138,6 +138,12 @@
 - Agent-only packages 没有 script validator，只靠 output-role policy；语义完整性由本审阅与
   `SKILL.md` 闭环保证，后续可在 plugin schema 稳定后增加 schema validator。
 
+## 按需激活复核（2026-09-14）
+
+- 范围：6 个 FinRobot extension。逐包程序正文、输入输出、knowledge、validator、安全边界和 profile 保持原审阅结论；本轮语义变化只把固定 graph 完成动作改为服从 activation packet。
+- Standalone packet 只允许返回 researchspec/ 外的普通输出路径，禁止 run、node、handoff、Gate、Decision、override 和 transition 写入；graph packet 才提供 owning handoff 与精确 advance selector。
+- 生成路径与静态受审树均已核对；全库 47/47 core 与 332/332 extension 包含 mode-neutral Completion，旧 advance node:<run>/<node> Completion 为 0。该适配保留既有领域步骤和证据义务，未引入新的流程权威。
+
 ## 结论
 
 ### 2026-09-05 维护文件身份复核

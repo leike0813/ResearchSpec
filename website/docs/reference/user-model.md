@@ -10,12 +10,12 @@ This page summarizes the canonical source in `docs/user/usage-model.md`.
 
 ## Entry
 
-1. `researchspec init` prepares a schema 2 workspace and projects selected Skills and profiles. It
+1. `researchspec init` prepares a schema 2 workspace and projects Navigate and selected profiles. It
    starts no academic work.
 2. User-Agent dialogue selects the academic capability. Vague, cross-capability, resume,
    explanation and export requests use `researchspec-navigate`.
-3. The Agent reads status and profile instructions, then presents the entry, prerequisites,
-   boundary outputs, Gates, Decisions and cost.
+3. Navigate searches compact Procedure cards and loads one activation packet. One-off work uses
+   standalone mode; resumable or governed work selects a profile and graph mode.
 
 ## Authorization
 
@@ -25,7 +25,7 @@ the parent graph authorization. Every declared Gate and Decision still requires 
 
 ## Work and state
 
-ARSU Skills write drafts, reports and reviews at ordinary project paths outside `researchspec/`.
+Procedures write drafts, reports and reviews at ordinary project paths outside `researchspec/`.
 Run handoffs record their semantic roles and safe paths. ResearchSpec does not register or hash-bind
 those boundary files.
 
@@ -34,6 +34,6 @@ conditions but never complete execution nodes; successful `advance node:<run>/<n
 
 ## Agent surface
 
-The fixed base surface contains four ARSU Skills, five Companion Skills and all packages in the
-bundled capability registry. Selecting `zotero-library` adds seven Adapter Skills. Optional domain
-plugins add reviewed advisory Skills without adding command wrappers or workflow authority.
+The fixed base surface contains only `researchspec-navigate`. Four ARSU workflows, four other
+Companions, core capabilities and plugin extensions stay in a hidden runtime-derived Procedure
+inventory. Selecting `zotero-library` still adds seven Adapter Skills.

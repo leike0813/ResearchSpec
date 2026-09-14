@@ -159,15 +159,15 @@ plugins:
     - bioinformatics-and-computational-biology
 ```
 
-For each operation ResearchSpec computes the sorted union of selected domains' direct Skills and transitive required dependencies. Multiple domains and dependency paths are deduplicated by global Skill ID. All configured Agent tools receive the same resolved set; adding a tool later backfills the current closure. Domain Skills add no command wrappers, so the fixed wrapper frontier remains sixteen wrappers on each of the 28 command-capable tools when the configured delivery includes commands. The complete catalog contains 37 tools, and Codex plus the shared `.agents` target use one physical Skill tree.
+For each operation ResearchSpec computes the sorted union of selected domains' direct Skills and transitive required dependencies. Multiple domains and dependency paths are deduplicated by global Skill ID. This closure remains resolution and recovery evidence; it is not projected into Agent Skill catalogs. Command-capable tools receive the single Navigate wrapper when commands are selected.
 
-`tool-installation-manifest.json` records vendor/Skill file ownership and a resolution snapshot for every selected available domain. Config is user intent; snapshots are derived recovery evidence retained while a selection is unavailable.
+`tool-installation-manifest.json` records a resolution snapshot and projected graph profiles for every selected available domain. Config is user intent; snapshots are derived recovery evidence retained while a selection is unavailable.
 
-In schema 2 graph workspaces, `plugin install`, `plugin uninstall`, and `plugin update` reconcile the selected-domain Skill closure with the configured skill-capable Agent tools through the same generated-file ownership rules. `plugin instructions <skill-id>` succeeds only when the Skill belongs to the current available selected-domain closure and every configured skill-capable tool has the complete manifest-owned, hash-clean projection. `status --json` exposes the plugin selection, resolution, availability, and projection state; `check plugins` validates registry load, selected domains, snapshots, manifest ownership, and projected file hashes without executing plugin resources.
+In schema 2 graph workspaces, `plugin install`, `plugin uninstall`, and `plugin update` reconcile selected-domain resolution snapshots and graph profiles. `instructions procedure:<procedure-id>` activates an extension only when one of its domains is selected and available. `status --json` exposes selection, resolution and profile projection state; `check plugins` validates registries, snapshots, manifest ownership and profile hashes without executing plugin resources.
 
 A graph-extension registry under `skills/plugins/extensions/registry.json` is the staged bridge from advisory Skills to graph-native plugins. It records capability packages, graph profiles, and domain assignments with content hashes. The `ecology` assignment carries `plugin-ecology-biodiversity` as one validated capability package and one one-node graph profile, and the two finance assignments carry all six FinRobot-derived extensions. `plugin show` exposes extension counts and `check plugins` validates extension hashes, capability/profile identity, graph references, collisions, projected files, and projection hashes.
 
-Installing a domain with graph-extension assignments now projects its capability packages to every configured skill-capable Agent tool and writes its graph profiles into `researchspec/profiles/`. `tool-installation-manifest.json` records `plugin-capability` and `plugin-profile` ownership, and `plugin_resolutions` snapshots include resolved capability and profile IDs. The graph CLI loads a base-plus-selected-extension capability registry: `start` rejects profiles with unknown capabilities, `instructions node:` includes the capability manifest contract, and `advance` runs the declared capability validators. The pilot flow is `plugin install ecology`, `start plugin-ecology-biodiversity`, `instructions node:<run>/research`, then `advance node:<run>/research`.
+Installing a domain writes its graph profiles into `researchspec/profiles/` and records resolved capability/profile IDs, but leaves capability packages in the packaged Procedure inventory. The graph CLI loads a base-plus-selected-extension capability registry: `start` rejects profiles with unknown capabilities, `instructions node:` includes the activation packet, and `advance` runs declared validators. The pilot flow is `plugin install ecology`, `start plugin-ecology-biodiversity`, `instructions node:<run>/research`, then `advance node:<run>/research`.
 
 The FinRobot-derived extensions complete the mixed-execution pilot. `plugin-financial-company-fundamentals`, `plugin-financial-event-evidence`, `plugin-financial-relative-valuation`, and `plugin-financial-statement-analysis` package the reviewed calculation scripts plus `financial_support.py` as hash-bound knowledge refs, and each declares a deterministic `validate_financial_brief.py` script validator bound to its required `research_brief` fields. `plugin-financial-competitive-position` and `plugin-financial-corporate-risk` are complete llm Agent procedures with the engine-enforced output-role policy. `advance` fails while required sections are missing and succeeds only after the declared validator passes; install, update, status, and check never execute plugin scripts.
 
@@ -219,20 +219,19 @@ researchspec plugin show <domain-id> [--summary]
 researchspec plugin install <domain-ids...> [--summary] [--yes]
 researchspec plugin update [domain-ids...]
 researchspec plugin uninstall <domain-ids...>
-researchspec plugin instructions <skill-id>
 ```
 
 Normal lifecycle surfaces expose domains rather than vendors. `show` includes domain type, ANZSRC Group code where applicable, direct and resolved Skills, dependencies, vendor release, revision, licenses, and provenance. `--installed` means explicit workspace selections, including unavailable recovery entries; it never infers domains from dependencies.
 
 `list --summary` returns compact domain identity, state, and direct/resolved counts. `show --summary` adds the direct and resolved Skill IDs, descriptions, dependencies, and packaged `SKILL.md` SHA-256 values needed for Agent-side semantic matching. Full views retain license and provenance detail. ResearchSpec does not score or recommend domains in the CLI.
 
-Install and update are idempotent set reconciliation. Preview reports exact domain IDs, resolved Skills,
-configured tools, and summarized write impact. Non-interactive installation requires explicit domain IDs
+Install and update are idempotent set reconciliation. Preview reports exact domain IDs, resolved Procedures,
+profiles, and summarized write impact. Non-interactive installation requires explicit domain IDs
 and `--yes`; interactive installation retains its confirmation prompt. Install without an Agent tool
 saves intent and returns a non-blocking warning. Update blocks when a selected domain is unavailable.
 Updating a subset retains the full selected-domain projection and ownership; `--force` applies only
 to resources resolved by the requested domains, including their shared dependencies.
-Uninstall removes only projections no longer reachable from remaining selections; shared dependencies
+Uninstall removes only profile projections no longer reachable from remaining selections; shared profiles
 remain. Drift in a file scheduled for deletion blocks the operation, and `--force` never deletes a
 user-modified file. Generated operations, config and manifest share one write plan, with config after
 the projections and the manifest last. Commit preflight checks the config and manifest bytes read
@@ -241,14 +240,12 @@ before projection changes; a caught commit failure rolls back all three together
 remain safe to restore. Empty-directory cleanup follows a successful commit. These checks do not
 provide cross-process locking or cross-file atomicity after power loss or process termination.
 
-`plugin instructions <skill-id>` is a read-only immediate-activation bridge. It succeeds only when the Skill belongs to the current available selected-domain closure and every configured tool has the complete manifest-owned, hash-clean projection. The packet returns the exact packaged `SKILL.md`, its entry hash, resource paths, providing domains, projected tools, and an advisory authority boundary. It never executes bundled resources.
-
 ## Agent-assisted runtime integration
 
 Navigate and the current ARSU producer evaluate optional plugin assistance at bounded semantic moments: a new or materially changed route, a newly ready work item, or an explicit specialist request. They query compact metadata, inspect only plausible domains, and recommend nothing unless one or more named Skills materially help the current research task.
 
-For uninstalled assistance, the Agent proposes at most three domains in one batch, states the matching Skills and installation counts, and obtains consent separately from route confirmation. After the core Start is confirmed, the Agent previews the exact domain IDs, resolved Skills, configured tools, and write impact, executes only the explicitly confirmed domain set, then reloads plugin status. Installation authorizes static Skill projection only; it does not authorize network access, script or dependency execution, credentials, external services, or sensitive-data transfer.
+For unselected assistance, the Agent proposes at most three domains in one batch, states the matching Procedures, and obtains consent separately from route confirmation. It previews the exact domain IDs, resolved Procedures, profiles and write impact, executes only the confirmed domain set, then reloads plugin status. Selection authorizes eligibility and profile projection only; it does not authorize network access, script or dependency execution, credentials, external services, or sensitive-data transfer.
 
-An installed Skill remains a bounded advisory helper of the current ARSU producer. If the host has loaded it, the Agent may invoke it natively. Otherwise the Agent reads the exact current instructions through the bridge. The helper receives only the current task, necessary inputs, expected response, and forbidden ResearchSpec authority writes. Its result returns to the original ARSU producer for validation and integration; it is not itself a submitted workflow candidate.
+A selected Procedure remains a bounded advisory helper of the current producer. The Agent loads its exact current activation packet only when needed. The helper receives only the current task, necessary inputs, expected response, and forbidden ResearchSpec authority writes. Its result returns to the original producer for validation and integration.
 
 An unavailable snapshot is recovery evidence, not an executable recommendation. Recommendations and invocations never create routes, subflows, work items, Gates, Decisions, receipts, frontiers, producers, or an alternate workflow state machine. Declining a suggestion is conversation context, not a Decision. Discovery, installation, activation, or invocation failure is non-blocking: report the unavailable augmentation and continue the same core ARSU route.

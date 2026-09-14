@@ -34,6 +34,32 @@ void test("graph list and show inspect profiles and changes", async () => {
   }
 });
 
+void test("procedure discovery is global and activation is workspace-bound", async () => {
+  const root = await tempProject();
+  try {
+    const listed = parseEnvelope<{ items: Array<{ procedure_id: string; description: string }>; total: number }>(
+      runCli(["list", "procedures", "--query", "deep research", "--json"], root),
+    );
+    assert.equal(listed.ok, true, JSON.stringify(listed.error));
+    assert.equal(listed.data?.items[0]?.procedure_id, "deep-research");
+    assert.ok((listed.data?.items[0]?.description.length ?? 0) <= 240);
+    const shown = parseEnvelope<{ procedure_id: string }>(runCli(["show", "procedure:deep-research", "--json"], root));
+    assert.equal(shown.data?.procedure_id, "deep-research");
+    assert.equal(parseEnvelope(runCli(["instructions", "procedure:deep-research", "--json"], root)).error?.code, "workspace_unsupported");
+
+    init(root);
+    const instructions = parseEnvelope<{ packet: { activation_mode: string; procedure: { id: string; content_sha256: string } } }>(
+      runCli(["instructions", "procedure:deep-research", "--json"], root),
+    );
+    assert.equal(instructions.ok, true, JSON.stringify(instructions.error));
+    assert.equal(instructions.data?.packet.activation_mode, "standalone");
+    assert.equal(instructions.data?.packet.procedure.id, "deep-research");
+    assert.match(instructions.data?.packet.procedure.content_sha256 ?? "", /^[a-f0-9]{64}$/);
+  } finally {
+    await cleanup(root);
+  }
+});
+
 void test("profile and change instructions expose bounded executable contracts", async () => {
   const root = await tempProject();
   try {
@@ -169,7 +195,7 @@ void test("plugin list works outside and inside a schema 2 workspace", async () 
   }
 });
 
-void test("plugin uninstall blocks when a projected Skill has drifted", async () => {
+void test("plugin uninstall blocks when a projected profile has drifted", async () => {
   const root = await tempProject();
   try {
     const initialized = parseEnvelope(runCli(["init", root, "--tools", "codex", "--delivery", "skills", "--json"], root));
@@ -177,8 +203,8 @@ void test("plugin uninstall blocks when a projected Skill has drifted", async ()
     const installed = parseEnvelope(runCli(["plugin", "install", "ecology", "--yes", "--json"], root));
     assert.equal(installed.ok, true, JSON.stringify(installed.error));
 
-    const projectedSkillPath = path.join(root, ".agents/skills/tooluniverse-ecology-biodiversity/SKILL.md");
-    await appendFile(projectedSkillPath, "\n<!-- user drift -->\n", "utf8");
+    const projectedProfilePath = path.join(root, "researchspec/profiles/plugin-ecology-biodiversity.yaml");
+    await appendFile(projectedProfilePath, "\n# user drift\n", "utf8");
 
     const driftCheck = parseEnvelope<{ diagnostics: Array<{ code?: string }> }>(runCli(["check", "plugins", "--json"], root));
     assert.equal(driftCheck.ok, true, JSON.stringify(driftCheck.error));
@@ -190,7 +216,7 @@ void test("plugin uninstall blocks when a projected Skill has drifted", async ()
     const uninstalled = parseEnvelope(runCli(["plugin", "uninstall", "ecology", "--yes", "--json"], root));
     assert.equal(uninstalled.ok, false);
     assert.equal(uninstalled.error?.code, "plugin_projection_conflict");
-    await readFile(projectedSkillPath, "utf8");
+    await readFile(projectedProfilePath, "utf8");
 
     const installedList = parseEnvelope<{ selected_plugins: string[] }>(runCli(["plugin", "list", "--installed", "--json"], root));
     assert.deepEqual(installedList.data?.selected_plugins ?? [], ["ecology"]);
@@ -199,7 +225,7 @@ void test("plugin uninstall blocks when a projected Skill has drifted", async ()
   }
 });
 
-void test("plugin install, instructions, and uninstall reconcile graph workspace projections", async () => {
+void test("plugin selection enables on-demand procedures and graph profiles without Agent projection", async () => {
   const root = await tempProject();
   try {
     const initialized = parseEnvelope(runCli(["init", root, "--tools", "codex", "--delivery", "skills", "--json"], root));
@@ -211,16 +237,13 @@ void test("plugin install, instructions, and uninstall reconcile graph workspace
     assert.equal(installed.ok, true, JSON.stringify(installed.error));
     assert.deepEqual(installed.data?.selected_plugins ?? [], ["ecology"]);
     assert.deepEqual(installed.data?.resolved_skill_ids ?? [], ["tooluniverse-ecology-biodiversity"]);
-    assert.deepEqual(installed.data?.projected_tools ?? [], ["codex"]);
-
-    const projectedSkillPath = path.join(root, ".agents/skills/tooluniverse-ecology-biodiversity/SKILL.md");
-    await readFile(projectedSkillPath, "utf8");
+    assert.deepEqual(installed.data?.projected_tools ?? [], []);
 
     const status = parseEnvelope<{ plugins: { selected: string[]; resolved_skills: string[]; projected: string[] } }>(runCli(["status", "--json"], root));
     assert.equal(status.ok, true, JSON.stringify(status.error));
     assert.deepEqual(status.data?.plugins.selected ?? [], ["ecology"]);
     assert.deepEqual(status.data?.plugins.resolved_skills ?? [], ["tooluniverse-ecology-biodiversity"]);
-    assert.deepEqual(status.data?.plugins.projected ?? [], ["ecology"]);
+    assert.deepEqual(status.data?.plugins.projected ?? [], []);
 
     const checked = parseEnvelope<{ target: string; diagnostics: unknown[] }>(runCli(["check", "plugins", "--json"], root));
     assert.equal(checked.ok, true, JSON.stringify(checked.error));
@@ -234,28 +257,28 @@ void test("plugin install, instructions, and uninstall reconcile graph workspace
     };
     assert.equal(manifest.plugin_resolutions[0]?.domain_id, "ecology");
     assert.deepEqual(manifest.plugin_resolutions[0]?.resolved_skill_ids ?? [], ["tooluniverse-ecology-biodiversity"]);
-    assert.equal(manifest.installations.some((item) => item.source.kind === "domain-skill" && item.source.skill_id === "tooluniverse-ecology-biodiversity"), true);
+    assert.equal(manifest.installations.some((item) => item.source.kind === "domain-skill"), false);
+    assert.equal(manifest.installations.some((item) => item.source.kind === "plugin-capability"), false);
 
-    const instructions = parseEnvelope<{ skill_id: string; entry_sha256: string; content: string; projected_tools: string[] }>(
-      runCli(["plugin", "instructions", "tooluniverse-ecology-biodiversity", "--json"], root),
+    const instructions = parseEnvelope<{ packet: { procedure: { id: string; content_sha256: string; content: string }; activation_mode: string } }>(
+      runCli(["instructions", "procedure:plugin-tooluniverse-ecology-biodiversity", "--json"], root),
     );
     assert.equal(instructions.ok, true, JSON.stringify(instructions.error));
-    assert.equal(instructions.data?.skill_id, "tooluniverse-ecology-biodiversity");
-    assert.match(instructions.data?.entry_sha256 ?? "", /^[a-f0-9]{64}$/);
-    assert.match(instructions.data?.content ?? "", /^---\nname: tooluniverse-ecology-biodiversity/);
-    assert.deepEqual(instructions.data?.projected_tools ?? [], ["codex"]);
+    assert.equal(instructions.data?.packet.procedure.id, "plugin-tooluniverse-ecology-biodiversity");
+    assert.equal(instructions.data?.packet.activation_mode, "standalone");
+    assert.match(instructions.data?.packet.procedure.content_sha256 ?? "", /^[a-f0-9]{64}$/);
+    assert.match(instructions.data?.packet.procedure.content ?? "", /^---\nname: plugin-tooluniverse-ecology-biodiversity/);
 
     const reconfigured = parseEnvelope(runCli(["update", "--tools", "none", "--json"], root));
     assert.equal(reconfigured.ok, true, JSON.stringify(reconfigured.error));
-    await assert.rejects(readFile(projectedSkillPath, "utf8"), { code: "ENOENT" });
-    const deferredInstructions = parseEnvelope(runCli(["plugin", "instructions", "tooluniverse-ecology-biodiversity", "--json"], root));
-    assert.equal(deferredInstructions.ok, false);
-    assert.equal(deferredInstructions.error?.code, "plugin_not_projected");
+    assert.equal(parseEnvelope(runCli(["instructions", "procedure:plugin-tooluniverse-ecology-biodiversity", "--json"], root)).ok, true);
 
     const uninstalled = parseEnvelope<{ selected_plugins: string[] }>(runCli(["plugin", "uninstall", "ecology", "--yes", "--json"], root));
     assert.equal(uninstalled.ok, true, JSON.stringify(uninstalled.error));
     assert.deepEqual(uninstalled.data?.selected_plugins ?? [], []);
-    await assert.rejects(readFile(projectedSkillPath, "utf8"), { code: "ENOENT" });
+    const unavailable = parseEnvelope(runCli(["instructions", "procedure:plugin-tooluniverse-ecology-biodiversity", "--json"], root));
+    assert.equal(unavailable.ok, false);
+    assert.equal(unavailable.error?.code, "procedure_domain_selection_required");
 
     const reconciledManifest = JSON.parse(await readFile(manifestPath, "utf8")) as {
       plugin_resolutions: unknown[];
@@ -294,14 +317,14 @@ void test("plugin transactions reject stale config or manifest snapshots before 
       assert.equal(transaction.writePlan.operations.find((operation) => operation.path === manifestPath)?.action, "skip-unchanged");
       const target = path.join(workspace, relativePath);
       assert.ok(transaction.writePlan.readPreconditions?.some((precondition) => precondition.path === target));
-      const projectedSkillPath = path.join(root, ".agents/skills/tooluniverse-ecology-biodiversity/SKILL.md");
-      const beforeProjection = await readFile(projectedSkillPath, "utf8");
+      const projectedProfilePath = path.join(workspace, "profiles/plugin-ecology-biodiversity.yaml");
+      const beforeProjection = await readFile(projectedProfilePath, "utf8");
       await writeFile(target, `${await readFile(target, "utf8")}\n# concurrent edit\n`, "utf8");
       await assert.rejects(
         () => executeWritePlan(transaction.writePlan),
         (error: unknown) => (error as NodeJS.ErrnoException).code === "EWRITE_CONFLICT",
       );
-      assert.equal(await readFile(projectedSkillPath, "utf8"), beforeProjection);
+      assert.equal(await readFile(projectedProfilePath, "utf8"), beforeProjection);
       assert.match(await readFile(target, "utf8"), /concurrent edit/);
     } finally {
       await cleanup(root);
@@ -354,13 +377,13 @@ void test("plugin transactions roll back install, uninstall, and update together
         assert.equal(installed.status, 0, installed.stderr);
       }
       const workspace = path.join(root, "researchspec");
-      const skillPath = path.join(root, ".agents/skills/tooluniverse-ecology-biodiversity/SKILL.md");
-      if (mode === "update") await appendFile(skillPath, "\n<!-- update drift -->\n", "utf8");
+      const profilePath = path.join(workspace, "profiles/plugin-ecology-biodiversity.yaml");
+      if (mode === "update") await appendFile(profilePath, "\n# update drift\n", "utf8");
       const configPath = path.join(workspace, "config.yaml");
       const manifestPath = path.join(workspace, "tool-installation-manifest.json");
       const beforeConfig = await readFile(configPath, "utf8");
       const beforeManifest = await readFile(manifestPath, "utf8");
-      const beforeSkill = mode === "install" ? undefined : await readFile(skillPath, "utf8");
+      const beforeProfile = mode === "install" ? undefined : await readFile(profilePath, "utf8");
       const index = await loadGraphWorkspaceIndex(workspace);
       const selected = mode === "install" ? ["ecology"] : mode === "uninstall" ? [] : index.config.plugins.selected;
       const transaction = await planWorkspacePluginTransaction({
@@ -380,8 +403,8 @@ void test("plugin transactions roll back install, uninstall, and update together
       );
       assert.equal(await readFile(configPath, "utf8"), beforeConfig);
       assert.equal(await readFile(manifestPath, "utf8"), beforeManifest);
-      if (mode === "install") await assert.rejects(readFile(skillPath, "utf8"), { code: "ENOENT" });
-      else assert.equal(await readFile(skillPath, "utf8"), beforeSkill);
+      if (mode === "install") await assert.rejects(readFile(profilePath, "utf8"), { code: "ENOENT" });
+      else assert.equal(await readFile(profilePath, "utf8"), beforeProfile);
     } finally {
       await cleanup(root);
     }
@@ -397,11 +420,11 @@ void test("plugin update force refreshes only the requested domain projection", 
     assert.equal(installed.status, 0, installed.stderr);
 
     const workspace = path.join(root, "researchspec");
-    const ecologyPath = path.join(root, ".agents/skills/tooluniverse-ecology-biodiversity/SKILL.md");
-    const historicalPath = path.join(root, ".agents/skills/histagent-historical-research/SKILL.md");
+    const ecologyPath = path.join(workspace, "profiles/plugin-ecology-biodiversity.yaml");
+    const historicalPath = path.join(workspace, "profiles/plugin-historical-research.yaml");
     const ecologySource = await readFile(ecologyPath, "utf8");
-    await appendFile(ecologyPath, "\n<!-- ecology drift -->\n", "utf8");
-    const historicalDrift = `${await readFile(historicalPath, "utf8")}\n<!-- historical drift -->\n`;
+    await appendFile(ecologyPath, "\n# ecology drift\n", "utf8");
+    const historicalDrift = `${await readFile(historicalPath, "utf8")}\n# historical drift\n`;
     await writeFile(historicalPath, historicalDrift, "utf8");
     const configBefore = await readFile(path.join(workspace, "config.yaml"), "utf8");
     const manifestBefore = await readFile(path.join(workspace, "tool-installation-manifest.json"), "utf8");

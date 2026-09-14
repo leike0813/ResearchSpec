@@ -1,6 +1,6 @@
 # ResearchSpec
 
-ResearchSpec is an agent-neutral, file-based execution-flow engine for academic research capabilities. It installs composable capability Skills into supported Agent tools, keeps stable research contracts explicit, and records each graph run, node state, formal Gate, human Decision, transition, and handoff path in its own control directory.
+ResearchSpec is an agent-neutral, file-based execution-flow engine for academic research capabilities. It installs one navigation entry, loads reviewed Procedures on demand, keeps stable research contracts explicit, and records graph runs, node state, formal Gates, human Decisions, transitions, and handoff paths in its own control directory.
 
 Version `0.1.0` is an MVP release candidate. The functional user model is implemented and covered by public-CLI acceptance journeys; publication remains blocked until the hosted CI and manual dogfooding checklist are signed.
 
@@ -14,7 +14,7 @@ AI Agent 驱动的学术研究面临三个核心问题：
 
 ResearchSpec 的应对方案：
 
-- **Agent-neutral Skills**：所有研究 Skills 以文件形式分发，通过 CLI 适配层安装到不同 Agent 工具，不依赖任何平台的私有运行时
+- **按需 Procedure**：研究能力仍以文件包分发，但宿主只常驻 Navigate；CLI 在选定后加载完整内容，不依赖平台私有运行时
 - **CLI 为中心的执行框架**：CLI 是 run/node 运行状态的唯一修改入口；Agent 执行能力节点、维护研究规格、外部语义交付物和 handoff，不直接编辑 run/node 状态
 - **文件合约 (File Contracts)**：研究意图、来源、claims、稿件结构、graph profile、run/node state、handoff 与 project change 都有明确的 Markdown / YAML / JSON owner
 
@@ -114,7 +114,7 @@ researchspec check all --strict
 researchspec init . --tools codex --literature-adapters zotero-library
 ```
 
-`init` 只创建 schema `"2"` workspace、graph profiles、四份 stable specs 和静态 Agent
+`init` 只创建 schema `"2"` workspace、graph profiles、四份 stable specs 和 Navigate Agent
 投影，不会启动学术工作。旧或未知 workspace 会被报告为 unsupported，且不会被读取、迁移
 或修改。
 
@@ -122,11 +122,11 @@ researchspec init . --tools codex --literature-adapters zotero-library
 
 > I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, boundary outputs, formal Gates, risks, and cost. Do not start a route until I confirm it.
 
-ResearchSpec 默认投影经过 authoring converter 生成的 capability Skills（当前 47 个，含 paper-humanizer 四个节点与 review-response 五个节点），并安装五个核心 Companion 工作流与预设 graph profiles：`minimal`、`research-main`、`academic-paper`、`academic-paper-reviewer`、`academic-pipeline`、`paper-humanizer`、`review-response`。
+ResearchSpec 默认只投影 `researchspec-navigate`。四个 ARSU 工作流、其余 Companion、47 个 core capability 与 332 个 plugin extension 通过 `list/show/instructions procedure` 按需发现和加载；预设 graph profiles 保持可组合。
 
 可选的 [Zotero 文献系统 Adapter](docs/user/literature-adapters.md) 会额外安装七个 Skill、项目级 `.zotero-bridge` runtime 和配置模板。`update --literature-adapters none` 可取消选择；未修改的托管文件会被移除，发生 drift 的文件会保留并报告。初始化及状态检查阶段不与 Zotero 通信。
 
-可选 ResearchSpec 维护的[领域 Skill 插件](docs/developer/domain-plugins.md)可为 workspace 添加经审查的 Open Agent Skills。用户按稳定 domain 选择；维护者 converter 拥有上游出处和 Skill 依赖。学科域遵循 [ANZSRC 2020 FoR 组](docs/developer/domain-taxonomy.md)，Field 代码只用于审计。插件不增加 Companion 或 CLI capability，也不能修改 stable specs、run/node state、handoff、Gate、Decision 或 graph transition。用户拒绝插件或插件不可用时，核心工作不变。
+可选 ResearchSpec 维护的[领域插件](docs/developer/domain-plugins.md)让 workspace 选择经审查的 Procedure 与 graph profile，不向宿主目录批量投影 Skills。用户按稳定 domain 选择；维护者 converter 拥有上游出处和依赖。插件不能修改 stable specs、run/node state、handoff、Gate、Decision 或 graph transition。
 
 这里的“可选”控制 workspace 投影；安装 CLI 仍会下载包含全部插件和 Adapter 资源的离线包。能力包的 `operational` 是已编写完整执行流程的成熟度声明，内容覆盖由独立 parity 检查验证；真实 Agent 的证据质量和交付可用性仍需单独演练、人工签收。
 

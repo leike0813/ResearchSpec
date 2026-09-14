@@ -31,7 +31,6 @@ import {
 } from "./handlers/graph-context.js";
 import {
   handleGraphPluginInstall,
-  handleGraphPluginInstructions,
   handleGraphPluginList,
   handleGraphPluginShow,
   handleGraphPluginUninstall,
@@ -143,8 +142,6 @@ function registerCommands(program: Command, run: Runner): void {
     .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handleGraphPluginUninstall(pluginIds, commandContext("plugin", command))));
   registerCliCommand(plugin, "plugin-update")
     .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handleGraphPluginUpdate(pluginIds, commandContext("plugin", command))));
-  registerCliCommand(plugin, "plugin-instructions")
-    .action(async (skillId: string, _options: Record<string, never>, command: Command) => run("plugin", command, () => handleGraphPluginInstructions(skillId, commandContext("plugin", command))));
 }
 
 async function createProgram(): Promise<Command> {

@@ -13,7 +13,6 @@ import {
   type DomainResolutionSnapshot,
   type ManagedInstallation,
 } from "../adapters/installations.js";
-import { selectSkillWriters } from "../adapters/delivery.js";
 import { managedTargetDiagnostic, resolveManagedTarget, validateManagedTarget } from "../adapters/managed-target.js";
 import { getTool, toolSkillsRoot, type DeliveryMode } from "../adapters/tools.js";
 import { GraphWorkspaceConfigSchema } from "../core/contracts/graph-workspace.js";
@@ -22,7 +21,7 @@ import type { Diagnostic } from "../core/validation/types.js";
 import { executeWritePlan, planDirectFileEdit, planFile, sha256, type PlannedWrite, type ReadPrecondition, type WritePlan } from "../core/workspace/write-plan.js";
 import { assertPathWithinRoot } from "../core/workspace/path-boundary.js";
 import { loadPluginExtensionRegistry, resolveDomainExtensions, type LoadedPluginExtensionRegistry } from "./extensions.js";
-import { domainIsAvailable, filesForSkill, pluginSkillRoot, resolveDomainSelection, type LoadedPluginRegistry } from "./registry.js";
+import { domainIsAvailable, resolveDomainSelection, type LoadedPluginRegistry } from "./registry.js";
 
 export interface PlanPluginProjectionInput {
   projectRoot: string;
@@ -137,16 +136,11 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
   const resolution = resolveDomainSelection(input.registry, input.selectedDomainIds);
   const extensions = input.extensions ?? await loadPluginExtensionRegistry();
   const extensionResolution = resolveDomainExtensions(extensions, input.selectedDomainIds);
-  const forceResolution = input.forceDomainIds === undefined
-    ? resolution
-    : resolveDomainSelection(input.registry, input.forceDomainIds);
-  const forceSkillIds = new Set(forceResolution.resolvedSkillIds);
   const forceExtensionResolution = input.forceDomainIds === undefined
     ? extensionResolution
     : resolveDomainExtensions(extensions, input.forceDomainIds);
-  const forceCapabilityIds = new Set(forceExtensionResolution.capabilityIds);
   const forceProfileIds = new Set(forceExtensionResolution.profileIds);
-  const skillToolIds = selectSkillWriters(input.toolIds, input.delivery);
+  const skillToolIds: string[] = [];
   const existingByKey = new Map(input.existingInstallations.map((item) => [installationKey(item), item]));
   const operations: PlannedWrite[] = [];
   const desiredInstallations: ManagedInstallation[] = [];
@@ -156,75 +150,7 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
   const removedCapabilityRoots: Array<{ toolId: string; capabilityId: string }> = [];
   const snapshots = selectedDomainResolutionSnapshots(input.registry, input.selectedDomainIds, input.existingResolutions, extensions);
   const unavailableSnapshots = snapshots.filter((snapshot) => !domainIsAvailable(input.registry.domains.get(snapshot.domain_id)));
-  const preservedSkillIds = new Set(unavailableSnapshots.flatMap((snapshot) => snapshot.resolved_skill_ids));
-  const preservedCapabilityIds = new Set(unavailableSnapshots.flatMap((snapshot) => snapshot.resolved_capability_ids ?? []));
   const preservedProfileIds = new Set(unavailableSnapshots.flatMap((snapshot) => snapshot.resolved_profile_ids ?? []));
-
-  for (const toolId of skillToolIds) {
-    const tool = getTool(toolId);
-    if (!tool) continue;
-    const root = toolSkillsRoot(tool, input.projectRoot);
-    for (const registered of resolution.skills) {
-      const skill = registered.definition;
-      const sourceRoot = pluginSkillRoot(input.registry.root, registered.vendor.vendor_id, skill.skill_id);
-      for (const relativeAsset of filesForSkill(input.registry, skill.skill_id)) {
-        const target = path.join(root.root, skill.skill_id, relativeAsset);
-        const manifestPath = root.scope === "project" ? targetPath(path.relative(input.projectRoot, target)) : target;
-        const recordedHash = existingByKey.get(installationKey({ target: { scope: root.scope, path: manifestPath, executable: false } }))?.sha256;
-        const content = await readFile(path.join(sourceRoot, relativeAsset));
-        const installation: ManagedInstallation = {
-          owner: "agent-tool", tool_id: toolId,
-          source: { kind: "domain-skill", vendor_id: registered.vendor.vendor_id, vendor_release: registered.vendor.release, skill_id: skill.skill_id },
-          target: { scope: root.scope, path: manifestPath, executable: false }, sha256: sha256(content),
-        };
-        const operation = await planFile({
-          boundaryRoot: resolveManagedTarget(input.projectRoot, installation).boundaryRoot,
-          path: target,
-          relativePath: manifestPath,
-          content,
-          scope: root.scope,
-          ownership: "generated",
-          recordedHash,
-          requireRecordedOwnership: recordedHash === undefined,
-          force: input.force && forceSkillIds.has(skill.skill_id),
-        });
-        operations.push(operation);
-        pushProjectionDiagnostic(diagnostics, operation, "plugin_projection", `Cannot project plugin Skill ${skill.skill_id} for ${toolId}: ${operation.reason}`, `Plugin Skill file has user modifications and was preserved: ${skill.skill_id}`, target, { tool_id: toolId, skill_id: skill.skill_id });
-        desiredInstallations.push({ ...installation, sha256: operation.action === "skip-drift" && recordedHash ? recordedHash : installation.sha256 });
-      }
-    }
-
-    for (const capabilityId of extensionResolution.capabilityIds) {
-      const registered = extensions.capabilities.get(capabilityId);
-      if (!registered) continue;
-      for (const source of registered.files) {
-        const relativeAsset = targetPath(path.relative(registered.packageRoot, source));
-        const target = path.join(root.root, capabilityId, relativeAsset);
-        const manifestPath = root.scope === "project" ? targetPath(path.relative(input.projectRoot, target)) : target;
-        const recordedHash = existingByKey.get(installationKey({ target: { scope: root.scope, path: manifestPath, executable: false } }))?.sha256;
-        const content = await readFile(source);
-        const installation: ManagedInstallation = {
-          owner: "agent-tool", tool_id: toolId,
-          source: { kind: "plugin-capability", capability_id: capabilityId, extension_registry_version: extensions.registry.registry_version },
-          target: { scope: root.scope, path: manifestPath, executable: false }, sha256: sha256(content),
-        };
-        const operation = await planFile({
-          boundaryRoot: resolveManagedTarget(input.projectRoot, installation).boundaryRoot,
-          path: target,
-          relativePath: manifestPath,
-          content,
-          scope: root.scope,
-          ownership: "generated",
-          recordedHash,
-          requireRecordedOwnership: recordedHash === undefined,
-          force: input.force && forceCapabilityIds.has(capabilityId),
-        });
-        operations.push(operation);
-        pushProjectionDiagnostic(diagnostics, operation, "plugin_extension_projection", `Cannot project plugin capability ${capabilityId} for ${toolId}: ${operation.reason}`, `Plugin capability file has user modifications and was preserved: ${capabilityId}`, target, { tool_id: toolId, capability_id: capabilityId });
-        desiredInstallations.push({ ...installation, sha256: operation.action === "skip-drift" && recordedHash ? recordedHash : installation.sha256 });
-      }
-    }
-  }
 
   for (const profileId of extensionResolution.profileIds) {
     const registered = extensions.profiles.get(profileId);
@@ -264,11 +190,7 @@ export async function planPluginProjection(input: PlanPluginProjectionInput): Pr
       : isPluginCapabilityInstallation(existing)
         ? existing.source.capability_id
         : existing.source.profile_id;
-    const preserved = isDomainSkillInstallation(existing)
-      ? preservedSkillIds.has(sourceId)
-      : isPluginCapabilityInstallation(existing)
-        ? preservedCapabilityIds.has(sourceId)
-        : preservedProfileIds.has(sourceId);
+    const preserved = isPluginProfileInstallation(existing) && preservedProfileIds.has(sourceId);
     if (preserved) {
       retainedInstallations.push(existing);
       continue;

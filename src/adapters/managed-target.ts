@@ -5,7 +5,7 @@ import type { Diagnostic } from "../core/validation/types.js";
 import { isCanonicalAbsolutePath, isSafePathComponent, isSafeRelativePath } from "../core/contracts/project-path.js";
 import { assertPathWithinRoot } from "../core/workspace/path-boundary.js";
 import { getLiteratureAdapter } from "../literature-adapters/catalog.js";
-import { COMMAND_WRAPPER_CONTENTS } from "./command-renderer.js";
+import { COMMAND_WRAPPER_CONTENTS, LEGACY_COMMAND_IDS } from "./command-renderer.js";
 import { getTool, sharedSkillTarget, toolSkillsRoot } from "./tools.js";
 import type { ManagedInstallation, ManagedInstallationSource } from "./installations.js";
 
@@ -24,7 +24,7 @@ export class ManagedTargetError extends Error {
   }
 }
 
-const COMMAND_IDS = new Set(COMMAND_WRAPPER_CONTENTS.map((item) => item.id));
+const COMMAND_IDS = new Set<string>([...LEGACY_COMMAND_IDS, ...COMMAND_WRAPPER_CONTENTS.map((item) => item.id)]);
 
 /**
  * Resolve a manifest record without touching the filesystem.
@@ -95,7 +95,7 @@ function resolveAgentTarget(
 
   if (source.kind === "command") {
     assertSafeComponent(source.command_id, "command_id");
-    if (!COMMAND_IDS.has(source.command_id as (typeof COMMAND_WRAPPER_CONTENTS)[number]["id"])) {
+    if (!COMMAND_IDS.has(source.command_id)) {
       fail(`command destination is not a ResearchSpec wrapper: ${source.command_id}`);
     }
     if (!tool.command) fail(`tool ${tool.id} does not define command destinations`);

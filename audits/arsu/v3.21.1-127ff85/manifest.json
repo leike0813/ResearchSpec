@@ -16,25 +16,25 @@
     "registry_sha256": "c677e348ad341312183f6fd5c76f5580bfe482c021f0edbd8b8c2b249ee0f7bf",
     "capability_count": 47,
     "operational_count": 47,
-    "packages_tree_sha256": "99793ac1f02f4c69aa8ef36aa7e225cdd04a9f9f192c77915e389fc6fd48924b"
+    "packages_tree_sha256": "4497ab19774abe5a558b0b7e31e2c6e1a441796695ef1babceab7ed552d306fc"
   },
   "review": {
-    "parity_report_sha256": "8fae41dc975e35722c9d00488033742714d7b37546717d9b28c3569eea878a6f",
-    "section_coverage": 0.9453378676060703,
-    "rule_coverage": 0.9463518494045783,
+    "parity_report_sha256": "0bb84590e8f26cbf4e476da921900198ccf00a2fae614b12a7775a1c642dc1e6",
+    "section_coverage": 0.9456871931208453,
+    "rule_coverage": 0.9445787997591882,
     "below_section_threshold": [],
     "below_rule_threshold": [],
     "output_missing": [],
     "flow_retained": [],
-    "review_html_sha256": "fb14f4bd4cec586d1f91376e19beb3342d4ae0d7acd7d5f40696471e3b414f29",
-    "assessment_html_sha256": "5b518d7310ea03ec18679fa3c9abbdc8a9c98675253f422d1e15f264c03dca4b",
-    "gap_review_html_sha256": "151e1c8860f677f28a31e53a0d1eccfd5bdddccd65276ac197d14253724469c7"
+    "review_html_sha256": "6e9eab194ba444d6280363ec8974fd98f69139efcd45c5bb40bd47c033514dd1",
+    "assessment_html_sha256": "66230b19a32f32f33cec8062395e44dc6c8686df343dc3c33055f54c9e1053d3",
+    "gap_review_html_sha256": "c728de0c4d5092474e79e715fdabd07070fa5975c932885f66c6908f077e7842"
   },
   "maintenance": {
     "skill_sha256": "b0097664e5eebf76a5af772f4cef4beab9434314ce87a128adb5fa7adaada590",
-    "record_sha256": "8aada73ed3c8a1b608f396c28e585272937ca8c20306b0cb0ee380ecba1e6b58"
+    "record_sha256": "21ce4598730570c757184f7d3f85330085913c974d0ce7324b31cc2dd6834429"
   },
   "schema_version": "1",
   "anchor_id": "v3.21.1-127ff85",
-  "created_at": "2026-09-05T18:12:19.702Z"
+  "created_at": "2026-09-14T03:33:40.606Z"
 }

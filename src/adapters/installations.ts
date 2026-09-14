@@ -233,7 +233,7 @@ export async function reconcileAgentToolInstallations(input: {
 
   for (const installation of input.existingInstallations) {
     if (desiredKeys.has(installationKey(installation))) continue;
-    if (isDomainSkillInstallation(installation) || isPluginCapabilityInstallation(installation) || isPluginProfileInstallation(installation)) {
+    if (isPluginProfileInstallation(installation)) {
       retainedInstallations.push(installation);
       continue;
     }

@@ -9,11 +9,12 @@ import { GraphRunError, writeGraphHandoff } from "../../core/runtime/graph-run.j
 import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
 import { sha256 } from "../../core/workspace/write-plan.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
+import { loadProcedureCatalog, procedureCard, searchProcedures } from "../../procedures/catalog.js";
 
 
 const FIXED_DATE = new Date("1980-01-01T00:00:00.000Z");
 
-export interface GraphListOptions { limit?: string; cursor?: string }
+export interface GraphListOptions { limit?: string; cursor?: string; query?: string }
 export interface GraphHandoffOptions { input?: string }
 export interface GraphPackOptions { output: string; scope?: string }
 export interface GraphProposeOptions { targets: string; with?: string }
@@ -24,21 +25,25 @@ async function graphWorkspace(context: CommandContext): Promise<string> {
 }
 
 export async function handleGraphList(type: string | undefined, options: GraphListOptions, context: CommandContext): Promise<CommandResult> {
-  const workspace = await graphWorkspace(context);
-  const index = await loadGraphWorkspaceIndex(workspace);
   const resolved = type ?? "runs";
   let items: Array<Record<string, unknown>> = [];
-  if (resolved === "profiles") items = [...index.profiles.values()].map((profile) => ({ selector: `profile:${profile.profile_id}`, profile_id: profile.profile_id, profile_version: profile.profile_version }));
-  else if (resolved === "runs") items = index.runs.map((record) => ({ selector: `run:${record.run?.run_id ?? record.directoryName}`, run_id: record.run?.run_id, status: record.run?.status, node_count: record.nodeEntries.length }));
-  else if (resolved === "nodes") items = index.runs.flatMap((record) => record.nodeEntries.flatMap((entry) => entry.node ? [{ selector: `node:${record.run?.run_id ?? ""}/${entry.node.node_id}${entry.node.round === undefined ? "" : `@${String(entry.node.round)}`}`, run_id: record.run?.run_id, node_id: entry.node.node_id, ...(entry.node.round === undefined ? {} : { round: entry.node.round }), state: entry.node.state }] : []));
-  else if (resolved === "changes") items = [...index.changes, ...index.archivedChanges].map((record) => ({ selector: `change:${record.id}`, id: record.id, archived: record.archived, status: record.change.status }));
-  else if (resolved === "diagnostics") items = index.diagnostics.map((item) => ({ selector: item.code, code: item.code, severity: item.severity, path: item.path, message: item.message }));
-  else throw new CliError("invalid_list_type", `Unknown graph list type: ${resolved}`, 2);
-  items.sort((left, right) => compareText(
-    typeof left.selector === "string" ? left.selector : "",
-    typeof right.selector === "string" ? right.selector : "",
-  ));
-  const limit = options.limit === undefined ? 20 : Number(options.limit);
+  if (resolved === "procedures") {
+    items = searchProcedures(await loadProcedureCatalog(), options.query).map((procedure) => ({ ...procedureCard(procedure) }));
+  } else {
+    const workspace = await graphWorkspace(context);
+    const index = await loadGraphWorkspaceIndex(workspace);
+    if (resolved === "profiles") items = [...index.profiles.values()].map((profile) => ({ selector: `profile:${profile.profile_id}`, profile_id: profile.profile_id, profile_version: profile.profile_version }));
+    else if (resolved === "runs") items = index.runs.map((record) => ({ selector: `run:${record.run?.run_id ?? record.directoryName}`, run_id: record.run?.run_id, status: record.run?.status, node_count: record.nodeEntries.length }));
+    else if (resolved === "nodes") items = index.runs.flatMap((record) => record.nodeEntries.flatMap((entry) => entry.node ? [{ selector: `node:${record.run?.run_id ?? ""}/${entry.node.node_id}${entry.node.round === undefined ? "" : `@${String(entry.node.round)}`}`, run_id: record.run?.run_id, node_id: entry.node.node_id, ...(entry.node.round === undefined ? {} : { round: entry.node.round }), state: entry.node.state }] : []));
+    else if (resolved === "changes") items = [...index.changes, ...index.archivedChanges].map((record) => ({ selector: `change:${record.id}`, id: record.id, archived: record.archived, status: record.change.status }));
+    else if (resolved === "diagnostics") items = index.diagnostics.map((item) => ({ selector: item.code, code: item.code, severity: item.severity, path: item.path, message: item.message }));
+    else throw new CliError("invalid_list_type", `Unknown graph list type: ${resolved}`, 2);
+    items.sort((left, right) => compareText(
+      typeof left.selector === "string" ? left.selector : "",
+      typeof right.selector === "string" ? right.selector : "",
+    ));
+  }
+  const limit = options.limit === undefined ? (resolved === "procedures" ? 10 : 20) : Number(options.limit);
   if (!Number.isInteger(limit) || limit < 1 || limit > 50) throw new CliError("list_limit_invalid", "List limit must be an integer from 1 to 50.", 2);
   const fingerprint = sha256(JSON.stringify(items));
   const offset = options.cursor === undefined ? 0 : decodeListCursor(options.cursor, resolved, fingerprint);
@@ -57,6 +62,12 @@ export async function handleGraphList(type: string | undefined, options: GraphLi
 }
 
 export async function handleGraphShow(selector: string, context: CommandContext): Promise<CommandResult> {
+  if (selector.startsWith("procedure:")) {
+    const procedure = (await loadProcedureCatalog()).get(selector.slice("procedure:".length));
+    if (!procedure) throw new CliError("item_not_found", `Procedure not found: ${selector}`, 1);
+    const card = procedureCard(procedure);
+    return success("show", card, { stdout: `${JSON.stringify(card, null, 2)}\n` });
+  }
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
   if (selector.startsWith("profile:")) {

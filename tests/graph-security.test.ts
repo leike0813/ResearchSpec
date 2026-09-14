@@ -88,7 +88,7 @@ void test("invalid installation manifests block every projection mutation withou
     }
     const inspected = parseEnvelope(runCli(["check", "all", "--json"], root));
     assert.ok(inspected.diagnostics.some((item) => (item as { code: string }).code === "invalid_current_contract"));
-    for (const args of [["plugin", "list", "--installed"], ["plugin", "instructions", "missing-skill"]]) {
+    for (const args of [["plugin", "list", "--installed"], ["instructions", "procedure:missing-skill"]]) {
       assert.equal(parseEnvelope(runCli([...args, "--json"], root)).error?.code, "invalid_current_contract");
     }
     assert.equal(await hashPath(root), before);

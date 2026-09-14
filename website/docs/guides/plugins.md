@@ -95,16 +95,16 @@ researchspec plugin uninstall <plugin-id>
 
 Removes selected plugins from the current workspace.
 
-## Using Installed Plugins
+## Using Selected Plugin Procedures
 
-Read an installed plugin's instructions:
+Load a selected plugin Procedure on demand:
 
 ```bash
-researchspec plugin instructions <skill-id>
+researchspec instructions procedure:<procedure-id>
 ```
 
-This provides immediate advisory use of a hash-clean plugin Skill without
-persistent installation artifacts.
+This returns the reviewed package only after domain selection, availability and
+manifest-hash checks. It does not project the Procedure into the host Skill catalog.
 
 ## Domain Taxonomy
 

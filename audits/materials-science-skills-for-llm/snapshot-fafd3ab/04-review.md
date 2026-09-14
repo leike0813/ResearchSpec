@@ -12,19 +12,19 @@
 
 | capability_id | package tree SHA-256 | profile SHA-256 | tool files | tools byte-identical | required fields bound |
 |---|---|---|---|---|---|
-| `plugin-materials-apex-alloy-workflows` | `a4818aa7a7742abb39c7b6c953014df973da25604caeb4a3a443d5f62a6eaf92` | `451428f9b7959164a0bb4528df8da1f5ec88252c94f634401e1284c0f69b2369` | 1 | yes | yes |
-| `plugin-materials-atomsk-cli` | `a27b55d391f7f09a1544f7e6575b15d012dd4b0c3a9457305a69de5274a21bca` | `10d0919ceb3d37985899a0d8d00dfb7fab8104c15e6ee5c64fa7c757f96d76bf` | 0 | yes | yes |
-| `plugin-materials-deeptb-helper` | `70be8d394e017a9a588487593336b109e18883b92973ed149cb665d8709fc11c` | `d977b4b0015eb8ecbfd3cdd5962558330ef03babe299d1213ba6ea327df0d481` | 1 | yes | yes |
-| `plugin-materials-dpgen-workflow` | `7c9b786aa1a276532e0bafae9aac3ce11fcbd778adae4556c7794a72243e59dc` | `4c233e16557d758e6d963dc609130a76af33c94c6f89c26a7ba82bcd4b15996b` | 1 | yes | yes |
-| `plugin-materials-gpumd-workflow` | `92f3c5758b66c5609c4cf7e9a042293c2f0f0a0155687b0ce463ca12b2bd7474` | `ff15144110c09a1ddfac64f601c08e5dcd7d406c83fc04f92386b2b87598b89c` | 1 | yes | yes |
-| `plugin-materials-phonopy-workflows` | `68aa25b764decac61ff62803b13b6d0cb63dab006a45733dcccdbebf963990e6` | `f08149037a9b5b4949513a56a9addbf789910beb37c92109170b59bf37a27e88` | 1 | yes | yes |
-| `plugin-materials-unimol-ops` | `d6229708246c9c223036cd43f9544a7315d608e6ff81dfbba1b3a57c126eb19a` | `3e4543abadadce0c9ce1c4177165ef295b15fbfb7903cee1f9a67d5f0e0ce148` | 1 | yes | yes |
+| `plugin-materials-apex-alloy-workflows` | `3cc8056045c5500fe5e11a5b56983e341197be0377d06123a3c5181fa5746e71` | `451428f9b7959164a0bb4528df8da1f5ec88252c94f634401e1284c0f69b2369` | 1 | yes | yes |
+| `plugin-materials-atomsk-cli` | `c54e82fb5d28275470db9190a74b1c5009fcebe821dbb144f2d62b6df07d4ce1` | `10d0919ceb3d37985899a0d8d00dfb7fab8104c15e6ee5c64fa7c757f96d76bf` | 0 | yes | yes |
+| `plugin-materials-deeptb-helper` | `95fc326ce44f2eb864c09b9c8c911d770426cea1f204b7898cca68b85b743f97` | `d977b4b0015eb8ecbfd3cdd5962558330ef03babe299d1213ba6ea327df0d481` | 1 | yes | yes |
+| `plugin-materials-dpgen-workflow` | `7b81bd7f77cd3f45b1e69e8948706ae549a19d66917a75737bce917f66d25493` | `4c233e16557d758e6d963dc609130a76af33c94c6f89c26a7ba82bcd4b15996b` | 1 | yes | yes |
+| `plugin-materials-gpumd-workflow` | `da446a3a46f7b246be7a4ee3c79c1f0e14a158728ccea5d1a163bea0f99dbf3d` | `ff15144110c09a1ddfac64f601c08e5dcd7d406c83fc04f92386b2b87598b89c` | 1 | yes | yes |
+| `plugin-materials-phonopy-workflows` | `efdddb82ae959690b6dfd6cc93673f840041b4e8b63e387eda315e0b6df4c11e` | `f08149037a9b5b4949513a56a9addbf789910beb37c92109170b59bf37a27e88` | 1 | yes | yes |
+| `plugin-materials-unimol-ops` | `a774eaac6c555937fc859f8ae86c57fa4f60c74e47d6161284c9071561e2e6e2` | `3e4543abadadce0c9ce1c4177165ef295b15fbfb7903cee1f9a67d5f0e0ce148` | 1 | yes | yes |
 
 ## Machine Review Artifact
 
 | artifact | path | sha256 |
 |---|---|---|
-| extension review | `audits/materials-science-skills-for-llm/snapshot-fafd3ab/artifacts/extension-review.json` | `336b300d1bd5211a2fe36b3fb5a4cca7eb81b9b8067242fe0e88ef8c085dfc0f` |
+| extension review | `audits/materials-science-skills-for-llm/snapshot-fafd3ab/artifacts/extension-review.json` | `67df83acd01e8888fc96a141162ad7431f6b70b8dbbddf54bfaac3544008cfdc` |
 
 ## Human Confirmation
 

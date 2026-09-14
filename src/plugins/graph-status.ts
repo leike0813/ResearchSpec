@@ -1,7 +1,3 @@
-import path from "node:path";
-
-import { selectSkillWriters } from "../adapters/delivery.js";
-import { getTool, toolSkillsRoot } from "../adapters/tools.js";
 import type { GraphWorkspaceIndex } from "../core/runtime/graph-workspace-index.js";
 import { loadPluginExtensionRegistry, resolveDomainExtensions } from "./extensions.js";
 import { loadPluginRegistry } from "./registry.js";
@@ -39,14 +35,13 @@ export async function loadGraphPluginStatusView(index: GraphWorkspaceIndex): Pro
     let extensions;
     let resolvedCapabilityIds: string[] = [];
     let resolvedProfileIds: string[] = [];
-    let projectedCapabilityIds: string[] = [];
+    const projectedCapabilityIds: string[] = [];
     let projectedProfileIds: string[] = [];
     try {
       extensions = await loadPluginExtensionRegistry();
       const resolved = resolveDomainExtensions(extensions, selected);
       resolvedCapabilityIds = resolved.capabilityIds;
       resolvedProfileIds = resolved.profileIds;
-      projectedCapabilityIds = projectedCapabilities(index, extensions, resolvedCapabilityIds);
       projectedProfileIds = projectedProfiles(index, resolvedProfileIds);
     } catch {
       // Extension status is optional for the core graph status command.
@@ -74,31 +69,6 @@ export async function loadGraphPluginStatusView(index: GraphWorkspaceIndex): Pro
       error: error instanceof Error ? error.message : String(error),
     };
   }
-}
-
-function projectedCapabilities(index: GraphWorkspaceIndex, extensions: Awaited<ReturnType<typeof loadPluginExtensionRegistry>>, capabilityIds: readonly string[]): string[] {
-  const tools = selectSkillWriters(index.config.agent_tools.selected, index.config.agent_tools.delivery);
-  if (tools.length === 0) return [];
-  return capabilityIds.filter((capabilityId) => {
-    const capability = extensions.capabilities.get(capabilityId);
-    if (!capability) return false;
-    return tools.every((toolId) => {
-      const tool = getTool(toolId);
-      if (!tool) return false;
-      const root = toolSkillsRoot(tool, index.projectRoot);
-      return capability.files.every((source) => {
-        const relativeAsset = path.relative(capability.packageRoot, source).split(path.sep).join("/");
-        const target = path.join(root.root, capabilityId, relativeAsset);
-        const manifestPath = root.scope === "project" ? path.relative(index.projectRoot, target).split(path.sep).join("/") : target;
-        return index.manifest.installations.some((item) =>
-          item.target.scope === root.scope
-          && item.target.path === manifestPath
-          && item.source.kind === "plugin-capability"
-          && item.source.capability_id === capabilityId,
-        );
-      });
-    });
-  });
 }
 
 function projectedProfiles(index: GraphWorkspaceIndex, profileIds: readonly string[]): string[] {

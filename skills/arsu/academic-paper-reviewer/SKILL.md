@@ -16,13 +16,19 @@ metadata:
 <!-- researchspec-literature-adapter:zotero-library:v2 -->
 ## ResearchSpec Contract Preflight
 
-Locate the project researchspec/ workspace and run "researchspec status --json".
-For a new root run, request "researchspec instructions profile:<profile-id> --json"
-and present the selected entry, prerequisites, boundary outputs, formal Gates,
-Decisions, risk, cost, and confirmation scope. Start only after the user confirms
-that exact entry summary. Nodes and bound child runs declared by the frozen graph
-inherit that authorization; every formal Gate and Decision still requires its
-own confirmation, and alternate-model review requires separate current consent.
+Follow the active procedure packet. In standalone mode, work only with ordinary
+project files outside researchspec/, return their paths to the caller, and do not
+create or mutate runs, nodes, handoffs, Gates, Decisions, overrides, or transitions.
+
+In graph mode, locate the project researchspec/ workspace and use only the exact
+selectors and authority returned by `researchspec status --json` and
+`researchspec instructions <selector> --json`. For a new root run, request
+`researchspec instructions profile:<profile-id> --json` and present the selected
+entry, prerequisites, boundary outputs, formal Gates, Decisions, risk, cost, and
+confirmation scope. Start only after the user confirms that exact entry summary.
+Nodes and bound child runs declared by the frozen graph inherit that authorization;
+every formal Gate and Decision still requires its own confirmation, and
+alternate-model review requires separate current consent.
 
 Read only the route-relevant parts of specs/project.md, specs/sources.yaml,
 specs/claims.yaml, and specs/manuscript.yaml. Pipeline work also reads the
@@ -59,12 +65,12 @@ after the eligible Node Card's output and validator requirements are satisfied.
 A failed-Gate override requires its own human approval and reason on the owning
 Gate; confirmations never complete an execution node.
 
-Optional domain Skills are bounded advisory helpers. Suggest at most three
+Optional domain procedures are bounded advisory helpers. Suggest at most three
 domains, keep plugin consent separate from graph entry confirmation, preview the exact
-domain IDs and resolved Skills, and install only after explicit consent. Invoke a
-projected Skill natively when loaded; otherwise use plugin instructions only
-after selection, availability, projection, and manifest-hash checks. Decline or
-failure leaves the graph selector, active producer, and workflow frontier unchanged.
+domain IDs and resolved procedures, and install only after explicit consent. Activate
+a selected procedure with `researchspec instructions procedure:<procedure-id> --json`
+after selection, availability, and manifest-hash checks. Decline or failure leaves
+the graph selector, active producer, and workflow frontier unchanged.
 
 For literature work, the active ARSU producer may use an installed
 Zotero task Skill as a bounded provider after a just-in-time readiness check.

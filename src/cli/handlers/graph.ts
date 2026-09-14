@@ -25,6 +25,9 @@ import type { CurrentCheckTarget } from "../../core/validation/types.js";
 import { pluginWorkspaceDiagnostics } from "../../plugins/graph-check.js";
 import { loadWorkspaceCapabilityRegistry } from "../../plugins/runtime-capabilities.js";
 import { loadGraphPluginStatusView } from "../../plugins/graph-status.js";
+import { domainIsAvailable, loadPluginRegistry } from "../../plugins/registry.js";
+import { buildProcedurePacket } from "../../procedures/packet.js";
+import { loadProcedureCatalog } from "../../procedures/catalog.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 
 export type GraphDoctorOptions = Record<string, never>;
@@ -138,6 +141,30 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
 export async function handleGraphInstructions(selector: string, context: CommandContext): Promise<CommandResult> {
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
+  if (index.manifestStatus === "invalid") {
+    throw new CliError("invalid_current_contract", "The installation manifest is invalid; existing files were left unchanged.", 3, undefined, index.diagnostics);
+  }
+  if (selector.startsWith("procedure:")) {
+    const procedureId = selector.slice("procedure:".length);
+    const procedure = (await loadProcedureCatalog()).get(procedureId);
+    if (!procedure) throw new CliError("procedure_not_found", `Procedure not found: ${procedureId}`, 1);
+    if (procedure.kind === "plugin") {
+      const registry = await loadPluginRegistry();
+      const eligibleDomains = procedure.domains.filter((domainId) =>
+        index.config.plugins.selected.includes(domainId) && domainIsAvailable(registry.domains.get(domainId)));
+      if (eligibleDomains.length === 0) {
+        throw new CliError(
+          "procedure_domain_selection_required",
+          `Procedure requires a selected available domain: ${procedureId}`,
+          1,
+          "Inspect the listed domains and install one with explicit consent.",
+          { procedure_id: procedureId, eligible_domains: procedure.domains },
+        );
+      }
+    }
+    const packet = await buildProcedurePacket(procedure, { mode: "standalone", workspace });
+    return success("instructions", { selector, kind: "procedure", packet }, { stdout: packet.procedure.content });
+  }
   if (selector.startsWith("profile:")) {
     const profileId = selector.slice("profile:".length);
     const profile = index.profiles.get(profileId);
@@ -299,6 +326,26 @@ export async function handleGraphInstructions(selector: string, context: Command
     } catch (error) {
       throw graphControlCliError(error);
     }
+    const procedure = definition.capability_id === undefined
+      ? undefined
+      : (await loadProcedureCatalog()).get(definition.capability_id);
+    const procedurePacket = procedure === undefined ? undefined : await buildProcedurePacket(procedure, {
+      mode: "graph",
+      workspace,
+      inputs: resolvedInputs,
+      outputs: definition.expected_outputs,
+      authority: {
+        workflow_state: "cli-only",
+        run_id: runId,
+        node_id: nodeId,
+        handoff: "Use the owning run handoff for declared role/path exchange.",
+      },
+      completion: {
+        action: "advance_node",
+        selector,
+        instruction: `Submit declared outputs, then request validated advance through ${selector}.`,
+      },
+    });
     return success("instructions", {
       selector,
       kind: "node",
@@ -311,6 +358,7 @@ export async function handleGraphInstructions(selector: string, context: Command
       expected_output_roles: definition.expected_outputs,
       required_gate_ids: definition.required_gate_ids,
       required_decision_ids: definition.required_decision_ids,
+      ...(procedurePacket === undefined ? {} : { procedure_packet: procedurePacket }),
       ...(definition.delivery_requirement ? {
         child_start_input: {
           schema_version: "2",

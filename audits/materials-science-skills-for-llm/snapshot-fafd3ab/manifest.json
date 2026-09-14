@@ -82,7 +82,7 @@
       "plugin-materials-unimol-ops"
     ],
     "registry_subset_sha256": "00241f500c6ffa6804faab8ff062f86563a14f72052926de51497ed905923672",
-    "packages_tree_sha256": "407771446c2ed4dbd9937efac85e4f0dabdf272466bee09835639a6c3fc6bfbe",
+    "packages_tree_sha256": "77ded7ad197e9fe075e2abf9cbb8d17b5d6f9bd27885526f5f1ee6d16ae322c5",
     "profiles_tree_sha256": "0370d5e8bba6ac4c03cb2327272c3f9e313b39d1ee00bb525d18f9bc9e44af90",
     "rows": [
       {
@@ -108,7 +108,7 @@
           "conclusions"
         ],
         "required_ok": true,
-        "package_tree_sha256": "a4818aa7a7742abb39c7b6c953014df973da25604caeb4a3a443d5f62a6eaf92",
+        "package_tree_sha256": "3cc8056045c5500fe5e11a5b56983e341197be0377d06123a3c5181fa5746e71",
         "profile_sha256": "451428f9b7959164a0bb4528df8da1f5ec88252c94f634401e1284c0f69b2369",
         "manifest_sha256": "c7a02fac55444d597f512b3c4ee0bc90f5e823b7173d82e8fe11e2687dc906f6",
         "files": 4,
@@ -143,7 +143,7 @@
           "conclusions"
         ],
         "required_ok": true,
-        "package_tree_sha256": "a27b55d391f7f09a1544f7e6575b15d012dd4b0c3a9457305a69de5274a21bca",
+        "package_tree_sha256": "c54e82fb5d28275470db9190a74b1c5009fcebe821dbb144f2d62b6df07d4ce1",
         "profile_sha256": "10d0919ceb3d37985899a0d8d00dfb7fab8104c15e6ee5c64fa7c757f96d76bf",
         "manifest_sha256": "6e88de853751b847cb9cd170ab761141cd00ccaeb89538a5465b73fda9d46495",
         "files": 3,
@@ -171,7 +171,7 @@
           "conclusions"
         ],
         "required_ok": true,
-        "package_tree_sha256": "70be8d394e017a9a588487593336b109e18883b92973ed149cb665d8709fc11c",
+        "package_tree_sha256": "95fc326ce44f2eb864c09b9c8c911d770426cea1f204b7898cca68b85b743f97",
         "profile_sha256": "d977b4b0015eb8ecbfd3cdd5962558330ef03babe299d1213ba6ea327df0d481",
         "manifest_sha256": "7902a60e4a3e2b7e48f65af9af81ae383641a4fe985e6c2957a269d9af0cce9a",
         "files": 4,
@@ -206,7 +206,7 @@
           "conclusions"
         ],
         "required_ok": true,
-        "package_tree_sha256": "7c9b786aa1a276532e0bafae9aac3ce11fcbd778adae4556c7794a72243e59dc",
+        "package_tree_sha256": "7b81bd7f77cd3f45b1e69e8948706ae549a19d66917a75737bce917f66d25493",
         "profile_sha256": "4c233e16557d758e6d963dc609130a76af33c94c6f89c26a7ba82bcd4b15996b",
         "manifest_sha256": "298220965f297566a80cfecdd15794b876ae13699e304e9700271a7fb820714e",
         "files": 4,
@@ -241,7 +241,7 @@
           "conclusions"
         ],
         "required_ok": true,
-        "package_tree_sha256": "92f3c5758b66c5609c4cf7e9a042293c2f0f0a0155687b0ce463ca12b2bd7474",
+        "package_tree_sha256": "da446a3a46f7b246be7a4ee3c79c1f0e14a158728ccea5d1a163bea0f99dbf3d",
         "profile_sha256": "ff15144110c09a1ddfac64f601c08e5dcd7d406c83fc04f92386b2b87598b89c",
         "manifest_sha256": "d4465c416a11f3941cdb58c8de851d6ab4be89cc21d929863cd1a33363c0cdca",
         "files": 4,
@@ -276,7 +276,7 @@
           "conclusions"
         ],
         "required_ok": true,
-        "package_tree_sha256": "68aa25b764decac61ff62803b13b6d0cb63dab006a45733dcccdbebf963990e6",
+        "package_tree_sha256": "efdddb82ae959690b6dfd6cc93673f840041b4e8b63e387eda315e0b6df4c11e",
         "profile_sha256": "f08149037a9b5b4949513a56a9addbf789910beb37c92109170b59bf37a27e88",
         "manifest_sha256": "d3e240e11036d36d88244de6aee8d06bfc345b947dc931e46f285d8ffbc0f12d",
         "files": 4,
@@ -311,7 +311,7 @@
           "conclusions"
         ],
         "required_ok": true,
-        "package_tree_sha256": "d6229708246c9c223036cd43f9544a7315d608e6ff81dfbba1b3a57c126eb19a",
+        "package_tree_sha256": "a774eaac6c555937fc859f8ae86c57fa4f60c74e47d6161284c9071561e2e6e2",
         "profile_sha256": "3e4543abadadce0c9ce1c4177165ef295b15fbfb7903cee1f9a67d5f0e0ce148",
         "manifest_sha256": "040bb9668d16599d56361bac73c3d583d9ab1ff7ec269c60146d6f476816eb71",
         "files": 4,
@@ -328,7 +328,7 @@
   },
   "review": {
     "artifact_path": "audits/materials-science-skills-for-llm/snapshot-fafd3ab/artifacts/extension-review.json",
-    "artifact_sha256": "336b300d1bd5211a2fe36b3fb5a4cca7eb81b9b8067242fe0e88ef8c085dfc0f",
+    "artifact_sha256": "67df83acd01e8888fc96a141162ad7431f6b70b8dbbddf54bfaac3544008cfdc",
     "tool_file_count": 6,
     "tools_byte_identical": true,
     "required_fields_bound": true
@@ -340,6 +340,6 @@
     "catalog_sha256": "c541f40f2c66cba2e8b2ec206d8dc87130768d5f9c587776ef41802fd8eae018",
     "audit_readme_path": "audits/materials-science-skills-for-llm/README.md",
     "audit_readme_sha256": "e3c08d99aaf76a4649b17205dfa7ecec45574ea8cb7644ff5ee8892f370f3702",
-    "record_sha256": "ec8b74993dacc8e37c2c4c0c187967fa5a6bd842c97e28055c0948be2cb11ab7"
+    "record_sha256": "68c1eec07adf791f2ea6e7490326e9a08bbdfe076332c59f54e1079349745655"
   }
 }

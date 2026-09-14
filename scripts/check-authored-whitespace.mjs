@@ -15,6 +15,7 @@ try {
   const errors = [];
 
   for (const relativePath of uniqueSorted(candidates.map((candidate) => normalizeRelativePath(candidate, "candidate path")))) {
+    if (options.paths.length === 0 && isGeneratedPreservedSkill(relativePath)) continue;
     const absolutePath = resolveInsideRoot(root, relativePath, "candidate path");
     const fileInfo = await statOrUndefined(absolutePath);
     if (!fileInfo?.isFile() || exemptions.has(relativePath)) continue;
@@ -144,6 +145,10 @@ function requireSha256(value, label) {
 
 function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
+}
+
+function isGeneratedPreservedSkill(relativePath) {
+  return /^skills\/plugins\/extensions\/capabilities\/plugin-(?:tooluniverse|scientific-agent-skills|education-agent-skills)-[^/]+\/SKILL\.md$/.test(relativePath);
 }
 
 async function statOrUndefined(target) {

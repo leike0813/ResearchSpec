@@ -5,20 +5,13 @@ import { parse } from "yaml";
 
 import { COMPANION_INTENTS, renderCompanionSkill } from "../src/adapters/companion/index.js";
 import { checkArsuOutput } from "../src/arsu-converter/converter.js";
-import { ARSU_ROUTING_CATALOG } from "../src/arsu-converter/routing/catalog.js";
-import { ARSU_SKILL_IDS } from "../src/arsu-converter/routing/contracts.js";
 import { MIT_LICENSE_TEXT } from "../src/licensing.js";
 import { LITERATURE_ADAPTER_CATALOG } from "../src/literature-adapters/catalog.js";
+import { loadProcedureCatalog } from "../src/procedures/catalog.js";
 import { assemblePluginRegistry } from "../src/plugins/assembler.js";
-import {
-  filesForSkill,
-  pluginSkillRoot,
-  readPluginSkillEntry,
-  resolveDomainSelection,
-  validatePluginRegistry,
-} from "../src/plugins/registry.js";
+import { validatePluginRegistry } from "../src/plugins/registry.js";
 
-export type HarnessSkillFamily = "arsu" | "companion" | "literature-adapter" | "plugin";
+export type HarnessSkillFamily = "arsu" | "companion" | "capability" | "literature-adapter" | "plugin";
 export type HarnessFileKind = "markdown" | "text" | "image" | "binary";
 
 export interface HarnessDiagnostic {
@@ -60,6 +53,7 @@ export interface HarnessVendor {
 export interface HarnessSkill {
   skill_id: string;
   family: HarnessSkillFamily;
+  visibility: "visible-entry" | "hidden-procedure";
   title: string;
   description: string;
   license: string | null;
@@ -85,21 +79,25 @@ export interface HarnessDomain {
   domain_type: "discipline" | "tool";
   anzsrc_group_code: string | null;
   available: boolean;
-  direct_skill_ids: string[];
-  resolved_skill_ids: string[];
+  direct_procedure_ids: string[];
+  resolved_procedure_ids: string[];
 }
 
 export interface HarnessCatalog {
   summary: {
-    arsu_skills: number;
-    companion_skills: number;
+    visible_entries: number;
+    procedures: number;
+    arsu_procedures: number;
+    companion_procedures: number;
+    core_procedures: number;
+    plugin_procedures: number;
     literature_adapter_skills: number;
-    plugin_skills: number;
     domains: number;
     available_domains: number;
   };
   diagnostics: HarnessDiagnostic[];
-  skills: HarnessSkill[];
+  visible_entries: HarnessSkill[];
+  procedures: HarnessSkill[];
   domains: HarnessDomain[];
 }
 
@@ -141,31 +139,37 @@ const IMAGE_TYPES = new Map([
 export async function loadHarnessCatalog(repoRoot: string): Promise<LoadedHarnessCatalog> {
   const resolvedRoot = path.resolve(repoRoot);
   const diagnostics: HarnessDiagnostic[] = [];
-  const skills: HarnessSkill[] = [];
+  const visibleEntries: HarnessSkill[] = [];
+  const procedures: HarnessSkill[] = [];
   const domains: HarnessDomain[] = [];
   const fileSources = new Map<string, ReadonlyMap<string, HarnessFileSource>>();
 
-  await loadArsu(resolvedRoot, skills, fileSources, diagnostics);
-  loadCompanions(skills, fileSources);
-  await loadLiteratureAdapters(resolvedRoot, skills, fileSources, diagnostics);
-  await loadPlugins(resolvedRoot, skills, domains, fileSources, diagnostics);
+  loadNavigate(visibleEntries, fileSources);
+  await loadProcedures(resolvedRoot, procedures, fileSources, diagnostics);
+  await loadLiteratureAdapters(resolvedRoot, visibleEntries, fileSources, diagnostics);
+  await loadDomains(resolvedRoot, procedures, domains, diagnostics);
 
-  skills.sort((left, right) => compareText(left.skill_id, right.skill_id));
+  visibleEntries.sort((left, right) => compareText(left.skill_id, right.skill_id));
+  procedures.sort((left, right) => compareText(left.skill_id, right.skill_id));
   domains.sort((left, right) => compareText(left.domain_id, right.domain_id));
   diagnostics.sort((left, right) => compareText(`${left.source}:${left.code}:${left.message}`, `${right.source}:${right.code}:${right.message}`));
 
   return {
     catalog: {
       summary: {
-        arsu_skills: skills.filter((skill) => skill.family === "arsu").length,
-        companion_skills: skills.filter((skill) => skill.family === "companion").length,
-        literature_adapter_skills: skills.filter((skill) => skill.family === "literature-adapter").length,
-        plugin_skills: skills.filter((skill) => skill.family === "plugin").length,
+        visible_entries: visibleEntries.length,
+        procedures: procedures.length,
+        arsu_procedures: procedures.filter((item) => item.family === "arsu").length,
+        companion_procedures: procedures.filter((item) => item.family === "companion").length,
+        core_procedures: procedures.filter((item) => item.family === "capability").length,
+        plugin_procedures: procedures.filter((item) => item.family === "plugin").length,
+        literature_adapter_skills: visibleEntries.filter((item) => item.family === "literature-adapter").length,
         domains: domains.length,
         available_domains: domains.filter((domain) => domain.available).length,
       },
       diagnostics,
-      skills,
+      visible_entries: visibleEntries,
+      procedures,
       domains,
     },
     fileSources,
@@ -190,6 +194,7 @@ async function loadLiteratureAdapters(
         skills.push({
           skill_id: skillId,
           family: "literature-adapter",
+          visibility: "visible-entry",
           title: titleCase(skillId),
           description: stringValue(frontmatter.description) ?? "",
           license: "AGPL-3.0-only",
@@ -224,7 +229,8 @@ export async function readHarnessFile(loaded: LoadedHarnessCatalog, skillId: str
   const normalized = normalizeRelativePath(relativePath);
   if (!normalized) return undefined;
   const source = loaded.fileSources.get(skillId)?.get(normalized);
-  const metadata = loaded.catalog.skills.find((skill) => skill.skill_id === skillId)?.files.find((file) => file.path === normalized);
+  const metadata = [...loaded.catalog.visible_entries, ...loaded.catalog.procedures]
+    .find((skill) => skill.skill_id === skillId)?.files.find((file) => file.path === normalized);
   if (!source || !metadata) return undefined;
   if (source.type === "virtual") return { metadata, bytes: source.content };
 
@@ -240,9 +246,9 @@ export async function validateHarnessSkillRoot(root: string): Promise<void> {
   await diskSources(path.resolve(root));
 }
 
-async function loadArsu(
+async function loadProcedures(
   repoRoot: string,
-  skills: HarnessSkill[],
+  procedures: HarnessSkill[],
   fileSources: Map<string, ReadonlyMap<string, HarnessFileSource>>,
   diagnostics: HarnessDiagnostic[],
 ): Promise<void> {
@@ -254,67 +260,70 @@ async function loadArsu(
     diagnostics.push({ source: "arsu", severity: "error", code: "arsu_check_failed", message: errorMessage(error) });
   }
 
-  for (const skillId of ARSU_SKILL_IDS) {
-    const root = path.join(repoRoot, "skills/arsu", skillId);
+  let catalog;
+  try {
+    catalog = await loadProcedureCatalog(repoRoot);
+  } catch (error) {
+    diagnostics.push({ source: "registry", severity: "error", code: "procedure_catalog_failed", message: errorMessage(error) });
+    return;
+  }
+  for (const procedure of catalog.values()) {
     try {
-      const sources = await diskSources(root);
-      const entry = await readFile(path.join(root, "SKILL.md"), "utf8");
-      const frontmatter = parseFrontmatter(entry);
-      const routing = ARSU_ROUTING_CATALOG.skills.find((item) => item.skill_id === skillId);
+      const sources = procedure.content === undefined
+        ? await diskSources(procedure.packageRoot)
+        : virtualSkill(procedure.content);
       const files = await fileMetadata(sources);
-      skills.push({
-        skill_id: skillId,
-        family: "arsu",
-        title: routing?.title ?? titleCase(skillId),
-        description: stringValue(frontmatter.description) ?? routing?.summary ?? "",
-        license: "CC BY-NC 4.0",
+      procedures.push({
+        skill_id: procedure.id,
+        family: procedure.kind,
+        visibility: "hidden-procedure",
+        title: procedure.title,
+        description: procedure.description,
+        license: procedure.manifest?.license ?? (procedure.kind === "companion" ? "MIT" : procedure.kind === "arsu" ? "CC BY-NC 4.0" : null),
         dependencies: [],
-        direct_domain_ids: [],
-        resolved_domain_ids: [],
+        direct_domain_ids: [...procedure.domains],
+        resolved_domain_ids: [...procedure.domains],
         vendor: null,
         adapter: null,
         files,
         file_tree: buildHarnessFileTree(files),
       });
-      fileSources.set(skillId, sources);
+      fileSources.set(procedure.id, sources);
     } catch (error) {
-      diagnostics.push({ source: "arsu", severity: "error", code: "arsu_skill_unreadable", message: `${skillId}: ${errorMessage(error)}` });
+      diagnostics.push({ source: procedure.kind, severity: "error", code: "procedure_unreadable", message: `${procedure.id}: ${errorMessage(error)}` });
     }
   }
 }
 
-function loadCompanions(skills: HarnessSkill[], fileSources: Map<string, ReadonlyMap<string, HarnessFileSource>>): void {
-  for (const intent of COMPANION_INTENTS) {
-    const virtual = new Map<string, HarnessFileSource>([
-      ["LICENSE", { type: "virtual", content: Buffer.from(MIT_LICENSE_TEXT, "utf8") }],
-      ["SKILL.md", { type: "virtual", content: Buffer.from(renderCompanionSkill(intent), "utf8") }],
-    ]);
-    const files = [...virtual.entries()]
-      .map(([filePath, source]) => metadataFor(filePath, source.type === "virtual" ? source.content.byteLength : 0))
-      .sort((left, right) => compareText(left.path, right.path));
-    skills.push({
-      skill_id: intent.skillId,
-      family: "companion",
-      title: intent.name,
-      description: intent.description,
-      license: "MIT",
-      dependencies: [],
-      direct_domain_ids: [],
-      resolved_domain_ids: [],
-      vendor: null,
-      adapter: null,
-      files,
-      file_tree: buildHarnessFileTree(files),
-    });
-    fileSources.set(intent.skillId, virtual);
-  }
+function loadNavigate(skills: HarnessSkill[], fileSources: Map<string, ReadonlyMap<string, HarnessFileSource>>): void {
+  const intent = COMPANION_INTENTS.find((item) => item.id === "navigate");
+  if (!intent) throw new Error("Navigate Companion definition is missing.");
+  const virtual = virtualSkill(renderCompanionSkill(intent));
+  const files = [...virtual.entries()]
+    .map(([filePath, source]) => metadataFor(filePath, source.type === "virtual" ? source.content.byteLength : 0))
+    .sort((left, right) => compareText(left.path, right.path));
+  skills.push({
+    skill_id: intent.skillId,
+    family: "companion",
+    visibility: "visible-entry",
+    title: intent.name,
+    description: intent.description,
+    license: "MIT",
+    dependencies: [],
+    direct_domain_ids: [],
+    resolved_domain_ids: [],
+    vendor: null,
+    adapter: null,
+    files,
+    file_tree: buildHarnessFileTree(files),
+  });
+  fileSources.set(intent.skillId, virtual);
 }
 
-async function loadPlugins(
+async function loadDomains(
   repoRoot: string,
-  skills: HarnessSkill[],
+  procedures: HarnessSkill[],
   domains: HarnessDomain[],
-  fileSources: Map<string, ReadonlyMap<string, HarnessFileSource>>,
   diagnostics: HarnessDiagnostic[],
 ): Promise<void> {
   const pluginRoot = path.join(repoRoot, "skills/plugins");
@@ -329,10 +338,11 @@ async function loadPlugins(
       diagnostics.push({ source: "registry", severity: item.severity, code: item.code, message: item.message });
     }
 
-    const directDomains = new Map<string, string[]>();
-    const resolvedDomains = new Map<string, string[]>();
     for (const domain of loaded.domains.values()) {
-      const resolution = resolveDomainSelection(loaded, [domain.domain_id]);
+      const procedureIds = procedures
+        .filter((item) => item.family === "plugin" && item.direct_domain_ids.includes(domain.domain_id))
+        .map((item) => item.skill_id)
+        .sort(compareText);
       domains.push({
         domain_id: domain.domain_id,
         title: domain.title,
@@ -340,47 +350,21 @@ async function loadPlugins(
         version: domain.version,
         domain_type: domain.domain_type,
         anzsrc_group_code: domain.domain_type === "discipline" ? domain.anzsrc_group_code : null,
-        available: domain.skills.length > 0,
-        direct_skill_ids: [...domain.skills].sort(compareText),
-        resolved_skill_ids: resolution.resolvedSkillIds,
+        available: procedureIds.length > 0,
+        direct_procedure_ids: procedureIds,
+        resolved_procedure_ids: procedureIds,
       });
-      for (const skillId of domain.skills) append(directDomains, skillId, domain.domain_id);
-      for (const skillId of resolution.resolvedSkillIds) append(resolvedDomains, skillId, domain.domain_id);
-    }
-
-    for (const [skillId, registered] of loaded.skills) {
-      const root = pluginSkillRoot(pluginRoot, registered.vendor.vendor_id, skillId);
-      const sourceFiles = new Map<string, HarnessFileSource>();
-      for (const relativePath of filesForSkill(loaded, skillId)) {
-        sourceFiles.set(relativePath, { type: "disk", root, absolutePath: path.join(root, relativePath) });
-      }
-      const entry = await readPluginSkillEntry(path.join(root, "SKILL.md"));
-      const files = await fileMetadata(sourceFiles);
-      skills.push({
-        skill_id: skillId,
-        family: "plugin",
-        title: titleCase(skillId),
-        description: entry.metadata.description,
-        license: registered.definition.license,
-        dependencies: [...registered.definition.dependencies].sort(compareText),
-        direct_domain_ids: sorted(directDomains.get(skillId) ?? []),
-        resolved_domain_ids: sorted(resolvedDomains.get(skillId) ?? []),
-        vendor: {
-          vendor_id: registered.vendor.vendor_id,
-          name: registered.vendor.name,
-          release: registered.vendor.release,
-          revision: registered.vendor.revision,
-          repository_url: registered.vendor.repository_url,
-        },
-        adapter: null,
-        files,
-        file_tree: buildHarnessFileTree(files),
-      });
-      fileSources.set(skillId, sourceFiles);
     }
   } catch (error) {
     diagnostics.push({ source: "registry", severity: "error", code: "plugin_assembly_failed", message: errorMessage(error) });
   }
+}
+
+function virtualSkill(content: string): Map<string, HarnessFileSource> {
+  return new Map<string, HarnessFileSource>([
+    ["LICENSE", { type: "virtual", content: Buffer.from(MIT_LICENSE_TEXT, "utf8") }],
+    ["SKILL.md", { type: "virtual", content: Buffer.from(content, "utf8") }],
+  ]);
 }
 
 async function diskSources(root: string): Promise<Map<string, HarnessFileSource>> {
@@ -486,13 +470,6 @@ function isWithin(root: string, target: string): boolean {
   return relative !== "" && !relative.startsWith(`..${path.sep}`) && relative !== ".." && !path.isAbsolute(relative);
 }
 
-function append(index: Map<string, string[]>, key: string, value: string): void {
-  const values = index.get(key) ?? [];
-  values.push(value);
-  index.set(key, values);
-}
-
-function sorted(values: readonly string[]): string[] { return [...new Set(values)].sort(compareText); }
 function stringValue(value: unknown): string | undefined { return typeof value === "string" ? value : undefined; }
 function titleCase(value: string): string { return value.split("-").map((part) => part ? `${part[0]?.toUpperCase() ?? ""}${part.slice(1)}` : part).join(" "); }
 function posix(value: string): string { return value.split(path.sep).join("/"); }
