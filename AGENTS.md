@@ -111,8 +111,7 @@ tools receive Navigate. In `commands` mode, command-capable tools receive one
 Navigate wrapper while Skill-only tools receive the Navigate Skill fallback. In
 `both` mode they receive both supported entry forms. Codex writes project `.agents/skills` and never generates global
 custom prompts; Kimi writes `.kimi-code/skills` and reads `.kimi` only for migration.
-`windsurf` remains an input alias for `devin`, and MiniMax Code uses the global
-`~/.minimax/skills` tree without workspace-exclusive ownership.
+`windsurf` remains an input alias for `devin`.
 Optional ResearchSpec-maintained domains select extension Procedures and graph
 profiles without projecting their raw or extension Skills into the host catalog.
 

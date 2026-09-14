@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
-import { homedir, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 
@@ -36,7 +36,7 @@ void test("managed installation schema bounds project paths while allowing frame
   }
 });
 
-void test("managed target resolution derives profile and shared-global roots", async () => {
+void test("managed target resolution derives profile and project roots", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-managed-target-"));
   try {
     const profile = asInstallation({
@@ -51,17 +51,6 @@ void test("managed target resolution derives profile and shared-global roots", a
       boundaryRoot: root,
     });
     await validateManagedTarget(root, profile);
-
-    const global = asInstallation({
-      owner: "agent-tool",
-      tool_id: "minimax-code",
-      source: { kind: "core-skill", skill_id: "retired-skill" },
-      target: { scope: "shared-global", path: path.join(homedir(), ".minimax", "skills", "retired-skill", "SKILL.md"), executable: false },
-      sha256: hash("skill"),
-    });
-    const resolved = resolveManagedTarget(root, global);
-    assert.equal(resolved.path, path.join(homedir(), ".minimax", "skills", "retired-skill", "SKILL.md"));
-    assert.equal(resolved.boundaryRoot, path.resolve(homedir()));
 
     assert.throws(() => resolveManagedTarget(root, asInstallation({
       owner: "agent-tool", tool_id: "claude",
@@ -84,9 +73,9 @@ void test("managed target resolution derives profile and shared-global roots", a
       target: { scope: "project", path: ".claude/skills/.researchspec-target", executable: false }, sha256: hash("marker"),
     })));
     assert.throws(() => resolveManagedTarget(root, asInstallation({
-      owner: "agent-tool", tool_id: "minimax-code",
+      owner: "agent-tool", tool_id: "claude",
       source: { kind: "core-skill", skill_id: "retired-skill" },
-      target: { scope: "shared-global", path: path.join(homedir(), ".claude", "skills", "retired-skill", "SKILL.md"), executable: false }, sha256: hash("skill"),
+      target: { scope: "shared-global", path: path.join(root, ".claude", "skills", "retired-skill", "SKILL.md"), executable: false }, sha256: hash("skill"),
     })));
   } finally {
     await rm(root, { recursive: true, force: true });
@@ -151,7 +140,7 @@ void test("agent reconciliation blocks a typed unsafe record before reading or r
   }
 });
 
-void test("agent reconciliation removes only a clean retired project record and preserves global ownership", async () => {
+void test("agent reconciliation removes only a clean retired project record", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-managed-clean-"));
   try {
     const projectTarget = path.join(root, ".claude/skills/retired-skill/SKILL.md");
@@ -170,17 +159,6 @@ void test("agent reconciliation removes only a clean retired project record and 
     assert.equal(projectResult.operations[0]?.action, "remove-owned");
     assert.equal(projectResult.operations[0]?.boundaryRoot, root);
 
-    const globalRecord = asInstallation({
-      owner: "agent-tool", tool_id: "minimax-code",
-      source: { kind: "core-skill", skill_id: "retired-skill" },
-      target: { scope: "shared-global", path: path.join(homedir(), ".minimax", "skills", "retired-skill", "SKILL.md"), executable: false }, sha256: hash("retired"),
-    });
-    const globalResult = await reconcileAgentToolInstallations({
-      projectRoot: root, existingInstallations: [globalRecord], desiredInstallations: [],
-      reconciledToolIds: ["minimax-code"], selectedToolIds: [],
-    });
-    assert.equal(globalResult.operations.length, 0);
-    assert.equal(globalResult.retainedInstallations.length, 1);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

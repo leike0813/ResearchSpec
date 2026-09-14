@@ -16,7 +16,7 @@ export interface SearchableChoice {
 
 interface Config { message: string; choices: SearchableChoice[]; pageSize?: number }
 
-const prompt = createPrompt((config: Config, done: (value: string[]) => void): string => {
+const prompt = createPrompt((config: Config, done: (value: string[]) => void): string | [string, string] => {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<string[]>(() => config.choices.filter((choice) => choice.preSelected).map((choice) => choice.value));
   const [cursor, setCursor] = useState(0);
@@ -48,7 +48,6 @@ const prompt = createPrompt((config: Config, done: (value: string[]) => void): s
   const lines = [
     `${prefix} ${chalk.bold(config.message)}`,
     `  Search: ${chalk.yellow("[")}${search || chalk.dim("type to filter")}${chalk.yellow("]")}`,
-    `  ${chalk.cyan("↑↓")} navigate • ${chalk.cyan("Space")} toggle • ${chalk.cyan("Enter")} confirm`,
   ];
   for (const [index, choice] of filtered.slice(start, start + pageSize).entries()) {
     const active = start + index === cursor;
@@ -58,7 +57,10 @@ const prompt = createPrompt((config: Config, done: (value: string[]) => void): s
     if (choice.description) lines.push(chalk.dim(`      ${choice.description}`));
   }
   if (!filtered.length) lines.push(chalk.yellow("  No matches"));
-  return lines.join("\n");
+  return [
+    lines.join("\n"),
+    `  ${chalk.cyan("↑↓")} navigate • ${chalk.cyan("Space")} toggle • ${chalk.cyan("Enter")} confirm • ${chalk.cyan("Ctrl+C")} cancel`,
+  ];
 });
 
 export async function searchableMultiSelect(config: Config): Promise<string[]> { return prompt(config); }

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
 
@@ -10,16 +10,17 @@ import { TOOL_IDS, TOOLS, detectTools, getTool, parseToolExpression } from "../s
 import { CLI_TOP_LEVEL_COMMANDS } from "../src/cli/command-catalog.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
 
-void test("tool registry contains the exact 37-tool surface and 28 command adapters", () => {
-  assert.equal(TOOL_IDS.length, 37);
-  assert.equal(new Set(TOOL_IDS).size, 37);
+void test("tool registry contains the exact 36-tool surface and 28 command adapters", () => {
+  assert.equal(TOOL_IDS.length, 36);
+  assert.equal(new Set(TOOL_IDS).size, 36);
   assert.equal(TOOLS.filter((tool) => tool.command).length, 28);
-  assert.deepEqual(TOOLS.filter((tool) => !tool.command).map((tool) => tool.id), ["codeartsagent", "codex", "forgecode", "hermes", "kimi", "minimax-code", "vibe", "rovodev", "agents"]);
+  assert.deepEqual(TOOLS.filter((tool) => !tool.command).map((tool) => tool.id), ["codeartsagent", "codex", "forgecode", "hermes", "kimi", "vibe", "rovodev", "agents"]);
   assert.equal(getTool("windsurf")?.id, "devin");
   assert.deepEqual(parseToolExpression("codex,claude,codex"), ["codex", "claude"]);
   assert.deepEqual(parseToolExpression("none"), []);
   assert.deepEqual(parseToolExpression("all"), [...TOOL_IDS]);
   assert.throws(() => parseToolExpression("all,codex"));
+  assert.throws(() => parseToolExpression("minimax-code"));
   assert.throws(() => parseToolExpression("unknown"));
 });
 
@@ -59,7 +60,6 @@ void test("registered command paths preserve per-tool conventions", () => {
   }
   assert.equal(requireTool("codex").command, undefined);
   assert.equal(requireTool("kimi").skillsDir, ".kimi-code");
-  assert.equal(requireTool("minimax-code").globalSkillsDir, ".minimax");
 });
 
 void test("command delivery exposes one Navigate wrapper while the public CLI stays complete", () => {
@@ -117,31 +117,10 @@ void test("Copilot uses its explicit detection paths", async () => {
   await cleanup(root);
 });
 
-void test("global-only tools are detected only by managed skill files", async () => {
-  const root = await tempProject();
-  const previousHome = process.env.HOME;
-  const home = path.join(root, "home");
-  const globalSkills = path.join(home, ".minimax", "skills");
-  await mkdir(globalSkills, { recursive: true });
-  process.env.HOME = home;
-  try {
-    assert.equal((await detectTools(root)).includes("minimax-code"), false);
-    await mkdir(path.join(globalSkills, "deep-research"), { recursive: true });
-    await writeFile(path.join(globalSkills, "deep-research", "SKILL.md"), "x", "utf8");
-    assert.ok((await detectTools(root)).includes("minimax-code"));
-  } finally {
-    if (previousHome === undefined) Reflect.deleteProperty(process.env, "HOME");
-    else process.env.HOME = previousHome;
-    await cleanup(root);
-  }
-});
-
 void test("delivery projects one Navigate entry per selected channel", async () => {
   const root = await tempProject();
   const previousCodexHome = process.env.CODEX_HOME;
-  const previousHome = process.env.HOME;
   process.env.CODEX_HOME = path.join(root, "codex-home");
-  process.env.HOME = path.join(root, "home");
   try {
     const delivery = await planWorkspaceDelivery({
       projectRoot: root,
@@ -169,12 +148,10 @@ void test("delivery projects one Navigate entry per selected channel", async () 
       assert.deepEqual([...skillIds], ["researchspec-navigate"], toolId);
     }
     assert.equal(delivery.installations.some((item) => item.target.path.replaceAll("\\", "/").endsWith("/researchspec-navigate/references/cli-handbook.md")), false);
-    assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 9);
+    assert.equal(delivery.diagnostics.filter((item) => item.code === "commands_not_supported").length, 8);
   } finally {
     if (previousCodexHome === undefined) Reflect.deleteProperty(process.env, "CODEX_HOME");
     else process.env.CODEX_HOME = previousCodexHome;
-    if (previousHome === undefined) Reflect.deleteProperty(process.env, "HOME");
-    else process.env.HOME = previousHome;
     await cleanup(root);
   }
 });

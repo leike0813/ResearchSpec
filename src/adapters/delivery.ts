@@ -56,7 +56,7 @@ export async function planToolDelivery(input: {
     try {
       if (writesSkills) {
         const root = toolSkillsRoot(tool, input.projectRoot);
-        await planSharedMarker(tool, root);
+        await planSharedMarker(tool, root.root);
         for (const intent of [navigate]) {
           const skillRoot = path.join(root.root, intent.skillId);
           await addSkill(
@@ -74,7 +74,7 @@ export async function planToolDelivery(input: {
         if (command) {
           for (const content of COMMAND_WRAPPER_CONTENTS) {
             const target = command.path(content.id, input.projectRoot);
-            await addPlanned(target, command.scope === "shared-global" ? target : relativeProject(target), command.scope, renderCommand(tool, content), { kind: "command", command_id: content.id }, tool.id);
+            await addPlanned(target, relativeProject(target), renderCommand(tool, content), { kind: "command", command_id: content.id }, tool.id);
           }
         }
       }
@@ -85,19 +85,19 @@ export async function planToolDelivery(input: {
 
   return { operations, installations, diagnostics, skillToolIds, commandToolIds };
 
-  async function planSharedMarker(tool: ToolDefinition, root: ReturnType<typeof toolSkillsRoot>): Promise<void> {
-    const target = path.join(root.root, SHARED_TARGET_MARKER);
+  async function planSharedMarker(tool: ToolDefinition, skillsRoot: string): Promise<void> {
+    const target = path.join(skillsRoot, SHARED_TARGET_MARKER);
     const targetId = sharedSkillTarget(tool.id);
     if (!targetId) return;
-    await addPlanned(target, root.scope === "project" ? relativeProject(target) : target, root.scope, `${targetId}\n`, { kind: "shared-skill-target", target_id: targetId }, tool.id);
+    await addPlanned(target, relativeProject(target), `${targetId}\n`, { kind: "shared-skill-target", target_id: targetId }, tool.id);
   }
 
   async function addSkill(target: string, content: string | Uint8Array, source: ManagedInstallationSource, tool: ToolDefinition): Promise<void> {
-    const root = toolSkillsRoot(tool, input.projectRoot);
-    await addPlanned(target, root.scope === "project" ? relativeProject(target) : target, root.scope, content, source, tool.id);
+    await addPlanned(target, relativeProject(target), content, source, tool.id);
   }
 
-  async function addPlanned(target: string, manifestPath: string, scope: "project" | "shared-global", content: string | Uint8Array, source: ManagedInstallationSource, toolId: string): Promise<void> {
+  async function addPlanned(target: string, manifestPath: string, content: string | Uint8Array, source: ManagedInstallationSource, toolId: string): Promise<void> {
+    const scope = "project" as const;
     const prior = recorded.get(`${scope}:${manifestPath}`);
     const installation: ManagedInstallation = { owner: "agent-tool", tool_id: toolId, source, target: { scope, path: manifestPath, executable: false }, sha256: sha256(content) };
     const operation = await planFile({
@@ -123,7 +123,7 @@ export function selectSkillWriters(toolIds: readonly string[], delivery: Deliver
   const selected = [...new Set(toolIds.map(resolveToolIdAlias))];
   const candidates = selected.filter((id) => {
     const tool = getTool(id);
-    return Boolean(tool && (tool.skillsDir || tool.globalSkillsDir) && (delivery !== "commands" || !tool.command));
+    return Boolean(tool?.skillsDir && (delivery !== "commands" || !tool.command));
   });
   if (candidates.includes("codex") && candidates.includes("agents")) return candidates.filter((id) => id !== "agents");
   return candidates;

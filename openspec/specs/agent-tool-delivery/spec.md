@@ -9,18 +9,13 @@ tool delivery layer driven by `init` / `update`.
 
 ### Requirement: Complete Agent Tool Registry
 
-ResearchSpec SHALL provide a single registry for all 37 selectable agent tools
+ResearchSpec SHALL provide a single registry for all 36 selectable agent tools
 supported by the bundled OpenSpec 1.5.0 reference.
 
 #### Scenario: All selects every registered tool
 
 - **WHEN** a user supplies `--tools all`
-- **THEN** the selection SHALL include exactly `amazon-q`, `antigravity`,
-  `auggie`, `bob`, `claude`, `cline`, `codeartsagent`, `codex`, `devin`,
-  `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`,
-  `github-copilot`, `hermes`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `lingma`,
-  `minimax-code`, `vibe`, `oh-my-pi`, `opencode`, `pi`, `qoder`, `qwen`, `rovodev`,
-  `roocode`, `trae`, `zcode`, and `agents`; `windsurf` resolves to `devin`
+- **THEN** the selection SHALL include exactly `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codeartsagent`, `codex`, `devin`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `hermes`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `lingma`, `vibe`, `oh-my-pi`, `opencode`, `pi`, `qoder`, `qwen`, `rovodev`, `roocode`, `trae`, `zcode`, and `agents`; `windsurf` resolves to `devin`
 
 #### Scenario: Tool expressions are validated
 
@@ -84,6 +79,12 @@ followed by optional literature-Adapter selection with catalog-backed guidance.
 - **WHEN** Agent-tool selection completes in an interactive init
 - **THEN** the CLI SHALL present `zotero-library` unselected by default
 - **AND** its description SHALL identify the seven-Skill bundle, require Zotero with `zotero-agents`, and link to `https://github.com/leike0813/zotero-agents`
+
+#### Scenario: Interactive controls remain visible and cancellable
+
+- **WHEN** an interactive selector is open
+- **THEN** navigation, selection, confirmation, and cancellation controls SHALL be displayed below the choices
+- **AND** `Ctrl+C` SHALL terminate initialization without writing workspace files
 
 #### Scenario: Non-interactive selection is deterministic
 
@@ -237,11 +238,11 @@ Graph profiles SHALL remain project-level managed projections. Core capability p
 - **THEN** Codex receives the Navigate Skill in `.agents/skills` and no custom prompt target
 
 ### Requirement: Current Tool Catalog
-The catalog SHALL contain exactly 37 current tools, preserve `windsurf` as an alias for `devin`, and describe legacy Skill roots, global Skill roots, detection paths, and command capability from one source of truth.
+The catalog SHALL contain exactly 36 current tools, preserve `windsurf` as an alias for `devin`, and describe project Skill roots, legacy Skill roots, detection paths, and command capability from one source of truth.
 
 #### Scenario: Catalog expressions resolve current IDs
 - **WHEN** a user selects `windsurf` or `all`
-- **THEN** `windsurf` SHALL resolve to `devin` and `all` SHALL resolve to exactly the 37 catalog IDs
+- **THEN** `windsurf` SHALL resolve to `devin` and `all` SHALL resolve to exactly the 36 catalog IDs
 
 ### Requirement: Safe Reconciliation
 Init and update SHALL calculate one ownership-aware plan, migrate known Codex/Kimi legacy trees, remove only unmodified ResearchSpec-generated files, preserve drift and user files, and perform zero writes when any blocking conflict exists.
@@ -250,13 +251,13 @@ Init and update SHALL calculate one ownership-aware plan, migrate known Codex/Ki
 - **WHEN** a planned generated target is a symlink or an unowned conflicting file
 - **THEN** init or update SHALL return a blocking diagnostic before changing config, manifest, or any projection
 
-### Requirement: Shared And Global Skill Roots
-Codex and the `agents` target SHALL share one `.agents/skills` tree and one ResearchSpec marker. MiniMax SHALL use a global `~/.minimax/skills` root and workspace reconciliation SHALL never remove it.
+### Requirement: Shared Project Skill Root
+Codex and the `agents` target SHALL share one project-local `.agents/skills` tree and one ResearchSpec marker.
 
 #### Scenario: Shared target is written once
 - **WHEN** both Codex and `agents` are selected
 - **THEN** one `.agents/skills` tree and one ownership marker SHALL be planned
-- **AND** removing either selection SHALL preserve the shared global Skill files
+- **AND** removing either selection SHALL preserve the shared Skill files while the other remains selected
 
 ### Requirement: Interactive re-init replaces current static selections
 
@@ -285,7 +286,7 @@ Interactive init against an existing current workspace SHALL present the same se
 
 ### Requirement: Managed installation targets are bounded by their provenance
 
-ResearchSpec SHALL validate each installation target against its scope, owner, source namespace and registered tool or Adapter destination before reading target contents as ownership evidence. Project targets SHALL be canonical nonempty POSIX relative file paths without traversal, absolute paths, drive prefixes, backslashes, NUL or empty segments. Framework and plugin profiles SHALL target the corresponding `researchspec/profiles/<profile_id>.yaml`. Agent resources SHALL remain inside the corresponding tool and source package namespace; commands and markers SHALL use their defined destinations. Shared-global targets SHALL use the owning tool's defined global namespace, and workspace reconciliation SHALL NOT remove shared-global Skill files.
+ResearchSpec SHALL validate each installation target against its scope, owner, source namespace and registered tool or Adapter destination before reading target contents as ownership evidence. Project targets SHALL be canonical nonempty POSIX relative file paths without traversal, absolute paths, drive prefixes, backslashes, NUL or empty segments. Framework and plugin profiles SHALL target the corresponding `researchspec/profiles/<profile_id>.yaml`. Agent resources SHALL remain inside the corresponding tool and source package namespace; commands and markers SHALL use their defined destinations. Shared-global Agent targets SHALL be unsupported and rejected before their files are read or removed.
 
 #### Scenario: Matching hash does not authorize an escaped target
 - **WHEN** a manifest claims a project-external path or a file outside its source namespace with a matching hash
@@ -293,9 +294,9 @@ ResearchSpec SHALL validate each installation target against its scope, owner, s
 - **AND** the referenced file remains unchanged
 
 #### Scenario: Valid profiles and global Skills remain supported
-- **WHEN** a manifest identifies a correctly located profile or MiniMax global Skill resource
-- **THEN** its path passes the corresponding target rules
-- **AND** deselection preserves shared-global Skill files
+- **WHEN** a manifest identifies a correctly located framework or plugin profile or a historical shared-global Agent resource
+- **THEN** the profile path passes the corresponding target rules
+- **AND** the shared-global Agent record is rejected without reading or removing its target
 
 ### Requirement: Unsafe manifests do not authorize mutations
 

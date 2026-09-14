@@ -1,7 +1,8 @@
 import path from "node:path";
+import { ExitPromptError } from "@inquirer/core";
 import { stringify } from "yaml";
 
-import { parseToolExpression, type DeliveryMode } from "../../adapters/tools.js";
+import { detectTools, orderTools, parseToolExpression, type DeliveryMode } from "../../adapters/tools.js";
 import { planWorkspaceDelivery } from "../../adapters/workspace-delivery.js";
 import { renderToolInstallationManifest } from "../../adapters/installations.js";
 import { GraphWorkspaceConfigSchema } from "../../core/contracts/graph-workspace.js";
@@ -9,12 +10,18 @@ import { loadPluginRegistry } from "../../plugins/registry.js";
 import { inspectGraphWorkspaceFormat, loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
 import { resolveInitTarget } from "../../core/workspace/layout.js";
 import { executeWritePlan, planDirectFileEdit, planFile, type PlannedWrite } from "../../core/workspace/write-plan.js";
-import { parseLiteratureAdapterExpression } from "../../literature-adapters/index.js";
+import { assertLiteratureAdapterSelection, LITERATURE_ADAPTER_CATALOG, parseLiteratureAdapterExpression } from "../../literature-adapters/index.js";
 import { fileExists } from "../../utils/fs.js";
+import { searchableMultiSelect, type SearchableChoice } from "../prompts/searchable-multi-select.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 
 export interface GraphInitOptions { tools?: string; literatureAdapters?: string; delivery?: DeliveryMode }
 export interface GraphUpdateOptions { tools?: string; literatureAdapters?: string; delivery?: DeliveryMode }
+export interface GraphBootstrapPromptPort {
+  multiSelect(config: { id: "agent-tools" | "literature-adapters"; message: string; choices: SearchableChoice[] }): Promise<string[]>;
+}
+
+const DEFAULT_BOOTSTRAP_PROMPTS: GraphBootstrapPromptPort = { multiSelect: searchableMultiSelect };
 
 const PROJECT_SPEC = '---\nschema_version: "2"\nproject_id: project\n---\n\n# Project intent\n\n## Research question\n\n## Scope and boundaries\n\n## Method stance\n\n## Expected contribution\n';
 
@@ -90,33 +97,38 @@ async function applyGraphWorkspaceProjection(input: {
   return { projected: deliveryPlan.installations.filter((item) => item.source.kind === "framework-capability").length, operations };
 }
 
-export async function handleGraphInit(inputPath: string | undefined, options: GraphInitOptions, context: CommandContext): Promise<CommandResult> {
+export async function handleGraphInit(
+  inputPath: string | undefined,
+  options: GraphInitOptions,
+  context: CommandContext,
+  prompts: GraphBootstrapPromptPort = DEFAULT_BOOTSTRAP_PROMPTS,
+): Promise<CommandResult> {
   const workspace = context.workspace ? path.resolve(context.cwd, context.workspace) : resolveInitTarget(inputPath, context.cwd);
   if (await fileExists(workspace)) {
     const format = await inspectGraphWorkspaceFormat(workspace);
     if (!format.current) throw new CliError("unsupported_workspace", `Initialization target is not a current schema 2 workspace: ${workspace}`, 1, "Existing files were left unchanged.");
     const index = await loadGraphWorkspaceIndex(workspace);
-    return handleGraphReinit(workspace, index.config.agent_tools.selected, options, context);
+    return handleGraphReinit(workspace, index, options, context, prompts);
   }
-  let tools: string[];
-  try { tools = parseToolExpression(options.tools ?? "none"); }
-  catch (error) { throw new CliError("invalid_tools", error instanceof Error ? error.message : String(error), 2); }
-  let literatureAdapters: string[];
-  try { literatureAdapters = parseLiteratureAdapterExpression(options.literatureAdapters ?? "none"); }
-  catch (error) { throw new CliError("invalid_literature_adapters", error instanceof Error ? error.message : String(error), 2); }
+  const detected = await detectTools(path.dirname(workspace));
+  const tools = await selectTools({ configured: [], detected, expression: options.tools, context, fresh: true, prompts });
+  const literatureAdapters = await selectLiteratureAdapters({ configured: [], expression: options.literatureAdapters, context, prompts });
   const delivery = options.delivery ?? "skills";
   const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters: literatureAdapters, delivery, selectedPlugins: [], context });
   return success("init", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: literatureAdapters, selected_plugins: [], projected_capability_files: applied.projected }, { stdout: `${context.dryRun ? "Would initialize" : "ResearchSpec schema 2 workspace initialized"}: ${workspace}\n` });
 }
 
-async function handleGraphReinit(workspace: string, configured: string[], options: GraphInitOptions, context: CommandContext): Promise<CommandResult> {
-  let tools: string[];
-  try { tools = parseToolExpression(options.tools ?? "none"); }
-  catch (error) { throw new CliError("invalid_tools", error instanceof Error ? error.message : String(error), 2); }
-  let literatureAdapters: string[];
-  try { literatureAdapters = parseLiteratureAdapterExpression(options.literatureAdapters ?? "none"); }
-  catch (error) { throw new CliError("invalid_literature_adapters", error instanceof Error ? error.message : String(error), 2); }
-  const index = await loadGraphWorkspaceIndex(workspace);
+async function handleGraphReinit(
+  workspace: string,
+  index: Awaited<ReturnType<typeof loadGraphWorkspaceIndex>>,
+  options: GraphInitOptions,
+  context: CommandContext,
+  prompts: GraphBootstrapPromptPort,
+): Promise<CommandResult> {
+  const configured = index.config.agent_tools.selected;
+  const detected = await detectTools(index.projectRoot);
+  const tools = await selectTools({ configured, detected, expression: options.tools, context, fresh: false, prompts });
+  const literatureAdapters = await selectLiteratureAdapters({ configured: index.config.literature_adapters.selected, expression: options.literatureAdapters, context, prompts });
   const delivery = options.delivery ?? index.config.agent_tools.delivery;
   const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters: literatureAdapters, delivery, selectedPlugins: index.config.plugins.selected, index, context });
   const projected = applied.projected;
@@ -145,4 +157,74 @@ async function requireGraphWorkspaceForUpdate(context: CommandContext): Promise<
   } catch (error) {
     throw new CliError("workspace_unsupported", error instanceof Error ? error.message : String(error), 1);
   }
+}
+
+async function selectTools(input: {
+  configured: string[];
+  detected: string[];
+  expression?: string;
+  context: CommandContext;
+  fresh: boolean;
+  prompts: GraphBootstrapPromptPort;
+}): Promise<string[]> {
+  try {
+    if (input.expression !== undefined) return parseToolExpression(input.expression);
+    if (input.context.interactive) {
+      const selected = await input.prompts.multiSelect({
+        id: "agent-tools",
+        message: "Select agent tools",
+        choices: orderTools(input.configured, input.detected).map((tool) => ({
+          name: tool.name,
+          value: tool.id,
+          configured: input.configured.includes(tool.id),
+          detected: input.detected.includes(tool.id),
+          preSelected: input.configured.includes(tool.id) || (input.fresh && input.detected.includes(tool.id)),
+        })),
+      });
+      return sameSelection(selected, input.configured) ? input.configured : selected;
+    }
+    if (!input.fresh) return input.configured;
+    if (input.detected.length) return input.detected;
+    throw new CliError("tools_required", "No agent tools were selected or detected.", 2, "Pass --tools all, --tools none, or a comma-separated tool list.");
+  } catch (error) {
+    if (error instanceof CliError) throw error;
+    throw selectionError("invalid_tools", error);
+  }
+}
+
+async function selectLiteratureAdapters(input: {
+  configured: string[];
+  expression?: string;
+  context: CommandContext;
+  prompts: GraphBootstrapPromptPort;
+}): Promise<string[]> {
+  try {
+    if (input.expression !== undefined) return parseLiteratureAdapterExpression(input.expression);
+    assertLiteratureAdapterSelection(input.configured);
+    if (!input.context.interactive) return input.configured;
+    const selected = await input.prompts.multiSelect({
+      id: "literature-adapters",
+      message: "Select optional literature Adapters",
+      choices: LITERATURE_ADAPTER_CATALOG.filter((adapter) => adapter.install_policy === "optional").map((adapter) => ({
+        name: `${adapter.display.name} (${adapter.adapter_id})`,
+        value: adapter.adapter_id,
+        description: `${adapter.display.description} Setup: ${adapter.display.setup_url}`,
+        configured: input.configured.includes(adapter.adapter_id),
+        preSelected: input.configured.includes(adapter.adapter_id),
+      })),
+    });
+    return sameSelection(selected, input.configured) ? input.configured : selected;
+  } catch (error) {
+    throw selectionError("invalid_literature_adapters", error);
+  }
+}
+
+function sameSelection(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((value) => right.includes(value));
+}
+
+function selectionError(code: "invalid_tools" | "invalid_literature_adapters", error: unknown): CliError {
+  return error instanceof ExitPromptError
+    ? new CliError("cancelled", "Initialization cancelled.", 1)
+    : new CliError(code, error instanceof Error ? error.message : String(error), 2);
 }

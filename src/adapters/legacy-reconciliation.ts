@@ -42,7 +42,7 @@ export async function planLegacyToolReconciliation(input: {
 
   for (const toolId of reconciled) {
     const tool = getTool(toolId);
-    if (!tool?.legacySkillsDirs?.length || (!tool.skillsDir && !tool.globalSkillsDir)) continue;
+    if (!tool?.legacySkillsDirs?.length || !tool.skillsDir) continue;
     const currentRoot = toolSkillsRoot(tool, input.projectRoot).root;
     for (const legacyRoot of tool.legacySkillsDirs) {
       const legacySkillsRoot = path.join(input.projectRoot, legacyRoot, "skills");

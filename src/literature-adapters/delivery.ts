@@ -196,8 +196,7 @@ export async function planLiteratureAdapterDelivery(input: {
           const target = path.join(skillRoot.root, sourceFile.skillId, sourceFile.relativePath);
           await addManaged({
             target,
-            manifestPath: skillRoot.scope === "project" ? posix(path.relative(input.projectRoot, target)) : target,
-            scope: skillRoot.scope,
+            manifestPath: posix(path.relative(input.projectRoot, target)),
             content: sourceFile.content,
             source: literatureSource(adapter.adapter_id, adapter.identity.release_set_id, "skill", sourceFile.skillId),
             owner: "agent-tool",
@@ -231,7 +230,6 @@ export async function planLiteratureAdapterDelivery(input: {
   async function addManaged(value: {
     target: string;
     manifestPath: string;
-    scope?: "project" | "shared-global";
     content: string | Uint8Array;
     source: ManagedInstallationSource;
     owner: ManagedInstallation["owner"];
@@ -239,7 +237,7 @@ export async function planLiteratureAdapterDelivery(input: {
     executable: boolean;
     mode?: number;
   }): Promise<void> {
-    const scope = value.scope ?? "project";
+    const scope = "project" as const;
     const key = `${scope}:${value.manifestPath}`;
     const prior = recorded.get(key);
     const installation: ManagedInstallation = {

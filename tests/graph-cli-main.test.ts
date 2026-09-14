@@ -3,8 +3,11 @@ import { access, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promise
 import path from "node:path";
 import { test } from "node:test";
 
+import { ExitPromptError } from "@inquirer/core";
 import { parse as parseYaml, stringify } from "yaml";
 
+import { handleGraphInit, type GraphBootstrapPromptPort } from "../src/cli/handlers/graph-bootstrap.js";
+import { CliError, type CommandContext } from "../src/cli/types.js";
 import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 
 void test("source-compiled CLI initializes and completes a schema 2 graph workspace", async () => {
@@ -85,6 +88,74 @@ void test("source-compiled CLI initializes and completes a schema 2 graph worksp
     assert.equal(parseEnvelope(runCli(["check", "--json"], root)).ok, true);
     assert.equal(parseEnvelope(runCli(["doctor", "--json"], root)).ok, true);
     assert.ok(workspace);
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("graph init prompts for tools and Adapters and preserves omitted machine selections", async () => {
+  const root = await tempProject();
+  try {
+    await mkdir(path.join(root, ".qwen"));
+    const calls: Array<Parameters<GraphBootstrapPromptPort["multiSelect"]>[0]> = [];
+    const prompts: GraphBootstrapPromptPort = {
+      multiSelect(config) {
+        calls.push(config);
+        return Promise.resolve(config.id === "agent-tools" ? ["qwen"] : ["zotero-library"]);
+      },
+    };
+    const context: CommandContext = {
+      command: "init", cwd: root, json: false, dryRun: false, force: false, yes: true, quiet: false, interactive: true,
+    };
+
+    const initialized = await handleGraphInit(root, {}, context, prompts);
+    assert.equal(initialized.ok, true);
+    assert.deepEqual(calls.map((call) => call.id), ["agent-tools", "literature-adapters"]);
+    const qwen = calls[0]?.choices.find((choice) => choice.value === "qwen");
+    assert.deepEqual({ detected: qwen?.detected, preSelected: qwen?.preSelected }, { detected: true, preSelected: true });
+    const zotero = calls[1]?.choices.find((choice) => choice.value === "zotero-library");
+    assert.deepEqual({ configured: zotero?.configured, preSelected: zotero?.preSelected }, { configured: false, preSelected: false });
+
+    const preserved = parseEnvelope<{ selected_tools: string[]; selected_literature_adapters: string[] }>(runCli(["init", root, "--json"], root));
+    assert.deepEqual(preserved.data?.selected_tools, ["qwen"]);
+    assert.deepEqual(preserved.data?.selected_literature_adapters, ["zotero-library"]);
+
+    const reconfigureCalls: typeof calls = [];
+    await handleGraphInit(root, {}, context, {
+      multiSelect(config) {
+        reconfigureCalls.push(config);
+        return Promise.resolve([]);
+      },
+    });
+    assert.deepEqual(reconfigureCalls.map((call) => call.id), ["agent-tools", "literature-adapters"]);
+    const configuredQwen = reconfigureCalls[0]?.choices.find((choice) => choice.value === "qwen");
+    assert.deepEqual({ configured: configuredQwen?.configured, preSelected: configuredQwen?.preSelected }, { configured: true, preSelected: true });
+    const config = parseYaml(await readFile(path.join(root, "researchspec/config.yaml"), "utf8")) as {
+      agent_tools: { selected: string[] };
+      literature_adapters: { selected: string[] };
+    };
+    assert.deepEqual(config.agent_tools.selected, []);
+    assert.deepEqual(config.literature_adapters.selected, []);
+
+    const configPath = path.join(root, "researchspec/config.yaml");
+    const beforeCancellation = await readFile(configPath, "utf8");
+    await assert.rejects(
+      handleGraphInit(root, {}, context, { multiSelect: () => Promise.reject(new ExitPromptError("SIGINT")) }),
+      (error: unknown) => error instanceof CliError && error.code === "cancelled",
+    );
+    assert.equal(await readFile(configPath, "utf8"), beforeCancellation);
+  } finally {
+    await cleanup(root);
+  }
+});
+
+void test("fresh machine init requires an explicit or detected tool selection", async () => {
+  const root = await tempProject();
+  try {
+    const result = parseEnvelope(runCli(["init", root, "--json"], root, { HOME: path.join(root, "home") }));
+    assert.equal(result.ok, false);
+    assert.equal(result.error?.code, "tools_required");
+    await assert.rejects(access(path.join(root, "researchspec")));
   } finally {
     await cleanup(root);
   }

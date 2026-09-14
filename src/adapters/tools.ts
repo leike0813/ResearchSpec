@@ -1,8 +1,5 @@
-import { homedir } from "node:os";
 import path from "node:path";
 
-import { ARSU_SKILL_IDS } from "../arsu-converter/routing/contracts.js";
-import { CORE_SKILL_IDS } from "../core-skills/catalog.js";
 import { fileExists } from "../utils/fs.js";
 
 export type CommandFormat =
@@ -25,17 +22,15 @@ export type DeliveryMode = "skills" | "commands" | "both";
 export interface ToolDefinition {
   id: ToolId;
   name: string;
-  /** Project-relative integration root. Global-only tools leave this undefined. */
-  skillsDir?: string;
+  /** Project-relative integration root. */
+  skillsDir: string;
   /** Former project roots whose known ResearchSpec files may be migrated. */
   legacySkillsDirs?: readonly string[];
-  /** Home-relative global integration root, resolved below the user's home. */
-  globalSkillsDir?: string;
   /** Existing files/directories that indicate the tool is configured. */
   detectionPaths?: readonly string[];
   setupNote?: string;
   command?: {
-    scope: "project" | "shared-global";
+    scope: "project";
     format: CommandFormat;
     path(commandId: string, projectRoot: string): string;
     replaceColon?: boolean;
@@ -47,7 +42,7 @@ export const TOOL_IDS = [
   "amazon-q", "antigravity", "auggie", "bob", "claude", "cline", "codeartsagent", "codex",
   "devin", "forgecode", "codebuddy", "continue", "costrict", "crush", "cursor", "factory",
   "gemini", "github-copilot", "hermes", "iflow", "junie", "kilocode", "kimi", "kiro", "lingma",
-  "minimax-code", "vibe", "oh-my-pi", "opencode", "pi", "qoder", "qwen", "rovodev", "roocode",
+  "vibe", "oh-my-pi", "opencode", "pi", "qoder", "qwen", "rovodev", "roocode",
   "trae", "zcode", "agents",
 ] as const;
 
@@ -86,7 +81,6 @@ export const TOOLS: readonly ToolDefinition[] = [
   skillsOnly("kimi", "Kimi Code", ".kimi-code", { legacySkillsDirs: [".kimi"], detectionPaths: [".kimi-code", ".kimi"] }),
   tool("kiro", "Kiro", ".kiro", ".kiro/prompts/researchspec-<id>.prompt.md", "description"),
   tool("lingma", "Lingma", ".lingma", ".lingma/commands/researchspec/<id>.md", "named"),
-  skillsOnly("minimax-code", "MiniMax Code", undefined, { globalSkillsDir: ".minimax" }),
   skillsOnly("vibe", "Mistral Vibe", ".vibe"),
   tool("oh-my-pi", "Oh My Pi", ".omp", ".omp/commands/researchspec-<id>.md", "description", { replaceColon: true, injectArguments: true }),
   tool("opencode", "OpenCode", ".opencode", ".opencode/commands/researchspec-<id>.md", "description", { replaceColon: true }),
@@ -119,20 +113,11 @@ export function parseToolExpression(expression: string): string[] {
   return ids;
 }
 
-export function toolSupportsSkills(tool: ToolDefinition): boolean {
-  return Boolean(tool.skillsDir || tool.globalSkillsDir);
-}
-
 export function toolSupportsCommands(tool: ToolDefinition): boolean {
   return Boolean(tool.command);
 }
 
-export function toolSkillsRoot(tool: ToolDefinition, projectRoot: string): { scope: "project" | "shared-global"; root: string; manifestRoot: string } {
-  if (tool.globalSkillsDir) {
-    const root = path.join(homedir(), tool.globalSkillsDir, "skills");
-    return { scope: "shared-global", root, manifestRoot: root };
-  }
-  if (tool.skillsDir === undefined) throw new Error(`Tool has no project skills directory: ${tool.id}`);
+export function toolSkillsRoot(tool: ToolDefinition, projectRoot: string): { scope: "project"; root: string; manifestRoot: string } {
   const root = path.join(projectRoot, tool.skillsDir, "skills");
   return { scope: "project", root, manifestRoot: path.posix.join(tool.skillsDir, "skills") };
 }
@@ -142,17 +127,10 @@ export function sharedSkillTarget(toolId: string): "codex" | "agents" | undefine
   return resolved === "codex" || resolved === "agents" ? resolved : undefined;
 }
 
-const FIXED_SKILL_IDS: readonly string[] = [...ARSU_SKILL_IDS, ...CORE_SKILL_IDS];
-
 export async function detectTools(projectRoot: string): Promise<string[]> {
   const detected: string[] = [];
   for (const definition of TOOLS) {
-    if (definition.globalSkillsDir) {
-      const globalRoot = toolSkillsRoot(definition, projectRoot).root;
-      if ((await Promise.all(FIXED_SKILL_IDS.map((skillId) => fileExists(path.join(globalRoot, skillId, "SKILL.md"))))).some(Boolean)) detected.push(definition.id);
-      continue;
-    }
-    const candidates = definition.detectionPaths ?? (definition.skillsDir ? [definition.skillsDir] : []);
+    const candidates = definition.detectionPaths ?? [definition.skillsDir];
     if ((await Promise.all(candidates.map((candidate) => fileExists(path.join(projectRoot, candidate))))).some(Boolean)) detected.push(definition.id);
   }
   return detected;
@@ -169,13 +147,12 @@ function tool(id: ToolId, name: string, skillsDir: string, commandPath: string, 
   return { id, name, skillsDir, ...options, command: { scope: "project", format, path: projectCommand(commandPath), ...optionsForCommand(options) } };
 }
 
-function skillsOnly(id: ToolId, name: string, skillsDir?: string, extras: ToolExtras = {}): ToolDefinition {
-  return { id, name, ...(skillsDir ? { skillsDir } : {}), ...extras };
+function skillsOnly(id: ToolId, name: string, skillsDir: string, extras: ToolExtras = {}): ToolDefinition {
+  return { id, name, skillsDir, ...extras };
 }
 
 interface ToolExtras {
   legacySkillsDirs?: readonly string[];
-  globalSkillsDir?: string;
   detectionPaths?: readonly string[];
   setupNote?: string;
   replaceColon?: boolean;

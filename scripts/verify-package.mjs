@@ -457,9 +457,9 @@ async function loadPackagedSurface(root) {
   const capabilities = uniqueSorted(capabilityRegistry.capabilities?.map((item) => item.capability_id), "capability registry entries");
   const profiles = uniqueSorted(profileRegistry.profiles?.map((item) => item.profile_id), "profile registry entries");
   const adapters = uniqueSorted(adapterModule.LITERATURE_ADAPTER_SKILL_IDS, "literature Adapter catalog Skills");
-  const projectTools = uniqueSorted(toolModule.TOOLS?.filter((tool) => !tool.globalSkillsDir).map((tool) => tool.id), "project-scoped tool catalog");
+  const projectTools = uniqueSorted(toolModule.TOOLS?.map((tool) => tool.id), "project-scoped tool catalog");
   const projectSkillWriters = uniqueSorted(deliveryModule.selectSkillWriters?.(projectTools, "both"), "project-scoped Skill writers");
-  const commandTools = uniqueSorted(toolModule.TOOLS?.filter((tool) => !tool.globalSkillsDir && tool.command).map((tool) => tool.id), "project-scoped command-capable tools");
+  const commandTools = uniqueSorted(toolModule.TOOLS?.filter((tool) => tool.command).map((tool) => tool.id), "project-scoped command-capable tools");
   return {
     arsu,
     companions,
