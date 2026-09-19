@@ -320,7 +320,18 @@ void test("graph init projects only Navigate into selected Agent tools", async (
     assert.equal(initialized.ok, true);
     assert.equal(initialized.data?.projected_capability_files ?? 0, 0);
     await access(path.join(root, ".agents", "skills", "researchspec-navigate", "SKILL.md"));
+    const executor = path.join(root, ".codex", "agents", "researchspec-executor.toml");
+    const reviewer = path.join(root, ".codex", "agents", "researchspec-reviewer.toml");
+    await access(executor);
+    await access(reviewer);
+    const manifest = JSON.parse(await readFile(path.join(root, "researchspec/tool-installation-manifest.json"), "utf8")) as {
+      installations: Array<{ source: { kind?: string } }>;
+    };
+    assert.equal(manifest.installations.filter((item) => item.source.kind === "custom-agent").length, 2);
     await assert.rejects(access(path.join(root, ".agents", "skills", "design-research-question-formulation", "SKILL.md")));
+    assert.equal(runCli(["update", "--tools", "none", "--json"], root, { CODEX_HOME: codexHome }).status, 0);
+    await assert.rejects(access(executor));
+    await assert.rejects(access(reviewer));
   } finally {
     await cleanup(root);
   }

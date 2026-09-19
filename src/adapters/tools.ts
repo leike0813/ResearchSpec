@@ -18,6 +18,30 @@ export type CommandFormat =
 
 export type ToolId = typeof TOOL_IDS[number];
 export type DeliveryMode = "skills" | "commands" | "both";
+export type AgentProfileFormat = "frontmatter" | "toml";
+
+export interface AgentProfileToolDefinition {
+  dir: string;
+  suffix: string;
+  format: AgentProfileFormat;
+  mode?: { key: string; value: string };
+  inheritModel?: boolean;
+  omitName?: boolean;
+  nameKey?: string;
+  permissions?: {
+    allowKey?: string;
+    allow?: readonly string[];
+    denyKey?: string;
+    deny?: readonly string[];
+    mapKey?: string;
+    map?: Readonly<Record<string, boolean>>;
+    tomlAllowKey?: string;
+    tomlDenyKey?: string;
+  };
+  extra?: Readonly<Record<string, string | boolean>>;
+  descriptionStyle?: "json";
+  promptRef?: { dir: string; key: string };
+}
 
 export interface ToolDefinition {
   id: ToolId;
@@ -29,6 +53,7 @@ export interface ToolDefinition {
   /** Existing files/directories that indicate the tool is configured. */
   detectionPaths?: readonly string[];
   setupNote?: string;
+  agentProfile?: AgentProfileToolDefinition;
   command?: {
     scope: "project";
     format: CommandFormat;
@@ -47,6 +72,35 @@ export const TOOL_IDS = [
 ] as const;
 
 export const TOOL_ID_ALIASES: Readonly<Record<string, ToolId>> = { windsurf: "devin" };
+
+const AGENT_ALLOW = ["Read", "Grep", "Glob", "WebFetch", "WebSearch", "Write", "Edit"] as const;
+const AGENT_DENY = ["Bash", "AskUserQuestion", "Task"] as const;
+const AGENT_PROFILES: Partial<Record<ToolId, AgentProfileToolDefinition>> = {
+  antigravity: { dir: ".agents/agents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW } },
+  auggie: { dir: ".augment/agents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW, denyKey: "disabled_tools", deny: AGENT_DENY } },
+  claude: { dir: ".claude/agents", suffix: ".md", format: "frontmatter", inheritModel: true, permissions: { allowKey: "tools", allow: AGENT_ALLOW, denyKey: "disallowedTools", deny: AGENT_DENY } },
+  codeartsagent: { dir: ".codeartsdoer/agents", suffix: ".md", format: "frontmatter", omitName: true, mode: { key: "mode", value: "subagent" }, permissions: { mapKey: "tools", map: { read: true, grep: true, glob: true, webfetch: true, write: true, edit: true, bash: false, task: false } } },
+  codebuddy: { dir: ".codebuddy/agents", suffix: ".md", format: "frontmatter", descriptionStyle: "json", permissions: { allowKey: "tools", allow: AGENT_ALLOW, denyKey: "disallowedTools", deny: AGENT_DENY } },
+  codex: { dir: ".codex/agents", suffix: ".toml", format: "toml" },
+  devin: { dir: ".devin/agents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW } },
+  forgecode: { dir: ".forge/agents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW }, extra: { tool_supported: true } },
+  costrict: { dir: ".costrict/agents", suffix: ".md", format: "frontmatter", descriptionStyle: "json", permissions: { allowKey: "tools", allow: AGENT_ALLOW } },
+  cursor: { dir: ".cursor/agents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW } },
+  factory: { dir: ".factory/droids", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW } },
+  gemini: { dir: ".gemini/agents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW } },
+  "github-copilot": { dir: ".github/agents", suffix: ".agent.md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW } },
+  iflow: { dir: ".iflow/agents", suffix: ".md", format: "frontmatter", mode: { key: "agentType", value: "subagent" }, permissions: { allowKey: "allowedTools", allow: AGENT_ALLOW } },
+  junie: { dir: ".junie/agents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW, denyKey: "disallowedTools", deny: AGENT_DENY } },
+  kilocode: { dir: ".kilo/agents", suffix: ".md", format: "frontmatter", mode: { key: "mode", value: "subagent" }, permissions: { allowKey: "tools", allow: AGENT_ALLOW } },
+  kiro: { dir: ".kiro/agents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW, denyKey: "excludedTools", deny: AGENT_DENY } },
+  vibe: { dir: ".vibe/agents", suffix: ".toml", format: "toml", nameKey: "display_name", mode: { key: "agent_type", value: "subagent" }, promptRef: { dir: ".vibe/prompts", key: "system_prompt_id" }, permissions: { tomlDenyKey: "disabled_tools", deny: ["bash", "task"] } },
+  "oh-my-pi": { dir: ".omp/agents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW } },
+  opencode: { dir: ".opencode/agents", suffix: ".md", format: "frontmatter", omitName: true, mode: { key: "mode", value: "subagent" }, permissions: { mapKey: "tools", map: { read: true, grep: true, glob: true, webfetch: true, write: true, edit: true, bash: false, task: false } } },
+  qoder: { dir: ".qoder/agents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW, denyKey: "disallowedTools", deny: AGENT_DENY } },
+  qwen: { dir: ".qwen/agents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW, denyKey: "disallowedTools", deny: AGENT_DENY } },
+  rovodev: { dir: ".rovodev/subagents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW } },
+  trae: { dir: ".trae/agents", suffix: ".md", format: "frontmatter", permissions: { allowKey: "tools", allow: AGENT_ALLOW } },
+};
 
 const projectCommand = (relative: string) => (id: string, root: string) => path.join(root, relative.replace("<id>", id));
 
@@ -92,7 +146,10 @@ export const TOOLS: readonly ToolDefinition[] = [
   tool("trae", "Trae", ".trae", ".trae/commands/researchspec-<id>.md", "trae"),
   tool("zcode", "ZCode", ".zcode", ".zcode/commands/researchspec/<id>.md", "named"),
   skillsOnly("agents", "Shared .agents skills", ".agents", { detectionPaths: [".agents/skills"] }),
-] as const;
+].map((definition) => {
+  const agentProfile = AGENT_PROFILES[definition.id];
+  return agentProfile ? { ...definition, agentProfile } : definition;
+});
 
 export function resolveToolIdAlias(toolId: string): string {
   return TOOL_ID_ALIASES[toolId] ?? toolId;

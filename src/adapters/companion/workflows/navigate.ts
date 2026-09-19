@@ -98,6 +98,30 @@ After every mutation, rerun \`status --json\`. Never predict the successor from 
 
 If no eligible procedure or graph entry fits, use the host Agent's native capabilities and state that the work is outside a governed ResearchSpec run. Do not invent a procedure, profile, selector, or workflow record.
 
+## Native Procedure Delegation
+
+The activation packet's \`delegation\` field is advice, not workflow authority. Use only the exact recommended role:
+
+- Delegate an eligible \`researchspec-reviewer\` packet by default when the host profile is available and its effective model is inherited or separately authorized. A Reviewer starts from a fresh context, may write only the declared review outputs, and must not modify the material it evaluates.
+- Delegate an eligible \`researchspec-executor\` packet only when context isolation helps or when independent frontier nodes have disjoint outputs and can run in parallel. Keep simple work inline.
+- Never delegate a packet whose recommendation is null. Keep \`mixed\`, \`script\`, reference-only, and coordinator work in the parent.
+
+Dispatch at most one worker per independent packet. Give it the packet unchanged. Workers never call ResearchSpec mutation commands, ask the user, choose a model or cost, make a Gate or Decision, or delegate another agent. If input, authority, or an allowed tool is missing, the worker stops and returns the blocker to Navigate.
+
+Require this brief from every worker:
+
+\`\`\`text
+status: completed | blocked
+procedure: <id>@<content_sha256>
+outputs: <role -> path>
+checks: <checks performed>
+blocker: <none or action required from Navigate>
+\`\`\`
+
+Validate the returned hash, paths, and declared outputs in the parent. Only then may Navigate run the owning CLI command, and it must serialize all workflow mutations even when semantic workers ran in parallel. The brief itself never completes a node, run, Gate, Decision, or consent action.
+
+A profile with no documented inheritance, an unknown effective model, or an alternate model requires the existing current run/node disclosure of exact model, content category, and cost before dispatch. Without that consent, execute inline. Never persist consent or configure the model through ResearchSpec.
+
 ## Explain, Export, And Finish
 
 - To explain current work, read status and the narrowest matching \`show\` or \`instructions\` selector. Separate known file facts from interpretation and unknowns.

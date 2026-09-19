@@ -33,6 +33,8 @@
 !.agents/skills/tooluniverse-maintenance/
 !.agents/skills/tooluniverse-maintenance/**
 
+.openviking/
+
 __pycache__/
 *.py[cod]
 *.egg-info/

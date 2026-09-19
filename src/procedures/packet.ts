@@ -1,6 +1,11 @@
 import { sha256 } from "../core/workspace/write-plan.js";
 import { readProcedureContent, type ProcedureDefinition, type ProcedureMode } from "./catalog.js";
 
+export type ProcedureDelegation =
+  | { recommended_agent: "researchspec-executor"; reason: "llm-producer" }
+  | { recommended_agent: "researchspec-reviewer"; reason: "llm-independent-review" }
+  | { recommended_agent: null; reason: "non-llm" | "reference-only" | "coordinator" };
+
 export interface ProcedurePacketOptions {
   mode: ProcedureMode;
   workspace: string;
@@ -24,6 +29,7 @@ export async function buildProcedurePacket(procedure: ProcedureDefinition, optio
       content_sha256: sha256(content),
     },
     workspace: options.workspace,
+    delegation: procedureDelegation(procedure),
     inputs: options.inputs ?? procedure.manifest?.inputs ?? [],
     outputs: options.outputs ?? procedure.manifest?.outputs ?? [],
     authority: options.authority ?? {
@@ -45,4 +51,14 @@ export async function buildProcedurePacket(procedure: ProcedureDefinition, optio
       instruction: "Return the declared ordinary output paths to the caller. Do not mutate ResearchSpec workflow state.",
     },
   };
+}
+
+export function procedureDelegation(procedure: ProcedureDefinition): ProcedureDelegation {
+  const manifest = procedure.manifest;
+  if (!manifest) return { recommended_agent: null, reason: "coordinator" };
+  if (manifest.execution_type !== "llm") return { recommended_agent: null, reason: "non-llm" };
+  if (manifest.outputs.length === 0) return { recommended_agent: null, reason: "reference-only" };
+  return manifest.node_kind === "producer"
+    ? { recommended_agent: "researchspec-executor", reason: "llm-producer" }
+    : { recommended_agent: "researchspec-reviewer", reason: "llm-independent-review" };
 }

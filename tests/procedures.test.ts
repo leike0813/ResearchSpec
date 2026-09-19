@@ -40,6 +40,24 @@ void test("standalone and graph packets share package content but not authority"
   });
   assert.equal(standalone.procedure.content_sha256, graph.procedure.content_sha256);
   assert.equal(standalone.package.root, graph.package.root);
+  assert.deepEqual(standalone.delegation, { recommended_agent: "researchspec-executor", reason: "llm-producer" });
+  assert.deepEqual(graph.delegation, standalone.delegation);
   assert.notDeepEqual(standalone.authority, graph.authority);
   assert.notDeepEqual(standalone.completion, graph.completion);
+});
+
+void test("procedure packets recommend native roles only for eligible LLM work", async () => {
+  const catalog = await loadProcedureCatalog();
+  const cases = [
+    ["check-claim-faithfulness-audit", { recommended_agent: "researchspec-reviewer", reason: "llm-independent-review" }],
+    ["transform-revision-patching", { recommended_agent: null, reason: "non-llm" }],
+    ["generation-humanization-reference", { recommended_agent: null, reason: "reference-only" }],
+    ["deep-research", { recommended_agent: null, reason: "coordinator" }],
+  ] as const;
+  for (const [id, expected] of cases) {
+    const procedure = catalog.get(id);
+    assert.ok(procedure, id);
+    const packet = await buildProcedurePacket(procedure, { mode: "standalone", workspace: "/workspace" });
+    assert.deepEqual(packet.delegation, expected, id);
+  }
 });

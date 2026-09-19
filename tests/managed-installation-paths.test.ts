@@ -52,6 +52,21 @@ void test("managed target resolution derives profile and project roots", async (
     });
     await validateManagedTarget(root, profile);
 
+    const customAgent = asInstallation({
+      owner: "agent-tool", tool_id: "vibe",
+      source: { kind: "custom-agent", role_id: "researchspec-reviewer", component: "prompt" },
+      target: { scope: "project", path: ".vibe/prompts/researchspec-reviewer.md", executable: false }, sha256: hash("prompt"),
+    });
+    assert.deepEqual(resolveManagedTarget(root, customAgent), {
+      path: path.join(root, ".vibe/prompts/researchspec-reviewer.md"),
+      boundaryRoot: root,
+    });
+    await validateManagedTarget(root, customAgent);
+    assert.throws(() => resolveManagedTarget(root, asInstallation({
+      ...customAgent,
+      target: { ...customAgent.target, path: ".vibe/prompts/other.md" },
+    })));
+
     assert.throws(() => resolveManagedTarget(root, asInstallation({
       owner: "agent-tool", tool_id: "claude",
       source: { kind: "core-skill", skill_id: "retired-skill" },
@@ -159,6 +174,37 @@ void test("agent reconciliation removes only a clean retired project record", as
     assert.equal(projectResult.operations[0]?.action, "remove-owned");
     assert.equal(projectResult.operations[0]?.boundaryRoot, root);
 
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+void test("custom-agent reconciliation removes clean profiles and preserves drift", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "researchspec-managed-agents-"));
+  try {
+    const target = path.join(root, ".codex/agents/researchspec-executor.toml");
+    await mkdir(path.dirname(target), { recursive: true });
+    await writeFile(target, "managed", "utf8");
+    const record = asInstallation({
+      owner: "agent-tool", tool_id: "codex",
+      source: { kind: "custom-agent", role_id: "researchspec-executor", component: "definition" },
+      target: { scope: "project", path: ".codex/agents/researchspec-executor.toml", executable: false },
+      sha256: hash("managed"),
+    });
+    const clean = await reconcileAgentToolInstallations({
+      projectRoot: root, existingInstallations: [record], desiredInstallations: [],
+      reconciledToolIds: ["codex"], selectedToolIds: [],
+    });
+    assert.equal(clean.operations[0]?.action, "remove-owned");
+
+    await writeFile(target, "user edit", "utf8");
+    const drift = await reconcileAgentToolInstallations({
+      projectRoot: root, existingInstallations: [record], desiredInstallations: [],
+      reconciledToolIds: ["codex"], selectedToolIds: [],
+    });
+    assert.equal(drift.operations.length, 0);
+    assert.deepEqual(drift.retainedInstallations, [record]);
+    assert.ok(drift.diagnostics.some((item) => item.code === "generated_file_drift"));
   } finally {
     await rm(root, { recursive: true, force: true });
   }

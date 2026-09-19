@@ -117,6 +117,17 @@ custom prompts; Kimi writes `.kimi-code/skills` and reads `.kimi` only for migra
 Optional ResearchSpec-maintained domains select extension Procedures and graph
 profiles without projecting their raw or extension Skills into the host catalog.
 
+The 24 registered class-A hosts with project-local native custom-agent support
+also receive exactly two managed non-entry profiles: `researchspec-executor`
+for eligible pure-LLM producers and `researchspec-reviewer` for eligible
+pure-LLM checkers or observers. Activation packet schema `"1"` carries the
+advisory recommendation; `mixed`, `script`, outputless reference and
+coordinator Procedures stay in Navigate. Workers execute one packet, never
+mutate ResearchSpec state or ask the user, and return a fixed brief for parent
+validation. Navigate alone serializes CLI mutations. Profiles do not pin a
+vendor model; unknown, non-inherited or alternate effective models retain the
+existing per-run/node model, content-category and cost consent boundary.
+
 `src/literature-adapters/catalog.ts` is the installation SSOT for the optional
 `zotero-library` Adapter, while `config.yaml.literature_adapters.selected` is the
 workspace selection SSOT. Project runtime and profile files live only under

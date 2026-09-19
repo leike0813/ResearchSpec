@@ -95,6 +95,16 @@ route 或 profile 摘要、可选入口节点、前置条件、边界输出、Ga
 plugin extensions 都属于隐藏 Procedure inventory；它们从已有 registry 即时派生，不投影进宿主
 Skill catalog。可选 Zotero Adapter 仍增加七个显式 Skills。
 
+支持项目级 custom agent 的 24 个宿主还会收到两个非入口角色：`researchspec-executor` 与
+`researchspec-reviewer`。它们不增加 Skill、Command 或 Procedure，也不能自行接单；只有当前
+activation packet 明确推荐相应角色时，Navigate 才考虑委派。纯 LLM 的 checker/observer 默认用
+Reviewer 获得独立上下文；producer 只在隔离或并行确有帮助时用 Executor。`mixed`、`script`、
+无输出参考程序和协调程序留在主 Agent。
+
+每个 worker 只执行一个 packet，只写声明的普通输出，不能调用 ResearchSpec mutation command、
+询问用户、选择模型或继续委派。它返回 Procedure hash、输出路径、检查结果和 blocker；Navigate
+校验后才串行执行 `advance` 等 CLI mutation。worker 回报本身不改变 run、node、Gate 或 Decision。
+
 ## 3. 一次确认授权一张冻结图
 
 启动根 run 前，Agent 必须向用户展示 profile entry summary，至少包含：
@@ -199,9 +209,11 @@ run 使用时，在 handoff 中声明对应路径。
 
 ## 9. 异模型复核、Plugin 与 Zotero
 
-异模型复核只使用宿主原生 subagent。派发前，Agent 说明实际模型、发送内容类别和成本，并取得只对
-当前 run/node 有效的确认。主 Agent 先冻结自己的结构化判断，只发送最少材料；分歧按证据处理，
-不能投票或自动覆盖。ResearchSpec 不保存模型 consent，也不配置或调用模型服务。
+同模型或宿主明确继承当前模型的 worker 不新增模型 consent。若有效模型未知、不能确认继承或确属
+异模型，派发前 Agent 必须说明实际模型、发送内容类别和成本，并取得只对当前 run/node 有效的确认；
+没有确认就留在主 Agent 执行。异模型复核仍只使用宿主原生 subagent。主 Agent 先冻结自己的结构化
+判断，只发送最少材料；分歧按证据处理，不能投票或自动覆盖。ResearchSpec 不保存模型 consent，
+也不配置或调用模型服务。
 
 Plugin consent 与根 run 确认分开。一次最多建议三个 domain，preview 展示精确 IDs；非交互安装要求
 显式 IDs 与 `--yes`。拒绝或失败不能改变 selector、frontier 或原 producer。

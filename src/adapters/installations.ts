@@ -23,6 +23,11 @@ export const ManagedInstallationSourceSchema = z.discriminatedUnion("kind", [
     skill_id: PathComponentSchema,
   }),
   z.strictObject({ kind: z.literal("command"), command_id: PathComponentSchema }),
+  z.strictObject({
+    kind: z.literal("custom-agent"),
+    role_id: z.enum(["researchspec-executor", "researchspec-reviewer"]),
+    component: z.enum(["definition", "prompt"]),
+  }),
   z.strictObject({ kind: z.literal("shared-skill-target"), target_id: z.enum(["codex", "agents"]) }),
   z.strictObject({
     kind: z.literal("framework-profile"),

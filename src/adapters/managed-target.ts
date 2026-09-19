@@ -6,6 +6,7 @@ import { isCanonicalAbsolutePath, isSafePathComponent, isSafeRelativePath } from
 import { assertPathWithinRoot } from "../core/workspace/path-boundary.js";
 import { getLiteratureAdapter } from "../literature-adapters/catalog.js";
 import { COMMAND_WRAPPER_CONTENTS, LEGACY_COMMAND_IDS } from "./command-renderer.js";
+import { renderAgentProfileFiles } from "./agent-profiles.js";
 import { getTool, sharedSkillTarget, toolSkillsRoot } from "./tools.js";
 import type { ManagedInstallation, ManagedInstallationSource } from "./installations.js";
 
@@ -109,6 +110,15 @@ function resolveAgentTarget(
     if (expectedTarget !== source.target_id) fail(`marker source does not match tool ${tool.id}`);
     const expected = path.join(root.root, ".researchspec-target");
     return resolveExactTarget(projectRoot, scope, targetPath, expected, boundaryForScope(projectRoot, scope));
+  }
+
+  if (source.kind === "custom-agent") {
+    if (scope !== "project") fail("custom-agent files are project-scoped");
+    const expected = renderAgentProfileFiles(tool.id, projectRoot).find(
+      (file) => file.roleId === source.role_id && file.component === source.component,
+    );
+    if (!expected) fail(`custom-agent destination is not defined for tool ${tool.id}`);
+    return resolveExactTarget(projectRoot, scope, targetPath, expected.target, projectRoot);
   }
 
   const namespaceId = agentNamespaceId(source);

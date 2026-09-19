@@ -4,6 +4,7 @@ import type { Diagnostic } from "../core/validation/types.js";
 import { planFile, type PlannedWrite, sha256 } from "../core/workspace/write-plan.js";
 import { COMPANION_INTENTS, renderCompanionSkillFiles } from "./companion/index.js";
 import { COMMAND_WRAPPER_CONTENTS, renderCommand } from "./command-renderer.js";
+import { renderAgentProfileFiles } from "./agent-profiles.js";
 import { getTool, resolveToolIdAlias, sharedSkillTarget, toolSkillsRoot, type DeliveryMode, type ToolDefinition } from "./tools.js";
 import type { LoadedPluginRegistry } from "../plugins/registry.js";
 import { installationKey, type ManagedInstallation, type ManagedInstallationSource } from "./installations.js";
@@ -75,6 +76,16 @@ export async function planToolDelivery(input: {
             await addPlanned(target, relativeProject(target), renderCommand(tool, content), { kind: "command", command_id: content.id }, tool.id);
           }
         }
+      }
+
+      for (const profile of renderAgentProfileFiles(tool.id, input.projectRoot)) {
+        await addPlanned(
+          profile.target,
+          profile.path,
+          profile.content,
+          { kind: "custom-agent", role_id: profile.roleId, component: profile.component },
+          tool.id,
+        );
       }
     } catch (error) {
       diagnostics.push({ severity: "error", code: "tool_delivery_failed", message: error instanceof Error ? error.message : String(error), blocking: true, details: { tool_id: tool.id } });

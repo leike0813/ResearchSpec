@@ -102,6 +102,12 @@ void test("companion manifest renders four fixed self-contained Skills", () => {
   const files = new Map(renderCompanionSkillFiles(navigate).map((file) => [file.path, file.content]));
   assert.equal(files.get("references/cli-handbook.md"), renderCliHandbook());
   assert.equal(files.get("references/arsu-routes.md"), renderNavigateRoutingProjection());
+  const instructions = files.get("SKILL.md") ?? "";
+  assert.match(instructions, /Native Procedure Delegation/);
+  assert.match(instructions, /researchspec-executor/);
+  assert.match(instructions, /researchspec-reviewer/);
+  assert.match(instructions, /serialize all workflow mutations/);
+  assert.match(instructions, /status: completed \| blocked/);
 });
 
 void test("Copilot uses its explicit detection paths", async () => {
@@ -131,6 +137,11 @@ void test("delivery projects one Navigate entry per selected channel", async () 
     assert.equal(wrappers.length, TOOLS.filter((tool) => tool.command).length * COMMAND_WRAPPER_CONTENTS.length);
     const wrapperIds = wrappers.flatMap((item) => item.source.kind === "command" ? [item.source.command_id] : []);
     assert.deepEqual([...new Set(wrapperIds)].sort(), COMMAND_WRAPPER_CONTENTS.map((item) => item.id).sort());
+    const customAgents = delivery.installations.filter((item) => item.source.kind === "custom-agent");
+    assert.equal(customAgents.length, 50);
+    assert.equal(customAgents.filter((item) => item.source.kind === "custom-agent" && item.source.component === "definition").length, 48);
+    assert.equal(customAgents.filter((item) => item.source.kind === "custom-agent" && item.source.component === "prompt").length, 2);
+    assert.equal(customAgents.every((item) => item.tool_id !== "agents"), true);
     for (const toolId of TOOL_IDS.filter((id) => id !== "agents")) {
       const skillIds = new Set(delivery.installations.flatMap((item) => {
         if (item.tool_id !== toolId) return [];
