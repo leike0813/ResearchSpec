@@ -28,6 +28,7 @@ import { loadGraphPluginStatusView } from "../../plugins/graph-status.js";
 import { domainIsAvailable, loadPluginRegistry } from "../../plugins/registry.js";
 import { buildProcedurePacket } from "../../procedures/packet.js";
 import { loadProcedureCatalog } from "../../procedures/catalog.js";
+import { reviewWorkspaceInstruction } from "../../review-workspace/instructions.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 
 export type GraphDoctorOptions = Record<string, never>;
@@ -209,6 +210,7 @@ export async function handleGraphInstructions(selector: string, context: Command
         };
       });
     });
+    const reviewWorkspace = reviewWorkspaceInstruction({ profileId: profile.profile_id, selector });
     return success("instructions", {
       selector,
       kind: "profile",
@@ -229,6 +231,7 @@ export async function handleGraphInstructions(selector: string, context: Command
         formal_gates: [],
         cost: { effort: "<effort>", interaction: "<interaction>" },
       },
+      ...(reviewWorkspace === undefined ? {} : { review_workspace: reviewWorkspace }),
     }, { stdout: `Graph profile instructions: ${profileId}\n` });
   }
   if (selector.startsWith("change:")) {
@@ -254,6 +257,7 @@ export async function handleGraphInstructions(selector: string, context: Command
     const registry = await loadWorkspaceCapabilityRegistry(index);
     const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, graphChildRunSnapshots(index),
       record.handoff ? { registry, handoff: record.handoff.frontmatter } : undefined);
+    const reviewWorkspace = reviewWorkspaceInstruction({ profileId: record.graph.profile_id, selector });
     return success("instructions", {
       selector,
       kind: "run",
@@ -264,6 +268,7 @@ export async function handleGraphInstructions(selector: string, context: Command
       pending_decisions: frontier.pending_decisions,
       blockers: frontier.blockers,
       completion_ready: frontier.completion_ready,
+      ...(reviewWorkspace === undefined ? {} : { review_workspace: reviewWorkspace }),
     }, { stdout: `Run instructions: ${runId}\n` });
   }
   const nodeMatch = /^node:([^/]+)\/([^@]+)(?:@(\d+))?$/.exec(selector);
@@ -346,6 +351,12 @@ export async function handleGraphInstructions(selector: string, context: Command
         instruction: `Submit declared outputs, then request validated advance through ${selector}.`,
       },
     });
+    const reviewWorkspace = reviewWorkspaceInstruction({
+      profileId: record.graph.profile_id,
+      selector,
+      ...(definition.capability_id === undefined ? {} : { capabilityId: definition.capability_id }),
+      ...(procedurePacket === undefined ? {} : { packageRoot: procedurePacket.package.root }),
+    });
     return success("instructions", {
       selector,
       kind: "node",
@@ -359,6 +370,7 @@ export async function handleGraphInstructions(selector: string, context: Command
       required_gate_ids: definition.required_gate_ids,
       required_decision_ids: definition.required_decision_ids,
       ...(procedurePacket === undefined ? {} : { procedure_packet: procedurePacket }),
+      ...(reviewWorkspace === undefined ? {} : { review_workspace: reviewWorkspace }),
       ...(definition.delivery_requirement ? {
         child_start_input: {
           schema_version: "2",
@@ -378,7 +390,8 @@ export async function handleGraphInstructions(selector: string, context: Command
     const record = index.runs.find((item) => item.run?.run_id === runId);
     const gate = record?.graph?.gates.find((item) => item.gate_id === gateId);
     if (!gate) throw new CliError("gate_not_found", `Gate not found: ${gateId}`, 1);
-    return success("instructions", { selector, kind: "gate", run_id: runId, gate, round: round ?? null, allowed_actions: ["confirm", "override_failed"] }, { stdout: `Gate instructions: ${selector}\n` });
+    const reviewWorkspace = reviewWorkspaceInstruction({ profileId: record?.graph?.profile_id ?? "", selector });
+    return success("instructions", { selector, kind: "gate", run_id: runId, gate, round: round ?? null, allowed_actions: ["confirm", "override_failed"], ...(reviewWorkspace === undefined ? {} : { review_workspace: reviewWorkspace }) }, { stdout: `Gate instructions: ${selector}\n` });
   }
   const decisionMatch = /^decision:([^/]+)\/([^@]+)(?:@(\d+))?$/.exec(selector);
   if (decisionMatch) {
@@ -388,7 +401,8 @@ export async function handleGraphInstructions(selector: string, context: Command
     const record = index.runs.find((item) => item.run?.run_id === runId);
     const decision = record?.graph?.decisions.find((item) => item.decision_id === decisionId);
     if (!decision) throw new CliError("decision_not_found", `Decision not found: ${decisionId}`, 1);
-    return success("instructions", { selector, kind: "decision", run_id: runId, decision, round: round ?? null, allowed_actions: ["choose"] }, { stdout: `Decision instructions: ${selector}\n` });
+    const reviewWorkspace = reviewWorkspaceInstruction({ profileId: record?.graph?.profile_id ?? "", selector });
+    return success("instructions", { selector, kind: "decision", run_id: runId, decision, round: round ?? null, allowed_actions: ["choose"], ...(reviewWorkspace === undefined ? {} : { review_workspace: reviewWorkspace }) }, { stdout: `Decision instructions: ${selector}\n` });
   }
   throw new CliError("selector_invalid", `Unsupported graph selector: ${selector}`, 2);
 }

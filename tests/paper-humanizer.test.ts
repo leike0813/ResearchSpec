@@ -51,6 +51,9 @@ void test("paper-humanizer capability packages are authored and registered", asy
     assert.ok(registered.manifest.provenance.extraction_artifact_ids?.some((id) => id.startsWith("PH-")));
     assert.match(await readFile(path.join(registered.packageRoot, "SKILL.md"), "utf8"), /## Completion/);
     assert.equal((await readdir(path.join(registered.packageRoot, "knowledge"))).length > 0, true);
+    if (["check-paper-humanization-review", "transform-paper-humanization-revision"].includes(capabilityId)) {
+      assert.match(await readFile(path.join(registered.packageRoot, "review-workspace/index.html"), "utf8"), /review-workspace-result\.v1/);
+    }
   }
 });
 

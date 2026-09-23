@@ -42,6 +42,10 @@ knowledge_refs:
     path: knowledge/helper-scripts.md
     content_hash: 27279ea1c86d431a82a6a38cec85f3245b6ef7be195bdc43361b1c1a6aeaf6af
     license: MIT
+  - knowledge_id: review-workspace-index.html
+    path: review-workspace/index.html
+    content_hash: 5626313e33ccf67479c704d703e638f409367a6173ef1c639866b76f91a7dd09
+    license: MIT
 gate_policy: required
 provenance:
   origin: vendor-derived

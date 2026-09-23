@@ -38,3 +38,17 @@ purpose 和 consumer。Working directory 本身不会自动成为接口。
 ARSU revision patch 是唯一稿件 patch contract。Stateless helper 在写 destination 前校验全部 block、
 old hash 和 annotation mapping。Mechanical application 成功不等于 revision completeness；formal
 verdict 仍由 Verify、用户和 owning node 完成。
+
+## 6. 交互式审阅投影
+
+`researchspec/review-workspace` 提供 `review-workspace.v1` 与
+`review-workspace-result.v1` 的严格 schema，以及三类薄适配器：
+
+- Annotation Set candidate：保留 raw evidence、typed target、interpretation、expected action 和 semantic impact；
+- paper-humanizer plan：保留 finding IDs、locators、operation、preservation constraints、risk、recommendation 和 disposition；
+- review-response workboard：保留 comment ID、source pointer、target locations、priority、evidence gap、confirmation need 和 next action。
+
+投影包含精确手稿内容、路径、格式和 SHA-256，以便一个通过 `file://` 打开的静态页面完成本地审阅。页面只产生普通外部结果文件。它不读取或写入 `researchspec/`，不访问
+`revision-master.db`，不修改手稿，也不调用 CLI。Agent 接收结果后必须重新校验 source hash，映射回原生事实源，再从当前 `instructions` 完成合法的 Gate、Decision 或 node 动作。
+
+Markdown/QMD 只通过 DOM text nodes 做有限安全渲染；原始 HTML 不执行。plain 和 LaTeX 以源文本展示，LaTeX project 只展示声明的 `entry_path`，不编译项目。

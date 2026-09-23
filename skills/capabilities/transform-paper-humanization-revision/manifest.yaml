@@ -42,6 +42,10 @@ knowledge_refs:
     path: knowledge/document-yaml-contract.md
     content_hash: 953ed9c15d832446b569428426c7e9914d938f2179639d1d726a8d02b9723096
     license: MIT
+  - knowledge_id: review-workspace-index.html
+    path: review-workspace/index.html
+    content_hash: 5626313e33ccf67479c704d703e638f409367a6173ef1c639866b76f91a7dd09
+    license: MIT
 gate_policy: required
 provenance:
   origin: vendor-derived

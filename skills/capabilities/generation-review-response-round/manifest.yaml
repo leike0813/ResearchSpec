@@ -56,6 +56,10 @@ knowledge_refs:
     path: knowledge/stage-6-final-review-and-export.md
     content_hash: b98563f8f1a62807c9136ab9e0e17ea9919c94e4a43e556dd814ccafb429babb
     license: MIT
+  - knowledge_id: review-workspace-index.html
+    path: review-workspace/index.html
+    content_hash: 5626313e33ccf67479c704d703e638f409367a6173ef1c639866b76f91a7dd09
+    license: MIT
 gate_policy: required
 provenance:
   origin: vendor-derived

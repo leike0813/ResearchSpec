@@ -34,6 +34,12 @@
 - Standalone packet 只允许返回 researchspec/ 外的普通输出路径，禁止 run、node、handoff、Gate、Decision、override 和 transition 写入；graph packet 才提供 owning handoff 与精确 advance selector。
 - 生成路径与静态受审树均已核对；全库 47/47 core 与 332/332 extension 包含 mode-neutral Completion，旧 advance node:<run>/<node> Completion 为 0。该适配保留既有领域步骤和证据义务，未引入新的流程权威。
 
+## 交互审阅工作区复核（2026-09-23）
+
+- `design-review-response-workboard-planning` 与 `generation-review-response-round` 各自携带同一份 `review-workspace/index.html`；intake、manuscript-analysis 与 comment-atomization 包不携带该资产。
+- workboard/round procedure 把既有 atomic comment、target、priority 与 evidence 投影成 `review-workspace.v1`，只消费用户显式导出的 `review-workspace-result.v1`；共享契约校验稿件 SHA-256、item 唯一性与 disposition 完整覆盖。
+- 静态页面只在浏览器本地保存草稿并导出 JSON，不写 SQLite 或 `researchspec/`，不执行 revision，不确认五个 Gate 或 continue/complete Decision，也不改变 graph profile 的 stage 与 round 权威。
+
 ## 结论
 
 declared-fit-with-notes。当前锚点无阻塞性 gap；上述 note 是后续增量维护的观察项。

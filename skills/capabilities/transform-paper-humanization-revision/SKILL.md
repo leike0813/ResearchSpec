@@ -27,10 +27,12 @@ Execute exactly one ResearchSpec capability node.
 
 - Load knowledge ID `paper-humanizer-taxonomy` from `knowledge/paper-humanizer-taxonomy.md`.
 - Load knowledge ID `document-yaml-contract` from `knowledge/document-yaml-contract.md`.
+- Load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
 
 ## Tools
 
 - `scripts/document_pipeline.py` is packaged from extraction artifact `PH-SCRIPT-01`; invoke it only through the declared runner and arguments.
+- `review-workspace/index.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
 
 ## Procedure
 
@@ -72,6 +74,8 @@ If a writing sample or governing house style is available, record only acceptabl
 - On parser, schema, protected-content, or stale-analysis failure, stop without claiming success and report the error envelope and the offending artifact path.
 - When a safe edit is uncertain, leave the span unchanged and record the uncertainty in the candidate notes.
 - Never hand-edit `state.yaml`, plan hashes, or rendered views.
+
+For an interactive candidate review, project only eligible prose segments and the current verified candidate through the `paper-humanizer` review-workspace adapter, then open `review-workspace/index.html`. Recheck the exported source hash and treat requested changes as a new plan/revision round; the page cannot replace verification or the acceptance Decision.
 
 ## Outputs
 

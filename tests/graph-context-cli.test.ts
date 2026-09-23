@@ -64,11 +64,27 @@ void test("profile and change instructions expose bounded executable contracts",
   const root = await tempProject();
   try {
     init(root);
-    const profile = parseEnvelope<{ entries: Array<{ entry_id: string; entry_node_id: string; route_ref: string }> }>(
+    const profile = parseEnvelope<{ entries: Array<{ entry_id: string; entry_node_id: string; route_ref: string }>; review_workspace?: unknown }>(
       runCli(["instructions", "profile:academic-pipeline", "--json"], root),
     );
     assert.equal(profile.ok, true, JSON.stringify(profile.error));
     assert.equal(profile.data?.entries.some((entry) => entry.entry_id === "mid-entry" && entry.entry_node_id === "format" && entry.route_ref === "academic-pipeline:mid-entry"), true);
+    assert.equal(profile.data?.review_workspace, undefined);
+
+    const humanizer = parseEnvelope<{ review_workspace: { adapter: string; mutation_authority: string; selector: string } }>(
+      runCli(["instructions", "profile:paper-humanizer", "--json"], root),
+    );
+    assert.deepEqual(humanizer.data?.review_workspace, {
+      schema_version: "1",
+      adapter: "paper-humanizer",
+      selector: "profile:paper-humanizer",
+      surface: "local-static",
+      asset_path: null,
+      descriptor_schema: "review-workspace.v1",
+      result_schema: "review-workspace-result.v1",
+      mutation_authority: "researchspec-cli-only",
+      instruction: "The browser result is advisory working material. Validate its source hash and re-read current instructions before any CLI, handoff, SQLite, or manuscript mutation.",
+    });
 
     assert.equal(parseEnvelope(runCli(["propose", "bounded-change", "--targets", "project.md", "--json"], root)).ok, true);
     const change = parseEnvelope<{ kind: string; allowed_actions: string[] }>(runCli(["instructions", "change:bounded-change", "--json"], root));

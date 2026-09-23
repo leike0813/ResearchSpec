@@ -10,6 +10,10 @@
       "types": "./dist/src/annotation-intake.d.ts",
       "import": "./dist/src/annotation-intake.js"
     },
+    "./review-workspace": {
+      "types": "./dist/src/review-workspace.d.ts",
+      "import": "./dist/src/review-workspace.js"
+    },
     "./package.json": "./package.json"
   },
   "bin": {
@@ -21,6 +25,7 @@
     "!dist/src/vendor-evidence",
     "!dist/src/vendor-converters",
     "skills",
+    "review-workspace",
     "literature-adapters",
     "README.md",
     "CHANGELOG.md",

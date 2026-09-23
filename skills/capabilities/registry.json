@@ -60,7 +60,7 @@
     {
       "capability_id": "check-paper-humanization-review",
       "source_path": "check-paper-humanization-review",
-      "manifest_sha256": "c0779f5cf35a941993bcf73e8d5ae39564294c820112021803c5906f2032924e"
+      "manifest_sha256": "82f4495c336dcecd0369d38b4b5ec6f389f6c1e67d01f92029638016507d1e3c"
     },
     {
       "capability_id": "check-paper-humanization-verification",
@@ -135,7 +135,7 @@
     {
       "capability_id": "design-review-response-workboard-planning",
       "source_path": "design-review-response-workboard-planning",
-      "manifest_sha256": "18c82a15ea847d6dcf3e362a4e013d5ee4e08f0180c555eccd6059b775b596d3"
+      "manifest_sha256": "e5fe8d878c87dd94fe313b8accfb81062d680f64287a162eeb4fd67c498ef920"
     },
     {
       "capability_id": "design-writing-intake",
@@ -190,7 +190,7 @@
     {
       "capability_id": "generation-review-response-round",
       "source_path": "generation-review-response-round",
-      "manifest_sha256": "23f40e80658860a2d6579d6659a0cbd55a5987032bcc87d92394fc059e11da04"
+      "manifest_sha256": "8396e32edd72cd254dafdc59f1fdd5631e45c6c0f77481be901a05aab56f1a3a"
     },
     {
       "capability_id": "judgment-devils-advocate-stress-test",
@@ -215,7 +215,7 @@
     {
       "capability_id": "transform-paper-humanization-revision",
       "source_path": "transform-paper-humanization-revision",
-      "manifest_sha256": "530ce33b99fe62a28feca10b09d10a520a9f5f95df9473dbdf027f4fd9e7c0d7"
+      "manifest_sha256": "9b3e0b76998fea3c4af15ee79d84613edd842ac9ab93eacf0c456f0176088454"
     },
     {
       "capability_id": "transform-review-response-comment-atomization",

@@ -47,6 +47,12 @@ ResearchSpec should not become:
 - a hand-maintained copy of generated ARSU artifacts when converter rules should
   own the output.
 
+The optional interactive manuscript review workspace is a local static surface
+over ordinary `review-workspace.v1` files. It keeps drafts in browser-local
+state, exports advisory results, and never owns manuscript, SQLite, handoff,
+Gate, Decision, node, or other ResearchSpec workflow mutations. Browser failure
+falls back to the same review in Agent dialogue.
+
 Files remain the interface. Tool adapters may render and write files, but should
 not call agent APIs or depend on a specific model.
 

@@ -27,6 +27,7 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `workflow-state-machine` from `knowledge/workflow-state-machine.md`.
 - Load knowledge ID `sql-write-recipes` from `knowledge/sql-write-recipes.md`.
 - Load knowledge ID `helper-scripts` from `knowledge/helper-scripts.md`.
+- Load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
 
 ## Tools
 
@@ -60,6 +61,7 @@ Execute exactly one ResearchSpec capability node.
 - `assets/templates/supplement-intake-plan.md.j2` is packaged from extraction artifact `RM-ASSET-25`; invoke it only through the declared runner and arguments.
 - `assets/templates/supplement-suggestion-plan.md.j2` is packaged from extraction artifact `RM-ASSET-26`; invoke it only through the declared runner and arguments.
 - `assets/templates/thread-to-atomic-mapping.md.j2` is packaged from extraction artifact `RM-ASSET-27`; invoke it only through the declared runner and arguments.
+- `review-workspace/index.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
 
 ## Procedure
 
@@ -84,6 +86,8 @@ Build the canonical atomic workboard: priority, dependencies, evidence gaps, tar
    - next action is the smallest forward step or a request for confirmation/material/location.
 6. Write `workflow_pending_user_confirmations`, run `scripts/gate_and_render_workspace.py --artifact-root <workspace>`, and present `08-atomic-comment-workboard.md` and `06-thread-to-atomic-mapping.md`.
 7. Keep the confirmation request open until the user explicitly accepts the workboard.
+
+If the user requests browser review, project the current atomic comments and workboard fields through the `review-response` review-workspace adapter and open `review-workspace/index.html`. Validate the exported source hash and apply accepted changes through the existing SQLite write recipes before rerendering; the page never writes `revision-master.db` or confirms the graph Gate.
 
 ## Completion Criteria
 

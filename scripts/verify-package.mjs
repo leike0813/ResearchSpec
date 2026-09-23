@@ -82,9 +82,16 @@ try {
       && installedPackage.exports?.["./annotation-intake"]?.types === "./dist/src/annotation-intake.d.ts",
     "Packaged annotation-intake subpath export is missing or invalid.",
   );
+  assert(
+    installedPackage.exports?.["./review-workspace"]?.import === "./dist/src/review-workspace.js"
+      && installedPackage.exports?.["./review-workspace"]?.types === "./dist/src/review-workspace.d.ts",
+    "Packaged review-workspace subpath export is missing or invalid.",
+  );
   await writeFile(path.join(installDirectory, "annotation-intake-consumer.mjs"), [
     "import { generateAnnotationReviewCopy } from 'researchspec/annotation-intake';",
+    "import { ReviewWorkspaceDescriptorSchema } from 'researchspec/review-workspace';",
     "if (typeof generateAnnotationReviewCopy !== 'function') throw new Error('annotation intake API missing');",
+    "if (typeof ReviewWorkspaceDescriptorSchema.safeParse !== 'function') throw new Error('review workspace API missing');",
     "",
   ].join("\n"), "utf8");
   run(process.execPath, ["annotation-intake-consumer.mjs"], installDirectory);
@@ -190,7 +197,7 @@ function verifyTarballFiles(files) {
   const required = [
     "package.json", "README.md", "CHANGELOG.md", "SECURITY.md", "LICENSE", "NOTICE",
     "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "LICENSES/CC-BY-SA-4.0.txt", "LICENSES/Apache-2.0.txt", "LICENSES/AGPL-3.0.txt",
-    "docs/README.md", "docs/user/README.md", "docs/user/usage-model.md", "docs/user/cli-handbook.md", "docs/user/literature-adapters.md",
+    "docs/README.md", "docs/user/README.md", "docs/user/usage-model.md", "docs/user/cli-handbook.md", "docs/user/literature-adapters.md", "docs/user/review-workspace.md",
     "docs/developer/README.md", "docs/developer/architecture.md", "docs/developer/cli-interface.md", "docs/developer/domain-plugins.md", "docs/developer/domain-taxonomy.md", "docs/developer/manuscript-annotations.md",
     "docs/developer/runtime/README.md", "docs/developer/runtime/core_runtime_model.md", "docs/developer/runtime/runtime_protocols.md",
     "docs/developer/runtime/deep_research_workflow.md", "docs/developer/runtime/academic_paper_workflow.md", "docs/developer/runtime/academic_paper_reviewer_workflow.md", "docs/developer/runtime/academic_pipeline_workflow.md",
@@ -251,7 +258,7 @@ function verifyTarballFiles(files) {
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/SKILL.md",
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/LICENSE",
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/NOTICE.md",
-    "skills/arsu/researchspec-contracts.json", "artifacts/release/mvp-release-checklist.md", "dist/src/cli/bin.js", "dist/src/annotation-intake.js", "dist/src/annotation-intake.d.ts",
+    "skills/arsu/researchspec-contracts.json", "artifacts/release/mvp-release-checklist.md", "review-workspace/index.html", "dist/src/cli/bin.js", "dist/src/annotation-intake.js", "dist/src/annotation-intake.d.ts", "dist/src/review-workspace.js", "dist/src/review-workspace.d.ts",
   ];
   for (const skill of expectedArsuSkills) required.push(`skills/arsu/${skill}/SKILL.md`);
   for (const skill of expectedCapabilitySkills) {
@@ -292,7 +299,7 @@ function verifyTarballFiles(files) {
   );
   assert(adapterOpaqueFiles.length === 14, `Tarball Zotero opaque runtime metadata count mismatch: ${String(adapterOpaqueFiles.length)}`);
 
-  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/.*|artifacts\/(?:README\.md|release\/mvp-release-checklist\.md)|dist\/src\/.*\.(?:js|d\.ts)|skills\/.*|literature-adapters\/.*)$/;
+  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/.*|artifacts\/(?:README\.md|release\/mvp-release-checklist\.md)|review-workspace\/index\.html|dist\/src\/.*\.(?:js|d\.ts)|skills\/.*|literature-adapters\/.*)$/;
   const retired = /^dist\/src\/adapters\/companion\/workflows\/(?:archive|check|context|explore|next|submit)\.js$/;
   for (const file of files) {
     assert(allowed.test(file), `Tarball contains a path outside the release allowlist: ${file}`);

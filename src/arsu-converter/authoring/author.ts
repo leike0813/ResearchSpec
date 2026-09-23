@@ -259,7 +259,9 @@ ${manifest.outputs.map((item) => `- \`${item.role}\` (${item.schema_ref})`).join
 ## Knowledge
 
 ${manifest.knowledge_refs.map((item) => `- Load knowledge ID \`${item.knowledge_id}\` from \`${item.path}\`.`).join("\n")}
-${(source.package_assets ?? []).length > 0 ? `\n## Tools\n\n${(source.package_assets ?? []).map((item) => `- \`${item.output_path}\` ${item.source_path ? "implements the package's authored computation" : `is packaged from extraction artifact \`${item.extraction_artifact_id ?? ""}\``}; invoke it only through the declared runner and arguments.`).join("\n")}\n` : ""}
+${(source.package_assets ?? []).length > 0 ? `\n## Tools\n\n${(source.package_assets ?? []).map((item) => item.output_path.endsWith(".html")
+    ? `- \`${item.output_path}\` is an optional local static review surface; it exports advisory working material and never owns workflow state.`
+    : `- \`${item.output_path}\` ${item.source_path ? "implements the package's authored computation" : `is packaged from extraction artifact \`${item.extraction_artifact_id ?? ""}\``}; invoke it only through the declared runner and arguments.`).join("\n")}\n` : ""}
 ## Procedure
 
 ${procedureText.trim() ? procedureText.trim() : "Perform only the procedure described by the referenced knowledge and extraction artifacts."}

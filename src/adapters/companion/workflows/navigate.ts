@@ -94,6 +94,17 @@ For an active workspace, resume from exactly one status collection:
 
 After every mutation, rerun \`status --json\`. Never predict the successor from prose or silently combine Gate confirmation, Decision choice, and node Advance.
 
+### Interactive Review Workspace
+
+When current profile, node, Gate, or Decision instructions include \`review_workspace\`, offer its local static browser surface by default for paper-humanizer and review-response review. The user may always continue in chat instead.
+
+1. Project current native evidence through the named adapter into one \`review-workspace.v1\` file. Keep it outside \`researchspec/\` and bind it to the exact manuscript SHA-256.
+2. Open the returned \`asset_path\` when present, or the same packaged \`review-workspace/index.html\` asset from the relevant review procedure. The page imports the JSON, keeps only browser-local drafts, and exports \`review-workspace-result.v1\`.
+3. Validate the exported result and source hash, then translate accepted intent back into the owning annotation intake, paper-humanizer plan, or revision-master SQLite procedure. Never treat browser state as semantic or workflow truth.
+4. Before any formal action, reread the exact current selector instructions, present the recommendation, obtain the required human confirmation, and call the existing CLI command. A workspace export never approves a Gate, chooses a Decision, advances a node, edits a handoff, or commits manuscript/SQLite bytes.
+
+If the page cannot be opened, a port is unavailable, or the user prefers conversation, render the same items in chat and preserve the same result fields and confirmation boundary. Do not make browser availability a workflow prerequisite.
+
 ### Native
 
 If no eligible procedure or graph entry fits, use the host Agent's native capabilities and state that the work is outside a governed ResearchSpec run. Do not invent a procedure, profile, selector, or workflow record.

@@ -264,8 +264,8 @@
     {
       "capability_id": "check-paper-humanization-review",
       "maturity": "operational",
-      "skill_lines": 125,
-      "knowledge_refs": 3,
+      "skill_lines": 129,
+      "knowledge_refs": 4,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
       "knowledge_refs_referenced": 1,
@@ -612,8 +612,8 @@
     {
       "capability_id": "design-review-response-workboard-planning",
       "maturity": "operational",
-      "skill_lines": 106,
-      "knowledge_refs": 4,
+      "skill_lines": 110,
+      "knowledge_refs": 5,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
       "knowledge_refs_referenced": 1,
@@ -866,8 +866,8 @@
     {
       "capability_id": "generation-review-response-round",
       "maturity": "operational",
-      "skill_lines": 129,
-      "knowledge_refs": 5,
+      "skill_lines": 133,
+      "knowledge_refs": 6,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
       "knowledge_refs_referenced": 1,
@@ -1014,8 +1014,8 @@
     {
       "capability_id": "transform-paper-humanization-revision",
       "maturity": "operational",
-      "skill_lines": 89,
-      "knowledge_refs": 2,
+      "skill_lines": 93,
+      "knowledge_refs": 3,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
       "knowledge_refs_referenced": 1,

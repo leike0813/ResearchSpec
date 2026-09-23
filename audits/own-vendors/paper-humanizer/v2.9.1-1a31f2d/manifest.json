@@ -2,7 +2,7 @@
   "schema_version": "1",
   "vendor_id": "paper-humanizer",
   "anchor_id": "v2.9.1-1a31f2d",
-  "created_at": "2026-09-14T03:33:45.178Z",
+  "created_at": "2026-09-22T17:15:48.484Z",
   "upstream": {
     "source_meta": "vendor/paper-humanizer/SOURCE.json",
     "upstream_root": "vendor/paper-humanizer/upstream",
@@ -27,13 +27,13 @@
       "generation-humanization-reference",
       "transform-paper-humanization-revision"
     ],
-    "registry_subset_sha256": "15f8ce2fc743baf29479f8952a436dc609afe4ee9c5aeef28cff99ab4551273e",
-    "packages_tree_sha256": "53c44c03a94696226293ec3319b77b3b35ac8314632307e603c2b47b27b7510a"
+    "registry_subset_sha256": "70c951dd9aa6806e8f52845fe961056a545e5c40a173e45fba76ac440a0784d4",
+    "packages_tree_sha256": "011ae8f792e9119258dc5b4d42908e4870253a99677d595224775470e36479a6"
   },
   "review": {
     "parity_report_path": "/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json",
     "parity_artifact_path": "audits/own-vendors/paper-humanizer/v2.9.1-1a31f2d/artifacts/parity-packages.json",
-    "parity_artifact_sha256": "28fab799ca390a4d804bbe9d54ea516cd706a5abb26d38c69fe0a6013f561c55",
+    "parity_artifact_sha256": "3df456cc00897d4848820e66554fef2576e2689d9b8e12b8e0f54db000c5e774",
     "package_count": 4,
     "operational_count": 4,
     "avg_section_coverage": 0.9450000000000001,
@@ -47,6 +47,6 @@
   "maintenance": {
     "skill_sha256": "def669d3fc096a0fdf7ae084b6c7abc36819f81347bdb0958de0600f82fc8e70",
     "catalog_sha256": "82504ff1fd3c0be0d21c0ee63fde6fba0661e15d1043d789a4d4350ab4612aa1",
-    "record_sha256": "13cd0cacfc5a5dd171258494eb24964da570c23dcf7c713f6385a8defb5c0387"
+    "record_sha256": "f70608489dae3a14dac91796c19a231a23140249a3386ef1a7ca5f3d54790cde"
   }
 }

@@ -3,6 +3,7 @@ import type { CapabilityAuthoringSource } from "./author.js";
 const MIT = "MIT";
 const PROCEDURES = "src/arsu-converter/authoring/procedures/paper-humanizer";
 const INDEX = "authoring/paper-humanizer/extraction-index.json";
+const REVIEW_WORKSPACE = { source_path: "review-workspace/index.html", output_path: "review-workspace/index.html" };
 
 export const PAPER_HUMANIZER_AUTHORING_OPTIONS = {
   extractionIndexPath: INDEX,
@@ -41,6 +42,7 @@ export const PAPER_HUMANIZER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
     extraction_artifact_id: "PH-CAP-01",
     package_assets: [
       { extraction_artifact_id: "PH-SCRIPT-01", output_path: "scripts/document_pipeline.py" },
+      REVIEW_WORKSPACE,
     ],
     knowledge_sources: [
       { knowledge_id: "paper-humanizer-taxonomy", extraction_artifact_id: "PH-CAP-03", output_path: "knowledge/paper-humanizer-taxonomy.md" },
@@ -69,6 +71,7 @@ export const PAPER_HUMANIZER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
     extraction_artifact_id: "PH-CAP-04",
     package_assets: [
       { extraction_artifact_id: "PH-SCRIPT-01", output_path: "scripts/document_pipeline.py" },
+      REVIEW_WORKSPACE,
     ],
     knowledge_sources: [
       { knowledge_id: "paper-humanizer-taxonomy", extraction_artifact_id: "PH-CAP-03", output_path: "knowledge/paper-humanizer-taxonomy.md" },

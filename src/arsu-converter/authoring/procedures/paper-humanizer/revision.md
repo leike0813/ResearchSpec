@@ -37,6 +37,8 @@ If a writing sample or governing house style is available, record only acceptabl
 - When a safe edit is uncertain, leave the span unchanged and record the uncertainty in the candidate notes.
 - Never hand-edit `state.yaml`, plan hashes, or rendered views.
 
+For an interactive candidate review, project only eligible prose segments and the current verified candidate through the `paper-humanizer` review-workspace adapter, then open `review-workspace/index.html`. Recheck the exported source hash and treat requested changes as a new plan/revision round; the page cannot replace verification or the acceptance Decision.
+
 ## Outputs
 
 1. `humanized_manuscript`: the rendered boundary manuscript produced by the deterministic pipeline.

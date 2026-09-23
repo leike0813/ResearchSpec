@@ -70,6 +70,8 @@ Assign stable IDs in source order (`PH-001`, `PH-002`, …). One finding per pri
 
 Assign `RP-001`, `RP-002`, … and group findings only when they share one edit operation or must change together. Each plan item contains linked finding IDs and exact locators, one bounded operation, expected effect, preservation constraints, risk, recommendation (`include`/`optional`/`defer`), and disposition (`include`/`exclude`/`pending`). Use a conservative default. Never add stance, evidence, disagreement, limitations, or surprise absent from the source.
 
+When the user prefers browser review, project the exact manuscript and plan through the `paper-humanizer` review-workspace adapter and open `review-workspace/index.html`. Treat the exported result as advisory plan input: verify the manuscript hash, preserve excluded and revised choices, and return to current Gate and Decision instructions for formal confirmation. The page never edits the source or approves the plan.
+
 ## Outputs
 
 Write the two declared outputs:

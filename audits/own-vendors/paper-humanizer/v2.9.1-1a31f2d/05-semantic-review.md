@@ -33,6 +33,12 @@
 - Standalone packet 只允许返回 researchspec/ 外的普通输出路径，禁止 run、node、handoff、Gate、Decision、override 和 transition 写入；graph packet 才提供 owning handoff 与精确 advance selector。
 - 生成路径与静态受审树均已核对；全库 47/47 core 与 332/332 extension 包含 mode-neutral Completion，旧 advance node:<run>/<node> Completion 为 0。该适配保留既有领域步骤和证据义务，未引入新的流程权威。
 
+## 交互审阅工作区复核（2026-09-23）
+
+- `check-paper-humanization-review` 与 `transform-paper-humanization-revision` 各自携带同一份 `review-workspace/index.html`；reference 与 verification 包不携带该资产。
+- review procedure 将 revision plan 投影成 `review-workspace.v1`，revision procedure 只消费用户显式导出的 `review-workspace-result.v1`。稿件 SHA-256 与完整 item disposition 覆盖由共享契约校验。
+- 静态页面只在浏览器本地保存草稿并导出 JSON，不写 `researchspec/`，不执行 revision，不确认 Gate/Decision，也不取代对话内审阅路径。生成后的 SKILL 与 manifest 对这些边界表述一致。
+
 ## 结论
 
 declared-fit。当前锚点语义覆盖完整，无阻塞性 gap。
