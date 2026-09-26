@@ -99,7 +99,7 @@ const definitions: readonly CliCommandDefinition[] = [
     option("strict", "--strict", "treat warnings as failures"),
   ], ["status", "doctor", "show"]),
   command("doctor", ["doctor"], "doctor", "recovery", "Diagnose current workspace contracts without modifying them", "required", "read", [], ["check", "status"]),
-  command("list", ["list"], "list [type]", "inspection", "List procedures, profiles, runs, nodes, changes, or diagnostics", "optional", "read", [
+  command("list", ["list"], "list [type]", "inspection", "List procedures, tools, profiles, runs, nodes, changes, or diagnostics", "optional", "read", [
     option("limit", "--limit <count>", "page size from 1 to 50"),
     option("cursor", "--cursor <cursor>", "opaque cursor returned by the prior page"),
     option("query", "--query <text>", "lexical procedure search terms"),

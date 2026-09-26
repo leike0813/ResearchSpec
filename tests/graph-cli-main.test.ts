@@ -336,3 +336,35 @@ void test("graph init projects only Navigate into selected Agent tools", async (
     await cleanup(root);
   }
 });
+
+void test("list tools exposes discovery fallbacks and doctor reports entry warnings without writes", async () => {
+  const root = await tempProject();
+  try {
+    const catalog = parseEnvelope<{ items: Array<{ tool_id: string; entry: { mechanism: string; runtime_status: string } }> }>(
+      runCli(["list", "tools", "--limit", "50", "--json"], root),
+    );
+    assert.equal(catalog.ok, true);
+    assert.equal(catalog.data?.items.length, 36);
+    assert.equal(catalog.data?.items.filter((item) => item.entry.mechanism === "discovery").length, 30);
+    assert.ok(catalog.data?.items.every((item) => item.entry.runtime_status === "unverified"));
+
+    assert.equal(runCli(["init", root, "--tools", "codex", "--json"], root).status, 0);
+    const agreement = path.join(root, "AGENTS.md");
+    const installed = await readFile(agreement);
+    await writeFile(path.join(root, "AGENTS.override.md"), "# Local override\n", "utf8");
+    const shadowed = parseEnvelope<{ diagnostics: Array<{ code: string }> }>(runCli(["doctor", "--json"], root));
+    assert.equal(shadowed.ok, true);
+    assert.ok(shadowed.data?.diagnostics.some((item) => item.code === "project_entry_shadowed"));
+    assert.match(runCli(["doctor"], root).stdout, /project_entry_shadowed/);
+    assert.deepEqual(await readFile(agreement), installed);
+
+    await rm(agreement);
+    const missing = parseEnvelope<{ diagnostics: Array<{ code: string }> }>(runCli(["doctor", "--json"], root));
+    assert.equal(missing.ok, true);
+    assert.ok(missing.data?.diagnostics.some((item) => item.code === "project_entry_missing"));
+    assert.match(runCli(["doctor"], root).stdout, /project_entry_missing/);
+    await assert.rejects(access(agreement));
+  } finally {
+    await cleanup(root);
+  }
+});

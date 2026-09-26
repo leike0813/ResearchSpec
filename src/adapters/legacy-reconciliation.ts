@@ -31,7 +31,7 @@ export async function planLegacyToolReconciliation(input: {
   const desiredHashes = new Map<string, string>();
   for (const installation of input.existingInstallations ?? []) {
     const target = await validateManagedTarget(input.projectRoot, installation);
-    if (installation.owner !== "agent-tool" || installation.target.scope !== "project" || !installation.sha256) continue;
+    if (installation.owner !== "agent-tool" || installation.target.scope !== "project" || installation.source.kind === "project-entry" || !installation.sha256) continue;
     desiredHashes.set(target.path, installation.sha256);
   }
   for (const item of input.plannedOperations) {

@@ -20,6 +20,15 @@ export type ToolId = typeof TOOL_IDS[number];
 export type DeliveryMode = "skills" | "commands" | "both";
 export type AgentProfileFormat = "frontmatter" | "toml";
 
+export interface ProjectEntryDefinition {
+  mechanism: "region" | "file" | "discovery";
+  path?: string;
+  format?: "markdown" | "mdc";
+  documentation?: string;
+  checked_on?: string;
+  limitation: string;
+}
+
 export interface AgentProfileToolDefinition {
   dir: string;
   suffix: string;
@@ -53,6 +62,7 @@ export interface ToolDefinition {
   /** Existing files/directories that indicate the tool is configured. */
   detectionPaths?: readonly string[];
   setupNote?: string;
+  entry: ProjectEntryDefinition;
   agentProfile?: AgentProfileToolDefinition;
   command?: {
     scope: "project";
@@ -104,6 +114,21 @@ const AGENT_PROFILES: Partial<Record<ToolId, AgentProfileToolDefinition>> = {
 
 const projectCommand = (relative: string) => (id: string, root: string) => path.join(root, relative.replace("<id>", id));
 
+const ENTRY_CHECKED_ON = "2026-09-26";
+const DOCUMENTED_ENTRIES: Partial<Record<ToolId, ProjectEntryDefinition>> = {
+  codex: { mechanism: "region", path: "AGENTS.md", format: "markdown", documentation: "https://learn.chatgpt.com/docs/agent-configuration/agents-md", checked_on: ENTRY_CHECKED_ON, limitation: "A nonempty root AGENTS.override.md can shadow AGENTS.md." },
+  opencode: { mechanism: "region", path: "AGENTS.md", format: "markdown", documentation: "https://opencode.ai/docs/rules/", checked_on: ENTRY_CHECKED_ON, limitation: "Creating AGENTS.md can suppress an existing CLAUDE.md fallback." },
+  gemini: { mechanism: "region", path: "GEMINI.md", format: "markdown", documentation: "https://geminicli.com/docs/cli/gemini-md/", checked_on: ENTRY_CHECKED_ON, limitation: "Host settings can change context-file discovery." },
+  claude: { mechanism: "file", path: ".claude/rules/researchspec.md", format: "markdown", documentation: "https://code.claude.com/docs/en/memory", checked_on: ENTRY_CHECKED_ON, limitation: "Project rules can be disabled by host settings." },
+  cursor: { mechanism: "file", path: ".cursor/rules/researchspec.mdc", format: "mdc", documentation: "https://cursor.com/docs/rules", checked_on: ENTRY_CHECKED_ON, limitation: "Always Apply configures rule inclusion; actual invocation still needs host verification." },
+  "github-copilot": { mechanism: "region", path: ".github/copilot-instructions.md", format: "markdown", documentation: "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions", checked_on: ENTRY_CHECKED_ON, limitation: "File-pattern rules alone cannot guarantee context before a file is opened." },
+};
+
+const DISCOVERY_ENTRY: ProjectEntryDefinition = {
+  mechanism: "discovery",
+  limitation: "Project-rule support has not been reviewed; use the delivered Navigate Skill or command through host discovery.",
+};
+
 export const TOOLS: readonly ToolDefinition[] = [
   tool("amazon-q", "Amazon Q Developer", ".amazonq", ".amazonq/prompts/researchspec-<id>.md", "description"),
   tool("antigravity", "Antigravity", ".agent", ".agent/workflows/researchspec-<id>.md", "description"),
@@ -148,7 +173,7 @@ export const TOOLS: readonly ToolDefinition[] = [
   skillsOnly("agents", "Shared .agents skills", ".agents", { detectionPaths: [".agents/skills"] }),
 ].map((definition) => {
   const agentProfile = AGENT_PROFILES[definition.id];
-  return agentProfile ? { ...definition, agentProfile } : definition;
+  return { ...definition, entry: DOCUMENTED_ENTRIES[definition.id] ?? DISCOVERY_ENTRY, ...(agentProfile ? { agentProfile } : {}) };
 });
 
 export function resolveToolIdAlias(toolId: string): string {
@@ -200,11 +225,11 @@ export function orderTools(configured: readonly string[], detected: readonly str
   function rank(id: string): number { return configuredSet.has(id) ? 0 : detectedSet.has(id) ? 1 : 2; }
 }
 
-function tool(id: ToolId, name: string, skillsDir: string, commandPath: string, format: CommandFormat, options: Omit<ToolExtras, "detectionPaths"> & { detectionPaths?: readonly string[] } = {}): ToolDefinition {
+function tool(id: ToolId, name: string, skillsDir: string, commandPath: string, format: CommandFormat, options: Omit<ToolExtras, "detectionPaths"> & { detectionPaths?: readonly string[] } = {}): Omit<ToolDefinition, "entry"> {
   return { id, name, skillsDir, ...options, command: { scope: "project", format, path: projectCommand(commandPath), ...optionsForCommand(options) } };
 }
 
-function skillsOnly(id: ToolId, name: string, skillsDir: string, extras: ToolExtras = {}): ToolDefinition {
+function skillsOnly(id: ToolId, name: string, skillsDir: string, extras: ToolExtras = {}): Omit<ToolDefinition, "entry"> {
   return { id, name, skillsDir, ...extras };
 }
 

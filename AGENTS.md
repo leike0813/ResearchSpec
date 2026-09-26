@@ -67,9 +67,24 @@ The locked direction is:
 
 - `researchspec init` prepares a schema `"2"` graph workspace and preset
   profiles; it does not start academic work.
-- User-Agent dialogue starts work. Vague, cross-capability, resume, explanation,
-  and export requests read `status --json` and `instructions <selector> --json`;
-  an explicit capability may route directly after the same graph selector check.
+- User-Agent dialogue starts from a natural research task and discovers suitable
+  capabilities without requiring internal names. Ordinary work may remain
+  standalone across sessions. Formal Gates or Decisions, parallel/join work,
+  revision rounds, or auditable workflow state require a graph; persistence or
+  continuation alone does not. An unfinished related run takes precedence over
+  standalone continuation; a completed historical run does not.
+- Navigate maintains plain notes at `work/researchspec-notes/<task-id>.md` for
+  sustained ordinary work. Notes record the goal, inputs and outputs, completed
+  work and evidence limits, open questions, next step, and any related run.
+  They are informal files outside `researchspec/`: they are not registered in
+  the installation manifest, scanned by `status` or `check`, exposed through a
+  CLI selector, or accepted as proof of run, node, or Gate completion. Resume
+  ordinary work from the note and current materials; resume an unfinished
+  related run through `status --json` and exact node instructions.
+- Stable specs hold confirmed scope, claims, limitations, and delivery
+  requirements. Candidate questions, provisional positions, and draft outlines
+  remain in ordinary working files. Promoting or changing a commitment uses
+  the existing project change lifecycle.
 - Starting a run requires a user-confirmed profile entry summary with
   prerequisites, boundary outputs, formal Gates, and cost. Nodes authorized by
   the frozen graph do not require per-node starts; each formal Gate and Decision
@@ -120,6 +135,12 @@ Navigate wrapper while Skill-only tools receive the Navigate Skill fallback. In
 `both` mode they receive both supported entry forms. Codex writes project `.agents/skills` and never generates global
 custom prompts; Kimi writes `.kimi-code/skills` and reads `.kimi` only for migration.
 `windsurf` remains an input alias for `devin`.
+The tool catalog also owns project research-entry metadata. Reviewed native
+rules use manifest-owned dedicated files or fixed regions in shared files;
+unreviewed targets retain explicit Navigate discovery. Region hashes cover only
+the owned bytes, while whole-file transaction preconditions protect surrounding
+user content. Entry installation does not certify live host invocation or grant
+workflow, model, plugin, Adapter, or external-service consent.
 Optional ResearchSpec-maintained domains select extension Procedures and graph
 profiles without projecting their raw or extension Skills into the host catalog.
 

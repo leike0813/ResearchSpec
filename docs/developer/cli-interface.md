@@ -31,7 +31,7 @@ Inspection 命令另有 stable spec、handoff 与 tool selectors；每个命令�
 | `start` | 启动已确认的根 graph，或启动 eligible child subgraph |
 | `advance` | 校验并完成执行节点 |
 | `check` | 对选定 owner 或 workspace 做只读结构检查 |
-| `list` | 稳定排序并以 cursor 分页列出 owner |
+| `list` | 稳定排序并以 cursor 分页列出 owner；`list tools` 展示入口机制与发现回退 |
 | `show` | 展示一个 profile、run、node 或 project change |
 | `handoff` | 渲染或替换一个 run handoff |
 | `pack` | 为一组 owner 或单个 owner 生成确定性上下文包 |
@@ -63,9 +63,13 @@ transition。
 version 与 workspace schema 无关。旧或未知 workspace 对 mutation fail closed。`status`、
 `check`、`doctor` 和其它读命令不会执行外部工具、修复语义或改变文件。
 
+工具目录是项目入口机制的唯一来源。`list tools --json` 列出每个已注册目标的机制、路径、文档
+依据和限制；`doctor --json` 静态检查已选目标的入口缺失、漂移、标记错误和已知遮蔽条件，并在
+人类可读输出中显示非阻塞诊断。二者都不探测宿主运行状态。共享区域的 manifest 哈希只覆盖标记
+区域，实际写入仍使用整文件快照前置条件保护用户字节。
+
 ## 确认边界
 
 根 entry summary 的一次确认授权 frozen graph 及绑定 child runs。Formal Gate、Decision、
 failed-Gate override、异模型 review、Plugin、Adapter 与 QMD 代码执行仍分别确认。Decision 只改变
 frontier 条件，不会隐式完成执行节点。
-

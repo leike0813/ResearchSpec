@@ -6,6 +6,7 @@ import { isCanonicalAbsolutePath, isSafePathComponent, isSafeRelativePath } from
 import type { Diagnostic } from "../core/validation/types.js";
 import { sha256, type PlannedWrite } from "../core/workspace/write-plan.js";
 import { managedTargetDiagnostic, validateManagedTarget } from "./managed-target.js";
+import { planProjectEntryRemoval } from "./project-entry.js";
 
 const IdentifierSchema = z.string().trim().min(1);
 const PathComponentSchema = IdentifierSchema.refine(isSafePathComponent, "must be a safe path component");
@@ -23,6 +24,11 @@ export const ManagedInstallationSourceSchema = z.discriminatedUnion("kind", [
     skill_id: PathComponentSchema,
   }),
   z.strictObject({ kind: z.literal("command"), command_id: PathComponentSchema }),
+  z.strictObject({ kind: z.literal("project-entry"), mode: z.enum(["file", "region"]), region_id: z.literal("researchspec-entry").optional() }).superRefine((value, context) => {
+    if ((value.mode === "region") !== (value.region_id === "researchspec-entry")) {
+      context.addIssue({ code: "custom", path: ["region_id"], message: "region entries require the researchspec-entry ID; file entries have no region ID" });
+    }
+  }),
   z.strictObject({
     kind: z.literal("custom-agent"),
     role_id: z.enum(["researchspec-executor", "researchspec-reviewer"]),
@@ -257,6 +263,13 @@ export async function reconcileAgentToolInstallations(input: {
     }
 
     const selected = selectedTools.has(installation.tool_id);
+    if (installation.source.kind === "project-entry") {
+      const removal = await planProjectEntryRemoval(input.projectRoot, installation);
+      if (removal.operation) operations.push(removal.operation);
+      if (removal.diagnostic) diagnostics.push(removal.diagnostic);
+      if (removal.retain) retainedInstallations.push(installation);
+      continue;
+    }
     if (installation.target.scope !== "project") {
       // Global Skill roots are shared by every workspace. A workspace may
       // refresh its selected global namespace, but never owns its removal.

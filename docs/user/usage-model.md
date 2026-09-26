@@ -2,15 +2,14 @@
 
 ## 先记住这张图
 
-ResearchSpec 把一次学术工作看成一张在启动时冻结的能力图：
+ResearchSpec 从研究者想完成的任务出发。默认路径是“表达目标 -> 调用能力 -> 交付成果 -> 保存必要进展”；只有需要正式流程控制时才启动能力图：
 
 ```text
-用户意图
-  -> Navigate 检索 Procedure 卡片
-  -> standalone：按需加载一个 Procedure，返回普通项目文件
-  -> graph：选择 profile entry，确认后冻结 graph
-            -> 按 node 加载同一 Procedure 包
-            -> CLI 记录 node、Gate、Decision 和 frontier
+研究目标
+  -> Navigate 发现并调用适用能力
+  -> 普通工作：交付项目文件，持续任务用普通笔记保存进展
+  -> 需要 Gate/Decision、parallel/join、轮次或审计：确认入口并冻结 graph
+       -> 按 node 执行能力；CLI 记录 run、node、Gate 和 Decision
 ```
 
 这里有三个容易混淆的角色：
@@ -31,6 +30,11 @@ Skills、converter 与验收必须与本文一致。
 `researchspec init` 创建 schema `"2"` workspace、投影所选 Agent 表面和 preset profiles。它不会
 开始学术工作，也不会创建 run。
 
+已核实原生项目规则的宿主还会收到简短的研究任务入口约定，用来提醒 Agent 按普通研究请求发现
+Navigate。约定独立于 `skills`、`commands` 或 `both` 交付模式，并只引用实际安装的入口文件；
+未核实规则路径的宿主保持现有显式发现方式。安装只证明静态投影，不能证明宿主会在真实会话中主动
+触发能力。各宿主机制、路径和文档依据见[项目入口矩阵](agent-entry-matrix.md)。
+
 ```text
 researchspec/
   config.yaml
@@ -45,7 +49,7 @@ researchspec/
   runs/
 ```
 
-四份 stable specs 是长期研究事实：
+四份 stable specs 只保存已确认的研究承诺，包括范围、主张、限制和交付要求：
 
 | 文件 | 内容 |
 | --- | --- |
@@ -56,14 +60,14 @@ researchspec/
 
 早期 workspace 可以有空的 sources、claims 或 manuscript。不要为了通过检查编造占位事实。
 
-普通事实可直接写入所属 spec。研究问题、范围、贡献、claim 强度或适用范围、稿件结构、关键限制
-和 review-response 策略等高影响变更，经 `propose -> decide -> 实际修改 specs -> archive` 完成。
+候选研究问题、暂定观点和草稿提纲留在 `researchspec/` 外的普通工作文件中，可自由迭代。候选内容
+成为已确认承诺，或已确认承诺发生改变时，经 `propose -> decide -> 实际修改 specs -> archive` 完成。
 `accepted` 只代表用户接受方案；stable specs 修改并通过检查后，change 才能成为 `applied`。
 
 ## 2. 从一个入口按需选择 Procedure
 
-用户通常描述目标，不必先记 CLI。模糊、跨能力、恢复、解释和导出请求先交给
-`researchspec-navigate`。Navigate 先做三阶段披露，不把完整程序提前塞入 Agent catalog：
+用户通常直接描述研究目标，不必先记 CLI 或内部 selector。模糊、跨能力、恢复、解释和导出请求
+先交给 `researchspec-navigate`。Navigate 先做三阶段披露，不把完整程序提前塞入 Agent catalog：
 
 ```text
 list procedures --query <意图> --json
@@ -74,9 +78,10 @@ list procedures --query <意图> --json
 `list` 只返回紧凑卡片，`show` 返回单项元数据，`instructions` 才加载完整 Procedure、资源引用和
 激活包。发现可以在 workspace 外只读执行；激活要求当前 schema 2 workspace。
 
-简单、一次性、无需恢复或审计的任务使用 standalone 模式：Procedure 只能写 `researchspec/` 外的
-普通项目文件，完成时把路径返回调用者，不创建或修改 run、node、handoff、Gate 或 Decision。
-需要持久恢复、并行/join、正式确认、重复轮次或审计时进入 graph 模式：
+不需要正式流程控制的普通任务使用 standalone 模式，持续工作也可留在此模式：Procedure 只能写
+`researchspec/` 外的普通项目文件，完成时把路径返回调用者，不创建或修改 run、node、handoff、
+Gate 或 Decision。恢复普通工作不需要 graph。需要 formal Gate/Decision、parallel/join、重复
+轮次或可审计工作流状态时进入 graph 模式：
 
 ```text
 status --json
@@ -104,6 +109,17 @@ Reviewer 获得独立上下文；producer 只在隔离或并行确有帮助时�
 每个 worker 只执行一个 packet，只写声明的普通输出，不能调用 ResearchSpec mutation command、
 询问用户、选择模型或继续委派。它返回 Procedure hash、输出路径、检查结果和 blocker；Navigate
 校验后才串行执行 `advance` 等 CLI mutation。worker 回报本身不改变 run、node、Gate 或 Decision。
+
+## 普通任务笔记
+
+持续的普通研究工作由 Navigate 主 Agent 维护 Markdown 笔记 `work/researchspec-notes/<task-id>.md`。
+笔记记录用户目标与交付期望、输入和产出文件及其用途、已完成的实质工作与证据限制、待解决问题、
+下一步，以及有关联时的 run selector。达到阶段产出、遇到阻塞或结束一轮工作时更新；一次即可
+完成的请求无需创建笔记。
+
+笔记是 `researchspec/` 外的非正式工作材料：不进入安装 manifest，`status` 和 `check` 不扫描或
+校验它，CLI 也不提供 task selector。它不能用来声称 run、node 或 Gate 已完成；涉及未完成的
+相关正式 run 时，应按该 run 的 status 和精确 node instructions 继续。
 
 ## 3. 一次确认授权一张冻结图
 
@@ -223,8 +239,10 @@ Zotero 的 status/check 只检查静态配置和投影，不执行 runner、不�
 
 ## 10. 恢复、检查、打包与结束
 
-新会话从 `status --json` 开始，再读取精确的 `run:`、`node:`、`gate:` 或 `decision:`
-instructions。多个候选由用户选择，Agent 不能猜“最近一个”。
+恢复普通工作时，Navigate 从相关任务笔记和当前材料找回目标、已完成内容与下一步；这本身不需要
+graph。若存在相关的未完成正式 run，应改从 `status --json` 和精确的 `run:`、`node:`、`gate:`
+或 `decision:` instructions 恢复，不能用笔记替代 run 状态。已完成的历史 run 不阻止新任务
+作为普通工作继续。多个候选由用户选择，Agent 不能猜“最近一个”。
 
 运行 selectors 是：
 

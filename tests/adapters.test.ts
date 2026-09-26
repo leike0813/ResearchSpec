@@ -76,6 +76,10 @@ void test("command delivery exposes one Navigate wrapper while the public CLI st
   assert.match(renderCommand(requireTool("claude"), content), /allowed-tools: Bash\(researchspec:\*\)/);
   assert.match(renderCommand(requireTool("pi"), content), /\$@/);
   assert.match(renderCommand(requireTool("cursor"), content), /\$ARGUMENTS/);
+  const commandsOnly = renderCommand(requireTool("claude"), content);
+  assert.match(commandsOnly, /researchspec status --json/);
+  assert.match(commandsOnly, /researchspec-reviewer/);
+  assert.doesNotMatch(commandsOnly, /references\//);
   for (const definition of TOOLS.filter((tool) => tool.command)) {
     for (const wrapper of COMMAND_WRAPPER_CONTENTS) assert.ok(renderCommand(definition, wrapper).trim().length > 0);
   }

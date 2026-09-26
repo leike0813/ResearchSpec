@@ -39,6 +39,10 @@ ResearchSpec 不调用模型 API，不管理数据库，不执行 vendor 脚本�
 Status、history、parent/child summary、frontier 和 completion readiness 都是扫描 owner 文件得到的
 read model，不持久化全局索引或 children list。
 
+普通任务笔记 `work/researchspec-notes/<task-id>.md` 位于 `researchspec/` 外，是非正式工作材料，
+不属于上表的受管 owner 文件，也不参与工作流状态推导。Stable specs 只保存已确认的研究承诺；
+候选问题、暂定观点和草稿提纲留在普通工作文件，承诺的建立或修改走 project change。
+
 ## Graph 是自由组合层
 
 Profile 定义 entry、route binding、节点、依赖、parallel/join、Gates、Decisions、动态轮次和
@@ -90,6 +94,11 @@ Converter 的 TypeScript profile source 是 authored SSOT；仓库中的 profile
 宿主只常驻 Navigate。Navigate 先读取紧凑卡片，选定后才加载完整 Procedure；Propose、Verify、
 Decide 与 ARSU/core/plugin 程序都走同一按需入口。Standalone Procedure 只返回普通项目文件；graph
 Procedure 读取 stable specs 与 handoff inputs，并仅通过激活包给出的 CLI selector 更新 owner。
+已核实原生规则的宿主可接收项目级研究入口约定：专用文件由安装 manifest 整文件管理，共享文件
+只由固定标记区域与该区域的哈希管理。约定是 Navigate 的非入口上下文，不新增 Skill、Command、
+Procedure 或 worker；静态安装状态不等于真实宿主会主动调用。
+Navigate 主 Agent 为持续的普通工作维护任务笔记；笔记不成为 workflow authority，不能代替
+未完成 run 的 status 与精确 node instructions。
 
 Domain Plugin 与 Zotero Adapter 只能返回有界辅助材料。它们不能修改 stable specs、run/node、
 handoff、Gate、Decision 或 transition。异模型复核也由宿主 Agent 执行，ResearchSpec 不保存模型

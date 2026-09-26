@@ -6,11 +6,16 @@ Define dialogue-first ARSU capability selection, graph-entry confirmation and co
 
 ### Requirement: Dialogue Starts Academic Work
 
-User-Agent dialogue SHALL choose between standalone and graph activation by required lifecycle guarantees. Bounded one-shot work SHALL prefer standalone procedures; persistence, resume, formal Gates or Decisions, parallel joins, or audit state SHALL require a graph route. Navigate SHALL use its generated ARSU route reference when intent is vague or crosses capabilities.
+User-Agent dialogue SHALL choose between standalone and graph activation by required lifecycle guarantees. Bounded one-shot work SHALL prefer standalone procedures, and ordinary work that continues across sessions SHALL remain standalone with continuity carried by a plain task note outside `researchspec/` only when no unfinished related run exists. An unfinished related run SHALL take precedence over standalone continuation, and a completed historical run SHALL NOT block it. Formal Gates or Decisions, parallel joins, revision rounds, or audit state SHALL require a graph route. Persistent continuity SHALL NOT by itself require a graph route. Navigate SHALL use its generated ARSU route reference when intent is vague or crosses capabilities.
 
 #### Scenario: User asks for bounded work
 - **WHEN** the request can be completed through ordinary files without workflow state
 - **THEN** Navigate searches procedures and may activate one directly
+
+#### Scenario: Ordinary work continues without a graph
+- **WHEN** a request needs persistence or continuation across sessions but no unfinished related run and no formal Gate, Decision, parallel join, revision round, or audit state
+- **THEN** Navigate keeps the work standalone and represents progress with a task note outside `researchspec/`
+- **AND** it does not start a graph run for continuity alone
 
 #### Scenario: Bootstrap does not start work
 - **WHEN** `researchspec init` completes

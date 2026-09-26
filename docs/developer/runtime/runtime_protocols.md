@@ -11,7 +11,9 @@ list procedures -> show procedure:<id> -> instructions procedure:<id>
                                                  -> start / decide / advance -> status
 ```
 
-Procedure 发现和 `instructions` 都只读。Standalone packet 禁止工作流写入；graph packet 包含已解析
+Procedure 发现和 `instructions` 都只读。Standalone packet 禁止工作流写入；持续普通工作可由
+Navigate 主 Agent 在 `work/researchspec-notes/` 保存非正式进展。笔记不属于运行时协议，CLI 不扫描、
+校验或修改它，也不能凭笔记声称 run 或 Gate 完成。Graph packet 包含已解析
 输入、handoff 约束和精确 advance selector。`start profile:` 在根 entry summary 获得确认后创建 run；
 `start node:` 启动冻结图已经授权的 child，不重复索取 run-level 确认。`decide` 记录 formal
 Gate、graph Decision、override 或 change decision；`advance` 单独验证 profile 与 owning files
@@ -44,5 +46,7 @@ Project change 的 accepted 与 applied 分开。ARSU revision patch 是外部�
 
 ## 4. 恢复与失败
 
-新会话从 status 和精确 selector 恢复。外部文件缺失只阻塞消费者。`doctor` 只读报告损坏 owner、
+恢复普通工作时，Navigate 读取任务笔记和当前材料；恢复本身不要求 graph。相关正式 run 尚未完成时，
+改用 `status --json` 和精确 node instructions 恢复该 run，笔记不能代替其状态。已完成的历史 run
+不阻止新任务作为普通工作继续。外部文件缺失只阻塞消费者。`doctor` 只读报告损坏 owner、
 unsafe path 和 generated drift，不重建研究语义。非 schema `"2"` workspace 保持不变。

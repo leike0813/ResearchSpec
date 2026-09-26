@@ -10,6 +10,7 @@ import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
 import { sha256 } from "../../core/workspace/write-plan.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 import { loadProcedureCatalog, procedureCard, searchProcedures } from "../../procedures/catalog.js";
+import { TOOLS } from "../../adapters/tools.js";
 
 
 const FIXED_DATE = new Date("1980-01-01T00:00:00.000Z");
@@ -29,6 +30,12 @@ export async function handleGraphList(type: string | undefined, options: GraphLi
   let items: Array<Record<string, unknown>> = [];
   if (resolved === "procedures") {
     items = searchProcedures(await loadProcedureCatalog(), options.query).map((procedure) => ({ ...procedureCard(procedure) }));
+  } else if (resolved === "tools") {
+    items = TOOLS.map((tool) => ({
+      selector: `tool:${tool.id}`, tool_id: tool.id, name: tool.name,
+      entry: { ...tool.entry, runtime_status: "unverified" },
+      delivery: { skills: true, commands: Boolean(tool.command) },
+    })).sort((left, right) => compareText(left.selector, right.selector));
   } else {
     const workspace = await graphWorkspace(context);
     const index = await loadGraphWorkspaceIndex(workspace);

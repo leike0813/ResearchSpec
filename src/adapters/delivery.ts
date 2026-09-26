@@ -9,6 +9,7 @@ import { getTool, resolveToolIdAlias, sharedSkillTarget, toolSkillsRoot, type De
 import type { LoadedPluginRegistry } from "../plugins/registry.js";
 import { installationKey, type ManagedInstallation, type ManagedInstallationSource } from "./installations.js";
 import { resolveManagedTarget, validateManagedTarget } from "./managed-target.js";
+import { planProjectEntryDelivery } from "./project-entry.js";
 
 export interface DeliveryPlan {
   operations: PlannedWrite[];
@@ -91,6 +92,16 @@ export async function planToolDelivery(input: {
       diagnostics.push({ severity: "error", code: "tool_delivery_failed", message: error instanceof Error ? error.message : String(error), blocking: true, details: { tool_id: tool.id } });
     }
   }
+
+  const entries = await planProjectEntryDelivery({
+    projectRoot: input.projectRoot,
+    toolIds: selected,
+    installedEntries: installations,
+    existingInstallations: input.existingInstallations,
+  });
+  operations.push(...entries.operations);
+  installations.push(...entries.installations);
+  diagnostics.push(...entries.diagnostics);
 
   return { operations, installations, diagnostics, skillToolIds, commandToolIds };
 

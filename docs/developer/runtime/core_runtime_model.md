@@ -4,10 +4,13 @@
 
 ## 1. 文件 owner
 
-四份 stable specs 拥有研究事实；graph profiles 拥有能力执行图；每个 run 拥有 frozen graph 与 lifecycle；每个 node instance 拥有状态、Gate attempts 和 Decisions；handoff 拥有边界 input/output role/path；project change 拥有尚未应用的高影响更新。
+四份 stable specs 拥有已确认的研究承诺；graph profiles 拥有能力执行图；每个 run 拥有 frozen graph 与 lifecycle；每个 node instance 拥有状态、Gate attempts 和 Decisions；handoff 拥有边界 input/output role/path；project change 拥有尚未应用的高影响更新。
 
 边界论文、报告、review、图表和数据位于 `researchspec/` 外。Private working material 位于 owning
 项目外的普通 `work/`，需要跨 run 使用时通过 handoff 明确声明。
+
+普通任务笔记位于 `work/researchspec-notes/`，由 Navigate 主 Agent 维护持续工作的非正式进展。
+它不属于 runtime owner 或协议，CLI 不扫描、校验或修改，也不影响 run、node 或 frontier。
 
 ## 2. 派生视图
 

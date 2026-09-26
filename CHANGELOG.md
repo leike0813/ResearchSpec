@@ -2,6 +2,11 @@
 
 All notable ResearchSpec releases are documented here.
 
+## Unreleased
+
+- Reoriented the usage specifications and documentation around natural research tasks and usable deliverables. Sustained ordinary work and its recovery use plain task notes without requiring a graph run; formal controls still use graph runs.
+- Clarified that exploratory drafts stay in ordinary working files and stable specs hold confirmed research commitments.
+
 ## 0.1.0 - Release candidate
 
 - Added the Schema 0.2 file-contract workspace and fifteen-command public CLI.

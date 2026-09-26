@@ -222,7 +222,7 @@ An optional validation target and strictness flag.
 
 ### `researchspec list [type]`
 
-List procedures, profiles, runs, nodes, changes, or diagnostics
+List procedures, tools, profiles, runs, nodes, changes, or diagnostics
 
 - Workspace: `optional`
 - Static effect: `read`

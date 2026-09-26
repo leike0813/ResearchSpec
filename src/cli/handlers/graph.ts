@@ -29,6 +29,7 @@ import { domainIsAvailable, loadPluginRegistry } from "../../plugins/registry.js
 import { buildProcedurePacket } from "../../procedures/packet.js";
 import { loadProcedureCatalog } from "../../procedures/catalog.js";
 import { reviewWorkspaceInstruction } from "../../review-workspace/instructions.js";
+import { inspectProjectEntries } from "../../adapters/project-entry.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 
 export type GraphDoctorOptions = Record<string, never>;
@@ -527,11 +528,13 @@ export async function handleGraphCheck(strict: boolean, context: CommandContext,
 export async function handleGraphDoctor(context: CommandContext): Promise<CommandResult> {
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
-  const diagnostics = [...index.diagnostics, ...await pluginWorkspaceDiagnostics(index, true)];
+  const diagnostics = [...index.diagnostics, ...await pluginWorkspaceDiagnostics(index, true),
+    ...await inspectProjectEntries(index.projectRoot, index.config.agent_tools.selected, index.manifest.installations)];
   const report = { workspace, healthy: diagnostics.every((item) => !item.blocking), diagnostics };
-  const human = report.healthy
-    ? { stdout: `ResearchSpec Doctor found no graph workspace damage: ${workspace}\n` }
-    : { stderr: `ResearchSpec Doctor found ${String(diagnostics.length)} diagnostic(s): ${workspace}\n${diagnostics.map((item) => `- [${item.code}] ${item.path ?? ""} ${item.message}`).join("\n")}\n` };
+  const message = diagnostics.length
+    ? `ResearchSpec Doctor found ${String(diagnostics.length)} diagnostic(s): ${workspace}\n${diagnostics.map((item) => `- [${item.code}] ${item.path ?? ""} ${item.message}`).join("\n")}\n`
+    : `ResearchSpec Doctor found no graph workspace damage: ${workspace}\n`;
+  const human = report.healthy ? { stdout: message } : { stderr: message };
   return { ...success("doctor", report, human), ok: report.healthy, exitCode: report.healthy ? 0 : 1, diagnostics };
 }
 

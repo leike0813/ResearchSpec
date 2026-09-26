@@ -4,8 +4,18 @@ import { renderLiteratureSourcePolicyProjection } from "../../../literature-adap
 export const navigateWorkflow = {
   id: "navigate",
   name: "ResearchSpec Navigate",
-  description: "Route, start, resume, explain, verify, and finish ResearchSpec academic work. Use for vague or cross-capability research requests, standalone procedure selection, graph workflow operation, CLI guidance, project status, plugins, Zotero, and alternate-model review.",
-  instructions: `## Goal
+  description: "Route, start, resume, explain, verify, and finish ResearchSpec academic work. Use for ordinary literature, manuscript, evidence, or review requests, including bounded ones that name no ResearchSpec term, and for vague or cross-capability research goals, standalone procedure selection, graph workflow operation, CLI guidance, project status, plugins, Zotero, and alternate-model review.",
+  instructions: renderNavigateExecutionGuidance("skill"),
+} satisfies CompanionWorkflowSource;
+
+/**
+ * Canonical execution guidance for the single Navigate entry. The Skill surface
+ * reads its installed references; a commands-only surface reaches the same
+ * detail through the CLI it is part of, so it never points at a file it does
+ * not deliver. Both surfaces share this one body.
+ */
+export function renderNavigateExecutionGuidance(surface: "skill" | "command"): string {
+  return `## Goal
 
 Translate the user's academic request into a legal ResearchSpec action, carry it through the appropriate standalone procedure or graph workflow, and keep the user informed at every human decision boundary. Prefer the lightest mode that provides the lifecycle guarantees the work actually needs.
 
@@ -13,6 +23,7 @@ Translate the user's academic request into a legal ResearchSpec action, carry it
 
 Use Navigate when the user:
 
+- describes an ordinary literature, manuscript, evidence, or review task, including a bounded one that names no ResearchSpec term;
 - describes a vague, broad, or cross-capability academic goal;
 - asks which ResearchSpec procedure, profile, command, or selector to use;
 - wants to start, resume, inspect, verify, explain, export, or finish governed work;
@@ -24,7 +35,7 @@ An explicit bounded procedure can route directly after the same eligibility chec
 
 - Do not perform the producer's scholarly work when a selected procedure owns it.
 - Do not make human Gate verdicts, branch choices, run confirmations, plugin selections, managed-library authorizations, or alternate-model consent.
-- Do not treat catalog prose, this Skill, or a reference file as runtime authority.
+- Do not treat catalog prose, this entry, or a reference file as runtime authority.
 - Do not create a graph run for ordinary one-shot file work that needs no persistence, resume, formal control, join, or audit state.
 
 ## Inputs And Outputs
@@ -43,12 +54,19 @@ Never claim a run, node, Gate, Decision, handoff, plugin, or managed-library mut
 
 ## Reference Loading
 
-Use this main file by default. Read references only at these decision points:
+${surface === "skill"
+    ? `Use this main file by default. Read references only at these decision points:
 
 - Read [CLI handbook](references/cli-handbook.md) before constructing a nontrivial or file-based payload, explaining the complete CLI, comparing command options, or troubleshooting selectors, syntax, payload fields, or exit classes.
 - Read [ARSU route catalog](references/arsu-routes.md) when a goal is vague or crosses capabilities, when comparing ARSU routes or profile entries, or when prerequisites, boundary outputs, Gates, risk, and cost affect routing.
 
-The references provide detail. The complete mode decision, authority boundaries, confirmation rules, and recovery flow remain here.
+The references provide detail. The complete mode decision, authority boundaries, confirmation rules, and recovery flow remain here.`
+    : `This commands-only entry installs no Skill-relative reference file. Reach the same detail through the CLI at these decision points:
+
+- Run \`researchspec --help\` or \`researchspec <command> --help\` before constructing a nontrivial or file-based payload, explaining the complete CLI, comparing command options, or troubleshooting selectors, syntax, payload fields, or exit classes.
+- Run \`researchspec list procedures --json\` and, in a workspace, \`researchspec list profiles --json\` when a goal is vague or crosses capabilities, or when comparing profiles, prerequisites, boundary outputs, Gates, risk, and cost before choosing an entry.
+
+The complete mode decision, authority boundaries, confirmation rules, and recovery flow remain here.`}
 
 ## Start With Current Facts
 
@@ -76,7 +94,7 @@ Choose a graph profile when the work needs persistence, resume, formal Gates or 
 
 For a new root run:
 
-1. Read \`status --json\`, then identify candidate routes. For vague or cross-capability goals, read the ARSU route reference before choosing a profile.
+1. Read \`status --json\`, then identify candidate routes. For vague or cross-capability goals, compare candidate routes before choosing a profile.
 2. Run \`instructions profile:<profile-id> --json\`. Use only entries returned as executable by that profile.
 3. Present one exact entry summary: entry ID and node, stable-spec prerequisites, required handoff roles and material paths, boundary output roles, formal Gates, Decisions, source policy, risk, and cost.
 4. Ask for fresh confirmation of that entry and its frozen graph. Confirmation authorizes one root run; it does not decide Gates, Decisions, plugins, managed-library effects, or alternate-model use.
@@ -175,7 +193,7 @@ The ResearchSpec CLI must validate payloads and selectors; render current instru
 ## Failure Recovery
 
 - Exit 1: report the current workspace or domain blocker and its owning file; do not invent a repair.
-- Exit 2: reread help or the CLI handbook, correct the selector, option, or input, and retry only the corrected request.
+- Exit 2: reread help or ${surface === "skill" ? "the installed CLI handbook" : "the relevant CLI command help"}, correct the selector, option, or input, and retry only the corrected request.
 - Exit 3: preserve current bytes, reread the owning file and status, then retry only if the user's intent still applies.
 - Exit 4: stop and report the reproducible command and structured error.
 - Ineligible node: report the returned unmet prerequisites; do not activate its procedure packet.
@@ -185,13 +203,13 @@ The ResearchSpec CLI must validate payloads and selectors; render current instru
 
 ## Example Flows
 
-Broad request: read status if a workspace exists, load the ARSU route reference, compare at most a few candidates, inspect the selected profile, present its exact entry summary, obtain confirmation, start once, and continue from the returned frontier.
+Broad request: read status if a workspace exists, compare candidate routes, inspect the selected profile, present its exact entry summary, obtain confirmation, start once, and continue from the returned frontier.
 
 Bounded request: search procedures, inspect and activate one standalone packet, write the requested ordinary deliverable, and return its path without creating workflow state.
 
-Near miss: if the user asks only how a command works, use compact help and the CLI handbook. Do not start a run. If the user later requests a mutation, return to status and exact selector instructions first.
+Near miss: if the user asks only how a command works, use compact help${surface === "skill" ? " and the installed CLI handbook" : ""}. Do not start a run. If the user later requests a mutation, return to status and exact selector instructions first.
 
 ## Success Criteria
 
-Navigation is complete when the request has a justified mode and owner, every executed action came from current structured instructions, all required human decisions were separately confirmed, semantic outputs are named by path, and the final status or standalone result is reported without invented state.`,
-} satisfies CompanionWorkflowSource;
+Navigation is complete when the request has a justified mode and owner, every executed action came from current structured instructions, all required human decisions were separately confirmed, semantic outputs are named by path, and the final status or standalone result is reported without invented state.`;
+}

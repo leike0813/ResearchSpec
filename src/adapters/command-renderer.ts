@@ -1,5 +1,7 @@
 import type { ToolDefinition } from "./tools.js";
 import { CLI_TOP_LEVEL_COMMANDS } from "../cli/command-catalog.js";
+import { navigateWorkflow, renderNavigateExecutionGuidance } from "./companion/workflows/navigate.js";
+import { SHARED_CLI_GUIDANCE } from "./companion/shared-guidance.js";
 
 export interface CommandContent {
   id: "navigate";
@@ -16,11 +18,15 @@ export const LEGACY_COMMAND_IDS = CLI_TOP_LEVEL_COMMANDS.map((command) => comman
 export const COMMAND_WRAPPER_CONTENTS: readonly CommandContent[] = [{
   id: "navigate",
   family: "cli",
-  name: "ResearchSpec Navigate",
-  description: "Discover and activate the smallest suitable ResearchSpec procedure without expanding the Agent catalog",
+  name: navigateWorkflow.name,
+  description: navigateWorkflow.description,
   category: "researchspec",
   tags: ["researchspec", "navigate", "procedures"],
-  body: "Route the user's request: {{arguments}}. Search with researchspec list procedures --query <terms> --json, inspect one candidate with researchspec show procedure:<id> --json, then request researchspec instructions procedure:<id> --json for bounded standalone work. Use researchspec status --json and graph selectors when the work needs persistence, resume, Gates, Decisions, parallel joins, or audit state. If no procedure fits, continue with native Agent capabilities and state that the work is outside a governed ResearchSpec run.",
+  body: `Route the user's request: {{arguments}}.
+
+${renderNavigateExecutionGuidance("command")}
+
+${SHARED_CLI_GUIDANCE}`,
 }];
 
 export function renderCommand(tool: ToolDefinition, content: CommandContent): string {

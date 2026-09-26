@@ -46,6 +46,7 @@ export function resolveManagedTarget(projectRoot: string, installation: ManagedI
   const targetPath = target.path;
   if (scope !== "project" && scope !== "shared-global") fail("target scope is invalid");
   if (typeof targetPath !== "string" || targetPath.length === 0) fail("target path is empty");
+  if (source.kind === "project-entry" && target.executable !== false) fail("project entry cannot be executable");
 
   if (owner === "framework") return resolveFrameworkTarget(root, toolId, scope, targetPath, source);
   if (owner === "literature-adapter") return resolveLiteratureTarget(root, toolId, scope, targetPath, source);
@@ -93,6 +94,12 @@ function resolveAgentTarget(
 
   const root = toolSkillsRoot(tool, projectRoot);
   if (scope !== root.scope) fail(`target scope does not match tool ${tool.id}`);
+
+  if (source.kind === "project-entry") {
+    if (tool.entry.mechanism !== source.mode || !tool.entry.path) fail(`project entry mode is not defined for tool ${tool.id}`);
+    if (source.mode === "region" ? source.region_id !== "researchspec-entry" : source.region_id !== undefined) fail("project entry region ID is invalid");
+    return resolveExactTarget(projectRoot, scope, targetPath, path.join(projectRoot, ...tool.entry.path.split("/")), projectRoot);
+  }
 
   if (source.kind === "command") {
     assertSafeComponent(source.command_id, "command_id");

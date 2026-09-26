@@ -8,6 +8,7 @@ import {
   renderMdxCommandPages,
 } from "../dist/src/cli/handbook.js";
 import { CLI_TOP_LEVEL_COMMANDS } from "../dist/src/cli/command-catalog.js";
+import { renderProjectEntryMatrix } from "../dist/src/adapters/project-entry-matrix.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -27,6 +28,11 @@ if (!siteOnly) {
     label: "handbook",
     filePath: path.join(projectRoot, "docs/user/cli-handbook.md"),
     content: renderCliHandbook(),
+  });
+  outputs.push({
+    label: "project entry matrix",
+    filePath: path.join(projectRoot, "docs/user/agent-entry-matrix.md"),
+    content: renderProjectEntryMatrix(),
   });
 }
 

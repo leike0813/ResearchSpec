@@ -1,6 +1,6 @@
 # ResearchSpec
 
-ResearchSpec is an agent-neutral, file-based execution-flow engine for academic research capabilities. It installs one navigation entry, loads reviewed Procedures on demand, keeps stable research contracts explicit, and records graph runs, node state, formal Gates, human Decisions, transitions, and handoff paths in its own control directory.
+ResearchSpec helps an Agent carry out academic research tasks through reusable capabilities and ordinary project files. The user describes a research goal; the Agent finds suitable capabilities, delivers usable results, and saves the progress needed to continue. Formal graph runs provide Gates, Decisions, parallel work, revision rounds, and auditable state when the task calls for them.
 
 Version `0.1.0` is an MVP release candidate. The functional user model is implemented and covered by public-CLI acceptance journeys; publication remains blocked until the hosted CI and manual dogfooding checklist are signed.
 
@@ -14,6 +14,7 @@ AI Agent 驱动的学术研究面临三个核心问题：
 
 ResearchSpec 的应对方案：
 
+- **研究任务优先**：用户直接表达目标；Navigate 按需发现适用能力，普通工作先交付成果并用任务笔记延续
 - **按需 Procedure**：研究能力仍以文件包分发，但宿主只常驻 Navigate；CLI 在选定后加载完整内容，不依赖平台私有运行时
 - **CLI 为中心的执行框架**：CLI 是 run/node 运行状态的唯一修改入口；Agent 执行能力节点、维护研究规格、外部语义交付物和 handoff，不直接编辑 run/node 状态
 - **文件合约 (File Contracts)**：研究意图、来源、claims、稿件结构、graph profile、run/node state、handoff 与 project change 都有明确的 Markdown / YAML / JSON owner
@@ -22,11 +23,11 @@ ResearchSpec 的应对方案：
 
 ResearchSpec 的设计深受 **[OpenSpec](https://github.com/Fission-AI/OpenSpec)** spec-driven 开发模式的启发：
 
-- **当前 specs 即为真理**：核心研究意图和约束存放在 `specs/`，实时生效
+- **已确认承诺写入 specs**：接受的研究范围、主张、限制与交付要求存放在 `specs/`；探索草稿留在普通工作文件
 - **变更隔离**：高影响修改以可审阅的 project change 文档包存在于 `changes/`；接受 change 不会自动修改 stable specs
 - **决策 first-class**：Human-in-the-loop 不依赖聊天记录；正式 Gate、override 和分支选择写入所属 node instance 文件
 
-与 OpenSpec 遵循相同理念：代码（此处为研究工件）是附带产物，specs 才应驱动行为。
+Specs 帮助保存已确认的约束和决定；研究工件是实际交付，价值要由研究结果的可用性和证据质量检验。
 
 ## 🔗 与 Zotero-Agents 的集成
 
@@ -120,7 +121,11 @@ researchspec init . --tools codex --literature-adapters zotero-library
 
 随后在相同项目中启动 Codex，以自然语言描述研究目标：
 
-> I want to study how generative AI affects writing instruction in higher education. Show candidate routes, prerequisites, boundary outputs, formal Gates, risks, and cost. Do not start a route until I confirm it.
+> 请帮我梳理生成式 AI 对高校写作教学的影响。先找近年的研究，说明主要发现、证据限制和仍有争议的问题，再给我一份可继续修改的综述提纲。
+
+持续的普通研究工作由 Navigate 主 Agent 用 `work/researchspec-notes/<task-id>.md` 记录目标、材料、
+已完成内容和下一步；新会话可据此继续，不需要为保存或恢复普通工作启动 graph。正式 Gate/Decision、
+并行汇合、重复轮次或可审计状态才需要 graph。具体边界见[用户使用模型](docs/user/usage-model.md)。
 
 ResearchSpec 默认只投影 `researchspec-navigate`。它自带从 typed catalog 生成的 CLI handbook 和 ARSU route reference：主文件负责完整控制流程，详细参数与路由表按需读取。四个 ARSU 工作流、其余三个 Companion、47 个 core capability 与 332 个 plugin extension 通过 `list/show/instructions procedure` 按需发现和加载；预设 graph profiles 保持可组合。
 
@@ -132,7 +137,7 @@ ResearchSpec 默认只投影 `researchspec-navigate`。它自带从 typed catalo
 
 ## 运行时协议
 
-Agent 按统一协议运行：
+正式 graph run 按以下协议运行：
 
 ```text
 researchspec --help

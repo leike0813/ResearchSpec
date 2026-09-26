@@ -11,6 +11,10 @@ import {
   type ManagedInstallation,
 } from "../src/adapters/installations.js";
 import { resolveManagedTarget, validateManagedTarget } from "../src/adapters/managed-target.js";
+import { planToolDelivery } from "../src/adapters/delivery.js";
+import { entryOwnedBytes, inspectProjectEntries, planProjectEntryDelivery } from "../src/adapters/project-entry.js";
+import { TOOLS } from "../src/adapters/tools.js";
+import { executeWritePlan, sha256 } from "../src/core/workspace/write-plan.js";
 import { reconcileLiteratureAdapterInstallations } from "../src/literature-adapters/delivery.js";
 import { PluginProjectionError, planPluginProjection } from "../src/plugins/graph-delivery.js";
 import type { LoadedPluginRegistry } from "../src/plugins/registry.js";
@@ -269,6 +273,157 @@ void test("plugin projection rejects an unsafe typed record before registry reti
     await rm(container, { recursive: true, force: true });
   }
 });
+
+void test("documented hosts receive mode-correct project entries and all other hosts retain discovery", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "researchspec-entry-modes-"));
+  try {
+    const documented = TOOLS.filter((tool) => tool.entry.mechanism !== "discovery");
+    assert.equal(documented.length, 6);
+    assert.equal(TOOLS.filter((tool) => tool.entry.mechanism === "discovery").length, 30);
+    for (const tool of TOOLS) for (const delivery of ["skills", "commands", "both"] as const) {
+      const plan = await planToolDelivery({ projectRoot: root, toolIds: [tool.id], delivery, existingInstallations: [], force: false });
+      const entry = plan.installations.find((item) => item.source.kind === "project-entry");
+      if (tool.entry.mechanism === "discovery") {
+        assert.equal(entry, undefined, `${tool.id}/${delivery}`);
+        continue;
+      }
+      assert.ok(entry, `${tool.id}/${delivery}`);
+      assert.equal(entry.target.path, tool.entry.path);
+      assert.equal(entry.source.kind === "project-entry" && entry.source.mode, tool.entry.mechanism);
+      const operation = plan.operations.find((item) => item.relativePath === entry.target.path);
+      assert.ok(operation?.content);
+      const text = Buffer.from(operation.content).toString("utf8");
+      const references = [...text.matchAll(/^- `([^`]+)`$/gm)].map((match) => match[1]);
+      assert.ok(references.length > 0, `${tool.id}/${delivery}`);
+      for (const reference of references) assert.ok(plan.installations.some((item) => item.target.path === reference), reference);
+      if (delivery === "commands" && tool.command) assert.equal(references.some((reference) => reference?.endsWith("/SKILL.md")), false);
+    }
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+void test("shared entry keeps BOM, CRLF, user edits and surviving consumers while removing only owned bytes", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "researchspec-entry-region-"));
+  const target = path.join(root, "AGENTS.md");
+  const original = Buffer.from("\uFEFF# User rules\r\nKeep this text without a trailing newline");
+  const codexAsset = navigateAsset("codex", ".agents/skills/researchspec-navigate/SKILL.md");
+  const openCodeAsset = navigateAsset("opencode", ".opencode/commands/researchspec-navigate.md", "command");
+  try {
+    await writeFile(target, original);
+    const first = await planProjectEntryDelivery({ projectRoot: root, toolIds: ["codex", "opencode"], installedEntries: [codexAsset, openCodeAsset], existingInstallations: [] });
+    assert.equal(first.operations.length, 1);
+    assert.equal(first.installations.length, 1);
+    await executeWritePlan({ operations: first.operations });
+    const record = first.installations[0];
+    const created = await readFile(target);
+    assert.deepEqual(created.subarray(0, original.length), original);
+    assert.match(created.toString("utf8"), /\r\n<!-- researchspec:begin researchspec-entry -->\r\n/);
+    const firstOwned = entryOwnedBytes(created, record);
+    assert.ok(firstOwned);
+    assert.equal(sha256(firstOwned), record.sha256);
+
+    const userPrefix = Buffer.from("\uFEFF# User rules updated\r\nKeep this text without a trailing newline");
+    await writeFile(target, Buffer.concat([userPrefix, created.subarray(original.length)]));
+    const remaining = await planProjectEntryDelivery({ projectRoot: root, toolIds: ["opencode"], installedEntries: [openCodeAsset], existingInstallations: [record] });
+    assert.equal(remaining.installations[0]?.tool_id, "opencode");
+    await executeWritePlan({ operations: remaining.operations });
+    assert.deepEqual((await readFile(target)).subarray(0, userPrefix.length), userPrefix);
+
+    const retired = await reconcileAgentToolInstallations({ projectRoot: root, existingInstallations: remaining.installations,
+      desiredInstallations: [], reconciledToolIds: ["opencode"], selectedToolIds: [] });
+    assert.equal(retired.operations.length, 1);
+    await executeWritePlan({ operations: retired.operations });
+    assert.deepEqual(await readFile(target), Buffer.concat([userPrefix, Buffer.from("\r\n")]));
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+void test("unowned, malformed and drifted regions are preserved and stale snapshots reject concurrent edits", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "researchspec-entry-conflicts-"));
+  const target = path.join(root, "AGENTS.md");
+  const asset = navigateAsset("codex", ".agents/skills/researchspec-navigate/SKILL.md");
+  const plan = (existingInstallations: ManagedInstallation[]) => planProjectEntryDelivery({ projectRoot: root,
+    toolIds: ["codex"], installedEntries: [asset], existingInstallations });
+  try {
+    const initial = await plan([]);
+    await executeWritePlan({ operations: initial.operations });
+    const record = initial.installations[0];
+    const owned = await readFile(target);
+    assert.equal((await plan([])).operations.length, 0);
+    await writeFile(target, Buffer.from(owned.toString("utf8").replace("researchspec:end", "researchspec:broken")));
+    const malformed = await plan([record]);
+    assert.equal(malformed.operations.length, 0);
+    assert.ok(malformed.diagnostics.some((item) => item.code === "project_entry_content_conflict"));
+    assert.ok((await inspectProjectEntries(root, ["codex"], [record])).some((item) => item.code === "project_entry_malformed"));
+    await writeFile(target, Buffer.from(owned.toString("utf8").replace("academic literature", "academic sources")));
+    assert.equal((await plan([record])).operations.length, 0);
+
+    await writeFile(target, owned);
+    const refresh = await planProjectEntryDelivery({ projectRoot: root, toolIds: ["codex", "opencode"],
+      installedEntries: [asset, navigateAsset("opencode", ".opencode/commands/researchspec-navigate.md", "command")], existingInstallations: [record] });
+    await writeFile(target, Buffer.concat([Buffer.from("Concurrent edit\n"), owned]));
+    await assert.rejects(executeWritePlan({ operations: refresh.operations }));
+    assert.match(await readFile(target, "utf8"), /^Concurrent edit/);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+void test("project entries reject unsafe manifests and symlinks, and restore missing owned files", async () => {
+  const container = await mkdtemp(path.join(tmpdir(), "researchspec-entry-boundary-"));
+  const root = path.join(container, "project");
+  const outside = path.join(container, "outside.md");
+  const asset = navigateAsset("codex", ".agents/skills/researchspec-navigate/SKILL.md");
+  try {
+    await mkdir(root);
+    await writeFile(outside, "Keep this file\n", "utf8");
+    const initial = await planProjectEntryDelivery({ projectRoot: root, toolIds: ["codex"], installedEntries: [asset], existingInstallations: [] });
+    const record = initial.installations[0];
+    for (const forged of [
+      { ...record, target: { ...record.target, path: "../outside.md" } },
+      { ...record, target: { ...record.target, path: "other.md" } },
+      { ...record, target: { ...record.target, executable: true } },
+      { ...record, source: { kind: "project-entry", mode: "file" } },
+    ]) {
+      assert.throws(() => resolveManagedTarget(root, asInstallation(forged)));
+    }
+    assert.equal(ManagedInstallationSchema.safeParse({ ...record, source: { kind: "project-entry", mode: "region", region_id: "unexpected" } }).success, false);
+
+    await symlink(outside, path.join(root, "AGENTS.md"));
+    await assert.rejects(planProjectEntryDelivery({ projectRoot: root, toolIds: ["codex"], installedEntries: [asset], existingInstallations: [] }));
+    assert.equal(await readFile(outside, "utf8"), "Keep this file\n");
+    await rm(path.join(root, "AGENTS.md"));
+
+    const restored = await planProjectEntryDelivery({ projectRoot: root, toolIds: ["codex"], installedEntries: [asset], existingInstallations: [record] });
+    assert.equal(restored.operations.length, 1);
+    await executeWritePlan({ operations: restored.operations });
+    const restoredOwned = entryOwnedBytes(await readFile(path.join(root, "AGENTS.md")), restored.installations[0]);
+    assert.ok(restoredOwned);
+    assert.equal(sha256(restoredOwned), record.sha256);
+  } finally { await rm(container, { recursive: true, force: true }); }
+});
+
+void test("OpenCode fallback and optional entry collisions preserve user files without blocking other projections", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "researchspec-entry-fallback-"));
+  try {
+    await writeFile(path.join(root, "CLAUDE.md"), "Existing OpenCode guidance\n", "utf8");
+    const fallback = await planToolDelivery({ projectRoot: root, toolIds: ["codex", "opencode"], delivery: "commands", existingInstallations: [], force: false });
+    assert.ok(fallback.diagnostics.some((item) => item.code === "project_entry_fallback_preserved" && !item.blocking));
+    assert.equal(fallback.operations.some((item) => item.relativePath === "AGENTS.md"), false);
+    assert.ok(fallback.operations.some((item) => item.relativePath?.includes("researchspec-navigate")));
+    assert.equal(await readFile(path.join(root, "CLAUDE.md"), "utf8"), "Existing OpenCode guidance\n");
+
+    await mkdir(path.join(root, ".claude/rules"), { recursive: true });
+    await writeFile(path.join(root, ".claude/rules/researchspec.md"), "Personal rule\n", "utf8");
+    const conflict = await planToolDelivery({ projectRoot: root, toolIds: ["claude"], delivery: "skills", existingInstallations: [], force: true });
+    assert.ok(conflict.diagnostics.some((item) => item.code === "project_entry_content_conflict" && !item.blocking));
+    assert.equal(conflict.operations.some((item) => item.relativePath === ".claude/rules/researchspec.md"), false);
+    assert.ok(conflict.operations.some((item) => item.relativePath?.endsWith("/SKILL.md")));
+    assert.equal(await readFile(path.join(root, ".claude/rules/researchspec.md"), "utf8"), "Personal rule\n");
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+function navigateAsset(toolId: string, targetPath: string, kind: "command" | "companion-skill" = "companion-skill"): ManagedInstallation {
+  return asInstallation({ owner: "agent-tool", tool_id: toolId,
+    source: kind === "command" ? { kind, command_id: "navigate" } : { kind, skill_id: "researchspec-navigate" },
+    target: { scope: "project", path: targetPath, executable: false }, sha256: hash("asset") });
+}
 
 function asInstallation(value: unknown): ManagedInstallation {
   return value as ManagedInstallation;
