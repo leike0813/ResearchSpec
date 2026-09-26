@@ -106,7 +106,7 @@ Navigate SHALL be the complete entry controller for standalone procedure selecti
 
 ### Requirement: Companions Use Current File Contracts
 
-Navigate, Propose, Decide and Verify SHALL use stable specs, graph profiles, run/node files, run handoffs and project changes. Navigate SHALL additionally maintain ordinary task notes under `work/researchspec-notes/<task-id>.md` for sustained standalone research work, which SHALL be non-authoritative and SHALL NOT be treated as workflow state. Companions SHALL NOT reconstruct or guess the workflow frontier from Skill prose.
+Navigate, Propose, Decide and Verify SHALL use stable specs, graph profiles, run/node files, run handoffs and project changes. Navigate SHALL additionally maintain ordinary task notes under `work/researchspec-notes/<task-id>.md` for sustained standalone research work, which SHALL be non-authoritative and SHALL NOT be treated as workflow state. When resuming ordinary work, Navigate SHALL check the note against the recorded project materials and SHALL NOT report or act on any run, node, Gate, Decision, or handoff state that the CLI does not confirm. Companions SHALL NOT reconstruct or guess the workflow frontier from Skill prose.
 
 #### Scenario: Navigate explains current work
 - **WHEN** a user asks to understand a project
@@ -126,6 +126,11 @@ Navigate, Propose, Decide and Verify SHALL use stable specs, graph profiles, run
 - **WHEN** both a task note and an unfinished confirmed run are present
 - **THEN** Navigate keeps them separate and uses status plus exact node instructions to resume the run
 - **AND** it does not substitute the task note for run state
+
+#### Scenario: Ordinary task resume verifies materials
+- **WHEN** Navigate resumes a noted ordinary task
+- **THEN** it checks the recorded materials and outputs before continuing
+- **AND** it asks one focused question only when a difference changes the task identity, its inputs, or the next step and the materials do not settle it
 
 ### Requirement: Companion Decisions Respect File Ownership
 Verify SHALL propose Gate findings, Decide SHALL record only the relevant owning run/node decision,

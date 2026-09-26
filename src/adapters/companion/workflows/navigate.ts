@@ -1,6 +1,8 @@
 import type { CompanionWorkflowSource } from "../types.js";
 import { renderLiteratureSourcePolicyProjection } from "../../../literature-adapters/provider-policy.js";
 
+const GRAPH_REASONS = "formal Gates or Decisions, parallel or joined execution, child profiles, revision rounds, or auditable workflow state";
+
 export const navigateWorkflow = {
   id: "navigate",
   name: "ResearchSpec Navigate",
@@ -36,7 +38,7 @@ An explicit bounded procedure can route directly after the same eligibility chec
 - Do not perform the producer's scholarly work when a selected procedure owns it.
 - Do not make human Gate verdicts, branch choices, run confirmations, plugin selections, managed-library authorizations, or alternate-model consent.
 - Do not treat catalog prose, this entry, or a reference file as runtime authority.
-- Do not create a graph run for ordinary one-shot file work that needs no persistence, resume, formal control, join, or audit state.
+- Do not create a graph run for ordinary file work merely to continue it. Continuation alone stays standalone with a task note; use a graph only for ${GRAPH_REASONS}.
 
 ## Inputs And Outputs
 
@@ -79,18 +81,24 @@ The complete mode decision, authority boundaries, confirmation rules, and recove
 
 ### Standalone
 
-Choose standalone when the request is bounded and can finish through ordinary project files without persistent workflow state, resume, formal Gates or Decisions, parallel joins, or an audit trail.
+Choose standalone when the request can proceed through ordinary project files without ${GRAPH_REASONS}. Continuation alone stays standalone with a task note.
 
 1. Search with \`list procedures\`; inspect promising cards with \`show procedure:<id>\`.
 2. Select one eligible procedure and load only its body with \`instructions procedure:<id> --json\`.
 3. Follow the packet's inputs, outputs, resources, and authority limits. Read package resources only when that packet requires them.
 4. Produce semantic files outside \`researchspec/\` and return their paths. A standalone procedure creates no run, node, Gate, Decision, or handoff state.
 
+For sustained ordinary research work, only the main Agent maintains \`work/researchspec-notes/<task-id>.md\` outside \`researchspec/\`; delegated workers return outputs for the main Agent to validate before it updates the note. Record the user's goal and delivery expectations; inputs and produced files with their purpose; completed substantive work and evidence limits; open questions and the next step; and any related run selector. Update the note when a stage output is reached, the work is blocked, or a work session ends. A one-shot exchange with no continuing deliverable creates no note.
+
+To resume ordinary work, read the related note and check its recorded materials and outputs against the current project files before continuing. Never choose a task by note modification order. If several notes could match and the materials do not identify the task, ask one focused question naming the candidates. If a difference changes task identity, required inputs, or the next step and the materials cannot settle it, ask one focused question naming the affected material. Report a difference that leaves those three intact and continue without requesting confirmation. An unfinished related run takes precedence: read current \`status --json\` and exact selector instructions; a completed historical run does not block a new standalone task.
+
+A note never authorizes a run, node, Gate, Decision, handoff, or transition claim; report workflow state only from current CLI output. If ${GRAPH_REASONS} become necessary mid-task, follow the existing graph entry and confirmation rules. Passing declared ordinary file outputs to another standalone procedure does not itself require graph scheduling.
+
 Use \`researchspec-propose\` for an adaptable contract change, \`researchspec-verify\` for evidence-backed checking, and \`researchspec-decide\` only to prepare or record an already authorized governance action through its exact packet.
 
 ### Graph
 
-Choose a graph profile when the work needs persistence, resume, formal Gates or Decisions, parallel or joined execution, child profiles, revision rounds, or auditable state.
+Choose a graph profile when the work needs ${GRAPH_REASONS}. Continuation alone stays standalone with a task note; ordinary declared file chaining alone does not require a graph.
 
 For a new root run:
 

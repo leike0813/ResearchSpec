@@ -18,6 +18,13 @@ Focused test runner (verified working): `./node_modules/.bin/tsc -p tsconfig.tes
 
 ## 2. Natural research-task scenarios
 
+Continuity handoff from change 03 — all remain **unverified** until natural host sessions are recorded:
+
+- `New session continues a noted task`: compare the note with current materials and outputs, then continue the recorded next step without creating graph state.
+- `Several candidate tasks`: when materials cannot identify the intended task, ask one focused question naming the candidates; never select by modification order.
+- `Material changed without changing the work`: report a difference that leaves task identity, required inputs, and the next step intact, then continue.
+- `Note cannot stand in for run state`: report formal state only from current CLI status and exact selector instructions; an unfinished related run takes precedence.
+
 - [ ] 2.1 Add positive natural-language scenarios to `playbooks/dogfooding/scenarios.yaml` for literature synthesis, manuscript writing or revision, evidence checking, and peer review or review response, each using a natural prompt that names no ResearchSpec, Procedure, profile, frontier, selector or command, and each mapped to the `benchmark/` fixture variant that supplies its inputs; verify each scenario's `intent` and `hard_assertions` describe the expected behaviour for human semantic review.
 - [ ] 2.2 Add a run-free standalone natural scenario whose assertions require no run/node/Gate/Decision/handoff creation, and add both continuity scenarios: an ordinary non-graph task resumed in a new session from the task material and the ordinary note, and an accepted graph run resumed in a new session; verify the standalone assertions forbid run state, the ordinary-task resume uses the task material and note and adds no selector, run or workflow authority, and only the graph-resume scenario requires exact CLI selectors and forbids duplicate runs.
 - [ ] 2.3 Cover the ordinary-task resume boundaries in the continuity scenarios or adjacent ones, matching change 03 exactly: an unfinished confirmed governed run for the same work takes priority over ordinary treatment, a note-versus-material difference is reported and continues when the task identity, inputs and next step are unaffected, and one focused question is asked only when a difference or candidate set changes the task identity, inputs or next step and the materials do not settle it; verify each boundary appears in a `hard_assertions` entry.

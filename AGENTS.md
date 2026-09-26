@@ -73,14 +73,19 @@ The locked direction is:
   revision rounds, or auditable workflow state require a graph; persistence or
   continuation alone does not. An unfinished related run takes precedence over
   standalone continuation; a completed historical run does not.
-- Navigate maintains plain notes at `work/researchspec-notes/<task-id>.md` for
-  sustained ordinary work. Notes record the goal, inputs and outputs, completed
-  work and evidence limits, open questions, next step, and any related run.
+- Navigate's main Agent maintains plain notes at
+  `work/researchspec-notes/<task-id>.md` for sustained ordinary work, after
+  validating any delegated output. Notes record the goal, inputs and outputs,
+  completed work and evidence limits, open questions, next step, and any
+  related run.
   They are informal files outside `researchspec/`: they are not registered in
   the installation manifest, scanned by `status` or `check`, exposed through a
   CLI selector, or accepted as proof of run, node, or Gate completion. Resume
-  ordinary work from the note and current materials; resume an unfinished
-  related run through `status --json` and exact node instructions.
+  ordinary work by checking the note against current materials and outputs,
+  never by note modification order. Ask one focused question only when
+  candidate tasks or changed materials leave task identity, inputs, or the
+  next step unresolved; report other differences and continue. Resume an
+  unfinished related run through `status --json` and exact node instructions.
 - Stable specs hold confirmed scope, claims, limitations, and delivery
   requirements. Candidate questions, provisional positions, and draft outlines
   remain in ordinary working files. Promoting or changing a commitment uses

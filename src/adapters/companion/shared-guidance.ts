@@ -6,6 +6,7 @@ export const SHARED_CLI_GUIDANCE = `## Shared CLI Discipline
 - Graph profiles own executable workflow structure. Each run's \`run.yaml\` plus its frozen \`graph.yaml\` is that run's sole runtime authority; every node instance owns its own state file.
 - Stable specs, project changes, and run handoffs are directly editable. Only the ResearchSpec CLI may modify run/node state.
 - Boundary deliverables remain outside \`researchspec/\`. Exchange them through explicit handoff roles and safe project-relative paths.
+- Task notes are ordinary project files outside \`researchspec/\`, not workflow state; the CLI neither indexes nor validates them.
 - Do not invent a registry, ledger, receipt, runtime index, plan hash, or second workflow state.
 
 ### Read before acting

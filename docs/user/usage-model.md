@@ -115,7 +115,7 @@ Reviewer 获得独立上下文；producer 只在隔离或并行确有帮助时�
 持续的普通研究工作由 Navigate 主 Agent 维护 Markdown 笔记 `work/researchspec-notes/<task-id>.md`。
 笔记记录用户目标与交付期望、输入和产出文件及其用途、已完成的实质工作与证据限制、待解决问题、
 下一步，以及有关联时的 run selector。达到阶段产出、遇到阻塞或结束一轮工作时更新；一次即可
-完成的请求无需创建笔记。
+完成的请求无需创建笔记。委派 worker 不写笔记；主 Agent 校验其返回的路径和产出后更新。
 
 笔记是 `researchspec/` 外的非正式工作材料：不进入安装 manifest，`status` 和 `check` 不扫描或
 校验它，CLI 也不提供 task selector。它不能用来声称 run、node 或 Gate 已完成；涉及未完成的
@@ -240,7 +240,9 @@ Zotero 的 status/check 只检查静态配置和投影，不执行 runner、不�
 ## 10. 恢复、检查、打包与结束
 
 恢复普通工作时，Navigate 从相关任务笔记和当前材料找回目标、已完成内容与下一步；这本身不需要
-graph。若存在相关的未完成正式 run，应改从 `status --json` 和精确的 `run:`、`node:`、`gate:`
+graph。恢复前应核对笔记记录的材料与产出，不按笔记修改时间猜测任务。多个候选且材料不能确定
+任务，或材料差异使任务身份、所需输入、下一步无法确定时，只问一个具体问题；不影响这些要素的
+差异应告知用户并继续。若存在相关的未完成正式 run，应改从 `status --json` 和精确的 `run:`、`node:`、`gate:`
 或 `decision:` instructions 恢复，不能用笔记替代 run 状态。已完成的历史 run 不阻止新任务
 作为普通工作继续。多个候选由用户选择，Agent 不能猜“最近一个”。
 
