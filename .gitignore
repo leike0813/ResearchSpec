@@ -45,6 +45,7 @@ __pycache__/
 .tmp/
 
 references/OpenSpec/
+references/ppt-master/
 
 node_modules/
 dist/

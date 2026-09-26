@@ -105,6 +105,12 @@ reviewer calibration 的专用图能力缺口单独保留；当前四个 ARSU �
 - Standalone packet 只允许返回 researchspec/ 外的普通输出路径，禁止 run、node、handoff、Gate、Decision、override 和 transition 写入；graph packet 才提供 owning handoff 与精确 advance selector。
 - 生成路径与静态受审树均已核对；全库 47/47 core 与 332/332 extension 包含 mode-neutral Completion，旧 advance node:<run>/<node> Completion 为 0。该适配保留既有领域步骤和证据义务，未引入新的流程权威。
 
+## 共享 capability 树复核（2026-09-23）
+
+- 本轮变化来自 paper-humanizer 与 revision-master 四个 package 新增静态 `review-workspace/index.html` 及对应 procedure/manifest；38 个 ARSU-derived package、ARS extraction 与 graph profile 均未修改。
+- 中央 `skills/capabilities/registry.json` 与整树 SHA-256 因上述受审资产变化而更新。重新生成的 ARSU capability review、graph assessment 与 gap review 保持原有 ARSU 语义结论；parity 仍为 47/47 operational，所有 below-threshold、output-missing、knowledge-below 与 flow-retained 列表为空。
+- 交互工作区不进入 ARSU procedure，不获得 graph、Gate、Decision 或 workflow-state 权限，因此不改变本锚点已审阅的 27 mode 映射与运行边界。
+
 ## 结论
 
 declared-fit-with-notes：七个脚本能力的实际执行缺口已修复并通过真实报告与打包 CLI 验证，支持声明范围内的使用。完整上游护照/投稿检查和 reviewer empirical calibration 不在当前确定性实现的承诺内；报告及指令明确保留未检查状态，不能以运行完成代替科学通过或人类 Gate。
