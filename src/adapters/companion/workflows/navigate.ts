@@ -44,13 +44,7 @@ An explicit bounded procedure can route directly after the same eligibility chec
 
 Inputs may include the user's goal, project files, a procedure or profile name, an existing run, or a request for explanation. For workspace actions, discover the current schema \`"2"\` workspace and read structured CLI output. Ask the user only for a decision or missing material that changes the legal route or deliverable.
 
-Return a concise user-facing report containing:
-
-- selected mode: \`standalone\`, \`graph\`, or \`native\`;
-- selected procedure, profile entry, or exact current selector;
-- evidence used for the choice and any unresolved blocker;
-- files produced or changed outside workflow state;
-- the next owning command, file, or human decision, if work remains.
+For a completed standalone capability, use the single result report defined below. For governed work, report the current CLI-confirmed state and next action. Name internal mode names, procedure IDs, and selectors only when the user needs them to act.
 
 Never claim a run, node, Gate, Decision, handoff, plugin, or managed-library mutation unless the CLI completed it successfully.
 
@@ -79,18 +73,24 @@ The complete mode decision, authority boundaries, confirmation rules, and recove
 
 ## Choose The Execution Mode
 
+Before selecting standalone work for a request, check whether a relevant unfinished confirmed run already owns that work. If so, read current \`status --json\` and its exact selector instructions and resume through its pending controls. A completed historical run stays closed and never takes precedence over a new independent task.
+
 ### Standalone
 
 Choose standalone when the request can proceed through ordinary project files without ${GRAPH_REASONS}. Continuation alone stays standalone with a task note.
 
-1. Search with \`list procedures\`; inspect promising cards with \`show procedure:<id>\`.
-2. Select one eligible procedure and load only its body with \`instructions procedure:<id> --json\`.
-3. Follow the packet's inputs, outputs, resources, and authority limits. Read package resources only when that packet requires them.
-4. Produce semantic files outside \`researchspec/\` and return their paths. A standalone procedure creates no run, node, Gate, Decision, or handoff state.
+1. Turn the user's natural request into short domain search terms, translating a Chinese-language request into suitable catalog terms when needed. Search with \`list procedures --query "<terms>"\` and inspect a few promising cards with \`show procedure:<id>\`; do not ask the user to name a procedure first.
+2. If no suitable candidate appears, retry once with different terms. If that also finds none, use host-native capabilities and say the work is outside a governed ResearchSpec run.
+3. Select an eligible procedure and load only its body with \`instructions procedure:<id> --json\`. If a required input is absent, ask one focused question rather than inventing or substituting material.
+4. Follow the packet's declared inputs, outputs, resources, and authority limits. Read package resources only when that packet requires them. Produce semantic files outside \`researchspec/\`.
+
+When the request needs several standalone procedures, connect them only where one packet's declared output satisfies the next packet's declared input. Pass the produced ordinary project-relative path outside \`researchspec/\` explicitly to the next activation. If no declared link exists, report the gap or ask one focused question; do not infer a link. Chaining creates no run, handoff, or hidden activation state.
+
+On completion, give one user-facing standalone result report: outcome and every produced ordinary file path; evidence and its limits; unresolved items; and the next step. Show internal mode names, procedure IDs, or selectors only when the user must act on them. A standalone finding is working evidence, never a completed run, node, Gate, or Decision.
 
 For sustained ordinary research work, only the main Agent maintains \`work/researchspec-notes/<task-id>.md\` outside \`researchspec/\`; delegated workers return outputs for the main Agent to validate before it updates the note. Record the user's goal and delivery expectations; inputs and produced files with their purpose; completed substantive work and evidence limits; open questions and the next step; and any related run selector. Update the note when a stage output is reached, the work is blocked, or a work session ends. A one-shot exchange with no continuing deliverable creates no note.
 
-To resume ordinary work, read the related note and check its recorded materials and outputs against the current project files before continuing. Never choose a task by note modification order. If several notes could match and the materials do not identify the task, ask one focused question naming the candidates. If a difference changes task identity, required inputs, or the next step and the materials cannot settle it, ask one focused question naming the affected material. Report a difference that leaves those three intact and continue without requesting confirmation. An unfinished related run takes precedence: read current \`status --json\` and exact selector instructions; a completed historical run does not block a new standalone task.
+To resume ordinary work, read the related note and check its recorded materials and outputs against the current project files before continuing. Never choose a task by note modification order. If several notes could match and the materials do not identify the task, ask one focused question naming the candidates. If a difference changes task identity, required inputs, or the next step and the materials cannot settle it, ask one focused question naming the affected material. Report a difference that leaves those three intact and continue without requesting confirmation. Apply the unfinished-run precedence above before continuing a related task; a completed historical run does not block a new standalone task.
 
 A note never authorizes a run, node, Gate, Decision, handoff, or transition claim; report workflow state only from current CLI output. If ${GRAPH_REASONS} become necessary mid-task, follow the existing graph entry and confirmation rules. Passing declared ordinary file outputs to another standalone procedure does not itself require graph scheduling.
 
@@ -176,7 +176,7 @@ Keep these confirmations separate and current:
 - managed-library authorization bound to the current run, route, collection, candidates, effects, and time window;
 - alternate-model confirmation naming the host-available model, disclosed content category, and cost for the current run/node.
 
-Suggest no more than three relevant plugin domains in one batch. Declining or failing optional plugin assistance must leave the core producer, selector, frontier, and workflow authority unchanged. Alternate-model work uses only a host-native subagent; never configure or call a model service, persist model consent, or carry consent into another node, branch, round, child, or run.
+When the selected capability could benefit from optional plugin assistance, suggest no more than three relevant domains in one batch and preview the exact install before seeking consent separate from run confirmation. Declining, failing, or leaving that assistance unselected must leave the selected capability, selector, frontier, and workflow authority unchanged. Alternate-model work uses only a host-native subagent; never configure or call a model service, persist model consent, or carry consent into another node, branch, round, child, or run.
 
 ${renderLiteratureSourcePolicyProjection()}
 

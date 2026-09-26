@@ -25,12 +25,21 @@ Continuity handoff from change 03 — all remain **unverified** until natural ho
 - `Material changed without changing the work`: report a difference that leaves task identity, required inputs, and the next step intact, then continue.
 - `Note cannot stand in for run state`: report formal state only from current CLI status and exact selector instructions; an unfinished related run takes precedence.
 
+Capability-discovery handoff from change 04 — all remain **unverified** until natural host sessions are recorded:
+
+- `Natural request finds a capability`: discover a suitable procedure from ordinary-language terms without requiring its name.
+- `First search misses`: retry once with different search terms before choosing a route.
+- `Second search misses`: use host-native work and state that it is outside a governed run.
+- `Existing unfinished run takes precedence`: follow current run instructions for the same work instead of starting a standalone chain.
+- `Completed run does not hijack a new request`: keep the completed run closed and handle an independent request on its own terms.
+- `Two capabilities compose`: pass an explicit ordinary project-relative output path into the next declared input without creating a run, handoff, or hidden state.
+
 - [ ] 2.1 Add positive natural-language scenarios to `playbooks/dogfooding/scenarios.yaml` for literature synthesis, manuscript writing or revision, evidence checking, and peer review or review response, each using a natural prompt that names no ResearchSpec, Procedure, profile, frontier, selector or command, and each mapped to the `benchmark/` fixture variant that supplies its inputs; verify each scenario's `intent` and `hard_assertions` describe the expected behaviour for human semantic review.
 - [ ] 2.2 Add a run-free standalone natural scenario whose assertions require no run/node/Gate/Decision/handoff creation, and add both continuity scenarios: an ordinary non-graph task resumed in a new session from the task material and the ordinary note, and an accepted graph run resumed in a new session; verify the standalone assertions forbid run state, the ordinary-task resume uses the task material and note and adds no selector, run or workflow authority, and only the graph-resume scenario requires exact CLI selectors and forbids duplicate runs.
 - [ ] 2.3 Cover the ordinary-task resume boundaries in the continuity scenarios or adjacent ones, matching change 03 exactly: an unfinished confirmed governed run for the same work takes priority over ordinary treatment, a note-versus-material difference is reported and continues when the task identity, inputs and next step are unaffected, and one focused question is asked only when a difference or candidate set changes the task identity, inputs or next step and the materials do not settle it; verify each boundary appears in a `hard_assertions` entry.
 - [ ] 2.4 Add the ambiguity and negative scenarios: missing required input, an unrelated non-research request, and a user instruction to proceed without the framework; verify each declares the expected behaviour in `hard_assertions` and the negative cases require no workspace mutation.
 - [ ] 2.5 Include at least one Chinese and one English natural prompt across the new positive scenarios; verify both languages appear by human review of the catalog, not by a prompt-text assertion.
-- [ ] 2.6 Add the capability-discovery scenarios handed off by change 04 as natural-session acceptance items: `First search misses` (one bounded retry with different terms), `Second search misses` (host-native fallback, stated as outside a governed run), `Two capabilities compose` (chaining through declared input/output paths only, with no run, handoff or hidden state), and `Existing relevant run takes precedence`; verify each names its expected behaviour in `intent` and `hard_assertions` and each stays `unverified` until a real session recording exists.
+- [ ] 2.6 Add the capability-discovery scenarios handed off by change 04 as natural-session acceptance items: `Natural request finds a capability`, `First search misses`, `Second search misses`, `Existing unfinished run takes precedence`, `Completed run does not hijack a new request`, and `Two capabilities compose`; verify each names its expected behaviour in `intent` and `hard_assertions` and each stays `unverified` until a real session recording exists.
 
 ## 3. Behavioural evidence record
 
