@@ -5,6 +5,7 @@ import { test } from "node:test";
 
 import { parse } from "yaml";
 import { TOOL_IDS } from "../src/adapters/tools.js";
+import { loadProcedureCatalog, searchProcedures } from "../src/procedures/catalog.js";
 
 interface DogfoodingCatalog {
   schema_version: "1";
@@ -30,6 +31,8 @@ interface DogfoodingCatalog {
     cleanup: string[];
     release_checklist_ref?: string;
     acceptance_journey_refs: string[];
+    first_query?: string;
+    procedure_chain?: { first: string; second: string; shared_role: string; fixture_inputs: Record<string, string> };
   }>;
 }
 
@@ -110,10 +113,21 @@ void test("dogfooding playbook catalog covers routes, fixtures, and release mapp
   assert.ok(byId.get("DF-T1-RESUME")?.required_evidence.includes("handoff"));
   assert.ok(byId.get("DF-T2-RUN-PRECEDENCE")?.route_refs.length);
 
-  const intake = parse(await readFile("skills/capabilities/design-review-response-intake/manifest.yaml", "utf8")) as { outputs: Array<{ role: string }> };
-  const atomization = parse(await readFile("skills/capabilities/transform-review-response-comment-atomization/manifest.yaml", "utf8")) as { inputs: Array<{ role: string; required: boolean }> };
-  assert.deepEqual(atomization.inputs.filter((input) => input.required).map((input) => input.role), ["review_response_workspace"]);
-  assert.ok(intake.outputs.some((output) => output.role === atomization.inputs[0]?.role));
+  const firstQuery = byId.get("DF-T2-FIRST-SEARCH-MISS")?.first_query;
+  assert.ok(firstQuery);
+  assert.equal(searchProcedures(await loadProcedureCatalog(), firstQuery).length, 0, "The staged first search must miss");
+
+  const chain = byId.get("DF-T2-TWO-CAPABILITIES")?.procedure_chain;
+  assert.ok(chain);
+  const first = parse(await readFile(`skills/capabilities/${chain.first}/manifest.yaml`, "utf8")) as { inputs: Array<{ role: string; required: boolean }>; outputs: Array<{ role: string; schema_ref: string; required: boolean }> };
+  const second = parse(await readFile(`skills/capabilities/${chain.second}/manifest.yaml`, "utf8")) as { inputs: Array<{ role: string; schema_ref: string; required: boolean }> };
+  const output = first.outputs.find((item) => item.role === chain.shared_role && item.required);
+  const input = second.inputs.find((item) => item.role === chain.shared_role);
+  assert.ok(output && input && output.schema_ref === input.schema_ref);
+  const required = [...first.inputs, ...second.inputs].filter((item) => item.required && item.role !== chain.shared_role).map((item) => item.role);
+  assert.deepEqual(Object.keys(chain.fixture_inputs).sort(), required.sort());
+  const fixture = catalog.fixture_variants.find((item) => item.fixture_variant === byId.get("DF-T2-TWO-CAPABILITIES")?.fixture_variant);
+  for (const file of Object.values(chain.fixture_inputs)) assert.ok(fixture?.paths.includes(file), `Missing chain fixture: ${file}`);
 });
 
 void test("host verification record follows runtime target IDs and keeps behaviour unverified", async () => {

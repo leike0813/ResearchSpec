@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
 import { adapters, resolveBinary, sandboxCommand } from './hosts.mjs';
-import { attemptDir, buildHash, campaignDir, evidenceHash, loadCatalog, playbookRoot, readJson, repoRoot, sha, writeJson } from './lib.mjs';
+import { attemptDir, buildHash, campaignDir, evidenceHash, loadCampaignCatalog, playbookRoot, readJson, repoRoot, sha, validateFirstQuery, validateProcedureChain, writeJson } from './lib.mjs';
 
 const [stateRoot, campaignId, attemptId] = process.argv.slice(2);
 const dir = attemptDir(stateRoot, campaignId, attemptId);
@@ -49,26 +49,34 @@ function copyFixture(paths) {
     fs.copyFileSync(path.join(playbookRoot, relative), target);
   }
 }
-function stageNotes(scenarioId) {
+function stageNotes(scenarioId, staged) {
   const noteCases = new Set(['DF-T1-NOTE-RESUME', 'DF-T2-NOTE-DIVERGENCE', 'DF-T2-NOTE-MATERIAL-CHANGE', 'DF-T2-NOTE-AMBIGUITY', 'DF-T2-RUN-PRECEDENCE']);
   if (!noteCases.has(scenarioId)) return;
   const base = path.join(project, 'work/researchspec-notes');
   fs.mkdirSync(base, { recursive: true });
-  fs.copyFileSync(path.join(playbookRoot, 'benchmark/ordinary-task-note.md'), path.join(base, 'writing-evidence.md'));
+  const note = path.join(base, 'writing-evidence.md');
+  if (scenarioId === 'DF-T2-RUN-PRECEDENCE') {
+    fs.writeFileSync(note, fs.readFileSync(path.join(playbookRoot, 'benchmark/run-precedence-note.md'), 'utf8').replace('{{RUN_SELECTOR}}', `run:${staged.run_id}`));
+  } else fs.copyFileSync(path.join(playbookRoot, 'benchmark/ordinary-task-note.md'), note);
   if (scenarioId === 'DF-T2-NOTE-AMBIGUITY') fs.copyFileSync(path.join(playbookRoot, 'benchmark/second-task-note.md'), path.join(base, 'review-response.md'));
   if (scenarioId === 'DF-T2-NOTE-MATERIAL-CHANGE') fs.unlinkSync(path.join(project, 'benchmark/sources.yaml'));
   if (scenarioId === 'DF-T2-NOTE-DIVERGENCE') fs.appendFileSync(path.join(project, 'benchmark/sources.yaml'), '\n# Minor wording correction since the note; source identities and claims unchanged.\n');
 }
 function stageGraph(scenarioId) {
   if (!['DF-T1-RESUME', 'DF-T2-RUN-PRECEDENCE', 'DF-T2-COMPLETED-RUN'].includes(scenarioId)) return null;
+  if (scenarioId === 'DF-T2-RUN-PRECEDENCE') fs.copyFileSync(path.join(playbookRoot, 'benchmark/run-precedence-project.md'), path.join(project, 'researchspec/specs/project.md'));
   const profile = scenarioId === 'DF-T2-COMPLETED-RUN' ? 'minimal' : 'academic-pipeline';
   const response = JSON.parse(cli('profile-instructions', ['instructions', `profile:${profile}`, '--json']));
   const entry = response.data.entries.find(e => e.entry_id === 'main');
+  const plannedOutputs = entry.boundary_outputs.map(o => ({ role: o.role, type: o.type, path: `work/historical-${o.role}${o.role === 'submission_package' ? '.zip' : '.md'}`, purpose: o.purpose }));
+  for (const output of entry.expected_output_roles.filter(o => o.required && !plannedOutputs.some(p => p.role === o.role))) {
+    plannedOutputs.push({ role: output.role, type: output.role, path: `work/historical-${output.role}.md`, purpose: `Required output of entry node ${entry.entry_node_id}.` });
+  }
   const input = {
     schema_version: '2', confirmed_at: new Date().toISOString(), entry_id: entry.entry_id,
     entry_node_id: entry.entry_node_id, route_ref: entry.route_ref,
     prerequisites: ['Synthetic test fixture research goal and project spec checked.'], handoff_inputs: [],
-    planned_outputs: entry.boundary_outputs.map(o => ({ role: o.role, type: o.type, path: `work/historical-${o.role}${o.role === 'submission_package' ? '.zip' : '.md'}`, purpose: o.purpose })),
+    planned_outputs: plannedOutputs,
     formal_gates: entry.formal_gates.map(g => g.gate_id), cost: { effort: 'synthetic fixture', interaction: 'synthetic fixture' },
   };
   const inputFile = path.join(dir, 'staged-start-input.json');
@@ -85,7 +93,35 @@ function stageGraph(scenarioId) {
       cli(`staged-advance-${node}`, ['advance', `node:${runId}/${node}`, '--input', advanceInput, '--json']);
     }
   }
-  return { run_id: runId, profile };
+  return { run_id: runId, profile, required_entry_roles: entry.expected_output_roles.filter(o => o.required).map(o => o.role) };
+}
+function validateRunPrecedenceFixture(staged, status) {
+  const fixture = relative => fs.readFileSync(path.join(playbookRoot, 'benchmark', relative), 'utf8');
+  const note = fs.readFileSync(path.join(project, 'work/researchspec-notes/writing-evidence.md'), 'utf8');
+  const intent = fs.readFileSync(path.join(project, 'researchspec/specs/project.md'), 'utf8');
+  const handoff = JSON.parse(fs.readFileSync(path.join(dir, 'staged-start.stdout'), 'utf8')).data.handoff;
+  const plannedRoles = new Set(handoff.outputs.map(output => output.role));
+  if (intent !== fixture('run-precedence-project.md')
+    || note !== fixture('run-precedence-note.md').replace('{{RUN_SELECTOR}}', `run:${staged.run_id}`)
+    || !staged.required_entry_roles.every(role => plannedRoles.has(role))
+    || !status.data.pending_subgraph_starts.some(item => item.run_id === staged.run_id)) {
+    throw new Error('Fixture precondition failed: run-precedence task link, entry outputs, or runnable frontier is missing');
+  }
+}
+function stageScenario(scenario) {
+  if (scenario.first_query) {
+    const response = JSON.parse(cli('first-query', ['list', 'procedures', '--query', scenario.first_query, '--json']));
+    validateFirstQuery(response);
+    const record = { query: scenario.first_query, result: response };
+    writeJson(path.join(dir, 'first-query.json'), record);
+    writeJson(path.join(project, 'benchmark/first-query-result.json'), record);
+  }
+  if (scenario.procedure_chain) {
+    const chain = scenario.procedure_chain;
+    const first = JSON.parse(cli('chain-first-packet', ['instructions', `procedure:${chain.first}`, '--json'])).data?.packet;
+    const second = JSON.parse(cli('chain-second-packet', ['instructions', `procedure:${chain.second}`, '--json'])).data?.packet;
+    validateProcedureChain(chain, first, second, project);
+  }
 }
 function appendEvent(event) {
   const file = path.join(dir, 'events.ndjson');
@@ -137,7 +173,7 @@ async function hostRun(binary, argv, scratch) {
 }
 
 try {
-  const { catalog, hash } = loadCatalog();
+  const { catalog, hash } = loadCampaignCatalog(stateRoot, campaignId);
   if (hash !== campaign.catalog_hash) throw new Error('Scenario catalog changed since campaign creation');
   if (buildHash() !== campaign.build_hash) throw new Error('Harness or ResearchSpec build changed since campaign creation');
   const scenario = catalog.scenarios.find(x => x.scenario_id === session.scenario);
@@ -151,10 +187,12 @@ try {
   fs.writeFileSync(cliShim, `#!/bin/sh\nexec '${process.execPath}' '${path.join(repoRoot, 'dist/src/cli/bin.js')}' "$@"\n`, { mode: 0o755 });
   update('staging', { started_at: new Date().toISOString(), workspace: project });
   copyFixture(variant.paths);
-  stageNotes(session.scenario);
   cli('init', ['init', project, '--tools', session.host, '--delivery', 'both']);
   const staged = stageGraph(session.scenario);
-  cli('before-status', ['status', '--json']);
+  stageNotes(session.scenario, staged);
+  stageScenario(scenario);
+  const beforeStatus = JSON.parse(cli('before-status', ['status', '--json']));
+  if (session.scenario === 'DF-T2-RUN-PRECEDENCE') validateRunPrecedenceFixture(staged, beforeStatus);
   cli('before-check', ['check', 'all', '--strict', '--json']);
   const before = inventory(project);
   writeJson(path.join(dir, 'before-files.json'), before);
@@ -187,7 +225,7 @@ try {
   update(blocked ? 'blocked' : 'sealed', { evidence_hash: evidenceHash(dir) });
   if (blocked) process.exitCode = 1;
 } catch (error) {
-  update('blocked', { completed_at: new Date().toISOString(), issue: error.message });
+  update('blocked', { completed_at: new Date().toISOString(), issue: error.message, issue_kind: error.message.startsWith('Fixture precondition failed:') ? 'fixture_precondition' : 'setup_or_host' });
   update('blocked', { evidence_hash: evidenceHash(dir) });
   process.stderr.write(`${error.stack || error.message}\n`);
   process.exitCode = 1;

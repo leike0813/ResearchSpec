@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import YAML from 'yaml';
-import { assessmentDir, attemptDir, buildHash, campaignDir, evidenceHash, fail, id, loadCatalog, matrixCaseDir, matrixState, playbookRoot, readJson, repoRoot, rubricKeys, sha, writeJson } from './lib.mjs';
+import { assessmentDir, attemptDir, buildHash, campaignDir, evidenceHash, fail, id, loadCatalog, loadCampaignCatalog, matrixCaseDir, matrixState, playbookRoot, readJson, repoRoot, rubricKeys, sha, writeJson } from './lib.mjs';
 
 function sessions(root, campaign) {
   return campaign.sessions.map(x => readJson(path.join(attemptDir(root, campaign.id, x.id), 'session.json')));
@@ -17,7 +17,7 @@ export function importReview(root, campaignId, file) {
 export function acceptReviews(root, campaignId, reviews, { allowAmend = false } = {}) {
   const campaign = readJson(path.join(campaignDir(root, campaignId), 'campaign.json'));
   if (campaign.schema_version !== '2') fail('Historical campaign is read-only');
-  const { catalog, hash } = loadCatalog();
+  const { catalog, hash } = loadCampaignCatalog(root, campaignId);
   if (campaign.catalog_hash && campaign.catalog_hash !== hash) fail('Scenario catalog changed since campaign creation');
   const scenarios = new Map(catalog.scenarios.map(s => [s.scenario_id, s]));
   const accepted = [];
@@ -81,7 +81,7 @@ export function report(root, campaignId, write = false) {
   const campaign = readJson(path.join(campaignDir(root, campaignId), 'campaign.json'));
   if (write && campaign.schema_version !== '2') fail('Historical campaign is read-only');
   if (write && campaign.build_hash !== buildHash()) fail('Campaign source changed; start a new campaign before publishing evidence');
-  const { catalog, hash } = loadCatalog();
+  const { catalog, hash } = loadCampaignCatalog(root, campaignId);
   if (campaign.catalog_hash && campaign.catalog_hash !== hash) fail('Scenario catalog changed since campaign creation');
   campaign.state_root = root;
   const records = sessions(root, campaign);

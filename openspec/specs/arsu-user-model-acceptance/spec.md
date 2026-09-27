@@ -224,3 +224,35 @@ at project level and SHALL NOT transfer to untested hosts.
 - **THEN** the project behavior result SHALL cite the host and model versions, sessions, human-correction count, resume attempts and successes, and quality scores
 - **AND** `resume_attempts: 0` SHALL leave the resume success rate recorded as not applicable
 - **AND** untested hosts SHALL receive no inferred behavior verdict
+
+### Requirement: Per-Host Behavioural Verification Status Is Tracked
+
+Manual acceptance SHALL keep one human verification record with a row for every registered
+target. Target identity SHALL come from the runtime registry (`researchspec list tools --json`,
+the `TOOL_IDS` catalog) and its entry/discovery metadata SHALL come from the catalog and
+generated matrix, so the record is behavioural evidence and never a second target registry.
+
+#### Scenario: Record covers every registered target
+- **WHEN** the verification record is validated
+- **THEN** its target ids SHALL equal the runtime registry's target ids
+- **AND** a target present in the registry SHALL NOT be missing from the record
+
+#### Scenario: Unrun targets remain unverified
+- **WHEN** a target has no recorded natural-journey evidence
+- **THEN** its status SHALL read `unverified`
+- **AND** absence of a run SHALL NOT be reported as a pass
+
+#### Scenario: Installation checks do not confer verification
+- **WHEN** only the installation matrix, static parity or fixture-based technical journeys have completed
+- **THEN** no target SHALL be marked behaviourally verified
+
+#### Scenario: An unrun shared-projection target stays unverified
+- **WHEN** two registered targets share one project projection root
+- **THEN** they SHALL NOT be counted as two verified behavioural hosts
+- **AND** a target without its own runnable host SHALL remain `unverified` and SHALL NOT be given a version, two sessions or another target's verdict
+- **AND** it SHALL be recorded as shared or delegated evidence only when genuinely transferable evidence exists, referencing that evidence without copying its conclusion
+
+#### Scenario: Verified status requires recorded evidence
+- **WHEN** a target is marked verified
+- **THEN** the record SHALL contain the host and model versions, two independent sessions, the human-correction count, resume attempts and successes, and the quality score
+- **AND** `resume_attempts: 0` SHALL leave the resume success rate recorded as not applicable

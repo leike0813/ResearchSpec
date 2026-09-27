@@ -53,6 +53,7 @@ node_modules/
 dist/
 .test-dist/
 .harness-dist/
+.dogfood/campaigns/
 coverage/
 *.tsbuildinfo
 

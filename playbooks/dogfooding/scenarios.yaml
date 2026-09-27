@@ -69,6 +69,11 @@ fixture_variants:
       - benchmark/sources.yaml
       - benchmark/partial-manuscript.md
       - benchmark/ordinary-task-note.md
+  - fixture_variant: run-precedence
+    paths:
+      - benchmark/README.md
+      - benchmark/sources.yaml
+      - benchmark/partial-manuscript.md
   - fixture_variant: ambiguous-continuation
     paths:
       - benchmark/README.md
@@ -432,15 +437,15 @@ scenarios:
     intent: 验证同一工作已有确认且未完成的图运行时，Agent 通过当前 status 与精确指引继续，而非新开独立链。
     personas: [returning-researcher]
     route_refs: [academic-pipeline:end-to-end]
-    fixture_variant: ordinary-continuation
-    initial_state: staged-note-and-relevant-unfinished-confirmed-run
+    fixture_variant: run-precedence
+    initial_state: note-linked-unfinished-confirmed-run-with-matching-project-intent-and-planned-entry-outputs
     prompts: [继续这项关于生成式 AI 与高校写作教学的工作。]
-    checkpoints: [保存已确认 run、相关笔记、当前 status、精确节点指引和继续后的状态。]
+    checkpoints: [宿主启动前核对笔记中的精确 run、同题项目意图、入口产物规划和可继续的 frontier；保存当前 status、精确节点指引和继续后的状态。]
     prohibited_actions: [绕过待处理 Gate 或 Decision, 重新启动同一 run, 把普通笔记当作运行状态]
     hard_assertions:
       - Agent 识别同一工作的未完成 run，读取当前 status 和精确 selector 指引后再行动。
       - 现有正式控制不被独立 Procedure 链绕过，且不创建重复 run。
-    required_evidence: [manifest, prompts, transcript, task-note, before-after-status, exact-instructions, run-snapshot]
+    required_evidence: [manifest, prompts, transcript, task-note, project-intent, root-handoff, before-after-status, exact-instructions, run-snapshot]
     soft_rubric: default
     cleanup: [保存运行与笔记证据后清理隔离项目。]
     acceptance_journey_refs: [resume-pack-failure]
@@ -467,18 +472,19 @@ scenarios:
   - scenario_id: DF-T2-FIRST-SEARCH-MISS
     tier: 2
     title: 第一次目录检索未命中
-    intent: 验证普通研究请求的首组短词未找到适用卡片时，Agent 只换词重试一次，再按实际候选决定。
+    intent: 验证用户提供的真实零结果目录查询之后，Agent 换词重试一次，再按实际候选决定。
     personas: [researcher-using-unusual-terms]
     route_refs: []
     fixture_variant: evidence-corpus
-    initial_state: fresh-workspace-with-observed-first-query-miss
-    prompts: [请把这些材料里的教学干预、观察结果和局限性串起来，说明哪些结论还需要补充资料。]
-    checkpoints: [保存两次实际查询词、结果卡片和候选选择；首查若已有适合结果则本场景不计通过。]
+    initial_state: fresh-workspace-with-recorded-empty-first-query
+    first_query: echoformativecycle
+    prompts: [我用自创术语查过能力目录，结果在 benchmark/first-query-result.json。请核对后只换一组描述教学干预和证据综合的短词再查一次；选用实际找到的能力，把这些材料里的干预、观察结果和局限性串起来，保存结果并说明哪些结论还需要补充资料。]
+    checkpoints: [保存预检的零结果、Agent 的替代查询词、结果卡片和候选选择；未作替代查询应记行为失败。]
     prohibited_actions: [要求用户给出 Procedure 名称, 无限扩展检索, 在首查无结果后直接宣称没有能力]
     hard_assertions:
-      - 首次检索实际没有适合候选，Agent 以不同短词重试一次并检查少量卡片。
-      - 后续选择依据第二次实际结果，不捏造目录候选或隐藏检索失败。
-    required_evidence: [manifest, prompts, transcript, first-query, second-query, candidate-cards, final-status]
+      - 已记录的首次查询实际没有候选；Agent 核对结果后以不同短词查询一次并检查少量卡片。
+      - 后续选择依据 Agent 的替代查询结果，不捏造目录候选或隐藏检索失败。
+    required_evidence: [manifest, prompts, transcript, first-query-result, second-query, candidate-cards, final-status]
     soft_rubric: default
     cleanup: [保存查询轨迹后清理隔离项目。]
     acceptance_journey_refs: [routing]
@@ -505,18 +511,25 @@ scenarios:
   - scenario_id: DF-T2-TWO-CAPABILITIES
     tier: 2
     title: 两项能力通过声明路径串接
-    intent: 验证审稿回复材料整理的声明输出 `review_response_workspace` 能作为意见拆分的同名声明输入，通过普通项目相对路径串接。
+    intent: 验证修订路线图的声明输出 `revision_roadmap` 能作为预提交自检的同名声明输入，通过普通项目相对路径串接。
     personas: [researcher-composing-work]
     route_refs: []
     fixture_variant: review-cycle
     initial_state: fresh-initialized-workspace
-    prompts: [先整理现有稿件和审稿意见的回复材料，再逐条拆分意见并检查有没有遗漏；请保存每一步的结果。]
+    procedure_chain:
+      first: transform-revision-roadmap-parsing
+      second: check-pre-submission-self-check
+      shared_role: revision_roadmap
+      fixture_inputs:
+        review_comments: benchmark/review-comments.md
+        manuscript_draft: benchmark/partial-manuscript.md
+    prompts: [请先把现有审稿意见整理成修订路线图，再结合现有部分稿件和这份路线图做预提交自检。分别保存两步结果；我还没决定的修改取舍请保留为待定，不要直接改稿。]
     checkpoints: [保存两份 Procedure 的输入输出声明、两次指引、传递的相对路径和两个交付物。]
     prohibited_actions: [推断未声明的输入输出连接, 创建运行或 handoff 作为临时链状态, 传递绝对或受管路径]
     hard_assertions:
-      - 第二项能力以第一项的 review_response_workspace 输出路径作为同名声明输入，并使用普通项目相对路径。
+      - 预提交自检以修订路线图的 revision_roadmap 输出路径作为同名声明输入，同时读取现有稿件，并使用普通项目相对路径。
       - 两步产物均在 researchspec 外；没有 run、handoff 或隐藏激活状态。
-      - 若实际候选没有声明连接，本场景不计通过；Agent 应报告缺口或只问一个针对性问题。
+      - 若实际选用的候选没有声明连接，Agent 应报告缺口；作者尚未决定的修改取舍不得当作已确认。
     required_evidence: [manifest, prompts, transcript, procedure-packets, path-handoff, external-files, before-after-status]
     soft_rubric: default
     cleanup: [保存声明和路径证据后清理隔离项目。]

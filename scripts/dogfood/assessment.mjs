@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { assessmentDir, attemptDir, campaignDir, evidenceHash, fail, loadCatalog, readJson, rubricKeys, writeJson } from './lib.mjs';
+import { assessmentDir, attemptDir, campaignDir, evidenceHash, fail, loadCampaignCatalog, readJson, rubricKeys, writeJson } from './lib.mjs';
 
 const outcomes = new Set(['yes', 'no', 'unknown']);
 const verdicts = new Set(['pass', 'fail', 'blocked', 'invalid', 'undetermined']);
@@ -63,7 +63,7 @@ export function validateAssessment(root, campaignId, sessionId, draft, assessor)
   const dir = attemptDir(root, campaignId, sessionId);
   const session = readJson(path.join(dir, 'session.json'));
   if (!['sealed', 'blocked', 'interrupted'].includes(session.state) || !session.evidence_hash || evidenceHash(dir) !== session.evidence_hash) fail('Attempt evidence is unsealed or changed');
-  const { catalog, hash } = loadCatalog();
+  const { catalog, hash } = loadCampaignCatalog(root, campaignId);
   const campaign = readJson(path.join(campaignDir(root, campaignId), 'campaign.json'));
   if (campaign.schema_version !== '2') fail('Historical campaign is read-only');
   if (campaign.catalog_hash && campaign.catalog_hash !== hash) fail('Assessment scenario catalog changed since campaign creation');
@@ -91,7 +91,7 @@ export function validateAssessment(root, campaignId, sessionId, draft, assessor)
   const promptFile = path.join(dir, 'prompts.md');
   const diffFile = path.join(dir, 'file-diff.json');
   const changed = session.changed || (fs.existsSync(diffFile) ? (readJson(diffFile).changed || []).map(x => typeof x === 'string' ? x : x.path) : []);
-  const facts = { host: session.host, model: session.requested_model || null, observed_model: session.observed_model || null, host_version: session.host_version || null, state: session.state, issue: session.issue || null, prompt: fs.existsSync(promptFile) ? fs.readFileSync(promptFile, 'utf8').trimEnd() : scenario.prompts.join('\n'), scenario: { id: scenario.scenario_id, title: scenario.title, intent: scenario.intent, initial_state: scenario.initial_state, fixture_variant: scenario.fixture_variant, hard_assertions: scenario.hard_assertions }, changed, changed_known: !!session.changed || fs.existsSync(diffFile), evidence_gaps: session.evidence_gaps || [] };
+  const facts = { host: session.host, model: session.requested_model || null, observed_model: session.observed_model || null, host_version: session.host_version || null, state: session.state, issue: session.issue || null, prompt: fs.existsSync(promptFile) ? fs.readFileSync(promptFile, 'utf8').trimEnd() : scenario.prompts.join('\n'), scenario: { id: scenario.scenario_id, title: scenario.title, intent: scenario.intent, initial_state: scenario.initial_state, fixture_variant: scenario.fixture_variant, first_query: scenario.first_query, procedure_chain: scenario.procedure_chain, hard_assertions: scenario.hard_assertions }, changed, changed_known: !!session.changed || fs.existsSync(diffFile), evidence_gaps: session.evidence_gaps || [] };
   return { schema_version: '1', session_id: sessionId, evidence_hash: session.evidence_hash, catalog_hash: hash, created_at: new Date().toISOString(), assessor, facts, analysis: a };
 }
 

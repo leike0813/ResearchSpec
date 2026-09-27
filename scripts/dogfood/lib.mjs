@@ -1,6 +1,5 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -8,7 +7,7 @@ import YAML from 'yaml';
 
 export const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 export const playbookRoot = path.join(repoRoot, 'playbooks/dogfooding');
-export const defaultStateDir = path.join(process.env.XDG_STATE_HOME || path.join(os.homedir(), '.local/state'), 'researchspec/dogfooding');
+export const campaignsRoot = path.join(repoRoot, '.dogfood', 'campaigns');
 export const rubricKeys = ['routing_clarity', 'user_control', 'evidence_discipline', 'artifact_usability'];
 export const matrixModes = ['skills', 'commands', 'both'];
 
@@ -22,7 +21,6 @@ export function writeJson(file, value) {
   fs.renameSync(next, file);
 }
 export function id() { return `${new Date().toISOString().replace(/[-:]/g, '').replace(/\..*/, 'Z')}-${crypto.randomBytes(3).toString('hex')}`; }
-export function stateRoot(value) { return path.resolve(value || defaultStateDir); }
 export function campaignDir(root, campaignId) {
   if (!/^[0-9TZ]+-[a-f0-9]{6}$/.test(campaignId) && !/^legacy-[0-9TZ]+-[a-f0-9]{6}$/.test(campaignId)) fail(`Invalid campaign ID: ${campaignId}`);
   return path.join(root, campaignId);
@@ -44,10 +42,38 @@ export function matrixState(root, campaignId, target, mode) {
   return fs.existsSync(file) ? readJson(file) : { status: 'pending' };
 }
 export function loadCatalog() {
-  const bytes = fs.readFileSync(path.join(playbookRoot, 'scenarios.yaml'));
+  return parseCatalog(fs.readFileSync(path.join(playbookRoot, 'scenarios.yaml')));
+}
+function parseCatalog(bytes) {
   const catalog = YAML.parse(bytes.toString('utf8'));
   if (catalog.schema_version !== '1' || !catalog.scenarios?.length) fail('Invalid dogfooding scenario catalog');
   return { catalog, hash: sha(bytes) };
+}
+export function loadCampaignCatalog(root, campaignId) {
+  const dir = campaignDir(root, campaignId);
+  const campaign = readJson(path.join(dir, 'campaign.json'));
+  const snapshot = path.join(dir, 'catalog.yaml');
+  const result = fs.existsSync(snapshot) ? parseCatalog(fs.readFileSync(snapshot)) : loadCatalog();
+  if (campaign.catalog_hash && result.hash !== campaign.catalog_hash) fail('Campaign scenario catalog hash mismatch');
+  return result;
+}
+export function validateFirstQuery(result) {
+  if (result?.ok !== true || result.data?.type !== 'procedures' || result.data.total !== 0 || result.data.items?.length !== 0) {
+    fail('Fixture precondition failed: first Procedure query must return zero candidates');
+  }
+}
+export function validateProcedureChain(chain, first, second, project) {
+  const output = first?.outputs?.find(item => item.role === chain.shared_role && item.required);
+  const input = second?.inputs?.find(item => item.role === chain.shared_role);
+  if (!output || !input || output.schema_ref !== input.schema_ref) fail('Fixture precondition failed: Procedure roles do not connect');
+  const required = [...(first.inputs || []), ...(second.inputs || [])]
+    .filter(item => item.required && item.role !== chain.shared_role);
+  for (const item of required) {
+    const relative = chain.fixture_inputs?.[item.role];
+    if (typeof relative !== 'string' || path.isAbsolute(relative) || relative.split(/[\\/]/).includes('..') || !fs.existsSync(path.join(project, relative)) || !fs.statSync(path.join(project, relative)).isFile()) {
+      fail(`Fixture precondition failed: required input ${item.role} is unavailable`);
+    }
+  }
 }
 export function loadConfig(file) {
   if (!file) fail('--config is required');

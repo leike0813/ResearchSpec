@@ -3,7 +3,7 @@ import path from 'node:path';
 import { createServer } from 'node:http';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { assessmentDir, attemptDir, campaignDir, loadCatalog, matrixCaseDir, matrixState, readJson, sha, toolIds } from './lib.mjs';
+import { assessmentDir, attemptDir, campaignDir, loadCampaignCatalog, matrixCaseDir, matrixState, readJson, sha, toolIds } from './lib.mjs';
 import { adapters } from './hosts.mjs';
 import { assessmentState } from './assessment.mjs';
 import { acceptReviews } from './review.mjs';
@@ -86,8 +86,8 @@ export async function startServer(root, campaignId, port = 0) {
         return send(res, 200, { ...campaign, historical: campaign.schema_version !== '2', matrix, review_token: campaign.schema_version === '2' ? reviewToken : null, sessions: sessions(root, campaignId).map(s => ({ ...s, assessment: assessmentState(root, campaignId, s.id) })), registered_targets: registered.map(id => ({ id, runnable: !!adapters[id] && id !== 'agents' })) });
       }
       if (pathname === '/api/scenarios') {
-        const { catalog } = loadCatalog();
-        return send(res, 200, { scenarios: catalog.scenarios.map(x => ({ scenario_id: x.scenario_id, title: x.title, intent: x.intent, fixture_variant: x.fixture_variant, hard_assertions: x.hard_assertions })) });
+        const { catalog } = loadCampaignCatalog(root, campaignId);
+        return send(res, 200, { scenarios: catalog.scenarios.map(x => ({ scenario_id: x.scenario_id, title: x.title, intent: x.intent, fixture_variant: x.fixture_variant, first_query: x.first_query, procedure_chain: x.procedure_chain, hard_assertions: x.hard_assertions })) });
       }
       const matrixMatch = /^\/api\/matrix\/([a-z0-9-]+)\/(skills|commands|both)(?:\/(.*))?$/.exec(pathname);
       if (matrixMatch) {

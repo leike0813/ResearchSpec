@@ -4,7 +4,7 @@ export const SHARED_CLI_GUIDANCE = `## Shared CLI Discipline
 
 - Stable specs under \`researchspec/specs/\` own current research intent, sources, claims, and manuscript structure.
 - Graph profiles own executable workflow structure. Each run's \`run.yaml\` plus its frozen \`graph.yaml\` is that run's sole runtime authority; every node instance owns its own state file.
-- Stable specs, project changes, and run handoffs are directly editable. Only the ResearchSpec CLI may modify run/node state.
+- Changes to confirmed stable-spec commitments use the project change lifecycle: propose, decide, edit the specs, check, then archive. Project change files and run handoffs are directly editable under their contracts. Only the ResearchSpec CLI may modify run/node state.
 - Boundary deliverables remain outside \`researchspec/\`. Exchange them through explicit handoff roles and safe project-relative paths.
 - Task notes are ordinary project files outside \`researchspec/\`, not workflow state; the CLI neither indexes nor validates them.
 - Do not invent a registry, ledger, receipt, runtime index, plan hash, or second workflow state.
@@ -29,7 +29,7 @@ export const SHARED_CLI_GUIDANCE = `## Shared CLI Discipline
 - Use \`--json\` when structured output is useful. Read \`ok\`, \`data\`, \`diagnostics\`, and \`error\` instead of scraping prose.
 - Use \`--dry-run\` to preview file operations. A preview is informative and creates no reusable transaction identity.
 - \`--force\` applies only to manifest-owned generated projections or an explicit derived pack output. It cannot overwrite specs, run/node state, handoffs, changes, or external deliverables.
-- Direct edits to stable specs, changes, and run handoffs are valid when their contracts remain valid. Recheck the narrowest affected target afterward.
+- Edit stable specs after the project change is accepted; edit change files and run handoffs under their own contracts. Recheck the narrowest affected target afterward.
 
 ### Failure handling
 
@@ -40,4 +40,4 @@ export const SHARED_CLI_GUIDANCE = `## Shared CLI Discipline
 | 3 | Write conflict | Preserve current bytes, reread the owner, and retry only with current intent. |
 | 4 | Internal failure | Stop and report the reproducible command and structured error. |
 
-Procedures execute only the standalone or graph packet that activated them and return control to ResearchSpec. Companions help the user navigate, propose, decide, and verify contracts without taking scholarly or human authority.`;
+Navigate carries out the selected Procedure packet's scholarly work inline or through an eligible worker. The packet owns the method, the CLI owns workflow state, and the user owns human decisions.`;

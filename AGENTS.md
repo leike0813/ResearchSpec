@@ -64,7 +64,8 @@ to draft evidence-bound acceptance reports. Those reports are advisory. Only
 a human review record can establish formal behavior acceptance;
 the local review service may write that record but never ResearchSpec workflow
 state or sealed attempt evidence. Its `dogfood-audit` project Skill is not an
-installed research-entry Skill.
+installed research-entry Skill. Campaign records live in the ignored project
+directory `.dogfood/campaigns/`; harness commands use that fixed location.
 
 ## Canonical User Usage Model
 

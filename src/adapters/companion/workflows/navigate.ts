@@ -6,7 +6,7 @@ const GRAPH_REASONS = "formal Gates or Decisions, parallel or joined execution, 
 export const navigateWorkflow = {
   id: "navigate",
   name: "ResearchSpec Navigate",
-  description: "Route, start, resume, explain, verify, and finish ResearchSpec academic work. Use for ordinary literature, manuscript, evidence, or review requests, including bounded ones that name no ResearchSpec term, and for vague or cross-capability research goals, standalone procedure selection, graph workflow operation, CLI guidance, project status, plugins, Zotero, and alternate-model review.",
+  description: "Use for literature synthesis, manuscript writing or revision, evidence checks, peer review, reviewer replies, and continuing research work in a ResearchSpec project, even when the request does not name ResearchSpec. Navigate discovers the relevant procedure or governed workflow and carries the work through its current instructions.",
   instructions: renderNavigateExecutionGuidance("skill"),
 } satisfies CompanionWorkflowSource;
 
@@ -33,9 +33,20 @@ Use Navigate when the user:
 
 An explicit bounded procedure can route directly after the same eligibility check. An explicit graph selector still requires current instructions before any action.
 
+## Work Loop
+
+For scholarly work in an initialized project:
+
+1. Run \`researchspec status --json\`. If a related confirmed run is unfinished, follow its current exact selector instructions and pending controls. A completed historical run does not take over a new task.
+2. Otherwise, if continuing ordinary work, compare the matching task note with current materials. If the work needs ${GRAPH_REASONS}, follow the Graph section below. For standalone work, search \`researchspec list procedures --query "<short domain terms>" --json\`; translate a Chinese request into useful catalog terms when needed. Inspect promising cards with \`show procedure:<id> --json\`. Retry with different terms only if the first search has no suitable candidate.
+3. For standalone work, load \`researchspec instructions procedure:<id> --json\` for the selected eligible procedure. Check its required inputs against actual files before producing content. If a required material is missing, stop and ask one focused question about it.
+4. Carry out the selected packet's scholarly work inline or through an eligible worker. Save its declared outputs as ordinary project files outside \`researchspec/\`; a chat-only answer does not replace a declared file. For a second standalone procedure, pass the first output's project-relative path only through a matching declared input role.
+5. Report the produced paths, evidence and limits, unresolved items, and next step. For graph work, reread status after each CLI mutation. Stop for a fresh human verdict or choice at each pending Gate or Decision.
+
+For an explanation-only request, use the narrowest current read command; it needs no research deliverable. An unrelated request or explicit opt-out uses host-native capabilities.
+
 ## Non-goals
 
-- Do not perform the producer's scholarly work when a selected procedure owns it.
 - Do not make human Gate verdicts, branch choices, run confirmations, plugin selections, managed-library authorizations, or alternate-model consent.
 - Do not treat catalog prose, this entry, or a reference file as runtime authority.
 - Do not create a graph run for ordinary file work merely to continue it. Continuation alone stays standalone with a task note; use a graph only for ${GRAPH_REASONS}.
@@ -60,16 +71,13 @@ The references provide detail. The complete mode decision, authority boundaries,
     : `This commands-only entry installs no Skill-relative reference file. Reach the same detail through the CLI at these decision points:
 
 - Run \`researchspec --help\` or \`researchspec <command> --help\` before constructing a nontrivial or file-based payload, explaining the complete CLI, comparing command options, or troubleshooting selectors, syntax, payload fields, or exit classes.
-- Run \`researchspec list procedures --json\` and, in a workspace, \`researchspec list profiles --json\` when a goal is vague or crosses capabilities, or when comparing profiles, prerequisites, boundary outputs, Gates, risk, and cost before choosing an entry.
+- Run \`researchspec list procedures --query "<terms>" --json\` and, in a workspace, \`researchspec list profiles --json\` when a goal is vague or crosses capabilities, or when comparing profiles, prerequisites, boundary outputs, Gates, risk, and cost before choosing an entry.
 
 The complete mode decision, authority boundaries, confirmation rules, and recovery flow remain here.`}
 
-## Start With Current Facts
+## Current Facts
 
-1. If the request concerns a workspace, run \`researchspec status --json\` first. Read the envelope's \`ok\`, \`data\`, \`diagnostics\`, and \`error\` fields.
-2. If the request is static discovery outside a workspace, use \`researchspec list procedures --query "<terms>" --json\` and \`researchspec show procedure:<id> --json\` without initializing a workspace.
-3. Before activation or any graph action, run \`researchspec instructions <selector> --json\`. Treat that returned packet as the executable contract.
-4. Use machine-returned IDs in selectors. Do not infer an identity from a directory name, title, route description, or earlier status snapshot.
+Read the CLI envelope's \`ok\`, \`data\`, \`diagnostics\`, and \`error\` fields. Static procedure discovery works outside a workspace without initializing one. Before activation or any graph action, read \`instructions <selector> --json\` and treat that packet as the executable contract. Use machine-returned IDs, not a directory name, title, route description, or earlier status snapshot.
 
 ## Choose The Execution Mode
 
@@ -79,10 +87,7 @@ Before selecting standalone work for a request, check whether a relevant unfinis
 
 Choose standalone when the request can proceed through ordinary project files without ${GRAPH_REASONS}. Continuation alone stays standalone with a task note.
 
-1. Turn the user's natural request into short domain search terms, translating a Chinese-language request into suitable catalog terms when needed. Search with \`list procedures --query "<terms>"\` and inspect a few promising cards with \`show procedure:<id>\`; do not ask the user to name a procedure first.
-2. If no suitable candidate appears, retry once with different terms. If that also finds none, use host-native capabilities and say the work is outside a governed ResearchSpec run.
-3. Select an eligible procedure and load only its body with \`instructions procedure:<id> --json\`. If a required input is absent, ask one focused question rather than inventing or substituting material.
-4. Follow the packet's declared inputs, outputs, resources, and authority limits. Read package resources only when that packet requires them. Produce semantic files outside \`researchspec/\`.
+Use the work loop above; do not ask the user to name a procedure first. If two different searches find no suitable candidate, use host-native capabilities and say the work is outside a governed ResearchSpec run. Read package resources only when the selected packet requires them.
 
 When the request needs several standalone procedures, connect them only where one packet's declared output satisfies the next packet's declared input. Pass the produced ordinary project-relative path outside \`researchspec/\` explicitly to the next activation. If no declared link exists, report the gap or ask one focused question; do not infer a link. Chaining creates no run, handoff, or hidden activation state.
 
@@ -90,7 +95,15 @@ On completion, give one user-facing standalone result report: outcome and every 
 
 For sustained ordinary research work, only the main Agent maintains \`work/researchspec-notes/<task-id>.md\` outside \`researchspec/\`; delegated workers return outputs for the main Agent to validate before it updates the note. Record the user's goal and delivery expectations; inputs and produced files with their purpose; completed substantive work and evidence limits; open questions and the next step; and any related run selector. Update the note when a stage output is reached, the work is blocked, or a work session ends. A one-shot exchange with no continuing deliverable creates no note.
 
-To resume ordinary work, read the related note and check its recorded materials and outputs against the current project files before continuing. Never choose a task by note modification order. If several notes could match and the materials do not identify the task, ask one focused question naming the candidates. If a difference changes task identity, required inputs, or the next step and the materials cannot settle it, ask one focused question naming the affected material. Report a difference that leaves those three intact and continue without requesting confirmation. Apply the unfinished-run precedence above before continuing a related task; a completed historical run does not block a new standalone task.
+To resume ordinary work, read the related note and check its recorded materials and outputs against current project files. Never choose a task by note modification order:
+
+| What current materials show | Response |
+| --- | --- |
+| Several plausible notes, with no way to identify the task | Ask one focused question naming the candidate tasks. |
+| A difference changes task identity, required inputs, or the next step, and the materials cannot settle it | Name the affected material and ask one focused question; do not continue the dependent work. |
+| A difference leaves task identity, required inputs, and the next step intact | Report the difference and continue without requesting confirmation. |
+
+Apply unfinished-run precedence before continuing a related task; a completed historical run does not block a new standalone task.
 
 A note never authorizes a run, node, Gate, Decision, handoff, or transition claim; report workflow state only from current CLI output. If ${GRAPH_REASONS} become necessary mid-task, follow the existing graph entry and confirmation rules. Passing declared ordinary file outputs to another standalone procedure does not itself require graph scheduling.
 
@@ -115,8 +128,8 @@ For an active workspace, resume from exactly one status collection:
 | --- | --- |
 | \`frontier\` | Read \`instructions node:<run>/<node> --json\`, activate its graph procedure packet, produce declared outputs, then submit with \`advance node:<run>/<node>\`. |
 | \`pending_subgraph_starts\` | Start the exact returned child-profile node selector. Parent authorization covers the declared child start; do not ask for another root-run confirmation. |
-| \`pending_gates\` | Read \`instructions gate:<run>/<node> --json\`, verify evidence, present a recommendation, obtain the human verdict, then call \`decide\`. |
-| \`pending_decisions\` | Read \`instructions decision:<run>/<node> --json\`, present allowed choices and consequences, obtain the human choice, then call \`decide\`. |
+| \`pending_gates\` | Read \`instructions gate:<run>/<node> --json\`, verify evidence, present a recommendation, obtain this Gate's human verdict, then call \`decide\`. |
+| \`pending_decisions\` | Read \`instructions decision:<run>/<node> --json\`, present allowed choices and consequences, obtain this Decision's human choice, then call \`decide\`. |
 
 After every mutation, rerun \`status --json\`. Never predict the successor from prose or silently combine Gate confirmation, Decision choice, and node Advance.
 

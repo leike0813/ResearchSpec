@@ -353,7 +353,9 @@ void test("unowned, malformed and drifted regions are preserved and stale snapsh
     assert.equal(malformed.operations.length, 0);
     assert.ok(malformed.diagnostics.some((item) => item.code === "project_entry_content_conflict"));
     assert.ok((await inspectProjectEntries(root, ["codex"], [record])).some((item) => item.code === "project_entry_malformed"));
-    await writeFile(target, Buffer.from(owned.toString("utf8").replace("academic literature", "academic sources")));
+    const heading = owned.indexOf(Buffer.from("# "));
+    assert.ok(heading >= 0);
+    await writeFile(target, Buffer.concat([owned.subarray(0, heading + 2), Buffer.from("User edit: "), owned.subarray(heading + 2)]));
     assert.equal((await plan([record])).operations.length, 0);
 
     await writeFile(target, owned);

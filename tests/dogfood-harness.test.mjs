@@ -4,13 +4,40 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { adapters } from '../scripts/dogfood/hosts.mjs';
-import { assessmentDir, attemptDir, campaignDir, evidenceHash, loadCatalog, loadConfig, matrixCaseDir, resolveSelection, rubricKeys, writeJson } from '../scripts/dogfood/lib.mjs';
+import { assessmentDir, attemptDir, campaignDir, evidenceHash, loadCatalog, loadCampaignCatalog, loadConfig, matrixCaseDir, resolveSelection, rubricKeys, sha, validateFirstQuery, validateProcedureChain, writeJson } from '../scripts/dogfood/lib.mjs';
 import { saveAssessment } from '../scripts/dogfood/assessment.mjs';
 import { importReview, report } from '../scripts/dogfood/review.mjs';
 import { startServer } from '../scripts/dogfood/server.mjs';
 
 const config = loadConfig('playbooks/dogfooding/harness.example.yaml');
 const { catalog } = loadCatalog();
+
+test('campaign review uses its frozen catalog and rejects a damaged copy', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'researchspec-harness-catalog-'));
+  const campaignId = '20260927T000000Z-aabcde';
+  const dir = campaignDir(root, campaignId);
+  fs.mkdirSync(dir, { recursive: true });
+  const frozen = JSON.stringify({ schema_version: '1', scenarios: [{ scenario_id: 'DF-T2-FROZEN', title: 'Original contract', hard_assertions: ['original'] }] });
+  writeJson(path.join(dir, 'campaign.json'), { id: campaignId, catalog_hash: sha(frozen) });
+  fs.writeFileSync(path.join(dir, 'catalog.yaml'), frozen);
+  assert.equal(loadCampaignCatalog(root, campaignId).catalog.scenarios[0].title, 'Original contract');
+  fs.writeFileSync(path.join(dir, 'catalog.yaml'), frozen.replace('original', 'changed'));
+  assert.throws(() => loadCampaignCatalog(root, campaignId), /hash mismatch/);
+});
+
+test('scenario preflight rejects a changed search result or unavailable chain input', () => {
+  validateFirstQuery({ ok: true, data: { type: 'procedures', total: 0, items: [] } });
+  assert.throws(() => validateFirstQuery({ ok: true, data: { type: 'procedures', total: 1, items: [{}] } }), /Fixture precondition failed/);
+  const project = fs.mkdtempSync(path.join(os.tmpdir(), 'researchspec-harness-chain-'));
+  const chain = { shared_role: 'roadmap', fixture_inputs: { comments: 'comments.md', manuscript: 'draft.md' } };
+  const first = { inputs: [{ role: 'comments', required: true }], outputs: [{ role: 'roadmap', schema_ref: 'roadmap.v1', required: true }] };
+  const second = { inputs: [{ role: 'roadmap', schema_ref: 'roadmap.v1' }, { role: 'manuscript', required: true }] };
+  fs.writeFileSync(path.join(project, 'comments.md'), 'comments');
+  assert.throws(() => validateProcedureChain(chain, first, second, project), /manuscript is unavailable/);
+  fs.writeFileSync(path.join(project, 'draft.md'), 'draft');
+  validateProcedureChain(chain, first, second, project);
+  assert.throws(() => validateProcedureChain(chain, first, { inputs: [{ role: 'roadmap', schema_ref: 'other.v1' }] }, project), /roles do not connect/);
+});
 
 test('suite and model selection follows the catalog and per-host config', () => {
   const ids = [...Object.keys(adapters), 'agents', 'gemini'];

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
 import { adapters, resolveBinary } from './dogfood/hosts.mjs';
-import { assessmentDir, attemptDir, buildHash, campaignDir, evidenceHash, fail, id, loadCatalog, loadConfig, matrixCaseDir, matrixState, readJson, repoRoot, resolveSelection, run, stateRoot, toolIds, writeJson } from './dogfood/lib.mjs';
+import { assessmentDir, attemptDir, buildHash, campaignDir, campaignsRoot, evidenceHash, fail, id, loadCatalog, loadCampaignCatalog, loadConfig, matrixCaseDir, matrixState, readJson, repoRoot, resolveSelection, run, sha, toolIds, writeJson } from './dogfood/lib.mjs';
 import { startServer } from './dogfood/server.mjs';
 import { importReview, importLegacy, report } from './dogfood/review.mjs';
 import { assessmentState } from './dogfood/assessment.mjs';
@@ -12,12 +12,12 @@ import { assessmentState } from './dogfood/assessment.mjs';
 const exec = promisify(execFile);
 const command = process.argv[2];
 const args = parse(process.argv.slice(3));
-const root = stateRoot(args.stateDir);
+const root = campaignsRoot;
 const orca = process.platform === 'linux' && !process.env.ORCA_CLI_COMMAND ? 'orca-ide' : process.env.ORCA_CLI_COMMAND || 'orca';
 
 function parse(values) {
   const result = { host: [], scenario: [], model: [] };
-  const map = { '--config': 'config', '--host': 'host', '--behavior-host': 'behaviorHost', '--scenario': 'scenario', '--suite': 'suite', '--repeat': 'repeat', '--jobs': 'jobs', '--timeout-sec': 'timeoutSec', '--model': 'model', '--assessor-host': 'assessorHost', '--assessor-model': 'assessorModel', '--assess-jobs': 'assessJobs', '--session': 'session', '--state-dir': 'stateDir', '--campaign': 'campaign', '--file': 'file', '--port': 'port', '--raw-root': 'rawRoot' };
+  const map = { '--config': 'config', '--host': 'host', '--behavior-host': 'behaviorHost', '--scenario': 'scenario', '--suite': 'suite', '--repeat': 'repeat', '--jobs': 'jobs', '--timeout-sec': 'timeoutSec', '--model': 'model', '--assessor-host': 'assessorHost', '--assessor-model': 'assessorModel', '--assess-jobs': 'assessJobs', '--session': 'session', '--campaign': 'campaign', '--file': 'file', '--port': 'port', '--raw-root': 'rawRoot' };
   for (let i = 0; i < values.length; i++) {
     const key = values[i];
     if (['--full', '--no-ui', '--open-ui', '--write', '--help', '-h'].includes(key)) result[{ '--full': 'full', '--no-ui': 'noUi', '--open-ui': 'openUi', '--write': 'write', '--help': 'help', '-h': 'help' }[key]] = true;
@@ -239,7 +239,7 @@ async function drive(campaign, ui = true) {
 
 async function main() {
   if (command === 'help' || command === '--help' || args.help) {
-    process.stdout.write('Usage: pnpm dogfood <plan|run|resume|retry|assess|serve|import-review|report|legacy-import> [options]\n\nAll 36 registered targets are checked in skills, commands and both modes.\n--behavior-host ID [--config FILE] [--scenario ID | --suite ID] [--model ID=MODEL]\n--assessor-host ID --assessor-model MODEL --assess-jobs N\n--repeat N  --jobs N (matrix concurrency)  --timeout-sec N  --state-dir DIR  --no-ui  --open-ui  --port N\n--campaign ID  --session ID  --file REVIEW.json  --raw-root DIR  --write\nSee playbooks/dogfooding/README.md for command examples.\n');
+    process.stdout.write('Usage: pnpm dogfood <plan|run|resume|retry|assess|serve|import-review|report|legacy-import> [options]\n\nAll 36 registered targets are checked in skills, commands and both modes.\n--behavior-host ID [--config FILE] [--scenario ID | --suite ID] [--model ID=MODEL]\n--assessor-host ID --assessor-model MODEL --assess-jobs N\n--repeat N  --jobs N (matrix concurrency)  --timeout-sec N  --no-ui  --open-ui  --port N\n--campaign ID  --session ID  --file REVIEW.json  --raw-root DIR  --write\nCampaigns: .dogfood/campaigns/\nSee playbooks/dogfooding/README.md for command examples.\n');
     return;
   }
   if (command === 'plan' || command === 'run') {
@@ -254,6 +254,9 @@ async function main() {
     const orcaContext = selection.hosts.length ? await context() : null;
     const campaign = { id: id(), schema_version: '2', status: 'planned', created_at: new Date().toISOString(), selection, catalog_hash: hash, build_hash: buildHash(), orca: orcaContext, ...prerequisite, sessions: [] };
     fs.mkdirSync(path.join(campaignDir(root, campaign.id), 'sessions'), { recursive: true });
+    const catalogBytes = fs.readFileSync(path.join(repoRoot, 'playbooks/dogfooding/scenarios.yaml'));
+    if (sha(catalogBytes) !== hash) fail('Scenario catalog changed during campaign creation');
+    fs.writeFileSync(path.join(campaignDir(root, campaign.id), 'catalog.yaml'), catalogBytes, { flag: 'wx' });
     writeJson(path.join(campaignDir(root, campaign.id), 'campaign.json'), campaign);
     for (const host of selection.hosts) for (const scenario of selection.scenarios) for (let ordinal = 1; ordinal <= selection.repeat; ordinal++) newAttempt(campaign, host, scenario, ordinal);
     process.stdout.write(`Campaign: ${campaign.id}\n`);
@@ -292,7 +295,7 @@ async function main() {
     if (!args.campaign) fail('assess requires --campaign');
     const c = readJson(path.join(campaignDir(root, args.campaign), 'campaign.json'));
     if (c.schema_version !== '2' || !c.selection.hosts.length) fail('Assessment requires a current campaign with one behaviour host');
-    if (c.catalog_hash !== loadCatalog().hash || c.build_hash !== buildHash()) fail('Campaign source changed; start a new campaign');
+    loadCampaignCatalog(root, c.id);
     const jobs = Number(args.assessJobs ?? 1);
     if (!Number.isInteger(jobs) || jobs < 1 || jobs > 4) fail('--assess-jobs must be 1..4');
     const assessor = c.selection.assessor;

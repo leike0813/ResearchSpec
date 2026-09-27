@@ -83,6 +83,12 @@ Tier 1 对应 `artifacts/release/mvp-release-checklist.md` 的人工证据：
 
 自然语言场景另外覆盖文献综合、写作、证据核查、审稿回复、普通任务跨会话继续、能力检索重试及退出、输入缺失和非研究请求。场景的 `intent` 与 `hard_assertions` 是人工验收依据；未保存真实宿主会话证据前，状态保持 `unverified`。
 
+`DF-T2-FIRST-SEARCH-MISS` 从一次真实的零结果目录查询开始。harness 先用场景声明的自创术语查询，把查询词及原始结果放入一次性项目的 `benchmark/first-query-result.json`，再请 Agent 换词检索。若这次预检已有候选，宿主不启动；预检有效但 Agent 不再检索，应记为行为失败。`DF-T2-TWO-CAPABILITIES` 使用现有 Markdown 审稿材料和部分稿件，检查“修订路线图解析 → 预提交自检”的 `revision_roadmap` 声明路径；未获作者确认的修改取舍保持待定。
+
+`DF-T2-RUN-PRECEDENCE` 在同题的已确认项目意图、普通任务笔记和未完成 run 上开始。笔记给出精确 run selector，根 handoff 规划入口节点必需产物；harness 在宿主启动前核对这些条件及可继续的 frontier。独立普通任务场景继续使用原笔记。
+
+每轮 campaign 保存当时的场景目录副本。之后即使项目场景更新，旧报告与人工审阅仍按该轮的 prompt 和断言解释；原始尝试证据不重写。
+
 自动 acceptance 不能替代这些真实对话与人工判断。
 
 ### Tier 2：覆盖扩展
@@ -223,8 +229,8 @@ pnpm dogfood run --config playbooks/dogfooding/harness.example.yaml --behavior-h
 行为验收默认使用 `natural-18` 的 18 个场景、每场景两次独立会话，共 36 次被测调用与 36 次
 验收调用。局部行为调试可指定 `--scenario` 或 `--suite`；`--model <host>=<model>` 临时覆盖模型。
 `--repeat` 默认 2，`--jobs` 控制静态矩阵并发，默认 4；所选行为宿主串行运行。
-`--timeout-sec` 默认 600。`--state-dir` 更改本地证据目录，默认在
-`$XDG_STATE_HOME/researchspec/dogfooding`，无 XDG 设置时在用户本地 state 目录。
+`--timeout-sec` 默认 600。所有 campaign 的证据固定保存在项目根目录的
+`.dogfood/campaigns/`，该目录由 `.gitignore` 排除。
 `--no-ui` 只关闭运行期间的网页；`--port` 指定审阅服务端口，默认随机空闲端口；
 `--open-ui` 在 Orca 中打开网页。`plan` 只检查选择与基本前置条件，不调用模型。
 
@@ -277,6 +283,6 @@ pnpm dogfood serve --campaign <返回的 legacy-campaign-id>
 ```
 
 `--raw-root` 可省略，此时优先使用旧 manifest 记录的原始流路径。旧 campaign 只读，不能再
-续跑、补写验收报告或审定；旧分数和结论仅作为历史信息展示。所有真实原始流只留在本地 state 目录；
+续跑、补写验收报告或审定；旧分数和结论仅作为历史信息展示。所有真实原始流只留在项目内忽略的 campaign 目录；
 网页仅绑定 `127.0.0.1`。项目维护者可使用 `.agents/skills/dogfood-audit/SKILL.md`
 完成范围确认、模型配置、运行和打开审阅页。
