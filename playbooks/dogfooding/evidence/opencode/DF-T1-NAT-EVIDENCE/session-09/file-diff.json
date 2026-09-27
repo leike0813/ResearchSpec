@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "claim-audit-report.md",
+      "before_sha256": null,
+      "after_sha256": "b5f5e964d8d0d5d81f5d220649c840186ffc66ab8983299007967ea3c7084e7c"
+    }
+  ],
+  "host_scaffold_file_count": 3651,
+  "authority_changed": []
+}

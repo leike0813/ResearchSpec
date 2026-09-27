@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "benchmark/review-synthesis.md",
+      "before_sha256": null,
+      "after_sha256": "707924542735f06ecd66604903cebd2aa22b5fed975e59694eea278bcb74bbb3"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

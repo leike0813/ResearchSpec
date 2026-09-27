@@ -1,0 +1,16 @@
+{
+  "changed": [
+    {
+      "path": "work/review-response.md",
+      "before_sha256": null,
+      "after_sha256": "90ad7727c7551f32b09bebbeed30c20adcfc62e60237830aacf7462ff842120d"
+    },
+    {
+      "path": "work/revised-manuscript.md",
+      "before_sha256": null,
+      "after_sha256": "f48352ecfeeda3903a10510f204fa64c7d6b5321ae74f41fe7d3af414520dbdd"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

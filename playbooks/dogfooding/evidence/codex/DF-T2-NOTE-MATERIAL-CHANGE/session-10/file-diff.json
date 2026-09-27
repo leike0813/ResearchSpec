@@ -1,0 +1,16 @@
+{
+  "changed": [
+    {
+      "path": "work/claim-check-writing-evidence.md",
+      "before_sha256": null,
+      "after_sha256": "5d1ea6736fec9562ff5065bb320830c9e2e4b26a39619011aab6a92f2d67ee15"
+    },
+    {
+      "path": "work/researchspec-notes/writing-evidence.md",
+      "before_sha256": "5a5e5550bc9dd875bb02a26366e6994cab5aca62729983f82d94406730957beb",
+      "after_sha256": "8ce65f0c2ad75bce927619b4e919ae2073475449967bd00c638662db6c159eaa"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

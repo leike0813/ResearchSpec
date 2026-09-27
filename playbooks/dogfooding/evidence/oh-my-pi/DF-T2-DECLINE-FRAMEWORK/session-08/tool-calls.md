@@ -1,0 +1,5 @@
+1. bash: [non-CLI command; raw trace retained outside repository]
+2. bash: [non-CLI command; raw trace retained outside repository]
+3. bash: [non-CLI command; raw trace retained outside repository]
+4. bash: [non-CLI command; raw trace retained outside repository]
+5. bash: [non-CLI command; raw trace retained outside repository]

@@ -1,0 +1,6 @@
+1. Bash: [non-CLI command; raw trace retained outside repository]
+2. Bash: [non-CLI command; raw trace retained outside repository]
+3. Bash: [non-CLI command; raw trace retained outside repository]
+4. Read: [workspace]/benchmark/README.md
+5. Read: [workspace]/benchmark/goal.md
+6. Read: [workspace]/benchmark/sources.yaml

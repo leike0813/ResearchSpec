@@ -1,0 +1,206 @@
+{
+  "changed": [
+    {
+      "path": "work/__pycache__/runtime_shim.cpython-312.pyc",
+      "before_sha256": null,
+      "after_sha256": "de40e9a1bd074c05f846849b4652aa2338908d4c5f1bc8d1a80abef44893b642"
+    },
+    {
+      "path": "work/researchspec-notes/review-response-intake-and-atomization.md",
+      "before_sha256": null,
+      "after_sha256": "1b4aee8c8b7741f44a15bbe4404b3a39ae6446613cdabf08d17747b40c05b941"
+    },
+    {
+      "path": "work/review-response-workspace/manuscript-copies/source-snapshot/partial-manuscript.md",
+      "before_sha256": null,
+      "after_sha256": "daa52e1c035f948f6a3a4ded7fd2801669bc9afbb79e4271b58454b7a89f465c"
+    },
+    {
+      "path": "work/review-response-workspace/manuscript-copies/working-manuscript/partial-manuscript.md",
+      "before_sha256": null,
+      "after_sha256": "daa52e1c035f948f6a3a4ded7fd2801669bc9afbb79e4271b58454b7a89f465c"
+    },
+    {
+      "path": "work/review-response-workspace/revision-master.db",
+      "before_sha256": null,
+      "after_sha256": "238e816ed9b050db1824241bdd1c450dffb01a87f3a4def357e911b0ef852e29"
+    },
+    {
+      "path": "work/review-response-workspace-v2/01-agent-resume.md",
+      "before_sha256": null,
+      "after_sha256": "50a4b47141210e554b09bb6af0a501c259deb6c574178c43eb5d787e82660428"
+    },
+    {
+      "path": "work/review-response-workspace-v2/02-manuscript-structure-summary.md",
+      "before_sha256": null,
+      "after_sha256": "800fb1a720780cee1237f7af154f427b0f6512fbd3392c9675e8769aa340c6c5"
+    },
+    {
+      "path": "work/review-response-workspace-v2/03-style-profile.md",
+      "before_sha256": null,
+      "after_sha256": "459d6422d0090a351298622e931bfbce131ee3c116ef213e4918cecf396b4917"
+    },
+    {
+      "path": "work/review-response-workspace-v2/04-raw-review-thread-list.md",
+      "before_sha256": null,
+      "after_sha256": "a93441add2fae61374351e77f6e5951ea8fc8718a48b81e01ef5a00274219f2a"
+    },
+    {
+      "path": "work/review-response-workspace-v2/05-atomic-review-comment-list.md",
+      "before_sha256": null,
+      "after_sha256": "7b6b6fdf13f3e300a465157e986633de8b4dec90207c8c26c3044b7cd23cc155"
+    },
+    {
+      "path": "work/review-response-workspace-v2/06-thread-to-atomic-mapping.md",
+      "before_sha256": null,
+      "after_sha256": "6971066f424fc7d6120af86649a63b2d367069d3ba5b7365fa9ff88e459ac03b"
+    },
+    {
+      "path": "work/review-response-workspace-v2/07-review-comment-coverage.md",
+      "before_sha256": null,
+      "after_sha256": "27da0425f38c789be381768f6a42cee5921cf77b76682a5e0a90e7a9bbbd497e"
+    },
+    {
+      "path": "work/review-response-workspace-v2/08-atomic-comment-workboard.md",
+      "before_sha256": null,
+      "after_sha256": "b7e91557ff98012ff615b386a683745b7808726581e52aeb3e8bf6450a122ca5"
+    },
+    {
+      "path": "work/review-response-workspace-v2/09-supplement-suggestion-plan.md",
+      "before_sha256": null,
+      "after_sha256": "7c45cb4a8f4b2bf677766d00ea9fb3d5b58eef2ef4fcf0296f83d52d2b4c62c2"
+    },
+    {
+      "path": "work/review-response-workspace-v2/10-supplement-intake-plan.md",
+      "before_sha256": null,
+      "after_sha256": "f3cc863ed36f4ce35feedd0bbc6589f1a12c0ba2f6312889604ad0e9dae76b73"
+    },
+    {
+      "path": "work/review-response-workspace-v2/11-manuscript-revision-guide.md",
+      "before_sha256": null,
+      "after_sha256": "a20dcf9f00564dc8ac3c8e542334e9ae7f334c53c191c68674c81b4fbe833dd6"
+    },
+    {
+      "path": "work/review-response-workspace-v2/12-manuscript-execution-graph.md",
+      "before_sha256": null,
+      "after_sha256": "60f9c2506bf3004ff7486d992beddd9a584ebbdeeb39fcf309e79c9f7a567455"
+    },
+    {
+      "path": "work/review-response-workspace-v2/13-revision-action-log.md",
+      "before_sha256": null,
+      "after_sha256": "3316f1520e475ae6ff5fc726b482cf203d03f64cb1fbe4dc4acf0565e35d1da8"
+    },
+    {
+      "path": "work/review-response-workspace-v2/14-response-coverage-matrix.md",
+      "before_sha256": null,
+      "after_sha256": "74d0d3d6f42e1755c6a0fac99f5f7813922f02ffd162a9818aaa1309ce2a2423"
+    },
+    {
+      "path": "work/review-response-workspace-v2/15-response-letter-preview.md",
+      "before_sha256": null,
+      "after_sha256": "6d4685a0cba57e891f65c49f1298a23635ab2b783ca7513e28f741534f5f119d"
+    },
+    {
+      "path": "work/review-response-workspace-v2/16-response-letter-preview.tex",
+      "before_sha256": null,
+      "after_sha256": "6bea9ea41599294fa16018d0c5a478df943e58da01688d9b264f9100c0169989"
+    },
+    {
+      "path": "work/review-response-workspace-v2/17-final-assembly-checklist.md",
+      "before_sha256": null,
+      "after_sha256": "ebb34cdc0c954a3f67526865939fdaeaaca3fb9d9fc467461a9f61a6300d52db"
+    },
+    {
+      "path": "work/review-response-workspace-v2/manuscript-copies/source-snapshot/partial-manuscript.md",
+      "before_sha256": null,
+      "after_sha256": "daa52e1c035f948f6a3a4ded7fd2801669bc9afbb79e4271b58454b7a89f465c"
+    },
+    {
+      "path": "work/review-response-workspace-v2/manuscript-copies/working-manuscript/partial-manuscript.md",
+      "before_sha256": null,
+      "after_sha256": "daa52e1c035f948f6a3a4ded7fd2801669bc9afbb79e4271b58454b7a89f465c"
+    },
+    {
+      "path": "work/review-response-workspace-v2/response-strategy-cards/atomic_001.md",
+      "before_sha256": null,
+      "after_sha256": "dbf9487b8f83153b62ddd02bf46c03614145264adf33e0b14ccd1ed632b15c7d"
+    },
+    {
+      "path": "work/review-response-workspace-v2/response-strategy-cards/atomic_002.md",
+      "before_sha256": null,
+      "after_sha256": "35800fbf4703745525997fe75a9dfad2611934c5dc0b15c700ca6045dbc544da"
+    },
+    {
+      "path": "work/review-response-workspace-v2/response-strategy-cards/atomic_003.md",
+      "before_sha256": null,
+      "after_sha256": "379bcff85a513db74fef8195620c16504171dc98d4cbe289c6d2fd924a48cc3f"
+    },
+    {
+      "path": "work/review-response-workspace-v2/response-strategy-cards/atomic_004.md",
+      "before_sha256": null,
+      "after_sha256": "bedac97e76d5d2652c8471de9a7681d979bd03a9c5431214414dab6b273e9fb2"
+    },
+    {
+      "path": "work/review-response-workspace-v2/response-strategy-cards/atomic_005.md",
+      "before_sha256": null,
+      "after_sha256": "70e6fbc8e9eef12d7ba00ae1c063b933798f69d32332409bdac65efa00843c00"
+    },
+    {
+      "path": "work/review-response-workspace-v2/response-strategy-cards/atomic_006.md",
+      "before_sha256": null,
+      "after_sha256": "31b5dd6091711a0b113a82a8c45a13a8681a7c6abbafe80410c86b6f306852c8"
+    },
+    {
+      "path": "work/review-response-workspace-v2/response-strategy-cards/atomic_007.md",
+      "before_sha256": null,
+      "after_sha256": "57388bc83ac4832e6c36411688b543724b63a91ed56863ce4e19eb0ddbeee504"
+    },
+    {
+      "path": "work/review-response-workspace-v2/revision-master.db",
+      "before_sha256": null,
+      "after_sha256": "0995fe809efda9a034af5ba4b9070531c02dda7ff44b031b5d1560ac6ac66712"
+    },
+    {
+      "path": "work/review-response-workspace-v2/runtime-localization/document-messages.json",
+      "before_sha256": null,
+      "after_sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "work/review-response-workspace-v2/runtime-localization/source-messages.yaml",
+      "before_sha256": null,
+      "after_sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "work/review-response-workspace-v2/runtime-localization/working-messages.json",
+      "before_sha256": null,
+      "after_sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "work/run_gate.py",
+      "before_sha256": null,
+      "after_sha256": "8df11e780e626af689d96ca469f5565f95129bb22d493573317e550a3ee3f606"
+    },
+    {
+      "path": "work/runtime-localization-stub/en.json",
+      "before_sha256": null,
+      "after_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "work/runtime-localization-stub/zh-CN.json",
+      "before_sha256": null,
+      "after_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "path": "work/runtime-shim.py",
+      "before_sha256": null,
+      "after_sha256": "34484ff238675d78f91fa1c6d5fb43e2b8660eaad4dee7116b1a7ff5ab5589bc"
+    },
+    {
+      "path": "work/runtime_shim.py",
+      "before_sha256": null,
+      "after_sha256": "34484ff238675d78f91fa1c6d5fb43e2b8660eaad4dee7116b1a7ff5ab5589bc"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

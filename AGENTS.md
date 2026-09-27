@@ -56,6 +56,16 @@ falls back to the same review in Agent dialogue.
 Files remain the interface. Tool adapters may render and write files, but should
 not call agent APIs or depend on a specific model.
 
+The maintainer-only dogfooding harness checks init projection across all
+registered targets and all three delivery modes without model calls. Its natural
+behavior suite runs on one selected host; the result does not certify other
+hosts' behavior. It may launch a separately configured host Agent through Orca
+to draft evidence-bound acceptance reports. Those reports are advisory. Only
+a human review record can establish formal behavior acceptance;
+the local review service may write that record but never ResearchSpec workflow
+state or sealed attempt evidence. Its `dogfood-audit` project Skill is not an
+installed research-entry Skill.
+
 ## Canonical User Usage Model
 
 `docs/user/usage-model.md` is the canonical source for how users enter,

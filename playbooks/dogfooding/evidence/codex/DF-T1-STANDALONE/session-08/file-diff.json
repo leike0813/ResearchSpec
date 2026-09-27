@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "work/impact-summary.md",
+      "before_sha256": null,
+      "after_sha256": "62cfdb95e23428997effab4fb427a1032073d4b5c1b1b220ac995e71cd604d05"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

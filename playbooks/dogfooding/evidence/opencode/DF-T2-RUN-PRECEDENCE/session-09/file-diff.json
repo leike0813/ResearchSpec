@@ -1,0 +1,149 @@
+{
+  "changed": [
+    {
+      "path": "researchspec/runs/run-08ae493b86bba791b0e3d19c/graph.yaml",
+      "before_sha256": null,
+      "after_sha256": "1fc09369bffb9b10a2c6279e90dcca0563d32bea04edad291987d32801381a9a"
+    },
+    {
+      "path": "researchspec/runs/run-08ae493b86bba791b0e3d19c/handoff.md",
+      "before_sha256": null,
+      "after_sha256": "0a1c2db1540fd8c486fd356be01199d07b7f7b353e676c7c486a8f5b7421aafb"
+    },
+    {
+      "path": "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/grading.yaml",
+      "before_sha256": null,
+      "after_sha256": "f39987322db294d687b99ca371f4a1276bf5397cb69b0bc0f552f312036b935f"
+    },
+    {
+      "path": "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/literature.yaml",
+      "before_sha256": null,
+      "after_sha256": "765a3c08ea418e9575a92eca605f4dbfa38c7fbcd49af8102966c7410954b791"
+    },
+    {
+      "path": "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/methodology.yaml",
+      "before_sha256": null,
+      "after_sha256": "6f48ea4ad719243a6429dd0ba6b0abd6d51aa663e498bad710e33af01f277010"
+    },
+    {
+      "path": "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/report.yaml",
+      "before_sha256": null,
+      "after_sha256": "5c0487d0beb5cee6ddbdea50dfb1cf5a4d6099867761db0d89f5802816aa7401"
+    },
+    {
+      "path": "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/research-question.yaml",
+      "before_sha256": null,
+      "after_sha256": "f59a16f325c50460a5fd17204a5df508fb45f3fc2d633ab05eca8c539842a25b"
+    },
+    {
+      "path": "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/rq-gate.yaml",
+      "before_sha256": null,
+      "after_sha256": "444a474b65ac607b6c6ec1f070caca41225b69336a5b949aeb9082b90832ec26"
+    },
+    {
+      "path": "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/synthesis.yaml",
+      "before_sha256": null,
+      "after_sha256": "5a00125933e0be1a32b9af6ac3a52f2574af6b9ff25715b87e50331f653516d9"
+    },
+    {
+      "path": "researchspec/runs/run-08ae493b86bba791b0e3d19c/run.yaml",
+      "before_sha256": null,
+      "after_sha256": "f4cf8fa96cecd431fa328b5085a0fc66d2b07ac39d4d850b900cbf01943277e7"
+    },
+    {
+      "path": "researchspec/runs/run-54c36847e4697610f309be79/handoff.md",
+      "before_sha256": "46a22d8e0e7bae553384983115ad6bbb50427e195b559216b7c37e9110d54720",
+      "after_sha256": "779f9d1b31a3d163d2ca8d75e500aff49e396f6a89a81582f560c33b3c7b3f49"
+    },
+    {
+      "path": "researchspec/runs/run-54c36847e4697610f309be79/nodes/research-gate.yaml",
+      "before_sha256": null,
+      "after_sha256": "ade4d95a28aaf62a04f8b020f6faba8471f9f9fb64d9864ff86503f3780ee0fc"
+    },
+    {
+      "path": "researchspec/specs/project.md",
+      "before_sha256": "2c5de77add30a2a4f40c6a0d67ae6ea20a8431c0ecfba7a66228654153031db3",
+      "after_sha256": "9c1a4f0a7c695cf0da0e99b9dd3712f8fc7efe57b96295341217221783280661"
+    },
+    {
+      "path": "work/advance-grading.yaml",
+      "before_sha256": null,
+      "after_sha256": "6ec937981034e6ad21ac79b53eaa416e2f67fa3ae11be654e8ecb7a4c0ee4bcd"
+    },
+    {
+      "path": "work/advance-literature.yaml",
+      "before_sha256": null,
+      "after_sha256": "5aa15892281402653ef3cd57003e804f450f4f3aa63dd53643c8f35d4910e141"
+    },
+    {
+      "path": "work/advance-methodology.yaml",
+      "before_sha256": null,
+      "after_sha256": "94f440baecd39a0167551780699a03b53a76e10a565eecdfa369ccaa9c2871a9"
+    },
+    {
+      "path": "work/advance-report.yaml",
+      "before_sha256": null,
+      "after_sha256": "388344751b7644434e8ff3c0aa27109f2daa4e7c9c7ec36c79b93f3863a62008"
+    },
+    {
+      "path": "work/advance-research-question.yaml",
+      "before_sha256": null,
+      "after_sha256": "7fd71bf2319a724bf9c3242649f8961f6164e90ba5e3c2b18767df752b7076ad"
+    },
+    {
+      "path": "work/advance-synthesis.yaml",
+      "before_sha256": null,
+      "after_sha256": "45b17ff3b74d25f9c660a8dda3cd4c67eaf5f13d330d0ec79a6d11c66a31cb3f"
+    },
+    {
+      "path": "work/annotated_bibliography.md",
+      "before_sha256": null,
+      "after_sha256": "3813f9e3dccbb5e85e88b06616059165efb6aabada90ca65b346cc95d726baa2"
+    },
+    {
+      "path": "work/graded_sources.md",
+      "before_sha256": null,
+      "after_sha256": "91870a5274effdf129023613e8e90d3fe0b15ebf6897a1fa7df245e40ec48960"
+    },
+    {
+      "path": "work/methodology_blueprint.md",
+      "before_sha256": null,
+      "after_sha256": "9bd9faa87b1c6b446c02b909ab58dcb0a676f217a99a2b69d87e8c213c1fdccf"
+    },
+    {
+      "path": "work/research_report.md",
+      "before_sha256": null,
+      "after_sha256": "e0512d710c1e7437f2a3b08fbe5039d692c68b42daba464e243911eb63724c06"
+    },
+    {
+      "path": "work/researchspec-notes/writing-evidence.md",
+      "before_sha256": "5a5e5550bc9dd875bb02a26366e6994cab5aca62729983f82d94406730957beb",
+      "after_sha256": "fd033191b169c4dbafa0cc4eab0e93623c10f656e463fe3b8daf74b230f2a8ef"
+    },
+    {
+      "path": "work/rq_brief.md",
+      "before_sha256": null,
+      "after_sha256": "fdca8aeddf19dc92a57edd0c4f634eda825b93a5ca19ff432434db099369a566"
+    },
+    {
+      "path": "work/synthesis_report.md",
+      "before_sha256": null,
+      "after_sha256": "71893bc87a422f1a5b751ce9a4070fa9ddc9321e652ee73cf8539b63a23e858e"
+    }
+  ],
+  "host_scaffold_file_count": 3651,
+  "authority_changed": [
+    "researchspec/runs/run-08ae493b86bba791b0e3d19c/graph.yaml",
+    "researchspec/runs/run-08ae493b86bba791b0e3d19c/handoff.md",
+    "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/grading.yaml",
+    "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/literature.yaml",
+    "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/methodology.yaml",
+    "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/report.yaml",
+    "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/research-question.yaml",
+    "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/rq-gate.yaml",
+    "researchspec/runs/run-08ae493b86bba791b0e3d19c/nodes/synthesis.yaml",
+    "researchspec/runs/run-08ae493b86bba791b0e3d19c/run.yaml",
+    "researchspec/runs/run-54c36847e4697610f309be79/handoff.md",
+    "researchspec/runs/run-54c36847e4697610f309be79/nodes/research-gate.yaml"
+  ]
+}

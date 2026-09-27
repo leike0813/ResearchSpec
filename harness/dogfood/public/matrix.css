@@ -1,0 +1,9 @@
+.init-matrix{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:1rem;margin-bottom:1rem}
+.init-matrix .section-head{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.init-matrix .detail{min-height:0;margin:1rem 0 0}
+.init-matrix table{min-width:520px}
+.init-matrix td button{min-width:5rem;text-align:center}
+.init-matrix button.pass{color:var(--good);background:#e8f4ea}
+.init-matrix button.fail{color:var(--bad);background:#faeaea}
+.init-matrix button.running{color:var(--accent);background:#e7eff2}
+.init-matrix .assertion a{margin-left:.35rem}

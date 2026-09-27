@@ -1,0 +1,138 @@
+{
+  "schema_version": "1",
+  "command": "status",
+  "ok": true,
+  "data": {
+    "schema_version": "2",
+    "workspace": "/tmp/researchspec-journey-cNiY5V/researchspec",
+    "stable_specs": {
+      "project_id": "project",
+      "sources": 0,
+      "claims": 0,
+      "manuscript_id": "manuscript"
+    },
+    "agent_tools": {
+      "selected": [
+        "oh-my-pi"
+      ],
+      "delivery": "skills",
+      "installations": 13
+    },
+    "literature_adapters": {
+      "selected": []
+    },
+    "profiles": [
+      {
+        "profile_id": "academic-paper-reviewer",
+        "profile_version": "0.1.0"
+      },
+      {
+        "profile_id": "academic-paper",
+        "profile_version": "0.1.0"
+      },
+      {
+        "profile_id": "academic-pipeline",
+        "profile_version": "0.1.0"
+      },
+      {
+        "profile_id": "minimal",
+        "profile_version": "0.1.0"
+      },
+      {
+        "profile_id": "paper-humanizer",
+        "profile_version": "0.1.0"
+      },
+      {
+        "profile_id": "research-main",
+        "profile_version": "0.1.0"
+      },
+      {
+        "profile_id": "review-response",
+        "profile_version": "0.1.0"
+      }
+    ],
+    "runs": {
+      "total": 0,
+      "active": 0
+    },
+    "nodes": {},
+    "frontier": [],
+    "pending_subgraph_starts": [],
+    "pending_gates": [],
+    "pending_decisions": [],
+    "plugins": {
+      "loadable": true,
+      "selected": [],
+      "available": [
+        "accounting-auditing-and-accountability",
+        "analytical-chemistry",
+        "applied-mathematics",
+        "artificial-intelligence",
+        "astronomical-sciences",
+        "banking-finance-and-investment",
+        "biochemistry-and-cell-biology",
+        "bioinformatics-and-computational-biology",
+        "clinical-sciences",
+        "computational-modeling-and-simulation",
+        "computer-vision-and-multimedia-computation",
+        "control-engineering-mechatronics-and-robotics",
+        "curriculum-and-pedagogy",
+        "data-management-and-data-science",
+        "design",
+        "distributed-computing-and-systems-software",
+        "ecological-applications",
+        "ecology",
+        "education-systems",
+        "epidemiology",
+        "evolutionary-biology",
+        "experimental-design-and-data-analysis",
+        "fluid-mechanics-and-thermal-engineering",
+        "genetics",
+        "geoinformatics",
+        "geomatic-engineering",
+        "health-services-and-systems",
+        "heritage-archive-and-museum-studies",
+        "historical-studies",
+        "human-centred-computing",
+        "immunology",
+        "inorganic-chemistry",
+        "laboratory-automation-and-informatics",
+        "library-and-information-studies",
+        "machine-learning",
+        "macromolecular-and-materials-chemistry",
+        "materials-engineering",
+        "medical-and-biological-physics",
+        "medical-biochemistry-and-metabolomics",
+        "medical-biotechnology",
+        "medical-microbiology",
+        "medicinal-and-biomolecular-chemistry",
+        "microbiology",
+        "neurosciences",
+        "numerical-and-computational-mathematics",
+        "oncology-and-carcinogenesis",
+        "organic-chemistry",
+        "pharmacology-and-pharmaceutical-sciences",
+        "physical-chemistry",
+        "plant-biology",
+        "quantum-physics",
+        "research-computing-infrastructure",
+        "scientific-visualization-and-communication",
+        "specialist-studies-in-education",
+        "statistics",
+        "theory-of-computation"
+      ],
+      "unavailable": [],
+      "projected": [],
+      "resolved_skills": [],
+      "resolved_capability_ids": [],
+      "resolved_profile_ids": [],
+      "projected_capability_ids": [],
+      "projected_profile_ids": []
+    },
+    "diagnostics_summary": {
+      "blocking": 0,
+      "warning": 0
+    }
+  },
+  "diagnostics": []
+}

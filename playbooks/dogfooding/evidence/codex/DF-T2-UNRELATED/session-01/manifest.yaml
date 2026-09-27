@@ -1,0 +1,28 @@
+schema_version: "1"
+target_id: codex
+verification_status: unverified
+scenario_id: DF-T2-UNRELATED
+fixture_variant: goal-only
+agent:
+  product: Codex CLI
+  host_version: 0.157.1
+  model_version: ""
+  adapter: adapters/codex.md
+independent_session_ids:
+  - 01a0dc2f-abf0-7811-b742-0fe7d6a93211
+result: ""
+hard_failures: []
+scores:
+  routing_clarity: null
+  user_control: null
+  evidence_discipline: null
+  artifact_usability: null
+human_corrections: 0
+resume_attempts: 0
+successful_resumes: 0
+resume_success_rate: N/A
+evidence_paths:
+  - prompts.md
+  - trace.jsonl
+  - notes.md
+notes: One exploratory session; fixture files were not staged and there is no before-state snapshot, second independent session, model version or human scoring. No pass verdict.

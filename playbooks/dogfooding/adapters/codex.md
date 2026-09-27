@@ -37,12 +37,9 @@ researchspec list tools
 researchspec status --json
 ```
 
-应发现固定 surface 中的以下类别：
+应发现一个基础可见 Skill `researchspec-navigate`。其他 ARSU、Companion、核心及扩展能力是运行时目录中的隐藏 Procedure，用 `researchspec list procedures --json` 查看，再按需读取。显式选择 Zotero 时另有 7 个 Adapter Skills。
 
-- 4 个 ARSU Skills：`deep-research`、`academic-paper`、`academic-paper-reviewer`、`academic-pipeline`；
-- 5 个 Companion Skills：`researchspec-navigate`、`researchspec-propose`、`researchspec-decide`、`researchspec-verify`、`researchspec-cli-handbook`；
-- `skills/capabilities/registry.json` 登记的全部 capability packages；
-- 本次显式选择的 7 个 Zotero Adapter Skills。
+入口机制与宿主矩阵由变更 02 的工具目录和生成器负责；本适配器只核对实际交付与会话行为。
 
 不要在 adapter 中硬编码总数；以 `config.yaml` 的 Adapter selection、installation manifest 和实际
 `.agents/skills/` inventory 交叉核对。未选择 Zotero 时，不应期待其 7 个 Skills。

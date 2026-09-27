@@ -1,0 +1,24 @@
+{
+  "inputs": [],
+  "outputs": [
+    {
+      "role": "annotated_bibliography",
+      "type": "annotated_bibliography",
+      "path": "work/research/annotated_bibliography.md",
+      "purpose": "Annotated bibliography produced by research-main subgraph for the academic-pipeline research node boundary."
+    },
+    {
+      "role": "synthesis_report",
+      "type": "synthesis_report",
+      "path": "work/research/synthesis_report.md",
+      "purpose": "Synthesis report produced by research-main subgraph for the academic-pipeline research node boundary."
+    },
+    {
+      "role": "research_report",
+      "type": "research_report",
+      "path": "work/research/research_report.md",
+      "purpose": "Research report produced by research-main subgraph for the academic-pipeline research node boundary."
+    }
+  ],
+  "body": "research-main subgraph completed for run-2288fd2a43bd79f271923277. All seven nodes (research-question, rq-gate, methodology, literature, grading, synthesis, report) produced boundary deliverables under work/research/. The subgraph bounded the RQ to a synthetic-corpus evidence-mapping exercise; no external literature was admitted. The partial manuscript's CLM-02 caution (workload reduction is unsupported) is preserved; CLM-01 (process visibility) is supported at the process level only."
+}

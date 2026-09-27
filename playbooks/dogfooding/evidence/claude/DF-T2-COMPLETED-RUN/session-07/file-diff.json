@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "work/review-response-letter.md",
+      "before_sha256": null,
+      "after_sha256": "4d58283b0ee4ffb873d3a0788d7bfa1b47ba754903ee9f110a3ea827b52b9853"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

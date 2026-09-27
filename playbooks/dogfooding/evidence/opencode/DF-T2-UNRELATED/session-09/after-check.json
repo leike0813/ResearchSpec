@@ -1,0 +1,11 @@
+{
+  "schema_version": "1",
+  "command": "check",
+  "ok": true,
+  "data": {
+    "workspace": "/tmp/researchspec-journey-0a7yxG/researchspec",
+    "target": "all",
+    "diagnostics": []
+  },
+  "diagnostics": []
+}

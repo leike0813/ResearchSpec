@@ -1,0 +1,77 @@
+schema_version: "1"
+target_id: oh-my-pi
+verification_status: unverified
+workspace_schema_version: "2"
+run_id: ""
+scenario_id: DF-T2-TWO-CAPABILITIES
+fixture_variant: review-cycle
+researchspec_version: 0.1.0 (local working tree)
+git_commit: 81e5e972b0142952b900908d0bad1ef2a1177f55
+package_sha256: ""
+build_tree_sha256: fcbdc10352a066ce867d07cd8e0f6f9b37b9daf09858cd5ac6213a42c6bcb0df
+agent:
+  product: oh-my-pi
+  host_version: 18.2.10
+  model_version: minimax-code-cn/MiniMax-M3
+  adapter: host CLI
+independent_session_ids:
+  - session-07
+  - session-08
+environment:
+  os: linux
+  node_version: v24.12.0
+  workspace_path: /tmp/researchspec-journey-qy0mCs
+started_at: 2026-09-27T07:01:47.568Z
+completed_at: 2026-09-27T07:04:41.042Z
+result: fail
+hard_failures:
+  - 虽然生成了多份普通文件，未观察到第二项能力消费第一项 review_response_workspace 同名声明输入路径。
+scores:
+  routing_clarity: 1
+  user_control: 3
+  evidence_discipline: 2
+  artifact_usability: 2
+evidence_paths:
+  - prompts.md
+  - tool-calls.md
+  - transcript.md
+  - before-status.json
+  - after-status.json
+  - before-check.json
+  - after-check.json
+  - file-diff.json
+  - external-files.sha256
+  - deliverables/work/review-bundle/README.md
+  - deliverables/work/review-bundle/atoms/M1-synthetic-disclosure.md
+  - deliverables/work/review-bundle/atoms/M2-clm02-tradeoff.md
+  - deliverables/work/review-bundle/atoms/M3-clm03-hypothesis.md
+  - deliverables/work/review-bundle/atoms/M4-methods-causal-limit.md
+  - deliverables/work/review-bundle/atoms/m1-terminology.md
+  - deliverables/work/review-bundle/atoms/m2-limitations-in-conclusion.md
+  - deliverables/work/review-bundle/steps/step1-material-bundle.md
+  - deliverables/work/review-bundle/steps/step2-comment-breakdown.md
+  - deliverables/work/review-bundle/steps/step3-coverage-and-gaps.md
+selectors:
+  - status --json --cwd /tmp/researchspec-journey-qy0mCs/researchspec 2>&1
+  - list profiles --json --cwd /tmp/researchspec-journey-qy0mCs/researchspec 2>&1
+  - list procedures --query
+  - list procedures --query
+  - list procedures --query
+  - list procedures --query
+  - list procedures --query
+  - show procedure:generation-review-response-round --json --cwd
+    /tmp/researchspec-journey-qy0mCs/researchspec 2>&1
+  - instructions procedure:generation-review-response-round --json --cwd
+    /tmp/researchspec-journey-qy0mCs/researchspec 2>&1 > /tmp/instr_review_re
+  - instructions procedure:design-review-response-intake --json --cwd
+    /tmp/researchspec-journey-qy0mCs/researchspec > /tmp/inst_intake.json 2>&1
+  - instructions procedure:design-review-response-workboard-planning --json
+    --cwd /tmp/researchspec-journey-qy0mCs/researchspec > /tmp/inst_wb.jso
+  - show profile:review-response --json --cwd
+    /tmp/researchspec-journey-qy0mCs/researchspec 2>&1
+human_corrections: 0
+resume_attempts: 0
+successful_resumes: 0
+resume_success_rate: N/A
+notes: 流程被组织为自定 review-bundle 步骤，没有形成 Procedure 角色绑定交接。
+raw_trace: /tmp/researchspec-acceptance-S3INwu/records/oh-my-pi/DF-T2-TWO-CAPABILITIES/session-07/trace.jsonl

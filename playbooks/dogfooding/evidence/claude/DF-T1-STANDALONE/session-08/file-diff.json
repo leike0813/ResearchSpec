@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "work/genai-writing-impact.md",
+      "before_sha256": null,
+      "after_sha256": "5ca36acf08201e956a654a0b9b7df6e352abdefe114b61ad4e8660214fe5adb8"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

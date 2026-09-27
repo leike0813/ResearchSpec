@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ResearchSpec · 宿主验收审阅</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/matrix.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header>
+    <div><strong>ResearchSpec · 宿主验收</strong><small id="campaign-id"></small></div>
+    <span id="campaign-state" class="badge">载入中</span>
+    <span class="spacer"></span>
+    <label>审阅者 <input id="reviewer" autocomplete="name" placeholder="姓名或标识"></label>
+  </header>
+  <main>
+    <section class="overview">
+      <h1>运行与审阅进度</h1>
+      <div id="metrics" class="metrics"></div>
+      <p id="notice" class="hint" role="status" aria-live="polite"></p>
+    </section>
+    <section class="init-matrix" aria-label="初始化投影矩阵">
+      <div class="section-head"><h2>初始化投影矩阵</h2><span id="matrix-progress" class="hint"></span></div>
+      <p class="hint">每格为一个目标在指定投影模式下的本地 CLI 检查；点击查看检查项和交付文件。</p>
+      <div class="matrix-scroll"><table id="init-matrix"><thead><tr><th>目标</th><th>skills</th><th>commands</th><th>both</th></tr></thead><tbody></tbody></table></div>
+      <section id="matrix-detail" class="detail"><p class="empty">选择一个矩阵格查看结果。</p></section>
+    </section>
+    <h2 id="behavior-title">单宿主行为验收</h2>
+    <div class="workspace">
+      <aside class="queue" aria-label="待审尝试">
+        <div class="section-head"><h2>尝试与报告</h2><label>筛选 <input id="filter" type="search" placeholder="场景、宿主或状态"></label></div>
+        <div id="queue-items"></div>
+      </aside>
+      <section id="detail" class="detail" aria-label="验收报告"><p class="empty">选择一次尝试，先阅读验收报告。</p></section>
+    </div>
+    <details class="matrix-section"><summary>查看行为场景进度</summary><div class="matrix-scroll"><table id="matrix"><thead></thead><tbody></tbody></table></div></details>
+  </main>
+</body>
+</html>

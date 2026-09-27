@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "benchmark/synthesis-report.md",
+      "before_sha256": null,
+      "after_sha256": "e5deb4d5aa3dedc9eab35f40ddb514a3236d1728523d75c79b763c51b4cb831d"
+    }
+  ],
+  "host_scaffold_file_count": 3651,
+  "authority_changed": []
+}

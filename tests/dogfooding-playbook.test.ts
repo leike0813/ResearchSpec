@@ -4,6 +4,7 @@ import path from "node:path";
 import { test } from "node:test";
 
 import { parse } from "yaml";
+import { TOOL_IDS } from "../src/adapters/tools.js";
 
 interface DogfoodingCatalog {
   schema_version: "1";
@@ -73,14 +74,60 @@ void test("dogfooding playbook catalog covers routes, fixtures, and release mapp
   assert.equal(canonicalRoutes.size, 27);
   assert.deepEqual([...referencedRoutes].sort(), [...canonicalRoutes].sort());
 
-  const expectedChecklistRefs = new Set(["quick-standalone", "new-session-resume", "context-export", "gate-challenge-override", "end-to-end-pipeline"]);
-  assert.deepEqual(new Set(catalog.release_mappings.map((item) => item.checklist_ref)), expectedChecklistRefs);
+  const manualChecklist = (await readFile("artifacts/release/mvp-release-checklist.md", "utf8"))
+    .split("## Manual dogfooding\n")[1]?.split("\n## ")[0];
+  assert.ok(manualChecklist);
+  const manualItems = manualChecklist.split("\n").filter((line) => line.startsWith("- ["));
+  const checklistRefs = manualItems.map((line) => {
+    const match = /^- \[ \] \[([a-z0-9-]+)\] (.+)$/.exec(line);
+    assert.ok(match, `Manual item needs exactly one scenario slug: ${line}`);
+    return match[1];
+  });
+  assert.equal(new Set(checklistRefs).size, checklistRefs.length);
+  assert.deepEqual(new Set(catalog.release_mappings.map((item) => item.checklist_ref)), new Set(checklistRefs));
   for (const mapping of catalog.release_mappings) {
     const scenario = catalog.scenarios.find((item) => item.scenario_id === mapping.scenario_id);
     assert.ok(scenario, `Unknown release scenario: ${mapping.scenario_id}`);
     assert.equal(scenario.tier, 1);
     assert.equal(scenario.release_checklist_ref, mapping.checklist_ref);
   }
+
+  const byId = new Map(catalog.scenarios.map((scenario) => [scenario.scenario_id, scenario]));
+  const groups = {
+    positive: ["DF-T1-NAT-LITERATURE", "DF-T1-NAT-WRITING", "DF-T1-NAT-EVIDENCE", "DF-T1-NAT-REVIEW"],
+    continuity: ["DF-T1-NOTE-RESUME", "DF-T1-RESUME", "DF-T2-NOTE-DIVERGENCE", "DF-T2-NOTE-MATERIAL-CHANGE", "DF-T2-NOTE-AMBIGUITY", "DF-T2-RUN-PRECEDENCE", "DF-T2-COMPLETED-RUN"],
+    discovery: ["DF-T2-FIRST-SEARCH-MISS", "DF-T2-SECOND-SEARCH-MISS", "DF-T2-TWO-CAPABILITIES"],
+    ambiguity: ["DF-T2-MISSING-INPUT"],
+    negative: ["DF-T2-UNRELATED", "DF-T2-DECLINE-FRAMEWORK"],
+  };
+  for (const ids of Object.values(groups)) for (const id of ids) assert.ok(byId.get(id)?.hard_assertions.length, `Missing acceptance case: ${id}`);
+  for (const id of ["DF-T1-STANDALONE", "DF-T1-NOTE-RESUME", ...groups.positive]) {
+    assert.deepEqual(byId.get(id)?.route_refs, [], `${id} must remain run-free`);
+  }
+  assert.ok(byId.get("DF-T1-STANDALONE")?.required_evidence.includes("before-after-status"));
+  assert.ok(byId.get("DF-T1-RESUME")?.required_evidence.includes("run"));
+  assert.ok(byId.get("DF-T1-RESUME")?.required_evidence.includes("graph"));
+  assert.ok(byId.get("DF-T1-RESUME")?.required_evidence.includes("handoff"));
+  assert.ok(byId.get("DF-T2-RUN-PRECEDENCE")?.route_refs.length);
+
+  const intake = parse(await readFile("skills/capabilities/design-review-response-intake/manifest.yaml", "utf8")) as { outputs: Array<{ role: string }> };
+  const atomization = parse(await readFile("skills/capabilities/transform-review-response-comment-atomization/manifest.yaml", "utf8")) as { inputs: Array<{ role: string; required: boolean }> };
+  assert.deepEqual(atomization.inputs.filter((input) => input.required).map((input) => input.role), ["review_response_workspace"]);
+  assert.ok(intake.outputs.some((output) => output.role === atomization.inputs[0]?.role));
+});
+
+void test("host verification record follows runtime target IDs and keeps behaviour unverified", async () => {
+  const record = await readFile("playbooks/dogfooding/host-verification.md", "utf8");
+  const table = record.split("| Target ID |")[1]?.split("\n\n")[0];
+  assert.ok(table);
+  const rows = table.split("\n").filter((line) => /^\| `[^`]+` \|/.test(line));
+  const targets = rows.map((line) => /^\| `([^`]+)` \|/.exec(line)?.[1]);
+  assert.equal(new Set(targets).size, targets.length);
+  assert.deepEqual(new Set(targets), new Set(TOOL_IDS));
+  for (const row of rows) assert.equal(row.split("|")[5]?.trim(), "unverified");
+  const agents = rows.find((row) => row.startsWith("| `agents` |"));
+  assert.ok(agents);
+  assert.deepEqual(agents.split("|").slice(6, 9).map((value) => value.trim()), ["—", "—", "0"]);
 });
 
 void test("dogfooding benchmark is synthetic and playbooks stay outside the package", async () => {

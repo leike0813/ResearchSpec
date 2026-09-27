@@ -1,0 +1,50 @@
+schema_version: "1"
+target_id: codex
+verification_status: unverified
+workspace_schema_version: "2"
+run_id: ""
+scenario_id: DF-T2-SECOND-SEARCH-MISS
+fixture_variant: goal-only
+researchspec_version: 0.1.0 (local working tree)
+git_commit: 81e5e972b0142952b900908d0bad1ef2a1177f55
+package_sha256: ""
+build_tree_sha256: fcbdc10352a066ce867d07cd8e0f6f9b37b9daf09858cd5ac6213a42c6bcb0df
+agent:
+  product: codex
+  host_version: 0.157.1
+  model_version: minimax-cn/MiniMax-M3
+  adapter: adapters/codex.md
+independent_session_ids:
+  - session-09
+  - session-10
+environment:
+  os: linux
+  node_version: v24.12.0
+  workspace_path: /tmp/researchspec-journey-m6LIPg
+started_at: 2026-09-27T07:13:55.876Z
+completed_at: 2026-09-27T07:14:39.458Z
+result: fail
+hard_failures:
+  - 没有两次使用不同短词的实际目录检索。
+scores:
+  routing_clarity: 1
+  user_control: 3
+  evidence_discipline: 1
+  artifact_usability: 1
+evidence_paths:
+  - prompts.md
+  - tool-calls.md
+  - transcript.md
+  - before-status.json
+  - after-status.json
+  - before-check.json
+  - after-check.json
+  - file-diff.json
+  - external-files.sha256
+selectors: []
+human_corrections: 0
+resume_attempts: 0
+successful_resumes: 0
+resume_success_rate: N/A
+notes: 没有两次使用不同短词的实际目录检索。
+raw_trace: /tmp/researchspec-acceptance-S3INwu/records/codex/DF-T2-SECOND-SEARCH-MISS/session-09/trace.jsonl

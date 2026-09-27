@@ -1,0 +1,26 @@
+{
+  "changed": [
+    {
+      "path": "work/review-response/step-1-intake/intake_report.md",
+      "before_sha256": null,
+      "after_sha256": "fa3a97761f27da7e86d9d9fedce2ed2f3053bfaa5c686f81d9e75d64f58d51ab"
+    },
+    {
+      "path": "work/review-response/step-2-manuscript-analysis/manuscript_structure_summary.md",
+      "before_sha256": null,
+      "after_sha256": "9d97748706294f80ab336343bf4667f50f101353451b7c35efff7ba3f7e3d338"
+    },
+    {
+      "path": "work/review-response/step-3-atomization/atomic_comment_list.md",
+      "before_sha256": null,
+      "after_sha256": "4aa0b4e0686f5eb6d4b627f8381ef5dd062aa97365b862adfe05c72927e8ab8d"
+    },
+    {
+      "path": "work/review-response/step-3-atomization/comment_coverage_report.md",
+      "before_sha256": null,
+      "after_sha256": "3c1c4946077393c6a77753f5bd9b062c5a74dcea0f698b6d24e77845424f6cff"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

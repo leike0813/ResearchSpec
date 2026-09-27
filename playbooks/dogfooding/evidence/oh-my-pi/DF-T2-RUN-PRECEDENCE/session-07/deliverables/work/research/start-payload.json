@@ -1,0 +1,34 @@
+{
+  "schema_version": "2",
+  "confirmed_at": "2026-09-27T06:33:07.862Z",
+  "entry_id": "main",
+  "entry_node_id": "research-question",
+  "route_ref": "deep-research:full",
+  "prerequisites": [],
+  "handoff_inputs": [],
+  "planned_outputs": [
+    {
+      "role": "annotated_bibliography",
+      "type": "annotated_bibliography",
+      "path": "work/research/annotated_bibliography.md",
+      "purpose": "Annotated bibliography produced by research-main subgraph for the academic-pipeline research node boundary."
+    },
+    {
+      "role": "synthesis_report",
+      "type": "synthesis_report",
+      "path": "work/research/synthesis_report.md",
+      "purpose": "Synthesis report produced by research-main subgraph for the academic-pipeline research node boundary."
+    },
+    {
+      "role": "research_report",
+      "type": "research_report",
+      "path": "work/research/research_report.md",
+      "purpose": "Research report produced by research-main subgraph for the academic-pipeline research node boundary."
+    }
+  ],
+  "formal_gates": ["rq-gate"],
+  "cost": {
+    "effort": "synthetic fixture evidence-mapping exercise over four SYN-* sources",
+    "interaction": "fixture-internal single-pass"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "changed": [
+    {
+      "path": "work/researchspec-notes/writing-evidence-synthesis.md",
+      "before_sha256": null,
+      "after_sha256": "bc2a8f42dbffec6634d4d616e6ec9a31ada33636abace99cad374a3bc1ea9c3a"
+    },
+    {
+      "path": "work/researchspec-notes/writing-evidence.md",
+      "before_sha256": "5a5e5550bc9dd875bb02a26366e6994cab5aca62729983f82d94406730957beb",
+      "after_sha256": "c0f46ee3eac2914b1809f2eff3f0bf9e40a259a604502294bf30bab44e312d03"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

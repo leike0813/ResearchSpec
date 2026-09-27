@@ -1,0 +1,54 @@
+schema_version: "1"
+target_id: oh-my-pi
+verification_status: unverified
+workspace_schema_version: "2"
+run_id: ""
+scenario_id: DF-T2-NOTE-DIVERGENCE
+fixture_variant: ordinary-continuation
+researchspec_version: 0.1.0 (local working tree)
+git_commit: 81e5e972b0142952b900908d0bad1ef2a1177f55
+package_sha256: ""
+build_tree_sha256: fcbdc10352a066ce867d07cd8e0f6f9b37b9daf09858cd5ac6213a42c6bcb0df
+agent:
+  product: oh-my-pi
+  host_version: 18.2.10
+  model_version: minimax-code-cn/MiniMax-M3
+  adapter: host CLI
+independent_session_ids:
+  - session-08
+  - session-14
+environment:
+  os: linux
+  node_version: v24.12.0
+  workspace_path: /tmp/researchspec-journey-eaPySP
+started_at: 2026-09-27T06:57:05.666Z
+completed_at: 2026-09-27T07:00:46.563Z
+result: fail
+hard_failures:
+  - 未观察到继续完成下一步的普通项目产物。
+  - 未报告笔记与当前材料的非实质差异。
+scores:
+  routing_clarity: 3
+  user_control: 3
+  evidence_discipline: 3
+  artifact_usability: 0
+evidence_paths:
+  - prompts.md
+  - tool-calls.md
+  - transcript.md
+  - before-status.json
+  - after-status.json
+  - before-check.json
+  - after-check.json
+  - file-diff.json
+  - external-files.sha256
+  - deliverables/work/researchspec-notes/evidence-synthesis.md
+  - deliverables/work/researchspec-notes/writing-evidence.md
+selectors:
+  - status --json 2>&1
+human_corrections: 0
+resume_attempts: 1
+successful_resumes: 0
+resume_success_rate: 0%
+notes: 未观察到继续完成下一步的普通项目产物。 未报告笔记与当前材料的非实质差异。
+raw_trace: /tmp/researchspec-acceptance-S3INwu/records/oh-my-pi/DF-T2-NOTE-DIVERGENCE/session-14/trace.jsonl

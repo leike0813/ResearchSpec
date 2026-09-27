@@ -4,6 +4,27 @@ adapters:
   - adapters/codex.md
 soft_rubric: README.md#7-评分与结论
 
+suites:
+  natural-18:
+    - DF-T1-STANDALONE
+    - DF-T1-RESUME
+    - DF-T1-NAT-LITERATURE
+    - DF-T1-NAT-WRITING
+    - DF-T1-NAT-EVIDENCE
+    - DF-T1-NAT-REVIEW
+    - DF-T1-NOTE-RESUME
+    - DF-T2-NOTE-DIVERGENCE
+    - DF-T2-NOTE-MATERIAL-CHANGE
+    - DF-T2-NOTE-AMBIGUITY
+    - DF-T2-RUN-PRECEDENCE
+    - DF-T2-COMPLETED-RUN
+    - DF-T2-FIRST-SEARCH-MISS
+    - DF-T2-SECOND-SEARCH-MISS
+    - DF-T2-TWO-CAPABILITIES
+    - DF-T2-MISSING-INPUT
+    - DF-T2-UNRELATED
+    - DF-T2-DECLINE-FRAMEWORK
+
 fixture_variants:
   - fixture_variant: goal-only
     paths:
@@ -41,6 +62,22 @@ fixture_variants:
       - benchmark/revision-context.md
       - benchmark/variants/stale-manuscript.md
       - benchmark/variants/conflicting-review.md
+  - fixture_variant: ordinary-continuation
+    paths:
+      - benchmark/README.md
+      - benchmark/goal.md
+      - benchmark/sources.yaml
+      - benchmark/partial-manuscript.md
+      - benchmark/ordinary-task-note.md
+  - fixture_variant: ambiguous-continuation
+    paths:
+      - benchmark/README.md
+      - benchmark/goal.md
+      - benchmark/sources.yaml
+      - benchmark/partial-manuscript.md
+      - benchmark/review-comments.md
+      - benchmark/ordinary-task-note.md
+      - benchmark/second-task-note.md
 
 release_mappings:
   - checklist_ref: quick-standalone
@@ -53,6 +90,16 @@ release_mappings:
     scenario_id: DF-T1-GATE
   - checklist_ref: end-to-end-pipeline
     scenario_id: DF-T1-PIPELINE
+  - checklist_ref: natural-literature
+    scenario_id: DF-T1-NAT-LITERATURE
+  - checklist_ref: natural-writing
+    scenario_id: DF-T1-NAT-WRITING
+  - checklist_ref: natural-evidence
+    scenario_id: DF-T1-NAT-EVIDENCE
+  - checklist_ref: natural-review
+    scenario_id: DF-T1-NAT-REVIEW
+  - checklist_ref: ordinary-note-resume
+    scenario_id: DF-T1-NOTE-RESUME
 
 scenarios:
   - scenario_id: DF-T0-BOOTSTRAP
@@ -72,7 +119,7 @@ scenarios:
       - 在 init 中选择或启动 ARSU route。
       - 写入未隔离的 Agent 全局目录或联系 Zotero。
     hard_assertions:
-      - 固定 ARSU/Companion Skills、registry-derived capability packages、选定 Adapter 与十六个顶层命令可发现。
+      - 基础可见 Skill 仅有 researchspec-navigate；其他能力在隐藏 Procedure 目录中，选定 Adapter Skills 与十六个顶层命令可发现。
       - 没有 run 被创建，check all --strict 通过。
     required_evidence: [manifest, prompts, transcript, workspace-tree, final-status, final-check, skill-inventory, cli-help]
     soft_rubric: default
@@ -103,37 +150,36 @@ scenarios:
 
   - scenario_id: DF-T1-STANDALONE
     tier: 1
-    title: 模糊路由到 quick standalone 并完成
-    intent: 验证 Navigate 消歧、根 entry 确认、外部边界交付物、handoff 和 owning run/node authority 的完整低成本旅程。
+    title: 自然请求按需执行独立 Procedure
+    intent: 验证 Navigate 从普通研究请求发现并执行独立 Procedure，交付普通项目文件且不创建图状态。
     personas: [researcher-with-vague-goal]
-    route_refs: [deep-research:quick]
-    fixture_variant: goal-only
+    route_refs: []
+    fixture_variant: evidence-corpus
     initial_state: initialized-not-started-workspace
     prompts:
-      - 我想研究生成式 AI 对高校写作教学的影响。请展示候选 route、near miss、前置条件、边界输出、正式 Gates、风险和成本；我确认前不要启动。
-      - 我确认 deep-research:quick。按当前 frontier 继续，遇到正式 Gate 或需要我选择时停下。
+      - 请根据项目里提供的资料，简要整理生成式 AI 对高校写作教学可能产生的影响，并把可核对的结论写成文件。
     checkpoints:
-      - 确认路线摘要前没有 instance。
-      - 保存 Start input、确认者、run/node authority、外部输出和 handoff 的变化。
-      - 保存 terminal status 与 final check。
-    prohibited_actions: [跳过 Navigate 消歧, 未确认根 entry 即 start, 把输出写入 researchspec, 手改 authority 文件]
+      - 保存普通请求、目录检索与所选 Procedure 的指引。
+      - 保存普通项目交付物和工作前后的 status、runs 目录及 handoff 状态。
+    prohibited_actions: [要求用户先说出 Procedure 名称, 创建 run 或 handoff, 把输出写入 researchspec, 手改 authority 文件]
     hard_assertions:
-      - Start 只创建一个精确实例，精确重试复用该实例。
-      - 边界交付物位于 researchspec 外，handoff 可定位它们，完成由 owning run status 表示。
-    required_evidence: [manifest, prompts, transcript, route-summary, status-sequence, instructions-sequence, start-input, run-snapshot, graph-snapshot, node-snapshots, handoff, external-files, final-check]
+      - Navigate 自主发现并执行适合的独立 Procedure，不要求用户提供内部名称。
+      - 交付物是 researchspec 外的普通项目文件；没有创建 run、node、Gate、Decision 或 handoff。
+      - 结果说明产物路径、证据及限制、未解决事项和下一步，不宣称图动作完成。
+    required_evidence: [manifest, prompts, transcript, procedure-discovery, instructions, before-after-status, external-files, final-check]
     soft_rubric: default
-    cleanup: [保留 workspace 给 DF-T1-RESUME，并把证据复制到 workspace 外。]
+    cleanup: [保留普通交付物供核对，并把证据复制到 workspace 外。]
     release_checklist_ref: quick-standalone
-    acceptance_journey_refs: [routing, standalone]
+    acceptance_journey_refs: [routing]
 
   - scenario_id: DF-T1-RESUME
     tier: 1
-    title: 无聊天记忆的新会话恢复
-    intent: 验证 Agent 仅依据 stable specs、profile、run/node 文件、handoffs 与精确 selector 恢复。
+    title: 无聊天记忆的新会话恢复图内工作
+    intent: 验证 Agent 仅依据 status、精确 selector、run/graph/node 文件及 handoff 恢复已确认的图运行，不创建重复 run。
     personas: [returning-researcher]
-    route_refs: [deep-research:quick]
-    fixture_variant: goal-only
-    initial_state: active-or-complete-workspace-from-DF-T1-STANDALONE
+    route_refs: [academic-pipeline:end-to-end]
+    fixture_variant: review-cycle
+    initial_state: staged-unfinished-confirmed-pipeline-run
     prompts:
       - 恢复这个研究项目。不要使用上一段聊天；只根据 workspace 告诉我已完成、阻塞与下一步。
     checkpoints:
@@ -220,6 +266,318 @@ scenarios:
     cleanup: [归档完整证据目录后按 adapter 安全清理隔离 workspace。]
     release_checklist_ref: end-to-end-pipeline
     acceptance_journey_refs: [pipeline-confirmation, revision-rounds]
+
+  - scenario_id: DF-T1-NAT-LITERATURE
+    tier: 1
+    title: 自然语言文献综合
+    intent: 验证首次会话从中文研究请求主动发现文献综合能力，依据给定合成来源形成有边界的普通文件。
+    personas: [first-time-researcher]
+    route_refs: []
+    fixture_variant: evidence-corpus
+    initial_state: fresh-initialized-workspace
+    prompts: [请把项目里关于生成式 AI 与高校写作教学的资料整理成一份简短综述，指出各项结论有什么依据、哪里还不确定。]
+    checkpoints: [保存原始请求、能力发现轨迹、所读来源、交付物及最终说明。]
+    prohibited_actions: [要求用户先说出能力名称, 把合成来源当成已核实出版物, 把普通综述称为已完成 Gate]
+    hard_assertions:
+      - Agent 从普通请求发现并执行适用能力，交付 researchspec 外的综述文件。
+      - 结果列出产物路径、来源依据及限制、未解决问题和下一步；不捏造外部文献。
+    required_evidence: [manifest, prompts, transcript, tool-trace, source-reads, external-files, final-status]
+    soft_rubric: default
+    cleanup: [保存证据后按适配器清理隔离项目。]
+    release_checklist_ref: natural-literature
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T1-NAT-WRITING
+    tier: 1
+    title: Natural manuscript revision
+    intent: Verify that an English request to improve draft prose reaches a suitable writing capability and yields an ordinary revised manuscript with source limits disclosed.
+    personas: [researcher-with-draft]
+    route_refs: []
+    fixture_variant: partial-manuscript
+    initial_state: fresh-initialized-workspace
+    prompts: [Please revise the draft discussion using the supplied source summaries. Keep unsupported claims visible and save the revised text in a separate file.]
+    checkpoints: [Save the original request, discovery trace, source reads, revised file and final report.]
+    prohibited_actions: [Require an internal capability name, overwrite the fixture draft, invent citations]
+    hard_assertions:
+      - The Agent invokes an applicable writing capability and saves a separate ordinary manuscript file outside researchspec.
+      - The report identifies the output path, source limits, unresolved claims and next step.
+    required_evidence: [manifest, prompts, transcript, tool-trace, source-reads, external-files, final-status]
+    soft_rubric: default
+    cleanup: [Preserve the recording, then clean only the isolated project.]
+    release_checklist_ref: natural-writing
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T1-NAT-EVIDENCE
+    tier: 1
+    title: 自然请求核查论断
+    intent: 验证 Agent 从普通核查请求找到证据核查能力，逐条区分材料支持、推断与缺口。
+    personas: [researcher-checking-claims]
+    route_refs: []
+    fixture_variant: partial-manuscript
+    initial_state: fresh-initialized-workspace
+    prompts: [请检查草稿中的主要论断能否由项目提供的资料支持，把核查结果和仍需补证的地方写成文件。]
+    checkpoints: [保存论断、来源读取轨迹、核查文件和最终说明。]
+    prohibited_actions: [把合成文献说成真实核实文献, 把独立核查报告称为正式 Gate 结论]
+    hard_assertions:
+      - Agent 主动找到适用核查能力，并将逐条核查结果写入 researchspec 外的普通文件。
+      - 结果区别证据与推断，报告路径、证据限制、未解决论断和下一步。
+    required_evidence: [manifest, prompts, transcript, tool-trace, source-reads, external-files, final-status]
+    soft_rubric: default
+    cleanup: [保存证据后按适配器清理隔离项目。]
+    release_checklist_ref: natural-evidence
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T1-NAT-REVIEW
+    tier: 1
+    title: 自然请求处理审稿意见
+    intent: 验证 Agent 从普通审稿回复请求主动选择审稿或回复能力，按意见与稿件证据形成回复草稿。
+    personas: [author-responding-to-review]
+    route_refs: []
+    fixture_variant: review-cycle
+    initial_state: fresh-initialized-workspace
+    prompts: [请阅读审稿意见和现有稿件，逐条说明哪些意见需要修改，并起草给审稿人的回复。]
+    checkpoints: [保存意见与稿件读取轨迹、回复草稿和最终说明。]
+    prohibited_actions: [要求用户先给出流程名称, 虚构已完成的稿件修改, 把普通回复当成正式 Decision]
+    hard_assertions:
+      - Agent 主动找到适用能力，在 researchspec 外形成逐条回复文件。
+      - 回复区分已做修改与拟议修改；结果报告依据、限制、未解决事项和下一步。
+    required_evidence: [manifest, prompts, transcript, tool-trace, source-reads, external-files, final-status]
+    soft_rubric: default
+    cleanup: [保存证据后按适配器清理隔离项目。]
+    release_checklist_ref: natural-review
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T1-NOTE-RESUME
+    tier: 1
+    title: 普通研究任务跨会话继续
+    intent: 验证无旧聊天的新会话对照当前材料与普通笔记恢复独立任务，不创建或声称任何图状态。
+    personas: [returning-researcher]
+    route_refs: []
+    fixture_variant: ordinary-continuation
+    initial_state: staged-ordinary-note-and-current-materials-without-run
+    prompts: [继续上次没有做完的资料核查，并告诉我你是根据哪些现有文件判断下一步的。]
+    checkpoints:
+      - 将 fixture 笔记复制为 work/researchspec-notes/writing-evidence.md，退出旧会话后启动无旧聊天的新会话。
+      - 保存笔记与当前材料、输出的对照记录及工作前后 status。
+    prohibited_actions: [依赖旧聊天摘要, 根据笔记修改时间选择任务, 把笔记当作 run 或 selector]
+    hard_assertions:
+      - Agent 对照普通笔记、当前来源和稿件恢复下一步，报告证据限制并继续。
+      - 没有创建 run、node、Gate、Decision 或 handoff；笔记不授予工作流权限。
+    required_evidence: [manifest, fresh-session-proof, prompts, transcript, task-note, material-check, before-after-status, external-files]
+    soft_rubric: default
+    cleanup: [保存笔记及对照证据后清理隔离项目。]
+    release_checklist_ref: ordinary-note-resume
+    acceptance_journey_refs: [resume-pack-failure]
+
+  - scenario_id: DF-T2-NOTE-DIVERGENCE
+    tier: 2
+    title: 笔记与材料轻微差异
+    intent: 验证来源文件出现不改变任务身份、输入或下一步的差异时，Agent 报告差异并继续，不索取多余确认。
+    personas: [returning-researcher]
+    route_refs: []
+    fixture_variant: ordinary-continuation
+    initial_state: staged-note-with-nonmaterial-source-edit
+    prompts: [接着完成前次的资料核查。]
+    checkpoints: [将普通笔记放入 work/researchspec-notes，记录来源文件中不影响任务的一处编辑及前后状态。]
+    prohibited_actions: [忽略材料差异, 因非实质差异停止并请求确认, 按笔记修改时间选择任务]
+    hard_assertions:
+      - Agent 对照笔记与现有材料，报告差异，确认任务身份、所需输入和下一步未变后继续。
+      - 未创建图状态，也未把笔记中的已完成工作当作 CLI 确认的完成状态。
+    required_evidence: [manifest, prompts, transcript, task-note, material-diff, before-after-status]
+    soft_rubric: default
+    cleanup: [保存差异证据后清理隔离项目。]
+    acceptance_journey_refs: [resume-pack-failure]
+
+  - scenario_id: DF-T2-NOTE-MATERIAL-CHANGE
+    tier: 2
+    title: 必需材料变化阻断普通任务恢复
+    intent: 验证笔记记录的必需来源已缺失且现有材料无法确定替代输入时，Agent 只问一个关于受影响材料的问题。
+    personas: [returning-researcher]
+    route_refs: []
+    fixture_variant: ordinary-continuation
+    initial_state: staged-note-with-required-source-removed
+    prompts: [继续完成上次的论断核查。]
+    checkpoints: [将普通笔记放入 work/researchspec-notes，移走隔离副本中的必需来源并保存材料差异。]
+    prohibited_actions: [凭空重建来源, 用无关文件替代, 声称笔记证明核查完成]
+    hard_assertions:
+      - Agent 报告必需来源缺失以及对输入和下一步的影响，只问一个针对该材料的问题。
+      - 在材料未澄清前不继续核查，也不创建或修改图状态。
+    required_evidence: [manifest, prompts, transcript, task-note, material-diff, final-status]
+    soft_rubric: default
+    cleanup: [保存差异和问题后清理隔离项目。]
+    acceptance_journey_refs: [resume-pack-failure]
+
+  - scenario_id: DF-T2-NOTE-AMBIGUITY
+    tier: 2
+    title: 多份候选普通任务笔记
+    intent: 验证当前材料无法确定用户所指任务时，Agent 只问一个指向候选任务的问题，不按新旧程度猜测。
+    personas: [returning-researcher]
+    route_refs: []
+    fixture_variant: ambiguous-continuation
+    initial_state: two-staged-notes-with-no-disambiguating-material
+    prompts: [继续我上次的研究任务。]
+    checkpoints: [将两份 fixture 笔记分别放入 work/researchspec-notes，保存候选笔记和 Agent 问题。]
+    prohibited_actions: [按文件修改时间选任务, 自行合并两个任务, 创建 run 来消除歧义]
+    hard_assertions:
+      - Agent 核对当前材料后只问一个明确列出两项候选任务的问题，不擅自选择。
+      - 提问前没有创建或修改 run、node、Gate、Decision 或 handoff。
+    required_evidence: [manifest, prompts, transcript, task-notes, material-check, final-status]
+    soft_rubric: default
+    cleanup: [保存问题和候选证据后清理隔离项目。]
+    acceptance_journey_refs: [resume-pack-failure]
+
+  - scenario_id: DF-T2-RUN-PRECEDENCE
+    tier: 2
+    title: 未完成运行优先
+    intent: 验证同一工作已有确认且未完成的图运行时，Agent 通过当前 status 与精确指引继续，而非新开独立链。
+    personas: [returning-researcher]
+    route_refs: [academic-pipeline:end-to-end]
+    fixture_variant: ordinary-continuation
+    initial_state: staged-note-and-relevant-unfinished-confirmed-run
+    prompts: [继续这项关于生成式 AI 与高校写作教学的工作。]
+    checkpoints: [保存已确认 run、相关笔记、当前 status、精确节点指引和继续后的状态。]
+    prohibited_actions: [绕过待处理 Gate 或 Decision, 重新启动同一 run, 把普通笔记当作运行状态]
+    hard_assertions:
+      - Agent 识别同一工作的未完成 run，读取当前 status 和精确 selector 指引后再行动。
+      - 现有正式控制不被独立 Procedure 链绕过，且不创建重复 run。
+    required_evidence: [manifest, prompts, transcript, task-note, before-after-status, exact-instructions, run-snapshot]
+    soft_rubric: default
+    cleanup: [保存运行与笔记证据后清理隔离项目。]
+    acceptance_journey_refs: [resume-pack-failure]
+
+  - scenario_id: DF-T2-COMPLETED-RUN
+    tier: 2
+    title: 已完成运行不截走新任务
+    intent: 验证历史运行已完成时，新独立请求按自身输入选择能力，旧运行保持关闭。
+    personas: [researcher-starting-new-task]
+    route_refs: []
+    fixture_variant: review-cycle
+    initial_state: completed-historical-run-and-new-review-request
+    prompts: [请根据这批审稿意见，为现有稿件起草一份新的逐条回复。]
+    checkpoints: [保存旧 run 完成状态、新请求的发现轨迹、交付物与最终状态。]
+    prohibited_actions: [重新打开已完成 run, 把新任务强行接入旧 frontier, 复用旧 run 的 Gate 结论]
+    hard_assertions:
+      - Agent 保持历史 run 完成，不恢复或重开它，并根据新请求及当前材料选择适合的能力。
+      - 新交付物是普通项目文件，旧 run 的 authority 保持不变。
+    required_evidence: [manifest, prompts, transcript, before-after-status, tool-trace, run-hashes, external-files]
+    soft_rubric: default
+    cleanup: [保存旧运行和新交付物证据后清理隔离项目。]
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T2-FIRST-SEARCH-MISS
+    tier: 2
+    title: 第一次目录检索未命中
+    intent: 验证普通研究请求的首组短词未找到适用卡片时，Agent 只换词重试一次，再按实际候选决定。
+    personas: [researcher-using-unusual-terms]
+    route_refs: []
+    fixture_variant: evidence-corpus
+    initial_state: fresh-workspace-with-observed-first-query-miss
+    prompts: [请把这些材料里的教学干预、观察结果和局限性串起来，说明哪些结论还需要补充资料。]
+    checkpoints: [保存两次实际查询词、结果卡片和候选选择；首查若已有适合结果则本场景不计通过。]
+    prohibited_actions: [要求用户给出 Procedure 名称, 无限扩展检索, 在首查无结果后直接宣称没有能力]
+    hard_assertions:
+      - 首次检索实际没有适合候选，Agent 以不同短词重试一次并检查少量卡片。
+      - 后续选择依据第二次实际结果，不捏造目录候选或隐藏检索失败。
+    required_evidence: [manifest, prompts, transcript, first-query, second-query, candidate-cards, final-status]
+    soft_rubric: default
+    cleanup: [保存查询轨迹后清理隔离项目。]
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T2-SECOND-SEARCH-MISS
+    tier: 2
+    title: 两次目录检索均未命中
+    intent: 验证两组不同短词均无适合 Procedure 时，Agent 用宿主原生能力处理并说明不属于受治理运行。
+    personas: [researcher-with-unmatched-task]
+    route_refs: []
+    fixture_variant: goal-only
+    initial_state: fresh-workspace-with-observed-two-query-miss
+    prompts: [请把这份研究目标改写成一段适合张贴在校园活动海报上的短文。]
+    checkpoints: [保存两次实际查询、候选卡片、原生处理轨迹和最终说明；任何适合命中都使本场景不计通过。]
+    prohibited_actions: [捏造 Procedure, 宣称原生处理完成了 run, 创建无请求的图运行]
+    hard_assertions:
+      - 两次不同短词检索均无适合候选，Agent 随后使用宿主原生能力完成请求。
+      - 结果明确说明工作位于受治理的 ResearchSpec run 之外，未创建 run 或 handoff。
+    required_evidence: [manifest, prompts, transcript, first-query, second-query, native-output, before-after-status]
+    soft_rubric: default
+    cleanup: [保存查询与产物后清理隔离项目。]
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T2-TWO-CAPABILITIES
+    tier: 2
+    title: 两项能力通过声明路径串接
+    intent: 验证审稿回复材料整理的声明输出 `review_response_workspace` 能作为意见拆分的同名声明输入，通过普通项目相对路径串接。
+    personas: [researcher-composing-work]
+    route_refs: []
+    fixture_variant: review-cycle
+    initial_state: fresh-initialized-workspace
+    prompts: [先整理现有稿件和审稿意见的回复材料，再逐条拆分意见并检查有没有遗漏；请保存每一步的结果。]
+    checkpoints: [保存两份 Procedure 的输入输出声明、两次指引、传递的相对路径和两个交付物。]
+    prohibited_actions: [推断未声明的输入输出连接, 创建运行或 handoff 作为临时链状态, 传递绝对或受管路径]
+    hard_assertions:
+      - 第二项能力以第一项的 review_response_workspace 输出路径作为同名声明输入，并使用普通项目相对路径。
+      - 两步产物均在 researchspec 外；没有 run、handoff 或隐藏激活状态。
+      - 若实际候选没有声明连接，本场景不计通过；Agent 应报告缺口或只问一个针对性问题。
+    required_evidence: [manifest, prompts, transcript, procedure-packets, path-handoff, external-files, before-after-status]
+    soft_rubric: default
+    cleanup: [保存声明和路径证据后清理隔离项目。]
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T2-MISSING-INPUT
+    tier: 2
+    title: 必需材料缺失
+    intent: 验证要求逐条回应审稿意见但项目中没有意见文件时，Agent 只问一个关于缺失材料的问题。
+    personas: [researcher-with-missing-material]
+    route_refs: []
+    fixture_variant: partial-manuscript
+    initial_state: fresh-workspace-without-review-comments
+    prompts: [请逐条回应审稿人的意见，并给出每项对应的稿件修改。]
+    checkpoints: [保存现有文件清单、所选能力的输入声明和 Agent 提问。]
+    prohibited_actions: [捏造审稿意见, 擅自使用无关材料替代, 将提问解释为已完成交付]
+    hard_assertions:
+      - Agent 发现必需的审稿意见缺失，只问一个明确指出该材料的问题。
+      - 未编造回复，也未创建 run、node、Gate、Decision 或 handoff。
+    required_evidence: [manifest, prompts, transcript, file-inventory, input-contract, final-status]
+    soft_rubric: default
+    cleanup: [保存问题和文件清单后清理隔离项目。]
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T2-UNRELATED
+    tier: 2
+    title: 非研究请求不触发研究路由
+    intent: 验证与研究任务无关的简单请求由宿主原生处理，项目不发生工作区变更。
+    personas: [ordinary-user]
+    route_refs: []
+    fixture_variant: goal-only
+    initial_state: fresh-initialized-workspace
+    prompts: [请计算 17 乘以 19。]
+    checkpoints: [保存回复及请求前后的项目状态和文件差异。]
+    prohibited_actions: [检索研究 Procedure, 启动 profile 或 run, 修改研究工作区]
+    hard_assertions:
+      - Agent 用宿主原生能力正确回应，未调用研究 Procedure 或 profile。
+      - 没有 workspace、run、node、Gate、Decision 或 handoff 变更。
+    required_evidence: [manifest, prompts, transcript, before-after-tree, before-after-status]
+    soft_rubric: default
+    cleanup: [保存只读证据后清理隔离项目。]
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T2-DECLINE-FRAMEWORK
+    tier: 2
+    title: 用户要求不用框架
+    intent: 验证用户明确拒绝 ResearchSpec 时，Agent 尊重选择且不触发框架工作区变更。
+    personas: [researcher-declining-framework]
+    route_refs: []
+    fixture_variant: evidence-corpus
+    initial_state: fresh-initialized-workspace
+    prompts: [这次请直接用你自己的方式概括这些资料，不要使用 ResearchSpec。]
+    checkpoints: [保存用户拒绝文本、回复及请求前后的项目状态和文件差异。]
+    prohibited_actions: [启动研究 Procedure, 创建 run, 修改工作区合同]
+    hard_assertions:
+      - Agent 遵守拒绝指示，未调用 ResearchSpec 的 Procedure、profile 或 mutation 命令。
+      - 没有 workspace、run、node、Gate、Decision 或 handoff 变更。
+    required_evidence: [manifest, prompts, transcript, before-after-tree, before-after-status]
+    soft_rubric: default
+    cleanup: [保存只读证据后清理隔离项目。]
+    acceptance_journey_refs: [routing]
 
   - scenario_id: DF-T2-EXPERT-DIRECT
     tier: 2
@@ -363,7 +721,7 @@ scenarios:
     personas: [researcher-using-optional-assistance]
     route_refs: []
     fixture_variant: evidence-corpus
-    initial_state: active-standalone-run
+    initial_state: active-confirmed-graph-run
     prompts: [检查 Zotero readiness，并预览一个适用 domain plugin；不要改变当前研究路线或推进 run。]
     checkpoints: [保存操作前后 status、run/node authority hash、plugin preview/result 和 Zotero connection_state。]
     prohibited_actions: [因 plugin 失败改走另一 route, 把 plugin 选择记成研究 Decision, 在 status 中联系 Zotero]
@@ -405,7 +763,7 @@ scenarios:
     required_evidence: [manifest, prompts, transcript, runs, nodes, cli-inputs, cli-results, directory-counts, authority-hashes, final-check]
     soft_rubric: default
     cleanup: [按 adapter 安全清理。]
-    acceptance_journey_refs: [standalone, pipeline-confirmation]
+    acceptance_journey_refs: [pipeline-confirmation]
 
   - scenario_id: DF-T3-GATE-REFUSAL
     tier: 3

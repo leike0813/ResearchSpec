@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "work/researchspec-notes/genai-writing-teaching-synthesis.md",
+      "before_sha256": null,
+      "after_sha256": "22ea7a27c054a843a92ed9ff45a8a3379e4d6836b5b47b0d4bd22188d72216d0"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "work/response-letter-round1.md",
+      "before_sha256": null,
+      "after_sha256": "092492d1fb8f0d7b2b04d5f999e15f46facd44844564d4a51a881c7da953d855"
+    }
+  ],
+  "host_scaffold_file_count": 3651,
+  "authority_changed": []
+}

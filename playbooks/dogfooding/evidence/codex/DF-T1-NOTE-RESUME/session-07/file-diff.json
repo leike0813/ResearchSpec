@@ -1,0 +1,16 @@
+{
+  "changed": [
+    {
+      "path": "work/claim-source-check.md",
+      "before_sha256": null,
+      "after_sha256": "f1049dbcdb3ac0b5ca65786c223fddc6cb46bafe2761716f3242e2a1a4574331"
+    },
+    {
+      "path": "work/researchspec-notes/writing-evidence.md",
+      "before_sha256": "5a5e5550bc9dd875bb02a26366e6994cab5aca62729983f82d94406730957beb",
+      "after_sha256": "f65fabbadc4b3f2f4599e4019ce37fdc5936dc7f99ec4c3dfa03aeb33cf2c37a"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

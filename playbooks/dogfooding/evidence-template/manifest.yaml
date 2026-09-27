@@ -1,4 +1,6 @@
 schema_version: "1"
+target_id: ""
+verification_status: unverified
 workspace_schema_version: "2"
 run_id: ""
 related_run_id: null
@@ -11,8 +13,10 @@ git_commit: ""
 package_sha256: ""
 agent:
   product: ""
-  version: ""
+  host_version: ""
+  model_version: ""
   adapter: ""
+independent_session_ids: []
 environment:
   os: ""
   node_version: ""
@@ -31,4 +35,5 @@ selectors: []
 human_corrections: 0
 resume_attempts: 0
 successful_resumes: 0
+resume_success_rate: N/A
 notes: ""

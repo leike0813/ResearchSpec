@@ -1,0 +1,8 @@
+- Goal: Summarize how the supplied synthetic sources bear on the draft's claims about generative AI in university writing instruction.
+- Inputs: `benchmark/sources.yaml` and `benchmark/partial-manuscript.md`.
+- Output so far: ordinary synthesis written to `work/researchspec-notes/evidence-synthesis.md` (104 lines).
+- Completed work: Cross-checked each substantive claim in the draft against the four `SYN-*` sources; recorded what each source supports vs. rejects, recorded source-borne limits to carry into the manuscript, flagged the `CLM-01` / `CLM-02` citation-key inconsistency, and identified two sources (`SYN-SURVEY-03`, `SYN-POLICY-04`) the draft does not yet use. No run, gate, or decision opened; status remained `runs.active = 0`.
+- Evidence limits: All sources are synthetic test material; no external publication has been verified. Source-borne limits (no comparison group, self-reported workload, voluntary response bias, policy text only) are reproduced in the synthesis for the next manuscript pass.
+- Open question: None blocking. Two follow-ups are recorded but are scope decisions for the user, not blockers for verification: (1) whether to expand the Discussion to use `SYN-SURVEY-03` attitudes and `SYN-POLICY-04` disclosure text; (2) whether to reconcile the `CLM-*` draft keys with the `SYN-*` source keys.
+- Next step: If the user wants to revise `benchmark/partial-manuscript.md` itself, do that as a separate edit pass using the calibration guidance in `evidence-synthesis.md`. Verification phase is complete.
+- Related run: none.

@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "benchmark/response-letter.md",
+      "before_sha256": null,
+      "after_sha256": "6ee4ec1b8c2fd36092f77d8a30de7a281b25dd2c3d6b1ed633b89619927ef23a"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

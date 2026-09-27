@@ -1,0 +1,50 @@
+schema_version: "1"
+target_id: oh-my-pi
+verification_status: unverified
+workspace_schema_version: "2"
+run_id: ""
+scenario_id: DF-T2-NOTE-MATERIAL-CHANGE
+fixture_variant: ordinary-continuation
+researchspec_version: 0.1.0 (local working tree)
+git_commit: 81e5e972b0142952b900908d0bad1ef2a1177f55
+package_sha256: ""
+build_tree_sha256: fcbdc10352a066ce867d07cd8e0f6f9b37b9daf09858cd5ac6213a42c6bcb0df
+agent:
+  product: oh-my-pi
+  host_version: 18.2.10
+  model_version: minimax-code-cn/MiniMax-M3
+  adapter: host CLI
+independent_session_ids:
+  - session-07
+  - session-08
+environment:
+  os: linux
+  node_version: v24.12.0
+  workspace_path: /tmp/researchspec-journey-YcgBqT
+started_at: 2026-09-27T06:49:26.714Z
+completed_at: 2026-09-27T06:50:22.613Z
+result: fail
+hard_failures:
+  - 来源缺失仍继续做逐条核查，并给出 A/B/C 三种选择；场景要求停下且只问一个针对材料的问题。
+scores:
+  routing_clarity: 1
+  user_control: 0
+  evidence_discipline: 2
+  artifact_usability: 1
+evidence_paths:
+  - prompts.md
+  - tool-calls.md
+  - transcript.md
+  - before-status.json
+  - after-status.json
+  - before-check.json
+  - after-check.json
+  - file-diff.json
+  - external-files.sha256
+selectors: []
+human_corrections: 0
+resume_attempts: 1
+successful_resumes: 0
+resume_success_rate: 0%
+notes: 准确识别缺失来源，但越过了核查暂停边界。
+raw_trace: /tmp/researchspec-acceptance-S3INwu/records/oh-my-pi/DF-T2-NOTE-MATERIAL-CHANGE/session-07/trace.jsonl

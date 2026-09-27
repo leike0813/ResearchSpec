@@ -1,0 +1,59 @@
+schema_version: "1"
+target_id: claude
+verification_status: unverified
+workspace_schema_version: "2"
+run_id: ""
+scenario_id: DF-T2-TWO-CAPABILITIES
+fixture_variant: review-cycle
+researchspec_version: 0.1.0 (local working tree)
+git_commit: 81e5e972b0142952b900908d0bad1ef2a1177f55
+package_sha256: ""
+build_tree_sha256: fcbdc10352a066ce867d07cd8e0f6f9b37b9daf09858cd5ac6213a42c6bcb0df
+agent:
+  product: claude
+  host_version: 2.1.282
+  model_version: MiniMax-M3
+  adapter: host CLI
+independent_session_ids:
+  - session-07
+  - session-08
+environment:
+  os: linux
+  node_version: v24.12.0
+  workspace_path: /tmp/researchspec-journey-wJ7rKi
+started_at: 2026-09-27T06:48:46.960Z
+completed_at: 2026-09-27T06:50:02.799Z
+result: fail
+hard_failures:
+  - 两份笔记没有把第一项能力的 review_response_workspace 输出路径作为第二项同名声明输入。
+scores:
+  routing_clarity: 1
+  user_control: 3
+  evidence_discipline: 2
+  artifact_usability: 2
+evidence_paths:
+  - prompts.md
+  - tool-calls.md
+  - transcript.md
+  - before-status.json
+  - after-status.json
+  - before-check.json
+  - after-check.json
+  - file-diff.json
+  - external-files.sha256
+  - deliverables/work/researchspec-notes/01-manuscript-organization.md
+  - deliverables/work/researchspec-notes/02-atomization-coverage.md
+selectors:
+  - status --json 2>&1
+  - list procedures --query
+  - list procedures --query
+  - instructions procedure:analysis-review-response-manuscript-analysis --json
+    2>&1
+  - instructions procedure:transform-review-response-comment-atomization --json
+    2>&1
+human_corrections: 0
+resume_attempts: 0
+successful_resumes: 0
+resume_success_rate: N/A
+notes: 读取了两项 Procedure 指引并保存文件，但缺少契约要求的输出到输入路径交接。
+raw_trace: /tmp/researchspec-acceptance-S3INwu/records/claude/DF-T2-TWO-CAPABILITIES/session-07/trace.jsonl

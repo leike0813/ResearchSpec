@@ -1,0 +1,51 @@
+schema_version: "1"
+target_id: opencode
+verification_status: unverified
+workspace_schema_version: "2"
+run_id: ""
+scenario_id: DF-T2-NOTE-MATERIAL-CHANGE
+fixture_variant: ordinary-continuation
+researchspec_version: 0.1.0 (local working tree)
+git_commit: 81e5e972b0142952b900908d0bad1ef2a1177f55
+package_sha256: ""
+build_tree_sha256: fcbdc10352a066ce867d07cd8e0f6f9b37b9daf09858cd5ac6213a42c6bcb0df
+agent:
+  product: opencode
+  host_version: 1.18.32
+  model_version: minimax-cn-coding-plan/MiniMax-M3
+  adapter: host CLI
+independent_session_ids:
+  - session-11
+  - session-12
+environment:
+  os: linux
+  node_version: v24.12.0
+  workspace_path: /tmp/researchspec-journey-7F9tmc
+started_at: 2026-09-27T07:23:10.944Z
+completed_at: 2026-09-27T07:23:55.231Z
+result: fail
+hard_failures:
+  - 来源缺失时提出三个选择，包括补造占位来源；场景要求只问一个针对该材料的问题。
+scores:
+  routing_clarity: 1
+  user_control: 1
+  evidence_discipline: 1
+  artifact_usability: 1
+evidence_paths:
+  - prompts.md
+  - tool-calls.md
+  - transcript.md
+  - before-status.json
+  - after-status.json
+  - before-check.json
+  - after-check.json
+  - file-diff.json
+  - external-files.sha256
+selectors:
+  - status --json 2>&1
+human_corrections: 0
+resume_attempts: 1
+successful_resumes: 0
+resume_success_rate: 0%
+notes: 未编造来源文件，但将其作为后续选项并扩展了澄清范围。
+raw_trace: /tmp/researchspec-acceptance-S3INwu/records/opencode/DF-T2-NOTE-MATERIAL-CHANGE/session-12/trace.jsonl

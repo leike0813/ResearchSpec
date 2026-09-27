@@ -1,0 +1,51 @@
+schema_version: "1"
+target_id: claude
+verification_status: unverified
+workspace_schema_version: "2"
+run_id: ""
+scenario_id: DF-T1-NAT-LITERATURE
+fixture_variant: evidence-corpus
+researchspec_version: 0.1.0 (local working tree)
+git_commit: 81e5e972b0142952b900908d0bad1ef2a1177f55
+package_sha256: ""
+build_tree_sha256: fcbdc10352a066ce867d07cd8e0f6f9b37b9daf09858cd5ac6213a42c6bcb0df
+agent:
+  product: claude
+  host_version: 2.1.282
+  model_version: MiniMax-M3
+  adapter: host CLI
+independent_session_ids:
+  - session-07
+  - session-08
+environment:
+  os: linux
+  node_version: v24.12.0
+  workspace_path: /tmp/researchspec-journey-eEMNKY
+started_at: 2026-09-27T06:30:58.818Z
+completed_at: 2026-09-27T06:31:38.289Z
+result: fail
+hard_failures:
+  - 未观察到从运行时目录发现并读取适用 Procedure 指引。
+  - 未交付 researchspec 外的普通项目文件。
+scores:
+  routing_clarity: 0
+  user_control: 3
+  evidence_discipline: 3
+  artifact_usability: 0
+evidence_paths:
+  - prompts.md
+  - tool-calls.md
+  - transcript.md
+  - before-status.json
+  - after-status.json
+  - before-check.json
+  - after-check.json
+  - file-diff.json
+  - external-files.sha256
+selectors: []
+human_corrections: 0
+resume_attempts: 0
+successful_resumes: 0
+resume_success_rate: N/A
+notes: 未观察到从运行时目录发现并读取适用 Procedure 指引。 未交付 researchspec 外的普通项目文件。
+raw_trace: /tmp/researchspec-acceptance-S3INwu/records/claude/DF-T1-NAT-LITERATURE/session-07/trace.jsonl

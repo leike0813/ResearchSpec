@@ -1,0 +1,4 @@
+schema_version: "2"
+outputs:
+  - role: annotated_bibliography
+    path: work/annotated_bibliography.md

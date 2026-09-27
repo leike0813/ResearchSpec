@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "work/researchspec-notes/writing-evidence.md",
+      "before_sha256": "5a5e5550bc9dd875bb02a26366e6994cab5aca62729983f82d94406730957beb",
+      "after_sha256": "8e7ab3b458211e1921f214493aa3ebd71f0951a25d9d6545b7cec36fe1602c1e"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

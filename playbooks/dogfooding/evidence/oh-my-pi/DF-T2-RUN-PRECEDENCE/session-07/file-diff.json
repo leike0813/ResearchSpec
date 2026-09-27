@@ -1,0 +1,159 @@
+{
+  "changed": [
+    {
+      "path": "researchspec/runs/run-2288fd2a43bd79f271923277/handoff.md",
+      "before_sha256": "e70f5981433d86a3ab85460937ad293e200baa85114cdb1a34fb07501351927b",
+      "after_sha256": "dc82278ea5e1dc6329608bdf1fec68ba2713f81a4b2ad67a133a12cdb5341980"
+    },
+    {
+      "path": "researchspec/runs/run-2288fd2a43bd79f271923277/nodes/research-gate.yaml",
+      "before_sha256": null,
+      "after_sha256": "142a4366ae226bb18627d91d1780655f494c767187a8a5d1ce3f323689be5970"
+    },
+    {
+      "path": "researchspec/runs/run-36ec006277874f96bd0d7871/graph.yaml",
+      "before_sha256": null,
+      "after_sha256": "1fc09369bffb9b10a2c6279e90dcca0563d32bea04edad291987d32801381a9a"
+    },
+    {
+      "path": "researchspec/runs/run-36ec006277874f96bd0d7871/handoff.md",
+      "before_sha256": null,
+      "after_sha256": "7f6897bec381e375bf95608e27c8f0f0de0d12b6fc1eed00653861454e0794cb"
+    },
+    {
+      "path": "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/grading.yaml",
+      "before_sha256": null,
+      "after_sha256": "460f4dbf6c82696f044bc0bc7d1ede2674d3490302bf0be36eb7ba4d1ac27d55"
+    },
+    {
+      "path": "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/literature.yaml",
+      "before_sha256": null,
+      "after_sha256": "0cbb1e0061852e6438ca621a653f260b85aca27969fea344c49f7be73c37f331"
+    },
+    {
+      "path": "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/methodology.yaml",
+      "before_sha256": null,
+      "after_sha256": "6a03b149311fde50531fde8373877915b1838210410fc72719c6ce80d10e92dc"
+    },
+    {
+      "path": "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/report.yaml",
+      "before_sha256": null,
+      "after_sha256": "4af262b26e1e5ad691c07a45e563f16c063afb0e17b2ed1dc4a5e229c4be76da"
+    },
+    {
+      "path": "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/research-question.yaml",
+      "before_sha256": null,
+      "after_sha256": "9f1db195691f058974cc88d5e7b1dbf450926b462b02a64ec5499ca2794b52da"
+    },
+    {
+      "path": "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/rq-gate.yaml",
+      "before_sha256": null,
+      "after_sha256": "0c0e4158f079019cea5b25594b32c40b1552b973d73822ea4c47d288c0138dd3"
+    },
+    {
+      "path": "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/synthesis.yaml",
+      "before_sha256": null,
+      "after_sha256": "92e787b6e146b8d48801262ea37c39255b7c247091065fe6f7e3193ce9cd185d"
+    },
+    {
+      "path": "researchspec/runs/run-36ec006277874f96bd0d7871/run.yaml",
+      "before_sha256": null,
+      "after_sha256": "c85d22467c59cf36673580225a26c5a778d4802eb56cc1b8e3952f91415e0edf"
+    },
+    {
+      "path": "work/research/advance-grade.json",
+      "before_sha256": null,
+      "after_sha256": "e7945027159f5a3acde30ba16adb0c3845a4adf30174a4f2930b9e28b80151fa"
+    },
+    {
+      "path": "work/research/advance-lit.json",
+      "before_sha256": null,
+      "after_sha256": "2e749e979b38c3f5b219652cda33bf1a2a565c4f3c668879b1a43879be9263b4"
+    },
+    {
+      "path": "work/research/advance-method.json",
+      "before_sha256": null,
+      "after_sha256": "29300de251eb14026737e3fca8ad23971958eac7a7bc628daeebe38558b48f8b"
+    },
+    {
+      "path": "work/research/advance-payload.json",
+      "before_sha256": null,
+      "after_sha256": "858d830bd6d7ce274cbb09afb95843b6692b1dad0edaab12ea5aac98a65cd9a2"
+    },
+    {
+      "path": "work/research/advance-rep.json",
+      "before_sha256": null,
+      "after_sha256": "c4320664b1654b2f6efc6f8b619b00bce402773db309ba542949180cb800e0a8"
+    },
+    {
+      "path": "work/research/advance-rq.json",
+      "before_sha256": null,
+      "after_sha256": "bcb78053f648864d044c7ddbe9be2ffb28a6b83497aa601df61928549549b1c0"
+    },
+    {
+      "path": "work/research/advance-synth.json",
+      "before_sha256": null,
+      "after_sha256": "41f9758f7c2f394c2d4e24d59f36c0286549dd3a39272a75dcbd40440a2fcde2"
+    },
+    {
+      "path": "work/research/annotated_bibliography.md",
+      "before_sha256": null,
+      "after_sha256": "88537321daaaea0be32de242efebfbc857de0a5dc67b9ab65f3e2521c9150f5a"
+    },
+    {
+      "path": "work/research/graded_sources.md",
+      "before_sha256": null,
+      "after_sha256": "5b9819e2485e6d170c14fb9975559e5c6e5e1532b6ea84cb3fd8fd71984e50a6"
+    },
+    {
+      "path": "work/research/handoff-payload.json",
+      "before_sha256": null,
+      "after_sha256": "a386d075e2e8648dc77ace4b7a9345cfb5db6425e37215ad305deffbab9aa80a"
+    },
+    {
+      "path": "work/research/methodology_blueprint.md",
+      "before_sha256": null,
+      "after_sha256": "257153aba74cf6bebda0c5583b599ef70fa21f9d972efce21bfd0466ae7275d3"
+    },
+    {
+      "path": "work/research/research_report.md",
+      "before_sha256": null,
+      "after_sha256": "83739e0910feee5523bd6f0abfd7ddc1b9a65116ffe17d03409b615486ed3e25"
+    },
+    {
+      "path": "work/research/rq_brief.md",
+      "before_sha256": null,
+      "after_sha256": "3f22e7a6c1587a7ed503ddeee7347ed939a92e3b276c17e7356fb5503c1d6ba2"
+    },
+    {
+      "path": "work/research/start-payload.json",
+      "before_sha256": null,
+      "after_sha256": "e5dffe6a5ecfa91cef98f0d16bb680aebf42ad90139414785f1447117a7807dc"
+    },
+    {
+      "path": "work/research/synthesis_report.md",
+      "before_sha256": null,
+      "after_sha256": "842caca23de43ee35cabc1b0061ee02ce8e0f4b3c012a26a72ede277d13f258b"
+    },
+    {
+      "path": "work/researchspec-notes/writing-evidence.md",
+      "before_sha256": "5a5e5550bc9dd875bb02a26366e6994cab5aca62729983f82d94406730957beb",
+      "after_sha256": "e97cc6ada5eca3132777bdc023eaa5ac484b11eefa729184a3def0b96f71dd59"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": [
+    "researchspec/runs/run-2288fd2a43bd79f271923277/handoff.md",
+    "researchspec/runs/run-2288fd2a43bd79f271923277/nodes/research-gate.yaml",
+    "researchspec/runs/run-36ec006277874f96bd0d7871/graph.yaml",
+    "researchspec/runs/run-36ec006277874f96bd0d7871/handoff.md",
+    "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/grading.yaml",
+    "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/literature.yaml",
+    "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/methodology.yaml",
+    "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/report.yaml",
+    "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/research-question.yaml",
+    "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/rq-gate.yaml",
+    "researchspec/runs/run-36ec006277874f96bd0d7871/nodes/synthesis.yaml",
+    "researchspec/runs/run-36ec006277874f96bd0d7871/run.yaml"
+  ]
+}

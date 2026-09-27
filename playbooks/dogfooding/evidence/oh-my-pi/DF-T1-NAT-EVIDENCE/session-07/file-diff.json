@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "benchmark/claim-verification.md",
+      "before_sha256": null,
+      "after_sha256": "6e7ef27e1bc973b2c4a4ffbc6fc6023be7eb6255c650c34692f23726de67ee9a"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

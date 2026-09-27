@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "benchmark/revised-discussion.md",
+      "before_sha256": null,
+      "after_sha256": "6dc1afbf7635ae921639ed9d20302c4b591e873c7711ebdec466da58a06b32ed"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

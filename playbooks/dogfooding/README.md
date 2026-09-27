@@ -16,7 +16,7 @@ Skills 与 ResearchSpec CLI 的协作是否遵守当前产品合同。若需要�
 1. `researchspec init` 只准备 schema `"2"` workspace 与静态投影，不启动学术工作或创建 run。
 2. Agent 从 `status` 和精确 selector 的 `instructions` 读取 frontier，不硬编码 graph。
 3. 根 run 的 entry summary 只确认一次；确认后的 frozen graph 授权声明的节点、child 和动态 revision round。每个 formal Gate、Decision 和 failed-Gate override 仍逐次取得确认。
-4. ARSU producer 把边界交付物写到 `researchspec/` 外，并维护所属 run 的 handoff 语义说明。
+4. 独立 Procedure 把产物写到 `researchspec/` 外，不创建 run、node、Gate、Decision 或 handoff；图内 producer 维护所属 run 的 handoff 语义说明。
 5. CLI 是 run、node、Gate、Decision 和 transition 的 workflow-state 修改入口；authority 文件不得手改。
 6. Stable specs、project changes 和 handoffs 可以按公开合同直接编辑；本规程通过 `handoff` CLI 提交 handoff，以保留当前字节检查和祖先完成派生。
 7. 正式 Gate 必须展示 verdict、证据、限制和后果，再由用户逐次确认。
@@ -41,11 +41,11 @@ Skills 与 ResearchSpec CLI 的协作是否遵守当前产品合同。若需要�
 | 能力 | 要求 |
 | --- | --- |
 | 隔离 | 使用一次性研究项目，并隔离宿主的项目级和全局投影目录 |
-| Bootstrap | 从源码或 tarball 安装 CLI，执行 `init` 与 `check all --strict` |
-| Skill 发现 | 验证 4 个 ARSU、5 个 Companion 和 registry-derived capability packages；选择 Zotero 后再验证 7 个 Adapter Skills |
+| Bootstrap | 从当前源码构建 CLI 或安装 tarball，执行 `init` 与 `check all --strict` |
+| Skill 发现 | 验证基础可见 Skill 仅有 `researchspec-navigate`；其他能力作为隐藏 Procedure 经运行时目录发现；显式选择 Zotero 后再验证 7 个 Adapter Skills |
 | 会话控制 | 结束当前会话，并在同一项目启动一个没有旧聊天的新会话 |
 | 证据捕获 | 保存原始提示、Agent 回复、CLI stdout/stderr、退出码、精确 selectors 及 run/node/Gate/Decision/handoff 快照 |
-| 清理 | 只清理已验证属于本轮的隔离目录，不用 `--force` 掩盖 drift |
+| 清理 | 只清理已验证属于本轮的隔离目录；固定 harness 默认保留临时项目，证据独立保存，不用 `--force` 掩盖 drift |
 
 Adapter 可以改变宿主启动和工具调用语法，不能改变 prompts、断言、fixture 或 ResearchSpec
 协议。首个适配器见 [`adapters/codex.md`](adapters/codex.md)。
@@ -73,13 +73,15 @@ library。
 
 ### Tier 1：发布签收
 
-Tier 1 对应 `artifacts/release/mvp-release-checklist.md` 的五项人工证据：
+Tier 1 对应 `artifacts/release/mvp-release-checklist.md` 的人工证据：
 
-1. `DF-T1-STANDALONE`：模糊目标经 Navigate 路由并完成 `deep-research:quick`。
-2. `DF-T1-RESUME`：新会话仅根据 profile、run/node 文件和 handoff 恢复。
+1. `DF-T1-STANDALONE`：自然请求经 Navigate 发现并执行按需 Procedure，输出普通项目文件；不创建 run、node、Gate、Decision 或 handoff。
+2. `DF-T1-RESUME`：新会话仅根据已有运行文件和精确 selector 恢复图内工作；普通任务恢复由 `DF-T1-NOTE-RESUME` 验证。
 3. `DF-T1-EXPORT`：维护 handoff 并生成有界 pack，run/node authority 不变。
 4. `DF-T1-GATE`：challenge、reverification、失败阻塞和显式 override。
-5. `DF-T1-PIPELINE`：根 run 确认后按 frontier 完成至少两轮 revision；每个 Gate 和 Decision 单独确认。
+5. `DF-T1-PIPELINE`：模糊目标经 Navigate 选择 graph，根 run 确认后按 frontier 启动 child、传递 handoff 并完成至少两轮 revision；每个 Gate 和 Decision 单独确认。
+
+自然语言场景另外覆盖文献综合、写作、证据核查、审稿回复、普通任务跨会话继续、能力检索重试及退出、输入缺失和非研究请求。场景的 `intent` 与 `hard_assertions` 是人工验收依据；未保存真实宿主会话证据前，状态保持 `unverified`。
 
 自动 acceptance 不能替代这些真实对话与人工判断。
 
@@ -100,16 +102,16 @@ override、受损 workspace 和外部篡改。预期结果是结构化拒绝，�
 
 1. 从 `scenarios.yaml` 读取场景和 fixture，不复用未声明的状态。
 2. 复制 [`evidence-template/`](evidence-template/) 到 workspace 外的证据目录。
-3. 保存初始 `status --json`、`check all --strict --json` 和相关 `instructions`。
+3. 保存初始 `status --json`、`check all --strict --json`；仅在选定的 Procedure 或图动作需要时保存相关 `instructions`。
 4. 原样发送场景 prompts；追加说明只能提供已声明输入。
-5. 在 checkpoint 保存精确 selector、CLI 请求与响应、相关 run/graph/node/Gate/Decision/handoff 快照及外部文件 hash。
+5. 在 checkpoint 保存实际使用的 selector、CLI 请求与响应、普通任务笔记或相关 run/graph/node/Gate/Decision/handoff 快照，以及外部文件 hash；未发生的图动作记为不适用。
 6. 触发 prohibited action 或 hard assertion 失败时，立即停止后续 mutation。
 7. 执行有界 cleanup，并记录最终诊断、硬断言、软评分和缺陷分类。
 
 推荐证据目录：
 
 ```text
-dogfood-evidence/<run-id>/<scenario-id>/
+dogfood-evidence/<session-id>/<scenario-id>/
 ├── manifest.yaml
 ├── prompts.md
 ├── transcript.md
@@ -148,7 +150,7 @@ dogfood-evidence/<run-id>/<scenario-id>/
 - `fail`：任一硬断言失败、评分不达标或关键证据缺失；
 - `blocked`：外部环境或授权使场景无法开始或继续，且没有观察到产品失败。
 
-Tier 1 五个场景必须全部 pass。熟悉协议的维护者轮与低干预自然语言轮分开记录。
+发布清单引用的 Tier 1 场景必须全部 pass。熟悉协议的维护者轮与低干预自然语言轮分开记录。
 恢复成功率只在存在恢复尝试时计算；没有尝试记为 N/A，不能把未执行场景计为成功。
 
 ## 8. 故障取证
@@ -185,3 +187,96 @@ run/node 的 terminal status、空 frontier、handoff 和严格 workspace health
 `scenarios.yaml` 的 `acceptance_journey_refs` 是场景覆盖标签，不是可调用的自动测试 ID；例如
 `pipeline-confirmation` 表示根 graph 授权及其 child frontier，`revision-rounds` 表示动态轮次与
 对应的 Gate/Decision。自动测试不能代替真实对话、人工 Gate、跨会话 Agent 行为或学术质量评分。
+
+## 10. 固定自动化 harness
+
+`pnpm dogfood` 是维护者验收工具。每轮固定对工具目录中的全部目标（含共享 `agents`）运行
+`skills`、`commands`、`both` 三种模式的本地初始化投影检查：当前为 36 × 3 = 108 格。
+检查 `init` 交付、manifest、Navigate Skill/命令、项目入口、执行与审阅 Agent profile、
+`status`、`check all --strict` 和 Procedure 的 `list/show/instructions` 选择器。每格在独立
+`/tmp` 项目运行，不调用宿主模型或 Orca。此结果只说明静态交付及 ResearchSpec CLI 可发现、
+可调用，不能证明目标宿主已原生调用或遵循这些指示。
+
+可另选**一个**有适配器的宿主，跑自然语言行为验收。当前行为适配器为 `codex`、`claude`、
+`opencode` 和 `oh-my-pi`；增加新宿主只需增加适配器和模型配置。行为层在 Linux 上要求
+Orca 注册的本项目工作树、`bwrap`、宿主 CLI 和凭据；OMP 另需 `sqlite3`。配置格式见
+[`harness.example.yaml`](harness.example.yaml)：行为宿主的 `model` 必填，`binary` 可覆盖可执行文件。
+示例模型是当前 MiniMax 选择，运行器没有默认模型。
+
+`assessor.host`、`assessor.model` 和 `assessor.timeout_sec` 单独配置验收 Agent。它在被测尝试
+结束后以新隔离会话读取封存证据并起草报告；可以与被测宿主同种，但不得复用其会话。`plan`
+会列出所选行为宿主和验收模型、108 次本地初始化、行为尝试数与验收调用数。命令行可用
+`--assessor-host`、`--assessor-model` 覆盖，`--assess-jobs` 控制报告并发（默认 1）。
+
+示例中的 Claude Code 使用本机 `opus` 别名；其宿主设置将该别名映射到 MiniMax-M3。
+在其他机器上应按该宿主实际可识别的模型名修改配置。
+
+先预览，再运行静态矩阵或追加一个宿主的行为验收：
+
+```bash
+pnpm dogfood plan
+pnpm dogfood run --open-ui
+pnpm dogfood plan --config playbooks/dogfooding/harness.example.yaml --behavior-host codex --suite natural-18
+pnpm dogfood run --config playbooks/dogfooding/harness.example.yaml --behavior-host codex --scenario DF-T2-UNRELATED --repeat 1 --open-ui
+```
+
+行为验收默认使用 `natural-18` 的 18 个场景、每场景两次独立会话，共 36 次被测调用与 36 次
+验收调用。局部行为调试可指定 `--scenario` 或 `--suite`；`--model <host>=<model>` 临时覆盖模型。
+`--repeat` 默认 2，`--jobs` 控制静态矩阵并发，默认 4；所选行为宿主串行运行。
+`--timeout-sec` 默认 600。`--state-dir` 更改本地证据目录，默认在
+`$XDG_STATE_HOME/researchspec/dogfooding`，无 XDG 设置时在用户本地 state 目录。
+`--no-ui` 只关闭运行期间的网页；`--port` 指定审阅服务端口，默认随机空闲端口；
+`--open-ui` 在 Orca 中打开网页。`plan` 只检查选择与基本前置条件，不调用模型。
+
+`run` 构建当前源码并先运行静态矩阵。只有选了 `--behavior-host`，矩阵全通过后才通过 Orca
+终端启动被测宿主。宿主只看到一次性项目、运行所需程序与凭据；适配器仅传递该宿主声明的模型凭据
+环境变量和必要的通用网络变量。OpenCode 可在该一次性项目安装自身依赖。
+终端 stdout/stderr、结构化事件、前后 `status`/`check`、文件清单和交付物持续写到本地
+campaign 目录。每次封存后验收 Agent 自动起草证据绑定的报告；若验收模型失败，测试结果仍保留，
+报告状态标记为失败，稍后可用 `assess` 重试。`Review:` URL 在首个 Agent 开始前打印，页面每两秒更新；运行命令结束时
+网页服务停止。之后可用：
+
+```bash
+pnpm dogfood serve --campaign <campaign-id>
+pnpm dogfood resume --campaign <campaign-id>
+pnpm dogfood retry --campaign <campaign-id> --host codex --scenario DF-T2-UNRELATED
+pnpm dogfood assess --campaign <campaign-id>
+```
+
+`serve` 重开已保存的审阅页面。`resume` 续跑未开始的静态格或行为会话，并为中断中的行为会话建立新尝试；
+`retry` 仅允许阻断、无效或中断的宿主场景。源码或场景变化后须新建 campaign。每次尝试
+保留原证据，失败行为不会由后续重试抹去。
+`assess --session <attempt-id>` 可只补写一个报告；未指定时补写全部待生成或失败的报告。
+模型服务限流时可降低 `--assess-jobs` 并重跑 `assess`，不会重跑被测宿主。
+
+页面首先给出 36 × 3 静态矩阵；每格可查看检查项、manifest 和投影文件。行为区域再给出
+逐次尝试的待审队列和验收报告：原始 prompt、关键行动、交付物、逐项断言、
+四项评分、建议结论与失败模式。每项关键判断链接到具体事件或文件片段；完整原始文件放在
+报告后供回查。验收 Agent 的结论仅供参考，不计入人工通过。填写审阅者并核对报告后，
+直接点击页面的“保存最终审定”；后续修订须写明原因，并保存旧记录。浏览器请求只能写入
+人工审定记录，不能改动封存证据或 ResearchSpec 运行状态。审阅草稿按证据和报告摘要保存在
+浏览器本地。CLI `import-review` 仍可导入已有的审阅 JSON：
+
+```bash
+pnpm dogfood import-review --campaign <campaign-id> --file <已有的审阅文件.json>
+pnpm dogfood report --campaign <campaign-id>
+pnpm dogfood report --campaign <campaign-id> --write
+```
+
+页面保存和 CLI 导入共用同一校验器，检查封存证据、报告摘要、场景前提、全部硬断言、评分和恢复计数。`pass` 需要
+硬断言全过、四项均非零且总分至少 9/12，并具备原始流与前后诊断。报告默认预览；
+`--write` 只在静态矩阵全部通过后生成经过路径脱敏的项目内证据摘要，并在
+`host-verification.md` 追加本轮静态和单宿主行为结果。发布门槛要求完整静态矩阵和**一个**
+宿主的 `natural-18` 全部场景各有两次独立人工通过。其他宿主的行为状态不继承通过结论。
+
+旧一轮的 144 个正式 manifest 可以导入本地审阅页：
+
+```bash
+pnpm dogfood legacy-import --raw-root /tmp/researchspec-acceptance-S3INwu/records
+pnpm dogfood serve --campaign <返回的 legacy-campaign-id>
+```
+
+`--raw-root` 可省略，此时优先使用旧 manifest 记录的原始流路径。旧 campaign 只读，不能再
+续跑、补写验收报告或审定；旧分数和结论仅作为历史信息展示。所有真实原始流只留在本地 state 目录；
+网页仅绑定 `127.0.0.1`。项目维护者可使用 `.agents/skills/dogfood-audit/SKILL.md`
+完成范围确认、模型配置、运行和打开审阅页。

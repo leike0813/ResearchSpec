@@ -1,0 +1,16 @@
+{
+  "outputs": [
+    {
+      "role": "annotated_bibliography",
+      "path": "work/research/annotated_bibliography.md"
+    },
+    {
+      "role": "synthesis_report",
+      "path": "work/research/synthesis_report.md"
+    },
+    {
+      "role": "research_report",
+      "path": "work/research/research_report.md"
+    }
+  ]
+}

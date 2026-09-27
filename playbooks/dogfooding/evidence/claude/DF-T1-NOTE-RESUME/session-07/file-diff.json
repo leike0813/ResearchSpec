@@ -1,0 +1,16 @@
+{
+  "changed": [
+    {
+      "path": "work/claims-vs-sources.md",
+      "before_sha256": null,
+      "after_sha256": "735c4bc43decad14aa0c12e2384a998b230a1296b762c47445e78cec76638681"
+    },
+    {
+      "path": "work/researchspec-notes/writing-evidence.md",
+      "before_sha256": "5a5e5550bc9dd875bb02a26366e6994cab5aca62729983f82d94406730957beb",
+      "after_sha256": "95081fbd1d2acf2d8d068430afbf3ec16e7c59d5b107c6e7665a35e675c9f1c6"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

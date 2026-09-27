@@ -1,0 +1,36 @@
+{
+  "changed": [
+    {
+      "path": "benchmark/review_response_workspace/README.md",
+      "before_sha256": null,
+      "after_sha256": "1f725770d1c84b3fe209a18828e1d68a64ae2591b5b0fe25907bfce68f6d27bd"
+    },
+    {
+      "path": "benchmark/review_response_workspace/WORKSPACE.md",
+      "before_sha256": null,
+      "after_sha256": "b6bc6d52b32821cfb6a714089693d9ecb3fa05d120e2cf6c87d4b28db9d59b15"
+    },
+    {
+      "path": "benchmark/review_response_workspace/comment_atomization/atomic_comment_list.md",
+      "before_sha256": null,
+      "after_sha256": "f8917e78ef6e81093c00ec547f2d96d326701f72d81f86301701f7a03bb3a818"
+    },
+    {
+      "path": "benchmark/review_response_workspace/comment_coverage/comment_coverage_report.md",
+      "before_sha256": null,
+      "after_sha256": "4253b22a685f6a10dbe435e2352bee0765ecf1a7977a8317179787d163a7e80d"
+    },
+    {
+      "path": "benchmark/review_response_workspace/intake/intake_report.md",
+      "before_sha256": null,
+      "after_sha256": "50c5e85bd6c9bff82653910a30e16200508efc4cf30a264931ebb9ebddb07c3e"
+    },
+    {
+      "path": "benchmark/review_response_workspace/manuscript_analysis/manuscript_structure_summary.md",
+      "before_sha256": null,
+      "after_sha256": "b7da3fd9f3ee88b37706da36b8ec8ac7c9f0dcbe07f0d11591c9161fc48bcbf1"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

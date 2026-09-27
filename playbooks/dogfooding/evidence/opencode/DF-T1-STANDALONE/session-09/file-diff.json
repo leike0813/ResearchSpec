@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "work/evidence-synthesis/report.md",
+      "before_sha256": null,
+      "after_sha256": "51b678779e096ad2ec024cc86334816e6c81cf6a5d7beec0c435e9737cfbf19e"
+    }
+  ],
+  "host_scaffold_file_count": 3651,
+  "authority_changed": []
+}

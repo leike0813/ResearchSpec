@@ -1,0 +1,24 @@
+# ResearchSpec task note — writing-evidence
+
+- Goal: Continue the academic-pipeline run for the synthetic benchmark "Generative AI in University Writing Instruction". Bounded-synthesis RQ: which hypotheses are supported, partially supported, or unsupported by the synthetic corpus, and what design constraints follow?
+- Inputs: `benchmark/sources.yaml` (4 SYN-* sources); `benchmark/partial-manuscript.md` (working draft with CLM-01, CLM-02).
+- Output so far:
+  - `work/research/rq_brief.md` — RQ Brief (FINER 4.0/5)
+  - `work/research/methodology_blueprint.md` — Pragmatist + scoping review over 4 sources
+  - `work/research/annotated_bibliography.md` — 4 sources pre-screened, all INCLUDE
+  - `work/research/graded_sources.md` — 4 sources graded VI–VII on the form of evidence; all flagged with verification-limit (no external index can verify synthetic IDs)
+  - `work/research/synthesis_report.md` — 4 themes, 4 cross-paper tensions inventoried (scholar_confirmation: pending), 5 knowledge gaps, claim-by-claim matrix
+  - `work/research/research_report.md` — short-form compiled report bundling methodology + synthesis; ~890 words
+- Completed work:
+  - Started child run `run-36ec006277874f96bd0d7871` (research-main subgraph) under parent `run-2288fd2a43bd79f271923277` (academic-pipeline).
+  - Advanced all 7 nodes: research-question, rq-gate, methodology, literature, grading, synthesis, report.
+  - Decided rq-gate (pass_with_conditions) and parent research-gate (pass).
+  - Replaced run handoff with 3 boundary outputs (annotated_bibliography, synthesis_report, research_report).
+- Evidence limits: All sources are synthetic test material; no external publication has been verified; verification tiers not applicable (no real DOI, venue, author).
+- Open question:
+  - Whether to continue into the `write` subgraph (academic-paper:full → intake/structure/argument/draft/cite-check/paper-gate/abstract) without further user input.
+  - The fixture goal explicitly says "如需改变研究范围或 claim 强度，必须先让用户决定" — so the `write` stage should not start without a user decision, because producing a manuscript draft is a substantive scope step.
+- Next step:
+  - Present the research-stage deliverables and the current frontier (`pending_subgraph_starts: node:run-2288fd2a43bd79f271923277/write`) to the user.
+  - Wait for the user to decide whether to advance to `write` (full APA-style manuscript drafting) or to pause the run.
+- Related run: `run-2288fd2a43bd79f271923277` (academic-pipeline, profile academic-pipeline 0.1.0, status active); child run `run-36ec006277874f96bd0d7871` (research-main) reached terminal state with all 7 nodes complete.

@@ -1,0 +1,10 @@
+1. shell: [non-CLI command; raw trace retained outside repository]
+2. shell: [non-CLI command; raw trace retained outside repository]
+3. shell: [non-CLI command; raw trace retained outside repository]
+4. shell: [non-CLI command; raw trace retained outside repository]
+5. shell: [non-CLI command; raw trace retained outside repository]
+6. shell: [non-CLI command; raw trace retained outside repository]
+7. shell: [non-CLI command; raw trace retained outside repository]
+8. shell: [non-CLI command; raw trace retained outside repository]
+9. shell: /usr/bin/zsh -lc 'cd [workspace] && researchspec status --json 2>&1 | head -80'
+10. shell: [non-CLI command; raw trace retained outside repository]

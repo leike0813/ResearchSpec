@@ -1,0 +1,4 @@
+schema_version: "2"
+outputs:
+  - role: research_report
+    path: work/research_report.md

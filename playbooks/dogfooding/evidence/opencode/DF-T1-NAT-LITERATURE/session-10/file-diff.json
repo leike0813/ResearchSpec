@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "work/evidence-synthesis-genai-writing.md",
+      "before_sha256": null,
+      "after_sha256": "65951706c760226f6ed3c5f68170ae645965d4e357f20e01b159b440c616fdbb"
+    }
+  ],
+  "host_scaffold_file_count": 3651,
+  "authority_changed": []
+}

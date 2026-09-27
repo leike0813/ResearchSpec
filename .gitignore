@@ -16,6 +16,8 @@
 .agents/*
 !.agents/skills/
 .agents/skills/*
+!.agents/skills/dogfood-audit/
+!.agents/skills/dogfood-audit/**
 !.agents/skills/arsu-maintenance/
 !.agents/skills/arsu-maintenance/**
 !.agents/skills/education-agent-skills-maintenance/

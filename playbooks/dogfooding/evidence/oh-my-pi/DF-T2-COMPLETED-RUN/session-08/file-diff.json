@@ -1,0 +1,11 @@
+{
+  "changed": [
+    {
+      "path": "benchmark/response-to-reviewers.md",
+      "before_sha256": null,
+      "after_sha256": "cc7ddd6bf4a2dc1ffa182ae2e0a7dda300101c8160ab0220c8df2806751e743c"
+    }
+  ],
+  "host_scaffold_file_count": 0,
+  "authority_changed": []
+}

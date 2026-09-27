@@ -1,0 +1,49 @@
+schema_version: "1"
+target_id: codex
+verification_status: unverified
+workspace_schema_version: "2"
+run_id: ""
+scenario_id: DF-T2-UNRELATED
+fixture_variant: goal-only
+researchspec_version: 0.1.0 (local working tree)
+git_commit: 81e5e972b0142952b900908d0bad1ef2a1177f55
+package_sha256: ""
+build_tree_sha256: fcbdc10352a066ce867d07cd8e0f6f9b37b9daf09858cd5ac6213a42c6bcb0df
+agent:
+  product: codex
+  host_version: 0.157.1
+  model_version: minimax-cn/MiniMax-M3
+  adapter: adapters/codex.md
+independent_session_ids:
+  - session-09
+  - session-10
+environment:
+  os: linux
+  node_version: v24.12.0
+  workspace_path: /tmp/researchspec-journey-LIOLq9
+started_at: 2026-09-27T07:00:52.898Z
+completed_at: 2026-09-27T07:01:25.450Z
+result: pass
+hard_failures: []
+scores:
+  routing_clarity: 3
+  user_control: 3
+  evidence_discipline: 1
+  artifact_usability: 3
+evidence_paths:
+  - prompts.md
+  - tool-calls.md
+  - transcript.md
+  - before-status.json
+  - after-status.json
+  - before-check.json
+  - after-check.json
+  - file-diff.json
+  - external-files.sha256
+selectors: []
+human_corrections: 0
+resume_attempts: 0
+successful_resumes: 0
+resume_success_rate: N/A
+notes: 已按原始会话轨迹、状态快照和产物复核；通过本场景硬断言。
+raw_trace: /tmp/researchspec-acceptance-S3INwu/records/codex/DF-T2-UNRELATED/session-09/trace.jsonl

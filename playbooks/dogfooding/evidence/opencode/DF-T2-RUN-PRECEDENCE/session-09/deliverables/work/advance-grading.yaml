@@ -1,0 +1,4 @@
+schema_version: "2"
+outputs:
+  - role: graded_sources
+    path: work/graded_sources.md

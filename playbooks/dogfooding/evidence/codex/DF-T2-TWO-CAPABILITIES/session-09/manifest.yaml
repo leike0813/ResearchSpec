@@ -1,0 +1,54 @@
+schema_version: "1"
+target_id: codex
+verification_status: unverified
+workspace_schema_version: "2"
+run_id: ""
+scenario_id: DF-T2-TWO-CAPABILITIES
+fixture_variant: review-cycle
+researchspec_version: 0.1.0 (local working tree)
+git_commit: 81e5e972b0142952b900908d0bad1ef2a1177f55
+package_sha256: ""
+build_tree_sha256: fcbdc10352a066ce867d07cd8e0f6f9b37b9daf09858cd5ac6213a42c6bcb0df
+agent:
+  product: codex
+  host_version: 0.157.1
+  model_version: minimax-cn/MiniMax-M3
+  adapter: adapters/codex.md
+independent_session_ids:
+  - session-09
+  - session-10
+environment:
+  os: linux
+  node_version: v24.12.0
+  workspace_path: /tmp/researchspec-journey-jxNsmY
+started_at: 2026-09-27T07:15:31.303Z
+completed_at: 2026-09-27T07:17:21.146Z
+result: fail
+hard_failures:
+  - 未按声明输入完成两项 Procedure 链接。
+  - 未保存两步普通项目产物。
+scores:
+  routing_clarity: 0
+  user_control: 3
+  evidence_discipline: 2
+  artifact_usability: 0
+evidence_paths:
+  - prompts.md
+  - tool-calls.md
+  - transcript.md
+  - before-status.json
+  - after-status.json
+  - before-check.json
+  - after-check.json
+  - file-diff.json
+  - external-files.sha256
+  - deliverables/work/researchspec-notes/step-01-inventory.md
+  - deliverables/work/researchspec-notes/step-02-comment-breakdown.md
+  - deliverables/work/researchspec-notes/step-03-completeness-check.md
+selectors: []
+human_corrections: 0
+resume_attempts: 0
+successful_resumes: 0
+resume_success_rate: N/A
+notes: 未按声明输入完成两项 Procedure 链接。 未保存两步普通项目产物。
+raw_trace: /tmp/researchspec-acceptance-S3INwu/records/codex/DF-T2-TWO-CAPABILITIES/session-09/trace.jsonl

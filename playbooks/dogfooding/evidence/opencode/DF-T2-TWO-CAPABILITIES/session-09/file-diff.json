@@ -1,0 +1,31 @@
+{
+  "changed": [
+    {
+      "path": "work/researchspec-notes/review-response-prep.md",
+      "before_sha256": null,
+      "after_sha256": "f493364816fb1241f151aec864468eeb16d4870b163069fd0fa6983fc7df00c8"
+    },
+    {
+      "path": "work/review-response-prep/01-intake-inventory.md",
+      "before_sha256": null,
+      "after_sha256": "2d2cfa9852d98ccc0f1a0c92a39b9659384beb6147c24b66a9d8d22740ef9103"
+    },
+    {
+      "path": "work/review-response-prep/02-manuscript-structure.md",
+      "before_sha256": null,
+      "after_sha256": "d3ca19164585317eb756b7050a688af76e65378ac3fe4e6c8bc7bf2bf5a030d3"
+    },
+    {
+      "path": "work/review-response-prep/03-atomic-comments.md",
+      "before_sha256": null,
+      "after_sha256": "0ade3d8085d8db239db7c2cd6acf11839faf08d4d48b63a771155a62ba818a69"
+    },
+    {
+      "path": "work/review-response-prep/04-coverage-report.md",
+      "before_sha256": null,
+      "after_sha256": "3d062dfe3630fad84ca321335d48db9853ad168d2813a83b63f22621bd40e1c0"
+    }
+  ],
+  "host_scaffold_file_count": 3651,
+  "authority_changed": []
+}
