@@ -29,7 +29,7 @@ if (previewMode) {
   for (const { id } of REVIEW_PREVIEW_CASES) {
     await writeFile(path.join(previewRoot, `${id}.html`), renderReviewWorkspacePreview(sourceHtml, samples[id]), "utf8");
   }
-  const url = pathToFileURL(path.join(previewRoot, "annotation-intake.html")).href;
+  const url = pathToFileURL(path.join(previewRoot, "article-rendered.html")).href;
   process.stdout.write(`ResearchSpec review preview: ${url}\n`);
   if (!process.argv.includes("--no-open")) {
     const command = process.platform === "darwin" ? "open" : process.platform === "win32" ? "explorer.exe" : "xdg-open";

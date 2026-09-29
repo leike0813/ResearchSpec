@@ -3,8 +3,8 @@ import type { AuthoringPackageAsset, AuthoringKnowledgeSource, CapabilityAuthori
 const MIT = "MIT";
 const PROCEDURES = "src/arsu-converter/authoring/procedures/review-response";
 const INDEX = "authoring/revision-master/extraction-index.json";
-const REVIEW_WORKSPACE = { source_path: "review-workspace/index.html", output_path: "review-workspace/index.html" };
-const REVIEW_WORKSPACE_V1 = { source_path: "review-workspace/v1.html", output_path: "review-workspace/v1.html" };
+const REVIEW_WORKSPACE = { source_path: "review-workspace/index.html", output_path: "review-workspace/index.html", recovery_only: true };
+const REVIEW_WORKSPACE_V1 = { source_path: "review-workspace/v1.html", output_path: "review-workspace/v1.html", recovery_only: true };
 
 export const REVISION_MASTER_AUTHORING_OPTIONS = {
   extractionIndexPath: INDEX,

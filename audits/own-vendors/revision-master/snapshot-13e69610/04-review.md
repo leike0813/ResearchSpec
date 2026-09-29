@@ -20,16 +20,16 @@
 |---|---|---|---|---|---|---|
 | `analysis-review-response-manuscript-analysis` | 0.933 | 1.000 | 114 | 4 | yes | none |
 | `design-review-response-intake` | 1.000 | 1.000 | 117 | 4 | yes | none |
-| `design-review-response-workboard-planning` | 1.000 | 1.000 | 112 | 6 | yes | none |
-| `generation-review-response-round` | 0.800 | 1.000 | 135 | 7 | yes | none |
+| `design-review-response-workboard-planning` | 1.000 | 1.000 | 110 | 6 | yes | none |
+| `generation-review-response-round` | 0.800 | 1.000 | 133 | 7 | yes | none |
 | `transform-review-response-comment-atomization` | 1.000 | 1.000 | 112 | 4 | yes | none |
 
 ## Artifact Hashes
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json` | `e08d861c593495f2f48d2839239ae032952fda264a01aa4009b8a3338784d537` |
-| parity package slice | `audits/own-vendors/revision-master/snapshot-13e69610/artifacts/parity-packages.json` | `6534b2676d7527ad814e67fa53d5ef52cc9560cf4bb932dc46f1d4e3c06ac9cf` |
+| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json` | `ed670331e8b9bec75f55ee6e2a1b92c7e6ff6c1ff094c0e57081a1195cec5bd8` |
+| parity package slice | `audits/own-vendors/revision-master/snapshot-13e69610/artifacts/parity-packages.json` | `66c77d6cbc7915873d18ccad5f38708f71b6b9d2ef675e34a814a51d15c85107` |
 
 ## Human Confirmation
 

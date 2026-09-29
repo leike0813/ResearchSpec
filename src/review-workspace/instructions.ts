@@ -4,14 +4,11 @@ import type { ReviewWorkspaceAdapter } from "./contracts.js";
 
 const ADAPTERS = new Map<string, ReviewWorkspaceAdapter>([
   ["paper-humanizer", "paper-humanizer"],
-  ["review-response", "review-response"],
 ]);
 
 const ASSET_CAPABILITIES = new Set([
   "check-paper-humanization-review",
   "transform-paper-humanization-revision",
-  "design-review-response-workboard-planning",
-  "generation-review-response-round",
 ]);
 
 export function reviewWorkspaceInstruction(input: {

@@ -68,6 +68,7 @@ function expectError(run, label) {
   try { run(); } catch (caught) { error = caught; }
   assert.ok(error, label + "：期望校验失败但没有抛出错误");
   assert.ok(typeof error.message === "string" && error.message.length > 0, label + "：错误信息为空");
+  return error;
 }
 function rejectsWorkspace(mutate, label) {
   const value = clone();
@@ -82,6 +83,27 @@ rejectsWorkspace((value) => { value.items[1].item_id = "A-001"; }, "duplicate it
 rejectsWorkspace((value) => { value.document.blocks[1].extra = true; }, "unknown block field");
 rejectsWorkspace((value) => { value.source.files = [{ path: "work/other.md", sha256: HASH }]; }, "entry path missing from source set");
 rejectsWorkspace((value) => { value.workflow.mutation_authority = "browser"; }, "authority mismatch");
+
+const compareFixture = clone();
+compareFixture.adapter = "paper-humanizer";
+compareFixture.source.files.unshift({ path: "work/base.md", sha256: HASH });
+compareFixture.document.blocks = [
+  { ...compareFixture.document.blocks[1], id: "before-intro-1", text: "城市绿地显著改善睡眠质量。", runs: [], source_path: "work/base.md" },
+  { ...compareFixture.document.blocks[1], id: "after-intro-1", runs: [], source_path: "work/manuscript.md" },
+];
+compareFixture.document.comparison = { base_path: "work/base.md", rows: [{ before_block_id: "before-intro-1", after_block_id: "after-intro-1" }] };
+compareFixture.items = [{ ...compareFixture.items[0], target: { kind: "locator", label: "引言" } }];
+compareFixture.document.item_locations = [{ item_id: "A-001", block_id: "after-intro-1", start: 0, end: 4 }];
+api.validateWorkspace(compareFixture);
+const invalidComparison = structuredClone(compareFixture);
+invalidComparison.document.comparison.rows[0].after_block_id = "before-intro-1";
+expectError(() => api.validateWorkspace(invalidComparison), "comparison side identity");
+const invalidLocation = structuredClone(compareFixture);
+invalidLocation.document.item_locations[0].end = 999;
+expectError(() => api.validateWorkspace(invalidLocation), "display location bounds");
+const malformedComparison = structuredClone(compareFixture);
+malformedComparison.document.blocks = null;
+assert.match(expectError(() => api.validateWorkspace(malformedComparison), "malformed comparison block list").message, /document\.blocks/);
 
 const draft = {
   export_revision: 1,
@@ -166,9 +188,40 @@ function chromeBinary() {
   return null;
 }
 
-function dumpWithImport(payload) {
+function dumpWithImport(payload, comparison = false) {
   const encoded = Buffer.from(JSON.stringify(payload), "utf8").toString("base64");
-  const probe = "<script>(function(){var bytes=Uint8Array.from(atob('" + encoded + "'),function(c){return c.charCodeAt(0)});var transfer=new DataTransfer();transfer.items.add(new File([bytes],'check.json',{type:'application/json'}));var picker=document.getElementById('file');picker.files=transfer.files;picker.dispatchEvent(new Event('change'));setTimeout(function(){if(document.getElementById('legacy-dialog').open){document.title='LEGACY-OPEN';return;}var paper=document.getElementById('paper');var before=paper.querySelector('[data-block-id=intro-1]');var a=paper.querySelector('[data-block-id=intro-1][data-text-target]');var b=paper.querySelector('[data-block-id=intro-cite][data-text-target]');var single=false,mixed=false;if(a){var r=document.createRange();r.selectNodeContents(a);var s=getSelection();s.removeAllRanges();s.addRange(r);paper.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));single=document.getElementById('selection-action').hidden===false;}if(a&&b){var r2=document.createRange();r2.setStart(a,0);r2.setEnd(b,b.childNodes.length);var s2=getSelection();s2.removeAllRanges();s2.addRange(r2);paper.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));var toast=document.getElementById('toast');mixed=!toast.hidden&&toast.textContent.indexOf('跨越')!==-1;}var expand=document.querySelector('#cards .expand');if(expand){expand.click();var field=document.querySelector('#cards textarea');if(field){field.value='新说明';field.dispatchEvent(new Event('input',{bubbles:true}));}}var bounded=before===paper.querySelector('[data-block-id=intro-1]');document.title='single='+single+' mixed='+mixed+' bounded='+bounded;},600);})();</script>";
+  const probe = `<script>(function(){
+    var bytes=Uint8Array.from(atob('${encoded}'),function(c){return c.charCodeAt(0)});
+    var transfer=new DataTransfer();transfer.items.add(new File([bytes],'check.json',{type:'application/json'}));
+    var picker=document.getElementById('file');picker.files=transfer.files;picker.dispatchEvent(new Event('change'));
+    setTimeout(function(){
+      if(document.getElementById('legacy-dialog').open){document.title='LEGACY-OPEN';return;}
+      var paper=document.getElementById('paper');
+      if(${comparison}){
+        var rows=paper.querySelectorAll('.compare-row').length;
+        var changes=paper.querySelectorAll('.diff-before,.diff-after').length;
+        addWhole('before-intro-1');addWhole('after-intro-1');
+        STATE.comments[0].body='原文批注';STATE.comments[1].body='候选稿批注';
+        var result=buildResult(STATE.workspace,STATE,new Date().toISOString());
+        validateResultAgainstWorkspace(result,STATE.workspace);
+        document.title='rows='+rows+' changes='+changes+' comments='+result.comments.length+' sides='+result.comments.map(function(c){return c.anchor.block_id}).join(',');
+        return;
+      }
+      var before=paper.querySelector('[data-block-id=intro-1]');
+      var a=paper.querySelector('[data-block-id=intro-1][data-text-target]');
+      var b=paper.querySelector('[data-block-id=intro-cite][data-text-target]');
+      var single=false,mixed=false;
+      if(a){var r=document.createRange();r.selectNodeContents(a);var s=getSelection();s.removeAllRanges();s.addRange(r);paper.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));single=document.getElementById('selection-action').hidden===false;}
+      if(a&&b){var r2=document.createRange();r2.setStart(a,0);r2.setEnd(b,b.childNodes.length);var s2=getSelection();s2.removeAllRanges();s2.addRange(r2);paper.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));var toast=document.getElementById('toast');mixed=!toast.hidden&&toast.textContent.indexOf('跨越')!==-1;}
+      var expand=document.querySelector('#cards .expand');if(expand)expand.click();
+      var cards=document.querySelectorAll('#cards .card').length;
+      var select=document.querySelector('#cards .card.agent select');if(select){select.value='include';select.dispatchEvent(new Event('change',{bubbles:true}));}
+      document.getElementById('disposition-filter').value='include';document.getElementById('disposition-filter').dispatchEvent(new Event('change'));
+      var filtered=document.querySelectorAll('#cards .card').length;
+      var bounded=before===paper.querySelector('[data-block-id=intro-1]');
+      document.title='single='+single+' mixed='+mixed+' bounded='+bounded+' cards='+cards+' filtered='+filtered;
+    },600);
+  })();</script>`;
   const dir = mkdtempSync(path.join(tmpdir(), "rs-review-page-"));
   const file = path.join(dir, "page.html");
   writeFileSync(file, v2Html.replace("</body>", probe + "</body>"), "utf8");
@@ -180,7 +233,7 @@ if (!chrome) {
   console.log("review-workspace page check: contract logic OK; no Chrome found, browser stage skipped");
 } else {
   const v2Dom = dumpWithImport(FIXTURE);
-  assert.ok(v2Dom.includes("<title>single=true mixed=true bounded=true</title>"), "single-block selection, cross-block guard, and bounded updates work in a real browser");
+  assert.ok(v2Dom.includes("<title>single=true mixed=true bounded=true cards=2 filtered=1</title>"), "selection, card expansion, disposition and filtering work in a real browser");
   assert.match(v2Dom, /文档目录/);
   assert.match(v2Dom, /跳到 引言/);
   assert.ok(v2Dom.includes("<em>城市绿地暴露</em>"), "typed runs render as formatting");
@@ -205,7 +258,9 @@ if (!chrome) {
   assert.ok(rails.includes("Agent 审阅项") && rails.includes("待处理"), "rail renders Agent items with their disposition");
   assert.ok(rails.includes("未定位到正文"), "an item without a document target stays reachable");
   assert.match(v2Dom, /未定位到正文/);
-  assert.ok(v2Dom.includes("显示 2 / 2 项"), "rail shows item counts");
+  assert.ok(v2Dom.includes("显示 1 / 2 项"), "rail shows filtered item counts");
+  const compareDom = dumpWithImport(compareFixture, true);
+  assert.match(compareDom, /<title>rows=1 changes=[1-9][0-9]* comments=2 sides=before-intro-1,after-intro-1<\/title>/, "comparison renders changed phrases and exports side-specific anchors");
   const v1Dom = dumpWithImport({ schema_version: "1", workspace_id: "old", adapter: "paper-humanizer", title: "旧版", manuscript: { path: "paper.md", entry_path: null, format: "markdown", sha256: HASH, content: "旧稿" }, items: [] });
   assert.ok(v1Dom.includes("<title>LEGACY-OPEN</title>"), "v1 input opens the recovery route");
   console.log("review-workspace page check: contract logic + real browser import OK");

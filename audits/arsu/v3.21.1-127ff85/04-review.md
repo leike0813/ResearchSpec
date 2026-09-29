@@ -40,8 +40,8 @@
 | `academic-paper-reviewer:methodology-focus` | Methodology-focused review | 7 / 2,015 | 0 / 0 | 1 / 1,278 | 100% (4/4) | none | none |
 | `academic-paper-reviewer:guided` | Guided review | 12 / 3,622 | 0 / 0 | 3 / 2,684 | 100% (4/4) | none | none |
 | `academic-paper-reviewer:calibration` | Reviewer calibration | 13 / 4,290 | 0 / 0 | 2 / 2,308 | 25% (1/4) | gap:FNR, gap:FPR, gap:gold set | none |
-| `academic-pipeline:end-to-end` | End-to-end pipeline | 26 / 9,568 | 1 / 136 | 24 / 23,116 | 80% (4/5) | none | Stage 1 RESEARCH |
-| `academic-pipeline:resume_from_passport` | Resume from passport reset boundary | 9 / 5,584 | 1 / 136 | 26 / 23,906 | 40% (2/5) | gap:reset boundary, gap:awaiting_resume, gap:consumes_hash | none |
+| `academic-pipeline:end-to-end` | End-to-end pipeline | 26 / 9,568 | 1 / 136 | 24 / 23,390 | 80% (4/5) | none | Stage 1 RESEARCH |
+| `academic-pipeline:resume_from_passport` | Resume from passport reset boundary | 9 / 5,584 | 1 / 136 | 26 / 24,180 | 40% (2/5) | gap:reset boundary, gap:awaiting_resume, gap:consumes_hash | none |
 
 ## Per-Package Parity
 
@@ -73,7 +73,7 @@
 | `design-research-question-formulation` | 0.923 | 1.000 | 165 | 2 | yes | none |
 | `design-review-panel-config` | 1.000 | 1.000 | 185 | 2 | yes | none |
 | `design-review-response-intake` | 1.000 | 1.000 | 117 | 4 | yes | none |
-| `design-review-response-workboard-planning` | 1.000 | 1.000 | 112 | 6 | yes | none |
+| `design-review-response-workboard-planning` | 1.000 | 1.000 | 110 | 6 | yes | none |
 | `design-writing-intake` | 1.000 | 1.000 | 287 | 2 | yes | none |
 | `discovery-literature-monitoring` | 1.000 | 1.000 | 210 | 1 | yes | none |
 | `discovery-literature-search-screening` | 0.837 | 1.000 | 295 | 2 | yes | none |
@@ -84,7 +84,7 @@
 | `generation-humanization-reference` | 0.980 | 0.667 | 199 | 1 | yes | none |
 | `generation-manuscript-drafting` | 0.952 | 1.000 | 246 | 3 | yes | none |
 | `generation-report-compilation` | 0.952 | 1.000 | 254 | 2 | yes | none |
-| `generation-review-response-round` | 0.800 | 1.000 | 135 | 7 | yes | none |
+| `generation-review-response-round` | 0.800 | 1.000 | 133 | 7 | yes | none |
 | `judgment-devils-advocate-stress-test` | 0.878 | 0.833 | 224 | 2 | yes | none |
 | `judgment-editorial-judgment` | 0.949 | 0.600 | 184 | 2 | yes | none |
 | `judgment-review-synthesis` | 0.816 | 0.609 | 235 | 1 | yes | none |
@@ -99,10 +99,10 @@
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `artifacts/generated/capability-parity-report.json` | `e08d861c593495f2f48d2839239ae032952fda264a01aa4009b8a3338784d537` |
-| mode-capability review HTML | `audits/arsu/v3.21.1-127ff85/artifacts/arsu-mode-capability-review.html` | `7399b5a9b8577b15466e8501febba6ceb83fcf16b1eefe7c7ed48be1ec3c45a6` |
-| graph-match assessment HTML | `audits/arsu/v3.21.1-127ff85/artifacts/arsu-mode-graph-match-assessment.html` | `bb267f5941a76199df96e066b5c85d1fee2d22f1f8044b24289832cf6b944c9f` |
-| gap semantic review HTML | `audits/arsu/v3.21.1-127ff85/artifacts/arsu-mode-gap-semantic-review.html` | `05dbdf5ae0926de47ca8d67874505e660a3b5fe97edd21ee75cc7074d5eb6ef2` |
+| parity report | `artifacts/generated/capability-parity-report.json` | `ed670331e8b9bec75f55ee6e2a1b92c7e6ff6c1ff094c0e57081a1195cec5bd8` |
+| mode-capability review HTML | `audits/arsu/v3.21.1-127ff85/artifacts/arsu-mode-capability-review.html` | `ea29cd3d884cb59f21d1cce6c6853349f8e3e05a25eb68c01dacae3e471baf76` |
+| graph-match assessment HTML | `audits/arsu/v3.21.1-127ff85/artifacts/arsu-mode-graph-match-assessment.html` | `826b4fd1ccff8f92b2907af8cc4e500737b9dbc652fbc05e58e0040e1ecbcae8` |
+| gap semantic review HTML | `audits/arsu/v3.21.1-127ff85/artifacts/arsu-mode-gap-semantic-review.html` | `23bc1803e526185cdf0fb3605681c47e0fc71ac4ee4fc753d533d9fda5c67589` |
 
 ## Semantic Review
 

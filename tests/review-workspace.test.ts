@@ -10,9 +10,11 @@ import {
   ReviewWorkspaceV2Schema,
   annotationCandidateReviewWorkspace,
   createReviewWorkspaceResult,
+  createReviewWorkspaceResultV2,
   paperHumanizerReviewWorkspace,
   reviewWorkspaceInstruction,
   reviewResponseReviewWorkspace,
+  validateReviewResultAgainstWorkspace,
 } from "../src/review-workspace.js";
 import { REVIEW_PREVIEW_CASES, renderReviewWorkspacePreview, reviewWorkspacePreviewSamples } from "../harness/review-workspace-preview.js";
 
@@ -101,27 +103,48 @@ void test("static workspace stays self-contained and keeps user content out of H
 
 void test("preview samples use the real v2 adapters and embed manuscript content safely", async () => {
   const sourceHtml = await readFile(path.resolve("review-workspace/index.html"), "utf8");
+  assert.doesNotMatch(sourceHtml, /开发样例/);
   const samples = reviewWorkspacePreviewSamples();
   assert.deepEqual(Object.keys(samples), REVIEW_PREVIEW_CASES.map((item) => item.id));
   for (const { id } of REVIEW_PREVIEW_CASES) {
     const sample = ReviewWorkspaceV2Schema.parse(samples[id]);
     if (id === "empty") assert.equal(sample.items.length, 0);
-    else { assert.equal(sample.adapter, id); assert.ok(sample.items.length >= 3); }
+    else {
+      assert.equal(sample.adapter, id.startsWith("article-") ? "annotation-intake" : "paper-humanizer");
+      assert.ok(sample.items.length >= 4);
+      assert.ok(sample.document.blocks.length >= 8);
+      assert.ok(sample.document.item_locations?.length);
+    }
+    if (id.startsWith("humanizer-candidate-")) assert.ok(sample.document.comparison?.rows.length);
+    if (id.endsWith("fallback")) assert.ok(sample.document.blocks.every((block) => block.kind === "raw-source"));
+    const commentBlocks = sample.document.comparison
+      ? [sample.document.comparison.rows[0]!.before_block_id, sample.document.comparison.rows[0]!.after_block_id]
+      : [sample.document.blocks.find((block) => block.text.length > 0)!.id];
+    const comments = commentBlocks.map((blockId, index) => {
+      const block = sample.document.blocks.find((entry) => entry.id === blockId)!;
+      return { comment_id: `U-${index + 1}`, origin: "user" as const, body: "Review this block", anchor: { kind: "whole" as const, snapshot_id: sample.snapshot_id, block_id: block.id, exact_quote: block.text, prefix: "", suffix: "", resource_id: block.resource_id } };
+    });
+    const result = createReviewWorkspaceResultV2({ workspace: sample, revision: 1, exportedAt: "2026-09-29T10:00:00Z", comments });
+    assert.equal(validateReviewResultAgainstWorkspace(result, sample).comments.length, commentBlocks.length);
     const preview = renderReviewWorkspacePreview(sourceHtml, sample);
     const embedded = /atob\('([^']+)'\)/.exec(preview)?.[1];
     assert.ok(embedded);
     assert.deepEqual(JSON.parse(Buffer.from(embedded, "base64").toString("utf8")), sample);
     assert.equal(preview.includes("window.__previewUnsafe"), false);
+    assert.equal(preview.slice(0, sourceHtml.indexOf("</body>")), sourceHtml.slice(0, sourceHtml.indexOf("</body>")));
     assert.match(preview, /<\/body>\s*<\/html>\s*$/);
   }
-  assert.doesNotMatch(renderReviewWorkspacePreview(sourceHtml, samples["annotation-intake"]), /<script>window\.__previewUnsafe/);
+  for (const capability of ["check-paper-humanization-review", "transform-paper-humanization-revision", "design-review-response-workboard-planning", "generation-review-response-round"]) {
+    assert.equal(await readFile(path.resolve("skills/capabilities", capability, "review-workspace/index.html"), "utf8"), sourceHtml);
+  }
+  assert.doesNotMatch(renderReviewWorkspacePreview(sourceHtml, samples["article-rendered"]), /<script>window\.__previewUnsafe/);
 });
 
-void test("instruction hints are additive only for the two review profiles", () => {
+void test("new instruction hints expose humanizer browser review", () => {
   const humanizer = reviewWorkspaceInstruction({ profileId: "paper-humanizer", selector: "node:run/review", capabilityId: "check-paper-humanization-review", packageRoot: "/tmp/package" });
   assert.equal(humanizer?.adapter, "paper-humanizer");
   assert.equal(humanizer?.asset_path, path.join("/tmp/package", "review-workspace/index.html"));
   const response = reviewWorkspaceInstruction({ profileId: "review-response", selector: "gate:run/review-response-strategy" });
-  assert.equal(response?.mutation_authority, "researchspec-cli-only");
+  assert.equal(response, undefined);
   assert.equal(reviewWorkspaceInstruction({ profileId: "minimal", selector: "profile:minimal" }), undefined);
 });

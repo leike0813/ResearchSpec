@@ -612,7 +612,7 @@
     {
       "capability_id": "design-review-response-workboard-planning",
       "maturity": "operational",
-      "skill_lines": 112,
+      "skill_lines": 110,
       "knowledge_refs": 6,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
@@ -866,7 +866,7 @@
     {
       "capability_id": "generation-review-response-round",
       "maturity": "operational",
-      "skill_lines": 135,
+      "skill_lines": 133,
       "knowledge_refs": 7,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,

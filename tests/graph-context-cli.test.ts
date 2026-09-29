@@ -78,6 +78,9 @@ void test("profile and change instructions expose bounded executable contracts",
     assert.equal(humanizer.data?.review_workspace.mutation_authority, "researchspec-cli-only");
     assert.equal((humanizer.data?.review_workspace as { descriptor_schema?: string } | undefined)?.descriptor_schema, "review-workspace.v2");
     assert.equal((humanizer.data?.review_workspace as { result_schema?: string } | undefined)?.result_schema, "review-workspace-result.v2");
+    const response = parseEnvelope<{ review_workspace?: unknown }>(runCli(["instructions", "profile:review-response", "--json"], root));
+    assert.equal(response.ok, true, JSON.stringify(response.error));
+    assert.equal(response.data?.review_workspace, undefined);
 
     assert.equal(parseEnvelope(runCli(["propose", "bounded-change", "--targets", "project.md", "--json"], root)).ok, true);
     const change = parseEnvelope<{ kind: string; allowed_actions: string[] }>(runCli(["instructions", "change:bounded-change", "--json"], root));

@@ -17,6 +17,7 @@ export interface AuthoringPackageAsset {
   extraction_artifact_id?: string;
   source_path?: string;
   output_path: string;
+  recovery_only?: boolean;
 }
 
 export interface AuthoringOptions {
@@ -258,8 +259,10 @@ ${manifest.outputs.map((item) => `- \`${item.role}\` (${item.schema_ref})`).join
 
 ## Knowledge
 
-${manifest.knowledge_refs.map((item) => `- Load knowledge ID \`${item.knowledge_id}\` from \`${item.path}\`.`).join("\n")}
-${(source.package_assets ?? []).length > 0 ? `\n## Tools\n\n${(source.package_assets ?? []).map((item) => item.output_path.endsWith(".html")
+${manifest.knowledge_refs.map((item) => (source.package_assets ?? []).some((asset) => asset.recovery_only && asset.output_path === item.path)
+    ? `- For an existing review workspace only, load knowledge ID \`${item.knowledge_id}\` from \`${item.path}\`.`
+    : `- Load knowledge ID \`${item.knowledge_id}\` from \`${item.path}\`.`).join("\n")}
+${(source.package_assets ?? []).some((item) => !item.recovery_only) ? `\n## Tools\n\n${(source.package_assets ?? []).filter((item) => !item.recovery_only).map((item) => item.output_path.endsWith(".html")
     ? `- \`${item.output_path}\` is an optional local static review surface; it exports advisory working material and never owns workflow state.`
     : `- \`${item.output_path}\` ${item.source_path ? "implements the package's authored computation" : `is packaged from extraction artifact \`${item.extraction_artifact_id ?? ""}\``}; invoke it only through the declared runner and arguments.`).join("\n")}\n` : ""}
 ## Procedure

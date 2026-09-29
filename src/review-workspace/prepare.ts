@@ -132,10 +132,16 @@ export function assembleReviewWorkspace(input: {
   blocks: ReviewBlock[];
   assets?: ReviewWorkspaceV2["assets"];
   items?: ReviewWorkspaceV2["items"];
+  itemLocations?: NonNullable<ReviewWorkspaceV2["document"]["item_locations"]>;
+  comparison?: ReviewWorkspaceV2["document"]["comparison"];
   workflow?: Partial<ReviewWorkspaceV2["workflow"]>;
 }): ReviewWorkspaceV2 {
   const source = { format: input.format, entry_path: input.frozen.entry_path, files: input.frozen.files, capture_limitations: input.frozen.capture_limitations };
-  const document = { blocks: input.blocks };
+  const document = {
+    blocks: input.blocks,
+    ...(input.itemLocations ? { item_locations: input.itemLocations } : {}),
+    ...(input.comparison ? { comparison: input.comparison } : {}),
+  };
   const assets = input.assets ?? [];
   const snapshotId = hash(JSON.stringify({ source, document, assets })).slice(0, 32);
   return ReviewWorkspaceV2Schema.parse({

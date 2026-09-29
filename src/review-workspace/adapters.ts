@@ -72,6 +72,7 @@ interface V2ProjectionContext extends ProjectionContext {
   frozen: FrozenSourceSet;
   blocks: ReviewBlock[];
   assets?: ReviewWorkspaceV2["assets"];
+  itemLocations?: NonNullable<ReviewWorkspaceV2["document"]["item_locations"]>;
 }
 
 function v2Projection(input: V2ProjectionContext, legacy: ReviewWorkspaceDescriptor): ReviewWorkspaceV2 {
@@ -79,7 +80,7 @@ function v2Projection(input: V2ProjectionContext, legacy: ReviewWorkspaceDescrip
   if (input.frozen.files.find((file) => file.path === input.manuscript.path)?.sha256 !== legacy.manuscript.sha256) throw new Error("Frozen source hash does not match the manuscript.");
   return assembleReviewWorkspace({
     frozen: input.frozen, format: legacy.manuscript.format, adapter: legacy.adapter, title: legacy.title,
-    blocks: input.blocks, assets: input.assets, items: legacy.items, workflow: legacy.workflow,
+    blocks: input.blocks, assets: input.assets, items: legacy.items, itemLocations: input.itemLocations, workflow: legacy.workflow,
   });
 }
 
@@ -89,6 +90,39 @@ export function annotationCandidateReviewWorkspaceV2(input: V2ProjectionContext 
 
 export function paperHumanizerReviewWorkspaceV2(input: V2ProjectionContext & { plan: z.input<typeof PaperHumanizerPlanSchema> }): ReviewWorkspaceV2 {
   return v2Projection(input, paperHumanizerReviewWorkspace(input));
+}
+
+export function paperHumanizerComparisonReviewWorkspaceV2(input: V2ProjectionContext & {
+  plan: z.input<typeof PaperHumanizerPlanSchema>;
+  base: ReviewManuscriptInput;
+  baseBlocks: ReviewBlock[];
+}): ReviewWorkspaceV2 {
+  const legacy = paperHumanizerReviewWorkspace(input);
+  if (input.frozen.workspace_id !== input.workspaceId || input.frozen.entry_path !== input.manuscript.path) throw new Error("Frozen candidate identity does not match the manuscript.");
+  if (input.base.path === input.manuscript.path) throw new Error("Comparison base and candidate need distinct frozen paths.");
+  for (const manuscript of [input.base, input.manuscript]) {
+    if (input.frozen.files.find((file) => file.path === manuscript.path)?.sha256 !== sha256(manuscript.content)) {
+      throw new Error(`Frozen source hash does not match ${manuscript.path}.`);
+    }
+  }
+  if (input.baseBlocks.length === 0 || input.baseBlocks.length !== input.blocks.length) throw new Error("Comparison block counts differ.");
+  const rows = input.baseBlocks.map((base, index) => {
+    const candidate = input.blocks[index];
+    if (!candidate || base.kind !== candidate.kind || base.level !== candidate.level || base.source_path !== input.base.path || candidate.source_path !== input.manuscript.path) {
+      throw new Error(`Comparison blocks differ at ${index}.`);
+    }
+    return { before_block_id: `before-${base.id}`, after_block_id: `after-${candidate.id}` };
+  });
+  const blocks = [
+    ...input.baseBlocks.map((block) => ({ ...block, id: `before-${block.id}` })),
+    ...input.blocks.map((block) => ({ ...block, id: `after-${block.id}` })),
+  ];
+  return assembleReviewWorkspace({
+    frozen: input.frozen, format: legacy.manuscript.format, adapter: "paper-humanizer", title: legacy.title,
+    blocks, assets: input.assets, items: legacy.items,
+    itemLocations: input.itemLocations?.map((location) => ({ ...location, block_id: `after-${location.block_id}` })),
+    comparison: { base_path: input.base.path, rows }, workflow: legacy.workflow,
+  });
 }
 
 export function reviewResponseReviewWorkspaceV2(input: V2ProjectionContext & { workboard: z.input<typeof ReviewResponseWorkboardSchema> }): ReviewWorkspaceV2 {

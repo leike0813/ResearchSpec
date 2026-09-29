@@ -15,6 +15,7 @@ import {
   createReviewWorkspaceResultV2,
   inspectReviewHandoff,
   paperHumanizerReviewWorkspaceV2,
+  paperHumanizerComparisonReviewWorkspaceV2,
   prepareRenderedImages,
   reviewBlocksFromMarkdown,
   reviewBlocksFromPandocAst,
@@ -88,6 +89,44 @@ void test("all three v2 projections retain original Agent evidence against one f
   const response = reviewResponseReviewWorkspaceV2({ ...shared, workboard: { items: [{ comment_id: "R1", title: "Check", source_text: "Comment", source_pointer: "/1", target_locations: ["Intro"], status: "open", priority: "high", evidence_gap: "", user_confirmation_needed: false, next_action: "Check" }] } });
   assert.equal(response.items[0]?.source_text, "Comment");
   assert.throws(() => annotationCandidateReviewWorkspaceV2({ ...shared, manuscript: { ...shared.manuscript, content: manuscript + "changed" }, candidate }), /hash/);
+});
+
+void test("item placement and humanizer comparison bind both frozen sources without changing plan targets", () => {
+  const baseText = "# Results\n\nThe effect was large and certain.\n";
+  const candidateText = "# Results\n\nThe observed effect was modest and uncertain.\n";
+  const baseBlocks = reviewBlocksFromMarkdown(baseText, "before.md");
+  const blocks = reviewBlocksFromMarkdown(candidateText, "after.md");
+  const itemLocations = [{ item_id: "H1", block_id: blocks[1]!.id, start: 0, end: 19 }];
+  const input = {
+    workspaceId: "comparison", title: "Candidate review", manuscript: { path: "after.md", content: candidateText },
+    base: { path: "before.md", content: baseText }, baseBlocks, blocks, itemLocations,
+    frozen: { workspace_id: "comparison", entry_path: "after.md", files: [
+      { path: "after.md", sha256: createHash("sha256").update(candidateText).digest("hex") },
+      { path: "before.md", sha256: createHash("sha256").update(baseText).digest("hex") },
+    ], capture_limitations: [] },
+    plan: { summary: "Preserve uncertainty", user_constraints: ["Keep the evidence limit"], items: [
+      { item_id: "H1", finding_ids: ["F1"], locators: ["Results paragraph"], operation: "Calibrate claim", expected_effect: "Clearer limits", preservation_constraints: ["No causal claim"], risk: "medium", recommendation: "include" as const, disposition: "pending" as const },
+    ] },
+  };
+  const workspace = paperHumanizerComparisonReviewWorkspaceV2(input);
+  assert.equal(workspace.items[0]?.target.kind, "locator");
+  assert.equal(workspace.items[0]?.source_pointer, "Results paragraph");
+  assert.equal(workspace.document.item_locations?.[0]?.block_id, `after-${blocks[1]!.id}`);
+  assert.equal(workspace.document.comparison?.rows.length, blocks.length);
+  const beforeId = workspace.document.comparison!.rows[1]!.before_block_id;
+  const afterId = workspace.document.comparison!.rows[1]!.after_block_id;
+  const result = createReviewWorkspaceResultV2({ workspace, revision: 1, exportedAt: "2026-09-29T10:00:00Z", comments: [
+    { comment_id: "U1", origin: "user", body: "Original overstates certainty", anchor: { kind: "text", snapshot_id: workspace.snapshot_id, block_id: beforeId, start: 0, end: 3, exact_quote: "The", prefix: "", suffix: " effect" } },
+    { comment_id: "U2", origin: "user", body: "Check the new wording", anchor: { kind: "text", snapshot_id: workspace.snapshot_id, block_id: afterId, start: 0, end: 3, exact_quote: "The", prefix: "", suffix: " observed" } },
+  ] });
+  assert.equal(validateReviewResultAgainstWorkspace(result, workspace).comments.length, 2);
+  const bad = (change: (copy: typeof workspace) => void) => { const copy = structuredClone(workspace); change(copy); return ReviewWorkspaceV2Schema.safeParse(copy).success; };
+  assert.equal(bad((copy) => { copy.document.item_locations![0]!.end = 999; }), false);
+  assert.equal(bad((copy) => { copy.document.item_locations!.push(copy.document.item_locations![0]!); }), false);
+  assert.equal(bad((copy) => { copy.source.files.pop(); }), false);
+  assert.equal(bad((copy) => { copy.document.comparison!.rows.pop(); }), false);
+  assert.equal(bad((copy) => { copy.document.comparison!.rows[0]!.after_block_id = copy.document.comparison!.rows[1]!.after_block_id; }), false);
+  assert.throws(() => paperHumanizerComparisonReviewWorkspaceV2({ ...input, base: { ...input.base, content: baseText + "changed" } }), /hash/);
 });
 
 void test("Markdown and host AST preserve annotatable table, math, image, and fallback blocks", () => {

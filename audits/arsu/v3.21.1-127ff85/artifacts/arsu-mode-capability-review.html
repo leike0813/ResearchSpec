@@ -173052,7 +173052,7 @@ Revision Master 提取工件（Extraction Artifact）
     <div><strong>inputs</strong> <code>review_response_workspace</code> ← review-response-workspace.v1</div>
     <div><strong>outputs</strong> <code>review_response_workboard</code> → review-response-workboard.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 112 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 110 行</summary><pre class="doc-body">---
 name: design-review-response-workboard-planning
 description: "Plans priority, dependencies, evidence gaps, target locations, and next actions for every canonical atomic comment."
 metadata:
@@ -173081,8 +173081,8 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `workflow-state-machine` from `knowledge/workflow-state-machine.md`.
 - Load knowledge ID `sql-write-recipes` from `knowledge/sql-write-recipes.md`.
 - Load knowledge ID `helper-scripts` from `knowledge/helper-scripts.md`.
-- Load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
-- Load knowledge ID `review-workspace-v1.html` from `review-workspace/v1.html`.
+- For an existing review workspace only, load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
+- For an existing review workspace only, load knowledge ID `review-workspace-v1.html` from `review-workspace/v1.html`.
 
 ## Tools
 
@@ -173116,8 +173116,6 @@ Execute exactly one ResearchSpec capability node.
 - `assets/templates/supplement-intake-plan.md.j2` is packaged from extraction artifact `RM-ASSET-25`; invoke it only through the declared runner and arguments.
 - `assets/templates/supplement-suggestion-plan.md.j2` is packaged from extraction artifact `RM-ASSET-26`; invoke it only through the declared runner and arguments.
 - `assets/templates/thread-to-atomic-mapping.md.j2` is packaged from extraction artifact `RM-ASSET-27`; invoke it only through the declared runner and arguments.
-- `review-workspace/index.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
-- `review-workspace/v1.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
 
 ## Procedure
 
@@ -173143,7 +173141,7 @@ Build the canonical atomic workboard: priority, dependencies, evidence gaps, tar
 6. Write `workflow_pending_user_confirmations`, run `scripts/gate_and_render_workspace.py --artifact-root &lt;workspace&gt;`, and present `08-atomic-comment-workboard.md` and `06-thread-to-atomic-mapping.md`.
 7. Keep the confirmation request open until the user explicitly accepts the workboard.
 
-If the user requests browser review, retain an exact frozen source set and project the current atomic comments and workboard fields through the `review-response` `review-workspace.v2` adapter, then open `review-workspace/index.html`. Prepare static selectable content with host Quarto/LaTeX tools where needed; ask separately before every render that may execute project code or filters and use a temporary copy after approval. Show uncertain conversion as raw source. Validate the result against the retained workspace and compare current source with the frozen set; if changed, show differences and affected comments and ask before SQLite writes, and if unchanged ask about ambiguous source locations. Apply accepted changes through existing SQLite write recipes; the page never writes `revision-master.db` or confirms the graph Gate.
+Review the workboard with the user in dialogue. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes. Obtain the graph Gate confirmation separately.
 
 ## Completion Criteria
 
@@ -174379,7 +174377,7 @@ Revision Master 提取工件（Extraction Artifact）
 2. Agent 汇总 semantic revision log payload，并运行 `commit_revision_round.py --payload ...`
 3. 读取更新后的 `13-17` 工件与 `instruction_payload`
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1310 行</summary><div class="doc-meta">sha256 <code>505b1e769c5dab8528e668f20734c458da7a02d23af1196c428abed8b7ae1796</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1449 行</summary><div class="doc-meta">sha256 <code>9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
   &lt;meta charset="utf-8"&gt;
@@ -174426,6 +174424,13 @@ Revision Master 提取工件（Extraction Artifact）
     .outline .level-3{padding-left:1.8rem}
     .paper-scroll{padding:1.2rem clamp(.8rem,2.2vw,2rem);scroll-behavior:smooth}
     .paper{max-width:54rem;margin:0 auto 2rem;background:#fff;box-shadow:0 6px 28px #23405312;border:1px solid #e0e5e5;padding:2rem clamp(1rem,4vw,4rem)}
+    .paper.comparing{max-width:92rem}
+    .compare-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;border-top:1px solid var(--line);padding:.65rem 0}
+    .compare-side{min-width:0;padding:.25rem .7rem;background:#fafbfa;border-radius:6px}
+    .compare-side.after{background:#f7fafb}
+    .compare-side&gt;small{display:block;color:var(--muted);font-weight:600}
+    .diff-before{background:#f8dedb;text-decoration:line-through;text-decoration-color:#ae706c}
+    .diff-after{background:#ddf2e5}
     .paper h1{font:700 1.8rem/1.35 Georgia,"Noto Serif SC",serif;margin:.2rem 0}
     .paper h2{font:700 1.3rem/1.4 Georgia,"Noto Serif SC",serif;margin:2.2rem 0 .7rem}
     .paper h3{font:700 1.1rem/1.45 Georgia,"Noto Serif SC",serif;margin:1.6rem 0 .6rem}
@@ -174484,7 +174489,7 @@ Revision Master 提取工件（Extraction Artifact）
     #overlap-menu button{display:block;width:100%;text-align:left;border:0}
     .toast{position:fixed;z-index:30;left:50%;bottom:1rem;transform:translateX(-50%);background:#263b48;color:#fff;padding:.55rem .8rem;border-radius:8px;box-shadow:0 4px 14px #0004;max-width:32rem}
     @media(max-width:1050px){.layout{grid-template-columns:11rem minmax(0,1fr) 19rem}}
-    @media(max-width:760px){.layout{display:block;overflow:auto}.outline,.paper-scroll,.rail{overflow:visible;border:0}.rail{border-left:0;border-top:1px solid var(--line)}.paper-scroll{padding:.7rem}.paper{padding:1.3rem}}
+    @media(max-width:760px){.layout{display:block;overflow:auto}.outline,.paper-scroll,.rail{overflow:visible;border:0}.rail{border-left:0;border-top:1px solid var(--line)}.paper-scroll{padding:.7rem}.paper{padding:1.3rem}.compare-row{display:block}.compare-side{margin:.5rem 0}}
   &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -174651,7 +174656,7 @@ Revision Master 提取工件（Extraction Artifact）
     var blockRefs = [];
     if (!isObject(value.document) || !Array.isArray(value.document.blocks) || value.document.blocks.length === 0) errors.push('document.blocks 至少需要一个块。');
     else {
-      rejectUnknown(value.document, ['blocks'], 'document', errors);
+      rejectUnknown(value.document, ['blocks','item_locations','comparison'], 'document', errors);
       value.document.blocks.forEach(function(block, index){
         var path = 'document.blocks[' + index + ']';
         if (!isObject(block)) { errors.push(path + ' 必须是对象。'); return; }
@@ -174750,6 +174755,50 @@ Revision Master 提取工件（Extraction Artifact）
     if (Array.isArray(value.assets)) value.assets.forEach(function(asset, index){
       if (isObject(asset) &amp;&amp; asset.source_path &amp;&amp; !pathSet.has(asset.source_path)) errors.push('assets[' + index + '].source_path 不在冻结来源中。');
     });
+    var displayBlocks = value.document &amp;&amp; Array.isArray(value.document.blocks) ? value.document.blocks : [];
+    if (value.document &amp;&amp; value.document.item_locations !== undefined) {
+      if (!Array.isArray(value.document.item_locations)) errors.push('document.item_locations 必须是数组。');
+      else {
+        var locationIds = [];
+        value.document.item_locations.forEach(function(location, index){
+          var where = 'document.item_locations[' + index + ']';
+          if (!isObject(location)) { errors.push(where + ' 必须是对象。'); return; }
+          rejectUnknown(location, ['item_id','block_id','start','end'], where, errors);
+          requireKeys(location, ['item_id','block_id','start','end'], where, errors);
+          locationIds.push(location.item_id);
+          var item = Array.isArray(value.items) ? value.items.find(function(entry){ return isObject(entry) &amp;&amp; entry.item_id === location.item_id; }) : null;
+          var block = displayBlocks.find(function(entry){ return isObject(entry) &amp;&amp; entry.id === location.block_id; });
+          if (!item || !block || typeof block.text !== 'string' || !Number.isInteger(location.start) || !Number.isInteger(location.end) || location.start &lt; 0 || location.end &lt; location.start || location.end &gt; block.text.length) { errors.push(where + ' 无效。'); return; }
+          if (isObject(item.target) &amp;&amp; item.target.kind === 'quote' &amp;&amp; block.text.slice(location.start, location.end) !== item.target.exact_quote) errors.push(where + ' 与原选文不一致。');
+          if (isObject(item.target) &amp;&amp; item.target.kind === 'section' &amp;&amp; (block.kind !== 'heading' || block.text !== item.target.heading)) errors.push(where + ' 与章节不一致。');
+        });
+        if (new Set(locationIds).size !== locationIds.length) errors.push('document.item_locations 存在重复 item_id。');
+      }
+    }
+    if (value.document &amp;&amp; value.document.comparison !== undefined) {
+      var comparison = value.document.comparison;
+      if (!isObject(comparison)) errors.push('document.comparison 必须是对象。');
+      else {
+        rejectUnknown(comparison, ['base_path','rows'], 'document.comparison', errors);
+        requireKeys(comparison, ['base_path','rows'], 'document.comparison', errors);
+        var entryPath = isObject(value.source) ? value.source.entry_path : null;
+        if (value.adapter !== 'paper-humanizer' || !isRelativePath(comparison.base_path) || comparison.base_path === entryPath || !pathSet.has(comparison.base_path)) errors.push('document.comparison.base_path 无效。');
+        if (!Array.isArray(comparison.rows) || comparison.rows.length === 0) errors.push('document.comparison.rows 不能为空。');
+        else {
+          var beforeIds = [], afterIds = [];
+          comparison.rows.forEach(function(row, index){
+            var where = 'document.comparison.rows[' + index + ']';
+            if (!isObject(row)) { errors.push(where + ' 必须是对象。'); return; }
+            rejectUnknown(row, ['before_block_id','after_block_id'], where, errors);
+            requireKeys(row, ['before_block_id','after_block_id'], where, errors);
+            beforeIds.push(row.before_block_id); afterIds.push(row.after_block_id);
+            var base = displayBlocks[index], candidate = displayBlocks[index + comparison.rows.length];
+            if (!isObject(base) || !isObject(candidate) || base.id !== row.before_block_id || candidate.id !== row.after_block_id || base.kind !== candidate.kind || base.level !== candidate.level || base.source_path !== comparison.base_path || candidate.source_path !== entryPath) errors.push(where + ' 配对无效。');
+          });
+          if (new Set(beforeIds.concat(afterIds)).size !== displayBlocks.length || beforeIds.length + afterIds.length !== displayBlocks.length) errors.push('document.comparison.rows 必须覆盖每个块一次。');
+        }
+      }
+    }
 
     if (errors.length &gt; 0) throw new Error(errors.slice(0, 6).join('；'));
     return normalizeWorkspace(value);
@@ -174963,6 +175012,49 @@ Revision Master 提取工件（Extraction Artifact）
   // @browser-check:end
 
   var STATE = null;
+  var diffRanges = {};
+  function comparisonDiffs(workspace){
+    var comparison = workspace.document.comparison;
+    var result = {};
+    if (!comparison) return result;
+    var blocks = new Map(workspace.document.blocks.map(function(block){ return [block.id, block]; }));
+    function tokens(text){
+      if (Intl.Segmenter) return Array.from(new Intl.Segmenter(undefined, { granularity: 'word' }).segment(text), function(part){ return { text: part.segment, start: part.index, end: part.index + part.segment.length }; });
+      var offset = 0;
+      return Array.from(text, function(char){ var start = offset; offset += char.length; return { text: char, start: start, end: offset }; });
+    }
+    comparison.rows.forEach(function(row){
+      var before = blocks.get(row.before_block_id), after = blocks.get(row.after_block_id);
+      if (before.text === after.text) return;
+      var left = tokens(before.text), right = tokens(after.text);
+      if (left.length &gt; 220 || right.length &gt; 220) {
+        // ponytail: Bound quadratic word diff; use a dedicated diff library if long blocks become common.
+        result[before.id] = [{ start: 0, end: before.text.length }];
+        result[after.id] = [{ start: 0, end: after.text.length }];
+        return;
+      }
+      var dp = Array.from({ length: left.length + 1 }, function(){ return new Uint16Array(right.length + 1); });
+      for (var i = left.length - 1; i &gt;= 0; i--) for (var j = right.length - 1; j &gt;= 0; j--) dp[i][j] = left[i].text === right[j].text ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+      var matches = [], a = 0, b = 0;
+      while (a &lt; left.length &amp;&amp; b &lt; right.length) {
+        if (left[a].text === right[b].text) { matches.push([a, b]); a++; b++; }
+        else if (dp[a + 1][b] &gt;= dp[a][b + 1]) a++;
+        else b++;
+      }
+      function changed(parts, side){
+        var ranges = [], previous = -1;
+        matches.concat([[left.length, right.length]]).forEach(function(match){
+          var next = match[side];
+          if (next &gt; previous + 1) ranges.push({ start: parts[previous + 1].start, end: parts[next - 1].end });
+          previous = next;
+        });
+        return ranges;
+      }
+      result[before.id] = changed(left, 0);
+      result[after.id] = changed(right, 1);
+    });
+    return result;
+  }
   var activeId = null;
   var pending = null;
   var forcedId = null;
@@ -175028,6 +175120,7 @@ Revision Master 提取工件（Extraction Artifact）
     try { workspace = validateWorkspace(raw); }
     catch (error) { notify('工作区校验未通过：' + error.message); return; }
     STATE = { workspace: workspace, comments: [], decisions: {}, overall_note: '', export_revision: 0 };
+    diffRanges = comparisonDiffs(workspace);
     activeId = null; pending = null; forcedId = null; collapsedGroups = {};
     $('search').value = ''; $('origin-filter').value = 'all'; $('disposition-filter').value = 'all';
     loadDraft();
@@ -175053,16 +175146,26 @@ Revision Master 提取工件（Extraction Artifact）
 
   function blockById(id){ return STATE.workspace.document.blocks.find(function(block){return block.id === id}) || null; }
   function assetById(id){ return STATE.workspace.assets.find(function(asset){return asset.id === id}) || null; }
-  function headingBlocks(){ return STATE.workspace.document.blocks.filter(function(block){return block.kind === 'heading' &amp;&amp; block.level !== null &amp;&amp; block.level &lt;= 3}); }
+  function headingBlocks(){
+    var comparison = STATE.workspace.document.comparison;
+    var after = comparison ? new Set(comparison.rows.map(function(row){ return row.after_block_id; })) : null;
+    return STATE.workspace.document.blocks.filter(function(block){return block.kind === 'heading' &amp;&amp; block.level !== null &amp;&amp; block.level &lt;= 3 &amp;&amp; (!after || after.has(block.id));});
+  }
   function sectionName(id){ var block = id ? blockById(id) : null; return block ? block.text : ''; }
 
   function sectionOf(blockId){
     if (!blockId) return null;
+    var comparison = STATE.workspace.document.comparison;
+    if (comparison) {
+      var row = comparison.rows.find(function(entry){ return entry.before_block_id === blockId; });
+      if (row) blockId = row.after_block_id;
+    }
     var blocks = STATE.workspace.document.blocks;
     var index = -1;
     for (var i = 0; i &lt; blocks.length; i++) { if (blocks[i].id === blockId) { index = i; break; } }
     if (index === -1) return null;
-    for (var j = index; j &gt;= 0; j--) {
+    var floor = comparison ? comparison.rows.length : 0;
+    for (var j = index; j &gt;= floor; j--) {
       var block = blocks[j];
       if (block.kind === 'heading' &amp;&amp; block.level !== null &amp;&amp; block.level &lt;= 3) return block.id;
     }
@@ -175070,6 +175173,8 @@ Revision Master 提取工件（Extraction Artifact）
   }
 
   function agentLocation(item){
+    var explicit = (STATE.workspace.document.item_locations || []).find(function(location){ return location.item_id === item.item_id; });
+    if (explicit) return { blockId: explicit.block_id, start: explicit.start, end: explicit.end };
     var target = item.target;
     if (target.kind === 'quote') {
       var quoted = blockById(target.block_id);
@@ -175150,6 +175255,8 @@ Revision Master 提取工件（Extraction Artifact）
     var points = [0, block.text.length];
     runs.forEach(function(run, index){ points.push(runOffsets[index]); points.push(runOffsets[index] + run.text.length); });
     marks.forEach(function(mark){ points.push(mark.start); points.push(mark.end); });
+    var changes = diffRanges[block.id] || [];
+    changes.forEach(function(change){ points.push(change.start); points.push(change.end); });
     var cuts = points.filter(function(point){ return point &gt;= 0 &amp;&amp; point &lt;= block.text.length; }).sort(function(a, b){ return a - b; });
     target.replaceChildren();
     for (var i = 0; i &lt; cuts.length - 1; i++) {
@@ -175162,6 +175269,12 @@ Revision Master 提取工件（Extraction Artifact）
       var node = document.createTextNode(text);
       var marksOfRun = runs[runIndex].marks;
       for (var m = marksOfRun.length - 1; m &gt;= 0; m--) node = wrapMark(node, marksOfRun[m]);
+      if (changes.some(function(change){ return start &gt;= change.start &amp;&amp; end &lt;= change.end; })) {
+        var difference = document.createElement('span');
+        difference.className = 'diff-' + (block.id.indexOf('before-') === 0 ? 'before' : 'after');
+        difference.append(node);
+        node = difference;
+      }
       if (cover.length &gt; 0) {
         var mark = document.createElement('mark');
         mark.className = (cover.length &gt; 1 ? 'overlap ' : '') + (cover.some(function(entry){ return entry.id === activeId; }) ? 'active' : '');
@@ -175270,10 +175383,26 @@ Revision Master 提取工件（Extraction Artifact）
   function renderPaper(){
     var paper = $('paper');
     paper.replaceChildren();
+    var comparison = STATE.workspace.document.comparison;
+    paper.classList.toggle('comparing', !!comparison);
     paper.append(el('h1', '', STATE.workspace.title));
     var source = STATE.workspace.source;
     paper.append(el('p', 'lead', FORMAT_LABEL[source.format] + ' · ' + source.entry_path + ' · 冻结快照 ' + STATE.workspace.snapshot_id));
     if (source.capture_limitations.length &gt; 0) paper.append(el('p', 'kind-note', '来源采集限制：' + source.capture_limitations.join('；')));
+    if (comparison) {
+      paper.append(el('p', 'lead', '左：本轮原文 · ' + comparison.base_path + '　右：已核验候选稿 · ' + source.entry_path));
+      comparison.rows.forEach(function(row){
+        var pair = el('div', 'compare-row');
+        [['before', row.before_block_id, '原文'], ['after', row.after_block_id, '候选稿']].forEach(function(side){
+          var column = el('section', 'compare-side ' + side[0]);
+          column.append(el('small', '', side[2]));
+          column.append(makeBlock(blockById(side[1])));
+          pair.append(column);
+        });
+        paper.append(pair);
+      });
+      return;
+    }
     var cellBuffer = [];
     STATE.workspace.document.blocks.forEach(function(block){
       if (block.kind === 'table-cell') { cellBuffer.push(block); return; }
@@ -175471,7 +175600,7 @@ Revision Master 提取工件（Extraction Artifact）
     }
   }
 
-  function dispositionKey(item){ var decision = STATE.decisions[item.item_id]; return decision ? decision.disposition : 'pending'; }
+  function dispositionKey(item){ var decision = STATE.decisions[item.id]; return decision ? decision.disposition : 'pending'; }
 
   function isVisibleItem(item){
     var origin = $('origin-filter').value;
@@ -175519,7 +175648,7 @@ Revision Master 提取工件（Extraction Artifact）
     expand.setAttribute('aria-expanded', String(expanded));
     top.append(expand);
     card.append(top);
-    card.append(el('small', '', agent ? 'Agent 审阅项 · ' + documentDisposition(item.item_id) : '用户批注 · ' + (item.location ? (item.section ? sectionName(item.section) : '正文') : '未定位')));
+    card.append(el('small', '', agent ? 'Agent 审阅项 · ' + documentDisposition(item.id) : '用户批注 · ' + (item.location ? (item.section ? sectionName(item.section) : '正文') : '未定位')));
     card.append(el('small', '', agent ? '证据原文' : '原选文'));
     card.append(el('blockquote', '', item.quote || '（无选文）'));
     if (!expanded) {
@@ -175530,9 +175659,16 @@ Revision Master 提取工件（Extraction Artifact）
       card.append(el('p', '', 'Agent 建议：' + item.item.recommendation.action));
       card.append(el('p', '', '理由：' + item.item.recommendation.rationale));
       card.append(el('p', '', '风险：' + item.item.recommendation.risk));
+      if (STATE.workspace.adapter === 'paper-humanizer') {
+        var metadata = item.item.metadata;
+        if (metadata.plan_summary) card.append(el('p', '', '方案摘要：' + metadata.plan_summary));
+        if (Array.isArray(metadata.user_constraints) &amp;&amp; metadata.user_constraints.length) card.append(el('p', '', '用户约束：' + metadata.user_constraints.join('；')));
+        if (Array.isArray(metadata.preservation_constraints) &amp;&amp; metadata.preservation_constraints.length) card.append(el('p', '', '保留约束：' + metadata.preservation_constraints.join('；')));
+        if (metadata.recommendation) card.append(el('small', '', '方案建议：' + metadata.recommendation));
+      }
       if (item.item.source_pointer) card.append(el('small', '', '来源位置：' + item.item.source_pointer));
       if (!item.location) card.append(el('p', 'forced', '未在本审阅件的正文中找到确切位置，仍可记录处理意见。'));
-      var decision = STATE.decisions[item.item_id];
+      var decision = STATE.decisions[item.id];
       card.append(fieldLabel('处理意见'));
       var select = document.createElement('select');
       select.setAttribute('aria-label', '处理 Agent 审阅项');
@@ -175542,7 +175678,7 @@ Revision Master 提取工件（Extraction Artifact）
         decision.disposition = select.value;
         save();
         var statusLine = card.querySelector('small');
-        if (statusLine) setText(statusLine, 'Agent 审阅项 · ' + documentDisposition(item.item_id));
+        if (statusLine) setText(statusLine, 'Agent 审阅项 · ' + documentDisposition(item.id));
         if ($('disposition-filter').value !== 'all') renderCards();
         renderStatus();
       });
@@ -175570,7 +175706,7 @@ Revision Master 提取工件（Extraction Artifact）
 
   function renderCards(){
     var root = $('cards');
-    root.replaceChildren();
+    var next = document.createDocumentFragment();
     var blockIndex = {};
     STATE.workspace.document.blocks.forEach(function(block, index){ blockIndex[block.id] = index; });
     var items = allItems().sort(function(a, b){
@@ -175587,7 +175723,7 @@ Revision Master 提取工件（Extraction Artifact）
     setText($('forced'), forced ? '已临时显示所选批注；筛选条件保持不变。' : '');
     setText($('card-count'), '显示 ' + shown.length + ' / ' + items.length + ' 项');
     setText($('rail-count'), String(items.length));
-    if (shown.length === 0) { root.append(el('p', 'subtle', '当前筛选下没有批注。')); return; }
+    if (shown.length === 0) { root.replaceChildren(el('p', 'subtle', '当前筛选下没有批注。')); return; }
     groupItems(shown).forEach(function(group){
       var details = document.createElement('details');
       details.className = 'group';
@@ -175595,8 +175731,9 @@ Revision Master 提取工件（Extraction Artifact）
       details.addEventListener('toggle', function(){ collapsedGroups[group.key] = !details.open; });
       details.append(el('summary', '', group.title + ' · ' + group.items.length));
       group.items.forEach(function(item){ details.append(renderCard(item)); });
-      root.append(details);
+      next.append(details);
     });
+    root.replaceChildren(next);
   }
 
   function renderStatus(){
@@ -175822,7 +175959,7 @@ Revision Master 提取工件（Extraction Artifact）
     <div><strong>inputs</strong> <code>review_response_workspace</code> ← review-response-workspace.v1</div>
     <div><strong>outputs</strong> <code>working_manuscript</code> → manuscript-draft.v1 · <code>response_markdown</code> → response-letter.v1 · <code>response_latex</code> → response-letter-latex.v1 · <code>round_summary</code> → review-response-round.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 135 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 133 行</summary><pre class="doc-body">---
 name: generation-review-response-round
 description: "Executes one complete strategy/draft round plus final interactive manuscript revision, semantic revision logging, response-letter coverage, and export."
 metadata:
@@ -175855,8 +175992,8 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `sql-write-recipes` from `knowledge/sql-write-recipes.md`.
 - Load knowledge ID `helper-scripts` from `knowledge/helper-scripts.md`.
 - Load knowledge ID `stage-6-final-review-export` from `knowledge/stage-6-final-review-and-export.md`.
-- Load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
-- Load knowledge ID `review-workspace-v1.html` from `review-workspace/v1.html`.
+- For an existing review workspace only, load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
+- For an existing review workspace only, load knowledge ID `review-workspace-v1.html` from `review-workspace/v1.html`.
 
 ## Tools
 
@@ -175893,8 +176030,6 @@ Execute exactly one ResearchSpec capability node.
 - `assets/templates/supplement-intake-plan.md.j2` is packaged from extraction artifact `RM-ASSET-25`; invoke it only through the declared runner and arguments.
 - `assets/templates/supplement-suggestion-plan.md.j2` is packaged from extraction artifact `RM-ASSET-26`; invoke it only through the declared runner and arguments.
 - `assets/templates/thread-to-atomic-mapping.md.j2` is packaged from extraction artifact `RM-ASSET-27`; invoke it only through the declared runner and arguments.
-- `review-workspace/index.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
-- `review-workspace/v1.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
 
 ## Procedure
 
@@ -175930,7 +176065,7 @@ Execute one complete revision-response round: author and confirm comment-scoped 
 7. Export final deliverables with `scripts/export_manuscript_variants.py` where the script supports the confirmed target; optional `latexdiff` is advisory only and must never block completion.
 8. Ask the user when a change would alter the main line, core claims, or conclusions; when a closing strategy needs authorization; or when a response-only resolution is ambiguous.
 
-For the final interactive pass, retain the exact frozen source set, project the current `working_manuscript` entry and open workboard items through the `review-response` `review-workspace.v2` adapter, then open `review-workspace/index.html`. Ask separately before every render that may execute project code or filters, render after approval in a temporary copy, and preserve unreliable conversion as visible raw source. The browser result is revision intent only: validate it against the retained workspace, compare current source with the frozen set, show differences and affected feedback and ask before edits if changed, and ask about ambiguous source locations if unchanged. Apply accepted edits to `working_manuscript`, commit through existing semantic revision log scripts, and prepare a new workspace without processed comments.
+For the final interactive pass, review the current `working_manuscript` and open workboard items with the user in dialogue. Apply accepted edits to `working_manuscript` and commit them through the existing semantic revision log scripts. Keep the per-comment confirmation and evidence boundaries intact.
 
 ## Round Completion
 
@@ -177340,7 +177475,7 @@ Stage 6 必须持续刷新并展示：
 - `14-response-coverage-matrix.md` 显示所有 thread 已闭环
 - `working_manuscript`、`response_markdown`、`response_latex` 已稳定可交付
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1310 行</summary><div class="doc-meta">sha256 <code>505b1e769c5dab8528e668f20734c458da7a02d23af1196c428abed8b7ae1796</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1449 行</summary><div class="doc-meta">sha256 <code>9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
   &lt;meta charset="utf-8"&gt;
@@ -177387,6 +177522,13 @@ Stage 6 必须持续刷新并展示：
     .outline .level-3{padding-left:1.8rem}
     .paper-scroll{padding:1.2rem clamp(.8rem,2.2vw,2rem);scroll-behavior:smooth}
     .paper{max-width:54rem;margin:0 auto 2rem;background:#fff;box-shadow:0 6px 28px #23405312;border:1px solid #e0e5e5;padding:2rem clamp(1rem,4vw,4rem)}
+    .paper.comparing{max-width:92rem}
+    .compare-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;border-top:1px solid var(--line);padding:.65rem 0}
+    .compare-side{min-width:0;padding:.25rem .7rem;background:#fafbfa;border-radius:6px}
+    .compare-side.after{background:#f7fafb}
+    .compare-side&gt;small{display:block;color:var(--muted);font-weight:600}
+    .diff-before{background:#f8dedb;text-decoration:line-through;text-decoration-color:#ae706c}
+    .diff-after{background:#ddf2e5}
     .paper h1{font:700 1.8rem/1.35 Georgia,"Noto Serif SC",serif;margin:.2rem 0}
     .paper h2{font:700 1.3rem/1.4 Georgia,"Noto Serif SC",serif;margin:2.2rem 0 .7rem}
     .paper h3{font:700 1.1rem/1.45 Georgia,"Noto Serif SC",serif;margin:1.6rem 0 .6rem}
@@ -177445,7 +177587,7 @@ Stage 6 必须持续刷新并展示：
     #overlap-menu button{display:block;width:100%;text-align:left;border:0}
     .toast{position:fixed;z-index:30;left:50%;bottom:1rem;transform:translateX(-50%);background:#263b48;color:#fff;padding:.55rem .8rem;border-radius:8px;box-shadow:0 4px 14px #0004;max-width:32rem}
     @media(max-width:1050px){.layout{grid-template-columns:11rem minmax(0,1fr) 19rem}}
-    @media(max-width:760px){.layout{display:block;overflow:auto}.outline,.paper-scroll,.rail{overflow:visible;border:0}.rail{border-left:0;border-top:1px solid var(--line)}.paper-scroll{padding:.7rem}.paper{padding:1.3rem}}
+    @media(max-width:760px){.layout{display:block;overflow:auto}.outline,.paper-scroll,.rail{overflow:visible;border:0}.rail{border-left:0;border-top:1px solid var(--line)}.paper-scroll{padding:.7rem}.paper{padding:1.3rem}.compare-row{display:block}.compare-side{margin:.5rem 0}}
   &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -177612,7 +177754,7 @@ Stage 6 必须持续刷新并展示：
     var blockRefs = [];
     if (!isObject(value.document) || !Array.isArray(value.document.blocks) || value.document.blocks.length === 0) errors.push('document.blocks 至少需要一个块。');
     else {
-      rejectUnknown(value.document, ['blocks'], 'document', errors);
+      rejectUnknown(value.document, ['blocks','item_locations','comparison'], 'document', errors);
       value.document.blocks.forEach(function(block, index){
         var path = 'document.blocks[' + index + ']';
         if (!isObject(block)) { errors.push(path + ' 必须是对象。'); return; }
@@ -177711,6 +177853,50 @@ Stage 6 必须持续刷新并展示：
     if (Array.isArray(value.assets)) value.assets.forEach(function(asset, index){
       if (isObject(asset) &amp;&amp; asset.source_path &amp;&amp; !pathSet.has(asset.source_path)) errors.push('assets[' + index + '].source_path 不在冻结来源中。');
     });
+    var displayBlocks = value.document &amp;&amp; Array.isArray(value.document.blocks) ? value.document.blocks : [];
+    if (value.document &amp;&amp; value.document.item_locations !== undefined) {
+      if (!Array.isArray(value.document.item_locations)) errors.push('document.item_locations 必须是数组。');
+      else {
+        var locationIds = [];
+        value.document.item_locations.forEach(function(location, index){
+          var where = 'document.item_locations[' + index + ']';
+          if (!isObject(location)) { errors.push(where + ' 必须是对象。'); return; }
+          rejectUnknown(location, ['item_id','block_id','start','end'], where, errors);
+          requireKeys(location, ['item_id','block_id','start','end'], where, errors);
+          locationIds.push(location.item_id);
+          var item = Array.isArray(value.items) ? value.items.find(function(entry){ return isObject(entry) &amp;&amp; entry.item_id === location.item_id; }) : null;
+          var block = displayBlocks.find(function(entry){ return isObject(entry) &amp;&amp; entry.id === location.block_id; });
+          if (!item || !block || typeof block.text !== 'string' || !Number.isInteger(location.start) || !Number.isInteger(location.end) || location.start &lt; 0 || location.end &lt; location.start || location.end &gt; block.text.length) { errors.push(where + ' 无效。'); return; }
+          if (isObject(item.target) &amp;&amp; item.target.kind === 'quote' &amp;&amp; block.text.slice(location.start, location.end) !== item.target.exact_quote) errors.push(where + ' 与原选文不一致。');
+          if (isObject(item.target) &amp;&amp; item.target.kind === 'section' &amp;&amp; (block.kind !== 'heading' || block.text !== item.target.heading)) errors.push(where + ' 与章节不一致。');
+        });
+        if (new Set(locationIds).size !== locationIds.length) errors.push('document.item_locations 存在重复 item_id。');
+      }
+    }
+    if (value.document &amp;&amp; value.document.comparison !== undefined) {
+      var comparison = value.document.comparison;
+      if (!isObject(comparison)) errors.push('document.comparison 必须是对象。');
+      else {
+        rejectUnknown(comparison, ['base_path','rows'], 'document.comparison', errors);
+        requireKeys(comparison, ['base_path','rows'], 'document.comparison', errors);
+        var entryPath = isObject(value.source) ? value.source.entry_path : null;
+        if (value.adapter !== 'paper-humanizer' || !isRelativePath(comparison.base_path) || comparison.base_path === entryPath || !pathSet.has(comparison.base_path)) errors.push('document.comparison.base_path 无效。');
+        if (!Array.isArray(comparison.rows) || comparison.rows.length === 0) errors.push('document.comparison.rows 不能为空。');
+        else {
+          var beforeIds = [], afterIds = [];
+          comparison.rows.forEach(function(row, index){
+            var where = 'document.comparison.rows[' + index + ']';
+            if (!isObject(row)) { errors.push(where + ' 必须是对象。'); return; }
+            rejectUnknown(row, ['before_block_id','after_block_id'], where, errors);
+            requireKeys(row, ['before_block_id','after_block_id'], where, errors);
+            beforeIds.push(row.before_block_id); afterIds.push(row.after_block_id);
+            var base = displayBlocks[index], candidate = displayBlocks[index + comparison.rows.length];
+            if (!isObject(base) || !isObject(candidate) || base.id !== row.before_block_id || candidate.id !== row.after_block_id || base.kind !== candidate.kind || base.level !== candidate.level || base.source_path !== comparison.base_path || candidate.source_path !== entryPath) errors.push(where + ' 配对无效。');
+          });
+          if (new Set(beforeIds.concat(afterIds)).size !== displayBlocks.length || beforeIds.length + afterIds.length !== displayBlocks.length) errors.push('document.comparison.rows 必须覆盖每个块一次。');
+        }
+      }
+    }
 
     if (errors.length &gt; 0) throw new Error(errors.slice(0, 6).join('；'));
     return normalizeWorkspace(value);
@@ -177924,6 +178110,49 @@ Stage 6 必须持续刷新并展示：
   // @browser-check:end
 
   var STATE = null;
+  var diffRanges = {};
+  function comparisonDiffs(workspace){
+    var comparison = workspace.document.comparison;
+    var result = {};
+    if (!comparison) return result;
+    var blocks = new Map(workspace.document.blocks.map(function(block){ return [block.id, block]; }));
+    function tokens(text){
+      if (Intl.Segmenter) return Array.from(new Intl.Segmenter(undefined, { granularity: 'word' }).segment(text), function(part){ return { text: part.segment, start: part.index, end: part.index + part.segment.length }; });
+      var offset = 0;
+      return Array.from(text, function(char){ var start = offset; offset += char.length; return { text: char, start: start, end: offset }; });
+    }
+    comparison.rows.forEach(function(row){
+      var before = blocks.get(row.before_block_id), after = blocks.get(row.after_block_id);
+      if (before.text === after.text) return;
+      var left = tokens(before.text), right = tokens(after.text);
+      if (left.length &gt; 220 || right.length &gt; 220) {
+        // ponytail: Bound quadratic word diff; use a dedicated diff library if long blocks become common.
+        result[before.id] = [{ start: 0, end: before.text.length }];
+        result[after.id] = [{ start: 0, end: after.text.length }];
+        return;
+      }
+      var dp = Array.from({ length: left.length + 1 }, function(){ return new Uint16Array(right.length + 1); });
+      for (var i = left.length - 1; i &gt;= 0; i--) for (var j = right.length - 1; j &gt;= 0; j--) dp[i][j] = left[i].text === right[j].text ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+      var matches = [], a = 0, b = 0;
+      while (a &lt; left.length &amp;&amp; b &lt; right.length) {
+        if (left[a].text === right[b].text) { matches.push([a, b]); a++; b++; }
+        else if (dp[a + 1][b] &gt;= dp[a][b + 1]) a++;
+        else b++;
+      }
+      function changed(parts, side){
+        var ranges = [], previous = -1;
+        matches.concat([[left.length, right.length]]).forEach(function(match){
+          var next = match[side];
+          if (next &gt; previous + 1) ranges.push({ start: parts[previous + 1].start, end: parts[next - 1].end });
+          previous = next;
+        });
+        return ranges;
+      }
+      result[before.id] = changed(left, 0);
+      result[after.id] = changed(right, 1);
+    });
+    return result;
+  }
   var activeId = null;
   var pending = null;
   var forcedId = null;
@@ -177989,6 +178218,7 @@ Stage 6 必须持续刷新并展示：
     try { workspace = validateWorkspace(raw); }
     catch (error) { notify('工作区校验未通过：' + error.message); return; }
     STATE = { workspace: workspace, comments: [], decisions: {}, overall_note: '', export_revision: 0 };
+    diffRanges = comparisonDiffs(workspace);
     activeId = null; pending = null; forcedId = null; collapsedGroups = {};
     $('search').value = ''; $('origin-filter').value = 'all'; $('disposition-filter').value = 'all';
     loadDraft();
@@ -178014,16 +178244,26 @@ Stage 6 必须持续刷新并展示：
 
   function blockById(id){ return STATE.workspace.document.blocks.find(function(block){return block.id === id}) || null; }
   function assetById(id){ return STATE.workspace.assets.find(function(asset){return asset.id === id}) || null; }
-  function headingBlocks(){ return STATE.workspace.document.blocks.filter(function(block){return block.kind === 'heading' &amp;&amp; block.level !== null &amp;&amp; block.level &lt;= 3}); }
+  function headingBlocks(){
+    var comparison = STATE.workspace.document.comparison;
+    var after = comparison ? new Set(comparison.rows.map(function(row){ return row.after_block_id; })) : null;
+    return STATE.workspace.document.blocks.filter(function(block){return block.kind === 'heading' &amp;&amp; block.level !== null &amp;&amp; block.level &lt;= 3 &amp;&amp; (!after || after.has(block.id));});
+  }
   function sectionName(id){ var block = id ? blockById(id) : null; return block ? block.text : ''; }
 
   function sectionOf(blockId){
     if (!blockId) return null;
+    var comparison = STATE.workspace.document.comparison;
+    if (comparison) {
+      var row = comparison.rows.find(function(entry){ return entry.before_block_id === blockId; });
+      if (row) blockId = row.after_block_id;
+    }
     var blocks = STATE.workspace.document.blocks;
     var index = -1;
     for (var i = 0; i &lt; blocks.length; i++) { if (blocks[i].id === blockId) { index = i; break; } }
     if (index === -1) return null;
-    for (var j = index; j &gt;= 0; j--) {
+    var floor = comparison ? comparison.rows.length : 0;
+    for (var j = index; j &gt;= floor; j--) {
       var block = blocks[j];
       if (block.kind === 'heading' &amp;&amp; block.level !== null &amp;&amp; block.level &lt;= 3) return block.id;
     }
@@ -178031,6 +178271,8 @@ Stage 6 必须持续刷新并展示：
   }
 
   function agentLocation(item){
+    var explicit = (STATE.workspace.document.item_locations || []).find(function(location){ return location.item_id === item.item_id; });
+    if (explicit) return { blockId: explicit.block_id, start: explicit.start, end: explicit.end };
     var target = item.target;
     if (target.kind === 'quote') {
       var quoted = blockById(target.block_id);
@@ -178111,6 +178353,8 @@ Stage 6 必须持续刷新并展示：
     var points = [0, block.text.length];
     runs.forEach(function(run, index){ points.push(runOffsets[index]); points.push(runOffsets[index] + run.text.length); });
     marks.forEach(function(mark){ points.push(mark.start); points.push(mark.end); });
+    var changes = diffRanges[block.id] || [];
+    changes.forEach(function(change){ points.push(change.start); points.push(change.end); });
     var cuts = points.filter(function(point){ return point &gt;= 0 &amp;&amp; point &lt;= block.text.length; }).sort(function(a, b){ return a - b; });
     target.replaceChildren();
     for (var i = 0; i &lt; cuts.length - 1; i++) {
@@ -178123,6 +178367,12 @@ Stage 6 必须持续刷新并展示：
       var node = document.createTextNode(text);
       var marksOfRun = runs[runIndex].marks;
       for (var m = marksOfRun.length - 1; m &gt;= 0; m--) node = wrapMark(node, marksOfRun[m]);
+      if (changes.some(function(change){ return start &gt;= change.start &amp;&amp; end &lt;= change.end; })) {
+        var difference = document.createElement('span');
+        difference.className = 'diff-' + (block.id.indexOf('before-') === 0 ? 'before' : 'after');
+        difference.append(node);
+        node = difference;
+      }
       if (cover.length &gt; 0) {
         var mark = document.createElement('mark');
         mark.className = (cover.length &gt; 1 ? 'overlap ' : '') + (cover.some(function(entry){ return entry.id === activeId; }) ? 'active' : '');
@@ -178231,10 +178481,26 @@ Stage 6 必须持续刷新并展示：
   function renderPaper(){
     var paper = $('paper');
     paper.replaceChildren();
+    var comparison = STATE.workspace.document.comparison;
+    paper.classList.toggle('comparing', !!comparison);
     paper.append(el('h1', '', STATE.workspace.title));
     var source = STATE.workspace.source;
     paper.append(el('p', 'lead', FORMAT_LABEL[source.format] + ' · ' + source.entry_path + ' · 冻结快照 ' + STATE.workspace.snapshot_id));
     if (source.capture_limitations.length &gt; 0) paper.append(el('p', 'kind-note', '来源采集限制：' + source.capture_limitations.join('；')));
+    if (comparison) {
+      paper.append(el('p', 'lead', '左：本轮原文 · ' + comparison.base_path + '　右：已核验候选稿 · ' + source.entry_path));
+      comparison.rows.forEach(function(row){
+        var pair = el('div', 'compare-row');
+        [['before', row.before_block_id, '原文'], ['after', row.after_block_id, '候选稿']].forEach(function(side){
+          var column = el('section', 'compare-side ' + side[0]);
+          column.append(el('small', '', side[2]));
+          column.append(makeBlock(blockById(side[1])));
+          pair.append(column);
+        });
+        paper.append(pair);
+      });
+      return;
+    }
     var cellBuffer = [];
     STATE.workspace.document.blocks.forEach(function(block){
       if (block.kind === 'table-cell') { cellBuffer.push(block); return; }
@@ -178432,7 +178698,7 @@ Stage 6 必须持续刷新并展示：
     }
   }
 
-  function dispositionKey(item){ var decision = STATE.decisions[item.item_id]; return decision ? decision.disposition : 'pending'; }
+  function dispositionKey(item){ var decision = STATE.decisions[item.id]; return decision ? decision.disposition : 'pending'; }
 
   function isVisibleItem(item){
     var origin = $('origin-filter').value;
@@ -178480,7 +178746,7 @@ Stage 6 必须持续刷新并展示：
     expand.setAttribute('aria-expanded', String(expanded));
     top.append(expand);
     card.append(top);
-    card.append(el('small', '', agent ? 'Agent 审阅项 · ' + documentDisposition(item.item_id) : '用户批注 · ' + (item.location ? (item.section ? sectionName(item.section) : '正文') : '未定位')));
+    card.append(el('small', '', agent ? 'Agent 审阅项 · ' + documentDisposition(item.id) : '用户批注 · ' + (item.location ? (item.section ? sectionName(item.section) : '正文') : '未定位')));
     card.append(el('small', '', agent ? '证据原文' : '原选文'));
     card.append(el('blockquote', '', item.quote || '（无选文）'));
     if (!expanded) {
@@ -178491,9 +178757,16 @@ Stage 6 必须持续刷新并展示：
       card.append(el('p', '', 'Agent 建议：' + item.item.recommendation.action));
       card.append(el('p', '', '理由：' + item.item.recommendation.rationale));
       card.append(el('p', '', '风险：' + item.item.recommendation.risk));
+      if (STATE.workspace.adapter === 'paper-humanizer') {
+        var metadata = item.item.metadata;
+        if (metadata.plan_summary) card.append(el('p', '', '方案摘要：' + metadata.plan_summary));
+        if (Array.isArray(metadata.user_constraints) &amp;&amp; metadata.user_constraints.length) card.append(el('p', '', '用户约束：' + metadata.user_constraints.join('；')));
+        if (Array.isArray(metadata.preservation_constraints) &amp;&amp; metadata.preservation_constraints.length) card.append(el('p', '', '保留约束：' + metadata.preservation_constraints.join('；')));
+        if (metadata.recommendation) card.append(el('small', '', '方案建议：' + metadata.recommendation));
+      }
       if (item.item.source_pointer) card.append(el('small', '', '来源位置：' + item.item.source_pointer));
       if (!item.location) card.append(el('p', 'forced', '未在本审阅件的正文中找到确切位置，仍可记录处理意见。'));
-      var decision = STATE.decisions[item.item_id];
+      var decision = STATE.decisions[item.id];
       card.append(fieldLabel('处理意见'));
       var select = document.createElement('select');
       select.setAttribute('aria-label', '处理 Agent 审阅项');
@@ -178503,7 +178776,7 @@ Stage 6 必须持续刷新并展示：
         decision.disposition = select.value;
         save();
         var statusLine = card.querySelector('small');
-        if (statusLine) setText(statusLine, 'Agent 审阅项 · ' + documentDisposition(item.item_id));
+        if (statusLine) setText(statusLine, 'Agent 审阅项 · ' + documentDisposition(item.id));
         if ($('disposition-filter').value !== 'all') renderCards();
         renderStatus();
       });
@@ -178531,7 +178804,7 @@ Stage 6 必须持续刷新并展示：
 
   function renderCards(){
     var root = $('cards');
-    root.replaceChildren();
+    var next = document.createDocumentFragment();
     var blockIndex = {};
     STATE.workspace.document.blocks.forEach(function(block, index){ blockIndex[block.id] = index; });
     var items = allItems().sort(function(a, b){
@@ -178548,7 +178821,7 @@ Stage 6 必须持续刷新并展示：
     setText($('forced'), forced ? '已临时显示所选批注；筛选条件保持不变。' : '');
     setText($('card-count'), '显示 ' + shown.length + ' / ' + items.length + ' 项');
     setText($('rail-count'), String(items.length));
-    if (shown.length === 0) { root.append(el('p', 'subtle', '当前筛选下没有批注。')); return; }
+    if (shown.length === 0) { root.replaceChildren(el('p', 'subtle', '当前筛选下没有批注。')); return; }
     groupItems(shown).forEach(function(group){
       var details = document.createElement('details');
       details.className = 'group';
@@ -178556,8 +178829,9 @@ Stage 6 必须持续刷新并展示：
       details.addEventListener('toggle', function(){ collapsedGroups[group.key] = !details.open; });
       details.append(el('summary', '', group.title + ' · ' + group.items.length));
       group.items.forEach(function(item){ details.append(renderCard(item)); });
-      root.append(details);
+      next.append(details);
     });
+    root.replaceChildren(next);
   }
 
   function renderStatus(){
@@ -202326,7 +202600,7 @@ Revision Master 提取工件（Extraction Artifact）
     <div><strong>inputs</strong> <code>review_response_workspace</code> ← review-response-workspace.v1</div>
     <div><strong>outputs</strong> <code>review_response_workboard</code> → review-response-workboard.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 112 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 110 行</summary><pre class="doc-body">---
 name: design-review-response-workboard-planning
 description: "Plans priority, dependencies, evidence gaps, target locations, and next actions for every canonical atomic comment."
 metadata:
@@ -202355,8 +202629,8 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `workflow-state-machine` from `knowledge/workflow-state-machine.md`.
 - Load knowledge ID `sql-write-recipes` from `knowledge/sql-write-recipes.md`.
 - Load knowledge ID `helper-scripts` from `knowledge/helper-scripts.md`.
-- Load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
-- Load knowledge ID `review-workspace-v1.html` from `review-workspace/v1.html`.
+- For an existing review workspace only, load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
+- For an existing review workspace only, load knowledge ID `review-workspace-v1.html` from `review-workspace/v1.html`.
 
 ## Tools
 
@@ -202390,8 +202664,6 @@ Execute exactly one ResearchSpec capability node.
 - `assets/templates/supplement-intake-plan.md.j2` is packaged from extraction artifact `RM-ASSET-25`; invoke it only through the declared runner and arguments.
 - `assets/templates/supplement-suggestion-plan.md.j2` is packaged from extraction artifact `RM-ASSET-26`; invoke it only through the declared runner and arguments.
 - `assets/templates/thread-to-atomic-mapping.md.j2` is packaged from extraction artifact `RM-ASSET-27`; invoke it only through the declared runner and arguments.
-- `review-workspace/index.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
-- `review-workspace/v1.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
 
 ## Procedure
 
@@ -202417,7 +202689,7 @@ Build the canonical atomic workboard: priority, dependencies, evidence gaps, tar
 6. Write `workflow_pending_user_confirmations`, run `scripts/gate_and_render_workspace.py --artifact-root &lt;workspace&gt;`, and present `08-atomic-comment-workboard.md` and `06-thread-to-atomic-mapping.md`.
 7. Keep the confirmation request open until the user explicitly accepts the workboard.
 
-If the user requests browser review, retain an exact frozen source set and project the current atomic comments and workboard fields through the `review-response` `review-workspace.v2` adapter, then open `review-workspace/index.html`. Prepare static selectable content with host Quarto/LaTeX tools where needed; ask separately before every render that may execute project code or filters and use a temporary copy after approval. Show uncertain conversion as raw source. Validate the result against the retained workspace and compare current source with the frozen set; if changed, show differences and affected comments and ask before SQLite writes, and if unchanged ask about ambiguous source locations. Apply accepted changes through existing SQLite write recipes; the page never writes `revision-master.db` or confirms the graph Gate.
+Review the workboard with the user in dialogue. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes. Obtain the graph Gate confirmation separately.
 
 ## Completion Criteria
 
@@ -203653,7 +203925,7 @@ Revision Master 提取工件（Extraction Artifact）
 2. Agent 汇总 semantic revision log payload，并运行 `commit_revision_round.py --payload ...`
 3. 读取更新后的 `13-17` 工件与 `instruction_payload`
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1310 行</summary><div class="doc-meta">sha256 <code>505b1e769c5dab8528e668f20734c458da7a02d23af1196c428abed8b7ae1796</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1449 行</summary><div class="doc-meta">sha256 <code>9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
   &lt;meta charset="utf-8"&gt;
@@ -203700,6 +203972,13 @@ Revision Master 提取工件（Extraction Artifact）
     .outline .level-3{padding-left:1.8rem}
     .paper-scroll{padding:1.2rem clamp(.8rem,2.2vw,2rem);scroll-behavior:smooth}
     .paper{max-width:54rem;margin:0 auto 2rem;background:#fff;box-shadow:0 6px 28px #23405312;border:1px solid #e0e5e5;padding:2rem clamp(1rem,4vw,4rem)}
+    .paper.comparing{max-width:92rem}
+    .compare-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;border-top:1px solid var(--line);padding:.65rem 0}
+    .compare-side{min-width:0;padding:.25rem .7rem;background:#fafbfa;border-radius:6px}
+    .compare-side.after{background:#f7fafb}
+    .compare-side&gt;small{display:block;color:var(--muted);font-weight:600}
+    .diff-before{background:#f8dedb;text-decoration:line-through;text-decoration-color:#ae706c}
+    .diff-after{background:#ddf2e5}
     .paper h1{font:700 1.8rem/1.35 Georgia,"Noto Serif SC",serif;margin:.2rem 0}
     .paper h2{font:700 1.3rem/1.4 Georgia,"Noto Serif SC",serif;margin:2.2rem 0 .7rem}
     .paper h3{font:700 1.1rem/1.45 Georgia,"Noto Serif SC",serif;margin:1.6rem 0 .6rem}
@@ -203758,7 +204037,7 @@ Revision Master 提取工件（Extraction Artifact）
     #overlap-menu button{display:block;width:100%;text-align:left;border:0}
     .toast{position:fixed;z-index:30;left:50%;bottom:1rem;transform:translateX(-50%);background:#263b48;color:#fff;padding:.55rem .8rem;border-radius:8px;box-shadow:0 4px 14px #0004;max-width:32rem}
     @media(max-width:1050px){.layout{grid-template-columns:11rem minmax(0,1fr) 19rem}}
-    @media(max-width:760px){.layout{display:block;overflow:auto}.outline,.paper-scroll,.rail{overflow:visible;border:0}.rail{border-left:0;border-top:1px solid var(--line)}.paper-scroll{padding:.7rem}.paper{padding:1.3rem}}
+    @media(max-width:760px){.layout{display:block;overflow:auto}.outline,.paper-scroll,.rail{overflow:visible;border:0}.rail{border-left:0;border-top:1px solid var(--line)}.paper-scroll{padding:.7rem}.paper{padding:1.3rem}.compare-row{display:block}.compare-side{margin:.5rem 0}}
   &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -203925,7 +204204,7 @@ Revision Master 提取工件（Extraction Artifact）
     var blockRefs = [];
     if (!isObject(value.document) || !Array.isArray(value.document.blocks) || value.document.blocks.length === 0) errors.push('document.blocks 至少需要一个块。');
     else {
-      rejectUnknown(value.document, ['blocks'], 'document', errors);
+      rejectUnknown(value.document, ['blocks','item_locations','comparison'], 'document', errors);
       value.document.blocks.forEach(function(block, index){
         var path = 'document.blocks[' + index + ']';
         if (!isObject(block)) { errors.push(path + ' 必须是对象。'); return; }
@@ -204024,6 +204303,50 @@ Revision Master 提取工件（Extraction Artifact）
     if (Array.isArray(value.assets)) value.assets.forEach(function(asset, index){
       if (isObject(asset) &amp;&amp; asset.source_path &amp;&amp; !pathSet.has(asset.source_path)) errors.push('assets[' + index + '].source_path 不在冻结来源中。');
     });
+    var displayBlocks = value.document &amp;&amp; Array.isArray(value.document.blocks) ? value.document.blocks : [];
+    if (value.document &amp;&amp; value.document.item_locations !== undefined) {
+      if (!Array.isArray(value.document.item_locations)) errors.push('document.item_locations 必须是数组。');
+      else {
+        var locationIds = [];
+        value.document.item_locations.forEach(function(location, index){
+          var where = 'document.item_locations[' + index + ']';
+          if (!isObject(location)) { errors.push(where + ' 必须是对象。'); return; }
+          rejectUnknown(location, ['item_id','block_id','start','end'], where, errors);
+          requireKeys(location, ['item_id','block_id','start','end'], where, errors);
+          locationIds.push(location.item_id);
+          var item = Array.isArray(value.items) ? value.items.find(function(entry){ return isObject(entry) &amp;&amp; entry.item_id === location.item_id; }) : null;
+          var block = displayBlocks.find(function(entry){ return isObject(entry) &amp;&amp; entry.id === location.block_id; });
+          if (!item || !block || typeof block.text !== 'string' || !Number.isInteger(location.start) || !Number.isInteger(location.end) || location.start &lt; 0 || location.end &lt; location.start || location.end &gt; block.text.length) { errors.push(where + ' 无效。'); return; }
+          if (isObject(item.target) &amp;&amp; item.target.kind === 'quote' &amp;&amp; block.text.slice(location.start, location.end) !== item.target.exact_quote) errors.push(where + ' 与原选文不一致。');
+          if (isObject(item.target) &amp;&amp; item.target.kind === 'section' &amp;&amp; (block.kind !== 'heading' || block.text !== item.target.heading)) errors.push(where + ' 与章节不一致。');
+        });
+        if (new Set(locationIds).size !== locationIds.length) errors.push('document.item_locations 存在重复 item_id。');
+      }
+    }
+    if (value.document &amp;&amp; value.document.comparison !== undefined) {
+      var comparison = value.document.comparison;
+      if (!isObject(comparison)) errors.push('document.comparison 必须是对象。');
+      else {
+        rejectUnknown(comparison, ['base_path','rows'], 'document.comparison', errors);
+        requireKeys(comparison, ['base_path','rows'], 'document.comparison', errors);
+        var entryPath = isObject(value.source) ? value.source.entry_path : null;
+        if (value.adapter !== 'paper-humanizer' || !isRelativePath(comparison.base_path) || comparison.base_path === entryPath || !pathSet.has(comparison.base_path)) errors.push('document.comparison.base_path 无效。');
+        if (!Array.isArray(comparison.rows) || comparison.rows.length === 0) errors.push('document.comparison.rows 不能为空。');
+        else {
+          var beforeIds = [], afterIds = [];
+          comparison.rows.forEach(function(row, index){
+            var where = 'document.comparison.rows[' + index + ']';
+            if (!isObject(row)) { errors.push(where + ' 必须是对象。'); return; }
+            rejectUnknown(row, ['before_block_id','after_block_id'], where, errors);
+            requireKeys(row, ['before_block_id','after_block_id'], where, errors);
+            beforeIds.push(row.before_block_id); afterIds.push(row.after_block_id);
+            var base = displayBlocks[index], candidate = displayBlocks[index + comparison.rows.length];
+            if (!isObject(base) || !isObject(candidate) || base.id !== row.before_block_id || candidate.id !== row.after_block_id || base.kind !== candidate.kind || base.level !== candidate.level || base.source_path !== comparison.base_path || candidate.source_path !== entryPath) errors.push(where + ' 配对无效。');
+          });
+          if (new Set(beforeIds.concat(afterIds)).size !== displayBlocks.length || beforeIds.length + afterIds.length !== displayBlocks.length) errors.push('document.comparison.rows 必须覆盖每个块一次。');
+        }
+      }
+    }
 
     if (errors.length &gt; 0) throw new Error(errors.slice(0, 6).join('；'));
     return normalizeWorkspace(value);
@@ -204237,6 +204560,49 @@ Revision Master 提取工件（Extraction Artifact）
   // @browser-check:end
 
   var STATE = null;
+  var diffRanges = {};
+  function comparisonDiffs(workspace){
+    var comparison = workspace.document.comparison;
+    var result = {};
+    if (!comparison) return result;
+    var blocks = new Map(workspace.document.blocks.map(function(block){ return [block.id, block]; }));
+    function tokens(text){
+      if (Intl.Segmenter) return Array.from(new Intl.Segmenter(undefined, { granularity: 'word' }).segment(text), function(part){ return { text: part.segment, start: part.index, end: part.index + part.segment.length }; });
+      var offset = 0;
+      return Array.from(text, function(char){ var start = offset; offset += char.length; return { text: char, start: start, end: offset }; });
+    }
+    comparison.rows.forEach(function(row){
+      var before = blocks.get(row.before_block_id), after = blocks.get(row.after_block_id);
+      if (before.text === after.text) return;
+      var left = tokens(before.text), right = tokens(after.text);
+      if (left.length &gt; 220 || right.length &gt; 220) {
+        // ponytail: Bound quadratic word diff; use a dedicated diff library if long blocks become common.
+        result[before.id] = [{ start: 0, end: before.text.length }];
+        result[after.id] = [{ start: 0, end: after.text.length }];
+        return;
+      }
+      var dp = Array.from({ length: left.length + 1 }, function(){ return new Uint16Array(right.length + 1); });
+      for (var i = left.length - 1; i &gt;= 0; i--) for (var j = right.length - 1; j &gt;= 0; j--) dp[i][j] = left[i].text === right[j].text ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+      var matches = [], a = 0, b = 0;
+      while (a &lt; left.length &amp;&amp; b &lt; right.length) {
+        if (left[a].text === right[b].text) { matches.push([a, b]); a++; b++; }
+        else if (dp[a + 1][b] &gt;= dp[a][b + 1]) a++;
+        else b++;
+      }
+      function changed(parts, side){
+        var ranges = [], previous = -1;
+        matches.concat([[left.length, right.length]]).forEach(function(match){
+          var next = match[side];
+          if (next &gt; previous + 1) ranges.push({ start: parts[previous + 1].start, end: parts[next - 1].end });
+          previous = next;
+        });
+        return ranges;
+      }
+      result[before.id] = changed(left, 0);
+      result[after.id] = changed(right, 1);
+    });
+    return result;
+  }
   var activeId = null;
   var pending = null;
   var forcedId = null;
@@ -204302,6 +204668,7 @@ Revision Master 提取工件（Extraction Artifact）
     try { workspace = validateWorkspace(raw); }
     catch (error) { notify('工作区校验未通过：' + error.message); return; }
     STATE = { workspace: workspace, comments: [], decisions: {}, overall_note: '', export_revision: 0 };
+    diffRanges = comparisonDiffs(workspace);
     activeId = null; pending = null; forcedId = null; collapsedGroups = {};
     $('search').value = ''; $('origin-filter').value = 'all'; $('disposition-filter').value = 'all';
     loadDraft();
@@ -204327,16 +204694,26 @@ Revision Master 提取工件（Extraction Artifact）
 
   function blockById(id){ return STATE.workspace.document.blocks.find(function(block){return block.id === id}) || null; }
   function assetById(id){ return STATE.workspace.assets.find(function(asset){return asset.id === id}) || null; }
-  function headingBlocks(){ return STATE.workspace.document.blocks.filter(function(block){return block.kind === 'heading' &amp;&amp; block.level !== null &amp;&amp; block.level &lt;= 3}); }
+  function headingBlocks(){
+    var comparison = STATE.workspace.document.comparison;
+    var after = comparison ? new Set(comparison.rows.map(function(row){ return row.after_block_id; })) : null;
+    return STATE.workspace.document.blocks.filter(function(block){return block.kind === 'heading' &amp;&amp; block.level !== null &amp;&amp; block.level &lt;= 3 &amp;&amp; (!after || after.has(block.id));});
+  }
   function sectionName(id){ var block = id ? blockById(id) : null; return block ? block.text : ''; }
 
   function sectionOf(blockId){
     if (!blockId) return null;
+    var comparison = STATE.workspace.document.comparison;
+    if (comparison) {
+      var row = comparison.rows.find(function(entry){ return entry.before_block_id === blockId; });
+      if (row) blockId = row.after_block_id;
+    }
     var blocks = STATE.workspace.document.blocks;
     var index = -1;
     for (var i = 0; i &lt; blocks.length; i++) { if (blocks[i].id === blockId) { index = i; break; } }
     if (index === -1) return null;
-    for (var j = index; j &gt;= 0; j--) {
+    var floor = comparison ? comparison.rows.length : 0;
+    for (var j = index; j &gt;= floor; j--) {
       var block = blocks[j];
       if (block.kind === 'heading' &amp;&amp; block.level !== null &amp;&amp; block.level &lt;= 3) return block.id;
     }
@@ -204344,6 +204721,8 @@ Revision Master 提取工件（Extraction Artifact）
   }
 
   function agentLocation(item){
+    var explicit = (STATE.workspace.document.item_locations || []).find(function(location){ return location.item_id === item.item_id; });
+    if (explicit) return { blockId: explicit.block_id, start: explicit.start, end: explicit.end };
     var target = item.target;
     if (target.kind === 'quote') {
       var quoted = blockById(target.block_id);
@@ -204424,6 +204803,8 @@ Revision Master 提取工件（Extraction Artifact）
     var points = [0, block.text.length];
     runs.forEach(function(run, index){ points.push(runOffsets[index]); points.push(runOffsets[index] + run.text.length); });
     marks.forEach(function(mark){ points.push(mark.start); points.push(mark.end); });
+    var changes = diffRanges[block.id] || [];
+    changes.forEach(function(change){ points.push(change.start); points.push(change.end); });
     var cuts = points.filter(function(point){ return point &gt;= 0 &amp;&amp; point &lt;= block.text.length; }).sort(function(a, b){ return a - b; });
     target.replaceChildren();
     for (var i = 0; i &lt; cuts.length - 1; i++) {
@@ -204436,6 +204817,12 @@ Revision Master 提取工件（Extraction Artifact）
       var node = document.createTextNode(text);
       var marksOfRun = runs[runIndex].marks;
       for (var m = marksOfRun.length - 1; m &gt;= 0; m--) node = wrapMark(node, marksOfRun[m]);
+      if (changes.some(function(change){ return start &gt;= change.start &amp;&amp; end &lt;= change.end; })) {
+        var difference = document.createElement('span');
+        difference.className = 'diff-' + (block.id.indexOf('before-') === 0 ? 'before' : 'after');
+        difference.append(node);
+        node = difference;
+      }
       if (cover.length &gt; 0) {
         var mark = document.createElement('mark');
         mark.className = (cover.length &gt; 1 ? 'overlap ' : '') + (cover.some(function(entry){ return entry.id === activeId; }) ? 'active' : '');
@@ -204544,10 +204931,26 @@ Revision Master 提取工件（Extraction Artifact）
   function renderPaper(){
     var paper = $('paper');
     paper.replaceChildren();
+    var comparison = STATE.workspace.document.comparison;
+    paper.classList.toggle('comparing', !!comparison);
     paper.append(el('h1', '', STATE.workspace.title));
     var source = STATE.workspace.source;
     paper.append(el('p', 'lead', FORMAT_LABEL[source.format] + ' · ' + source.entry_path + ' · 冻结快照 ' + STATE.workspace.snapshot_id));
     if (source.capture_limitations.length &gt; 0) paper.append(el('p', 'kind-note', '来源采集限制：' + source.capture_limitations.join('；')));
+    if (comparison) {
+      paper.append(el('p', 'lead', '左：本轮原文 · ' + comparison.base_path + '　右：已核验候选稿 · ' + source.entry_path));
+      comparison.rows.forEach(function(row){
+        var pair = el('div', 'compare-row');
+        [['before', row.before_block_id, '原文'], ['after', row.after_block_id, '候选稿']].forEach(function(side){
+          var column = el('section', 'compare-side ' + side[0]);
+          column.append(el('small', '', side[2]));
+          column.append(makeBlock(blockById(side[1])));
+          pair.append(column);
+        });
+        paper.append(pair);
+      });
+      return;
+    }
     var cellBuffer = [];
     STATE.workspace.document.blocks.forEach(function(block){
       if (block.kind === 'table-cell') { cellBuffer.push(block); return; }
@@ -204745,7 +205148,7 @@ Revision Master 提取工件（Extraction Artifact）
     }
   }
 
-  function dispositionKey(item){ var decision = STATE.decisions[item.item_id]; return decision ? decision.disposition : 'pending'; }
+  function dispositionKey(item){ var decision = STATE.decisions[item.id]; return decision ? decision.disposition : 'pending'; }
 
   function isVisibleItem(item){
     var origin = $('origin-filter').value;
@@ -204793,7 +205196,7 @@ Revision Master 提取工件（Extraction Artifact）
     expand.setAttribute('aria-expanded', String(expanded));
     top.append(expand);
     card.append(top);
-    card.append(el('small', '', agent ? 'Agent 审阅项 · ' + documentDisposition(item.item_id) : '用户批注 · ' + (item.location ? (item.section ? sectionName(item.section) : '正文') : '未定位')));
+    card.append(el('small', '', agent ? 'Agent 审阅项 · ' + documentDisposition(item.id) : '用户批注 · ' + (item.location ? (item.section ? sectionName(item.section) : '正文') : '未定位')));
     card.append(el('small', '', agent ? '证据原文' : '原选文'));
     card.append(el('blockquote', '', item.quote || '（无选文）'));
     if (!expanded) {
@@ -204804,9 +205207,16 @@ Revision Master 提取工件（Extraction Artifact）
       card.append(el('p', '', 'Agent 建议：' + item.item.recommendation.action));
       card.append(el('p', '', '理由：' + item.item.recommendation.rationale));
       card.append(el('p', '', '风险：' + item.item.recommendation.risk));
+      if (STATE.workspace.adapter === 'paper-humanizer') {
+        var metadata = item.item.metadata;
+        if (metadata.plan_summary) card.append(el('p', '', '方案摘要：' + metadata.plan_summary));
+        if (Array.isArray(metadata.user_constraints) &amp;&amp; metadata.user_constraints.length) card.append(el('p', '', '用户约束：' + metadata.user_constraints.join('；')));
+        if (Array.isArray(metadata.preservation_constraints) &amp;&amp; metadata.preservation_constraints.length) card.append(el('p', '', '保留约束：' + metadata.preservation_constraints.join('；')));
+        if (metadata.recommendation) card.append(el('small', '', '方案建议：' + metadata.recommendation));
+      }
       if (item.item.source_pointer) card.append(el('small', '', '来源位置：' + item.item.source_pointer));
       if (!item.location) card.append(el('p', 'forced', '未在本审阅件的正文中找到确切位置，仍可记录处理意见。'));
-      var decision = STATE.decisions[item.item_id];
+      var decision = STATE.decisions[item.id];
       card.append(fieldLabel('处理意见'));
       var select = document.createElement('select');
       select.setAttribute('aria-label', '处理 Agent 审阅项');
@@ -204816,7 +205226,7 @@ Revision Master 提取工件（Extraction Artifact）
         decision.disposition = select.value;
         save();
         var statusLine = card.querySelector('small');
-        if (statusLine) setText(statusLine, 'Agent 审阅项 · ' + documentDisposition(item.item_id));
+        if (statusLine) setText(statusLine, 'Agent 审阅项 · ' + documentDisposition(item.id));
         if ($('disposition-filter').value !== 'all') renderCards();
         renderStatus();
       });
@@ -204844,7 +205254,7 @@ Revision Master 提取工件（Extraction Artifact）
 
   function renderCards(){
     var root = $('cards');
-    root.replaceChildren();
+    var next = document.createDocumentFragment();
     var blockIndex = {};
     STATE.workspace.document.blocks.forEach(function(block, index){ blockIndex[block.id] = index; });
     var items = allItems().sort(function(a, b){
@@ -204861,7 +205271,7 @@ Revision Master 提取工件（Extraction Artifact）
     setText($('forced'), forced ? '已临时显示所选批注；筛选条件保持不变。' : '');
     setText($('card-count'), '显示 ' + shown.length + ' / ' + items.length + ' 项');
     setText($('rail-count'), String(items.length));
-    if (shown.length === 0) { root.append(el('p', 'subtle', '当前筛选下没有批注。')); return; }
+    if (shown.length === 0) { root.replaceChildren(el('p', 'subtle', '当前筛选下没有批注。')); return; }
     groupItems(shown).forEach(function(group){
       var details = document.createElement('details');
       details.className = 'group';
@@ -204869,8 +205279,9 @@ Revision Master 提取工件（Extraction Artifact）
       details.addEventListener('toggle', function(){ collapsedGroups[group.key] = !details.open; });
       details.append(el('summary', '', group.title + ' · ' + group.items.length));
       group.items.forEach(function(item){ details.append(renderCard(item)); });
-      root.append(details);
+      next.append(details);
     });
+    root.replaceChildren(next);
   }
 
   function renderStatus(){
@@ -205096,7 +205507,7 @@ Revision Master 提取工件（Extraction Artifact）
     <div><strong>inputs</strong> <code>review_response_workspace</code> ← review-response-workspace.v1</div>
     <div><strong>outputs</strong> <code>working_manuscript</code> → manuscript-draft.v1 · <code>response_markdown</code> → response-letter.v1 · <code>response_latex</code> → response-letter-latex.v1 · <code>round_summary</code> → review-response-round.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 135 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 133 行</summary><pre class="doc-body">---
 name: generation-review-response-round
 description: "Executes one complete strategy/draft round plus final interactive manuscript revision, semantic revision logging, response-letter coverage, and export."
 metadata:
@@ -205129,8 +205540,8 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `sql-write-recipes` from `knowledge/sql-write-recipes.md`.
 - Load knowledge ID `helper-scripts` from `knowledge/helper-scripts.md`.
 - Load knowledge ID `stage-6-final-review-export` from `knowledge/stage-6-final-review-and-export.md`.
-- Load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
-- Load knowledge ID `review-workspace-v1.html` from `review-workspace/v1.html`.
+- For an existing review workspace only, load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
+- For an existing review workspace only, load knowledge ID `review-workspace-v1.html` from `review-workspace/v1.html`.
 
 ## Tools
 
@@ -205167,8 +205578,6 @@ Execute exactly one ResearchSpec capability node.
 - `assets/templates/supplement-intake-plan.md.j2` is packaged from extraction artifact `RM-ASSET-25`; invoke it only through the declared runner and arguments.
 - `assets/templates/supplement-suggestion-plan.md.j2` is packaged from extraction artifact `RM-ASSET-26`; invoke it only through the declared runner and arguments.
 - `assets/templates/thread-to-atomic-mapping.md.j2` is packaged from extraction artifact `RM-ASSET-27`; invoke it only through the declared runner and arguments.
-- `review-workspace/index.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
-- `review-workspace/v1.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
 
 ## Procedure
 
@@ -205204,7 +205613,7 @@ Execute one complete revision-response round: author and confirm comment-scoped 
 7. Export final deliverables with `scripts/export_manuscript_variants.py` where the script supports the confirmed target; optional `latexdiff` is advisory only and must never block completion.
 8. Ask the user when a change would alter the main line, core claims, or conclusions; when a closing strategy needs authorization; or when a response-only resolution is ambiguous.
 
-For the final interactive pass, retain the exact frozen source set, project the current `working_manuscript` entry and open workboard items through the `review-response` `review-workspace.v2` adapter, then open `review-workspace/index.html`. Ask separately before every render that may execute project code or filters, render after approval in a temporary copy, and preserve unreliable conversion as visible raw source. The browser result is revision intent only: validate it against the retained workspace, compare current source with the frozen set, show differences and affected feedback and ask before edits if changed, and ask about ambiguous source locations if unchanged. Apply accepted edits to `working_manuscript`, commit through existing semantic revision log scripts, and prepare a new workspace without processed comments.
+For the final interactive pass, review the current `working_manuscript` and open workboard items with the user in dialogue. Apply accepted edits to `working_manuscript` and commit them through the existing semantic revision log scripts. Keep the per-comment confirmation and evidence boundaries intact.
 
 ## Round Completion
 
@@ -206614,7 +207023,7 @@ Stage 6 必须持续刷新并展示：
 - `14-response-coverage-matrix.md` 显示所有 thread 已闭环
 - `working_manuscript`、`response_markdown`、`response_latex` 已稳定可交付
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1310 行</summary><div class="doc-meta">sha256 <code>505b1e769c5dab8528e668f20734c458da7a02d23af1196c428abed8b7ae1796</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1449 行</summary><div class="doc-meta">sha256 <code>9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
   &lt;meta charset="utf-8"&gt;
@@ -206661,6 +207070,13 @@ Stage 6 必须持续刷新并展示：
     .outline .level-3{padding-left:1.8rem}
     .paper-scroll{padding:1.2rem clamp(.8rem,2.2vw,2rem);scroll-behavior:smooth}
     .paper{max-width:54rem;margin:0 auto 2rem;background:#fff;box-shadow:0 6px 28px #23405312;border:1px solid #e0e5e5;padding:2rem clamp(1rem,4vw,4rem)}
+    .paper.comparing{max-width:92rem}
+    .compare-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;border-top:1px solid var(--line);padding:.65rem 0}
+    .compare-side{min-width:0;padding:.25rem .7rem;background:#fafbfa;border-radius:6px}
+    .compare-side.after{background:#f7fafb}
+    .compare-side&gt;small{display:block;color:var(--muted);font-weight:600}
+    .diff-before{background:#f8dedb;text-decoration:line-through;text-decoration-color:#ae706c}
+    .diff-after{background:#ddf2e5}
     .paper h1{font:700 1.8rem/1.35 Georgia,"Noto Serif SC",serif;margin:.2rem 0}
     .paper h2{font:700 1.3rem/1.4 Georgia,"Noto Serif SC",serif;margin:2.2rem 0 .7rem}
     .paper h3{font:700 1.1rem/1.45 Georgia,"Noto Serif SC",serif;margin:1.6rem 0 .6rem}
@@ -206719,7 +207135,7 @@ Stage 6 必须持续刷新并展示：
     #overlap-menu button{display:block;width:100%;text-align:left;border:0}
     .toast{position:fixed;z-index:30;left:50%;bottom:1rem;transform:translateX(-50%);background:#263b48;color:#fff;padding:.55rem .8rem;border-radius:8px;box-shadow:0 4px 14px #0004;max-width:32rem}
     @media(max-width:1050px){.layout{grid-template-columns:11rem minmax(0,1fr) 19rem}}
-    @media(max-width:760px){.layout{display:block;overflow:auto}.outline,.paper-scroll,.rail{overflow:visible;border:0}.rail{border-left:0;border-top:1px solid var(--line)}.paper-scroll{padding:.7rem}.paper{padding:1.3rem}}
+    @media(max-width:760px){.layout{display:block;overflow:auto}.outline,.paper-scroll,.rail{overflow:visible;border:0}.rail{border-left:0;border-top:1px solid var(--line)}.paper-scroll{padding:.7rem}.paper{padding:1.3rem}.compare-row{display:block}.compare-side{margin:.5rem 0}}
   &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -206886,7 +207302,7 @@ Stage 6 必须持续刷新并展示：
     var blockRefs = [];
     if (!isObject(value.document) || !Array.isArray(value.document.blocks) || value.document.blocks.length === 0) errors.push('document.blocks 至少需要一个块。');
     else {
-      rejectUnknown(value.document, ['blocks'], 'document', errors);
+      rejectUnknown(value.document, ['blocks','item_locations','comparison'], 'document', errors);
       value.document.blocks.forEach(function(block, index){
         var path = 'document.blocks[' + index + ']';
         if (!isObject(block)) { errors.push(path + ' 必须是对象。'); return; }
@@ -206985,6 +207401,50 @@ Stage 6 必须持续刷新并展示：
     if (Array.isArray(value.assets)) value.assets.forEach(function(asset, index){
       if (isObject(asset) &amp;&amp; asset.source_path &amp;&amp; !pathSet.has(asset.source_path)) errors.push('assets[' + index + '].source_path 不在冻结来源中。');
     });
+    var displayBlocks = value.document &amp;&amp; Array.isArray(value.document.blocks) ? value.document.blocks : [];
+    if (value.document &amp;&amp; value.document.item_locations !== undefined) {
+      if (!Array.isArray(value.document.item_locations)) errors.push('document.item_locations 必须是数组。');
+      else {
+        var locationIds = [];
+        value.document.item_locations.forEach(function(location, index){
+          var where = 'document.item_locations[' + index + ']';
+          if (!isObject(location)) { errors.push(where + ' 必须是对象。'); return; }
+          rejectUnknown(location, ['item_id','block_id','start','end'], where, errors);
+          requireKeys(location, ['item_id','block_id','start','end'], where, errors);
+          locationIds.push(location.item_id);
+          var item = Array.isArray(value.items) ? value.items.find(function(entry){ return isObject(entry) &amp;&amp; entry.item_id === location.item_id; }) : null;
+          var block = displayBlocks.find(function(entry){ return isObject(entry) &amp;&amp; entry.id === location.block_id; });
+          if (!item || !block || typeof block.text !== 'string' || !Number.isInteger(location.start) || !Number.isInteger(location.end) || location.start &lt; 0 || location.end &lt; location.start || location.end &gt; block.text.length) { errors.push(where + ' 无效。'); return; }
+          if (isObject(item.target) &amp;&amp; item.target.kind === 'quote' &amp;&amp; block.text.slice(location.start, location.end) !== item.target.exact_quote) errors.push(where + ' 与原选文不一致。');
+          if (isObject(item.target) &amp;&amp; item.target.kind === 'section' &amp;&amp; (block.kind !== 'heading' || block.text !== item.target.heading)) errors.push(where + ' 与章节不一致。');
+        });
+        if (new Set(locationIds).size !== locationIds.length) errors.push('document.item_locations 存在重复 item_id。');
+      }
+    }
+    if (value.document &amp;&amp; value.document.comparison !== undefined) {
+      var comparison = value.document.comparison;
+      if (!isObject(comparison)) errors.push('document.comparison 必须是对象。');
+      else {
+        rejectUnknown(comparison, ['base_path','rows'], 'document.comparison', errors);
+        requireKeys(comparison, ['base_path','rows'], 'document.comparison', errors);
+        var entryPath = isObject(value.source) ? value.source.entry_path : null;
+        if (value.adapter !== 'paper-humanizer' || !isRelativePath(comparison.base_path) || comparison.base_path === entryPath || !pathSet.has(comparison.base_path)) errors.push('document.comparison.base_path 无效。');
+        if (!Array.isArray(comparison.rows) || comparison.rows.length === 0) errors.push('document.comparison.rows 不能为空。');
+        else {
+          var beforeIds = [], afterIds = [];
+          comparison.rows.forEach(function(row, index){
+            var where = 'document.comparison.rows[' + index + ']';
+            if (!isObject(row)) { errors.push(where + ' 必须是对象。'); return; }
+            rejectUnknown(row, ['before_block_id','after_block_id'], where, errors);
+            requireKeys(row, ['before_block_id','after_block_id'], where, errors);
+            beforeIds.push(row.before_block_id); afterIds.push(row.after_block_id);
+            var base = displayBlocks[index], candidate = displayBlocks[index + comparison.rows.length];
+            if (!isObject(base) || !isObject(candidate) || base.id !== row.before_block_id || candidate.id !== row.after_block_id || base.kind !== candidate.kind || base.level !== candidate.level || base.source_path !== comparison.base_path || candidate.source_path !== entryPath) errors.push(where + ' 配对无效。');
+          });
+          if (new Set(beforeIds.concat(afterIds)).size !== displayBlocks.length || beforeIds.length + afterIds.length !== displayBlocks.length) errors.push('document.comparison.rows 必须覆盖每个块一次。');
+        }
+      }
+    }
 
     if (errors.length &gt; 0) throw new Error(errors.slice(0, 6).join('；'));
     return normalizeWorkspace(value);
@@ -207198,6 +207658,49 @@ Stage 6 必须持续刷新并展示：
   // @browser-check:end
 
   var STATE = null;
+  var diffRanges = {};
+  function comparisonDiffs(workspace){
+    var comparison = workspace.document.comparison;
+    var result = {};
+    if (!comparison) return result;
+    var blocks = new Map(workspace.document.blocks.map(function(block){ return [block.id, block]; }));
+    function tokens(text){
+      if (Intl.Segmenter) return Array.from(new Intl.Segmenter(undefined, { granularity: 'word' }).segment(text), function(part){ return { text: part.segment, start: part.index, end: part.index + part.segment.length }; });
+      var offset = 0;
+      return Array.from(text, function(char){ var start = offset; offset += char.length; return { text: char, start: start, end: offset }; });
+    }
+    comparison.rows.forEach(function(row){
+      var before = blocks.get(row.before_block_id), after = blocks.get(row.after_block_id);
+      if (before.text === after.text) return;
+      var left = tokens(before.text), right = tokens(after.text);
+      if (left.length &gt; 220 || right.length &gt; 220) {
+        // ponytail: Bound quadratic word diff; use a dedicated diff library if long blocks become common.
+        result[before.id] = [{ start: 0, end: before.text.length }];
+        result[after.id] = [{ start: 0, end: after.text.length }];
+        return;
+      }
+      var dp = Array.from({ length: left.length + 1 }, function(){ return new Uint16Array(right.length + 1); });
+      for (var i = left.length - 1; i &gt;= 0; i--) for (var j = right.length - 1; j &gt;= 0; j--) dp[i][j] = left[i].text === right[j].text ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+      var matches = [], a = 0, b = 0;
+      while (a &lt; left.length &amp;&amp; b &lt; right.length) {
+        if (left[a].text === right[b].text) { matches.push([a, b]); a++; b++; }
+        else if (dp[a + 1][b] &gt;= dp[a][b + 1]) a++;
+        else b++;
+      }
+      function changed(parts, side){
+        var ranges = [], previous = -1;
+        matches.concat([[left.length, right.length]]).forEach(function(match){
+          var next = match[side];
+          if (next &gt; previous + 1) ranges.push({ start: parts[previous + 1].start, end: parts[next - 1].end });
+          previous = next;
+        });
+        return ranges;
+      }
+      result[before.id] = changed(left, 0);
+      result[after.id] = changed(right, 1);
+    });
+    return result;
+  }
   var activeId = null;
   var pending = null;
   var forcedId = null;
@@ -207263,6 +207766,7 @@ Stage 6 必须持续刷新并展示：
     try { workspace = validateWorkspace(raw); }
     catch (error) { notify('工作区校验未通过：' + error.message); return; }
     STATE = { workspace: workspace, comments: [], decisions: {}, overall_note: '', export_revision: 0 };
+    diffRanges = comparisonDiffs(workspace);
     activeId = null; pending = null; forcedId = null; collapsedGroups = {};
     $('search').value = ''; $('origin-filter').value = 'all'; $('disposition-filter').value = 'all';
     loadDraft();
@@ -207288,16 +207792,26 @@ Stage 6 必须持续刷新并展示：
 
   function blockById(id){ return STATE.workspace.document.blocks.find(function(block){return block.id === id}) || null; }
   function assetById(id){ return STATE.workspace.assets.find(function(asset){return asset.id === id}) || null; }
-  function headingBlocks(){ return STATE.workspace.document.blocks.filter(function(block){return block.kind === 'heading' &amp;&amp; block.level !== null &amp;&amp; block.level &lt;= 3}); }
+  function headingBlocks(){
+    var comparison = STATE.workspace.document.comparison;
+    var after = comparison ? new Set(comparison.rows.map(function(row){ return row.after_block_id; })) : null;
+    return STATE.workspace.document.blocks.filter(function(block){return block.kind === 'heading' &amp;&amp; block.level !== null &amp;&amp; block.level &lt;= 3 &amp;&amp; (!after || after.has(block.id));});
+  }
   function sectionName(id){ var block = id ? blockById(id) : null; return block ? block.text : ''; }
 
   function sectionOf(blockId){
     if (!blockId) return null;
+    var comparison = STATE.workspace.document.comparison;
+    if (comparison) {
+      var row = comparison.rows.find(function(entry){ return entry.before_block_id === blockId; });
+      if (row) blockId = row.after_block_id;
+    }
     var blocks = STATE.workspace.document.blocks;
     var index = -1;
     for (var i = 0; i &lt; blocks.length; i++) { if (blocks[i].id === blockId) { index = i; break; } }
     if (index === -1) return null;
-    for (var j = index; j &gt;= 0; j--) {
+    var floor = comparison ? comparison.rows.length : 0;
+    for (var j = index; j &gt;= floor; j--) {
       var block = blocks[j];
       if (block.kind === 'heading' &amp;&amp; block.level !== null &amp;&amp; block.level &lt;= 3) return block.id;
     }
@@ -207305,6 +207819,8 @@ Stage 6 必须持续刷新并展示：
   }
 
   function agentLocation(item){
+    var explicit = (STATE.workspace.document.item_locations || []).find(function(location){ return location.item_id === item.item_id; });
+    if (explicit) return { blockId: explicit.block_id, start: explicit.start, end: explicit.end };
     var target = item.target;
     if (target.kind === 'quote') {
       var quoted = blockById(target.block_id);
@@ -207385,6 +207901,8 @@ Stage 6 必须持续刷新并展示：
     var points = [0, block.text.length];
     runs.forEach(function(run, index){ points.push(runOffsets[index]); points.push(runOffsets[index] + run.text.length); });
     marks.forEach(function(mark){ points.push(mark.start); points.push(mark.end); });
+    var changes = diffRanges[block.id] || [];
+    changes.forEach(function(change){ points.push(change.start); points.push(change.end); });
     var cuts = points.filter(function(point){ return point &gt;= 0 &amp;&amp; point &lt;= block.text.length; }).sort(function(a, b){ return a - b; });
     target.replaceChildren();
     for (var i = 0; i &lt; cuts.length - 1; i++) {
@@ -207397,6 +207915,12 @@ Stage 6 必须持续刷新并展示：
       var node = document.createTextNode(text);
       var marksOfRun = runs[runIndex].marks;
       for (var m = marksOfRun.length - 1; m &gt;= 0; m--) node = wrapMark(node, marksOfRun[m]);
+      if (changes.some(function(change){ return start &gt;= change.start &amp;&amp; end &lt;= change.end; })) {
+        var difference = document.createElement('span');
+        difference.className = 'diff-' + (block.id.indexOf('before-') === 0 ? 'before' : 'after');
+        difference.append(node);
+        node = difference;
+      }
       if (cover.length &gt; 0) {
         var mark = document.createElement('mark');
         mark.className = (cover.length &gt; 1 ? 'overlap ' : '') + (cover.some(function(entry){ return entry.id === activeId; }) ? 'active' : '');
@@ -207505,10 +208029,26 @@ Stage 6 必须持续刷新并展示：
   function renderPaper(){
     var paper = $('paper');
     paper.replaceChildren();
+    var comparison = STATE.workspace.document.comparison;
+    paper.classList.toggle('comparing', !!comparison);
     paper.append(el('h1', '', STATE.workspace.title));
     var source = STATE.workspace.source;
     paper.append(el('p', 'lead', FORMAT_LABEL[source.format] + ' · ' + source.entry_path + ' · 冻结快照 ' + STATE.workspace.snapshot_id));
     if (source.capture_limitations.length &gt; 0) paper.append(el('p', 'kind-note', '来源采集限制：' + source.capture_limitations.join('；')));
+    if (comparison) {
+      paper.append(el('p', 'lead', '左：本轮原文 · ' + comparison.base_path + '　右：已核验候选稿 · ' + source.entry_path));
+      comparison.rows.forEach(function(row){
+        var pair = el('div', 'compare-row');
+        [['before', row.before_block_id, '原文'], ['after', row.after_block_id, '候选稿']].forEach(function(side){
+          var column = el('section', 'compare-side ' + side[0]);
+          column.append(el('small', '', side[2]));
+          column.append(makeBlock(blockById(side[1])));
+          pair.append(column);
+        });
+        paper.append(pair);
+      });
+      return;
+    }
     var cellBuffer = [];
     STATE.workspace.document.blocks.forEach(function(block){
       if (block.kind === 'table-cell') { cellBuffer.push(block); return; }
@@ -207706,7 +208246,7 @@ Stage 6 必须持续刷新并展示：
     }
   }
 
-  function dispositionKey(item){ var decision = STATE.decisions[item.item_id]; return decision ? decision.disposition : 'pending'; }
+  function dispositionKey(item){ var decision = STATE.decisions[item.id]; return decision ? decision.disposition : 'pending'; }
 
   function isVisibleItem(item){
     var origin = $('origin-filter').value;
@@ -207754,7 +208294,7 @@ Stage 6 必须持续刷新并展示：
     expand.setAttribute('aria-expanded', String(expanded));
     top.append(expand);
     card.append(top);
-    card.append(el('small', '', agent ? 'Agent 审阅项 · ' + documentDisposition(item.item_id) : '用户批注 · ' + (item.location ? (item.section ? sectionName(item.section) : '正文') : '未定位')));
+    card.append(el('small', '', agent ? 'Agent 审阅项 · ' + documentDisposition(item.id) : '用户批注 · ' + (item.location ? (item.section ? sectionName(item.section) : '正文') : '未定位')));
     card.append(el('small', '', agent ? '证据原文' : '原选文'));
     card.append(el('blockquote', '', item.quote || '（无选文）'));
     if (!expanded) {
@@ -207765,9 +208305,16 @@ Stage 6 必须持续刷新并展示：
       card.append(el('p', '', 'Agent 建议：' + item.item.recommendation.action));
       card.append(el('p', '', '理由：' + item.item.recommendation.rationale));
       card.append(el('p', '', '风险：' + item.item.recommendation.risk));
+      if (STATE.workspace.adapter === 'paper-humanizer') {
+        var metadata = item.item.metadata;
+        if (metadata.plan_summary) card.append(el('p', '', '方案摘要：' + metadata.plan_summary));
+        if (Array.isArray(metadata.user_constraints) &amp;&amp; metadata.user_constraints.length) card.append(el('p', '', '用户约束：' + metadata.user_constraints.join('；')));
+        if (Array.isArray(metadata.preservation_constraints) &amp;&amp; metadata.preservation_constraints.length) card.append(el('p', '', '保留约束：' + metadata.preservation_constraints.join('；')));
+        if (metadata.recommendation) card.append(el('small', '', '方案建议：' + metadata.recommendation));
+      }
       if (item.item.source_pointer) card.append(el('small', '', '来源位置：' + item.item.source_pointer));
       if (!item.location) card.append(el('p', 'forced', '未在本审阅件的正文中找到确切位置，仍可记录处理意见。'));
-      var decision = STATE.decisions[item.item_id];
+      var decision = STATE.decisions[item.id];
       card.append(fieldLabel('处理意见'));
       var select = document.createElement('select');
       select.setAttribute('aria-label', '处理 Agent 审阅项');
@@ -207777,7 +208324,7 @@ Stage 6 必须持续刷新并展示：
         decision.disposition = select.value;
         save();
         var statusLine = card.querySelector('small');
-        if (statusLine) setText(statusLine, 'Agent 审阅项 · ' + documentDisposition(item.item_id));
+        if (statusLine) setText(statusLine, 'Agent 审阅项 · ' + documentDisposition(item.id));
         if ($('disposition-filter').value !== 'all') renderCards();
         renderStatus();
       });
@@ -207805,7 +208352,7 @@ Stage 6 必须持续刷新并展示：
 
   function renderCards(){
     var root = $('cards');
-    root.replaceChildren();
+    var next = document.createDocumentFragment();
     var blockIndex = {};
     STATE.workspace.document.blocks.forEach(function(block, index){ blockIndex[block.id] = index; });
     var items = allItems().sort(function(a, b){
@@ -207822,7 +208369,7 @@ Stage 6 必须持续刷新并展示：
     setText($('forced'), forced ? '已临时显示所选批注；筛选条件保持不变。' : '');
     setText($('card-count'), '显示 ' + shown.length + ' / ' + items.length + ' 项');
     setText($('rail-count'), String(items.length));
-    if (shown.length === 0) { root.append(el('p', 'subtle', '当前筛选下没有批注。')); return; }
+    if (shown.length === 0) { root.replaceChildren(el('p', 'subtle', '当前筛选下没有批注。')); return; }
     groupItems(shown).forEach(function(group){
       var details = document.createElement('details');
       details.className = 'group';
@@ -207830,8 +208377,9 @@ Stage 6 必须持续刷新并展示：
       details.addEventListener('toggle', function(){ collapsedGroups[group.key] = !details.open; });
       details.append(el('summary', '', group.title + ' · ' + group.items.length));
       group.items.forEach(function(item){ details.append(renderCard(item)); });
-      root.append(details);
+      next.append(details);
     });
+    root.replaceChildren(next);
   }
 
   function renderStatus(){

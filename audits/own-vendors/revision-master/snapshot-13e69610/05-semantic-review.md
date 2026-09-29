@@ -73,6 +73,12 @@
 - 两包 procedure 段落现在引用共享 `review-workspace.v2` 契约与主机 Quarto/LaTeX 渲染边界；共享页面或契约变化会同时影响四个 capability 包，需在后续增量锚点一并复核（本锚点内两个 review-response 包页面 hash 一致）。
 - 该 change 同时改动两个 paper-humanizer 包副本，属跨 vendor 耦合；本文档只对本 vendor 负责，paper-humanizer 侧由其自身语义审阅覆盖。
 
+## 新审阅入口与既有资产复核（2026-09-29）
+
+- RM-CAP-04 workboard 的 priority、evidence gap、target location、next action 以及 Gate 确认仍在 `design-review-response-workboard-planning` 的对话与 SQLite recipe 中；RM-CAP-05/06 的逐条策略、工作稿和 semantic revision log 仍在 `generation-review-response-round`。本轮仅撤回新工作区的浏览器入口，判定 `adapted`，无语义删除或 graph 权威转移。
+- 两包原有 `review-workspace/index.html` 与 `v1.html` 仍在 manifest 中，并在生成 SKILL 的 Knowledge 段限定为现有审阅件恢复时读取；Tools 与 Procedure 不再引导新 review-response 审阅打开浏览器。根页面与四份包内 v2 页面 SHA-256 均为 `9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc`，v1 恢复页不变。判定 `preserved`（既有资产）。
+- 对照 RM-CAP-04/05/06 提取正文与两份生成 SKILL：数据库只由既有脚本写入，每条评论确认、revision log 和 response coverage 均未减少；三个其他 revision-master 包未变化。全局 parity 47/47 operational，未出现知识引用、输出或流程门禁缺口。
+
 ## 结论
 
-declared-fit-with-notes。本轮两个受影响能力的浏览器审阅语义按 v2 冻结源模型适配，v1 页面与结果按原契约逐字节保留（`5626313e...`），三个未受影响能力无漂移；无阻塞性 gap。note 是共享 v2 静态资产与主机渲染边界带来的跨包耦合，属后续增量维护的观察项。
+declared-fit-with-notes。新 review-response 审阅继续在对话和 SQLite 流程中进行；两个既有工作区页面仍可恢复旧审阅件，v1 字节不变。三个未受影响能力无漂移，也未发现阻塞性 gap。共享静态资产仍需随根页面同步审计。

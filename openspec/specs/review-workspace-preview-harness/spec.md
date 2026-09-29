@@ -19,10 +19,10 @@ The project SHALL provide a development command that builds local previews from 
 - **THEN** the previews are generated and their local location is printed without launching a browser
 
 ### Requirement: Representative and switchable examples
-The preview SHALL provide valid v2 sample workspaces for annotation intake, paper humanization, and review response, with multiple Agent items and a way to switch among them. It SHALL also exercise a workspace with no Agent items and representative Markdown, Quarto, and LaTeX rendered blocks, including a raw-source fallback. Every sample SHALL use the production v2 contract and ordinary page import/export interactions.
+The preview SHALL provide valid v2 examples for article revision through annotation intake, paper-humanizer plan review, and verified-candidate comparison. Each of these three scenarios SHALL have a fixed pre-rendered toolchain example and a no-toolchain source fallback example; an additional Markdown workspace SHALL have no Agent items. The examples SHALL include substantial manuscript context and representative special blocks. The generated page SHALL derive from the current shipped page, add only development bootstrap controls, and use its ordinary import/export interactions. Review response SHALL be absent from new preview selection.
 
 #### Scenario: Maintainer switches workflows
-- **WHEN** the maintainer selects another sample workflow
+- **WHEN** the maintainer selects another sample scenario or rendering outcome
 - **THEN** the corresponding populated review page appears with its frozen document and review items
 
 #### Scenario: Maintainer reviews real input
@@ -32,6 +32,10 @@ The preview SHALL provide valid v2 sample workspaces for annotation intake, pape
 #### Scenario: Maintainer tries a blank review
 - **WHEN** the maintainer opens the zero-item sample and adds a comment
 - **THEN** the preview exports a valid result containing that user comment and no Agent-item decisions
+
+#### Scenario: Host rendering tools are absent
+- **WHEN** the maintainer starts the preview without Quarto or Pandoc installed
+- **THEN** both pre-rendered and source-fallback examples are still generated from fixed reviewed inputs without running host tools
 
 ### Requirement: Preview remains development-only
 The preview SHALL neither mutate ResearchSpec workflow state nor add a public command, dependency, or production review behavior.

@@ -45,6 +45,18 @@ export const ReviewAssetSchema = z.strictObject({
   source_path: RelativePath.nullable(),
 });
 
+const ReviewItemLocationSchema = z.strictObject({
+  item_id: Id,
+  block_id: Id,
+  start: z.number().int().nonnegative(),
+  end: z.number().int().nonnegative(),
+});
+
+const ReviewComparisonSchema = z.strictObject({
+  base_path: RelativePath,
+  rows: z.array(z.strictObject({ before_block_id: Id, after_block_id: Id })).min(1),
+});
+
 export const ReviewWorkspaceV2Schema = z.strictObject({
   schema_version: z.literal("2"),
   workspace_id: Id,
@@ -57,7 +69,11 @@ export const ReviewWorkspaceV2Schema = z.strictObject({
     files: z.array(z.strictObject({ path: RelativePath, sha256: Hash })).min(1),
     capture_limitations: z.array(z.string()),
   }),
-  document: z.strictObject({ blocks: z.array(ReviewBlockSchema).min(1) }),
+  document: z.strictObject({
+    blocks: z.array(ReviewBlockSchema).min(1),
+    item_locations: z.array(ReviewItemLocationSchema).optional(),
+    comparison: ReviewComparisonSchema.optional(),
+  }),
   assets: z.array(ReviewAssetSchema),
   items: z.array(ReviewWorkspaceItemSchema),
   workflow: z.strictObject({
@@ -82,6 +98,44 @@ export const ReviewWorkspaceV2Schema = z.strictObject({
   }
   for (const [index, asset] of workspace.assets.entries()) {
     if (asset.source_path && !paths.has(asset.source_path)) context.addIssue({ code: "custom", message: "Asset source path not captured.", path: ["assets", index, "source_path"] });
+  }
+  const blocks = new Map(workspace.document.blocks.map((block) => [block.id, block]));
+  const items = new Map(workspace.items.map((item) => [item.item_id, item]));
+  const locations = workspace.document.item_locations ?? [];
+  if (!unique(locations.map((location) => location.item_id))) context.addIssue({ code: "custom", message: "Duplicate item display location.", path: ["document", "item_locations"] });
+  for (const [index, location] of locations.entries()) {
+    const block = blocks.get(location.block_id);
+    const item = items.get(location.item_id);
+    const locationPath = ["document", "item_locations", index];
+    if (!item || !block || location.end < location.start || location.end > (block?.text.length ?? 0)) {
+      context.addIssue({ code: "custom", message: "Item display location is invalid.", path: locationPath });
+      continue;
+    }
+    if (item.target.kind === "quote" && block.text.slice(location.start, location.end) !== item.target.exact_quote) {
+      context.addIssue({ code: "custom", message: "Displayed quote differs from source target.", path: locationPath });
+    }
+    if (item.target.kind === "section" && (block.kind !== "heading" || block.text !== item.target.heading)) {
+      context.addIssue({ code: "custom", message: "Displayed section differs from source target.", path: locationPath });
+    }
+  }
+  const comparison = workspace.document.comparison;
+  if (comparison) {
+    if (workspace.adapter !== "paper-humanizer" || comparison.base_path === workspace.source.entry_path || !paths.has(comparison.base_path)) {
+      context.addIssue({ code: "custom", message: "Comparison must bind a separate frozen base file for paper humanization.", path: ["document", "comparison", "base_path"] });
+    }
+    const before = comparison.rows.map((row) => row.before_block_id);
+    const after = comparison.rows.map((row) => row.after_block_id);
+    if (!unique(before) || !unique(after) || new Set([...before, ...after]).size !== workspace.document.blocks.length || before.length + after.length !== workspace.document.blocks.length) {
+      context.addIssue({ code: "custom", message: "Comparison rows must cover every block exactly once.", path: ["document", "comparison", "rows"] });
+    }
+    comparison.rows.forEach((row, index) => {
+      const base = blocks.get(row.before_block_id);
+      const candidate = blocks.get(row.after_block_id);
+      if (!base || !candidate || base.kind !== candidate.kind || base.level !== candidate.level || base.source_path !== comparison.base_path || candidate.source_path !== workspace.source.entry_path
+        || workspace.document.blocks[index]?.id !== row.before_block_id || workspace.document.blocks[index + comparison.rows.length]?.id !== row.after_block_id) {
+        context.addIssue({ code: "custom", message: "Comparison row does not pair matching source blocks.", path: ["document", "comparison", "rows", index] });
+      }
+    });
   }
 });
 

@@ -58,7 +58,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: review-workspace-index.html
     path: review-workspace/index.html
-    content_hash: 505b1e769c5dab8528e668f20734c458da7a02d23af1196c428abed8b7ae1796
+    content_hash: 9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc
     license: MIT
   - knowledge_id: review-workspace-v1.html
     path: review-workspace/v1.html

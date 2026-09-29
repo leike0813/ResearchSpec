@@ -80,6 +80,13 @@ review-workspace 资产；另 2 个 paper-humanizer 包只做语义漂移核对�
 - v2 页面含 FORMAL_ACTIONS 标记，仅用于展示 formal-action 目标，不写 researchspec/；如未来把展示升级为操作，需重新审阅其权威边界。
 - 冻结源集捕获依赖 Agent 在上游侧完成；页面不校验源集完整性，该义务在 procedure 文本中已明确交给 Agent。
 
+## 审阅场景与候选稿比较复核（2026-09-29）
+
+- 本轮仍由 PH-CAP-01 的只读诊断生成保守方案。`check-paper-humanization-review` 将 finding ID、原始 locator、操作、风险、建议、预期效果和保留约束交给页面；显式显示位置只指向冻结渲染块，不改写证据 locator。判定 `adapted`，方案 Gate 与 Decision 仍独立确认。
+- PH-CAP-04 的正文修改仍限于已批准计划与 eligible prose。`transform-paper-humanization-revision` 先执行 analyze/validate/render 与信息单元核对，再冻结本轮直接原文和候选稿；比较行逐块配对，左、右批注导出不同块 ID。无法可靠配对时显示来源片段。判定 `adapted`，浏览器比较不能替代候选稿验证或 acceptance Decision。
+- 两包的 `review-workspace/index.html` 与根页面 SHA-256 均为 `9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc`；`v1.html` 仍为 `5626313e33ccf67479c704d703e638f409367a6173ef1c639866b76f91a7dd09`。manifest、registry 与 parity 已由 authoring/maintenance 更新，4/4 paper-humanizer 包 operational，无知识或流程缺口。
+- 阅读本轮两份生成 SKILL、source procedure 与页面脚本后，未见 browser 接管手稿、ResearchSpec 状态或 Gate/Decision 的入口。来源比对和歧义处理仍由 Agent 执行。
+
 ## 结论
 
 declared-fit。冻结 v2 与保留 v1 的语义边界完整，2 个受影响 capability 的改写为 adapted 且保留原有证据与写入义务，无阻塞性 gap；未发现未受控的流程权威或语义漂移。

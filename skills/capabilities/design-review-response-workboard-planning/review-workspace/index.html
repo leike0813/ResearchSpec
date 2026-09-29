@@ -45,6 +45,13 @@
     .outline .level-3{padding-left:1.8rem}
     .paper-scroll{padding:1.2rem clamp(.8rem,2.2vw,2rem);scroll-behavior:smooth}
     .paper{max-width:54rem;margin:0 auto 2rem;background:#fff;box-shadow:0 6px 28px #23405312;border:1px solid #e0e5e5;padding:2rem clamp(1rem,4vw,4rem)}
+    .paper.comparing{max-width:92rem}
+    .compare-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;border-top:1px solid var(--line);padding:.65rem 0}
+    .compare-side{min-width:0;padding:.25rem .7rem;background:#fafbfa;border-radius:6px}
+    .compare-side.after{background:#f7fafb}
+    .compare-side>small{display:block;color:var(--muted);font-weight:600}
+    .diff-before{background:#f8dedb;text-decoration:line-through;text-decoration-color:#ae706c}
+    .diff-after{background:#ddf2e5}
     .paper h1{font:700 1.8rem/1.35 Georgia,"Noto Serif SC",serif;margin:.2rem 0}
     .paper h2{font:700 1.3rem/1.4 Georgia,"Noto Serif SC",serif;margin:2.2rem 0 .7rem}
     .paper h3{font:700 1.1rem/1.45 Georgia,"Noto Serif SC",serif;margin:1.6rem 0 .6rem}
@@ -103,7 +110,7 @@
     #overlap-menu button{display:block;width:100%;text-align:left;border:0}
     .toast{position:fixed;z-index:30;left:50%;bottom:1rem;transform:translateX(-50%);background:#263b48;color:#fff;padding:.55rem .8rem;border-radius:8px;box-shadow:0 4px 14px #0004;max-width:32rem}
     @media(max-width:1050px){.layout{grid-template-columns:11rem minmax(0,1fr) 19rem}}
-    @media(max-width:760px){.layout{display:block;overflow:auto}.outline,.paper-scroll,.rail{overflow:visible;border:0}.rail{border-left:0;border-top:1px solid var(--line)}.paper-scroll{padding:.7rem}.paper{padding:1.3rem}}
+    @media(max-width:760px){.layout{display:block;overflow:auto}.outline,.paper-scroll,.rail{overflow:visible;border:0}.rail{border-left:0;border-top:1px solid var(--line)}.paper-scroll{padding:.7rem}.paper{padding:1.3rem}.compare-row{display:block}.compare-side{margin:.5rem 0}}
   </style>
 </head>
 <body>
@@ -270,7 +277,7 @@
     var blockRefs = [];
     if (!isObject(value.document) || !Array.isArray(value.document.blocks) || value.document.blocks.length === 0) errors.push('document.blocks 至少需要一个块。');
     else {
-      rejectUnknown(value.document, ['blocks'], 'document', errors);
+      rejectUnknown(value.document, ['blocks','item_locations','comparison'], 'document', errors);
       value.document.blocks.forEach(function(block, index){
         var path = 'document.blocks[' + index + ']';
         if (!isObject(block)) { errors.push(path + ' 必须是对象。'); return; }
@@ -369,6 +376,50 @@
     if (Array.isArray(value.assets)) value.assets.forEach(function(asset, index){
       if (isObject(asset) && asset.source_path && !pathSet.has(asset.source_path)) errors.push('assets[' + index + '].source_path 不在冻结来源中。');
     });
+    var displayBlocks = value.document && Array.isArray(value.document.blocks) ? value.document.blocks : [];
+    if (value.document && value.document.item_locations !== undefined) {
+      if (!Array.isArray(value.document.item_locations)) errors.push('document.item_locations 必须是数组。');
+      else {
+        var locationIds = [];
+        value.document.item_locations.forEach(function(location, index){
+          var where = 'document.item_locations[' + index + ']';
+          if (!isObject(location)) { errors.push(where + ' 必须是对象。'); return; }
+          rejectUnknown(location, ['item_id','block_id','start','end'], where, errors);
+          requireKeys(location, ['item_id','block_id','start','end'], where, errors);
+          locationIds.push(location.item_id);
+          var item = Array.isArray(value.items) ? value.items.find(function(entry){ return isObject(entry) && entry.item_id === location.item_id; }) : null;
+          var block = displayBlocks.find(function(entry){ return isObject(entry) && entry.id === location.block_id; });
+          if (!item || !block || typeof block.text !== 'string' || !Number.isInteger(location.start) || !Number.isInteger(location.end) || location.start < 0 || location.end < location.start || location.end > block.text.length) { errors.push(where + ' 无效。'); return; }
+          if (isObject(item.target) && item.target.kind === 'quote' && block.text.slice(location.start, location.end) !== item.target.exact_quote) errors.push(where + ' 与原选文不一致。');
+          if (isObject(item.target) && item.target.kind === 'section' && (block.kind !== 'heading' || block.text !== item.target.heading)) errors.push(where + ' 与章节不一致。');
+        });
+        if (new Set(locationIds).size !== locationIds.length) errors.push('document.item_locations 存在重复 item_id。');
+      }
+    }
+    if (value.document && value.document.comparison !== undefined) {
+      var comparison = value.document.comparison;
+      if (!isObject(comparison)) errors.push('document.comparison 必须是对象。');
+      else {
+        rejectUnknown(comparison, ['base_path','rows'], 'document.comparison', errors);
+        requireKeys(comparison, ['base_path','rows'], 'document.comparison', errors);
+        var entryPath = isObject(value.source) ? value.source.entry_path : null;
+        if (value.adapter !== 'paper-humanizer' || !isRelativePath(comparison.base_path) || comparison.base_path === entryPath || !pathSet.has(comparison.base_path)) errors.push('document.comparison.base_path 无效。');
+        if (!Array.isArray(comparison.rows) || comparison.rows.length === 0) errors.push('document.comparison.rows 不能为空。');
+        else {
+          var beforeIds = [], afterIds = [];
+          comparison.rows.forEach(function(row, index){
+            var where = 'document.comparison.rows[' + index + ']';
+            if (!isObject(row)) { errors.push(where + ' 必须是对象。'); return; }
+            rejectUnknown(row, ['before_block_id','after_block_id'], where, errors);
+            requireKeys(row, ['before_block_id','after_block_id'], where, errors);
+            beforeIds.push(row.before_block_id); afterIds.push(row.after_block_id);
+            var base = displayBlocks[index], candidate = displayBlocks[index + comparison.rows.length];
+            if (!isObject(base) || !isObject(candidate) || base.id !== row.before_block_id || candidate.id !== row.after_block_id || base.kind !== candidate.kind || base.level !== candidate.level || base.source_path !== comparison.base_path || candidate.source_path !== entryPath) errors.push(where + ' 配对无效。');
+          });
+          if (new Set(beforeIds.concat(afterIds)).size !== displayBlocks.length || beforeIds.length + afterIds.length !== displayBlocks.length) errors.push('document.comparison.rows 必须覆盖每个块一次。');
+        }
+      }
+    }
 
     if (errors.length > 0) throw new Error(errors.slice(0, 6).join('；'));
     return normalizeWorkspace(value);
@@ -582,6 +633,49 @@
   // @browser-check:end
 
   var STATE = null;
+  var diffRanges = {};
+  function comparisonDiffs(workspace){
+    var comparison = workspace.document.comparison;
+    var result = {};
+    if (!comparison) return result;
+    var blocks = new Map(workspace.document.blocks.map(function(block){ return [block.id, block]; }));
+    function tokens(text){
+      if (Intl.Segmenter) return Array.from(new Intl.Segmenter(undefined, { granularity: 'word' }).segment(text), function(part){ return { text: part.segment, start: part.index, end: part.index + part.segment.length }; });
+      var offset = 0;
+      return Array.from(text, function(char){ var start = offset; offset += char.length; return { text: char, start: start, end: offset }; });
+    }
+    comparison.rows.forEach(function(row){
+      var before = blocks.get(row.before_block_id), after = blocks.get(row.after_block_id);
+      if (before.text === after.text) return;
+      var left = tokens(before.text), right = tokens(after.text);
+      if (left.length > 220 || right.length > 220) {
+        // ponytail: Bound quadratic word diff; use a dedicated diff library if long blocks become common.
+        result[before.id] = [{ start: 0, end: before.text.length }];
+        result[after.id] = [{ start: 0, end: after.text.length }];
+        return;
+      }
+      var dp = Array.from({ length: left.length + 1 }, function(){ return new Uint16Array(right.length + 1); });
+      for (var i = left.length - 1; i >= 0; i--) for (var j = right.length - 1; j >= 0; j--) dp[i][j] = left[i].text === right[j].text ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+      var matches = [], a = 0, b = 0;
+      while (a < left.length && b < right.length) {
+        if (left[a].text === right[b].text) { matches.push([a, b]); a++; b++; }
+        else if (dp[a + 1][b] >= dp[a][b + 1]) a++;
+        else b++;
+      }
+      function changed(parts, side){
+        var ranges = [], previous = -1;
+        matches.concat([[left.length, right.length]]).forEach(function(match){
+          var next = match[side];
+          if (next > previous + 1) ranges.push({ start: parts[previous + 1].start, end: parts[next - 1].end });
+          previous = next;
+        });
+        return ranges;
+      }
+      result[before.id] = changed(left, 0);
+      result[after.id] = changed(right, 1);
+    });
+    return result;
+  }
   var activeId = null;
   var pending = null;
   var forcedId = null;
@@ -647,6 +741,7 @@
     try { workspace = validateWorkspace(raw); }
     catch (error) { notify('工作区校验未通过：' + error.message); return; }
     STATE = { workspace: workspace, comments: [], decisions: {}, overall_note: '', export_revision: 0 };
+    diffRanges = comparisonDiffs(workspace);
     activeId = null; pending = null; forcedId = null; collapsedGroups = {};
     $('search').value = ''; $('origin-filter').value = 'all'; $('disposition-filter').value = 'all';
     loadDraft();
@@ -672,16 +767,26 @@
 
   function blockById(id){ return STATE.workspace.document.blocks.find(function(block){return block.id === id}) || null; }
   function assetById(id){ return STATE.workspace.assets.find(function(asset){return asset.id === id}) || null; }
-  function headingBlocks(){ return STATE.workspace.document.blocks.filter(function(block){return block.kind === 'heading' && block.level !== null && block.level <= 3}); }
+  function headingBlocks(){
+    var comparison = STATE.workspace.document.comparison;
+    var after = comparison ? new Set(comparison.rows.map(function(row){ return row.after_block_id; })) : null;
+    return STATE.workspace.document.blocks.filter(function(block){return block.kind === 'heading' && block.level !== null && block.level <= 3 && (!after || after.has(block.id));});
+  }
   function sectionName(id){ var block = id ? blockById(id) : null; return block ? block.text : ''; }
 
   function sectionOf(blockId){
     if (!blockId) return null;
+    var comparison = STATE.workspace.document.comparison;
+    if (comparison) {
+      var row = comparison.rows.find(function(entry){ return entry.before_block_id === blockId; });
+      if (row) blockId = row.after_block_id;
+    }
     var blocks = STATE.workspace.document.blocks;
     var index = -1;
     for (var i = 0; i < blocks.length; i++) { if (blocks[i].id === blockId) { index = i; break; } }
     if (index === -1) return null;
-    for (var j = index; j >= 0; j--) {
+    var floor = comparison ? comparison.rows.length : 0;
+    for (var j = index; j >= floor; j--) {
       var block = blocks[j];
       if (block.kind === 'heading' && block.level !== null && block.level <= 3) return block.id;
     }
@@ -689,6 +794,8 @@
   }
 
   function agentLocation(item){
+    var explicit = (STATE.workspace.document.item_locations || []).find(function(location){ return location.item_id === item.item_id; });
+    if (explicit) return { blockId: explicit.block_id, start: explicit.start, end: explicit.end };
     var target = item.target;
     if (target.kind === 'quote') {
       var quoted = blockById(target.block_id);
@@ -769,6 +876,8 @@
     var points = [0, block.text.length];
     runs.forEach(function(run, index){ points.push(runOffsets[index]); points.push(runOffsets[index] + run.text.length); });
     marks.forEach(function(mark){ points.push(mark.start); points.push(mark.end); });
+    var changes = diffRanges[block.id] || [];
+    changes.forEach(function(change){ points.push(change.start); points.push(change.end); });
     var cuts = points.filter(function(point){ return point >= 0 && point <= block.text.length; }).sort(function(a, b){ return a - b; });
     target.replaceChildren();
     for (var i = 0; i < cuts.length - 1; i++) {
@@ -781,6 +890,12 @@
       var node = document.createTextNode(text);
       var marksOfRun = runs[runIndex].marks;
       for (var m = marksOfRun.length - 1; m >= 0; m--) node = wrapMark(node, marksOfRun[m]);
+      if (changes.some(function(change){ return start >= change.start && end <= change.end; })) {
+        var difference = document.createElement('span');
+        difference.className = 'diff-' + (block.id.indexOf('before-') === 0 ? 'before' : 'after');
+        difference.append(node);
+        node = difference;
+      }
       if (cover.length > 0) {
         var mark = document.createElement('mark');
         mark.className = (cover.length > 1 ? 'overlap ' : '') + (cover.some(function(entry){ return entry.id === activeId; }) ? 'active' : '');
@@ -889,10 +1004,26 @@
   function renderPaper(){
     var paper = $('paper');
     paper.replaceChildren();
+    var comparison = STATE.workspace.document.comparison;
+    paper.classList.toggle('comparing', !!comparison);
     paper.append(el('h1', '', STATE.workspace.title));
     var source = STATE.workspace.source;
     paper.append(el('p', 'lead', FORMAT_LABEL[source.format] + ' · ' + source.entry_path + ' · 冻结快照 ' + STATE.workspace.snapshot_id));
     if (source.capture_limitations.length > 0) paper.append(el('p', 'kind-note', '来源采集限制：' + source.capture_limitations.join('；')));
+    if (comparison) {
+      paper.append(el('p', 'lead', '左：本轮原文 · ' + comparison.base_path + '　右：已核验候选稿 · ' + source.entry_path));
+      comparison.rows.forEach(function(row){
+        var pair = el('div', 'compare-row');
+        [['before', row.before_block_id, '原文'], ['after', row.after_block_id, '候选稿']].forEach(function(side){
+          var column = el('section', 'compare-side ' + side[0]);
+          column.append(el('small', '', side[2]));
+          column.append(makeBlock(blockById(side[1])));
+          pair.append(column);
+        });
+        paper.append(pair);
+      });
+      return;
+    }
     var cellBuffer = [];
     STATE.workspace.document.blocks.forEach(function(block){
       if (block.kind === 'table-cell') { cellBuffer.push(block); return; }
@@ -1090,7 +1221,7 @@
     }
   }
 
-  function dispositionKey(item){ var decision = STATE.decisions[item.item_id]; return decision ? decision.disposition : 'pending'; }
+  function dispositionKey(item){ var decision = STATE.decisions[item.id]; return decision ? decision.disposition : 'pending'; }
 
   function isVisibleItem(item){
     var origin = $('origin-filter').value;
@@ -1138,7 +1269,7 @@
     expand.setAttribute('aria-expanded', String(expanded));
     top.append(expand);
     card.append(top);
-    card.append(el('small', '', agent ? 'Agent 审阅项 · ' + documentDisposition(item.item_id) : '用户批注 · ' + (item.location ? (item.section ? sectionName(item.section) : '正文') : '未定位')));
+    card.append(el('small', '', agent ? 'Agent 审阅项 · ' + documentDisposition(item.id) : '用户批注 · ' + (item.location ? (item.section ? sectionName(item.section) : '正文') : '未定位')));
     card.append(el('small', '', agent ? '证据原文' : '原选文'));
     card.append(el('blockquote', '', item.quote || '（无选文）'));
     if (!expanded) {
@@ -1149,9 +1280,16 @@
       card.append(el('p', '', 'Agent 建议：' + item.item.recommendation.action));
       card.append(el('p', '', '理由：' + item.item.recommendation.rationale));
       card.append(el('p', '', '风险：' + item.item.recommendation.risk));
+      if (STATE.workspace.adapter === 'paper-humanizer') {
+        var metadata = item.item.metadata;
+        if (metadata.plan_summary) card.append(el('p', '', '方案摘要：' + metadata.plan_summary));
+        if (Array.isArray(metadata.user_constraints) && metadata.user_constraints.length) card.append(el('p', '', '用户约束：' + metadata.user_constraints.join('；')));
+        if (Array.isArray(metadata.preservation_constraints) && metadata.preservation_constraints.length) card.append(el('p', '', '保留约束：' + metadata.preservation_constraints.join('；')));
+        if (metadata.recommendation) card.append(el('small', '', '方案建议：' + metadata.recommendation));
+      }
       if (item.item.source_pointer) card.append(el('small', '', '来源位置：' + item.item.source_pointer));
       if (!item.location) card.append(el('p', 'forced', '未在本审阅件的正文中找到确切位置，仍可记录处理意见。'));
-      var decision = STATE.decisions[item.item_id];
+      var decision = STATE.decisions[item.id];
       card.append(fieldLabel('处理意见'));
       var select = document.createElement('select');
       select.setAttribute('aria-label', '处理 Agent 审阅项');
@@ -1161,7 +1299,7 @@
         decision.disposition = select.value;
         save();
         var statusLine = card.querySelector('small');
-        if (statusLine) setText(statusLine, 'Agent 审阅项 · ' + documentDisposition(item.item_id));
+        if (statusLine) setText(statusLine, 'Agent 审阅项 · ' + documentDisposition(item.id));
         if ($('disposition-filter').value !== 'all') renderCards();
         renderStatus();
       });
@@ -1189,7 +1327,7 @@
 
   function renderCards(){
     var root = $('cards');
-    root.replaceChildren();
+    var next = document.createDocumentFragment();
     var blockIndex = {};
     STATE.workspace.document.blocks.forEach(function(block, index){ blockIndex[block.id] = index; });
     var items = allItems().sort(function(a, b){
@@ -1206,7 +1344,7 @@
     setText($('forced'), forced ? '已临时显示所选批注；筛选条件保持不变。' : '');
     setText($('card-count'), '显示 ' + shown.length + ' / ' + items.length + ' 项');
     setText($('rail-count'), String(items.length));
-    if (shown.length === 0) { root.append(el('p', 'subtle', '当前筛选下没有批注。')); return; }
+    if (shown.length === 0) { root.replaceChildren(el('p', 'subtle', '当前筛选下没有批注。')); return; }
     groupItems(shown).forEach(function(group){
       var details = document.createElement('details');
       details.className = 'group';
@@ -1214,8 +1352,9 @@
       details.addEventListener('toggle', function(){ collapsedGroups[group.key] = !details.open; });
       details.append(el('summary', '', group.title + ' · ' + group.items.length));
       group.items.forEach(function(item){ details.append(renderCard(item)); });
-      root.append(details);
+      next.append(details);
     });
+    root.replaceChildren(next);
   }
 
   function renderStatus(){
