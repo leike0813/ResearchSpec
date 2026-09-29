@@ -48,10 +48,15 @@ ResearchSpec should not become:
   own the output.
 
 The optional interactive manuscript review workspace is a local static surface
-over ordinary `review-workspace.v1` files. It keeps drafts in browser-local
-state, exports advisory results, and never owns manuscript, SQLite, handoff,
-Gate, Decision, node, or other ResearchSpec workflow mutations. Browser failure
-falls back to the same review in Agent dialogue.
+over frozen `review-workspace.v2` documents. An Agent captures the relevant
+source set outside `researchspec/` and prepares one static selectable document;
+the browser keeps drafts in browser-local state and exports advisory
+`review-workspace-result.v2` snapshots. It never rerenders changed source,
+relocates annotations, installs host tools, or owns manuscript, SQLite, handoff,
+Gate, Decision, node, or other ResearchSpec workflow mutations. The retained
+`review-workspace/v1.html` page and the v1 contract keep existing v1 drafts and
+results on their original path; v1 and v2 are never mixed. Browser failure falls
+back to the same review in Agent dialogue.
 
 Files remain the interface. Tool adapters may render and write files, but should
 not call agent APIs or depend on a specific model.

@@ -37,7 +37,7 @@ If a writing sample or governing house style is available, record only acceptabl
 - When a safe edit is uncertain, leave the span unchanged and record the uncertainty in the candidate notes.
 - Never hand-edit `state.yaml`, plan hashes, or rendered views.
 
-For an interactive candidate review, project only eligible prose segments and the current verified candidate through the `paper-humanizer` review-workspace adapter, then open `review-workspace/index.html`. Recheck the exported source hash and treat requested changes as a new plan/revision round; the page cannot replace verification or the acceptance Decision.
+For an interactive candidate review, retain the exact frozen source set, project only eligible prose segments and the current verified candidate through the `paper-humanizer` `review-workspace.v2` adapter, then open `review-workspace/index.html`. Ask separately before every render that may run project code or filters, use a temporary copy after approval, and keep unreliable conversion visible as raw source. Validate the result against the retained workspace and compare current source with the frozen set; show differences and affected feedback and ask if it changed, or ask about ambiguous source locations if unchanged. Treat requested changes as a new plan/revision round with a new workspace identity and no processed comments; the page cannot replace verification or the acceptance Decision.
 
 ## Outputs
 

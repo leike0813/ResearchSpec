@@ -52,7 +52,7 @@ void test("review-response capability packages are authored and registered", asy
     assert.ok(registered.manifest.provenance.extraction_artifact_ids?.some((id) => id.startsWith("RM-")));
     assert.match(await readFile(path.join(registered.packageRoot, "SKILL.md"), "utf8"), /## Completion/);
     if (["design-review-response-workboard-planning", "generation-review-response-round"].includes(capabilityId)) {
-      assert.match(await readFile(path.join(registered.packageRoot, "review-workspace/index.html"), "utf8"), /review-workspace-result\.v1/);
+      assert.match(await readFile(path.join(registered.packageRoot, "review-workspace/index.html"), "utf8"), /review-workspace-result\.v2/);
     }
   }
 });

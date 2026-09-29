@@ -7,6 +7,7 @@ import { generateAnnotationReviewCopy, removeUntouchedAnnotationSlots } from "..
 import { sha256 } from "../src/arsu-converter/revision/markdown-blocks.js";
 import {
   ReviewWorkspaceDescriptorSchema,
+  ReviewWorkspaceV2Schema,
   annotationCandidateReviewWorkspace,
   createReviewWorkspaceResult,
   paperHumanizerReviewWorkspace,
@@ -92,25 +93,25 @@ void test("duplicate review item ids fail closed", () => {
 void test("static workspace stays self-contained and keeps user content out of HTML parsing", async () => {
   const html = await readFile(path.resolve("review-workspace/index.html"), "utf8");
   assert.match(html, /connect-src 'none'/);
-  assert.match(html, /review-workspace\.v1/);
-  assert.match(html, /review-workspace-result\.v1/);
+  assert.match(html, /review-workspace\.v2/);
+  assert.match(html, /review-workspace-result\.v2/);
   assert.doesNotMatch(html, /<script\s+src=|<link\s+[^>]*href=/i);
   assert.doesNotMatch(html, /innerHTML|insertAdjacentHTML|document\.write|eval\(/);
 });
 
-void test("preview samples use the real adapters and embed manuscript content safely", async () => {
+void test("preview samples use the real v2 adapters and embed manuscript content safely", async () => {
   const sourceHtml = await readFile(path.resolve("review-workspace/index.html"), "utf8");
   const samples = reviewWorkspacePreviewSamples();
   assert.deepEqual(Object.keys(samples), REVIEW_PREVIEW_CASES.map((item) => item.id));
   for (const { id } of REVIEW_PREVIEW_CASES) {
-    const sample = ReviewWorkspaceDescriptorSchema.parse(samples[id]);
-    assert.equal(sample.adapter, id);
-    assert.ok(sample.items.length >= 3);
+    const sample = ReviewWorkspaceV2Schema.parse(samples[id]);
+    if (id === "empty") assert.equal(sample.items.length, 0);
+    else { assert.equal(sample.adapter, id); assert.ok(sample.items.length >= 3); }
     const preview = renderReviewWorkspacePreview(sourceHtml, sample);
     const embedded = /atob\('([^']+)'\)/.exec(preview)?.[1];
     assert.ok(embedded);
     assert.deepEqual(JSON.parse(Buffer.from(embedded, "base64").toString("utf8")), sample);
-    assert.equal(preview.includes(sample.manuscript.content), false);
+    assert.equal(preview.includes("window.__previewUnsafe"), false);
     assert.match(preview, /<\/body>\s*<\/html>\s*$/);
   }
   assert.doesNotMatch(renderReviewWorkspacePreview(sourceHtml, samples["annotation-intake"]), /<script>window\.__previewUnsafe/);

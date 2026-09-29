@@ -2,7 +2,7 @@
   "schema_version": "1",
   "vendor_id": "revision-master",
   "anchor_id": "snapshot-13e69610",
-  "created_at": "2026-09-22T17:15:48.844Z",
+  "created_at": "2026-09-29T10:45:04.952Z",
   "upstream": {
     "source_meta": "vendor/revision-master/SOURCE.json",
     "upstream_root": "vendor/revision-master/upstream/skills/revision-master",
@@ -28,13 +28,13 @@
       "generation-review-response-round",
       "transform-review-response-comment-atomization"
     ],
-    "registry_subset_sha256": "544c4e6c1c6c248ee89c5855572cca5803cf97eb4138d8215951770882dc6277",
-    "packages_tree_sha256": "b3195cff6baf9184ee857915f4e5357951cd57da6ad0ace942d532d9fdcc4bb8"
+    "registry_subset_sha256": "414548f441e18ef7b1dd9b7529bfabc2dd8bbc233d7bbec4267f7837b09207e7",
+    "packages_tree_sha256": "8099276733cf258bb7738134f11f7e3d619d66195c0454a6296e12b1a8013f90"
   },
   "review": {
     "parity_report_path": "/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json",
     "parity_artifact_path": "audits/own-vendors/revision-master/snapshot-13e69610/artifacts/parity-packages.json",
-    "parity_artifact_sha256": "99a066674cc7f557ddfa8e491911272743cc51ef2cf795acb1710329222b4415",
+    "parity_artifact_sha256": "6534b2676d7527ad814e67fa53d5ef52cc9560cf4bb932dc46f1d4e3c06ac9cf",
     "package_count": 5,
     "operational_count": 5,
     "avg_section_coverage": 0.9466666666666667,
@@ -48,6 +48,6 @@
   "maintenance": {
     "skill_sha256": "def669d3fc096a0fdf7ae084b6c7abc36819f81347bdb0958de0600f82fc8e70",
     "catalog_sha256": "82504ff1fd3c0be0d21c0ee63fde6fba0661e15d1043d789a4d4350ab4612aa1",
-    "record_sha256": "0f306ac4b986a70d1196e43eb89f49fc9d90839af0a399cd7e10603249d8e387"
+    "record_sha256": "fa7b7da5ec8a59f18e12c35d1464aa363e83291bb7965484c4d5585670724f54"
   }
 }

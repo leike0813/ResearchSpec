@@ -28,11 +28,13 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `paper-humanizer-taxonomy` from `knowledge/paper-humanizer-taxonomy.md`.
 - Load knowledge ID `document-yaml-contract` from `knowledge/document-yaml-contract.md`.
 - Load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
+- Load knowledge ID `review-workspace-v1.html` from `review-workspace/v1.html`.
 
 ## Tools
 
 - `scripts/document_pipeline.py` is packaged from extraction artifact `PH-SCRIPT-01`; invoke it only through the declared runner and arguments.
 - `review-workspace/index.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
+- `review-workspace/v1.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
 
 ## Procedure
 
@@ -75,7 +77,7 @@ If a writing sample or governing house style is available, record only acceptabl
 - When a safe edit is uncertain, leave the span unchanged and record the uncertainty in the candidate notes.
 - Never hand-edit `state.yaml`, plan hashes, or rendered views.
 
-For an interactive candidate review, project only eligible prose segments and the current verified candidate through the `paper-humanizer` review-workspace adapter, then open `review-workspace/index.html`. Recheck the exported source hash and treat requested changes as a new plan/revision round; the page cannot replace verification or the acceptance Decision.
+For an interactive candidate review, retain the exact frozen source set, project only eligible prose segments and the current verified candidate through the `paper-humanizer` `review-workspace.v2` adapter, then open `review-workspace/index.html`. Ask separately before every render that may run project code or filters, use a temporary copy after approval, and keep unreliable conversion visible as raw source. Validate the result against the retained workspace and compare current source with the frozen set; show differences and affected feedback and ask if it changed, or ask about ambiguous source locations if unchanged. Treat requested changes as a new plan/revision round with a new workspace identity and no processed comments; the page cannot replace verification or the acceptance Decision.
 
 ## Outputs
 

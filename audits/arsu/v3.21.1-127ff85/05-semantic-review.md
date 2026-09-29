@@ -111,6 +111,13 @@ reviewer calibration 的专用图能力缺口单独保留；当前四个 ARSU �
 - 中央 `skills/capabilities/registry.json` 与整树 SHA-256 因上述受审资产变化而更新。重新生成的 ARSU capability review、graph assessment 与 gap review 保持原有 ARSU 语义结论；parity 仍为 47/47 operational，所有 below-threshold、output-missing、knowledge-below 与 flow-retained 列表为空。
 - 交互工作区不进入 ARSU procedure，不获得 graph、Gate、Decision 或 workflow-state 权限，因此不改变本锚点已审阅的 27 mode 映射与运行边界。
 
+## 冻结审阅件共享资产复核（2026-09-29）
+
+- 本次变更仅影响四个 own-vendor package：`check-paper-humanization-review`、`transform-paper-humanization-revision`、`design-review-response-workboard-planning`、`generation-review-response-round` 的审阅页面、v1 恢复页、procedure 与 manifest。`git diff --name-only -- skills/capabilities` 未显示任何 38 个 ARSU-derived package；`authoring/ars` 提取正文、ARSU procedure 和 graph profile 也未改动。本节复核共享 registry 和审阅工件的牵连，不重新宣称审阅上游 27 mode 的新语义。
+- 逐项读取四个变更 package 的生成 SKILL 与 `review-workspace/index.html`、`review-workspace/v1.html`：四者都把新浏览器结果限定为 advisory working material；paper-humanizer 仍回到当前 Gate/Decision 指令，review-response 仍通过现有 SQLite/semantic log 写入。v2 页面无 ResearchSpec 工作流写入口，v1 页面与原生产页 SHA-256 相同。判定为 `adapted`：新增冻结审阅件交接，但未转移流程权威。
+- `pnpm own-vendor-maintenance:artifacts` 重生成两组 owner-vendor 包及 parity；47/47 operational，`below_section_threshold`、`below_rule_threshold`、`output_missing`、`knowledge_below_threshold`、`flow_retained` 均为空。`pnpm arsu-maintenance:artifacts` 更新三份 HTML 复核工件；本轮无新增 ARSU-derived capability 或 mode gap。HTML 大幅变化来自嵌入四份新的静态页面及其 v1 恢复页，不是 ARSU 上游协议变化。
+- 风险边界：v2 导出前 Agent 必须对照保留的冻结原稿核对当前源码；Quarto 项目脚本、过滤器和计算每次单独获批并在临时副本渲染。临时副本不限制主机权限。上述义务位于 owner-vendor procedure 和 Navigate，不得被解释为 ARSU graph 的自动状态推进。
+
 ## 结论
 
-declared-fit-with-notes：七个脚本能力的实际执行缺口已修复并通过真实报告与打包 CLI 验证，支持声明范围内的使用。完整上游护照/投稿检查和 reviewer empirical calibration 不在当前确定性实现的承诺内；报告及指令明确保留未检查状态，不能以运行完成代替科学通过或人类 Gate。
+declared-fit-with-notes：七个脚本能力的实际执行缺口已修复并通过真实报告与打包 CLI 验证，支持声明范围内的使用。冻结审阅件只改变共享 own-vendor 资产和 registry，不改变 ARSU-derived procedure 的流程边界。完整上游护照/投稿检查和 reviewer empirical calibration 不在当前确定性实现的承诺内；报告及指令明确保留未检查状态，不能以运行完成代替科学通过或人类 Gate。

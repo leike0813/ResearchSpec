@@ -1,7 +1,7 @@
 # Own Vendor Anchor Conversion — revision-master @ snapshot-13e69610
 
-- registry subset SHA-256: `544c4e6c1c6c248ee89c5855572cca5803cf97eb4138d8215951770882dc6277`
-- packages tree SHA-256: `b3195cff6baf9184ee857915f4e5357951cd57da6ad0ace942d532d9fdcc4bb8`
+- registry subset SHA-256: `414548f441e18ef7b1dd9b7529bfabc2dd8bbc233d7bbec4267f7837b09207e7`
+- packages tree SHA-256: `8099276733cf258bb7738134f11f7e3d619d66195c0454a6296e12b1a8013f90`
 - capability count: 5 · operational: 5
 
 ## Capability Packages
@@ -9,9 +9,9 @@
 | capability_id | title | class | node_kind | execution | gate | maturity | in/out | knowledge | validators | files | manifest sha12 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | `analysis-review-response-manuscript-analysis` | Review Response Manuscript Analysis | analysis | producer | mixed | none | operational | 1/1 | 4 | 1 | 36 | `b08bd884a9b6` |
-| `design-review-response-intake` | Review Response Intake | design | producer | mixed | none | operational | 4/2 | 4 | 1 | 38 | `c1ed654755dc` |
-| `design-review-response-workboard-planning` | Review Response Workboard Planning | design | producer | mixed | required | operational | 1/1 | 5 | 1 | 37 | `e5fe8d878c87` |
-| `generation-review-response-round` | Review Response Round | generation | producer | mixed | required | operational | 1/4 | 6 | 1 | 41 | `8396e32edd72` |
+| `design-review-response-intake` | Review Response Intake | design | producer | mixed | none | operational | 4/2 | 4 | 1 | 42 | `c1ed654755dc` |
+| `design-review-response-workboard-planning` | Review Response Workboard Planning | design | producer | mixed | required | operational | 1/1 | 6 | 1 | 38 | `b8f6a997b26f` |
+| `generation-review-response-round` | Review Response Round | generation | producer | mixed | required | operational | 1/4 | 7 | 1 | 42 | `6c0a1060e718` |
 | `transform-review-response-comment-atomization` | Review Response Comment Atomization | transformation | producer | mixed | required | operational | 1/2 | 4 | 1 | 36 | `ba612aad074f` |
 
 ## Verification

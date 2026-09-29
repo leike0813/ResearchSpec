@@ -31,10 +31,9 @@ export function reviewWorkspaceInstruction(input: {
     selector: input.selector,
     surface: "local-static" as const,
     asset_path: assetPath,
-    descriptor_schema: "review-workspace.v1" as const,
-    result_schema: "review-workspace-result.v1" as const,
+    descriptor_schema: "review-workspace.v2" as const,
+    result_schema: "review-workspace-result.v2" as const,
     mutation_authority: "researchspec-cli-only" as const,
-    instruction: "The browser result is advisory working material. Validate its source hash and re-read current instructions before any CLI, handoff, SQLite, or manuscript mutation.",
+    instruction: "Prepare one frozen source set and static selectable review document before opening the browser. Ask separately before each render that executes project scripts, filters or computation, and render approved projects in a temporary copy. Keep unreliable conversion as visible raw source. Validate the exported result against the retained workspace; compare current source with the frozen source set. If changed, show differences and affected feedback and ask before mutation. For unchanged source, locate comments by quote/context and ask when ambiguous. Re-read current instructions before formal action. v1 results stay on the v1 contract.",
   };
 }
-

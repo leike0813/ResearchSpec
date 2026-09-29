@@ -4,6 +4,7 @@ const MIT = "MIT";
 const PROCEDURES = "src/arsu-converter/authoring/procedures/paper-humanizer";
 const INDEX = "authoring/paper-humanizer/extraction-index.json";
 const REVIEW_WORKSPACE = { source_path: "review-workspace/index.html", output_path: "review-workspace/index.html" };
+const REVIEW_WORKSPACE_V1 = { source_path: "review-workspace/v1.html", output_path: "review-workspace/v1.html" };
 
 export const PAPER_HUMANIZER_AUTHORING_OPTIONS = {
   extractionIndexPath: INDEX,
@@ -43,6 +44,7 @@ export const PAPER_HUMANIZER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
     package_assets: [
       { extraction_artifact_id: "PH-SCRIPT-01", output_path: "scripts/document_pipeline.py" },
       REVIEW_WORKSPACE,
+      REVIEW_WORKSPACE_V1,
     ],
     knowledge_sources: [
       { knowledge_id: "paper-humanizer-taxonomy", extraction_artifact_id: "PH-CAP-03", output_path: "knowledge/paper-humanizer-taxonomy.md" },
@@ -72,6 +74,7 @@ export const PAPER_HUMANIZER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
     package_assets: [
       { extraction_artifact_id: "PH-SCRIPT-01", output_path: "scripts/document_pipeline.py" },
       REVIEW_WORKSPACE,
+      REVIEW_WORKSPACE_V1,
     ],
     knowledge_sources: [
       { knowledge_id: "paper-humanizer-taxonomy", extraction_artifact_id: "PH-CAP-03", output_path: "knowledge/paper-humanizer-taxonomy.md" },

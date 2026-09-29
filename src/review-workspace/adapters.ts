@@ -11,6 +11,8 @@ import {
   type ReviewWorkspaceItem,
   type ReviewWorkspaceResult,
 } from "./contracts.js";
+import { assembleReviewWorkspace, type FrozenSourceSet } from "./prepare.js";
+import type { ReviewBlock, ReviewWorkspaceV2 } from "./v2.js";
 
 const NonEmptySchema = z.string().trim().min(1);
 
@@ -64,6 +66,33 @@ interface ProjectionContext {
   manuscript: ReviewManuscriptInput;
   selector?: string;
   formalAction?: ReviewWorkspaceDescriptor["workflow"]["formal_action"];
+}
+
+interface V2ProjectionContext extends ProjectionContext {
+  frozen: FrozenSourceSet;
+  blocks: ReviewBlock[];
+  assets?: ReviewWorkspaceV2["assets"];
+}
+
+function v2Projection(input: V2ProjectionContext, legacy: ReviewWorkspaceDescriptor): ReviewWorkspaceV2 {
+  if (input.frozen.workspace_id !== input.workspaceId || input.frozen.entry_path !== input.manuscript.path) throw new Error("Frozen source identity does not match the manuscript.");
+  if (input.frozen.files.find((file) => file.path === input.manuscript.path)?.sha256 !== legacy.manuscript.sha256) throw new Error("Frozen source hash does not match the manuscript.");
+  return assembleReviewWorkspace({
+    frozen: input.frozen, format: legacy.manuscript.format, adapter: legacy.adapter, title: legacy.title,
+    blocks: input.blocks, assets: input.assets, items: legacy.items, workflow: legacy.workflow,
+  });
+}
+
+export function annotationCandidateReviewWorkspaceV2(input: V2ProjectionContext & { candidate: AnnotationSetCandidate }): ReviewWorkspaceV2 {
+  return v2Projection(input, annotationCandidateReviewWorkspace(input));
+}
+
+export function paperHumanizerReviewWorkspaceV2(input: V2ProjectionContext & { plan: z.input<typeof PaperHumanizerPlanSchema> }): ReviewWorkspaceV2 {
+  return v2Projection(input, paperHumanizerReviewWorkspace(input));
+}
+
+export function reviewResponseReviewWorkspaceV2(input: V2ProjectionContext & { workboard: z.input<typeof ReviewResponseWorkboardSchema> }): ReviewWorkspaceV2 {
+  return v2Projection(input, reviewResponseReviewWorkspace(input));
 }
 
 export function annotationCandidateReviewWorkspace(input: ProjectionContext & {
@@ -227,4 +256,3 @@ function dispositionFromStatus(status: string): ReviewDisposition {
   if (["revise", "revision", "needs_revision"].includes(normalized)) return "revise";
   return "pending";
 }
-

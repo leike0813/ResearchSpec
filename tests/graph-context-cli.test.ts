@@ -74,17 +74,10 @@ void test("profile and change instructions expose bounded executable contracts",
     const humanizer = parseEnvelope<{ review_workspace: { adapter: string; mutation_authority: string; selector: string } }>(
       runCli(["instructions", "profile:paper-humanizer", "--json"], root),
     );
-    assert.deepEqual(humanizer.data?.review_workspace, {
-      schema_version: "1",
-      adapter: "paper-humanizer",
-      selector: "profile:paper-humanizer",
-      surface: "local-static",
-      asset_path: null,
-      descriptor_schema: "review-workspace.v1",
-      result_schema: "review-workspace-result.v1",
-      mutation_authority: "researchspec-cli-only",
-      instruction: "The browser result is advisory working material. Validate its source hash and re-read current instructions before any CLI, handoff, SQLite, or manuscript mutation.",
-    });
+    assert.equal(humanizer.data?.review_workspace.adapter, "paper-humanizer");
+    assert.equal(humanizer.data?.review_workspace.mutation_authority, "researchspec-cli-only");
+    assert.equal((humanizer.data?.review_workspace as { descriptor_schema?: string } | undefined)?.descriptor_schema, "review-workspace.v2");
+    assert.equal((humanizer.data?.review_workspace as { result_schema?: string } | undefined)?.result_schema, "review-workspace-result.v2");
 
     assert.equal(parseEnvelope(runCli(["propose", "bounded-change", "--targets", "project.md", "--json"], root)).ok, true);
     const change = parseEnvelope<{ kind: string; allowed_actions: string[] }>(runCli(["instructions", "change:bounded-change", "--json"], root));

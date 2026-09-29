@@ -40,6 +40,39 @@
 - workboard/round procedure 把既有 atomic comment、target、priority 与 evidence 投影成 `review-workspace.v1`，只消费用户显式导出的 `review-workspace-result.v1`；共享契约校验稿件 SHA-256、item 唯一性与 disposition 完整覆盖。
 - 静态页面只在浏览器本地保存草稿并导出 JSON，不写 SQLite 或 `researchspec/`，不执行 revision，不确认五个 Gate 或 continue/complete Decision，也不改变 graph profile 的 stage 与 round 权威。
 
+## 冻结文档审阅工作区复核（2026-09-29）
+
+- 范围：`frozen-document-review-workspace` change 落地后，本锚点只有 `design-review-response-workboard-planning`（RM-CAP-04）与 `generation-review-response-round`（RM-CAP-05/06）受影响；`design-review-response-intake`、`analysis-review-response-manuscript-analysis`、`transform-review-response-comment-atomization` 三包无工作区改动（`git status` 干净）。
+
+### 受影响能力判定
+
+| 上游语义 | 转换后承载 | 判定 | 证据 |
+|---|---|---|---|
+| Stage 4 browser review：project atomic comments/workboard -> open page -> validate hash -> SQLite write | `design-review-response-workboard-planning` procedure 段 | adapted | `src/arsu-converter/authoring/procedures/review-response/workboard-planning.md` 段落改为保留冻结源集、经 `review-response` `review-workspace.v2` adapter 投影、渲染前单独批准并在临时副本渲染、无法可靠转换保留原文、结果对保留工作区校验并比对当前源；`revision-master.db` 写入仍走既有 SQLite write recipes，页面不写 db、不确认 graph Gate |
+| Stage 5/6 final interactive pass：revision intent file -> verify hash -> apply -> commit semantic log | `generation-review-response-round` procedure 段 | adapted | `src/arsu-converter/authoring/procedures/review-response/round.md` 段落改为冻结源集 + `review-workspace.v2`；源已变则展示差异与受影响反馈并先询问，源未变则歧义定位询问，处理后准备不含已处理批注的新工作区 |
+| 可选静态审阅面 `review-workspace/index.html` | 两包 `review-workspace/v1.html` | preserved | v1.html 与改动前页面逐字节一致（sha256 `5626313e33ccf67479c704d703e638f409367a6173ef1c639866b76f91a7dd09`），两包相同 |
+| knowledge 声明 | 两包 manifest 新增 `review-workspace-v1.html` 引用 | adapted | `manifest.yaml` knowledge_refs 新增条目，`content_hash` 与文件实测一致（`5626313e...`）；`registry.json` manifest hash 同步刷新 |
+
+### 审阅工作区 v2/v1 资产判定
+
+| 资产 | 承载 | 判定 | 证据 |
+|---|---|---|---|
+| `review-workspace/index.html`（v2 页面） | 两包共享同一静态资产 | adapted | sha256 `505b1e769c5dab8528e668f20734c458da7a02d23af1196c428abed8b7ae1796` 在两个 review-response 包一致（`check-paper-humanization-review`、`transform-paper-humanization-revision` 两包亦为同值）；页面接受 `review-workspace.v2`、导出 `review-workspace-result.v2`，导入 v1 时拒绝并指向 `v1.html`；CSP `connect-src 'none'`、`img-src data:`，不执行文档内容、不加载远程资源 |
+| 零 Agent 项 | 页面 `items` 仅要求数组、`document.blocks` 至少一块 | preserved | 支持纯用户批注；`src/review-workspace/v2.ts` 的 `items` 无最小长度约束 |
+| v2 结果契约 | 页面内建校验 vs `src/review-workspace/v2.ts` | preserved | 两侧独立校验 anchor 引文/上下文与 block 文本一致、快照标识、决策覆盖 Agent 项、图片资产引用、冻结源清单排序与入口存在性；`export_revision` 递增支持多次导出 |
+
+### 流程权威检查
+
+- [x] 两包 SKILL 正文无 next-node / next-phase / agent-team orchestration；段落只描述浏览器审阅与写库义务。
+- [x] Stage 顺序、五个 Gate、revision Decision 仍由 `review-response` graph profile 承接，段落未新增流程动作。
+- [x] 页面 `workflow.mutation_authority` 固定 `researchspec-cli-only`；页面不写 `revision-master.db`、不写 `researchspec/`、不确认 Gate/Decision。
+- [x] `knowledge/` 中 Stage 5/6 术语来自上游 verbatim 知识包，未进入 SKILL 流程权威。
+
+### 风险与遗留
+
+- 两包 procedure 段落现在引用共享 `review-workspace.v2` 契约与主机 Quarto/LaTeX 渲染边界；共享页面或契约变化会同时影响四个 capability 包，需在后续增量锚点一并复核（本锚点内两个 review-response 包页面 hash 一致）。
+- 该 change 同时改动两个 paper-humanizer 包副本，属跨 vendor 耦合；本文档只对本 vendor 负责，paper-humanizer 侧由其自身语义审阅覆盖。
+
 ## 结论
 
-declared-fit-with-notes。当前锚点无阻塞性 gap；上述 note 是后续增量维护的观察项。
+declared-fit-with-notes。本轮两个受影响能力的浏览器审阅语义按 v2 冻结源模型适配，v1 页面与结果按原契约逐字节保留（`5626313e...`），三个未受影响能力无漂移；无阻塞性 gap。note 是共享 v2 静态资产与主机渲染边界带来的跨包耦合，属后续增量维护的观察项。

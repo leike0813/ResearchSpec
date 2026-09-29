@@ -32,6 +32,7 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `helper-scripts` from `knowledge/helper-scripts.md`.
 - Load knowledge ID `stage-6-final-review-export` from `knowledge/stage-6-final-review-and-export.md`.
 - Load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
+- Load knowledge ID `review-workspace-v1.html` from `review-workspace/v1.html`.
 
 ## Tools
 
@@ -69,6 +70,7 @@ Execute exactly one ResearchSpec capability node.
 - `assets/templates/supplement-suggestion-plan.md.j2` is packaged from extraction artifact `RM-ASSET-26`; invoke it only through the declared runner and arguments.
 - `assets/templates/thread-to-atomic-mapping.md.j2` is packaged from extraction artifact `RM-ASSET-27`; invoke it only through the declared runner and arguments.
 - `review-workspace/index.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
+- `review-workspace/v1.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
 
 ## Procedure
 
@@ -104,7 +106,7 @@ Execute one complete revision-response round: author and confirm comment-scoped 
 7. Export final deliverables with `scripts/export_manuscript_variants.py` where the script supports the confirmed target; optional `latexdiff` is advisory only and must never block completion.
 8. Ask the user when a change would alter the main line, core claims, or conclusions; when a closing strategy needs authorization; or when a response-only resolution is ambiguous.
 
-For the final interactive pass, project the current `working_manuscript` entry and open workboard items through the `review-response` review-workspace adapter, then open `review-workspace/index.html`. The browser result is a revision intent file only. Verify its manuscript hash, apply accepted edits to `working_manuscript`, and commit every change through the existing semantic revision log scripts before regenerating views.
+For the final interactive pass, retain the exact frozen source set, project the current `working_manuscript` entry and open workboard items through the `review-response` `review-workspace.v2` adapter, then open `review-workspace/index.html`. Ask separately before every render that may execute project code or filters, render after approval in a temporary copy, and preserve unreliable conversion as visible raw source. The browser result is revision intent only: validate it against the retained workspace, compare current source with the frozen set, show differences and affected feedback and ask before edits if changed, and ask about ambiguous source locations if unchanged. Apply accepted edits to `working_manuscript`, commit through existing semantic revision log scripts, and prepare a new workspace without processed comments.
 
 ## Round Completion
 

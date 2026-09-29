@@ -1,14 +1,31 @@
 # 交互式论文审阅工作台
 
-paper-humanizer 或 review-response 的当前 `instructions --json` 含有 `review_workspace` 时，Agent 可以生成一个 `review-workspace.v1` JSON，并打开相应 capability package 中的 `review-workspace/index.html`。也可以继续在对话中审阅；浏览器不是流程前提。
+当 paper-humanizer 或 review-response 的当前 `instructions --json` 含有 `review_workspace` 时，Agent 会为这一轮审阅准备一份冻结的 `review-workspace.v2` JSON，并打开相应 capability package 中的 `review-workspace/index.html`。也可以在对话中完成同样的审阅；浏览器不是流程前提。
 
-页面采用三栏布局：左侧是待处理问题，中间同时显示证据、建议和手稿上下文，右侧记录采用、不采用、需调整、暂缓及补充说明。草稿只保存在当前浏览器，并绑定工作区 ID 和手稿 SHA-256。点击“导出审阅结果”后会下载 `review-workspace-result.v1` JSON。
+“冻结”是这套流程的核心。准备阶段，Agent 把入口稿以及所有本地解析到的、构成审阅内容的手稿文件和图片复制到 `researchspec/` 之外的一个普通工作目录，记录按路径排序的 SHA-256 清单、入口路径和一个新的工作区标识。此后无论原稿是否被改动，页面始终显示并批注这份冻结版本。工作区 JSON 只携带可见的静态正文、公式和本地图片，不包含项目脚本，也不包含源文件树的可执行副本。工作区可以包含零个或多个 Agent 审阅项，因此也能用于纯用户批注。
 
-导出的结果还不是正式操作。把它交回 Agent 后，Agent 会：
+## 页面与渲染
 
-1. 校验工作区和手稿 hash，发现过期时保留意见并要求显式重建或 rebase；
-2. 将意见写回原流程的普通工作材料，例如 Annotation Set interpretation、humanizer plan 或 revision-master SQLite；
-3. 重新读取当前 selector 的 `instructions --json`；
-4. 单独询问 Gate verdict 或 Decision choice，再调用现有 `decide` / `advance`。
+页面采用左侧目录、中间文档、右侧批注的三栏布局。可以在一个可批注区块内用鼠标选择文字，选区旁会出现显式的“添加批注”；也可以整块批注一个段落、公式、图片或引用标记。表格单元格、脚注、参考文献条目、代码块和原始 LaTeX 回退块各自是独立区块；跨区块或混合对象的选择会被拒绝，并提示分别批注。右侧批注按文档位置排列，用标签区分 Agent 项与用户批注，每条都有显式的展开/收起按钮，重叠高亮会弹出选择。目录至少覆盖三级标题，支持折叠与筛选，文档与批注之间可双向定位。
 
-工作台不会直接改手稿、数据库、handoff 或 `researchspec/`。Markdown/QMD 的预览不执行原始 HTML；LaTeX 只显示入口源文件，不执行编译，也不加载远程内容。
+渲染在导入浏览器之前完成。项目内置的 Markdown 渲染器处理 Markdown，包括常见表格、脚注、引用、代码和 LaTeX 公式；Quarto 和 LaTeX 使用用户主机上的工具产出可选择的 HTML。遇到无法可靠转换的公式、表格或自定义环境，该区域会作为惰性 `raw-source` 块保留原始文本，而不是被悄悄丢弃。页面从不执行 Quarto、TeX、项目钩子、过滤器或计算代码，也不加载远程资源；导入工作区、编辑草稿、导出结果都不会触发渲染。
+
+如果 Quarto 项目带脚本、过滤器、`pre-render` 或可执行单元，这类渲染会运行用户代码，因此 Agent 每次都单独请求批准，获批后在临时副本中运行——临时副本保护的是相对路径下的原稿，项目脚本仍以主机权限运行，并非安全沙箱。若临时副本因项目依赖无法渲染，Agent 会报告阻塞并另行请示。普通或非执行转换则采用最低执行模式，并确认不会在未获批准时触发项目钩子。
+
+## 草稿与导出
+
+草稿只保存在当前浏览器，按工作区与快照标识隔离。编辑或删除草稿中的用户批注、调整 Agent 项的处置，都不会改动手稿或 `researchspec/` 下的任何文件。点击“导出审阅结果”会下载一份 `review-workspace-result.v2` JSON，它绑定同一工作区与快照，包含每个 Agent 项的一条处置、用户批注、整体说明和导出修订号。导出后草稿仍可继续编辑，再次导出会得到修订号递增、各自独立的完整结果。浏览器存储不可用时，页面会提示草稿无法持久保存，但仍提供显式导出。
+
+## 交回 Agent
+
+导出的结果不是正式操作。把它交回 Agent 后，Agent 先用保留的工作区校验结果，再比较当前源文件与冻结清单：
+
+1. 源文件未变，且某条批注在源码中能由引用和上下文唯一定位时，Agent 在所属流程中处理反馈，并准备一份含新标识、不含已处理批注的新工作区；
+2. 源文件已变时，Agent 展示差异和受影响的批注，并在做任何改动或生成替代工作区前询问用户；
+3. 源文件未变但某条批注在源码中定位有歧义，或冻结时存在捕获限制时，Agent 在应用前询问用户。
+
+随后 Agent 重新读取当前 selector 的 `instructions --json`，单独询问 Gate verdict 或 Decision choice，再调用现有 `decide` / `advance`。工作台不会直接改手稿、数据库、handoff 或 `researchspec/`，也不具备任何 CLI 权限。
+
+## v1 恢复
+
+`review-workspace.v1` 及其结果仍按原有契约处理。新版页面会拒绝导入 v1 并说明恢复方式：未完成的 v1 草稿用保留的 `review-workspace/v1.html` 页面按原身份规则重新打开，此前导出的 v1 结果直接交给 Agent 走 v1 流程。v1 与 v2 不会混用，也不做迁移或隐式转换。

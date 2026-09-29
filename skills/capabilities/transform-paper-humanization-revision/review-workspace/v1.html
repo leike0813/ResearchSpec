@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <title>ResearchSpec · 论文审阅工作台</title>
+  <style>
+    :root{color-scheme:light;--bg:#f4f3ef;--paper:#fff;--ink:#1e252b;--muted:#687178;--line:#d8d6ce;--accent:#245b78;--accent-soft:#e8f1f5;--warn:#8b5a19;--radius:12px;font:15px/1.55 system-ui,-apple-system,"Segoe UI","PingFang SC",sans-serif}
+    *{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--bg)}button,input,select,textarea{font:inherit;color:inherit}button,.file-button{border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:.48rem .72rem;cursor:pointer}.primary{background:var(--accent);border-color:var(--accent);color:#fff}.danger{color:#8b2f2f}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #9bc4d8;outline-offset:1px}
+    header{display:flex;align-items:center;gap:1rem;padding:.8rem 1.1rem;border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:5}header strong{font-size:1.08rem}header .spacer{flex:1}.file-button input{position:absolute;inline-size:1px;block-size:1px;opacity:0}.badge{display:inline-flex;padding:.18rem .5rem;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:.78rem}
+    #welcome{max-width:42rem;margin:8vh auto;padding:2rem;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius)}#welcome h1{margin-top:0}#workspace[hidden],#welcome[hidden]{display:none}.layout{display:grid;grid-template-columns:minmax(15rem,21rem) minmax(24rem,1fr) minmax(18rem,25rem);min-height:calc(100vh - 61px)}aside,main{min-width:0;padding:1rem;border-right:1px solid var(--line)}.right{border-right:0}.filters{display:grid;grid-template-columns:1fr auto;gap:.5rem;margin-bottom:.8rem}.filters input,.filters select,textarea{width:100%;border:1px solid var(--line);border-radius:8px;background:#fff;padding:.55rem}.queue{display:grid;gap:.45rem}.queue button{text-align:left;width:100%}.queue button[aria-current="true"]{border-color:var(--accent);background:var(--accent-soft)}.queue small{display:block;color:var(--muted)}
+    h1,h2,h3{line-height:1.25}.title-row{display:flex;align-items:flex-start;gap:.8rem}.title-row h1{font-size:1.35rem;margin:0;flex:1}.muted,.hint{color:var(--muted)}.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem;margin:.8rem 0}.card h2,.card h3{margin-top:0;font-size:1rem}.source,.manuscript{white-space:pre-wrap;overflow-wrap:anywhere}.manuscript{max-height:42vh;overflow:auto}.markdown pre{white-space:pre-wrap;background:#f1f2f3;padding:.7rem;border-radius:8px}.markdown blockquote{margin-left:0;border-left:3px solid var(--line);padding-left:.8rem;color:var(--muted)}.markdown h1{font-size:1.35rem}.markdown h2{font-size:1.18rem}.markdown h3{font-size:1.05rem}.markdown ul{padding-left:1.25rem}
+    label{display:block;font-weight:600;margin:.8rem 0 .3rem}.right textarea{min-height:8rem;resize:vertical}.actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}.status{min-height:1.3rem;color:var(--muted)}.warning{color:var(--warn)}dl{display:grid;grid-template-columns:max-content 1fr;gap:.3rem .7rem;margin:.5rem 0}dt{color:var(--muted)}dd{margin:0;overflow-wrap:anywhere}
+    @media(max-width:980px){.layout{grid-template-columns:16rem 1fr}.right{grid-column:1/-1;border-top:1px solid var(--line)}main{border-right:0}}@media(max-width:680px){header{flex-wrap:wrap}.layout{display:block}aside,main{border-right:0;border-bottom:1px solid var(--line)}.manuscript{max-height:30vh}}
+  </style>
+</head>
+<body>
+  <header>
+    <strong>ResearchSpec · 论文审阅工作台</strong>
+    <span id="adapter" class="badge" hidden></span>
+    <span class="spacer"></span>
+    <label class="file-button">导入工作区 JSON<input id="file" type="file" accept="application/json,.json"></label>
+    <button id="export" class="primary" type="button" disabled>导出审阅结果</button>
+  </header>
+  <section id="welcome">
+    <h1>把审阅集中到一个页面</h1>
+    <p>导入由 ResearchSpec Agent 生成的 <code>review-workspace.v1</code> JSON，并导出 <code>review-workspace-result.v1</code>。页面只在本地浏览器中读取和保存草稿，不会改动手稿、SQLite 或 <code>researchspec/</code>。</p>
+    <p class="hint">正式 Gate、Decision 和节点状态仍由 Agent 重新读取当前 instructions 后，通过现有 CLI 确认。</p>
+  </section>
+  <section id="workspace" class="layout" hidden>
+    <aside>
+      <div class="filters">
+        <input id="search" type="search" placeholder="搜索问题、证据或位置" aria-label="搜索审阅项">
+        <select id="filter" aria-label="按处理状态筛选"><option value="all">全部</option><option value="pending">待处理</option><option value="include">采用</option><option value="exclude">不采用</option><option value="revise">需调整</option><option value="defer">暂缓</option></select>
+      </div>
+      <p id="count" class="muted"></p>
+      <nav id="queue" class="queue" aria-label="审阅项"></nav>
+    </aside>
+    <main>
+      <div class="title-row"><h1 id="title"></h1><span id="position" class="badge"></span></div>
+      <dl><dt>手稿</dt><dd id="path"></dd><dt>目标</dt><dd id="target"></dd><dt>来源</dt><dd id="pointer"></dd></dl>
+      <section class="card"><h2>原始证据</h2><div id="evidence" class="source"></div></section>
+      <section class="card"><h2>建议动作</h2><p id="action"></p><p id="rationale"></p><p><strong>风险：</strong><span id="risk"></span></p></section>
+      <section class="card"><div class="title-row"><h2>手稿上下文</h2><button id="source-toggle" type="button" aria-pressed="false">查看原文</button></div><div id="manuscript" class="manuscript markdown"></div></section>
+    </main>
+    <aside class="right">
+      <h2>你的处理意见</h2>
+      <p id="authority" class="hint"></p>
+      <label for="disposition">处理</label><select id="disposition"><option value="pending">待处理</option><option value="include">采用</option><option value="exclude">不采用</option><option value="revise">需调整</option><option value="defer">暂缓</option></select>
+      <label for="proposed">建议文本（可选）</label><textarea id="proposed" spellcheck="true"></textarea>
+      <label for="note">说明 / 批注</label><textarea id="note" spellcheck="true"></textarea>
+      <label for="overall">整体说明</label><textarea id="overall" spellcheck="true"></textarea>
+      <p id="status" class="status" role="status"></p>
+      <div class="actions"><button id="previous" type="button">上一项</button><button id="next" type="button">下一项</button><button id="clear" class="danger" type="button">清除本地草稿</button></div>
+    </aside>
+  </section>
+  <script>
+  'use strict';
+  const $ = id => document.getElementById(id);
+  let workspace = null, selected = 0, sourceView = false, decisions = {}, saveTimer;
+  const dispositions = new Set(['pending','include','exclude','revise','defer']);
+  const storageKey = () => workspace ? `researchspec-review:${workspace.workspace_id}:${workspace.manuscript.sha256}` : '';
+  function text(target, value){ target.textContent = value == null ? '' : String(value); }
+  function validate(value){
+    if (!value || value.schema_version !== '1' || !['annotation-intake','paper-humanizer','review-response'].includes(value.adapter)) throw new Error('不是受支持的 review-workspace.v1 文件。');
+    if (!value.workspace_id || !value.manuscript || typeof value.manuscript.content !== 'string' || !Array.isArray(value.items) || !value.items.length) throw new Error('工作区缺少标识、手稿或审阅项。');
+    const ids = value.items.map(item => item && item.item_id);
+    if (ids.some(id => !id) || new Set(ids).size !== ids.length) throw new Error('审阅项 ID 缺失或重复。');
+    if (value.items.some(item => !dispositions.has(item.initial_disposition))) throw new Error('审阅项包含不支持的处理状态。');
+    return value;
+  }
+  function loadDraft(){
+    decisions = Object.fromEntries(workspace.items.map(item => [item.item_id,{item_id:item.item_id,disposition:item.initial_disposition,note:'',proposed_text:item.recommendation.proposed_text}]));
+    try { const saved = JSON.parse(localStorage.getItem(storageKey()) || 'null'); if (saved && saved.source_sha256 === workspace.manuscript.sha256) { decisions = {...decisions,...saved.decisions}; $('overall').value = saved.overall_note || ''; } } catch (_) { /* Browser storage is optional. */ }
+  }
+  function stage(){
+    if (!workspace) return;
+    const item = workspace.items[selected], current = decisions[item.item_id];
+    current.disposition = $('disposition').value; current.proposed_text = $('proposed').value || null; current.note = $('note').value;
+    clearTimeout(saveTimer); text($('status'),'正在保存本地草稿…');
+    saveTimer = setTimeout(() => { try { localStorage.setItem(storageKey(),JSON.stringify({source_sha256:workspace.manuscript.sha256,decisions,overall_note:$('overall').value})); text($('status'),'本地草稿已保存（非正式状态）'); } catch (_) { text($('status'),'浏览器无法保存草稿，请及时导出。'); } renderQueue(); },180);
+  }
+  function targetLabel(target){ if (!target) return ''; if (target.kind === 'document') return '整篇手稿'; if (target.kind === 'section') return target.heading; if (target.kind === 'block') return `块 ${target.block_id}`; if (target.kind === 'quote') return `引文：${target.exact_quote}`; return target.label || ''; }
+  function renderMarkdown(value,target){
+    target.replaceChildren(); let list=null, code=null;
+    for (const line of value.replace(/\r\n?/g,'\n').split('\n')) {
+      if (/^\s*```/.test(line)) { if (code) { target.append(code); code=null; } else { code=document.createElement('pre'); } list=null; continue; }
+      if (code) { code.append(document.createTextNode(`${line}\n`)); continue; }
+      const heading=/^(#{1,3})\s+(.*)$/.exec(line); const bullet=/^\s*[-*+]\s+(.*)$/.exec(line);
+      if (heading) { list=null; const node=document.createElement(`h${heading[1].length}`); text(node,heading[2]); target.append(node); }
+      else if (bullet) { if (!list) { list=document.createElement('ul'); target.append(list); } const item=document.createElement('li'); text(item,bullet[1]); list.append(item); }
+      else if (/^\s*>/.test(line)) { list=null; const node=document.createElement('blockquote'); text(node,line.replace(/^\s*>\s?/,'')); target.append(node); }
+      else if (line.trim()) { list=null; const node=document.createElement('p'); text(node,line); target.append(node); }
+      else list=null;
+    }
+    if (code) target.append(code);
+  }
+  function renderManuscript(){ const value=workspace.manuscript.content; const inert=!['markdown','quarto'].includes(workspace.manuscript.format)||sourceView; if(inert){ $('manuscript').className='manuscript source'; text($('manuscript'),value); } else { $('manuscript').className='manuscript markdown'; renderMarkdown(value,$('manuscript')); } $('source-toggle').hidden=!['markdown','quarto'].includes(workspace.manuscript.format); $('source-toggle').setAttribute('aria-pressed',String(sourceView)); text($('source-toggle'),sourceView?'查看渲染':'查看原文'); }
+  function visibleItems(){ const q=$('search').value.trim().toLowerCase(), filter=$('filter').value; return workspace.items.filter(item => { const decision=decisions[item.item_id]; const haystack=[item.title,item.source_text,item.source_pointer,targetLabel(item.target),item.recommendation.action].join(' ').toLowerCase(); return (!q||haystack.includes(q))&&(filter==='all'||decision.disposition===filter); }); }
+  function renderQueue(){ const items=visibleItems(); text($('count'),`${items.length} / ${workspace.items.length} 项`); $('queue').replaceChildren(...items.map(item => { const index=workspace.items.indexOf(item), button=document.createElement('button'); button.type='button'; button.setAttribute('aria-current',String(index===selected)); const title=document.createElement('strong'), meta=document.createElement('small'); text(title,item.title); text(meta,`${decisions[item.item_id].disposition} · ${targetLabel(item.target)}`); button.append(title,meta); button.addEventListener('click',()=>{ stage(); selected=index; render(); }); return button; })); }
+  function render(){
+    const item=workspace.items[selected], decision=decisions[item.item_id]; $('workspace').hidden=false; $('welcome').hidden=true; $('export').disabled=false; text($('adapter'),workspace.adapter); $('adapter').hidden=false;
+    text($('title'),item.title); text($('position'),`${selected+1} / ${workspace.items.length}`); text($('path'),workspace.manuscript.entry_path||workspace.manuscript.path); text($('target'),targetLabel(item.target)); text($('pointer'),item.source_pointer); text($('evidence'),item.source_text); text($('action'),item.recommendation.action); text($('rationale'),item.recommendation.rationale); text($('risk'),item.recommendation.risk); text($('authority'),workspace.workflow.handoff_instruction);
+    $('disposition').value=decision.disposition; $('proposed').value=decision.proposed_text||''; $('note').value=decision.note||''; $('previous').disabled=selected===0; $('next').disabled=selected===workspace.items.length-1; renderManuscript(); renderQueue();
+  }
+  $('file').addEventListener('change',async event => { const file=event.target.files[0]; if(!file)return; try { workspace=validate(JSON.parse(await file.text())); selected=0; sourceView=false; loadDraft(); render(); text($('status'),'工作区已导入。'); } catch(error){ alert(error.message); } finally { event.target.value=''; } });
+  for (const id of ['disposition','proposed','note','overall']) $(id).addEventListener(id==='disposition'?'change':'input',stage);
+  for (const id of ['search','filter']) $(id).addEventListener(id==='search'?'input':'change',renderQueue);
+  $('source-toggle').addEventListener('click',()=>{ sourceView=!sourceView; renderManuscript(); });
+  $('previous').addEventListener('click',()=>{ stage(); if(selected>0){selected--;render();} }); $('next').addEventListener('click',()=>{ stage(); if(selected<workspace.items.length-1){selected++;render();} });
+  $('clear').addEventListener('click',()=>{ if(!workspace||!confirm('清除当前工作区在本浏览器中的全部草稿？'))return; localStorage.removeItem(storageKey()); $('overall').value=''; loadDraft(); render(); text($('status'),'本地草稿已清除。'); });
+  $('export').addEventListener('click',()=>{ stage(); const result={schema_version:'1',workspace,source_sha256:workspace.manuscript.sha256,decisions:workspace.items.map(item=>decisions[item.item_id]),overall_note:$('overall').value,exported_at:new Date().toISOString()}; const blob=new Blob([`${JSON.stringify(result,null,2)}\n`],{type:'application/json'}), url=URL.createObjectURL(blob), link=document.createElement('a'); link.href=url; link.download=`${workspace.workspace_id}-review-result.json`; link.click(); setTimeout(()=>URL.revokeObjectURL(url),0); text($('status'),'审阅结果已导出；请交回 owning Agent。'); });
+  </script>
+</body>
+</html>
