@@ -36,6 +36,7 @@
 !.agents/skills/tooluniverse-maintenance/**
 
 .openviking/
+.mattpack/
 
 __pycache__/
 *.py[cod]

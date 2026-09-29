@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+  <title>文档批注工作台 · 完整交互原型</title>
+  <style>
+    :root{font:15px/1.55 system-ui,-apple-system,"Segoe UI","PingFang SC",sans-serif;color:#23313c;background:#f3f4f2;--ink:#23313c;--muted:#667783;--line:#d5dde0;--blue:#245f7d;--pale:#e9f3f7;--green:#2d765b;--warn:#92591d}
+    *{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}button,select,input,textarea{border:1px solid #bdcbd1;border-radius:7px;background:#fff;padding:.46rem .65rem}button:hover{border-color:#39728e}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid #9bc7da;outline-offset:2px}button:disabled{opacity:.5;cursor:default}[hidden]{display:none!important}
+    header{display:flex;align-items:center;gap:.8rem;padding:.7rem 1rem;background:#fff;border-bottom:1px solid var(--line);flex-wrap:wrap}header strong{font-size:1.12rem}header .spacer{flex:1}.badge{border-radius:999px;padding:.2rem .6rem;background:var(--pale);color:var(--blue);font-size:.8rem}.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.danger{color:#9d3833}.subtle{color:var(--muted);font-size:.86rem}.top-note{padding:.5rem 1rem;border-bottom:1px solid var(--line);background:#fdfcf6;color:#5d6264}
+    .guide{background:#fff;border-bottom:1px solid var(--line);padding:.7rem 1rem}.guide-head{display:flex;gap:.65rem;align-items:center;flex-wrap:wrap}.guide-head strong{font-size:.95rem}.guide-tabs,.guide-steps{display:flex;gap:.4rem;flex-wrap:wrap}.guide-tabs button,.guide-steps button{padding:.32rem .55rem;font-size:.84rem}.guide-tabs [aria-selected="true"]{background:var(--blue);border-color:var(--blue);color:#fff}.guide p{margin:.42rem 0;color:var(--muted);font-size:.85rem}
+    .layout{display:grid;grid-template-columns:minmax(12rem,15rem) minmax(0,1fr) minmax(19rem,25rem);height:calc(100vh - 174px);min-height:34rem}.outline,.paper-scroll,.rail{min-width:0;overflow:auto}.outline{padding:1rem;border-right:1px solid var(--line);background:#fafbfa}.outline h2,.rail h2{font-size:1rem;margin:.2rem 0 .75rem}.outline details{margin:.5rem 0}.outline summary{cursor:pointer;font-weight:650}.outline button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:.32rem .45rem;margin:.12rem 0}.outline button.current{color:var(--blue);background:var(--pale)}.outline .level-2{padding-left:1rem}.outline .level-3{padding-left:1.8rem}
+    .paper-scroll{padding:1.2rem clamp(.8rem,2.2vw,2rem);scroll-behavior:smooth}.paper{max-width:54rem;margin:0 auto 2rem;background:white;box-shadow:0 6px 28px #23405312;border:1px solid #e0e5e5;padding:2rem clamp(1rem,4vw,4rem)}.paper h1{font:700 1.9rem/1.35 Georgia,"Noto Serif SC",serif;margin:.2rem 0}.paper h2{font:700 1.35rem/1.4 Georgia,"Noto Serif SC",serif;margin:2.5rem 0 .7rem}.paper h3{font:700 1.12rem/1.45 Georgia,"Noto Serif SC",serif;margin:1.7rem 0 .6rem}.paper p,.paper blockquote{font:1.02rem/1.85 Georgia,"Noto Serif SC",serif}.paper .lead{color:#61717b;margin-top:0}.review-block{position:relative;margin:.8rem 0;padding:.2rem .35rem .2rem .75rem;border-left:3px solid transparent}.review-block.targeted{border-left-color:var(--blue)}.review-block.flash{background:#e9f5fb}.review-block p,.review-block blockquote{margin:.25rem 0}.review-block blockquote{border-left:3px solid #cad5db;padding-left:.9rem;color:#4b5f6b}.review-block .whole{font:12px system-ui;float:right;margin:0 0 .2rem .5rem;padding:.2rem .45rem}.review-block .type{font:12px system-ui;color:var(--muted)}.review-block pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f4f5;padding:.7rem;font:13px/1.55 ui-monospace,monospace}.review-block.raw pre{background:#fbf5e9}.review-block.math{background:#f5f8fa;text-align:center}.review-block.math .text-target{font:1.25rem Georgia,serif}.review-block.citation{display:inline-block;background:#f3f7f8}.review-block.footnote,.review-block.bibliography{font-size:.94rem}.review-block.image svg{display:block;width:100%;max-width:27rem;height:11rem;margin:.7rem auto}.image-label{display:block;text-align:center;color:var(--muted);font-size:.86rem}.paper table{border-collapse:collapse;width:100%;margin:1rem 0}.paper th,.paper td{border:1px solid #cbd5d8;padding:.55rem;text-align:left}.paper td .review-block{margin:0}.paper td .whole{float:none;margin-left:.4rem}.paper .table-caption{text-align:center;color:var(--muted);font-size:.9rem}
+    mark{background:#fbe5a8;color:inherit;cursor:pointer;border-radius:2px}mark.overlap{background:#dfc8ee}mark.active{outline:2px solid #79519a}mark:focus-visible{outline:3px solid #2f6d8e}.rail{padding:1rem;border-left:1px solid var(--line);background:#f7f9f8}.rail-head{display:flex;align-items:center;gap:.5rem}.rail-head h2{flex:1}.rail .filters{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin-bottom:.6rem}.rail .filters input{grid-column:1/-1;width:100%}.rail .filters select{min-width:0;width:100%}.rail .count{font-size:.83rem;color:var(--muted);margin:.3rem 0}.rail details.group{margin:.55rem 0}.rail details.group>summary{cursor:pointer;font-weight:650;padding:.4rem .2rem}.card{background:#fff;border:1px solid #d4dfe3;border-left:4px solid var(--green);border-radius:8px;padding:.7rem;margin:.5rem 0;box-shadow:0 2px 7px #23405309}.card.agent{border-left-color:#805f9f}.card.active{outline:2px solid #5e93ab}.card small{display:block;color:var(--muted);margin:.18rem 0}.card blockquote{margin:.45rem 0;padding-left:.5rem;border-left:2px solid #c4d2d8;color:#4e5d64;overflow-wrap:anywhere}.card p{margin:.4rem 0}.card label{display:block;font-size:.84rem;font-weight:650;margin:.5rem 0 .2rem}.card textarea,.card select{width:100%}.card textarea{min-height:4.3rem;resize:vertical}.card button{font-size:.84rem}.status{border-radius:6px;background:#edf5f0;color:#27684d;padding:.15rem .45rem;font-size:.78rem}.status.pending{background:#fff2df;color:#825118}.forced{background:#fff5df;padding:.45rem .6rem;border-radius:7px;color:#76521a;font-size:.83rem}
+    .review-block .footnote-ref{font-size:.72rem;vertical-align:super;border:0;padding:.1rem .3rem;color:var(--blue)}.rail .overall{display:block;margin-top:1rem;font-size:.85rem;font-weight:650}.rail #overall{width:100%;min-height:4rem;resize:vertical}
+    .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem}.card-top strong{font-size:.9rem}.card .expand{flex:none;background:var(--pale);border-color:#c3dce8;color:var(--blue);font-weight:650}.card .actions{display:flex;justify-content:flex-start;gap:.3rem;flex-wrap:wrap;margin-top:.5rem}.legacy-dialog,.handoff-dialog{max-width:36rem;border:1px solid var(--line);border-radius:10px;box-shadow:0 16px 48px #0004;padding:1.2rem}.legacy-dialog::backdrop,.handoff-dialog::backdrop{background:#263b4870}.legacy-dialog h2,.handoff-dialog h2{margin:.1rem 0 .7rem}.legacy-dialog p,.handoff-dialog p{margin:.6rem 0}.legacy-dialog .actions,.handoff-dialog .actions{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-top:1rem}.legacy-dialog a{color:var(--blue)}.bottom{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;padding:.6rem 1rem;background:#fff;border-top:1px solid var(--line)}.bottom .spacer{flex:1}.bottom details{font-size:.82rem}.bottom pre{max-height:14rem;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f4f5;padding:.7rem;max-width:60rem}
+    #selection-action{position:fixed;z-index:20;background:var(--blue);color:white;border:0;box-shadow:0 4px 18px #1d4c6880}#overlap-menu{position:fixed;z-index:21;background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 22px #243c4f40;padding:.35rem;max-width:17rem}#overlap-menu button{display:block;width:100%;text-align:left;border:0}.toast{position:fixed;z-index:30;left:50%;bottom:1rem;transform:translateX(-50%);background:#263b48;color:#fff;padding:.55rem .8rem;border-radius:8px;box-shadow:0 4px 14px #0004}
+    @media(max-width:1050px){.layout{grid-template-columns:11rem minmax(0,1fr) 19rem}}@media(max-width:760px){.layout{display:block;height:auto}.outline,.paper-scroll,.rail{overflow:visible;border:0}.outline{padding:.6rem 1rem}.outline details{display:inline-block;vertical-align:top;margin-right:.7rem}.paper-scroll{padding:.7rem}.paper{padding:1.3rem}.rail{padding:1rem}}
+  </style>
+</head>
+<body>
+  <header>
+    <strong>ResearchSpec · 文档批注工作台</strong><span class="badge">冻结审阅件原型</span>
+    <span class="spacer"></span>
+    <label for="format">样稿</label><select id="format"><option value="markdown">Markdown</option><option value="quarto">Quarto</option><option value="latex">LaTeX 转换预览</option><option value="empty">无 Agent 审阅项</option><option value="next">下一轮新审阅件</option></select>
+    <button id="reset" type="button">重置本样稿</button><button id="export" class="primary" type="button">导出原型结果</button>
+  </header>
+  <div class="top-note">当前审阅件的正文与批注位置已冻结。完成批注后导出给 Agent；原稿是否变化由 Agent 对照生成审阅件时保留的原稿核对。样稿是预置静态快照，不产生正式审阅结果。</div>
+  <section class="guide" aria-label="边界场景演练"><div class="guide-head"><strong>场景演练</strong><div id="guide-tabs" class="guide-tabs" role="tablist"></div></div><p id="guide-description"></p><div id="guide-steps" class="guide-steps"></div></section>
+  <div class="layout" id="layout">
+    <nav id="outline" class="outline" aria-label="文档章节"></nav>
+    <main id="paper-scroll" class="paper-scroll"><article id="paper" class="paper" aria-label="可批注的冻结文档"></article></main>
+    <aside id="rail" class="rail" aria-label="批注清单"><div class="rail-head"><h2>批注与审阅项</h2><span id="rail-count" class="badge"></span></div><div class="filters"><input id="search" type="search" placeholder="搜索批注、原文和章节" aria-label="搜索批注"><select id="origin-filter" aria-label="按来源筛选"><option value="all">全部来源</option><option value="user">我的批注</option><option value="agent">Agent 审阅项</option></select></div><p id="forced" class="forced" hidden></p><p id="card-count" class="count"></p><div id="cards"></div><label class="overall" for="overall">整体说明</label><textarea id="overall" spellcheck="true"></textarea></aside>
+  </div>
+  <div class="bottom"><span id="save-status" class="subtle" role="status"></span><span class="spacer"></span><span id="snapshot-label" class="subtle"></span><details><summary>查看当前原型状态</summary><pre id="state"></pre></details></div>
+  <button id="selection-action" type="button" hidden>添加批注</button><div id="overlap-menu" hidden role="menu" aria-label="选择此处批注"></div><div id="toast" class="toast" role="status" hidden></div>
+  <dialog id="legacy-dialog" class="legacy-dialog" aria-labelledby="legacy-title"><h2 id="legacy-title">旧版审阅怎样继续？</h2><p><strong>还在编辑 v1 草稿：</strong>用此前的同一浏览器打开现有 v1 工作台，导入原来的 <code>review-workspace.v1</code> 文件。该页面按工作区 ID 与手稿校验值找回自己的草稿；完成后在那里导出 <code>review-workspace-result.v1</code>。</p><p><strong>已经导出 v1 结果：</strong>直接交给 Agent 按旧版契约核对和处理。新版工作区会拒绝混用；若要改用新版，请 Agent 重新准备工作区，再核对旧意见。</p><div class="actions"><a href="./index.html" target="_blank" rel="noopener">打开现有 v1 工作台</a><button id="legacy-close" type="button">关闭</button></div></dialog>
+  <dialog id="handoff-dialog" class="handoff-dialog" aria-labelledby="handoff-title"><h2 id="handoff-title">Agent 收到冻结批注后</h2><p id="handoff-explanation"></p><div class="actions"><button id="source-same" type="button">原稿未改</button><button id="source-changed" type="button">原稿已改</button><button id="handoff-close" type="button">关闭</button></div></dialog>
+  <script>
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const SECTIONS = [
+    {id:'intro',title:'1 引言',level:1}, {id:'background',title:'1.1 背景',level:2},
+    {id:'detail',title:'1.1.1 研究问题',level:3}, {id:'methods',title:'2 方法',level:1},
+    {id:'results',title:'3 结果',level:1}, {id:'discussion',title:'4 讨论',level:1},
+    {id:'references',title:'参考文献',level:1}
+  ];
+  const INTRO = '我们分析城市绿地暴露与睡眠质量之间的关联。观察性数据不能直接证明因果关系，需要谨慎解释估计结果。';
+  const FILLER = '这一段补充说明样本、测量和解释边界，供长文档导航与批注筛选试用。';
+  const baseBlocks = format => [
+    {id:'intro-1',section:'intro',kind:'paragraph',text:format==='next'?'我们已补充绿地暴露的测量时间窗口，并继续审慎解释睡眠质量的关联结果。':INTRO},
+    {id:'intro-quote',section:'background',kind:'quotation',text:'“更好的睡眠与更好的环境同时出现，并不能说明环境造成了变化。”'},
+    {id:'intro-cite',section:'background',kind:'citation',text:'[Wang et al., 2024]',whole:true},
+    {id:'intro-2',section:'detail',kind:'paragraph',text:'本文比较不同社区的绿地暴露，并预先说明观察性研究的解释限制。'},
+    {id:'methods-1',section:'methods',kind:'paragraph',text:'研究纳入 120 名成年参与者，来自两个社区。睡眠质量由问卷测量，绿地暴露依据住址周边植被覆盖估计。'},
+    {id:'methods-formula',section:'methods',kind:'formula',text:'Yᵢ = β₀ + β₁Gᵢ + β₂Xᵢ + εᵢ',whole:true},
+    {id:'methods-code',section:'methods',kind:'code',text:'model <- lm(sleep ~ green + age + income, data = sample)\nsummary(model)'},
+    {id:'methods-footnote',section:'methods',kind:'footnote',text:'问卷分数越高表示自评睡眠质量越好。'},
+    {id:'results-1',section:'results',kind:'paragraph',text:'控制年龄与收入后，绿地暴露与睡眠评分呈正向关联，效应估计仍需复核。'},
+    {id:'results-cell-1',section:'results',kind:'cell',text:'0.18'},
+    {id:'results-cell-2',section:'results',kind:'cell',text:'120'},
+    {id:'results-image',section:'results',kind:'image',text:'图 1 · 社区绿地分布',whole:true,resource:'figures/green-map.svg#sample-01'},
+    {id:'results-caption',section:'results',kind:'caption',text:'图 1. 两个社区的示意性绿地分布。'},
+    {id:'results-image-plain',section:'results',kind:'image',text:'图片 2（无说明）',whole:true,resource:'figures/field-note.svg#sample-02'},
+    {id:'discussion-1',section:'discussion',kind:'paragraph',text:'样本规模与居住地选择偏差限制了结果推广。下一轮分析将使用独立样本复核。'},
+    ...Array.from({length:12},(_,i)=>({id:`discussion-extra-${i+1}`,section:'discussion',kind:'paragraph',text:`讨论补充 ${i+1}。${FILLER}`})),
+    {id:'references-1',section:'references',kind:'bibliography',text:'Wang, L., et al. (2024). Urban greenery and sleep. Journal of Example Studies, 12(2), 34–47.'},
+    ...(format==='quarto'||format==='latex' ? [{id:'raw-latex',section:'references',kind:'raw',text:'\\begin{customresult}\n  估计值：\\specialvalue{0.18}\n\\end{customresult}'}] : [])
+  ];
+  function documentFor(format){return baseBlocks(format)}
+  function snapshotFor(format){return {input_id:`${format}-input-1`,render_id:`${format}-visible-1`}}
+  function makeAnchor(block,start,end,blocks,snapshot){
+    return {render_id:snapshot.render_id,input_id:snapshot.input_id,kind:block.kind,block_hint:block.id,position_hint:blocks.findIndex(item=>item.id===block.id),exact_quote:block.text.slice(start,end),prefix:block.text.slice(Math.max(0,start-14),start),suffix:block.text.slice(end,end+14),start,end,resource_id:block.resource||null};
+  }
+  function resolvedComment(comment){const {block_hint,start,end}=comment.original;return {...comment,current:{block_id:block_hint,start,end},status:'已挂载'}}
+  function initialState(format){
+    const blocks=documentFor(format),snapshot=snapshotFor(format);
+    const seed=(id,blockId,quote,body)=>{const block=blocks.find(item=>item.id===blockId),start=block.text.indexOf(quote);return {id,body,suggested_text:'',original:makeAnchor(block,start,start+quote.length,blocks,snapshot)};};
+    return {format,session_id:`demo-${format}-${Date.now().toString(36)}`,revision:0,comments:format==='empty'||format==='next'?[]:[
+      seed('U-001','intro-1','城市绿地暴露','请补充暴露测量的时间窗口。'),
+      seed('U-002','intro-1','绿地暴露与睡眠质量','这组术语请与摘要保持一致。'),
+      seed('U-003','methods-formula',blocks.find(item=>item.id==='methods-formula').text,'公式中的变量定义请补全。')
+    ],decisions:{'A-001':{disposition:'pending',note:'',proposed_text:null},'A-002':{disposition:'pending',note:'',proposed_text:null}},overall_note:''};
+  }
+  const AGENTS=[
+    {id:'A-001',block_id:'methods-1',quote:'120 名成年参与者',title:'补充招募方式',evidence:'审阅者询问参与者招募渠道。',action:'在方法部分补充招募与排除标准。'},
+    {id:'A-002',block_id:'results-1',quote:'效应估计仍需复核',title:'限定结论',evidence:'当前样本规模不足以支持强因果表述。',action:'保留关联性措辞并说明不确定性。'}
+  ];
+  function agentItems(){return app.format==='empty'||app.format==='next'?[]:AGENTS}
+  const storeKey=format=>`researchspec-prototype-review-frozen:${format}`;
+  let app,activeId=null,pending=null,forcedId=null,guide='selection',toastTimer,saveTimer;
+  let collapsed=new Set();
+  function save(){
+    clearTimeout(saveTimer);
+    const key=storeKey(app.format),serialized=JSON.stringify(app);
+    saveTimer=setTimeout(()=>{
+      try{localStorage.setItem(key,serialized);$('save-status').textContent='原型草稿已保存在此浏览器';}
+      catch(_){$('save-status').textContent='浏览器未允许保存；请在关闭前导出。';}
+    },120);
+  }
+  function load(format){
+    let saved=null;try{saved=JSON.parse(localStorage.getItem(storeKey(format))||'null');}catch(_){}
+    app=saved&&Array.isArray(saved.comments)&&saved.format===format?saved:initialState(format);
+    activeId=app.comments[0]?.id||null;pending=null;forcedId=null;collapsed=new Set();
+    $('format').value=format;
+    $('search').value='';$('origin-filter').value='all';$('overall').value=app.overall_note;
+    render(true);
+  }
+  function reset(format=app.format){
+    if(!confirm('重置此样稿会删除本浏览器保存的批注草稿，继续吗？'))return;
+    try{localStorage.removeItem(storeKey(format));}catch(_){}
+    app=initialState(format);activeId=app.comments[0]?.id||null;pending=null;forcedId=null;collapsed=new Set();
+    $('format').value=format;
+    $('search').value='';$('origin-filter').value='all';$('overall').value=app.overall_note;
+    render(true);save();
+  }
+  function blocksNow(){return documentFor(app.format)}
+  function snapshotNow(){return snapshotFor(app.format)}
+  function commentsNow(){return app.comments.map(resolvedComment)}
+  function notify(message){const box=$('toast');box.textContent=message;box.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>box.hidden=true,3000)}
+  function button(label,run,className=''){const el=document.createElement('button');el.type='button';el.textContent=label;if(className)el.className=className;el.addEventListener('click',run);return el}
+  function addText(parent,value){parent.append(document.createTextNode(value))}
+  function blockName(kind){return ({paragraph:'正文',quotation:'引述',citation:'文内引用',formula:'公式',code:'代码',footnote:'脚注',cell:'表格单元格',image:'图片',caption:'图片说明',bibliography:'参考文献',raw:'原始 LaTeX'})[kind]||kind}
+  function sectionName(id){return SECTIONS.find(section=>section.id===id)?.title||id}
+  function renderOutline(){
+    const nav=$('outline');nav.replaceChildren();const h=document.createElement('h2');h.textContent='文档目录';nav.append(h);
+    for(const top of SECTIONS.filter(section=>section.level===1)){
+      const group=document.createElement('details');group.open=true;const summary=document.createElement('summary');summary.textContent=top.title;group.append(summary);
+      const topLink=button(`跳到${top.title}`,()=>jump(top.id,true));topLink.dataset.sectionLink=top.id;group.append(topLink);
+      const start=SECTIONS.indexOf(top),end=SECTIONS.findIndex((s,i)=>i>start&&s.level===1);
+      for(const sub of SECTIONS.slice(start+1,end<0?undefined:end)){
+        const b=button(sub.title,()=>jump(sub.id,true));b.className=`level-${sub.level}`;b.dataset.sectionLink=sub.id;group.append(b);
+      }
+      nav.append(group);
+    }
+  }
+  function wholeButton(block){return button(block.kind==='paragraph'||block.kind==='caption'||block.kind==='footnote'||block.kind==='bibliography'?'整段批注':block.kind==='cell'?'整格批注':`${blockName(block.kind)}批注`,()=>whole(block.id),'whole')}
+  function textTarget(block,tag){const el=document.createElement(tag);el.className='text-target';el.dataset.textTarget='';el.dataset.blockId=block.id;el.tabIndex=block.whole?-1:0;return el}
+  function makeBlock(block){
+    const wrap=document.createElement('div');wrap.className=`review-block ${block.kind}`;wrap.dataset.blockWrap=block.id;
+    wrap.append(wholeButton(block));
+    if(block.kind==='image'){
+      const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 430 170');svg.setAttribute('role','img');svg.setAttribute('aria-label',block.text);
+      const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');rect.setAttribute('width','430');rect.setAttribute('height','170');rect.setAttribute('fill',block.id==='results-image'?'#dcebdc':'#e7eceb');svg.append(rect);
+      for(let i=0;i<6;i++){const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');circle.setAttribute('cx',String(40+i*72));circle.setAttribute('cy',String(65+(i%2)*37));circle.setAttribute('r',String(18+i%3*8));circle.setAttribute('fill',block.id==='results-image'?'#7da87e':'#9aacb0');svg.append(circle)}
+      wrap.append(svg);const label=textTarget(block,'span');label.classList.add('image-label');wrap.append(label);
+    }else{
+      const tag=block.kind==='code'||block.kind==='raw'?'pre':block.kind==='quotation'?'blockquote':block.kind==='formula'?'div':block.kind==='citation'?'span':'p';
+      const target=textTarget(block,tag);wrap.append(target);
+      if(block.id==='methods-1')wrap.append(button('¹',()=>jump('methods-footnote',true),'footnote-ref'));
+      if(block.id==='methods-footnote'){
+        const number=button('脚注 1',()=>jump('methods-1',true),'footnote-ref');number.setAttribute('aria-label','返回脚注 1 的正文位置');wrap.prepend(number);
+      }
+    }
+    return wrap;
+  }
+  function renderTable(blocks){
+    const table=document.createElement('table'),caption=document.createElement('caption');caption.className='table-caption';caption.textContent='表 1 · 关联估计';table.append(caption);
+    const head=document.createElement('tr');for(const name of ['指标','估计值']){const th=document.createElement('th');th.textContent=name;head.append(th)}table.append(head);
+    for(const [i,block] of blocks.entries()){
+      const tr=document.createElement('tr'),label=document.createElement('td');label.textContent=i===0?'绿地暴露':'样本量';tr.append(label);
+      const td=document.createElement('td'),wrap=makeBlock(block);td.append(wrap);tr.append(td);table.append(tr);
+    }
+    return table;
+  }
+  function renderPaper(){
+    const paper=$('paper');paper.replaceChildren();
+    const title=document.createElement('h1');title.textContent='城市绿地与居民睡眠质量';paper.append(title);
+    const lead=document.createElement('p');lead.className='lead';lead.textContent=`${$('format').selectedOptions[0].textContent} 样稿 · 冻结的可选文字快照`;paper.append(lead);
+    const blocks=blocksNow();let tableDone=false;
+    for(const section of SECTIONS){
+      const heading=document.createElement(`h${section.level+1}`);heading.id=`section-${section.id}`;heading.tabIndex=-1;heading.textContent=section.title;paper.append(heading);
+      for(const block of blocks.filter(item=>item.section===section.id)){
+        if(block.kind==='cell'){
+          if(!tableDone){paper.append(renderTable(blocks.filter(item=>item.kind==='cell')));tableDone=true}
+        }else paper.append(makeBlock(block));
+      }
+    }
+    renderOutline();updateMarks();updateCurrentSection();
+  }
+  function decorations(block){
+    const user=commentsNow().filter(item=>item.current?.block_id===block.id).map(item=>({id:item.id,start:item.current.start,end:item.current.end}));
+    const agents=agentItems().filter(item=>item.block_id===block.id).map(item=>{const start=block.text.indexOf(item.quote);return {id:item.id,start,end:start+item.quote.length}}).filter(item=>item.start>=0);
+    return [...user,...agents];
+  }
+  function updateMarks(){
+    const blocks=blocksNow();
+    for(const block of blocks){
+      const target=$('paper').querySelector(`[data-text-target][data-block-id="${block.id}"]`);if(!target)continue;
+      const marks=decorations(block),cuts=[0,block.text.length,...marks.flatMap(mark=>[mark.start,mark.end])].sort((a,b)=>a-b);
+      target.replaceChildren();
+      for(let i=0;i<cuts.length-1;i++){
+        const start=cuts[i],end=cuts[i+1];if(end<=start)continue;
+        const cover=marks.filter(mark=>mark.start<end&&mark.end>start);
+        if(!cover.length){addText(target,block.text.slice(start,end));continue}
+        const mark=document.createElement('mark');mark.textContent=block.text.slice(start,end);mark.className=`${cover.length>1?'overlap ':''}${cover.some(item=>item.id===activeId)?'active':''}`;mark.tabIndex=0;mark.setAttribute('role','button');mark.setAttribute('aria-label',`${cover.length} 条批注，按回车查看`);
+        const open=event=>{if(getSelection()?.toString())return;cover.length===1?activate(cover[0].id,true):openOverlap(cover.map(item=>item.id),event)};
+        mark.addEventListener('click',open);mark.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();open(event)}});target.append(mark);
+      }
+      const wrap=target.closest('[data-block-wrap]');wrap?.classList.toggle('targeted',marks.length>0);
+    }
+  }
+  function openOverlap(ids,event){
+    const menu=$('overlap-menu');menu.replaceChildren();for(const id of ids)menu.append(button(`${id.startsWith('A-')?'Agent':'我的'} · ${id}`,()=>{menu.hidden=true;activate(id,true)}));
+    const x=event.clientX||innerWidth/2,y=event.clientY||innerHeight/2;menu.style.left=`${Math.min(x,innerWidth-235)}px`;menu.style.top=`${Math.min(y+7,innerHeight-135)}px`;menu.hidden=false;menu.querySelector('button')?.focus();
+  }
+  function cardStatus(item){return item.id.startsWith('A-')?app.decisions[item.id]?.disposition||'pending':item.status}
+  function itemSection(item){
+    const blockId=item.id.startsWith('A-')?item.block_id:item.current?.block_id;
+    return blocksNow().find(block=>block.id===blockId)?.section||null;
+  }
+  function visible(item){
+    const origin=$('origin-filter').value,q=$('search').value.trim().toLowerCase();
+    const type=item.id.startsWith('A-')?'agent':'user';
+    const haystack=[item.id,item.body,item.title,item.original?.exact_quote,item.quote,item.evidence,itemSection(item)&&sectionName(itemSection(item))].join(' ').toLowerCase();
+    return (origin==='all'||origin===type)&&(!q||haystack.includes(q));
+  }
+  function renderCards(){
+    const root=$('cards');root.replaceChildren();const items=[...agentItems(),...commentsNow()];
+    $('rail-count').textContent=String(items.length);$('card-count').textContent=`显示 ${items.filter(item=>visible(item)||item.id===forcedId).length} / ${items.length} 项`;
+    const forcing=items.some(item=>item.id===forcedId&&!visible(item));$('forced').hidden=!forcing;$('forced').textContent=forcing?'已临时显示所选批注；原筛选条件保留。':'';
+    for(const section of SECTIONS){
+      const shown=items.filter(item=>itemSection(item)===section.id&&(visible(item)||item.id===forcedId));
+      if(shown.length)root.append(cardGroup(section.title,shown,section.id));
+    }
+    if(!root.children.length){const p=document.createElement('p');p.className='subtle';p.textContent='当前筛选下没有批注。';root.append(p)}
+  }
+  function cardGroup(title,items,key){
+    const group=document.createElement('details');group.className='group';group.open=!collapsed.has(key)||items.some(item=>item.id===forcedId);
+    group.addEventListener('toggle',()=>{group.open?collapsed.delete(key):collapsed.add(key)});
+    const summary=document.createElement('summary');summary.textContent=`${title} · ${items.length}`;group.append(summary);
+    const ordered=items.toSorted((a,b)=>{
+      const blockOrder=blocksNow().map(item=>item.id),ia=blockOrder.indexOf(a.current?.block_id||a.block_id),ib=blockOrder.indexOf(b.current?.block_id||b.block_id);
+      return ia-ib||(a.current?.start||0)-(b.current?.start||0);
+    });
+    for(const item of ordered)group.append(renderCard(item));return group;
+  }
+  function renderCard(item){
+    const agent=item.id.startsWith('A-'),card=document.createElement('section');card.className=`card ${agent?'agent':'user'} ${item.id===activeId?'active':''}`;card.dataset.cardId=item.id;
+    const top=document.createElement('div');top.className='card-top';const title=document.createElement('strong');title.textContent=agent?`Agent · ${item.title}`:`我的批注 · ${item.id}`;
+    const expand=button(item.id===activeId?'收起详情':'展开详情',()=>toggleCard(item.id),'expand');expand.setAttribute('aria-expanded',String(item.id===activeId));top.append(title,expand);card.append(top);
+    const status=document.createElement('small');status.textContent=`${agent?'Agent 审阅项':'用户批注'} · ${cardStatus(item)}`;card.append(status);
+    const quoteLabel=document.createElement('small');quoteLabel.textContent=agent?'证据原文':'原选文';card.append(quoteLabel);
+    const quote=document.createElement('blockquote');quote.textContent=agent?item.quote:item.original.exact_quote;card.append(quote);
+    if(item.id!==activeId){const p=document.createElement('p');p.textContent=agent?item.action:item.body||'待填写批注正文';card.append(p);return card}
+    if(agent){
+      const source=document.createElement('p');source.textContent=`原始证据：${item.evidence}`;card.append(source);
+      const action=document.createElement('p');action.textContent=`Agent 建议：${item.action}`;card.append(action);
+      card.append(fieldLabel('处理意见'));
+      const select=document.createElement('select');select.setAttribute('aria-label','处理 Agent 审阅项');for(const [value,label] of [['pending','待处理'],['include','采用'],['exclude','不采用'],['revise','需调整'],['defer','暂缓']]){const option=document.createElement('option');option.value=value;option.textContent=label;select.append(option)}select.value=app.decisions[item.id].disposition;select.addEventListener('change',()=>{app.decisions[item.id].disposition=select.value;save();renderCards();renderState()});card.append(select);
+      card.append(fieldLabel('给 Agent 的说明'));card.append(editArea(app.decisions[item.id].note,'给 Agent 的说明',value=>{app.decisions[item.id].note=value}));
+      card.append(fieldLabel('建议修改文本（可选）'));card.append(editArea(app.decisions[item.id].proposed_text||'','建议修改文本',value=>{app.decisions[item.id].proposed_text=value||null}));
+    }else{
+      const badge=document.createElement('span');badge.className='status';badge.textContent=item.status;card.append(badge);
+      card.append(fieldLabel('批注正文'));card.append(editArea(item.body,'批注正文',value=>{app.comments.find(c=>c.id===item.id).body=value}));
+      card.append(fieldLabel('建议修改文本（可选）'));card.append(editArea(item.suggested_text,'建议修改文本',value=>{app.comments.find(c=>c.id===item.id).suggested_text=value}));
+      const actions=document.createElement('div');actions.className='actions';actions.append(button('定位正文',()=>jump(item.current.block_id,true)));
+      actions.append(button('删除',()=>removeComment(item.id),'danger'));card.append(actions);
+    }
+    return card;
+  }
+  function fieldLabel(text){const label=document.createElement('label');label.textContent=text;return label}
+  function editArea(value,label,onEdit){const field=document.createElement('textarea');field.value=value||'';field.setAttribute('aria-label',label);field.addEventListener('input',()=>{onEdit(field.value);save();renderState()});return field}
+  function toggleCard(id){activeId=activeId===id?null:id;renderCards();updateMarks();renderState()}
+  function activate(id,fromDocument){
+    activeId=id;const item=commentsNow().find(x=>x.id===id)||agentItems().find(x=>x.id===id);
+    if(!item)return;
+    if(fromDocument){forcedId=id;collapsed.delete(itemSection(item)||'unmatched')}
+    renderCards();updateMarks();renderState();
+    const card=$('cards').querySelector(`[data-card-id="${id}"]`);card?.scrollIntoView({block:'nearest'});
+    if(fromDocument)(card?.querySelector('textarea,select,.expand'))?.focus({preventScroll:true});
+    else if(item.current?.block_id||item.block_id)jump(item.current?.block_id||item.block_id,true);
+  }
+  function removeComment(id){if(!confirm('删除这条原型批注？'))return;app.comments=app.comments.filter(item=>item.id!==id);activeId=app.comments[0]?.id||null;forcedId=null;save();render(false);notify('批注已从草稿移除；再次导出会得到新的完整快照。')}
+  function applyAnchor(block,start,end){
+    const anchor=makeAnchor(block,start,end,blocksNow(),snapshotNow());
+    const id=`U-${Date.now().toString(36)}-${app.comments.length+1}`;app.comments.push({id,body:'',suggested_text:'',original:anchor});activeId=id;notify('已添加批注，请在右侧填写正文。');
+    pending=null;$('selection-action').hidden=true;getSelection()?.removeAllRanges();save();render(false);
+    $('cards').querySelector(`[data-card-id="${activeId}"] textarea`)?.focus();
+  }
+  function whole(id){const block=blocksNow().find(item=>item.id===id);if(block)applyAnchor(block,0,block.text.length)}
+  function rangeOffset(target,node,offset){const range=document.createRange();range.selectNodeContents(target);range.setEnd(node,offset);return range.toString().length}
+  function captureSelection(){
+    const selection=getSelection();if(!selection||selection.isCollapsed||!selection.rangeCount)return;
+    const range=selection.getRangeAt(0),start=(range.startContainer.nodeType===1?range.startContainer:range.startContainer.parentElement)?.closest?.('[data-text-target]'),end=(range.endContainer.nodeType===1?range.endContainer:range.endContainer.parentElement)?.closest?.('[data-text-target]');
+    if(!start||start!==end){pending=null;$('selection-action').hidden=true;notify('这次选区跨越不同内容，请分别批注。');return}
+    const block=blocksNow().find(item=>item.id===start.dataset.blockId);
+    if(!block||block.whole){pending=null;$('selection-action').hidden=true;notify('此处请使用整体批注按钮。');return}
+    const first=rangeOffset(start,range.startContainer,range.startOffset),last=rangeOffset(start,range.endContainer,range.endOffset);
+    if(last<=first)return;pending={id:block.id,start:first,end:last};
+    const rect=range.getBoundingClientRect(),action=$('selection-action');action.textContent='添加批注';action.style.left=`${Math.min(Math.max(10,rect.left),innerWidth-130)}px`;action.style.top=`${Math.min(Math.max(10,rect.bottom+7),innerHeight-48)}px`;action.hidden=false;
+  }
+  function jump(id,focus){
+    const target=$('paper').querySelector(`[data-text-target][data-block-id="${id}"],#section-${id}`);if(!target)return;
+    const box=$('paper-scroll');box.scrollTo({top:box.scrollTop+target.getBoundingClientRect().top-box.getBoundingClientRect().top-box.clientHeight*.28,behavior:'smooth'});
+    const wrap=target.closest('[data-block-wrap]')||target;wrap.classList.add('flash');setTimeout(()=>wrap.classList.remove('flash'),1300);
+    if(focus)target.focus({preventScroll:true});
+  }
+  function updateCurrentSection(){
+    const headings=[...$('paper').querySelectorAll('h2[id],h3[id],h4[id]')];let current=headings[0]?.id?.slice(8);
+    for(const heading of headings)if(heading.getBoundingClientRect().top<=$('paper-scroll').getBoundingClientRect().top+80)current=heading.id.slice(8);
+    for(const button of $('outline').querySelectorAll('[data-section-link]'))button.classList.toggle('current',button.dataset.sectionLink===current);
+  }
+  function renderState(){
+    if(!app)return;
+    const snap=snapshotNow(),comments=commentsNow();$('snapshot-label').textContent=`输入 ${snap.input_id} · 可见快照 ${snap.render_id} · 第 ${app.revision} 次导出`;
+    $('state').textContent=JSON.stringify({format:app.format,session_id:app.session_id,export_revision:app.revision,frozen_snapshot:snap,comments:comments.map(({id,body,original,current,status})=>({id,body,original,current,status})),agent_decisions:agentItems().map(item=>({item_id:item.id,...app.decisions[item.id]}))},null,2);
+  }
+  function render(full){if(full)renderPaper();else updateMarks();renderCards();renderState();$('selection-action').hidden=true;pending=null}
+  function download(data,name){const blob=new Blob([`${JSON.stringify(data,null,2)}\n`],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+  function exportResult(){
+    if(app.comments.some(item=>!item.body.trim())){notify('请先填写所有新批注的正文，再导出。');const missing=app.comments.find(item=>!item.body.trim());activate(missing.id,true);return}
+    app.revision++;save();const snap=snapshotNow();
+    const result={schema_version:'prototype-review-workspace-result.v2',workspace_id:`demo-${app.format}`,review_session_id:app.session_id,export_revision:app.revision,input_snapshot:snap.input_id,render_snapshot:snap.render_id,agent_decisions:agentItems().map(item=>({item_id:item.id,...app.decisions[item.id]})),user_comments:app.comments.map(({id,body,suggested_text,original})=>({comment_id:id,body,suggested_text:suggested_text||null,anchor:original})),overall_note:app.overall_note,exported_at:new Date().toISOString()};
+    download(result,`prototype-review-${app.format}-${app.revision}.json`);renderState();notify('已导出完整原型快照；可继续编辑并再次导出。');
+  }
+  function showHandoff(changed){
+    $('handoff-explanation').textContent=changed
+      ? 'Agent 发现当前原稿与生成审阅件时保留的原稿不同。批注仍对应冻结审阅件；Agent 列出差异和受影响意见，询问你如何继续，再决定处理旧意见或生成新审阅件。'
+      : 'Agent 核对当前原稿与冻结原稿一致，依据原选文和上下文处理批注。若具体源码位置仍有歧义，Agent 询问你。处理完成后生成新审阅件，已处理的批注不带入。';
+    if(!$('handoff-dialog').open)$('handoff-dialog').showModal();
+  }
+  function selectText(id,fragment){
+    const target=$('paper').querySelector(`[data-text-target][data-block-id="${id}"]`),block=blocksNow().find(item=>item.id===id);if(!target||!block)return;
+    const start=block.text.indexOf(fragment);if(start<0)return;const walker=document.createTreeWalker(target,NodeFilter.SHOW_TEXT);let node,offset=0,first=null,last=null;
+    while((node=walker.nextNode())){const next=offset+node.textContent.length;if(!first&&start<next)first={node,at:start-offset};if(!last&&start+fragment.length<=next)last={node,at:start+fragment.length-offset};offset=next;if(first&&last)break}
+    if(!first||!last)return;const range=document.createRange();range.setStart(first.node,first.at);range.setEnd(last.node,last.at);getSelection().removeAllRanges();getSelection().addRange(range);jump(id,false);captureSelection();
+  }
+  function seedDense(){
+    const blocks=blocksNow(),snap=snapshotNow();for(let i=1;i<=12;i++){const block=blocks.find(item=>item.id===`discussion-extra-${i}`);if(app.comments.some(item=>item.original.block_hint===block.id))continue;app.comments.push({id:`U-DENSE-${i}`,body:`第 ${i} 段的示例批注。`,suggested_text:'',original:makeAnchor(block,0,Math.min(12,block.text.length),blocks,snap)})}
+    save();render(false);notify('已加入 12 条批注，可试右侧折叠与筛选。');
+  }
+  const GUIDES={
+    selection:{title:'划选与重叠',description:'试单段选文、右侧编辑、同一处多条高亮，以及跨对象选区提示。',steps:[
+      ['重置并打开 Markdown 样稿',()=>reset('markdown')],['划选“城市绿地暴露”',()=>selectText('intro-1','城市绿地暴露')],['把选区加入右侧',()=>pending&&applyAnchor(blocksNow().find(b=>b.id===pending.id),pending.start,pending.end)],['查看重叠批注',()=>{getSelection()?.removeAllRanges();$('paper').querySelector('mark.overlap')?.click()}],['尝试跨块选区',()=>{const a=$('paper').querySelector('[data-block-id="intro-1"]'),b=$('paper').querySelector('[data-block-id="intro-cite"]'),r=document.createRange();r.setStart(a,0);r.setEnd(b,b.childNodes.length);getSelection().removeAllRanges();getSelection().addRange(r);captureSelection()}]
+    ]},
+    special:{title:'特殊内容',description:'试公式、表格、代码、脚注、参考文献、原始 LaTeX 与无说明图片的批注范围。',steps:[
+      ['打开 LaTeX 样稿',()=>load('latex')],['公式整体批注',()=>whole('methods-formula')],['代码中划选',()=>selectText('methods-code','sleep ~ green')],['脚注中划选',()=>selectText('methods-footnote','问卷分数')],['原始 LaTeX 中划选',()=>selectText('raw-latex','\\specialvalue{0.18}')],['无说明图片整体批注',()=>whole('results-image-plain')]
+    ]},
+    frozen:{title:'冻结与 Agent 交接',description:'审阅页始终是同一份快照。原稿是否变化只在结果交给 Agent 后核对，不会改变页面上已经写好的批注位置。',steps:[
+      ['打开 LaTeX 冻结审阅件',()=>load('latex')],['原稿未改：查看 Agent 如何处理',()=>showHandoff(false)],['原稿已改：查看 Agent 如何询问',()=>showHandoff(true)],['导出冻结批注结果',exportResult],['查看下一轮新审阅件',()=>load('next')]
+    ]},
+    long:{title:'长文档与筛选',description:'试密集批注、折叠章节、搜索、来源筛选和从正文高亮临时显示被隐藏卡片。',steps:[
+      ['打开 Quarto 样稿',()=>load('quarto')],['加入 12 条批注',seedDense],['只看 Agent 项',()=>{$('origin-filter').value='agent';renderCards()}],['从正文打开用户批注',()=>activate('U-001',true)],['导出冻结批注结果',exportResult]
+    ]},
+    handoff:{title:'导出与旧版',description:'试零预置项和新版结果导出；旧版 v1 草稿与结果沿现有工作台和 Agent 流程处理。',steps:[
+      ['打开无预置项样稿',()=>load('empty')],['整段建批注',()=>whole('methods-1')],['填写新批注',()=>{const item=app.comments.at(-1);if(item){item.body='请补充参与者招募过程。';save();render(false)}}],['导出新版原型快照',exportResult],['查看旧版草稿与结果的处理方式',()=>$('legacy-dialog').showModal()]
+    ]}
+  };
+  function renderGuide(){
+    const tabs=$('guide-tabs');tabs.replaceChildren();for(const [id,item] of Object.entries(GUIDES)){const tab=button(item.title,()=>{guide=id;renderGuide()});tab.setAttribute('role','tab');tab.setAttribute('aria-selected',String(guide===id));tabs.append(tab)}
+    $('guide-description').textContent=GUIDES[guide].description;const steps=$('guide-steps');steps.replaceChildren();GUIDES[guide].steps.forEach(([label,run],i)=>steps.append(button(`${i+1}. ${label}`,run)));
+  }
+  $('format').addEventListener('change',event=>load(event.target.value));
+  $('reset').addEventListener('click',()=>reset());$('export').addEventListener('click',exportResult);
+  for(const id of ['search','origin-filter'])$(id).addEventListener(id==='search'?'input':'change',()=>{forcedId=null;renderCards()});
+  $('overall').addEventListener('input',()=>{app.overall_note=$('overall').value;save();renderState()});
+  $('paper').addEventListener('mouseup',event=>{if(!event.target.closest('button'))captureSelection()});
+  $('paper').addEventListener('keyup',event=>{if(event.key.startsWith('Arrow')&&event.shiftKey)captureSelection()});
+  $('paper-scroll').addEventListener('scroll',updateCurrentSection,{passive:true});
+  $('selection-action').addEventListener('pointerdown',event=>event.preventDefault());
+  $('selection-action').addEventListener('click',()=>{if(!pending)return;const block=blocksNow().find(item=>item.id===pending.id);if(block)applyAnchor(block,pending.start,pending.end)});
+  $('legacy-close').addEventListener('click',()=>$('legacy-dialog').close());
+  $('source-same').addEventListener('click',()=>showHandoff(false));$('source-changed').addEventListener('click',()=>showHandoff(true));$('handoff-close').addEventListener('click',()=>$('handoff-dialog').close());
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'){$('overlap-menu').hidden=true;$('selection-action').hidden=true;pending=null}});
+  document.addEventListener('click',event=>{if(!event.target.closest('#overlap-menu,mark'))$('overlap-menu').hidden=true});
+  load('markdown');renderGuide();
+  </script>
+</body>
+</html>

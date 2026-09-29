@@ -46,6 +46,7 @@
     "check": "tsc -p tsconfig.json",
     "lint": "eslint .",
     "dev:harness": "node scripts/run-skill-harness.mjs",
+    "dev:review-workspace": "node scripts/run-skill-harness.mjs --review-workspace",
     "dogfood": "node scripts/dogfood.mjs",
     "dogfood:test": "pnpm build && node --test tests/dogfood-harness.test.mjs",
     "cli:handbook": "pnpm build && node scripts/generate-docs.mjs --handbook-only",
