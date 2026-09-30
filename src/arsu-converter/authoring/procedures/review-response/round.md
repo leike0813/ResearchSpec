@@ -12,7 +12,7 @@ Execute one complete revision-response round: author and confirm comment-scoped 
    - explicitly set `workflow_state.active_comment_id`; never switch silently;
    - write `strategy_cards` with `proposed_stance` and `stance_rationale`;
    - write at least one `strategy_card_actions`, plus target locations, evidence items, pending confirmations, and supplement suggestion/intake rows when needed;
-   - ask for per-comment confirmation before writing manuscript and response drafts;
+   - proactively prepare the current-strategy handoff using `workbench/README.md` and the package's `review-workspace/revision-master.html`, or review the same candidate in dialogue; ask for per-comment confirmation before writing manuscript and response drafts, binding the current active strategy candidate and its linked sources, evidence, and locations; a pending material blocker or substantive adjustment keeps that scope pending;
    - after confirmation, write `strategy_action_manuscript_execution_items` and `comment_response_drafts`; keep reviewer/editor excerpts in the source language and all normalized strategy/draft text in the working language;
    - mark a comment complete only when strategy, evidence judgment, manuscript draft, response draft, and one-to-one correspondence checks all pass.
 2. Keep comment-scoped blockers local. Use global blockers only for true stage-level blockers.
@@ -30,7 +30,9 @@ Execute one complete revision-response round: author and confirm comment-scoped 
 7. Export final deliverables with `scripts/export_manuscript_variants.py` where the script supports the confirmed target; optional `latexdiff` is advisory only and must never block completion.
 8. Ask the user when a change would alter the main line, core claims, or conclusions; when a closing strategy needs authorization; or when a response-only resolution is ambiguous.
 
-For the final interactive pass, review the current `working_manuscript` and open workboard items with the user in dialogue. Apply accepted edits to `working_manuscript` and commit them through the existing semantic revision log scripts. Keep the per-comment confirmation and evidence boundaries intact.
+For the final interactive pass, review the current `working_manuscript` and open workboard items with the user in dialogue or through the round handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and embed it in `review-workspace/revision-master.html`. The round view shows the frozen before/after excerpt, revision log, and thread-organized reply for every related location, plus actual delivery-file status and pending formal controls; a round seen marker is separate from feedback and never counts as confirmation. Apply accepted edits to `working_manuscript` and commit them through the existing semantic revision log scripts. Keep the per-comment confirmation and evidence boundaries intact.
+
+When a returned `revision-master-review-result.v1` is processed, validate it against the retained snapshot and recheck each scope's current database dependencies before writing, commit the processing receipt with the same semantic write in one task transaction, and regenerate the derived views. Keep pending or conflicting items traceable in the next handoff; recheck actual files, logs, and receipts after an interrupted manuscript write before retrying, without replaying blindly. Removing an earlier annotation never reverses an applied effect; an explicit request is required.
 
 ## Round Completion
 

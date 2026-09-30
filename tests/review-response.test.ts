@@ -170,6 +170,29 @@ void test("review-response graph run continues and completes through round-scope
   }
 });
 
+void test("review-response handoff packages publish the revision-master workbench resources", () => {
+  const handoffCapabilities = new Set([
+    "transform-review-response-comment-atomization",
+    "design-review-response-workboard-planning",
+    "generation-review-response-round",
+  ]);
+  const expected = [
+    "workbench/review_workbench.py",
+    "workbench/receipts.sql",
+    "workbench/README.md",
+    "review-workspace/revision-master.html",
+  ];
+  for (const source of REVISION_MASTER_AUTHORING_SOURCES) {
+    if (!handoffCapabilities.has(source.capability_id)) continue;
+    const authored = (source.package_assets ?? []).filter((asset) => asset.source_path !== undefined);
+    const outputPaths = authored.map((asset) => asset.output_path);
+    for (const expectedPath of expected) assert.ok(outputPaths.includes(expectedPath), `${source.capability_id} is missing ${expectedPath}`);
+    for (const asset of authored.filter((item) => expected.includes(item.output_path))) {
+      assert.equal(asset.extraction_artifact_id, undefined, `${source.capability_id} ${asset.output_path} must be project-owned`);
+    }
+  }
+});
+
 void test("revision-master authoring is deterministic and idempotent", async () => {
   const temp = await mkdtemp(path.join(tmpdir(), "researchspec-revision-authoring-"));
   try {

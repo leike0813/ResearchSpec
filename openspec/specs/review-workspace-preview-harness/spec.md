@@ -19,14 +19,14 @@ The project SHALL provide a development command that builds local previews from 
 - **THEN** the previews are generated and their local location is printed without launching a browser
 
 ### Requirement: Representative and switchable examples
-The preview SHALL provide valid v2 examples for article revision through annotation intake, paper-humanizer plan review, and verified-candidate comparison. Each of these three scenarios SHALL have a fixed pre-rendered toolchain example and a no-toolchain source fallback example; an additional Markdown workspace SHALL have no Agent items. The examples SHALL include substantial manuscript context and representative special blocks. The generated page SHALL derive from the current shipped page, add only development bootstrap controls, and use its ordinary import/export interactions. Review response SHALL be absent from new preview selection.
+The preview SHALL provide valid v2 examples for article revision through annotation intake, paper-humanizer plan review, and verified-candidate comparison. Each of these three scenarios SHALL have a fixed pre-rendered toolchain example and a no-toolchain source fallback example; an additional Markdown workspace SHALL have no Agent items. The examples SHALL include substantial manuscript context and representative special blocks. The generic generated page SHALL derive from the current shipped page, add only development bootstrap controls, and use its ordinary import/export interactions. Preview selection SHALL additionally include independent revision-master coverage, board, current-strategy, and round revision/response examples prepared through the production snapshot and embedded-HTML path from representative task-local SQLite inputs. Those examples SHALL exercise complex relations, multiple locations, unresolved material, and reliable and unavailable comparisons. Preview controls SHALL remain outside production artifacts.
 
 #### Scenario: Maintainer switches workflows
 - **WHEN** the maintainer selects another sample scenario or rendering outcome
 - **THEN** the corresponding populated review page appears with its frozen document and review items
 
 #### Scenario: Maintainer reviews real input
-- **WHEN** the maintainer imports a valid v2 workspace JSON into a preview
+- **WHEN** the maintainer imports a valid v2 workspace JSON into a generic preview
 - **THEN** the existing page handles that workspace and exports a normal v2 review result
 
 #### Scenario: Maintainer tries a blank review
@@ -36,6 +36,11 @@ The preview SHALL provide valid v2 examples for article revision through annotat
 #### Scenario: Host rendering tools are absent
 - **WHEN** the maintainer starts the preview without Quarto or Pandoc installed
 - **THEN** both pre-rendered and source-fallback examples are still generated from fixed reviewed inputs without running host tools
+
+#### Scenario: Maintainer reviews a revision-master handoff
+- **WHEN** the maintainer selects one of the four revision-master stages
+- **THEN** the production workbench opens with embedded frozen business data and exports the independent revision-master result contract
+- **AND** no development import bootstrap is required by the production handoff
 
 ### Requirement: Preview remains development-only
 The preview SHALL neither mutate ResearchSpec workflow state nor add a public command, dependency, or production review behavior.

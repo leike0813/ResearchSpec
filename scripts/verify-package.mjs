@@ -258,7 +258,7 @@ function verifyTarballFiles(files) {
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/SKILL.md",
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/LICENSE",
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/NOTICE.md",
-    "skills/arsu/researchspec-contracts.json", "artifacts/release/mvp-release-checklist.md", "review-workspace/index.html", "review-workspace/v1.html", "dist/src/cli/bin.js", "dist/src/annotation-intake.js", "dist/src/annotation-intake.d.ts", "dist/src/review-workspace.js", "dist/src/review-workspace.d.ts",
+    "skills/arsu/researchspec-contracts.json", "artifacts/release/mvp-release-checklist.md", "review-workspace/index.html", "review-workspace/v1.html", "review-workspace/revision-master.html", "dist/src/cli/bin.js", "dist/src/annotation-intake.js", "dist/src/annotation-intake.d.ts", "dist/src/review-workspace.js", "dist/src/review-workspace.d.ts",
   ];
   for (const skill of expectedArsuSkills) required.push(`skills/arsu/${skill}/SKILL.md`);
   for (const skill of expectedCapabilitySkills) {
@@ -299,7 +299,7 @@ function verifyTarballFiles(files) {
   );
   assert(adapterOpaqueFiles.length === 14, `Tarball Zotero opaque runtime metadata count mismatch: ${String(adapterOpaqueFiles.length)}`);
 
-  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/.*|artifacts\/(?:README\.md|release\/mvp-release-checklist\.md)|review-workspace\/(?:index|v1)\.html|dist\/src\/.*\.(?:js|d\.ts)|skills\/.*|literature-adapters\/.*)$/;
+  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/.*|artifacts\/(?:README\.md|release\/mvp-release-checklist\.md)|review-workspace\/(?:index|v1|revision-master)\.html|dist\/src\/.*\.(?:js|d\.ts)|skills\/.*|literature-adapters\/.*)$/;
   const retired = /^dist\/src\/adapters\/companion\/workflows\/(?:archive|check|context|explore|next|submit)\.js$/;
   for (const file of files) {
     assert(allowed.test(file), `Tarball contains a path outside the release allowlist: ${file}`);

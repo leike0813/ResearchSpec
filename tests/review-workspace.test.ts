@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
@@ -117,12 +118,15 @@ void test("preview samples use the real v2 adapters and embed manuscript content
     }
     if (id.startsWith("humanizer-candidate-")) assert.ok(sample.document.comparison?.rows.length);
     if (id.endsWith("fallback")) assert.ok(sample.document.blocks.every((block) => block.kind === "raw-source"));
+    const firstBlock = sample.document.blocks.find((block) => block.text.length > 0);
+    assert.ok(firstBlock);
     const commentBlocks = sample.document.comparison
-      ? [sample.document.comparison.rows[0]!.before_block_id, sample.document.comparison.rows[0]!.after_block_id]
-      : [sample.document.blocks.find((block) => block.text.length > 0)!.id];
+      ? [sample.document.comparison.rows[0].before_block_id, sample.document.comparison.rows[0].after_block_id]
+      : [firstBlock.id];
     const comments = commentBlocks.map((blockId, index) => {
-      const block = sample.document.blocks.find((entry) => entry.id === blockId)!;
-      return { comment_id: `U-${index + 1}`, origin: "user" as const, body: "Review this block", anchor: { kind: "whole" as const, snapshot_id: sample.snapshot_id, block_id: block.id, exact_quote: block.text, prefix: "", suffix: "", resource_id: block.resource_id } };
+      const block = sample.document.blocks.find((entry) => entry.id === blockId);
+      assert.ok(block);
+      return { comment_id: `U-${String(index + 1)}`, origin: "user" as const, body: "Review this block", anchor: { kind: "whole" as const, snapshot_id: sample.snapshot_id, block_id: block.id, exact_quote: block.text, prefix: "", suffix: "", resource_id: block.resource_id } };
     });
     const result = createReviewWorkspaceResultV2({ workspace: sample, revision: 1, exportedAt: "2026-09-29T10:00:00Z", comments });
     assert.equal(validateReviewResultAgainstWorkspace(result, sample).comments.length, commentBlocks.length);
@@ -140,11 +144,34 @@ void test("preview samples use the real v2 adapters and embed manuscript content
   assert.doesNotMatch(renderReviewWorkspacePreview(sourceHtml, samples["article-rendered"]), /<script>window\.__previewUnsafe/);
 });
 
-void test("new instruction hints expose humanizer browser review", () => {
+void test("new instruction hints expose humanizer and revision-master browser review", async () => {
   const humanizer = reviewWorkspaceInstruction({ profileId: "paper-humanizer", selector: "node:run/review", capabilityId: "check-paper-humanization-review", packageRoot: "/tmp/package" });
   assert.equal(humanizer?.adapter, "paper-humanizer");
   assert.equal(humanizer?.asset_path, path.join("/tmp/package", "review-workspace/index.html"));
-  const response = reviewWorkspaceInstruction({ profileId: "review-response", selector: "gate:run/review-response-strategy" });
-  assert.equal(response, undefined);
+  const root = await mkdtemp(path.join(tmpdir(), "researchspec-workbench-"));
+  try {
+    await mkdir(path.join(root, "review-workspace"), { recursive: true });
+    await mkdir(path.join(root, "workbench"), { recursive: true });
+    await writeFile(path.join(root, "review-workspace", "revision-master.html"), "<html></html>");
+    await writeFile(path.join(root, "workbench", "review_workbench.py"), "# tool");
+    await writeFile(path.join(root, "workbench", "README.md"), "# guide");
+    const coverage = reviewWorkspaceInstruction({ profileId: "review-response", selector: "node:run/comment-atomization", capabilityId: "transform-review-response-comment-atomization", packageRoot: root });
+    assert.equal(coverage?.adapter, "review-response");
+    assert.equal(coverage?.descriptor_schema, "revision-master-review-workspace.v1");
+    assert.equal(coverage?.result_schema, "revision-master-review-result.v1");
+    assert.deepEqual((coverage as { review_stages?: unknown } | undefined)?.review_stages, ["coverage"]);
+    assert.equal(coverage?.asset_path, path.join(root, "review-workspace", "revision-master.html"));
+    assert.equal((coverage as { tool_path?: unknown } | undefined)?.tool_path, path.join(root, "workbench", "review_workbench.py"));
+    assert.equal((coverage as { guide_path?: unknown } | undefined)?.guide_path, path.join(root, "workbench", "README.md"));
+    const missing = reviewWorkspaceInstruction({ profileId: "review-response", selector: "node:run/round", capabilityId: "generation-review-response-round", packageRoot: "/tmp/package" });
+    assert.equal(missing?.asset_path, null);
+    assert.equal((missing as { tool_path?: unknown } | undefined)?.tool_path, null);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+  const context = reviewWorkspaceInstruction({ profileId: "review-response", selector: "gate:run/review-response-strategy" });
+  assert.equal(context?.adapter, "review-response");
+  assert.equal((context as { review_stages?: unknown } | undefined)?.review_stages, null);
+  assert.equal(context?.asset_path, null);
   assert.equal(reviewWorkspaceInstruction({ profileId: "minimal", selector: "profile:minimal" }), undefined);
 });

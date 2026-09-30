@@ -79,6 +79,30 @@
 - 两包原有 `review-workspace/index.html` 与 `v1.html` 仍在 manifest 中，并在生成 SKILL 的 Knowledge 段限定为现有审阅件恢复时读取；Tools 与 Procedure 不再引导新 review-response 审阅打开浏览器。根页面与四份包内 v2 页面 SHA-256 均为 `9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc`，v1 恢复页不变。判定 `preserved`（既有资产）。
 - 对照 RM-CAP-04/05/06 提取正文与两份生成 SKILL：数据库只由既有脚本写入，每条评论确认、revision log 和 response coverage 均未减少；三个其他 revision-master 包未变化。全局 parity 47/47 operational，未出现知识引用、输出或流程门禁缺口。
 
+## 独立业务工作台复核（2026-09-30）
+
+逐包对照 `authoring/revision-master/capabilities/` 六份阶段提取件、生成的五份 SKILL、`knowledge/sql-write-recipes.md` 与实际运行资源。上游提取件及其索引没有修改。
+
+| 能力 | 判定 | 原文要求与本次承载 |
+| --- | --- | --- |
+| `design-review-response-intake` | preserved / adapted | RM-CAP-01 的“初始化运行时数据库与首批只读视图”及语言确认仍由 intake 实现。生成 schema、YAML 和 Jinja 模板剥离提取说明头，保留上游正文；加入 pinned 上游 `messages/en.json`、`zh-CN.json`，让实际初始化/渲染可执行。 |
+| `analysis-review-response-manuscript-analysis` | preserved / adapted | RM-CAP-02 的“建立足以支撑后续映射和策略制定的全文结构理解”仍包含章节、论点、证据、风格和 resume。只同步同一套可执行 runtime 资源，无新浏览器交接。 |
+| `transform-review-response-comment-atomization` | adapted | RM-CAP-03 的“明确原始意见块到 atomic item 的拆分、合并与去重关系”及 30%/50% 覆盖阈值保留。新增 coverage 冻结交接，全部原文 span、thread/atomic 多对多关系来自 task-bounded SQL 投影；确认仍绑定整体映射。 |
+| `design-review-response-workboard-planning` | adapted | RM-CAP-04 的“优先级、依赖、证据缺口、原文位置与下一步动作”保留。board 内部确认覆盖完整候选；筛选不缩小范围，材料文件仍由 Agent 接收。 |
+| `generation-review-response-round` | adapted | RM-CAP-05 的“把局部 blocker 留在 comment 作用域”与显式 active comment、RM-CAP-06 的“Agent-owned revision log 与 response 覆盖闭环”保留。新增 current-strategy 和 round 交接；seen 不构成确认，文件编辑与 semantic log 仍由 Agent 执行。 |
+
+新增 `workbench/{review_workbench.py,receipts.sql,README.md}` 与 `review-workspace/revision-master.html` 从项目自有 `source_path` 发布到三个 handoff 包，不声明为原上游提取正文。页面使用独立业务协议，并直接复用公共捕获、区块与锚点规则。两个旧页面继续作为原协议的恢复资源。
+
+实际验证包括只读 SQLite 投影/检查、缺字段与捕获期间变化、独立范围与依赖闭包、可信留存件、UTF-16 锚点、重复与分歧接收、失败回滚、修改日志和 gate-and-render。生产页在真实浏览器直接打开；实际导出的策略确认通过参数化 `recipe_stage5_confirm_strategy` 与 receipt 共同提交，再导入同件返回 `already_applied`，随后生成 19 份派生视图。预览夹具的缺材继续返回 `issues_found`，未冒充形式完成。
+
+流程权威复核：五份 SKILL 无 next-node/next-phase/agent-team 模式；五个能力包和既有图谱不增删。页面只保存本地草稿/导出结果，准备与检查不调用初始化或渲染；接收事务只写 task SQLite。正式 Gate/Decision 仍需要对话中的独立人类确认与 CLI 操作。验收证据见 `openspec/changes/add-revision-master-interactive-workbench/verification.md`。
+
+### 已批准原型的生产落实复核
+
+用户拒绝首版通用表格布局后，生产 HTML 恢复 #14 的 B 台账、编号阶段、分组整卡、阶段阅读引导，以及右侧来源/反馈分区。coverage 原文片段可点选到具体 atomic item；工作板、策略与 round 分别以工作卡、行动/证据卡、回复/前后对照为主。预览恢复原型的六条意见、五项修订与完整稿件/日志/回复案例，仍通过实际 SQLite 投影和生产准备 API 生成。此为交互承载的 adapted 修正；快照、范围确认、正式关口与 Agent 写入权威未改变。修正后的导出对照独立留存件校验通过；用户生产页复核尚未完成。
+
+新增文件/日志已落盘而 receipt 缺失的中断用例：范围漂移导致 pending，无回调重放，实际效果保留；新快照保留待处理反馈，拒绝旧结果转挂。没有引入按文字相似度推断已处理的机制。
+
 ## 结论
 
-declared-fit-with-notes。新 review-response 审阅继续在对话和 SQLite 流程中进行；两个既有工作区页面仍可恢复旧审阅件，v1 字节不变。三个未受影响能力无漂移，也未发现阻塞性 gap。共享静态资产仍需随根页面同步审计。
+declared-fit-with-notes。新增独立工作台保留五个能力的业务义务与流程权威；未发现阻塞性语义 gap。生产页的人工操作验收仍按本 change 的任务 7.3 等待用户复核，自动检查不替代该项。SQLite 事务仅覆盖数据库语义和 receipt，物理稿件编辑的中断恢复仍需要核对实际文件与日志。

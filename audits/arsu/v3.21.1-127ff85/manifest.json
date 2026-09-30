@@ -13,28 +13,28 @@
     "error": 0
   },
   "conversion": {
-    "registry_sha256": "15662e9ba3998c42c960c32622302104590811d2d10f588ddaea1d8ffbebd9c9",
+    "registry_sha256": "ebc28edd47ade83d82024e9dea5e45433c2bd8b2a8730c5ffe61c3ef331b613d",
     "capability_count": 47,
     "operational_count": 47,
-    "packages_tree_sha256": "9b10ac3e4a91d1f42a56c2196110a95f01bffb7f3cb0b05453c5e8f61c2618cc"
+    "packages_tree_sha256": "bf069380fdf5910d990949fffb4708cefce5f630ef8e8cb53f962c88d4a6c8df"
   },
   "review": {
-    "parity_report_sha256": "ed670331e8b9bec75f55ee6e2a1b92c7e6ff6c1ff094c0e57081a1195cec5bd8",
-    "section_coverage": 0.9456871931208453,
+    "parity_report_sha256": "f924ee4c156a5c9d43fca2b3ab15fb727401981ff4cab1ef018ce8782e170357",
+    "section_coverage": 0.9488786824825476,
     "rule_coverage": 0.9445787997591882,
     "below_section_threshold": [],
     "below_rule_threshold": [],
     "output_missing": [],
     "flow_retained": [],
-    "review_html_sha256": "ea29cd3d884cb59f21d1cce6c6853349f8e3e05a25eb68c01dacae3e471baf76",
-    "assessment_html_sha256": "826b4fd1ccff8f92b2907af8cc4e500737b9dbc652fbc05e58e0040e1ecbcae8",
-    "gap_review_html_sha256": "23bc1803e526185cdf0fb3605681c47e0fc71ac4ee4fc753d533d9fda5c67589"
+    "review_html_sha256": "b2076db90256276668d8986f36759c2110b32e2e88d22c323a862657cf394977",
+    "assessment_html_sha256": "6eb34d3774cdb03403b77ed58d9c9b42822062cdb2aa94b95976955f62305a18",
+    "gap_review_html_sha256": "79c9adaa0d8e108242fb503d68b08c3de07f6c544cf5c042839b820b101e8839"
   },
   "maintenance": {
     "skill_sha256": "b0097664e5eebf76a5af772f4cef4beab9434314ce87a128adb5fa7adaada590",
-    "record_sha256": "d4cacd2ec8e3b1a49454b5d0e72dada90db375db092b6b37935dff5114c771d1"
+    "record_sha256": "ab9d4b2cb4cbadf92413a7124982ab199b77915aec755ef8734add7502845959"
   },
   "schema_version": "1",
   "anchor_id": "v3.21.1-127ff85",
-  "created_at": "2026-09-29T13:50:52.530Z"
+  "created_at": "2026-09-30T06:45:37.653Z"
 }

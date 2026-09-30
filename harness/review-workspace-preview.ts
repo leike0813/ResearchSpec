@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import { REVISION_MASTER_PREVIEW_CASES } from "./revision-master-preview.js";
 
 import { sha256 } from "../src/core/workspace/write-plan.js";
 import {
@@ -144,7 +145,7 @@ function rendered(source: string, sourcePath: string): ReviewBlock[] {
 
 function fallback(source: string, sourcePath: string): ReviewBlock[] {
   return source.trim().split(/\n\s*\n/).map((text, index) => ({
-    id: `raw-${index + 1}`, kind: "raw-source", text, runs: [], level: null,
+    id: `raw-${String(index + 1)}`, kind: "raw-source", text, runs: [], level: null,
     source_path: sourcePath, resource_id: null, note: "未运行项目渲染；显示冻结来源片段",
   }));
 }
@@ -175,18 +176,18 @@ export function reviewWorkspacePreviewSamples(): Record<ReviewPreviewCase, Revie
       workspaceId: `preview-${articleId}`, title: raw ? "文章修订 · 来源回退" : "文章修订 · 排版审阅", manuscript: { path: "paper.md", content: article },
       frozen: frozen(articleId, "paper.md", { "paper.md": article, [imagePath]: Buffer.from(png, "base64") }),
       blocks: articleBlocks, assets: raw ? [] : [imageAsset],
-      itemLocations: annotationIds.map((id, index) => place(articleBlocks, id, annotationPhrases[index]!)),
+      itemLocations: annotationIds.map((id, index) => place(articleBlocks, id, annotationPhrases[index])),
       candidate: {
         schema_version: "1", annotation_set_id: "preview-article", intake_session_id: "preview-article", manuscript: { path: "paper.md", sha256: sha256(article) },
         raw_sources: [{ source_id: "feedback", path: "feedback.md", sha256: sha256("fictional feedback"), format: "markdown_feedback", media_type: "text/markdown" }],
-        annotations: annotationIds.map((id, index) => ({ annotation_id: id, raw_body: ["请明确横断面设计的限制。", "请说明未测混杂因素。", "分层结果的不确定性应保留。", "未完成分析不能写成已有证据。", "讨论中的推广范围需要收窄。"][index]!, source_pointer: `/feedback/${index}`, source_ref: { kind: "review_delta" as const, source_id: "feedback", delta_id: `D-${index + 1}` }, target: { kind: "document" as const }, agent_interpretation: "对照原稿核查并保留证据边界", expected_action: ["限定结论", "补充限制", "保留区间", "标明缺口", "收窄推广"][index]!, semantic_impact: { level: "ordinary" as const }, clarification: null })),
+        annotations: annotationIds.map((id, index) => ({ annotation_id: id, raw_body: ["请明确横断面设计的限制。", "请说明未测混杂因素。", "分层结果的不确定性应保留。", "未完成分析不能写成已有证据。", "讨论中的推广范围需要收窄。"][index], source_pointer: `/feedback/${String(index)}`, source_ref: { kind: "review_delta" as const, source_id: "feedback", delta_id: `D-${String(index + 1)}` }, target: { kind: "document" as const }, agent_interpretation: "对照原稿核查并保留证据边界", expected_action: ["限定结论", "补充限制", "保留区间", "标明缺口", "收窄推广"][index], semantic_impact: { level: "ordinary" as const }, clarification: null })),
       },
     });
 
     const planId = `humanizer-plan-${mode}` as ReviewPreviewCase;
     const baseBlocks = raw ? fallback(base, "base.qmd") : rendered(base, "base.qmd");
     const phrases = ["显著改善", "没有测量轮班工作", "没有完成夜间噪声", "适用于所有城市人群"];
-    const locations = plan.items.map((item, index) => place(baseBlocks, item.item_id, phrases[index]!));
+    const locations = plan.items.map((item, index) => place(baseBlocks, item.item_id, phrases[index]));
     cases[planId] = paperHumanizerReviewWorkspaceV2({
       workspaceId: `preview-${planId}`, title: raw ? "语言润色方案 · 来源回退" : "语言润色方案 · 排版审阅", selector: "gate:preview/plan", formalAction: "gate",
       manuscript: { path: "base.qmd", content: base, format: "quarto" }, frozen: frozen(planId, "base.qmd", { "base.qmd": base }),
@@ -200,7 +201,7 @@ export function reviewWorkspacePreviewSamples(): Record<ReviewPreviewCase, Revie
       workspaceId: `preview-${compareId}`, title: raw ? "候选稿逐段比较 · 来源回退" : "候选稿逐段比较 · 排版审阅", selector: "node:preview/revision", formalAction: "none",
       manuscript: { path: "candidate.qmd", content: candidate, format: "quarto" }, base: { path: "base.qmd", content: base, format: "quarto" },
       frozen: frozen(compareId, "candidate.qmd", { "base.qmd": base, "candidate.qmd": candidate }),
-      blocks: candidateBlocks, baseBlocks, itemLocations: plan.items.map((item, index) => place(candidateBlocks, item.item_id, comparePhrases[index]!)), plan,
+      blocks: candidateBlocks, baseBlocks, itemLocations: plan.items.map((item, index) => place(candidateBlocks, item.item_id, comparePhrases[index])), plan,
     });
   }
   const emptyText = "# 空白审阅\n\n这份 Markdown 审阅件没有预置 Agent 项。请选中正文中的词语，添加一条自己的批注并导出。\n";
@@ -211,7 +212,7 @@ export function reviewWorkspacePreviewSamples(): Record<ReviewPreviewCase, Revie
 export function renderReviewWorkspacePreview(sourceHtml: string, sample: ReviewWorkspaceV2): string {
   if (!sourceHtml.includes("</body>")) throw new Error("Review workspace HTML has no closing body tag.");
   const encoded = Buffer.from(JSON.stringify(sample), "utf8").toString("base64");
-  const cases = JSON.stringify(REVIEW_PREVIEW_CASES);
+  const cases = JSON.stringify([...REVIEW_PREVIEW_CASES, ...REVISION_MASTER_PREVIEW_CASES]);
   const selected = sample.workspace_id.replace(/^preview-/, "");
   const bootstrap = `
   <script>

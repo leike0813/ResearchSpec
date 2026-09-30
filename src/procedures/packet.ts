@@ -1,4 +1,5 @@
 import { sha256 } from "../core/workspace/write-plan.js";
+import { reviewWorkspaceInstruction } from "../review-workspace/instructions.js";
 import { readProcedureContent, type ProcedureDefinition, type ProcedureMode } from "./catalog.js";
 
 export type ProcedureDelegation =
@@ -18,6 +19,12 @@ export interface ProcedurePacketOptions {
 export async function buildProcedurePacket(procedure: ProcedureDefinition, options: ProcedurePacketOptions) {
   if (!procedure.modes.includes(options.mode)) throw new Error(`Procedure ${procedure.id} does not support ${options.mode} activation.`);
   const content = await readProcedureContent(procedure);
+  const reviewWorkspace = reviewWorkspaceInstruction({
+    profileId: "",
+    selector: procedure.selector,
+    capabilityId: procedure.id,
+    packageRoot: procedure.packageRoot,
+  });
   return {
     schema_version: "1" as const,
     activation_mode: options.mode,
@@ -50,6 +57,7 @@ export async function buildProcedurePacket(procedure: ProcedureDefinition, optio
       action: "return_outputs",
       instruction: "Return the declared ordinary output paths to the caller. Do not mutate ResearchSpec workflow state.",
     },
+    ...(reviewWorkspace === undefined ? {} : { review_workspace: reviewWorkspace }),
   };
 }
 

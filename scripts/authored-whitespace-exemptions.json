@@ -24,7 +24,7 @@
     {
       "path": "skills/capabilities/analysis-review-response-manuscript-analysis/assets/templates/supplement-suggestion-plan.md.j2",
       "byte_preserved": true,
-      "sha256": "be20495c47654c84feb7c7b230e2e117c918ae6c4dbdfcdc0d16ac976fe44ee6",
+      "sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6",
       "evidence": {
         "catalog_path": "authoring/revision-master/extraction-index.json",
         "artifact_id": "RM-ASSET-26",
@@ -34,7 +34,7 @@
     {
       "path": "skills/capabilities/design-review-response-intake/assets/templates/supplement-suggestion-plan.md.j2",
       "byte_preserved": true,
-      "sha256": "be20495c47654c84feb7c7b230e2e117c918ae6c4dbdfcdc0d16ac976fe44ee6",
+      "sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6",
       "evidence": {
         "catalog_path": "authoring/revision-master/extraction-index.json",
         "artifact_id": "RM-ASSET-26",
@@ -44,7 +44,7 @@
     {
       "path": "skills/capabilities/design-review-response-workboard-planning/assets/templates/supplement-suggestion-plan.md.j2",
       "byte_preserved": true,
-      "sha256": "be20495c47654c84feb7c7b230e2e117c918ae6c4dbdfcdc0d16ac976fe44ee6",
+      "sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6",
       "evidence": {
         "catalog_path": "authoring/revision-master/extraction-index.json",
         "artifact_id": "RM-ASSET-26",
@@ -54,7 +54,7 @@
     {
       "path": "skills/capabilities/generation-review-response-round/assets/templates/supplement-suggestion-plan.md.j2",
       "byte_preserved": true,
-      "sha256": "be20495c47654c84feb7c7b230e2e117c918ae6c4dbdfcdc0d16ac976fe44ee6",
+      "sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6",
       "evidence": {
         "catalog_path": "authoring/revision-master/extraction-index.json",
         "artifact_id": "RM-ASSET-26",
@@ -64,7 +64,7 @@
     {
       "path": "skills/capabilities/transform-review-response-comment-atomization/assets/templates/supplement-suggestion-plan.md.j2",
       "byte_preserved": true,
-      "sha256": "be20495c47654c84feb7c7b230e2e117c918ae6c4dbdfcdc0d16ac976fe44ee6",
+      "sha256": "742cb463e10053c78b6d240892449c4e64bb3fab3d309b364cbefbfa4b36bae6",
       "evidence": {
         "catalog_path": "authoring/revision-master/extraction-index.json",
         "artifact_id": "RM-ASSET-26",

@@ -1,8 +1,10 @@
 # 交互式论文审阅工作台
 
-当 paper-humanizer 的当前 `instructions --json` 含有 `review_workspace` 时，Agent 可以为方案审阅或已核验候选稿比较准备冻结的 `review-workspace.v2` JSON，并打开相应 capability package 中的 `review-workspace/index.html`。普通文章修订也可以通过现有 annotation-intake 适配器使用同一页面，无须新增图谱流程。review-response 的新审阅继续使用对话与原有 SQLite 流程；已经交付的旧审阅件仍按其原路径处理。也可以在对话中完成上述审阅；浏览器不是流程前提。
+当当前 `instructions --json` 含有 `review_workspace` 时，Agent 可以为审阅准备一份可直接用文件地址打开的本地静态页面。paper-humanizer 方案审阅、已核验候选稿比较以及 annotation-intake 修订使用通用 `review-workspace.v2` 页面（`review-workspace/index.html`，可能来自具体 capability package）；review-response 的语义审阅使用独立的 `revision-master-review-workspace.v1` 业务工作台（`review-workspace/revision-master.html`）。两者互不混用，已经交付的旧审阅件仍按其原路径处理。也可以在对话中完成同样的审阅；浏览器不是流程前提。
 
 “冻结”是这套流程的核心。准备阶段，Agent 把入口稿以及所有本地解析到的、构成审阅内容的手稿文件和图片复制到 `researchspec/` 之外的一个普通工作目录，记录按路径排序的 SHA-256 清单、入口路径和一个新的工作区标识。此后无论原稿是否被改动，页面始终显示并批注这份冻结版本。工作区 JSON 只携带可见的静态正文、公式和本地图片，不包含项目脚本，也不包含源文件树的可执行副本。工作区可以包含零个或多个 Agent 审阅项，因此也能用于纯用户批注。
+
+下面的页面与渲染、草稿与导出、交回 Agent 三节描述通用 `review-workspace.v2` 页面；review-response 的业务工作台见后一节。
 
 ## 页面与渲染
 
@@ -28,6 +30,51 @@
 
 随后 Agent 重新读取当前 selector 的 `instructions --json`，单独询问 Gate verdict 或 Decision choice，再调用现有 `decide` / `advance`。工作台不会直接改手稿、数据库、handoff 或 `researchspec/`，也不具备任何 CLI 权限。
 
+## revision-master 业务工作台（review-response）
+
+review-response 的审核使用独立业务工作台 `revision-master-review-workspace.v1`，结果契约为
+`revision-master-review-result.v1`。Agent 经包内生产准备路径，把已校验的冻结快照嵌进单文件
+`review-workspace/revision-master.html`，用户直接用文件地址打开即可，无需服务、网络或手动导入。
+页面默认只显示当前对象的相关稿件片段并列出全部关联位置，完整原始审阅文档与相关稿件按目录可达。
+Markdown、QMD、单文件 LaTeX 和 LaTeX project 沿用现有捕获、安全渲染与可读原文回退规则；无法可靠
+定位或渲染时保留可读原文并显式标注限制，不编造位置。
+
+工作台用同一台账承载四个阶段：comment atomization 后的意见覆盖、workboard 计划后的整块工作板、
+执行中的当前 active 策略、以及每轮接近结束时的改稿与回复。顶栏说明本次核对对象、确认范围、未解决
+问题和下一步；在对象间浏览或查看阻塞材料不会改变执行焦点、节点资格或 active 策略，需要改焦点时
+单独导出请求交给 Agent 评估。
+
+内部确认是显式的：`coverage` 绑定完整意见映射，`board` 绑定整块工作板，`strategy` 绑定当前
+策略候选及其依赖；round 只有独立的 seen 标记与反馈。访问对象、采用默认处置、导出结果或标记 seen
+都不产生确认；实质未决反馈或需要调整的处置会让对应范围保持 pending。补材建议导出为反馈，文件接收
+仍交给 Agent；拆合、依赖与策略调整以对象绑定请求导出，页面不直接编辑业务表。
+
+草稿只保存在当前浏览器，按工作区与快照标识隔离，编辑或删除草稿不会改动稿件、数据库或
+`researchspec/`。每次导出得到一份完整结果，绑定原快照与 context，包含稳定 `feedback_id`、独立
+`result_id`、本地导出修订号与时间，以及当前全部反馈类别；导出修订号和时间不跨浏览器决定权威。
+浏览器存储不可用时，页面提示本地恢复不可用，但仍允许审阅并导出当前内存草稿。
+
+把结果交回 Agent 后，Agent 先用独立留存的快照校验结果，并比较每个 scope 的语义依赖与已捕获材料：
+
+1. 依赖未变的独立 scope 可以接收，并通过包内语义写入应用，成功处理记录与该语义写入在同一任务
+   SQLite 事务内提交，随后重新生成派生的 Markdown 视图；
+2. 变化、有歧义或无法评估的 scope 显示相关差异并继续 pending，处理较早反馈会触发对剩余受影响
+   范围的重新评估；
+3. 相同 `feedback_id` 且 payload 未变的已应用反馈不重复写入；删除批注本身不撤销已完成的语义
+   效果；多浏览器分歧不按修订号或时间自动定序，而是请用户选择。
+
+内部确认被接收只写入相应语义状态，不自动决定任何正式图谱控制。正式 Gate verdict 与 Decision
+choice 仍需重新读取当前 selector 的 `instructions --json`，在对话中单独取得人工确认后通过 CLI
+执行；工作台不会改动 graph、handoff 或 `researchspec/`，也不具备任何 CLI 权限。浏览器不可用时，
+Agent 在对话中按相同候选范围和确认边界完成同一审阅。
+
 ## v1 恢复
 
 `review-workspace.v1` 及其结果仍按原有契约处理。新版页面会拒绝导入 v1 并说明恢复方式：未完成的 v1 草稿用保留的 `review-workspace/v1.html` 页面按原身份规则重新打开，此前导出的 v1 结果直接交给 Agent 走 v1 流程。v1 与 v2 不会混用，也不做迁移或隐式转换。
+
+## 维护者本地预览
+
+在仓库运行 `pnpm dev:review-workspace --no-open`，打开命令输出的本地 HTML。
+预览菜单包括通用 v2 样例和 revision-master 的四个交接阶段。四阶段样例从任务 SQLite
+与源稿经生产准备 API 生成，覆盖拆分与合并、多个位置、补材阻断、未定位意见和长稿目录。
+切换菜单仅存在于开发预览；实际交付件使用同一生产页面，不携带预览控件。

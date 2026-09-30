@@ -109,7 +109,7 @@ export function paperHumanizerComparisonReviewWorkspaceV2(input: V2ProjectionCon
   const rows = input.baseBlocks.map((base, index) => {
     const candidate = input.blocks[index];
     if (!candidate || base.kind !== candidate.kind || base.level !== candidate.level || base.source_path !== input.base.path || candidate.source_path !== input.manuscript.path) {
-      throw new Error(`Comparison blocks differ at ${index}.`);
+      throw new Error(`Comparison blocks differ at ${String(index)}.`);
     }
     return { before_block_id: `before-${base.id}`, after_block_id: `after-${candidate.id}` };
   });

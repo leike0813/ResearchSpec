@@ -6,7 +6,7 @@
 |---|---|
 | package count | 5 |
 | operational | 5 |
-| avg section coverage | 0.9466666666666667 |
+| avg section coverage | 0.9766666666666668 |
 | avg rule coverage | 1 |
 | below section threshold | 0 |
 | below rule threshold | 0 |
@@ -18,18 +18,18 @@
 
 | capability_id | section coverage | rule coverage | skill lines | knowledge refs | output format | flow headings |
 |---|---|---|---|---|---|---|
-| `analysis-review-response-manuscript-analysis` | 0.933 | 1.000 | 114 | 4 | yes | none |
-| `design-review-response-intake` | 1.000 | 1.000 | 117 | 4 | yes | none |
-| `design-review-response-workboard-planning` | 1.000 | 1.000 | 110 | 6 | yes | none |
-| `generation-review-response-round` | 0.800 | 1.000 | 133 | 7 | yes | none |
-| `transform-review-response-comment-atomization` | 1.000 | 1.000 | 112 | 4 | yes | none |
+| `analysis-review-response-manuscript-analysis` | 0.933 | 1.000 | 118 | 6 | yes | none |
+| `design-review-response-intake` | 1.000 | 1.000 | 121 | 6 | yes | none |
+| `design-review-response-workboard-planning` | 1.000 | 1.000 | 122 | 12 | yes | none |
+| `generation-review-response-round` | 0.950 | 1.000 | 147 | 13 | yes | none |
+| `transform-review-response-comment-atomization` | 1.000 | 1.000 | 124 | 10 | yes | none |
 
 ## Artifact Hashes
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json` | `ed670331e8b9bec75f55ee6e2a1b92c7e6ff6c1ff094c0e57081a1195cec5bd8` |
-| parity package slice | `audits/own-vendors/revision-master/snapshot-13e69610/artifacts/parity-packages.json` | `66c77d6cbc7915873d18ccad5f38708f71b6b9d2ef675e34a814a51d15c85107` |
+| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json` | `f924ee4c156a5c9d43fca2b3ab15fb727401981ff4cab1ef018ce8782e170357` |
+| parity package slice | `audits/own-vendors/revision-master/snapshot-13e69610/artifacts/parity-packages.json` | `627f8142bedabdb7d1ef57b9c5febcb2c98bbd38e6fb724b808aad6c0f1401db` |
 
 ## Human Confirmation
 

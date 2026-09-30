@@ -29,6 +29,14 @@ if (previewMode) {
   for (const { id } of REVIEW_PREVIEW_CASES) {
     await writeFile(path.join(previewRoot, `${id}.html`), renderReviewWorkspacePreview(sourceHtml, samples[id]), "utf8");
   }
+  const { prepareRevisionMasterPreviews, REVISION_MASTER_PREVIEW_CASES } = await import(pathToFileURL(path.join(outputRoot, "harness/revision-master-preview.js")).href);
+  await prepareRevisionMasterPreviews(repoRoot, previewRoot);
+  for (const item of REVISION_MASTER_PREVIEW_CASES) {
+    const file = path.join(previewRoot, `${item.id}.html`);
+    const html = await readFile(file, "utf8");
+    const menu = `<nav aria-label="开发预览" style="padding:8px">${[...REVIEW_PREVIEW_CASES, ...REVISION_MASTER_PREVIEW_CASES].map((entry) => `<a style="margin-right:12px" href="${entry.id}.html">${entry.label}</a>`).join("")}</nav>`;
+    await writeFile(file, html.replace("</body>", `${menu}</body>`));
+  }
   const url = pathToFileURL(path.join(previewRoot, "article-rendered.html")).href;
   process.stdout.write(`ResearchSpec review preview: ${url}\n`);
   if (!process.argv.includes("--no-open")) {

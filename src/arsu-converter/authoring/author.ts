@@ -125,7 +125,7 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
     const assetSourcePath = asset.source_path ?? assetArtifact?.path;
     if (!assetSourcePath) throw new Error(`Missing package asset source: ${asset.output_path}`);
     const assetSourceText = await readFile(path.resolve(assetSourcePath), "utf8");
-    const assetText = !asset.source_path && asset.output_path.endsWith(".py") ? stripExtractionHeader(assetSourceText) : assetSourceText;
+    const assetText = !asset.source_path && /\.(?:py|yaml|j2)$/.test(asset.output_path) ? stripExtractionHeader(assetSourceText) : assetSourceText;
     const assetPath = path.join(packageRoot, ...asset.output_path.split("/"));
     await mkdir(path.dirname(assetPath), { recursive: true });
     await writeFile(assetPath, assetText, "utf8");
@@ -264,6 +264,8 @@ ${manifest.knowledge_refs.map((item) => (source.package_assets ?? []).some((asse
     : `- Load knowledge ID \`${item.knowledge_id}\` from \`${item.path}\`.`).join("\n")}
 ${(source.package_assets ?? []).some((item) => !item.recovery_only) ? `\n## Tools\n\n${(source.package_assets ?? []).filter((item) => !item.recovery_only).map((item) => item.output_path.endsWith(".html")
     ? `- \`${item.output_path}\` is an optional local static review surface; it exports advisory working material and never owns workflow state.`
+    : !item.output_path.endsWith(".py")
+    ? `- \`${item.output_path}\` is a package resource; use it as directed by the Procedure.`
     : `- \`${item.output_path}\` ${item.source_path ? "implements the package's authored computation" : `is packaged from extraction artifact \`${item.extraction_artifact_id ?? ""}\``}; invoke it only through the declared runner and arguments.`).join("\n")}\n` : ""}
 ## Procedure
 

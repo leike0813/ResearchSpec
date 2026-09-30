@@ -27,41 +27,53 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `workflow-state-machine` from `knowledge/workflow-state-machine.md`.
 - Load knowledge ID `sql-write-recipes` from `knowledge/sql-write-recipes.md`.
 - Load knowledge ID `helper-scripts` from `knowledge/helper-scripts.md`.
+- Load knowledge ID `assets-localization-messages-en.json` from `assets/localization/messages/en.json`.
+- Load knowledge ID `assets-localization-messages-zh-CN.json` from `assets/localization/messages/zh-CN.json`.
 - For an existing review workspace only, load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
 - For an existing review workspace only, load knowledge ID `review-workspace-v1.html` from `review-workspace/v1.html`.
+- Load knowledge ID `workbench-review_workbench.py` from `workbench/review_workbench.py`.
+- Load knowledge ID `workbench-receipts.sql` from `workbench/receipts.sql`.
+- Load knowledge ID `workbench-README.md` from `workbench/README.md`.
+- Load knowledge ID `review-workspace-revision-master.html` from `review-workspace/revision-master.html`.
 
 ## Tools
 
 - `scripts/gate_and_render_workspace.py` is packaged from extraction artifact `RM-SCRIPT-03`; invoke it only through the declared runner and arguments.
 - `scripts/workspace_db.py` is packaged from extraction artifact `RM-SCRIPT-04`; invoke it only through the declared runner and arguments.
 - `scripts/runtime_localization.py` is packaged from extraction artifact `RM-SCRIPT-05`; invoke it only through the declared runner and arguments.
-- `assets/schema/revision-master-schema.yaml` is packaged from extraction artifact `RM-ASSET-01`; invoke it only through the declared runner and arguments.
-- `assets/runtime/skill-runtime-digest.md` is packaged from extraction artifact `RM-ASSET-02`; invoke it only through the declared runner and arguments.
-- `assets/localization/source-messages.yaml` is packaged from extraction artifact `RM-ASSET-03`; invoke it only through the declared runner and arguments.
-- `assets/templates/action-copy-variants.md.j2` is packaged from extraction artifact `RM-ASSET-04`; invoke it only through the declared runner and arguments.
-- `assets/templates/agent-resume.md.j2` is packaged from extraction artifact `RM-ASSET-05`; invoke it only through the declared runner and arguments.
-- `assets/templates/atomic-comment-workboard.md.j2` is packaged from extraction artifact `RM-ASSET-06`; invoke it only through the declared runner and arguments.
-- `assets/templates/atomic-review-comment-list.md.j2` is packaged from extraction artifact `RM-ASSET-07`; invoke it only through the declared runner and arguments.
-- `assets/templates/export-patch-plan.md.j2` is packaged from extraction artifact `RM-ASSET-08`; invoke it only through the declared runner and arguments.
-- `assets/templates/final-assembly-checklist.md.j2` is packaged from extraction artifact `RM-ASSET-09`; invoke it only through the declared runner and arguments.
-- `assets/templates/manuscript-execution-graph.md.j2` is packaged from extraction artifact `RM-ASSET-10`; invoke it only through the declared runner and arguments.
-- `assets/templates/manuscript-revision-guide.md.j2` is packaged from extraction artifact `RM-ASSET-11`; invoke it only through the declared runner and arguments.
-- `assets/templates/manuscript-structure-summary.md.j2` is packaged from extraction artifact `RM-ASSET-12`; invoke it only through the declared runner and arguments.
-- `assets/templates/raw-review-thread-list.md.j2` is packaged from extraction artifact `RM-ASSET-13`; invoke it only through the declared runner and arguments.
-- `assets/templates/render-manifest.yaml` is packaged from extraction artifact `RM-ASSET-14`; invoke it only through the declared runner and arguments.
-- `assets/templates/response-coverage-matrix.md.j2` is packaged from extraction artifact `RM-ASSET-15`; invoke it only through the declared runner and arguments.
-- `assets/templates/response-letter-outline.md.j2` is packaged from extraction artifact `RM-ASSET-16`; invoke it only through the declared runner and arguments.
-- `assets/templates/response-letter-preview.md.j2` is packaged from extraction artifact `RM-ASSET-17`; invoke it only through the declared runner and arguments.
-- `assets/templates/response-letter-preview.tex.j2` is packaged from extraction artifact `RM-ASSET-18`; invoke it only through the declared runner and arguments.
-- `assets/templates/response-letter-table-preview.md.j2` is packaged from extraction artifact `RM-ASSET-19`; invoke it only through the declared runner and arguments.
-- `assets/templates/response-letter-table-preview.tex.j2` is packaged from extraction artifact `RM-ASSET-20`; invoke it only through the declared runner and arguments.
-- `assets/templates/response-strategy-card.md.j2` is packaged from extraction artifact `RM-ASSET-21`; invoke it only through the declared runner and arguments.
-- `assets/templates/review-comment-coverage.md.j2` is packaged from extraction artifact `RM-ASSET-22`; invoke it only through the declared runner and arguments.
-- `assets/templates/revision-action-log.md.j2` is packaged from extraction artifact `RM-ASSET-23`; invoke it only through the declared runner and arguments.
-- `assets/templates/style-profile.md.j2` is packaged from extraction artifact `RM-ASSET-24`; invoke it only through the declared runner and arguments.
-- `assets/templates/supplement-intake-plan.md.j2` is packaged from extraction artifact `RM-ASSET-25`; invoke it only through the declared runner and arguments.
-- `assets/templates/supplement-suggestion-plan.md.j2` is packaged from extraction artifact `RM-ASSET-26`; invoke it only through the declared runner and arguments.
-- `assets/templates/thread-to-atomic-mapping.md.j2` is packaged from extraction artifact `RM-ASSET-27`; invoke it only through the declared runner and arguments.
+- `assets/schema/revision-master-schema.yaml` is a package resource; use it as directed by the Procedure.
+- `assets/runtime/skill-runtime-digest.md` is a package resource; use it as directed by the Procedure.
+- `assets/localization/source-messages.yaml` is a package resource; use it as directed by the Procedure.
+- `assets/localization/messages/en.json` is a package resource; use it as directed by the Procedure.
+- `assets/localization/messages/zh-CN.json` is a package resource; use it as directed by the Procedure.
+- `assets/templates/action-copy-variants.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/agent-resume.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/atomic-comment-workboard.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/atomic-review-comment-list.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/export-patch-plan.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/final-assembly-checklist.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/manuscript-execution-graph.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/manuscript-revision-guide.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/manuscript-structure-summary.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/raw-review-thread-list.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/render-manifest.yaml` is a package resource; use it as directed by the Procedure.
+- `assets/templates/response-coverage-matrix.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/response-letter-outline.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/response-letter-preview.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/response-letter-preview.tex.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/response-letter-table-preview.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/response-letter-table-preview.tex.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/response-strategy-card.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/review-comment-coverage.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/revision-action-log.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/style-profile.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/supplement-intake-plan.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/supplement-suggestion-plan.md.j2` is a package resource; use it as directed by the Procedure.
+- `assets/templates/thread-to-atomic-mapping.md.j2` is a package resource; use it as directed by the Procedure.
+- `workbench/review_workbench.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `workbench/receipts.sql` is a package resource; use it as directed by the Procedure.
+- `workbench/README.md` is a package resource; use it as directed by the Procedure.
+- `review-workspace/revision-master.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
 
 ## Procedure
 
@@ -87,7 +99,7 @@ Build the canonical atomic workboard: priority, dependencies, evidence gaps, tar
 6. Write `workflow_pending_user_confirmations`, run `scripts/gate_and_render_workspace.py --artifact-root <workspace>`, and present `08-atomic-comment-workboard.md` and `06-thread-to-atomic-mapping.md`.
 7. Keep the confirmation request open until the user explicitly accepts the workboard.
 
-Review the workboard with the user in dialogue. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes. Obtain the graph Gate confirmation separately.
+Review the workboard with the user in dialogue or through the board handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and embed it in `review-workspace/revision-master.html`. The board confirmation binds the whole candidate board, so filtering the page view never narrows it. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes, and commit the processing receipt with the semantic write in the same task transaction. Obtain the graph Gate confirmation separately in dialogue.
 
 ## Completion Criteria
 

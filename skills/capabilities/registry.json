@@ -15,7 +15,7 @@
     {
       "capability_id": "analysis-review-response-manuscript-analysis",
       "source_path": "analysis-review-response-manuscript-analysis",
-      "manifest_sha256": "b08bd884a9b609950e6a486c32245585a8715ac977747d0389032ec235da9130"
+      "manifest_sha256": "eccbfd2ec9ccb45ec71c2f033b1c3bf18e1af73f3ad31777dc6574cca7560cbf"
     },
     {
       "capability_id": "analysis-risk-of-bias-assessment",
@@ -130,12 +130,12 @@
     {
       "capability_id": "design-review-response-intake",
       "source_path": "design-review-response-intake",
-      "manifest_sha256": "c1ed654755dc8ccba8954441c3946bb5f12c6c91dd21093a43eea0c1d6056f39"
+      "manifest_sha256": "678e26990197b3cf9710d38dc0eac65a212526f10c7305e38faff8b9b2b4a12e"
     },
     {
       "capability_id": "design-review-response-workboard-planning",
       "source_path": "design-review-response-workboard-planning",
-      "manifest_sha256": "fda158b5872758ee0ea2916f2e3c09d6fc143f9a37e2afd15ceddc747c68f3db"
+      "manifest_sha256": "c5e4b351f139ce422e1b538c0271ffbecc43f3ff54f752abcb7e40b677f668de"
     },
     {
       "capability_id": "design-writing-intake",
@@ -190,7 +190,7 @@
     {
       "capability_id": "generation-review-response-round",
       "source_path": "generation-review-response-round",
-      "manifest_sha256": "1e33d55df3921a530100ece92c94ca412b0109c8510f7b9134f95d25febce4ab"
+      "manifest_sha256": "25e11535f807da92219536895448c3c098cdb8b5e1ed6e0a5583ff06ce186e32"
     },
     {
       "capability_id": "judgment-devils-advocate-stress-test",
@@ -220,7 +220,7 @@
     {
       "capability_id": "transform-review-response-comment-atomization",
       "source_path": "transform-review-response-comment-atomization",
-      "manifest_sha256": "ba612aad074f04362bfb6193f17246f7efeb808c6a75e1d7b959602c393ee760"
+      "manifest_sha256": "3d06238d4b4a78ac41fc0b8486f2b61ade0b257461345e28d64d60635dc2dbe4"
     },
     {
       "capability_id": "transform-revision-patching",

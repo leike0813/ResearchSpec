@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+  <title>论文修订工作台原型</title>
+  <style>
+    :root{font:16px/1.65 system-ui,-apple-system,"Segoe UI","PingFang SC",sans-serif;color:#24343c;background:#f0f3f2;--line:#d5dedc;--ink:#24343c;--muted:#53686d;--teal:#235f67;--soft:#e8f3f2;--red:#a63332;--orange:#a26116}
+    *{box-sizing:border-box}body{margin:0}button,select,textarea{font:inherit}button{cursor:pointer}button,select,textarea{border:1px solid #bfcfcd;border-radius:8px;background:#fff;color:var(--ink);padding:.55rem .75rem}button:hover{border-color:var(--teal)}button:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #9ccacc;outline-offset:2px}[aria-pressed=true]{background:var(--soft);border-color:var(--teal);color:#144c54;font-weight:700}h1,h2,h3,h4,p{margin-top:0}h1{font-size:1.5rem;margin-bottom:.2rem}h2{font-size:1.3rem;margin-bottom:.65rem;line-height:1.3}h3{font-size:1.07rem;margin-bottom:.5rem}h4{font-size:1rem;margin-bottom:.35rem}p{margin-bottom:.8rem}.small{font-size:.9rem}.muted{color:var(--muted)}.mono{font:13px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace}.tag{display:inline-block;border-radius:999px;background:#e8eff0;color:#355e66;padding:.18rem .55rem;font-size:.82rem;white-space:nowrap}.tag.good{background:#e4f2e9;color:#276341}.tag.warn{background:#fff0dc;color:#8c551a}.tag.neutral{background:#edf0f0;color:#53676e}.primary{background:var(--teal);border-color:var(--teal);color:#fff}.primary:hover{background:#164f57}
+    header{background:#fff;border-bottom:1px solid var(--line);padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}.eyebrow{color:var(--teal);font-size:.8rem;font-weight:800;letter-spacing:.05em}.header-meta{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+    #stages{display:flex;gap:.65rem;overflow-x:auto;background:#fafcfb;border-bottom:1px solid var(--line);padding:.7rem 1.5rem}#stages button{min-width:12rem;text-align:left;white-space:nowrap}#stages small{display:block;color:var(--muted);font-size:.82rem;font-weight:400}#stages [aria-pressed=true] small{color:#406c70}
+    #notice{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:.7rem 1.5rem;background:#fff9ed;border-bottom:1px solid #e9dfc9}#notice p{margin:0}.statline{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+    .workspace{display:grid;grid-template-columns:minmax(13rem,15rem) minmax(0,1fr) minmax(19rem,22rem);gap:1rem;max-width:110rem;margin:auto;padding:1rem;align-items:start}.column{min-width:0}.rail,.side-column{position:sticky;top:1rem;max-height:calc(100vh - 2rem);overflow:auto}.panel{min-width:0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.15rem;margin-bottom:1rem}.panel:last-child{margin-bottom:0}.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:.7rem;margin-bottom:.8rem}.panel-head h2{margin:0}.panel-head .tag{flex:none}.card{border:1px solid var(--line);border-radius:9px;background:#fff;padding:.8rem;margin:.7rem 0}.card p:last-child{margin-bottom:0}.group-label{display:flex;align-items:center;gap:.5rem;font-size:.82rem;font-weight:800;color:var(--muted);margin:1.1rem 0 .35rem}.group-label::after{content:"";flex:1;border-top:1px solid var(--line)}.group-label:first-child{margin-top:0}.actions{display:flex;flex-wrap:wrap;gap:.4rem}.actions button{margin:0}.source-text{font-family:Georgia,"Noto Serif",serif;line-height:1.7;color:#334249}.location{font-size:.86rem;color:var(--muted)}.task-guide{border-left:4px solid var(--teal);background:#eaf4f2;padding:1rem 1.15rem;margin-bottom:1rem;border-radius:0 9px 9px 0}.task-guide p{margin:.25rem 0 0}.task-guide strong{font-size:1.08rem}
+    details{border-top:1px solid var(--line);padding:.8rem 0;margin-top:.4rem}details summary{cursor:pointer;color:var(--teal);font-weight:700}details[open] summary{margin-bottom:.7rem}.source-meta{font-size:.86rem;color:var(--muted)}.source-meta p{overflow-wrap:anywhere}.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:.8rem 0 1.1rem}.metric{border:1px solid var(--line);border-radius:8px;background:#f8fbfa;padding:.7rem}.metric b{display:block;font-size:1.25rem}.metric span{font-size:.83rem;color:var(--muted)}.tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin:.8rem 0}.document{border:1px solid var(--line);border-radius:8px;background:#fdfdfc;padding:1.2rem;white-space:pre-wrap;font:17px/1.85 Georgia,"Noto Serif",serif}.document .span{cursor:pointer;border-radius:2px}.document .span:hover{outline:2px solid #91b8b9}.document .span.active{outline:2px solid var(--teal)}.document .covered{color:var(--red);font-weight:700}.document .duplicate{color:var(--orange);font-weight:700}.document button.span{display:inline;border:0;background:transparent;padding:0;font:inherit;text-align:left;white-space:pre-wrap}.legend{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.9rem}.legend .covered{color:var(--red)}.legend .duplicate{color:var(--orange)}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:8px;margin:.8rem 0}table{border-collapse:collapse;width:100%;font-size:.91rem}th,td{border-bottom:1px solid #e2e9e7;padding:.65rem .7rem;text-align:left;vertical-align:top}th{background:#f6f9f8;color:#50656b;white-space:nowrap}tr:last-child td{border-bottom:0}tr.selected-row{background:#edf7f5}td .tag{margin:.1rem}.kv{display:grid;grid-template-columns:minmax(8rem,10rem) 1fr;gap:.55rem .8rem;margin:.8rem 0}.kv dt{color:var(--muted)}.kv dd{margin:0}.list{margin:.5rem 0 .9rem;padding-left:1.3rem}.list li{margin:.4rem 0}.checklist{list-style:none;padding:0}.checklist li{margin:.4rem 0}.checklist li:before{content:"□";color:var(--teal);margin-right:.5rem}.checklist li.done:before{content:"☑"}.blocker{border-left:3px solid #d29346;background:#fff7ec;padding:.8rem .9rem}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}.comparison>div{border:1px solid var(--line);border-radius:8px;padding:.85rem}.comparison p{font:17px/1.8 Georgia,"Noto Serif",serif}
+    .feedback{background:#f4f8f7;border:1px solid #c6dad7;border-radius:9px;padding:.9rem}.feedback label{display:block;font-weight:700;margin:.6rem 0 .25rem}.feedback select,.feedback textarea{width:100%}.feedback textarea{min-height:6rem;resize:vertical}.feedback .primary{margin-top:.7rem}.status{font-size:.88rem;color:var(--muted);margin:.6rem 0 0}.focus-note{background:#edf6f4;border:1px solid #c7dbd8;border-radius:8px;padding:.8rem}.response-box{border-left:3px solid var(--teal);padding:.8rem 1rem;background:#f4f9f8}.response-box p{white-space:pre-wrap}
+    .side-column{display:flex;flex-direction:column;overflow:hidden}.side-column>.panel:first-child{min-height:0;flex:1;overflow:auto}.side-column>.panel:last-child{flex:none}
+    .choice-card{position:relative;display:block;width:100%;margin:.5rem 0;padding:.72rem 1.8rem .72rem .85rem;text-align:left;white-space:normal;border:1px solid #cbd8d6;border-left:4px solid #bdcecc;border-radius:9px;background:#fbfcfc;transition:background .12s,border-color .12s,box-shadow .12s}.choice-card::after{content:"›";position:absolute;right:.7rem;top:.58rem;color:#648085;font-size:1.25rem}.choice-card:hover{border-color:#5b9599;background:#f2f9f7;box-shadow:0 2px 9px #2b5b5d1c}.choice-card[aria-pressed=true]{border-color:#3d8990;border-left-color:#17636d;background:#e8f4f2;box-shadow:0 0 0 1px #a8d0cb}.choice-card[aria-pressed=true]::after{content:"✓";color:#17636d;font-size:1rem;font-weight:800}.choice-card.related:not([aria-pressed=true]){border-left-color:#8eafb1}.choice-id{display:block;font-weight:800;color:#1d5259}.choice-text{display:block;margin-top:.15rem;line-height:1.45}.work-card{padding:.85rem 2rem .85rem 1rem;margin:.65rem 0}.work-meta{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;margin-top:.65rem}.work-meta .location{margin-left:.2rem}
+    .trace-label{font-size:.88rem;font-weight:700;color:var(--muted);margin:.8rem 0 .35rem}.trace-choices{display:grid;grid-template-columns:minmax(0,1fr);gap:.4rem}.trace-choices button{display:flex;align-items:start;gap:.55rem;width:100%;min-width:0;text-align:left;line-height:1.4;background:#fff;border-color:#c4d5d3}.trace-choices button:hover{background:#f2f8f7}.trace-choices button[aria-pressed=true]{background:#e6f3f0;border-color:#2e777d;box-shadow:inset 3px 0 0 #2e777d}.trace-choice-id{flex:none;min-width:2.7rem;font-weight:800;color:#1d5b62}.trace-detail{background:#f7f9f8;border-left:3px solid #a8bfbe;border-radius:0 8px 8px 0;padding:.8rem .9rem;margin:.8rem 0}.trace-detail h4{font-size:.93rem;color:#53686d;margin-bottom:.35rem}.trace-detail p:last-child{margin-bottom:0}
+    #stages button[aria-pressed=true]{box-shadow:inset 0 -3px 0 var(--teal)}.context-panel{border-top:3px solid #90afb0}.review-panel{border-top:3px solid var(--teal)}.review-panel h2{color:#1d5b62}.review-panel .feedback{background:#f1f9f7}.review-panel .primary{display:block;width:100%;min-height:2.75rem}details summary:hover{text-decoration:underline;text-underline-offset:3px}
+    dialog{border:1px solid var(--line);border-radius:11px;max-width:min(45rem,92vw);box-shadow:0 20px 60px #0004}dialog::backdrop{background:#17303988}dialog pre{background:#f0f4f3;padding:.9rem;max-height:55vh;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+    @media(max-width:1250px){.workspace{grid-template-columns:minmax(12rem,14rem) minmax(0,1fr)}.side-column{grid-column:1/-1;position:static;max-height:none;display:grid;grid-template-columns:1fr 1fr;gap:1rem}.side-column .panel{margin:0}.metric-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){header,#notice{display:block}.header-meta{margin-top:.7rem}.workspace{display:block}.rail,.side-column{position:static;max-height:none}.rail{max-height:12rem;overflow:auto}.side-column{display:block}.side-column .panel{margin-bottom:1rem}.comparison{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:480px){.metric-grid,.kv{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <div><div class="eyebrow">论文修订 · 交互原型</div><h1>城市绿地与睡眠质量 · 审稿修订工作台</h1><div class="small muted">虚构案例｜英文审稿意见与论文节选｜页面操作仅用于试用</div></div>
+    <div class="header-meta"><span class="tag">6 条审稿意见</span><span class="tag">5 项修订事项</span><button type="button" data-action="summary">查看试用反馈</button><button type="button" data-action="reset">重置试用</button></div>
+  </header>
+  <nav id="stages" aria-label="审阅阶段"></nav>
+  <div id="notice" aria-live="polite"></div>
+  <div id="workspace"></div>
+  <dialog id="summary-dialog"><h2>本次试用反馈</h2><p class="small muted">这些选择和批注仅保存在当前页面；交回后由助手核对。</p><pre id="summary-json"></pre><button type="button" data-action="close-summary">关闭</button></dialog>
+  <script>
+    const DOCS = [
+      {id:"editor",label:"编辑决定信",kind:"editor",segments:[
+        {text:"Decision: major revision\nDear authors,\n\n"},
+        {text:"Please align the abstract and discussion with the observational design. The manuscript currently says that green space improves sleep; the evidence supports association rather than causation.",thread:"editor_thread_001",role:"primary",atoms:["atomic_005"]},
+        {text:"\n\nPlease provide a point-by-point response to all comments.\n"}
+      ]},
+      {id:"reviewer_1",label:"Reviewer 1",kind:"reviewer",segments:[
+        {text:"Reviewer 1\n\n"},
+        {text:"1. Green-space exposure is described only as 'within 500 m'. Specify the satellite product, image year, vegetation threshold, address geocoding and buffer construction. ",thread:"reviewer_1_thread_001",role:"primary",atoms:["atomic_001"]},
+        {text:"Please also report whether the association is robust to 300 m and 1000 m buffers.",thread:"reviewer_1_thread_001",role:"primary",atoms:["atomic_002"]},
+        {text:"\n\n"},
+        {text:"2. Residential self-selection may explain part of the association. Show how household income and education enter the adjusted model, and discuss residual confounding.",thread:"reviewer_1_thread_002",role:"primary",atoms:["atomic_003"]},
+        {text:"\n"}
+      ]},
+      {id:"reviewer_2",label:"Reviewer 2",kind:"reviewer",segments:[
+        {text:"Reviewer 2\n\n"},
+        {text:"1. Please present effect estimates for alternative buffer distances and discuss any attenuation at 1000 m. ",thread:"reviewer_2_thread_001",role:"primary",atoms:["atomic_002"]},
+        {text:"A 300 m check would be particularly useful.",thread:"reviewer_2_thread_001",role:"duplicate_filtered",atoms:["atomic_002"]},
+        {text:"\n\n"},
+        {text:"2. How many participants were excluded for missing address and sleep-quality data? Provide a flow table and compare included with excluded participants.",thread:"reviewer_2_thread_002",role:"primary",atoms:["atomic_004"]},
+        {text:"\n\n"},
+        {text:"3. Replace causal wording in the abstract and conclusion with language appropriate for a cross-sectional study.",thread:"reviewer_2_thread_003",role:"primary",atoms:["atomic_005"]},
+        {text:"\n"}
+      ]}
+    ];
+    const THREADS = [
+      {id:"editor_thread_001",short:"ED-01",reviewer:"编辑",order:1,summary:"收敛摘要与讨论中的因果措辞"},
+      {id:"reviewer_1_thread_001",short:"R1-01",reviewer:"Reviewer 1",order:2,summary:"说明绿地指标并报告缓冲半径稳健性"},
+      {id:"reviewer_1_thread_002",short:"R1-02",reviewer:"Reviewer 1",order:3,summary:"处理居住地自选择与混杂"},
+      {id:"reviewer_2_thread_001",short:"R2-01",reviewer:"Reviewer 2",order:4,summary:"报告不同缓冲半径的估计与衰减"},
+      {id:"reviewer_2_thread_002",short:"R2-02",reviewer:"Reviewer 2",order:5,summary:"交代缺失与样本排除"},
+      {id:"reviewer_2_thread_003",short:"R2-03",reviewer:"Reviewer 2",order:6,summary:"修改摘要与结论中的因果措辞"}
+    ];
+    const MANUSCRIPT = [
+      {id:"M1",section:"Methods · Green-space exposure",file:"manuscript/main.tex",locator:"§2.2",before:"Residential green space was defined as the proportion of vegetated area within a 500 m buffer around each participant's address.",after:"We derived residential green-space exposure from 2020 Sentinel-2 imagery using NDVI ≥ 0.30. Geocoded addresses were buffered by 500 m; the vegetated pixel share within each buffer was used in the primary analysis."},
+      {id:"M2",section:"Results · Buffer sensitivity",file:"manuscript/main.tex",locator:"§3.3 + Table S4",before:"Greater green-space exposure was associated with a higher sleep-quality score (adjusted β = 0.18; 95% CI 0.07–0.29).",after:"The association was positive at 300 m (β = 0.14; 95% CI 0.02–0.26) and 500 m (β = 0.18; 95% CI 0.07–0.29). At 1000 m the estimate was smaller and its interval included zero (β = 0.09; 95% CI −0.01–0.19; Table S4)."},
+      {id:"M3",section:"Methods · Adjustment set",file:"manuscript/main.tex",locator:"§2.4",before:"Models were adjusted for demographic and neighborhood factors.",after:"The adjusted model included age, sex, household income, educational attainment and neighborhood deprivation. Residential self-selection could remain despite these adjustments."},
+      {id:"M4",section:"Supplement · Participant flow",file:"supplement/flow.tex",locator:"Table S1",before:"The analytic sample included 2,146 participants.",after:"Of 2,322 eligible participants, 112 lacked usable residential coordinates and 73 lacked a sleep-quality score; 9 lacked both. The complete-case sample was 2,146. Table S1 compares included and excluded participants."},
+      {id:"M5",section:"Discussion · Interpretation",file:"manuscript/main.tex",locator:"§4",before:"Urban green space improves sleep quality in older adults.",after:"Greater residential green-space exposure was associated with higher sleep-quality scores. The cross-sectional design and possible residential self-selection prevent causal interpretation."},
+      {id:"M6",section:"Abstract · Conclusion",file:"manuscript/main.tex",locator:"Abstract",before:"Increasing neighborhood green space improves sleep quality.",after:"Residential green-space exposure was associated with sleep-quality scores; longitudinal studies are needed to assess causality."}
+    ];
+    const ATOMS = [
+      {id:"atomic_001",short:"A-01",summary:"交代绿地暴露指标的构建",required:"明确影像产品、年份、NDVI 阈值、地址定位和缓冲区计算。",priority:"高",gap:"否",status:"策略已确认",locations:["M1"],next:"补充方法定义",analysis:{claim:"现有 500 m 暴露定义",existing:"Sentinel-2 影像与地理编码记录",missing:"阈值和成像年份未在正文说明",depends:"无"},strategy:{stance:"接受并补足测量方法",why:"指标计算已有原始记录，可以复核后写入方法。",actions:[{id:"A1",change:"在 §2.2 写明影像年份、NDVI 阈值和缓冲区算法",targets:["M1"],effect:"回复中准确指向暴露定义"}],evidence:[["影像处理记录","有","无"],["地址定位质量检查","有","需在方法中说明误差范围"]],pending:[],blocker:"无",suggestion:"复核影像处理脚本与定位记录",draft:"在方法中补充 Sentinel-2 影像年份、NDVI 阈值和 500 m 缓冲区计算；回复解释定义。"}},
+      {id:"atomic_002",short:"A-02",summary:"检验 300 m 与 1000 m 缓冲半径",required:"复算两个半径的模型，报告估计与区间，并解释 1000 m 衰减。",priority:"高",gap:"是",status:"当前焦点 · 待补材",locations:["M2","M5"],next:"请求分析结果后确认策略",analysis:{claim:"主分析 500 m β=0.18",existing:"500 m 模型输出及 Table 2",missing:"300 m、1000 m 复算及置信区间",depends:"atomic_001 的暴露定义"},strategy:{stance:"接受敏感性分析；据结果限定结论",why:"两位审稿人要求相同的估计与解释，合并执行可保证一套数字、一致回复。",actions:[{id:"A1",change:"复算 300 m 与 1000 m 模型，核查样本和协变量一致",targets:["M2"],effect:"给 R1-01 与 R2-01 提供同一组估计"},{id:"A2",change:"在 Table S4 并列呈现三种半径并讨论 1000 m 衰减",targets:["M2","M5"],effect:"回复注明区间和结果限制"}],evidence:[["500 m 主模型输出","有","无"],["300 m / 1000 m 复算表","缺","需补充 analysis/buffer_sensitivity.csv"],["模型规格一致性核查","待做","须核对协变量与纳入样本"]],pending:["确认将 1000 m 区间跨零解释为不确定，而非无效","确认补材来源与模型规格"],blocker:"缺 300 m / 1000 m 复算结果；当前项不能标记完成。",suggestion:"S1 · 提供含三个半径估计、区间、样本量的复算表",draft:null}},
+      {id:"atomic_003",short:"A-03",summary:"说明混杂调整与居住地自选择",required:"列明收入、教育和社区剥夺变量，补充残余混杂限制。",priority:"高",gap:"否",status:"策略候选",locations:["M3","M5"],next:"核对协变量记录并确认策略",analysis:{claim:"横断面关联可能被自选择解释",existing:"调整模型包含收入、教育和社区剥夺",missing:"正文未列全协变量；限制段不足",depends:"无"},strategy:{stance:"接受并补充调整集与限制",why:"现有模型可支撑变量说明，但不能消除未测量的居住偏好。",actions:[{id:"A1",change:"在 §2.4 列明调整变量，并在 §4 讨论残余混杂",targets:["M3","M5"],effect:"明确已控制与未控制的因素"}],evidence:[["模型变量清单","有","核对最终模型版本"]],pending:["确认限制表述"],blocker:"无",suggestion:"核对最终模型变量清单",draft:null}},
+      {id:"atomic_004",short:"A-04",summary:"补充缺失样本与纳入流程",required:"报告地址和睡眠数据缺失人数、重叠人数及纳入/排除比较。",priority:"中",gap:"是",status:"策略候选",locations:["M4"],next:"核对样本流表后确认策略",analysis:{claim:"分析样本为 2,146 人",existing:"队列台账与完整案例筛选",missing:"缺失原因和纳入/排除比较尚未在补充表说明",depends:"无"},strategy:{stance:"接受并补充样本流表",why:"现有队列台账可生成精确计数和比较表。",actions:[{id:"A1",change:"新增 Table S1，列出缺失重叠和纳入/排除比较",targets:["M4"],effect:"回复给出可复核样本数"}],evidence:[["队列筛选台账","有","需确认 9 人重叠计数"],["纳入/排除比较","待核","补充 Table S1"]],pending:["确认排除口径"],blocker:"样本流表待复核",suggestion:"S2 · 提供队列筛选台账和比较表",draft:null}},
+      {id:"atomic_005",short:"A-05",summary:"收敛因果措辞",required:"将摘要、结论和讨论中的因果说法改为关联，并说明研究设计限制。",priority:"高",gap:"否",status:"策略已确认",locations:["M5","M6"],next:"按样例改写并回映两条原文",analysis:{claim:"现有结论使用 improves",existing:"横断面关联估计",missing:"因果识别条件不具备",depends:"atomic_003 的限制说明"},strategy:{stance:"接受，统一使用关联措辞",why:"横断面设计不足以支持干预效果断言。",actions:[{id:"A1",change:"改写摘要、讨论与结论并交叉核对术语",targets:["M5","M6"],effect:"一项修改回应编辑与 Reviewer 2 的原始条目"}],evidence:[["研究设计说明","有","无"]],pending:[],blocker:"无",suggestion:"无",draft:"把 improves 改为 was associated with，并补充横断面设计限制。"}}
+    ];
+    const PLAN = [
+      {id:"PA-01",atom:"atomic_001",title:"写明暴露测量方法",category:"manuscript_text",depends:"—",status:"completed"},
+      {id:"PA-02",atom:"atomic_002",title:"复算替代缓冲半径",category:"analysis",depends:"PA-01",status:"completed"},
+      {id:"PA-03",atom:"atomic_002",title:"更新 Table S4 与讨论",category:"table_and_text",depends:"PA-02",status:"completed"},
+      {id:"PA-04",atom:"atomic_003",title:"补足调整集和残余混杂",category:"manuscript_text",depends:"—",status:"completed"},
+      {id:"PA-05",atom:"atomic_004",title:"新增样本流 Table S1",category:"supplement",depends:"—",status:"completed"},
+      {id:"PA-06",atom:"atomic_005",title:"统一摘要与结论措辞",category:"manuscript_text",depends:"PA-04",status:"completed"}
+    ];
+    const LOGS = [
+      {id:"LOG-01",summary:"补足暴露测量定义",plans:["PA-01"],threads:["reviewer_1_thread_001"],entries:[{file:"manuscript/main.tex",locator:"§2.2",type:"replace",change:"写明 Sentinel-2 2020、NDVI ≥ 0.30 与 500 m 缓冲区",reason:"使暴露定义可复核",evidence:"影像处理记录",response:"回应 R1-01 的测量部分"}]},
+      {id:"LOG-02",summary:"复算半径并更新结果与混杂说明",plans:["PA-02","PA-03","PA-04"],threads:["reviewer_1_thread_001","reviewer_1_thread_002","reviewer_2_thread_001"],entries:[{file:"supplement/table-s4.tex",locator:"Table S4",type:"insert",change:"加入 300 m、500 m、1000 m 的 β、区间和样本量",reason:"呈现半径稳健性与衰减",evidence:"analysis/buffer_sensitivity.csv（已接收）",response:"回应 R1-01、R2-01"},{file:"manuscript/main.tex",locator:"§2.4 / §4",type:"replace",change:"列全调整变量并说明居住地自选择",reason:"明确残余混杂限制",evidence:"最终模型规格表",response:"回应 R1-02"}]},
+      {id:"LOG-03",summary:"补充样本流并统一解释措辞",plans:["PA-05","PA-06"],threads:["editor_thread_001","reviewer_2_thread_002","reviewer_2_thread_003"],entries:[{file:"supplement/flow.tex",locator:"Table S1",type:"insert",change:"加入缺失、重叠和纳入/排除比较",reason:"交代 2,322 到 2,146 人的筛选",evidence:"cohort_flow.csv（已接收）",response:"回应 R2-02"},{file:"manuscript/main.tex",locator:"Abstract / §4",type:"replace",change:"将因果动词改为关联表述",reason:"与横断面研究设计一致",evidence:"研究设计说明",response:"回应 ED-01、R2-03"}]}
+    ];
+    const RESPONSES = [
+      {thread:"editor_thread_001",logs:["LOG-03"],scope:"Abstract; Discussion §4",excerpt:"was associated with sleep-quality scores",reply:"We agree. We replaced causal claims in the abstract and discussion with association language and now state that the cross-sectional design precludes causal inference."},
+      {thread:"reviewer_1_thread_001",logs:["LOG-01","LOG-02"],scope:"Methods §2.2; Results §3.3; Table S4",excerpt:"300 m: β 0.14 (95% CI 0.02–0.26); 1000 m: β 0.09 (−0.01–0.19)",reply:"We now specify the 2020 Sentinel-2 product, NDVI threshold, geocoding and buffer construction. We also added 300 m and 1000 m sensitivity models to Table S4; the 1000 m estimate is smaller and its interval includes zero."},
+      {thread:"reviewer_1_thread_002",logs:["LOG-02"],scope:"Methods §2.4; Discussion §4",excerpt:"included household income, educational attainment and neighborhood deprivation",reply:"We expanded the adjustment-set description and added residential self-selection as a remaining limitation. These adjustments cannot remove unmeasured preferences for greener neighborhoods."},
+      {thread:"reviewer_2_thread_001",logs:["LOG-02"],scope:"Results §3.3; Table S4",excerpt:"1000 m: β 0.09 (95% CI −0.01–0.19)",reply:"The revised Table S4 presents all three buffer sizes with confidence intervals and sample sizes. The 1000 m estimate attenuates; we avoid treating its interval crossing zero as proof of no association."},
+      {thread:"reviewer_2_thread_002",logs:["LOG-03"],scope:"Supplement Table S1",excerpt:"2,322 eligible; 112 missing coordinates; 73 missing outcome; 9 missing both; 2,146 included",reply:"We added a participant-flow table and an included-versus-excluded comparison. The table makes the overlap in missingness explicit and reconciles the final analytic sample."},
+      {thread:"reviewer_2_thread_003",logs:["LOG-03"],scope:"Abstract; Discussion §4",excerpt:"associated with higher sleep-quality scores",reply:"We changed the abstract and conclusion to association language and added a sentence on the cross-sectional design and residual confounding."}
+    ];
+    const STAGES = [
+      {id:"coverage",number:"01",label:"核对审稿意见",hint:"原文、拆分与遗漏",snapshot:"第 1 次审阅 · 意见整理"},
+      {id:"workboard",number:"02",label:"安排修订工作",hint:"优先级、证据与位置",snapshot:"第 2 次审阅 · 修订安排"},
+      {id:"strategy",number:"03",label:"确认逐项策略",hint:"修改动作与所需材料",snapshot:"第 3 次审阅 · 当前策略"},
+      {id:"round",number:"04",label:"核对修改和回复",hint:"稿件改动与回复覆盖",snapshot:"第 4 次审阅 · 第二轮预览"}
+    ];
+    const CHOICES = {
+      coverage:[["","尚未处置"],["accept","覆盖与拆并可接受"],["revise","来源、拆并或遗漏需调整"],["defer","暂待核对"]],
+      workboard:[["","尚未处置"],["accept","规划可用"],["revise","优先级、证据或位置需调整"],["defer","暂缓该行动"]],
+      strategy:[["","尚未处置"],["accept","认可当前策略"],["revise","立场、动作或证据需调整"],["defer","等待补材"]],
+      round:[["","尚未处置"],["accept","改动与回复可用"],["revise","稿件或回复需调整"],["defer","保留意见"]]
+    };
+    const activeAtom = "atomic_002";
+    const byId = id => document.getElementById(id);
+    const esc = value => String(value ?? "").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    const t = id => THREADS.find(item=>item.id===id);
+    const a = id => ATOMS.find(item=>item.id===id);
+    const m = id => MANUSCRIPT.find(item=>item.id===id);
+    const r = id => RESPONSES.find(item=>item.thread===id);
+    const stage = () => STAGES.find(item=>item.id===state.stage);
+    const spans = doc => {let offset=0;return doc.segments.map(segment=>{const row={...segment,start:offset,end:offset+segment.text.length};offset=row.end;return row;});};
+    const linkedAtoms = id => [...new Set(DOCS.flatMap(doc=>doc.segments.filter(part=>part.thread===id).flatMap(part=>part.atoms||[])))];
+    const linkedThreads = id => THREADS.filter(item=>linkedAtoms(item.id).includes(id)).map(item=>item.id);
+    const original = id => DOCS.flatMap(doc=>doc.segments.filter(part=>part.thread===id).map(part=>part.text)).join("");
+    const docForThread = id => DOCS.find(doc=>doc.segments.some(part=>part.thread===id));
+    const label = id => t(id)?.short || a(id)?.short || id;
+    const button = (text,kind,id,selected=false) => '<button type="button" data-'+kind+'="'+esc(id)+'" aria-pressed="'+selected+'">'+esc(text)+'</button>';
+    const sourceFiles = files => '<details class="source-meta"><summary>查看来源文件</summary><p>'+esc(files)+'</p></details>';
+    const initial = () => {const query=new URL(location.href).searchParams;return {stage:STAGES.some(item=>item.id===query.get("stage"))?query.get("stage"):"coverage",thread:"reviewer_1_thread_001",atom:"atomic_002",doc:"reviewer_1",atomListOpen:false,decisions:{},notes:{},confirmed:{},focusRequest:"",message:"从 R1-01 开始，核对一条意见中的两项要求。"};};
+    let state=initial();
+    const decisionKey = () => state.stage+":"+(state.stage==="round"?state.thread:state.stage==="strategy"?activeAtom:state.atom);
+    const confirmKey = () => state.stage==="strategy"?state.stage+":"+activeAtom:state.stage;
+    function checkFixture(){
+      if(THREADS.some(item=>!linkedAtoms(item.id).length||!docForThread(item.id)))throw Error("Unmapped source thread");
+      if(THREADS.some(item=>!DOCS.some(doc=>doc.segments.some(part=>part.thread===item.id&&part.role==="primary"))))throw Error("Thread missing primary span");
+      for(const doc of DOCS){const source=doc.segments.map(part=>part.text).join("");for(const span of spans(doc))if(source.slice(span.start,span.end)!==span.text)throw Error("Source offset mismatch");}
+      if(ATOMS.some(item=>!linkedThreads(item.id).length||item.locations.some(id=>!m(id))))throw Error("Unmapped atomic item");
+      if(THREADS.some(item=>!r(item.id)||r(item.id).logs.some(id=>!LOGS.some(log=>log.id===id))))throw Error("Broken response coverage");
+      if(PLAN.some(item=>!a(item.atom)))throw Error("Broken plan action");
+      if(!linkedAtoms("reviewer_1_thread_001").includes("atomic_001")||!linkedAtoms("reviewer_1_thread_001").includes("atomic_002")||linkedThreads("atomic_002").length!==2)throw Error("Split/merge example lost");
+    }
+    checkFixture();
+    function coverageMetrics(doc){
+      const all=spans(doc),total=all.at(-1)?.end||0,covered=all.filter(s=>s.role).reduce((sum,s)=>sum+s.text.length,0),nonDuplicate=all.filter(s=>s.role&&s.role!=="duplicate_filtered").reduce((sum,s)=>sum+s.text.length,0);
+      return {total,covered,nonDuplicate,percent:total?Math.round(1000*covered/total)/10:0};
+    }
+    function rail(){
+      let last="";
+      const threads=THREADS.map(item=>{
+        const group=item.reviewer===last?"":'<div class="group-label">'+esc(item.reviewer.replace("Reviewer ","审稿人 "))+'</div>';
+        last=item.reviewer;
+        return group+'<button type="button" class="choice-card thread-card '+(linkedAtoms(item.id).includes(state.atom)?"related":"")+'" data-thread="'+esc(item.id)+'" aria-pressed="'+(state.thread===item.id)+'"><span class="choice-id">'+esc(item.short)+'</span><span class="choice-text">'+esc(item.summary)+'</span></button>';
+      }).join("");
+      const atoms=ATOMS.map(item=>'<button type="button" class="choice-card" data-atom="'+esc(item.id)+'" aria-pressed="'+(state.atom===item.id)+'"><span class="choice-id">'+esc(item.short)+'</span><span class="choice-text">'+esc(item.summary)+'</span></button>').join("");
+      return '<aside class="panel rail"><h2>审稿意见</h2><p class="small muted">点选意见，核对原文与修订事项。</p>'+threads+'<details class="atom-list"'+(state.atomListOpen?" open":"")+'><summary>查看全部 5 项修订事项</summary>'+atoms+'</details></aside>';
+    }
+    function trace(){
+      const item=a(state.atom),source=t(state.thread),target=m(item.locations[0]);
+      const excerpt=DOCS.flatMap(doc=>doc.segments.filter(part=>part.thread===source.id&&part.atoms?.includes(item.id)).map(part=>part.text)).join("");
+      const choices=linkedAtoms(source.id).map(id=>'<button type="button" data-atom="'+esc(id)+'" aria-pressed="'+(state.atom===id)+'"><span class="trace-choice-id">'+esc(a(id).short)+'</span><span>'+esc(a(id).summary)+'</span></button>').join("");
+      return '<section class="panel context-panel"><h2>当前意见与稿件</h2><h3>'+esc(source.short)+' · '+esc(source.summary)+'</h3><p class="source-text">'+esc(excerpt)+'</p><details><summary>查看这条意见全文</summary><p class="source-text">'+esc(original(source.id))+'</p></details><p class="trace-label">对应的修订事项</p><div class="trace-choices" role="group" aria-label="对应的修订事项">'+choices+'</div><div class="trace-detail"><h4>这项修订需要完成</h4><p>'+esc(item.required)+'</p><p class="small muted">关联意见：'+esc(linkedThreads(item.id).map(label).join("、"))+'</p></div><div class="card"><b>稿件位置：'+esc(target.locator)+'</b><p class="small muted">'+esc(target.section)+'</p><details><summary>查看原稿段落</summary><p class="source-text">'+esc(target.before)+'</p><span class="location">'+esc(target.file)+'</span></details></div></section>';
+    }
+    function feedback(){
+      const key=decisionKey(),target=state.stage==="round"?t(state.thread).short:state.stage==="strategy"?a(activeAtom).short:a(state.atom).short;
+      const scope=state.stage==="coverage"?"本次意见整理":state.stage==="workboard"?"本次修订安排":state.stage==="strategy"?"当前策略":"本轮预览";
+      return '<section class="panel review-panel"><div class="panel-head"><h2>我的反馈</h2><span class="tag">'+esc(target)+'</span></div>'+(state.stage==="strategy"&&state.atom!==activeAtom?'<p class="focus-note small">正在浏览 '+esc(a(state.atom).short)+'；本次审阅仍聚焦 '+esc(a(activeAtom).short)+'。'+button("请助手切换焦点","switch",state.atom)+'</p>':"")+'<div class="feedback"><label for="disposition">这项建议如何处理？</label><select id="disposition" data-decision="'+esc(key)+'">'+CHOICES[state.stage].map(([value,text])=>'<option value="'+value+'"'+((state.decisions[key]||"")===value?" selected":"")+'>'+esc(text)+'</option>').join("")+'</select><label for="note">批注或调整建议</label><textarea id="note" data-note="'+esc(key)+'" placeholder="写明遗漏、证据问题或修改建议">'+esc(state.notes[key]||"")+'</textarea><button type="button" class="primary" data-action="confirm">'+(state.stage==="round"?"标记本轮已看完":"确认"+scope)+'</button><p class="status">'+(state.confirmed[confirmKey()]?"已记录本次确认":"尚未确认")+'</p></div><p class="small muted">交回助手核对后继续。正式决定在对话中确认。</p></section>';
+    }
+    function coverageAppendix(){
+      const source=t(state.thread),links=DOCS.flatMap(doc=>doc.segments.filter(part=>part.thread===source.id).flatMap(part=>(part.atoms||[]).map(id=>({id,text:part.text,role:part.role}))));
+      return '<h3>当前意见拆成了哪些修订事项 · '+esc(source.short)+'</h3><div class="table-wrap"><table><thead><tr><th>顺序</th><th>修订事项</th><th>整理后的要求</th><th>来源原文</th><th>映射说明</th></tr></thead><tbody>'+links.map((link,index)=>'<tr><td>'+(index+1)+'</td><td>'+button(a(link.id).short,"atom",link.id,state.atom===link.id)+'</td><td>'+esc(a(link.id).summary)+'</td><td class="source-text">'+esc(link.text)+'</td><td>'+esc(link.role==="duplicate_filtered"?"与 A-02 重复，保留原文来源":link.id==="atomic_002"?"与另一条意见的半径检验合并":"独立修改与回复动作")+'</td></tr>').join("")+'</tbody></table></div><h3>全部修订事项</h3><div class="table-wrap"><table><thead><tr><th>修订事项</th><th>来源意见</th><th>事项摘要</th><th>需要完成</th></tr></thead><tbody>'+ATOMS.map(item=>'<tr><td>'+button(item.short,"atom",item.id,state.atom===item.id)+'</td><td>'+esc(linkedThreads(item.id).map(label).join("、"))+'</td><td>'+esc(item.summary)+'</td><td>'+esc(item.required)+'</td></tr>').join("")+'</tbody></table></div>';
+    }
+    function coverageView(){
+      const doc=DOCS.find(item=>item.id===state.doc),items=spans(doc),all=DOCS.map(coverageMetrics),total=all.reduce((sum,item)=>sum+item.total,0),covered=all.reduce((sum,item)=>sum+item.covered,0),nonDuplicate=all.reduce((sum,item)=>sum+item.nonDuplicate,0),percent=Math.round(1000*covered/total)/10;
+      return '<section class="panel"><div class="panel-head"><div><h2>原始意见是否都已整理？</h2><p class="muted">按原文顺序阅读。点击标色句子，右侧会显示它对应的修订事项与稿件位置。</p></div><span class="tag good">已标注 '+percent+'%</span></div><div class="tabs">'+DOCS.map(item=>button(item.label.replace("Reviewer ","审稿人 ")+" · "+coverageMetrics(item).percent+"%","doc",item.id,state.doc===item.id)).join("")+'</div><div class="legend"><span class="covered">■ 已对应修订事项</span><span class="duplicate">■ 重复要求，保留来源</span><span>■ 未标注</span></div><div class="document" aria-label="完整原始意见文档">'+items.map((item,index)=>item.thread?'<button type="button" class="span '+(item.role==="duplicate_filtered"?"duplicate":"covered")+(item.thread===state.thread?" active":"")+'" data-span="'+index+'" title="'+esc(item.thread+" · "+item.role+" · "+item.start+":"+item.end)+'">'+esc(item.text)+'</button>'+(item.role==="duplicate_filtered"?'<sup class="tag warn">重复</sup>':""):esc(item.text)).join("")+'</div><div class="focus-note" style="margin-top:1rem"><b>当前拆分与合并</b><p>R1-01 的指标定义和半径检验分为 A-01、A-02；R2-01 的半径检验也归入 A-02。编辑意见与 R2-03 的因果措辞归入 A-05。</p></div><details><summary>查看覆盖数字和完整对应表</summary><div class="metric-grid"><div class="metric"><b>'+covered+'/'+total+'</b><span>已标注字符</span></div><div class="metric"><b>'+Math.round(1000*nonDuplicate/total)/10+'%</b><span>去除重复后的覆盖</span></div><div class="metric"><b>30% / 50%</b><span>最低 / 建议参考值</span></div><div class="metric"><b>6 → 5</b><span>审稿意见 → 修订事项</span></div></div><h3>原文片段与修订事项</h3><div class="table-wrap"><table><thead><tr><th>原文位置</th><th>标注类型</th><th>审稿意见</th><th>修订事项</th><th>原文摘录</th></tr></thead><tbody>'+items.filter(item=>item.thread).map(item=>'<tr class="'+(item.thread===state.thread?"selected-row":"")+'"><td class="mono">'+item.start+':'+item.end+'</td><td>'+esc(item.role==="duplicate_filtered"?"重复要求":"主要意见")+'</td><td>'+button(label(item.thread),"thread",item.thread,item.thread===state.thread)+'</td><td>'+item.atoms.map(id=>button(a(id).short,"atom",id,id===state.atom)).join(" ")+'</td><td class="source-text">'+esc(item.text.slice(0,100))+'</td></tr>').join("")+'</tbody></table></div>'+coverageAppendix()+'</details>'+sourceFiles("04-raw-review-thread-list.md · 05-atomic-review-comment-list.md · 06-thread-to-atomic-mapping.md · 07-review-comment-coverage.md")+'</section>';
+    }
+    function workboardView(){
+      const item=a(state.atom);
+      return '<section class="panel"><div class="panel-head"><div><h2>五项修订工作怎么安排？</h2><p class="muted">点选一项，核对下一步、证据、依赖和稿件位置。</p></div><span class="tag warn">等待整体确认</span></div>'+ATOMS.map(row=>'<button type="button" class="choice-card work-card" data-atom="'+esc(row.id)+'" aria-pressed="'+(row.id===state.atom)+'"><span class="choice-id">'+esc(row.short)+' · '+esc(row.summary)+'</span><span class="choice-text">'+esc(row.next)+'</span><span class="work-meta"><span class="tag">'+esc(row.priority)+'优先级</span><span class="tag '+(row.gap==="是"?"warn":"good")+'">'+(row.gap==="是"?"需补证据":"证据可核对")+'</span><span class="location">'+esc(row.locations.map(id=>m(id).locator).join("、"))+'</span></span></button>').join("")+'<div class="focus-note"><h3>'+esc(item.short)+' · '+esc(item.summary)+'</h3><dl class="kv"><dt>现有主张</dt><dd>'+esc(item.analysis.claim)+'</dd><dt>已有材料</dt><dd>'+esc(item.analysis.existing)+'</dd><dt>仍需解决</dt><dd>'+esc(item.analysis.missing)+'</dd><dt>先做什么</dt><dd>'+esc(item.next)+'</dd></dl><details><summary>查看依赖、来源与稿件位置</summary><dl class="kv"><dt>依赖</dt><dd>'+esc(item.analysis.depends)+'</dd><dt>来自哪些意见</dt><dd>'+esc(linkedThreads(item.id).map(label).join("、"))+'</dd><dt>稿件位置</dt><dd>'+esc(item.locations.map(id=>m(id).section+" · "+m(id).locator).join("；"))+'</dd></dl></details></div>'+sourceFiles("08-atomic-comment-workboard.md · 06-thread-to-atomic-mapping.md")+'</section>';
+    }
+    function supplementBacklog(){
+      return '<details><summary>查看全部补材建议（5 项）</summary><div class="table-wrap"><table><thead><tr><th>修订事项</th><th>需要提供的材料</th><th>状态</th><th>接收情况</th></tr></thead><tbody>'+ATOMS.map(item=>'<tr class="'+(item.id===activeAtom?"selected-row":"")+'"><td>'+esc(item.short)+'</td><td>'+esc(item.strategy.suggestion)+'</td><td>'+esc(item.gap==="是"?"待补充":"已核对")+'</td><td>尚未接收</td></tr>').join("")+'</tbody></table></div></details>';
+    }
+    function strategyView(){
+      const item=a(state.atom),s=item.strategy,isActive=item.id===activeAtom,locked=!s.draft;
+      return '<section class="panel"><div class="panel-head"><div><h2>'+esc(item.short)+' · '+esc(item.summary)+'</h2><p class="muted">来自 '+esc(linkedThreads(item.id).map(label).join("、"))+' · 修改位置 '+esc(item.locations.map(id=>m(id).locator).join("、"))+'</p></div><span class="tag '+(isActive?"warn":"neutral")+'">'+(isActive?"本次审阅":"可浏览")+'</span></div><div class="focus-note">本次需要确认的是 '+esc(a(activeAtom).short)+' 的策略。其他已生成的策略也可以查看；如需调整先写在右侧。</div><h3 style="margin-top:1.2rem">建议如何回应</h3><p><b>'+esc(s.stance)+'</b></p><p>'+esc(s.why)+'</p>'+(s.blocker==="无"?"":'<div class="blocker"><b>还缺什么</b><p>'+esc(s.blocker)+'</p></div>')+'<h3 style="margin-top:1.2rem">计划修改</h3>'+s.actions.map(action=>'<div class="card"><b>'+esc(action.change)+'</b><p class="small muted">位置：'+esc(action.targets.map(id=>m(id).locator).join("、"))+' · 回复用途：'+esc(action.effect)+'</p></div>').join("")+'<h3>需要核对的材料</h3>'+s.evidence.map(row=>'<div class="card"><b>'+esc(row[0])+'</b> <span class="tag '+(row[1]==="有"?"good":"warn")+'">'+esc(row[1])+'</span><p class="small">'+esc(row[2])+'</p></div>').join("")+'<details><summary>查看待确认问题、补材建议与完成条件</summary><h3>待确认的问题</h3><ul class="list">'+(s.pending.length?s.pending.map(line=>'<li>'+esc(line)+'</li>').join(""):"<li>无待确认事项</li>")+'</ul><h3>补材建议</h3><p>'+esc(s.suggestion)+'</p>'+supplementBacklog()+'<h3>候选修改文字</h3><p>'+(locked?"材料或确认尚未齐全；目前只有修改方向。":esc(s.draft))+'</p><h3>完成条件</h3><ul class="checklist"><li class="done">策略、修改动作和证据判断已形成</li><li class="'+(locked?"":"done")+'">策略已确认</li><li class="'+(locked?"":"done")+'">修改事项与回复草稿已形成</li><li class="'+(locked?"":"done")+'">对应检查通过，阻断已解决</li></ul></details>'+sourceFiles("response-strategy-cards/"+item.id+".md · 09-supplement-suggestion-plan.md · 10-supplement-intake-plan.md")+'</section>';
+    }
+    function roundAppendix(){
+      const outputs=[["修订稿","候选已形成","manuscript/main.tex"],["Markdown 回复信","候选已形成","response/response.md"],["LaTeX 回复信","候选已形成","response/response.tex"],["修订对照稿","可选 · 未生成","—"]];
+      return '<details><summary>查看写作要求</summary><ul class="list"><li>结果段报告估计值与区间，不把区间跨零写成“没有作用”。</li><li>摘要和讨论使用关联措辞；回复信保持礼貌、具体，并指向实际修改位置。</li></ul></details><details><summary>查看完整逐条回复（6 条）</summary><div class="table-wrap"><table><thead><tr><th>原始意见</th><th>修改范围</th><th>关键改动</th><th>回复说明</th></tr></thead><tbody>'+THREADS.map(source=>{const row=r(source.id);return '<tr><td><b>'+esc(source.short)+'</b><p class="source-text">'+esc(original(source.id))+'</p></td><td>'+esc(row.scope)+'</td><td class="source-text">'+esc(row.excerpt)+'</td><td class="source-text">'+esc(row.reply)+'</td></tr>';}).join("")+'</tbody></table></div></details><details><summary>查看交付文件状态</summary><div class="table-wrap"><table><thead><tr><th>交付文件</th><th>状态</th><th>位置</th></tr></thead><tbody>'+outputs.map(row=>'<tr><td>'+esc(row[0])+'</td><td>'+esc(row[1])+'</td><td class="mono">'+esc(row[2])+'</td></tr>').join("")+'</tbody></table></div></details><div class="blocker"><b>正式确认仍待处理</b><p class="small">6 项修改和 6 条回复已形成候选。请先核对本轮预览；正式结果回到对话中确认。</p></div>';
+    }
+    function roundView(){
+      const source=t(state.thread),row=r(source.id),related=LOGS.filter(log=>log.threads.includes(source.id)),item=a(state.atom);
+      return '<section class="panel"><div class="panel-head"><div><h2>第二轮修改与回复预览</h2><p class="muted">逐条核对稿件改动、审稿意见的回复，以及是否有遗漏。</p></div><span class="tag warn">正式确认待处理</span></div><div class="metric-grid"><div class="metric"><b>6 / 6</b><span>计划修改已完成</span></div><div class="metric"><b>6 / 6</b><span>审稿意见有回复</span></div><div class="metric"><b>3</b><span>修改记录</span></div><div class="metric"><b>2</b><span>已接收补充材料</span></div></div><h3>'+esc(source.short)+' · '+esc(source.summary)+'</h3><div class="response-box"><b>建议回复</b><p class="source-text">'+esc(row.reply)+'</p><b>回复对应的改动</b><p class="source-text">'+esc(row.excerpt)+'</p><p class="small muted">修改范围：'+esc(row.scope)+'</p></div><h3 style="margin-top:1.3rem">稿件改动 · '+esc(item.short)+'</h3><div class="comparison"><div><span class="tag neutral">修改前</span><p>'+esc(m(item.locations[0]).before)+'</p></div><div><span class="tag good">修改后</span><p>'+esc(m(item.locations[0]).after)+'</p></div></div><details><summary>查看六条意见的回复覆盖</summary><div class="table-wrap"><table><thead><tr><th>审稿意见</th><th>关联修订</th><th>修改范围</th><th>状态</th></tr></thead><tbody>'+THREADS.map(th=>{const response=r(th.id);return '<tr class="'+(state.thread===th.id?"selected-row":"")+'"><td>'+button(th.short+" · "+th.summary,"thread",th.id,state.thread===th.id)+'</td><td>'+esc(linkedAtoms(th.id).map(id=>a(id).short).join("、"))+'</td><td>'+esc(response.scope)+'</td><td><span class="tag good">已覆盖</span></td></tr>';}).join("")+'</tbody></table></div></details><details><summary>查看相关修改记录与执行安排</summary>'+related.map(log=>'<div class="card"><b>'+esc(log.id)+' · '+esc(log.summary)+'</b>'+log.entries.map(entry=>'<dl class="kv"><dt>文件与位置</dt><dd>'+esc(entry.file+' · '+entry.locator)+'</dd><dt>改动与理由</dt><dd>'+esc(entry.change+'；'+entry.reason)+'</dd><dt>证据与回复用途</dt><dd>'+esc(entry.evidence+'；'+entry.response)+'</dd></dl>').join("")+'</div>').join("")+'<div class="table-wrap"><table><thead><tr><th>安排</th><th>修订事项</th><th>动作与依赖</th><th>状态</th></tr></thead><tbody>'+PLAN.map(plan=>'<tr><td>'+esc(plan.id)+'</td><td>'+esc(a(plan.atom).short)+'</td><td>'+esc(plan.title)+' <span class="muted">← '+esc(plan.depends)+'</span></td><td><span class="tag good">完成</span></td></tr>').join("")+'</tbody></table></div></details><details><summary>查看补充材料与本轮检查</summary><div class="card"><b>analysis/buffer_sensitivity.csv</b><p>已接收 · 模型规格与样本一致；用于 A-02 的 A1、A2 修改。</p></div><div class="card"><b>cohort_flow.csv</b><p>已接收 · 核对缺失重叠人数；用于 A-04 的 A1 修改。</p></div><ul class="checklist"><li class="done">修订事项与回复逐项对应</li><li class="done">6 项计划修改已完成</li><li class="done">6 条原始意见均有回复</li><li>用户核对本轮候选；正式确认仍待对话</li></ul></details>'+roundAppendix()+sourceFiles("11-manuscript-revision-guide.md · 12-manuscript-execution-graph.md · 13-revision-action-log.md · 14-response-coverage-matrix.md · 15/16-response-letter-preview · 17-final-assembly-checklist.md")+'</section>';
+    }
+    function stagePanel(){return state.stage==="coverage"?coverageView():state.stage==="workboard"?workboardView():state.stage==="strategy"?strategyView():roundView();}
+    function guide(){
+      const instructions={
+        coverage:["先核对原文","读中间的原始意见，点选标色片段。右侧核对拆分、合并及稿件位置；遗漏或异议写在“我的反馈”。"],
+        workboard:["先看修订安排","浏览五项工作的优先级和下一步，选中一项查看证据与依赖；逐项留下意见后确认整体安排。"],
+        strategy:["聚焦当前策略","核对建议立场、计划修改和所需材料。当前事项有缺口时写明建议，仍可浏览其他策略。"],
+        round:["逐条核对改动与回复","先读所选意见的回复和稿件前后对照，再查看六条意见是否都已覆盖。"]
+      };
+      const [title,description]=instructions[state.stage];
+      return '<div class="task-guide"><strong>'+title+'</strong><p>'+description+'</p></div>';
+    }
+    function render(){
+      byId("stages").innerHTML=STAGES.map(item=>'<button type="button" data-stage="'+item.id+'" aria-pressed="'+(state.stage===item.id)+'"><b>'+item.number+' · '+esc(item.label)+'</b><small>'+esc(item.hint)+'</small></button>').join("");
+      byId("notice").innerHTML='<div class="statline"><span class="tag">'+esc(stage().snapshot)+'</span><span class="small">'+esc(t(state.thread).short)+' → '+esc(a(state.atom).short)+' → '+esc(a(state.atom).locations.map(id=>m(id).locator).join("、"))+'</span></div><p class="small">'+esc(state.message)+'</p>';
+      byId("workspace").innerHTML='<div class="workspace">'+rail()+'<main class="column">'+guide()+stagePanel()+'</main><aside class="column side-column">'+trace()+feedback()+'</aside></div>';
+    }
+    function selectThread(id){state.thread=id;state.doc=docForThread(id).id;if(!linkedAtoms(id).includes(state.atom))state.atom=linkedAtoms(id)[0];state.message="已定位 "+t(id).short+" 的原文、修订事项与回复。";render();}
+    function selectAtom(id){state.atom=id;if(!linkedThreads(id).includes(state.thread))state.thread=linkedThreads(id)[0];state.doc=docForThread(state.thread).id;state.message="已定位 "+a(id).short+" 的来源与稿件位置。";render();}
+    function canConfirm(){
+      if(state.stage==="round")return true;
+      const ids=state.stage==="strategy"?[activeAtom]:ATOMS.map(item=>item.id);
+      return ids.every(id=>{const choice=state.decisions[state.stage+":"+id];return choice==="accept"||(state.stage==="workboard"&&choice==="defer");});
+    }
+    function syncUrl(){const url=new URL(location.href);url.searchParams.delete("variant");url.searchParams.set("stage",state.stage);try{history.replaceState(null,"",url);}catch(_){}}
+    document.addEventListener("click",event=>{
+      const listSummary=event.target.closest(".rail .atom-list summary");if(listSummary){state.atomListOpen=!listSummary.parentElement.open;return;}
+      const button=event.target.closest("button");if(!button)return;
+      if(button.dataset.span){const part=spans(DOCS.find(doc=>doc.id===state.doc))[Number(button.dataset.span)];if(part.thread){selectThread(part.thread);if(part.atoms.length===1)selectAtom(part.atoms[0]);}return;}
+      if(button.dataset.stage){state.stage=button.dataset.stage;syncUrl();state.message="正在浏览 "+stage().snapshot+"。";render();return;}
+      if(button.dataset.thread){selectThread(button.dataset.thread);return;}
+      if(button.dataset.atom){selectAtom(button.dataset.atom);return;}
+      if(button.dataset.doc){state.doc=button.dataset.doc;state.message="已切换原始文档。";render();return;}
+      if(button.dataset.switch){state.focusRequest=button.dataset.switch;state.message="已记录切换到 "+a(state.focusRequest).short+" 的请求。";render();return;}
+      switch(button.dataset.action){
+        case "confirm":if(!canConfirm()){state.message="仍有未处置或需调整的事项；请先写明反馈。";}else{state.confirmed[confirmKey()]=true;state.message=state.stage==="round"?"已标记本轮预览看完；正式结果仍需回到对话确认。":"已记录本次确认；交回后由助手核对。";}render();break;
+        case "summary":byId("summary-json").textContent=JSON.stringify({kind:"revision-master-prototype-feedback",snapshot:stage().snapshot,decisions:state.decisions,notes:state.notes,confirmations:state.confirmed,focus_request:state.focusRequest},null,2);byId("summary-dialog").showModal();break;
+        case "close-summary":byId("summary-dialog").close();break;
+        case "reset":state=initial();state.message="本地试用状态已重置。";render();break;
+      }
+    });
+    document.addEventListener("change",event=>{const key=event.target.dataset.decision;if(!key)return;state.decisions[key]=event.target.value;delete state.confirmed[confirmKey()];state.message="已记录当前事项的处置。";render();});
+    document.addEventListener("input",event=>{const key=event.target.dataset.note;if(!key)return;state.notes[key]=event.target.value;delete state.confirmed[confirmKey()];event.target.closest(".feedback").querySelector(".status").textContent="待确认 · 批注已更新";});
+    render();
+  </script>
+</body>
+</html>

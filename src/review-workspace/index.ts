@@ -6,3 +6,5 @@ export * from "./render.js";
 export * from "./host.js";
 export * from "./handoff.js";
 export * from "./instructions.js";
+export * from "./revision-master.js";
+export * from "./revision-master-prepare.js";

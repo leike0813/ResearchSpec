@@ -1,7 +1,7 @@
 # ARSU Anchor Conversion — v3.21.1-127ff85
 
-- registry SHA-256: `15662e9ba3998c42c960c32622302104590811d2d10f588ddaea1d8ffbebd9c9`
-- packages tree SHA-256: `9b10ac3e4a91d1f42a56c2196110a95f01bffb7f3cb0b05453c5e8f61c2618cc`
+- registry SHA-256: `ebc28edd47ade83d82024e9dea5e45433c2bd8b2a8730c5ffe61c3ef331b613d`
+- packages tree SHA-256: `bf069380fdf5910d990949fffb4708cefce5f630ef8e8cb53f962c88d4a6c8df`
 - capability count: 47 · operational: 47
 
 ## Capability Packages
@@ -10,7 +10,7 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | `analysis-evidence-synthesis` | Evidence Synthesis | analysis | producer | llm | required | operational | 1/1 | 3 | 1 | 5 | `419520198bcb` |
 | `analysis-meta-analysis` | Meta Analysis | analysis | producer | llm | required | operational | 1/1 | 1 | 1 | 3 | `4f85ae0de975` |
-| `analysis-review-response-manuscript-analysis` | Review Response Manuscript Analysis | analysis | producer | mixed | none | operational | 1/1 | 4 | 1 | 36 | `b08bd884a9b6` |
+| `analysis-review-response-manuscript-analysis` | Review Response Manuscript Analysis | analysis | producer | mixed | none | operational | 1/1 | 6 | 1 | 38 | `eccbfd2ec9cc` |
 | `analysis-risk-of-bias-assessment` | Risk of Bias Assessment | analysis | checker | llm | required | operational | 1/1 | 1 | 1 | 3 | `16e206a3550f` |
 | `check-citation-existence-verification` | Citation Existence Verification | verification | checker | script | required | operational | 1/1 | 2 | 2 | 5 | `c0f42946364d` |
 | `check-citation-format-compliance` | Citation Format Compliance | verification | checker | llm | required | operational | 1/1 | 1 | 1 | 3 | `ca61584a0d09` |
@@ -33,8 +33,8 @@
 | `design-methodology-design` | Methodology Design | design | producer | llm | required | operational | 1/1 | 4 | 1 | 6 | `e38674ed7ae4` |
 | `design-research-question-formulation` | Research Question Formulation | design | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `e0e89711f780` |
 | `design-review-panel-config` | Review Panel Configuration | design | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `a1d8d194d769` |
-| `design-review-response-intake` | Review Response Intake | design | producer | mixed | none | operational | 4/2 | 4 | 1 | 42 | `c1ed654755dc` |
-| `design-review-response-workboard-planning` | Review Response Workboard Planning | design | producer | mixed | required | operational | 1/1 | 6 | 1 | 38 | `fda158b58727` |
+| `design-review-response-intake` | Review Response Intake | design | producer | mixed | none | operational | 4/2 | 6 | 1 | 44 | `678e26990197` |
+| `design-review-response-workboard-planning` | Review Response Workboard Planning | design | producer | mixed | required | operational | 1/1 | 12 | 1 | 44 | `c5e4b351f139` |
 | `design-writing-intake` | Writing Intake | design | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `3d6ebdc8970f` |
 | `discovery-literature-monitoring` | Literature Monitoring | discovery | producer | llm | required | operational | 1/1 | 1 | 1 | 3 | `5085f65eba27` |
 | `discovery-literature-search-screening` | Literature Search And Screening | discovery | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `aa5b2dcbe921` |
@@ -45,13 +45,13 @@
 | `generation-humanization-reference` | Paper Humanizer Reference Mode | generation | observer | llm | none | operational | 0/0 | 1 | 1 | 3 | `d1e6fba4efb4` |
 | `generation-manuscript-drafting` | Manuscript Drafting | generation | producer | llm | required | operational | 2/1 | 3 | 1 | 5 | `f0a15abcbe53` |
 | `generation-report-compilation` | Research Report Compilation | generation | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `77cc41f581c8` |
-| `generation-review-response-round` | Review Response Round | generation | producer | mixed | required | operational | 1/4 | 7 | 1 | 42 | `1e33d55df392` |
+| `generation-review-response-round` | Review Response Round | generation | producer | mixed | required | operational | 1/4 | 13 | 1 | 51 | `25e11535f807` |
 | `judgment-devils-advocate-stress-test` | Devil's Advocate Stress Test | judgment | checker | llm | required | operational | 2/1 | 2 | 1 | 4 | `a58e06c72f05` |
 | `judgment-editorial-judgment` | Editorial Judgment | judgment | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `a04d8f827785` |
 | `judgment-review-synthesis` | Review Synthesis | judgment | producer | llm | required | operational | 3/1 | 1 | 1 | 3 | `9ef1fa9a4a94` |
 | `judgment-specialist-review` | Specialist Review | judgment | producer | llm | required | operational | 2/1 | 4 | 1 | 6 | `998139034297` |
 | `transform-paper-humanization-revision` | Paper Humanization Revision | transformation | producer | mixed | required | operational | 2/2 | 4 | 1 | 7 | `5aebe6e201f3` |
-| `transform-review-response-comment-atomization` | Review Response Comment Atomization | transformation | producer | mixed | required | operational | 1/2 | 4 | 1 | 36 | `ba612aad074f` |
+| `transform-review-response-comment-atomization` | Review Response Comment Atomization | transformation | producer | mixed | required | operational | 1/2 | 10 | 1 | 42 | `3d06238d4b4a` |
 | `transform-revision-patching` | Revision Patching | transformation | checker | mixed | required | operational | 1/2 | 1 | 1 | 3 | `f983a82eca52` |
 | `transform-revision-roadmap-parsing` | Revision Roadmap Parsing | transformation | producer | llm | required | operational | 2/2 | 1 | 1 | 3 | `639fd2fc139c` |
 | `transform-socratic-mentoring` | Socratic Mentoring | transformation | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `670993299989` |

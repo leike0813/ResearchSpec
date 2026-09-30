@@ -42,6 +42,14 @@ knowledge_refs:
     path: knowledge/helper-scripts.md
     content_hash: 27279ea1c86d431a82a6a38cec85f3245b6ef7be195bdc43361b1c1a6aeaf6af
     license: MIT
+  - knowledge_id: assets-localization-messages-en.json
+    path: assets/localization/messages/en.json
+    content_hash: 9b3a1022a9f8aa9d0d59c82dd216f9dbe75a3cbe476b9cffcba4d073d33f39bd
+    license: MIT
+  - knowledge_id: assets-localization-messages-zh-CN.json
+    path: assets/localization/messages/zh-CN.json
+    content_hash: f3c5ae24d9cecf4c8ec0851666f1d868472a4d60cfd6cd5458b548586d1f8f9e
+    license: MIT
 gate_policy: none
 provenance:
   origin: vendor-derived

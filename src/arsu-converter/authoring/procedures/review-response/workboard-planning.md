@@ -20,7 +20,7 @@ Build the canonical atomic workboard: priority, dependencies, evidence gaps, tar
 6. Write `workflow_pending_user_confirmations`, run `scripts/gate_and_render_workspace.py --artifact-root <workspace>`, and present `08-atomic-comment-workboard.md` and `06-thread-to-atomic-mapping.md`.
 7. Keep the confirmation request open until the user explicitly accepts the workboard.
 
-Review the workboard with the user in dialogue. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes. Obtain the graph Gate confirmation separately.
+Review the workboard with the user in dialogue or through the board handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and embed it in `review-workspace/revision-master.html`. The board confirmation binds the whole candidate board, so filtering the page view never narrows it. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes, and commit the processing receipt with the semantic write in the same task transaction. Obtain the graph Gate confirmation separately in dialogue.
 
 ## Completion Criteria
 

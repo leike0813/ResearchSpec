@@ -42,6 +42,14 @@ knowledge_refs:
     path: knowledge/helper-scripts.md
     content_hash: 27279ea1c86d431a82a6a38cec85f3245b6ef7be195bdc43361b1c1a6aeaf6af
     license: MIT
+  - knowledge_id: assets-localization-messages-en.json
+    path: assets/localization/messages/en.json
+    content_hash: 9b3a1022a9f8aa9d0d59c82dd216f9dbe75a3cbe476b9cffcba4d073d33f39bd
+    license: MIT
+  - knowledge_id: assets-localization-messages-zh-CN.json
+    path: assets/localization/messages/zh-CN.json
+    content_hash: f3c5ae24d9cecf4c8ec0851666f1d868472a4d60cfd6cd5458b548586d1f8f9e
+    license: MIT
   - knowledge_id: review-workspace-index.html
     path: review-workspace/index.html
     content_hash: 9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc
@@ -49,6 +57,22 @@ knowledge_refs:
   - knowledge_id: review-workspace-v1.html
     path: review-workspace/v1.html
     content_hash: 5626313e33ccf67479c704d703e638f409367a6173ef1c639866b76f91a7dd09
+    license: MIT
+  - knowledge_id: workbench-review_workbench.py
+    path: workbench/review_workbench.py
+    content_hash: 4db2b7b1c6717f362e4a7acc571544de79ceb99e26197339dcf3783614cee347
+    license: MIT
+  - knowledge_id: workbench-receipts.sql
+    path: workbench/receipts.sql
+    content_hash: bf562c2e4a2fb482ed49ef18508400eb67be878e099eacad1035d5dd2a1797fc
+    license: MIT
+  - knowledge_id: workbench-README.md
+    path: workbench/README.md
+    content_hash: 2cf0158564583e0d43d6dd68fa3e5064c828d1f8005ac4cda6cf2169e2b2568d
+    license: MIT
+  - knowledge_id: review-workspace-revision-master.html
+    path: review-workspace/revision-master.html
+    content_hash: 992386d99129f2f847f1d31a829c3615d74bff722e3de8e59978158215a18dac
     license: MIT
 gate_policy: required
 provenance:

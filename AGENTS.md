@@ -29,6 +29,9 @@ Current external reference paths:
 When paths or ownership change, update this file in the same change so future
 agents do not follow stale locations.
 
+Wayfinder planning maps and decision tickets use GitHub Issues for this repo;
+follow `.agents/skills/setup-matt-pocock-skills/issue-tracker-github.md`.
+
 ## Product Direction
 
 ResearchSpec should become:
@@ -57,6 +60,20 @@ Gate, Decision, node, or other ResearchSpec workflow mutations. The retained
 `review-workspace/v1.html` page and the v1 contract keep existing v1 drafts and
 results on their original path; v1 and v2 are never mixed. Browser failure falls
 back to the same review in Agent dialogue.
+
+review-response additionally offers the independent
+`revision-master-review-workspace.v1` workbench at
+`review-workspace/revision-master.html`, delivered with its package-local
+`workbench/` read-only projection, receipt DDL, and write guidance. It carries
+four handoffs: coverage mapping, whole workboard, current strategy, and round
+revision/response, and exports `revision-master-review-result.v1`. Internal
+confirmation is explicit and scoped to coverage, the whole board, or the current
+strategy; a round seen marker is separate. The Agent validates each returned
+result against its retained snapshot and per-scope dependencies, applies
+accepted feedback through package-local semantic writes, and commits the
+successful processing receipt with that semantic write in one task transaction.
+Preparation and inspection stay read-only, and formal Gate verdicts and Decision
+choices remain separate human confirmations in Agent dialogue.
 
 Files remain the interface. Tool adapters may render and write files, but should
 not call agent APIs or depend on a specific model.

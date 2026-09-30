@@ -123,6 +123,12 @@ reviewer calibration 的专用图能力缺口单独保留；当前四个 ARSU �
 - 本轮修改限于四个 own-vendor package 的页面、paper-humanizer 的方案/候选稿指导，以及 review-response 的新入口指导。38 个 ARSU-derived package、ARS 提取工件和 graph profile 未发生本轮语义变化。四份页面由同一根 HTML 生成；v2 页面为 `9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc`，v1 恢复页面字节不变。
 - 逐项核对两份 paper-humanizer 和两份 review-response 生成 SKILL：前者仍由 plan Gate、candidate verification、acceptance Decision 承接形式确认；后者的新审阅回到对话与 SQLite 脚本，原有页面仅供现有审阅件恢复。全局 parity 为 47/47 operational，五组缺口列表均为空。判定 `adapted`（共享 registry/资产），不改变已审阅的 27 mode 或 ARSU 流程权威。
 
+## 独立 revision-master 工作台的共享树复核（2026-09-30）
+
+- 本轮没有改动 38 个 ARSU-derived package、119 份 ARS 提取工件或 graph profile。全局锚点还绑定五个 revision-master 包所在的共享 registry/packages 树，因此随本 change 更新全局 parity、HTML 工件和记录。
+- 五个 revision-master 包逐项语义审阅见 `audits/own-vendors/revision-master/snapshot-13e69610/05-semantic-review.md`：intake/analysis 业务保持，三个 handoff 包新增独立冻结工作台；旧通用 v1/v2 恢复件保留，正式流程权威不进入浏览器。schema/模板剥离提取头、语言目录补齐已通过真实初始化与渲染验证。
+- 判定 adapted（共享资产与 registry）。该更新不扩大 ARSU mode 的支持范围，也不以工作台内部确认代替图谱 Gate/Decision。
+
 ## 结论
 
 declared-fit-with-notes：七个脚本能力的实际执行缺口已修复并通过真实报告与打包 CLI 验证，支持声明范围内的使用。冻结审阅件只改变共享 own-vendor 资产和 registry，不改变 ARSU-derived procedure 的流程边界。完整上游护照/投稿检查和 reviewer empirical calibration 不在当前确定性实现的承诺内；报告及指令明确保留未检查状态，不能以运行完成代替科学通过或人类 Gate。

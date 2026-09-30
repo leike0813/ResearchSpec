@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'">
+<title>论文修订审阅</title>
+<style>
+    :root{font:16px/1.65 system-ui,-apple-system,"Segoe UI","PingFang SC",sans-serif;color:#24343c;background:#f0f3f2;--line:#d5dedc;--ink:#24343c;--muted:#53686d;--teal:#235f67;--soft:#e8f3f2;--red:#a63332;--orange:#a26116}
+    *{box-sizing:border-box}body{margin:0}button,select,textarea{font:inherit}button{cursor:pointer}button,select,textarea{border:1px solid #bfcfcd;border-radius:8px;background:#fff;color:var(--ink);padding:.55rem .75rem}button:hover{border-color:var(--teal)}button:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #9ccacc;outline-offset:2px}[aria-pressed=true]{background:var(--soft);border-color:var(--teal);color:#144c54;font-weight:700}h1,h2,h3,h4,p{margin-top:0}h1{font-size:1.5rem;margin-bottom:.2rem}h2{font-size:1.3rem;margin-bottom:.65rem;line-height:1.3}h3{font-size:1.07rem;margin-bottom:.5rem}h4{font-size:1rem;margin-bottom:.35rem}p{margin-bottom:.8rem}.small{font-size:.9rem}.muted{color:var(--muted)}.mono{font:13px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace}.tag{display:inline-block;border-radius:999px;background:#e8eff0;color:#355e66;padding:.18rem .55rem;font-size:.82rem;white-space:nowrap}.tag.good{background:#e4f2e9;color:#276341}.tag.warn{background:#fff0dc;color:#8c551a}.tag.neutral{background:#edf0f0;color:#53676e}.primary{background:var(--teal);border-color:var(--teal);color:#fff}.primary:hover{background:#164f57}
+    header{background:#fff;border-bottom:1px solid var(--line);padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}.eyebrow{color:var(--teal);font-size:.8rem;font-weight:800;letter-spacing:.05em}.header-meta{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+    #stages{display:flex;gap:.65rem;overflow-x:auto;background:#fafcfb;border-bottom:1px solid var(--line);padding:.7rem 1.5rem}#stages button{min-width:12rem;text-align:left;white-space:nowrap}#stages small{display:block;color:var(--muted);font-size:.82rem;font-weight:400}#stages [aria-pressed=true] small{color:#406c70}
+    #notice{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:.7rem 1.5rem;background:#fff9ed;border-bottom:1px solid #e9dfc9}#notice p{margin:0}.statline{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+    .workspace{display:grid;grid-template-columns:minmax(13rem,15rem) minmax(0,1fr) minmax(19rem,22rem);gap:1rem;max-width:110rem;margin:auto;padding:1rem;align-items:start}.column{min-width:0}.rail,.side-column{position:sticky;top:1rem;max-height:calc(100vh - 2rem);overflow:auto}.panel{min-width:0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.15rem;margin-bottom:1rem}.panel:last-child{margin-bottom:0}.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:.7rem;margin-bottom:.8rem}.panel-head h2{margin:0}.panel-head .tag{flex:none}.card{border:1px solid var(--line);border-radius:9px;background:#fff;padding:.8rem;margin:.7rem 0}.card p:last-child{margin-bottom:0}.group-label{display:flex;align-items:center;gap:.5rem;font-size:.82rem;font-weight:800;color:var(--muted);margin:1.1rem 0 .35rem}.group-label::after{content:"";flex:1;border-top:1px solid var(--line)}.group-label:first-child{margin-top:0}.actions{display:flex;flex-wrap:wrap;gap:.4rem}.actions button{margin:0}.source-text{font-family:Georgia,"Noto Serif",serif;line-height:1.7;color:#334249}.location{font-size:.86rem;color:var(--muted)}.task-guide{border-left:4px solid var(--teal);background:#eaf4f2;padding:1rem 1.15rem;margin-bottom:1rem;border-radius:0 9px 9px 0}.task-guide p{margin:.25rem 0 0}.task-guide strong{font-size:1.08rem}
+    details{border-top:1px solid var(--line);padding:.8rem 0;margin-top:.4rem}details summary{cursor:pointer;color:var(--teal);font-weight:700}details[open] summary{margin-bottom:.7rem}.source-meta{font-size:.86rem;color:var(--muted)}.source-meta p{overflow-wrap:anywhere}.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:.8rem 0 1.1rem}.metric{border:1px solid var(--line);border-radius:8px;background:#f8fbfa;padding:.7rem}.metric b{display:block;font-size:1.25rem}.metric span{font-size:.83rem;color:var(--muted)}.tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin:.8rem 0}.document{border:1px solid var(--line);border-radius:8px;background:#fdfdfc;padding:1.2rem;white-space:pre-wrap;font:17px/1.85 Georgia,"Noto Serif",serif}.document .span{cursor:pointer;border-radius:2px}.document .span:hover{outline:2px solid #91b8b9}.document .span.active{outline:2px solid var(--teal)}.document .covered{color:var(--red);font-weight:700}.document .duplicate{color:var(--orange);font-weight:700}.document button.span{display:inline;border:0;background:transparent;padding:0;font:inherit;text-align:left;white-space:pre-wrap}.legend{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.9rem}.legend .covered{color:var(--red)}.legend .duplicate{color:var(--orange)}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:8px;margin:.8rem 0}table{border-collapse:collapse;width:100%;font-size:.91rem}th,td{border-bottom:1px solid #e2e9e7;padding:.65rem .7rem;text-align:left;vertical-align:top}th{background:#f6f9f8;color:#50656b;white-space:nowrap}tr:last-child td{border-bottom:0}tr.selected-row{background:#edf7f5}td .tag{margin:.1rem}.kv{display:grid;grid-template-columns:minmax(8rem,10rem) 1fr;gap:.55rem .8rem;margin:.8rem 0}.kv dt{color:var(--muted)}.kv dd{margin:0}.list{margin:.5rem 0 .9rem;padding-left:1.3rem}.list li{margin:.4rem 0}.checklist{list-style:none;padding:0}.checklist li{margin:.4rem 0}.checklist li:before{content:"□";color:var(--teal);margin-right:.5rem}.checklist li.done:before{content:"☑"}.blocker{border-left:3px solid #d29346;background:#fff7ec;padding:.8rem .9rem}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}.comparison>div{border:1px solid var(--line);border-radius:8px;padding:.85rem}.comparison p{font:17px/1.8 Georgia,"Noto Serif",serif}
+    .feedback{background:#f4f8f7;border:1px solid #c6dad7;border-radius:9px;padding:.9rem}.feedback label{display:block;font-weight:700;margin:.6rem 0 .25rem}.feedback select,.feedback textarea{width:100%}.feedback textarea{min-height:6rem;resize:vertical}.feedback .primary{margin-top:.7rem}.status{font-size:.88rem;color:var(--muted);margin:.6rem 0 0}.focus-note{background:#edf6f4;border:1px solid #c7dbd8;border-radius:8px;padding:.8rem}.response-box{border-left:3px solid var(--teal);padding:.8rem 1rem;background:#f4f9f8}.response-box p{white-space:pre-wrap}
+    .side-column{display:flex;flex-direction:column;overflow:hidden}.side-column>.panel:first-child{min-height:0;flex:1;overflow:auto}.side-column>.panel:last-child{flex:none}
+    .choice-card{position:relative;display:block;width:100%;margin:.5rem 0;padding:.72rem 1.8rem .72rem .85rem;text-align:left;white-space:normal;border:1px solid #cbd8d6;border-left:4px solid #bdcecc;border-radius:9px;background:#fbfcfc;transition:background .12s,border-color .12s,box-shadow .12s}.choice-card::after{content:"›";position:absolute;right:.7rem;top:.58rem;color:#648085;font-size:1.25rem}.choice-card:hover{border-color:#5b9599;background:#f2f9f7;box-shadow:0 2px 9px #2b5b5d1c}.choice-card[aria-pressed=true]{border-color:#3d8990;border-left-color:#17636d;background:#e8f4f2;box-shadow:0 0 0 1px #a8d0cb}.choice-card[aria-pressed=true]::after{content:"✓";color:#17636d;font-size:1rem;font-weight:800}.choice-card.related:not([aria-pressed=true]){border-left-color:#8eafb1}.choice-id{display:block;font-weight:800;color:#1d5259}.choice-text{display:block;margin-top:.15rem;line-height:1.45}.work-card{padding:.85rem 2rem .85rem 1rem;margin:.65rem 0}.work-meta{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;margin-top:.65rem}.work-meta .location{margin-left:.2rem}
+    .trace-label{font-size:.88rem;font-weight:700;color:var(--muted);margin:.8rem 0 .35rem}.trace-choices{display:grid;grid-template-columns:minmax(0,1fr);gap:.4rem}.trace-choices button{display:flex;align-items:start;gap:.55rem;width:100%;min-width:0;text-align:left;line-height:1.4;background:#fff;border-color:#c4d5d3}.trace-choices button:hover{background:#f2f8f7}.trace-choices button[aria-pressed=true]{background:#e6f3f0;border-color:#2e777d;box-shadow:inset 3px 0 0 #2e777d}.trace-choice-id{flex:none;min-width:2.7rem;font-weight:800;color:#1d5b62}.trace-detail{background:#f7f9f8;border-left:3px solid #a8bfbe;border-radius:0 8px 8px 0;padding:.8rem .9rem;margin:.8rem 0}.trace-detail h4{font-size:.93rem;color:#53686d;margin-bottom:.35rem}.trace-detail p:last-child{margin-bottom:0}
+    #stages button[aria-pressed=true]{box-shadow:inset 0 -3px 0 var(--teal)}.context-panel{border-top:3px solid #90afb0}.review-panel{border-top:3px solid var(--teal)}.review-panel h2{color:#1d5b62}.review-panel .feedback{background:#f1f9f7}.review-panel .primary{display:block;width:100%;min-height:2.75rem}details summary:hover{text-decoration:underline;text-underline-offset:3px}
+    dialog{border:1px solid var(--line);border-radius:11px;max-width:min(45rem,92vw);box-shadow:0 20px 60px #0004}dialog::backdrop{background:#17303988}dialog pre{background:#f0f4f3;padding:.9rem;max-height:55vh;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+    @media(max-width:1250px){.workspace{grid-template-columns:minmax(12rem,14rem) minmax(0,1fr)}.side-column{grid-column:1/-1;position:static;max-height:none;display:grid;grid-template-columns:1fr 1fr;gap:1rem}.side-column .panel{margin:0}.metric-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){header,#notice{display:block}.header-meta{margin-top:.7rem}.workspace{display:block}.rail,.side-column{position:static;max-height:none}.rail{max-height:12rem;overflow:auto}.side-column{display:block}.side-column .panel{margin-bottom:1rem}.comparison{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:480px){.metric-grid,.kv{grid-template-columns:1fr}}
+
+input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75rem;max-width:100%}.rail input,.rail select{width:100%}.rail label{display:block;margin:.4rem 0}.rail .filters{margin-bottom:.7rem}.review-panel{max-height:calc(100vh - 3rem);overflow:auto}.feedback-extra{font-size:.9rem}.feedback-extra label{display:block;margin:.5rem 0 .25rem}.feedback-extra textarea,.feedback-extra select{width:100%}.feedback-extra textarea{min-height:4rem}.doc-block{white-space:pre-wrap;font:17px/1.85 Georgia,"Noto Serif",serif;margin:.7rem 0;overflow-wrap:anywhere}.doc-block[data-kind=heading]{font-family:system-ui;font-weight:700}.doc-block[data-kind=code],.doc-block[data-kind=raw-source],.doc-block[data-kind=formula]{font:14px/1.7 ui-monospace,monospace;background:#f5f7f6;padding:.5rem}.doc-block img{max-width:100%}.block-tools{font:13px/1.5 system-ui;display:flex;gap:.4rem}.changed-before{background:#ffe6df}.changed-after{background:#dff1e6}mark{background:#ffe7a4;color:inherit;cursor:pointer}.status-line{font-size:.88rem;color:var(--muted)}.section-select{max-width:100%}#storage-status{color:#8c551a}#selection-tools{position:sticky;bottom:.5rem;background:#fff7df;padding:.7rem;border:1px solid #dfc48b;border-radius:8px;z-index:2}#selection-tools[hidden]{display:none}.field-note,.response-box{white-space:pre-wrap}.feedback-row button{font-size:.82rem}.card,.kv dd,.response-box{overflow-wrap:anywhere}button:disabled{opacity:.55;cursor:default}#object-heading:focus{outline:none}#context{margin-top:.3rem}
+@media(max-width:1050px){.workspace{grid-template-columns:13rem minmax(0,1fr)}.rail{position:static;max-height:none}.side-column{grid-column:1/-1;position:static;max-height:none;overflow:visible;display:grid;grid-template-columns:1fr 1fr;gap:1rem}.review-panel{max-height:none}}@media(max-width:650px){.workspace{display:block;padding:.6rem}.side-column{display:block}.comparison{grid-template-columns:1fr}.kv{grid-template-columns:1fr}.metric-grid{grid-template-columns:1fr 1fr}header{display:block;padding:1rem}.header-meta{margin-top:.6rem}#stages,#notice{padding:.6rem}#notice{display:block}.document{padding:.8rem}.panel{padding:1rem}#stages button{min-width:10.5rem}}
+</style>
+</head>
+<body>
+<header><div><div class="eyebrow">论文修订 · 工件台账</div><h1 id="title">论文修订工作台</h1><div id="identity" class="small muted"></div></div><div class="header-meta"><span id="counts" class="tag"></span><button class="primary" id="export">导出审阅结果</button></div></header>
+<nav id="stages" aria-label="审阅阶段"></nav>
+<div id="notice"><div><div class="statline" id="scope-description"></div><div id="context" class="small muted"></div></div><div><p id="message" class="small" role="status" aria-live="polite"></p><p id="storage-status" class="small" role="status"></p></div></div>
+<div class="workspace">
+<aside class="rail panel" aria-label="审稿意见"><h2>审稿意见</h2><p class="small muted">点选意见，核对原文与修订事项。</p><details class="filters"><summary>搜索与筛选</summary><label>搜索<input id="search" type="search"></label><label>审稿人<select id="reviewer"><option value="">全部</option></select></label><label>意见状态<select id="status"><option value="">全部</option></select></label></details><div id="objects"></div><details><summary>完整冻结文档目录</summary><div id="documents"></div></details></aside>
+<main class="column"><div id="guide" class="task-guide"></div><section class="panel"><h2 id="object-heading" tabindex="-1"></h2><div id="candidate"></div></section><details class="panel" id="reading-panel"><summary>查看关联稿件片段与完整文档</summary><div id="reading-mode"></div><div id="reading"></div><div id="selection-tools" hidden><span id="selection-quote"></span><button id="add-selection">批注所选文字</button><button id="cancel-selection">取消</button></div></details></main>
+<aside class="column side-column"><section class="panel context-panel"><h2>当前意见与稿件</h2><div id="trace"></div></section><section class="panel review-panel" aria-label="审阅反馈"><div class="panel-head"><h2>我的反馈</h2><span id="feedback-target" class="tag"></span></div><div id="focus-note" class="small focus-note" hidden></div><div class="feedback"><label>这项建议如何处理？<select id="disposition"></select></label><label>批注或调整建议<textarea id="request-note" placeholder="写明遗漏、证据问题或修改建议"></textarea></label><button id="save-request">保存处置与建议</button><div id="confirm-area"></div><div id="draft-status" class="status"></div></div><p class="small muted">交回助手核对后继续。正式决定在对话中确认。</p><details class="feedback-extra" id="additional-feedback"><summary>独立批注、整体说明与其他反馈对象</summary><label>反馈对象<select id="target"></select></label><label>独立批注<textarea id="annotation-note"></textarea></label><button id="add-object-note">添加对象批注</button><div class="actions"><button id="focus-request">请求切换执行焦点</button></div><label>整体说明<textarea id="overall"></textarea></label><button id="save-overall">保存整体说明</button></details><details class="feedback-extra"><summary>已记录反馈</summary><div id="feedback-list"></div></details></section></aside>
+</div>
+<script type="application/json" id="revision-master-data">__REVISION_MASTER_DATA__</script>
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  let w;
+  try { w = JSON.parse($('revision-master-data').textContent); }
+  catch { $('message').textContent = '请打开 Agent 已准备好的审阅 HTML。'; $('export').disabled = true; return; }
+  if (w.schema_version !== 'revision-master-review-workspace.v1') { $('message').textContent = '审阅件格式无法识别。'; $('export').disabled = true; return; }
+  const b = w.business, stageNames = {coverage:'意见覆盖',board:'整体工作板',strategy:'当前策略',round:'本轮改稿与回复'};
+  const stateNames = {todo:'待处理',blocked:'阻断',ready:'可审阅',in_progress:'处理中',done:'完成',yes:'是',no:'否',high:'高',medium:'中',low:'低',covered:'已覆盖',uncovered:'未覆盖',primary:'主要',supporting:'支持',duplicate_filtered:'重复来源',completed:'完成',draft:'草案',pending:'待处理',conflict:'需核对',accepted:'已接收'};
+  const labels = {comment_id:'意见',thread_id:'原始条目',reviewer_id:'审稿人',canonical_summary:'意见摘要',required_action:'所需行动',original_text:'原文',normalized_summary:'整理摘要',source_type:'来源类型',source_document_id:'原始文档',source_kind:'文档类型',source_label:'来源',source_path:'源文件',span_role:'来源作用',start_offset:'原文起点',end_offset:'原文终点',span_text:'原文片段',excerpt_text:'引文',note:'说明',coverage_status:'覆盖状态',segment_text:'覆盖片段',status:'状态',priority:'优先级',evidence_gap:'证据缺口',user_confirmation_needed:'需要用户确认',next_action:'下一步',target_location:'稿件位置',location_role:'位置作用',manuscript_claim_or_section:'论点或章节',existing_evidence:'现有证据',gap_summary:'缺口',dependency_comment_id:'依赖意见',proposed_stance:'拟定立场',stance_rationale:'立场理由',manuscript_change:'稿件修改',expected_response_letter_effect:'回复预期',required_material:'所需材料',available_now:'当前可用',gap_note:'缺口说明',message:'待核对事项',category:'类别',content_text:'候选措辞',rationale:'理由',target_scope_note:'适用范围',draft_text:'回复草案',request_summary:'补材建议',request_recommendation:'接收建议',round_id:'轮次',file_path:'材料文件',concern_summary:'材料事项',decision:'接收判断',decision_rationale:'判断理由',planned_usage_note:'使用计划',manuscript_execution_items_done:'稿件草案完成',response_draft_done:'回复完成',evidence_gap_closed:'证据缺口关闭',user_strategy_confirmed:'内部策略确认',one_to_one_link_checked:'对应已核对',export_ready:'导出就绪',plan_action_id:'计划行动',execution_category:'行动类别',title:'行动',objective:'目标',suggested_change:'修改建议',evidence_requirement:'证据要求',depends_on_plan_action_id:'依赖行动',log_id:'修改日志',operator_role:'执行者',summary:'摘要',change_note:'修改说明',response_note:'回复说明',created_at:'记录时间',target_file:'目标文件',target_locator:'位置',change_type:'修改类型',change_summary:'修改摘要',evidence_source:'证据来源',expected_response_use:'回复用途',relative_path:'文件',change_kind:'文件变化',diff_excerpt:'变化摘要',before_excerpt:'修改前',after_excerpt:'修改后',snapshot_sha256:'冻结文件标识',last_audited_sha256:'已核对文件标识',current_sha256:'当前文件标识',last_log_id:'最近日志',variant_label:'措辞版本',variant_text:'候选措辞',response_resolution_kind:'回复方式',original_comment:'原始意见',modification_scope:'修改范围',key_revision_excerpt:'修改引文',response_explanation:'回复解释',latex_excerpt:'LaTeX 引文',latex_response_text:'LaTeX 回复',artifact_name:'交付件',artifact_status:'记录状态',output_path:'交付路径',profile_target:'风格对象',profile_summary:'风格摘要',anti_ai_focus:'措辞关注点',rule_type:'规则类别',rule_text:'规则',main_entry:'稿件入口',project_shape:'稿件结构',high_risk_areas:'高风险范围',section_title:'章节',purpose_in_manuscript:'章节用途',key_files_or_locations:'文件位置',core_claim:'主要论点',main_evidence:'主要证据',supporting_section_ids:'支持章节',risk_level:'风险',link_note:'关联说明',response_role:'回复作用',patch_set_id:'交付修改组',artifact_kind:'交付类型',source_root:'原稿目录',output_root:'交付目录',operation:'操作',anchor_text:'定位引文',marked_text:'标记稿',clean_text:'净稿',notes:'说明'};
+  const categories = ['dispositions','annotations','confirmations','seen','focus_requests','overall_note'];
+  const categoryNames = {dispositions:'处置与请求',annotations:'独立批注',confirmations:'内部确认',seen:'本轮已看完',focus_requests:'切换焦点请求',overall_note:'整体说明'};
+  const id = () => crypto.randomUUID();
+  const empty = () => Object.fromEntries(categories.map(key => [key, []]));
+  const key = `revision-master:${w.workspace_id}:${w.snapshot_id}`;
+  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage;
+  let selected = w.context.active_comment_id ? `comment:${w.context.active_comment_id}` : (b.atomic_comments[0] ? `comment:${b.atomic_comments[0].comment_id}` : 'scope:coverage');
+  let atomListOpen = false, selectedThread = rowsForInitialThread();
+  function rowsForInitialThread() { return b.raw_thread_atomic_links.find(row => selected === 'comment:'+row.comment_id)?.thread_id || b.raw_review_threads[0]?.thread_id || null; }
+  let reading = {mode:'related',document_id:null,start:0}, selectionAnchor = null, coverageDocumentId = null;
+  const docs = new Map(w.documents.map(doc => [doc.document_id,doc]));
+  const blocks = new Map(w.documents.flatMap(doc => doc.blocks.map(block => [block.id,block])));
+  const scopes = new Map(w.scopes.map(scope => [scope.scope_id,scope]));
+  const comments = new Map(b.atomic_comments.map(row => [row.comment_id,row]));
+  const threads = new Map(b.raw_review_threads.map(row => [row.thread_id,row]));
+  const rows = (table,field,value) => (b[table] || []).filter(row => row[field] === value);
+  const name = value => stateNames[value] || String(value ?? '未知');
+  const el = (tag,text,className) => { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (className) node.className = className; return node; };
+  const button = (text,fn) => { const node = el('button',text); node.type = 'button'; node.addEventListener('click',fn); return node; };
+  const tell = text => { $('message').textContent = text; };
+  try {
+    const saved = JSON.parse(localStorage.getItem(key) || 'null');
+    if (saved && typeof saved.draft_id === 'string' && Number.isInteger(saved.export_revision) && saved.export_revision >= 0 && categories.every(category => Array.isArray(saved.feedback?.[category]))) {
+      const ids = categories.flatMap(category => saved.feedback[category].map(entry => entry.feedback_id));
+      if (new Set(ids).size === ids.length && categories.every(category => saved.feedback[category].every(entry => validEntry(entry)))) draft = saved;
+      else tell('保存的草稿无法核对，已打开原始候选。');
+    }
+  } catch { $('storage-status').textContent = '本地草稿恢复不可用；仍可审阅并导出。'; }
+  function validEntry(entry) {
+    const scope = scopes.get(entry.scope_id);
+    return typeof entry.feedback_id === 'string' && typeof entry.note === 'string' && scope && (entry.target_id === `scope:${scope.scope_id}` || scope.target_ids.includes(entry.target_id));
+  }
+  function save() {
+    removeBlockedConfirmations();
+    try { localStorage.setItem(key,JSON.stringify(draft)); }
+    catch { $('storage-status').textContent = '草稿未能保存到浏览器；请导出当前反馈以保留。'; }
+    renderFeedback(); renderConfirm();
+  }
+  function currentScope() { return scopes.get(stage === 'strategy' ? `strategy:${w.context.active_comment_id}` : stage) || scopes.get('board'); }
+  function targetScope(target) {
+    const current = currentScope();
+    if (current.target_ids.includes(target) || target === `scope:${current.scope_id}`) return current;
+    return w.scopes.find(scope => scope.kind !== 'strategy' && scope.target_ids.includes(target)) || current;
+  }
+  function targetForFeedback() { return $('target').value || `scope:${currentScope().scope_id}`; }
+  function entry(target,note) { const scope = targetScope(target); return {feedback_id:id(),scope_id:scope.scope_id,target_id:scope.target_ids.includes(target) ? target : `scope:${scope.scope_id}`,note}; }
+  function activeBlocked() {
+    const active = w.context.active_comment_id, state = rows('atomic_comment_state','comment_id',active)[0];
+    return !active || !comments.has(active) || !rows('strategy_cards','comment_id',active).length || state?.status === 'blocked' || state?.evidence_gap === 'yes' || rows('comment_blockers','comment_id',active).length > 0 || rows('strategy_card_evidence_items','comment_id',active).some(row => row.available_now === 'no');
+  }
+  function confirmationBlocked(scope) {
+    if (scope.baseline.unresolved?.length) return true;
+    if (scope.kind === 'strategy' && activeBlocked()) return true;
+    const targets = new Set([...scope.target_ids,...(scope.kind === 'strategy' ? scope.baseline.tables.atomic_comments || [] : []).map(row => `comment:${row.comment_id}`)]);
+    const overlaps = row => {
+      if (row.target_id.startsWith('comment:')) return targets.has(row.target_id);
+      if (row.target_id.startsWith('relation:')) return targets.has(`comment:${row.target_id.split(':').at(-1)}`) || targets.has(`thread:${row.target_id.split(':')[1]}`) || targets.has(row.target_id);
+      if (row.target_id.startsWith('thread:')) return targets.has(row.target_id) || b.raw_thread_atomic_links.some(edge => `thread:${edge.thread_id}` === row.target_id && targets.has(`comment:${edge.comment_id}`));
+      return row.scope_id === scope.scope_id || scopes.get(row.scope_id)?.target_ids.some(target => targets.has(target));
+    };
+    return draft.feedback.dispositions.some(row => overlaps(row) && (row.action === 'adjust' || row.action === 'defer' || row.note.trim())) || draft.feedback.annotations.some(overlaps) || draft.feedback.overall_note.some(row => overlaps(row) && row.note.trim());
+  }
+  function removeBlockedConfirmations() { draft.feedback.confirmations = draft.feedback.confirmations.filter(row => { const scope = scopes.get(row.scope_id); return scope && !confirmationBlocked(scope); }); }
+  function put(category,newEntry) {
+    const prior = draft.feedback[category].find(row => row.scope_id === newEntry.scope_id && row.target_id === newEntry.target_id);
+    if (prior) Object.assign(prior,newEntry,{feedback_id:prior.feedback_id}); else draft.feedback[category].push(newEntry);
+    save();
+  }
+  function targetLabel(target) {
+    if (target.startsWith('comment:')) { const cid = target.slice(8); return `${shortComment(cid)} · ${comments.get(cid)?.canonical_summary || '意见'}`; }
+    if (target.startsWith('thread:')) { const row = threads.get(target.slice(7)); return `${shortThread(target.slice(7))} · ${row?.normalized_summary || '原始意见'}`; }
+    if (target.startsWith('relation:')) return `关联 ${shortThread(target.split(':')[1])} → ${shortComment(target.split(':').slice(2).join(':'))}`;
+    if (target.startsWith('document:')) return docs.get(target.slice(9))?.title || target;
+    return `${stageNames[scopes.get(target.slice(6))?.kind] || '本次'}整体范围`;
+  }
+  function go(target) { if (target.startsWith('thread:')) { selectedThread = target.slice(7); const related = rows('raw_thread_atomic_links','thread_id',selectedThread); if (!related.some(row => selected === 'comment:'+row.comment_id)) selected = related[0] ? 'comment:'+related[0].comment_id : target; } else { selected = target; if (target.startsWith('comment:') && !rows('raw_thread_atomic_links','comment_id',target.slice(8)).some(row => row.thread_id === selectedThread)) selectedThread = rows('raw_thread_atomic_links','comment_id',target.slice(8))[0]?.thread_id || null; } reading.mode = 'related'; selectionAnchor = null; renderObjects(); renderCandidate(); renderReading(); renderTarget(); $('object-heading').focus(); }
+  function link(target,label) { return button(label ?? targetLabel(target),() => go(target)); }
+  function table(title,data,parent) {
+    if (!data.length) return;
+    const section = el('details'); section.append(el('summary',`${title} · ${data.length}`));
+    const wrap = el('div',undefined,'table-wrap'), t = el('table'), fields = [...new Set(data.flatMap(row => Object.keys(row)))].filter(field => !/(?:_order|_sha256)$/.test(field));
+    const head = el('tr'); fields.forEach(field => head.append(el('th',labels[field] || field))); t.append(head);
+    data.forEach(row => { const tr = el('tr'); fields.forEach(field => {
+      const td = el('td');
+      if (field === 'comment_id' || field === 'dependency_comment_id') { if (row[field]) td.append(link(`comment:${row[field]}`,String(row[field]))); else td.textContent = '无'; }
+      else if (field === 'thread_id' && row[field]) td.append(link(`thread:${row[field]}`,String(row[field])));
+      else td.textContent = name(row[field]);
+      tr.append(td);
+    }); t.append(tr); }); wrap.append(t); section.append(wrap); parent.append(section);
+  }
+  function info(title,value,parent) { const card = el('div',undefined,'card'); card.append(el('h3',title),el('div',value || '暂无记录','field-note')); parent.append(card); }
+  function fillFilters() {
+    for (const value of [...new Set(b.raw_review_threads.map(row => row.reviewer_id))]) { const option = el('option',value); option.value = value; $('reviewer').append(option); }
+    for (const value of [...new Set(b.atomic_comment_state.map(row => row.status))]) { const option = el('option',name(value)); option.value = value; $('status').append(option); }
+  }
+  const shortComment = cid => { const row = comments.get(cid); return row ? 'A-'+String(row.comment_order).padStart(2,'0') : cid; };
+  const shortThread = tid => { const row = threads.get(tid), reviewer = row?.reviewer_id || ''; const n = reviewer.match(/(?:reviewer|R|审稿人)[_ -]?(\d+)/i)?.[1]; return row ? (n ? 'R'+n : /editor|编辑/i.test(reviewer) ? 'ED' : reviewer)+'-'+String(row.thread_order).padStart(2,'0') : tid; };
+  function choice(target,title,text,extra) {
+    const node = link(target,''); node.className = 'choice-card'; node.setAttribute('aria-pressed',String(target === selected || target === 'thread:'+selectedThread));
+    node.append(el('span',title,'choice-id'),el('span',text,'choice-text')); if (extra) node.append(extra); return node;
+  }
+  function renderObjects() {
+    const list = $('objects'); list.replaceChildren();
+    const q = $('search').value.toLowerCase(), reviewer = $('reviewer').value, status = $('status').value;
+    const visible = row => {
+      const related = rows('raw_thread_atomic_links','comment_id',row.comment_id).map(edge => threads.get(edge.thread_id)), state = rows('atomic_comment_state','comment_id',row.comment_id)[0];
+      return (!q || [shortComment(row.comment_id),row.comment_id,row.canonical_summary,row.required_action,...related.map(thread => thread?.original_text || '')].join(' ').toLowerCase().includes(q)) && (!reviewer || related.some(thread => thread?.reviewer_id === reviewer)) && (!status || state?.status === status);
+    };
+    const matching = b.atomic_comments.filter(visible), ids = new Set(matching.map(row => row.comment_id)); let lastReviewer = null;
+    for (const thread of b.raw_review_threads) {
+      if (reviewer && reviewer !== thread.reviewer_id || status && !rows('raw_thread_atomic_links','thread_id',thread.thread_id).some(row => ids.has(row.comment_id)) || q && ![shortThread(thread.thread_id),thread.original_text,thread.normalized_summary].join(' ').toLowerCase().includes(q) && !rows('raw_thread_atomic_links','thread_id',thread.thread_id).some(row => ids.has(row.comment_id))) continue;
+      if (lastReviewer !== thread.reviewer_id) { list.append(el('div',thread.reviewer_id.replace(/reviewer[_ ]?(\d+)/i,'审稿人 $1').replace(/editor/i,'编辑'),'group-label')); lastReviewer = thread.reviewer_id; }
+      list.append(choice('thread:'+thread.thread_id,shortThread(thread.thread_id),thread.normalized_summary));
+    }
+    const details = el('details'); details.open = atomListOpen; details.append(el('summary','查看全部 '+b.atomic_comments.length+' 项修订事项'));
+    details.addEventListener('toggle',() => { atomListOpen = details.open; });
+    for (const row of matching) details.append(choice('comment:'+row.comment_id,shortComment(row.comment_id),row.canonical_summary));
+    list.append(details);
+    if (!matching.length) list.append(el('p','没有匹配修订事项；已有反馈保留。','muted'));
+  }
+  function selectedComments() { return selected.startsWith('comment:') ? [selected.slice(8)] : selectedThread ? rows('raw_thread_atomic_links','thread_id',selectedThread).map(row => row.comment_id) : []; }
+  function details(title,parent) { const node = el('details'); node.append(el('summary',title)); parent.append(node); return node; }
+  function fields(data,keys,parent) {
+    const list = el('dl',undefined,'kv'); for (const field of keys) { list.append(el('dt',labels[field] || field),el('dd',name(data?.[field] ?? '暂无记录'))); } parent.append(list);
+  }
+  function renderTrace() {
+    const parent = $('trace'); parent.replaceChildren(); const cid = selectedComments()[0], item = comments.get(cid), source = threads.get(selectedThread);
+    if (source) {
+      parent.append(el('h3',shortThread(source.thread_id)+' · '+source.normalized_summary));
+      const excerpts = b.atomic_comment_source_spans.filter(row => row.comment_id === cid && row.thread_id === source.thread_id);
+      parent.append(el('p',excerpts.map(row => row.excerpt_text).join('\n') || source.original_text,'source-text'));
+      details('查看这条意见全文',parent).append(el('p',source.original_text,'source-text'));
+      parent.append(el('p','对应的修订事项','trace-label')); const choices = el('div',undefined,'trace-choices'); choices.setAttribute('role','group'); choices.setAttribute('aria-label','对应的修订事项');
+      for (const edge of rows('raw_thread_atomic_links','thread_id',source.thread_id)) { const node = link('comment:'+edge.comment_id,''); node.setAttribute('aria-pressed',String(cid === edge.comment_id)); node.append(el('span',shortComment(edge.comment_id),'trace-choice-id'),el('span',comments.get(edge.comment_id)?.canonical_summary)); choices.append(node); } parent.append(choices);
+    }
+    if (item) {
+      const box = el('div',undefined,'trace-detail'); box.append(el('h4','这项修订需要完成'),el('p',item.required_action));
+      const origins = el('div',undefined,'actions'); for (const edge of rows('raw_thread_atomic_links','comment_id',cid)) origins.append(link('thread:'+edge.thread_id,shortThread(edge.thread_id))); box.append(el('p','关联意见','small muted'),origins); parent.append(box);
+      for (const location of rows('atomic_comment_target_locations','comment_id',cid)) {
+        const card = el('div',undefined,'card'); card.append(el('b','稿件位置：'+location.target_location));
+        const loc = w.locations.find(row => row.comment_id === cid && row.label === location.target_location && docs.get(row.document_id)?.role !== 'after') || w.locations.find(row => row.comment_id === cid && docs.get(row.document_id)?.role !== 'after');
+        if (loc) { const block = blocks.get(loc.block_id), body = details('查看原稿段落',card); body.append(el('p',block.text.slice(loc.start,loc.end),'source-text'),button('打开所在章节',() => openLocation(loc))); }
+        else card.append(el('p','暂无可靠定位，可从完整文档核对。','small muted')); parent.append(card);
+      }
+      if (!rows('atomic_comment_target_locations','comment_id',cid).length) parent.append(el('p','稿件位置尚待核对。','small muted'));
+      const mapping = details('查看拆分、合并与关联说明',parent);
+      for (const span of rows('atomic_comment_source_spans','comment_id',cid)) { const card = el('div',undefined,'card'); card.append(link('thread:'+span.thread_id,shortThread(span.thread_id)),el('p',span.excerpt_text,'source-text'),el('p',span.note,'small muted'),button('对这条关联反馈',() => { $('additional-feedback').open = true; $('target').value = 'relation:'+span.thread_id+':'+cid; loadRequest(); $('request-note').focus(); })); mapping.append(card); }
+    }
+  }
+  function openLocation(location) {
+    const doc = docs.get(location.document_id), index = doc.blocks.findIndex(block => block.id === location.block_id), range = sectionRanges(doc).find(row => index >= row.start && index < row.end);
+    reading = {mode:'document',document_id:doc.document_id,start:range?.start || 0}; $('reading-panel').open = true; renderReading(); $('reading-panel').scrollIntoView({block:'start'});
+  }
+  function renderCoverage(parent) {
+    $('object-heading').textContent = '原始意见是否都已整理？'; parent.append(el('p','按原文顺序阅读。点击标色句子，右侧会显示它对应的修订事项与稿件位置。','muted'));
+    const originals = b.review_comment_source_documents;
+    coverageDocumentId = originals.some(row => row.source_document_id === coverageDocumentId) ? coverageDocumentId : rows('raw_thread_source_spans','thread_id',selectedThread)[0]?.source_document_id || originals[0]?.source_document_id;
+    const tabs = el('div',undefined,'tabs');
+    for (const doc of originals) { const node = button(doc.source_label,() => { coverageDocumentId = doc.source_document_id; renderCandidate(); }); node.setAttribute('aria-pressed',String(coverageDocumentId === doc.source_document_id)); tabs.append(node); } parent.append(tabs);
+    const legend = el('div',undefined,'legend'); legend.append(el('span','■ 已对应修订事项','covered'),el('span','■ 重复要求，保留来源','duplicate'),el('span','■ 未标注')); parent.append(legend);
+    const doc = originals.find(row => row.source_document_id === coverageDocumentId);
+    if (doc) {
+      const chars = Array.from(doc.original_text), spans = rows('raw_thread_source_spans','source_document_id',doc.source_document_id), breaks = [...new Set([0,chars.length,...spans.flatMap(row => [row.start_offset,row.end_offset])])].sort((a,b) => a-b), body = el('div',undefined,'document'); body.setAttribute('aria-label','完整原始意见文档'); let covered = 0;
+      for (let i = 0; i < breaks.length-1; i++) {
+        const start = breaks[i], end = breaks[i+1], matches = spans.filter(row => row.start_offset <= start && row.end_offset >= end), primary = matches.find(row => row.span_role !== 'duplicate_filtered') || matches[0], text = chars.slice(start,end).join('');
+        if (primary) { covered += end-start; const fragment = button(text,() => { coverageDocumentId = doc.source_document_id; selectedThread = primary.thread_id; const atom = rows('atomic_comment_source_spans','thread_id',primary.thread_id).find(row => row.excerpt_text.includes(text)); go(atom ? 'comment:'+atom.comment_id : 'thread:'+primary.thread_id); }); fragment.className = 'span '+(primary.span_role === 'duplicate_filtered' ? 'duplicate' : 'covered')+(primary.thread_id === selectedThread ? ' active' : ''); body.append(fragment); } else body.append(document.createTextNode(text));
+      }
+      parent.append(el('p','已标注 '+(chars.length ? Math.round(1000*covered/chars.length)/10 : 0)+'%','tag good'),body); const note = el('div',undefined,'focus-note'); note.append(el('b','当前拆分与合并'));
+      for (const row of rows('atomic_comment_source_spans','thread_id',selectedThread)) { const line = el('div',undefined,'actions'); line.append(link('comment:'+row.comment_id,shortComment(row.comment_id)),el('span',row.note || comments.get(row.comment_id)?.required_action)); note.append(line); } parent.append(note);
+      const appendix = details('查看覆盖数字和完整对应表',parent);
+      const nonDuplicate = breaks.slice(0,-1).reduce((total,start,i) => total+(spans.some(row => row.span_role !== 'duplicate_filtered' && row.start_offset <= start && row.end_offset >= breaks[i+1]) ? breaks[i+1]-start : 0),0);
+      metrics([[covered+'/'+chars.length,'已标注字符'],[chars.length-covered,'未标注字符'],[(chars.length ? Math.round(1000*nonDuplicate/chars.length)/10 : 0)+'%','去除重复后的覆盖'],[b.raw_review_threads.length+' → '+b.atomic_comments.length,'审稿意见 → 修订事项']],appendix);
+      table('原文片段与位置',spans,appendix); table('全部拆分与合并说明',b.atomic_comment_source_spans,appendix); table('覆盖与遗漏',rows('review_comment_coverage_segments','source_document_id',doc.source_document_id),appendix);
+      table('覆盖片段关联意见',b.review_comment_coverage_segment_comment_links.filter(row => row.source_document_id === doc.source_document_id),appendix); table('完整对应关系',b.raw_thread_atomic_links,appendix);
+    } else parent.append(el('p','原始意见文档尚未准备，请交给助手核对。','blocker'));
+  }
+  function metrics(values,parent) { const grid = el('div',undefined,'metric-grid'); for (const [value,label] of values) { const item = el('div',undefined,'metric'); item.append(el('b',String(value)),el('span',label)); grid.append(item); } parent.append(grid); }
+  function renderBoard(parent,cid) {
+    $('object-heading').textContent = b.atomic_comments.length+' 项修订工作怎么安排？'; parent.append(el('p','点选一项，核对下一步、证据、依赖和稿件位置。','muted'));
+    for (const item of b.atomic_comments) {
+      const state = rows('atomic_comment_state','comment_id',item.comment_id)[0], meta = el('span',undefined,'work-meta');
+      meta.append(el('span',name(state?.priority)+'优先级','tag'),el('span',name(state?.status),'tag'),el('span',state?.evidence_gap === 'yes' ? '需补证据' : state?.evidence_gap === 'no' ? '证据可核对' : '证据待核对','tag '+(state?.evidence_gap === 'yes' ? 'warn' : 'neutral')),el('span',rows('atomic_comment_target_locations','comment_id',item.comment_id).map(row => row.target_location).join('、'),'location'));
+      const node = choice('comment:'+item.comment_id,shortComment(item.comment_id)+' · '+item.canonical_summary,state?.next_action || item.required_action,meta); node.classList.add('work-card'); parent.append(node);
+    }
+    if (!cid) return; const focus = el('div',undefined,'focus-note'), item = comments.get(cid); focus.append(el('h3',shortComment(cid)+' · '+item.canonical_summary));
+    for (const analysis of rows('atomic_comment_analysis_links','comment_id',cid)) { const list = el('dl',undefined,'kv'); for (const [label,value] of [['现有主张',analysis.manuscript_claim_or_section],['已有材料',analysis.existing_evidence],['仍需解决',analysis.gap_summary]]) list.append(el('dt',label),el('dd',value)); focus.append(list); }
+    fields(rows('atomic_comment_state','comment_id',cid)[0],['next_action'],focus);
+    const appendix = details('查看依赖、来源与稿件位置',focus); table('证据与依赖',rows('atomic_comment_analysis_links','comment_id',cid),appendix); table('稿件位置',rows('atomic_comment_target_locations','comment_id',cid),appendix);
+    parent.append(focus); renderMaterials(parent,cid);
+  }
+  function renderMaterials(parent,cid) {
+    const appendix = details('查看补材建议、已接收材料与阻断原因',parent);
+    for (const row of rows('comment_blockers','comment_id',cid)) appendix.append(el('p',row.message,'blocker'));
+    for (const row of rows('supplement_suggestion_items','comment_id',cid)) { const card = el('div',undefined,'card'); card.append(el('b',row.request_summary),el('span',name(row.status),'tag'),el('p',row.request_recommendation)); appendix.append(card); }
+    table('材料接收记录',b.supplement_intake_items,appendix); table('材料使用位置',rows('supplement_landing_links','comment_id',cid),appendix); table('补材与接收关联',rows('supplement_suggestion_intake_links','comment_id',cid),appendix);
+    appendix.append(el('p','补充材料文件交给助手核对；请在反馈中写明建议。','small muted'));
+  }
+  function renderStrategy(parent,cid) {
+    const item = comments.get(cid); $('object-heading').textContent = item ? shortComment(cid)+' · '+item.canonical_summary : '当前策略尚待核对';
+    parent.append(el('p','核对建议立场、修改动作与所需材料，再决定是否确认这项策略。','muted'));
+    if (!item) return; const card = rows('strategy_cards','comment_id',cid)[0];
+    const blockers = rows('comment_blockers','comment_id',cid); for (const row of blockers) parent.append(el('p',row.message,'blocker'));
+    info('建议立场',card?.proposed_stance,parent); info('为什么这样回应',card?.stance_rationale,parent);
+    parent.append(el('h3','计划改哪些地方'));
+    for (const action of rows('strategy_card_actions','comment_id',cid)) {
+      const box = el('div',undefined,'card'); box.append(el('b',action.manuscript_change),el('p','位置：'+rows('strategy_action_target_locations','comment_id',cid).filter(row => row.action_order === action.action_order).map(row => row.target_location).join('、')+' · 回复用途：'+action.expected_response_letter_effect,'small muted')); parent.append(box);
+    }
+    parent.append(el('h3','需要核对的材料'));
+    for (const row of rows('strategy_card_evidence_items','comment_id',cid)) { const box = el('div',undefined,'card'); box.append(el('b',row.required_material+' '),el('span',row.available_now === 'yes' ? '有' : row.available_now === 'no' ? '缺' : '待核对','tag '+(row.available_now === 'no' ? 'warn' : 'good')),el('p',row.gap_note,'small')); parent.append(box); }
+    const appendix = details('查看待确认问题、候选修改与完成条件',parent);
+    for (const row of rows('strategy_card_pending_confirmations','comment_id',cid)) appendix.append(el('p',row.message));
+    for (const row of rows('strategy_action_manuscript_execution_items','comment_id',cid)) { info('候选修改文字',row.content_text,appendix); fields(row,['category','rationale','target_scope_note'],appendix); }
+    for (const row of rows('comment_response_drafts','comment_id',cid)) { info('候选回复',row.draft_text,appendix); info('回复理由',row.rationale,appendix); }
+    appendix.append(el('h3','完成条件')); const completion = rows('comment_completion_status','comment_id',cid)[0], checks = el('ul',undefined,'checklist');
+    for (const field of ['manuscript_execution_items_done','response_draft_done','evidence_gap_closed','user_strategy_confirmed','one_to_one_link_checked','export_ready']) checks.append(el('li',labels[field]+' · '+name(completion?.[field] ?? '待核对'),completion?.[field] === 'yes' ? 'done' : '')); appendix.append(checks);
+    table('措辞候选',rows('action_copy_variants','comment_id',cid),appendix); table('所选措辞',rows('selected_action_copy_variants','comment_id',cid),appendix); renderMaterials(parent,cid);
+  }
+  function renderRound(parent,cid) {
+    $('object-heading').textContent = (w.context.round_id ? '第 '+w.context.round_id+' 轮' : '本轮')+'修改与回复预览'; parent.append(el('p','逐条核对稿件改动、审稿意见的回复，以及是否有遗漏。','muted'));
+    const done = b.revision_plan_actions.filter(row => row.status === 'done' || row.status === 'completed').length;
+    metrics([[done+' / '+b.revision_plan_actions.length,'计划修改已完成'],[b.response_thread_rows.length+' / '+b.raw_review_threads.length,'审稿意见有回复'],[b.revision_action_logs.length,'修改记录'],[b.supplement_intake_items.filter(row => row.decision === 'accepted' || row.decision === 'accept').length,'已接收补充材料']],parent);
+    const source = threads.get(selectedThread), reply = rows('response_thread_rows','thread_id',selectedThread)[0];
+    if (source) parent.append(el('h3',shortThread(source.thread_id)+' · '+source.normalized_summary));
+    if (reply) { const box = el('div',undefined,'response-box'); box.append(el('b','建议回复'),el('p',reply.response_explanation,'source-text'),el('b','回复对应的改动'),el('p',reply.key_revision_excerpt,'source-text'),el('p','修改范围：'+reply.modification_scope,'small muted')); parent.append(box); }
+    else parent.append(el('p','这条原始意见尚无回复。','blocker'));
+    parent.append(el('h3','稿件改动 · '+shortComment(cid))); const locations = w.locations.filter(row => row.comment_id === cid), paired = new Set(); let unmatched = null;
+    for (const loc of locations) {
+      if (paired.has(loc.location_id)) continue; const pair = w.locations.find(row => row.location_id === loc.paired_location_id);
+      if (pair) { parent.append(el('p',loc.label,'location')); comparePair(loc,pair,parent); paired.add(loc.location_id); paired.add(pair.location_id); }
+      else { unmatched ||= details('查看未配对的冻结原文与日志片段',parent); unmatched.append(el('p',loc.label,'location'),el('p','此位置没有可靠前后配对，分别保留原文供核对。','small muted')); renderBlock(blocks.get(loc.block_id),unmatched); }
+    }
+    if (!locations.length) parent.append(el('p','尚无可靠稿件定位，请从完整文档核对。','blocker'));
+    const coverage = details('查看全部意见的回复与覆盖',parent);
+    for (const thread of b.raw_review_threads) {
+      const box = el('div',undefined,'card'); box.append(link('thread:'+thread.thread_id,targetLabel('thread:'+thread.thread_id)));
+      const response = rows('response_thread_rows','thread_id',thread.thread_id)[0]; box.append(el('span',response ? '已有回复' : '尚无回复','tag '+(response ? 'good' : 'warn')));
+      if (response) { box.append(el('p',response.modification_scope,'small muted')); const full = details('查看完整原文与回复',box); full.append(el('p',thread.original_text,'source-text')); fields(response,['response_resolution_kind','key_revision_excerpt','response_explanation','latex_excerpt','latex_response_text'],full); }
+      coverage.append(box);
+    }
+    table('回复与修订对应',b.response_thread_resolution_links,coverage);
+    const logs = details('查看相关修改记录与执行安排',parent), planIds = new Set(rows('revision_plan_actions','comment_id',cid).map(row => row.plan_action_id)), logIds = new Set([...rows('revision_action_log_thread_links','thread_id',selectedThread).map(row => row.log_id),...b.revision_action_log_plan_links.filter(row => planIds.has(row.plan_action_id)).map(row => row.log_id)]);
+    for (const log of b.revision_action_logs.filter(row => logIds.has(row.log_id))) { const box = el('div',undefined,'card'); box.append(el('b',log.log_id+' · '+log.summary)); fields(log,['status','change_note','response_note'],box); for (const row of rows('revision_action_log_entries','log_id',log.log_id)) fields(row,['target_file','target_locator','change_summary','rationale','evidence_source','expected_response_use'],box); table('日志前后原文',rows('revision_action_log_file_diffs','log_id',log.log_id),box); logs.append(box); }
+    table('修订安排',b.revision_plan_actions,logs); table('计划依赖',b.revision_plan_dependencies,logs); table('回复日志关联',b.response_thread_action_log_links.filter(row => logIds.has(row.log_id)),logs); table('工作文件记录',b.working_copy_file_state,logs);
+    const outputs = details('查看写作要求与交付文件状态',parent); table('写作要求',b.style_profile_rules,outputs);
+    for (const artifact of b.export_artifacts) { const box = el('div',undefined,'card'); box.append(el('b',artifact.artifact_name),el('p',name(artifact.artifact_status)+' · '+artifact.output_path)); const captured = w.sources.files.some(file => file.path === artifact.output_path); box.append(el('p',captured ? '已捕获实际文件' : '实际文件尚未核对，请交给助手检查。','small muted')); outputs.append(box); }
+    table('交付修改',b.export_patches.filter(row => row.comment_id === cid),outputs); parent.append(el('div','正式确认仍待对话处理：'+w.context.formal_status,'blocker')); renderMaterials(parent,cid);
+  }
+  function renderCandidate() {
+    const parent = $('candidate'); parent.replaceChildren(); const cid = selectedComments()[0], scope = currentScope();
+    const guides = {coverage:['先核对原文','读中间的原始意见，点选标色片段。右侧核对拆分、合并及稿件位置；遗漏或异议写在“我的反馈”。'],board:['先看修订安排','浏览各项工作的优先级和下一步，选中一项查看证据与依赖；逐项留下意见后确认整体安排。'],strategy:['聚焦当前策略','核对建议立场、计划修改和所需材料。当前事项有缺口时写明建议，仍可浏览其他策略。'],round:['逐条核对改动与回复','先读所选意见的回复和稿件前后对照，再查看原始意见是否都已覆盖。']};
+    $('guide').replaceChildren(el('strong',guides[stage][0]),el('p',guides[stage][1]));
+    $('scope-description').textContent = '正在浏览：'+stageNames[stage]+' · '+(selectedThread ? shortThread(selectedThread)+' → ' : '')+(cid ? shortComment(cid) : '待定位');
+    if (stage === 'coverage') renderCoverage(parent); else if (stage === 'board') renderBoard(parent,cid); else if (stage === 'strategy') renderStrategy(parent,cid); else renderRound(parent,cid);
+    const next = details('查看本次核对范围、待处理事项与下一步',parent); next.append(el('p','确认范围：'+stageNames[scope.kind]+'。筛选只影响显示。'),el('p',w.next_step));
+    for (const note of w.unresolved) next.append(el('p',note,'blocker'));
+    for (const row of w.pending_feedback) next.append(el('p',name(row.status)+' · '+row.note,'blocker'));
+    table('整体待确认事项',b.workflow_pending_user_confirmations,next); table('全局阻断',b.workflow_global_blockers,next); table('稿件结构',b.manuscript_sections,next); table('主要论点',b.manuscript_claims,next);
+    renderTrace();
+  }
+  function renderDirectory() {
+    const parent = $('documents'); parent.replaceChildren();
+    for (const doc of w.documents) parent.append(button(doc.title,() => { $('reading-panel').open = true; reading = {mode:'document',document_id:doc.document_id,start:0}; renderReading(); $('reading-panel').scrollIntoView({block:'start'}); }));
+  }
+  function addText(parent,text,blockId,offset=0) {
+    const annotations = draft.feedback.annotations.filter(row => row.anchor?.kind === 'text' && row.anchor.block_id === blockId);
+    const ends = [...new Set([0,text.length,...annotations.flatMap(row => [Math.max(0,row.anchor.start-offset),Math.min(text.length,row.anchor.end-offset)])])].filter(value => value >= 0 && value <= text.length).sort((a,b) => a-b);
+    for (let i = 0; i < ends.length - 1; i++) {
+      const start = ends[i], end = ends[i+1], overlapping = annotations.filter(row => row.anchor.start <= start+offset && row.anchor.end >= end+offset);
+      const node = el(overlapping.length ? 'mark' : 'span',text.slice(start,end));
+      if (overlapping.length) { node.tabIndex = 0; node.title = overlapping.map(row => row.note).join('\n'); const show = () => { tell(overlapping.map(row => row.note).join('；')); $('feedback-list').scrollIntoView({block:'nearest'}); }; node.addEventListener('click',show); node.addEventListener('keydown',event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); show(); } }); }
+      parent.append(node);
+    }
+  }
+  function renderBlock(block,parent) {
+    const card = el('div'); const content = el('div',undefined,'doc-block'); content.dataset.blockId = block.id; content.dataset.kind = block.kind; content.tabIndex = 0;
+    if (block.kind === 'image') {
+      const asset = w.assets.find(row => row.id === block.resource_id);
+      if (asset && /^image\/(?:png|jpeg|gif|webp)$/.test(asset.mime)) { const img = el('img'); img.src = `data:${asset.mime};base64,${asset.base64}`; img.alt = block.text || '冻结图片'; content.append(img); }
+      else content.append(el('span',block.text || '图片不可用'));
+    } else if (block.runs.length && !draft.feedback.annotations.some(row => row.anchor?.block_id === block.id)) {
+      for (const run of block.runs) { let node = el('span',run.text); for (const mark of run.marks) { const wrap = el(mark === 'strong' ? 'strong' : mark === 'emphasis' ? 'em' : mark === 'code' ? 'code' : 'span'); wrap.append(node); node = wrap; } content.append(node); }
+    } else addText(content,block.text,block.id);
+    if (block.kind === 'heading') content.style.fontSize = `${Math.max(1,1.5-(block.level || 1)*.12)}rem`;
+    card.append(content);
+    const tools = el('div',undefined,'block-tools'); tools.append(button('批注此区块',() => addAnnotation({kind:'whole',snapshot_id:w.snapshot_id,block_id:block.id,exact_quote:block.text,prefix:'',suffix:'',resource_id:block.resource_id})));
+    if (block.note) tools.append(el('small',block.note)); card.append(tools); parent.append(card);
+  }
+  function sectionRanges(doc) {
+    const starts = [0,...doc.blocks.map((block,index) => block.kind === 'heading' && index > 0 ? index : -1).filter(index => index >= 0)];
+    const result = [];
+    for (let i = 0; i < starts.length; i++) {
+      const start = starts[i], end = starts[i+1] ?? doc.blocks.length;
+      // ponytail: pages cap unsectioned manuscripts at 80 blocks; larger outlines can use nested sections.
+      for (let offset = start; offset < end; offset += 80) result.push({start:offset,end:Math.min(offset+80,end),title:`${doc.blocks[start].kind === 'heading' ? doc.blocks[start].text : '文档开头'}${offset > start ? ' · 续页' : ''}`});
+    }
+    return result;
+  }
+  function comparePair(location,pair,parent) {
+    const beforeLocation = docs.get(location.document_id).role === 'before' ? location : pair, afterLocation = beforeLocation === location ? pair : location;
+    const before = blocks.get(beforeLocation.block_id).text.slice(beforeLocation.start,beforeLocation.end), after = blocks.get(afterLocation.block_id).text.slice(afterLocation.start,afterLocation.end);
+    let prefix = 0, suffix = 0;
+    while (prefix < Math.min(before.length,after.length) && before[prefix] === after[prefix]) prefix++;
+    while (suffix < Math.min(before.length,after.length)-prefix && before[before.length-1-suffix] === after[after.length-1-suffix]) suffix++;
+    const grid = el('div',undefined,'comparison');
+    for (const [text,label,changeClass] of [[before,'修改前','changed-before'],[after,'修改后','changed-after']]) {
+      const box = el('div'); box.append(el('h3',label)); const body = el('div',undefined,'doc-block'); body.append(document.createTextNode(text.slice(0,prefix)),el('span',text.slice(prefix,text.length-suffix),changeClass),document.createTextNode(suffix ? text.slice(-suffix) : '')); box.append(body); grid.append(box);
+    }
+    parent.append(grid);
+  }
+  function renderReading() {
+    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); selectionAnchor = null; $('selection-tools').hidden = true;
+    mode.append(button('查看相关片段',() => { reading.mode = 'related'; renderReading(); }));
+    if (reading.mode === 'document') {
+      const doc = docs.get(reading.document_id), ranges = sectionRanges(doc);
+      const select = el('select'); select.className = 'section-select'; select.setAttribute('aria-label','文档章节');
+      ranges.forEach(range => { const option = el('option',range.title); option.value = String(range.start); select.append(option); });
+      if (!ranges.some(range => range.start === reading.start)) reading.start = 0;
+      select.value = String(reading.start); select.addEventListener('change',() => { reading.start = Number(select.value); renderReading(); });
+      mode.append(el('h3',doc.title),select);
+      const range = ranges.find(row => row.start === reading.start) || ranges[0];
+      for (const block of doc.blocks.slice(range.start,range.end)) renderBlock(block,parent);
+      const original = el('details'); original.append(el('summary','完整冻结原文'));
+      original.addEventListener('toggle',() => { if (original.open && original.children.length === 1) { const body = el('div',doc.original_text,'doc-block'); original.append(body); } else if (!original.open && original.children.length > 1) original.lastChild.remove(); }); parent.append(original);
+      return;
+    }
+    const cids = selectedComments(), locations = w.locations.filter(row => cids.includes(row.comment_id)), displayed = new Set(), paired = new Set();
+    if (!locations.length) parent.append(el('p','尚无可靠稿件定位。请从左侧目录查看完整冻结内容并交给 Agent 核对。','warning'));
+    for (const location of locations) {
+      const label = el('div',undefined,'actions'); label.append(el('span',`${location.comment_id} · ${location.label}`,'tag'),button('打开所在章节',() => { const doc = docs.get(location.document_id), index = doc.blocks.findIndex(block => block.id === location.block_id), range = sectionRanges(doc).find(row => index >= row.start && index < row.end); reading = {mode:'document',document_id:doc.document_id,start:range?.start || 0}; renderReading(); })); parent.append(label);
+      if (!displayed.has(location.block_id)) {
+        const doc = docs.get(location.document_id), index = doc.blocks.findIndex(block => block.id === location.block_id);
+        const nextHeading = doc.blocks.findIndex((block,i) => i > index && block.kind === 'heading');
+        const excerpt = doc.blocks[index].kind === 'heading' ? doc.blocks.slice(index,Math.min(index+4,nextHeading < 0 ? doc.blocks.length : nextHeading)) : [doc.blocks[index]];
+        for (const block of excerpt) { if (!displayed.has(block.id)) renderBlock(block,parent); displayed.add(block.id); }
+      }
+      if (stage === 'round') {
+        const pair = w.locations.find(row => row.location_id === location.paired_location_id);
+        if (pair && !paired.has(pair.location_id)) { comparePair(location,pair,parent); paired.add(location.location_id); paired.add(pair.location_id); }
+        else if (!pair) parent.append(el('p','此位置没有可靠前后配对。保留冻结原文和日志片段供核对。','muted'));
+      }
+    }
+  }
+  function renderTarget() {
+    const select = $('target'); select.replaceChildren(); const scope = currentScope();
+    const targets = [...new Set([`scope:${scope.scope_id}`,selected,...w.scopes.filter(row => row.kind !== 'strategy').flatMap(row => row.target_ids)])].filter(target => targetScope(target).target_ids.includes(target) || target.startsWith('scope:'));
+    for (const target of targets) { const option = el('option',targetLabel(target)); option.value = target; select.append(option); }
+    const defaultTarget = stage === 'round' && selectedThread ? 'thread:'+selectedThread : selected;
+    select.value = targets.includes(defaultTarget) ? defaultTarget : `scope:${scope.scope_id}`; loadRequest();
+    $('focus-request').disabled = !selected.startsWith('comment:');
+    $('overall').value = draft.feedback.overall_note.find(row => row.scope_id === scope.scope_id)?.note || '';
+    $('feedback-target').textContent = stage === 'round' ? shortThread(selectedThread) : shortComment(selectedComments()[0]);
+    const note = $('focus-note'); note.hidden = stage !== 'strategy' || selectedComments()[0] === w.context.active_comment_id;
+    note.replaceChildren();
+    if (!note.hidden) note.append(el('p','正在浏览 '+shortComment(selectedComments()[0])+'；本次审阅仍聚焦 '+shortComment(w.context.active_comment_id)+'。'),button('请助手切换焦点',() => { put('focus_requests',entry(selected,'请评估切换执行焦点到 '+selected.slice(8))); tell('已记录焦点请求；当前执行焦点未改变。'); }));
+    renderConfirm();
+  }
+  function loadRequest() {
+    const options = stage === 'coverage' ? [['','尚未处置'],['include','认可整理'],['adjust','请求调整拆分或合并'],['exclude','排除这项要求'],['defer','待核对']]
+      : stage === 'board' ? [['','尚未处置'],['include','认可安排'],['adjust','请求调整安排'],['defer','暂缓处理'],['exclude','排除这项修订']]
+      : stage === 'strategy' ? [['','尚未处置'],['include','认可策略'],['adjust','请求调整策略'],['defer','材料或判断待核对'],['exclude','不采用这项策略']]
+      : [['','尚未处置'],['include','改动与回复可接受'],['adjust','请求修改稿件或回复'],['defer','仍需核对'],['exclude','不采用这项改动']];
+    $('disposition').replaceChildren(...options.map(([value,label]) => { const option = el('option',label); option.value = value; return option; }));
+    const prior = draft.feedback.dispositions.find(row => row.target_id === targetForFeedback()); $('disposition').value = prior?.action || ''; $('request-note').value = prior?.note || ''; }
+  function renderConfirm() {
+    const parent = $('confirm-area'); parent.replaceChildren(); const scope = currentScope();
+    if (stage === 'round') {
+      const seen = draft.feedback.seen.some(row => row.scope_id === 'round'); const mark = button(seen ? '取消本轮看完标记' : '本轮已看完',() => { if (seen) draft.feedback.seen = draft.feedback.seen.filter(row => row.scope_id !== 'round'); else put('seen',{...entry('scope:round',''),scope_id:'round',target_id:'scope:round'}); save(); }); mark.className = 'primary'; parent.append(mark); return;
+    }
+    if (stage === 'strategy' && scope.kind !== 'strategy') { parent.append(el('p','执行焦点未知，请交给 Agent 核对当前策略候选。','warning')); return; }
+    const confirmed = draft.feedback.confirmations.some(row => row.scope_id === scope.scope_id), blocked = confirmationBlocked(scope);
+    const confirm = button(confirmed ? '撤回本次内部确认' : `确认${stageNames[stage]}候选`,() => {
+      if (confirmed) draft.feedback.confirmations = draft.feedback.confirmations.filter(row => row.scope_id !== scope.scope_id);
+      else if (!confirmationBlocked(scope)) put('confirmations',{...entry(`scope:${scope.scope_id}`,''),scope_id:scope.scope_id,target_id:`scope:${scope.scope_id}`,kind:scope.kind,members:[...scope.target_ids]});
+      save();
+    }); confirm.className = 'primary'; confirm.disabled = blocked; parent.append(el('p',`内部确认绑定完整${stageNames[scope.kind]}；正式关口在对话中确认。`,'muted'),confirm);
+    if (blocked) parent.append(el('p','本范围存在未决反馈或材料阻断，待核对后重新确认。','warning'));
+  }
+  function renderFeedback() {
+    const list = $('feedback-list'); list.replaceChildren(); let count = 0;
+    for (const category of categories) for (const row of draft.feedback[category]) {
+      count++; const card = el('div',undefined,'card feedback-row'); card.append(el('strong',`${categoryNames[category]} · ${targetLabel(row.target_id)}`),el('small',` · 核对范围：${stageNames[scopes.get(row.scope_id)?.kind] || row.scope_id}`));
+      if (row.anchor) card.append(el('p',`所指：${row.anchor.exact_quote}`)); if (row.note) card.append(el('p',row.note,'field-note'));
+      if (row.action) card.append(el('span',({include:'采用',exclude:'排除',adjust:'请求调整',defer:'待核对'})[row.action],'tag'));
+      if (category === 'annotations') card.append(button('修改批注',() => { const text = prompt('批注内容',row.note); if (text !== null && text.trim()) { row.note = text; save(); renderReading(); } }));
+      card.append(button('删除这条反馈',() => { draft.feedback[category] = draft.feedback[category].filter(item => item.feedback_id !== row.feedback_id); save(); renderReading(); loadRequest(); }));
+      if (row.anchor) card.append(button('查看所指区块',() => { const doc = w.documents.find(doc => doc.blocks.some(block => block.id === row.anchor.block_id)); const index = doc.blocks.findIndex(block => block.id === row.anchor.block_id), range = sectionRanges(doc).find(range => index >= range.start && index < range.end); reading = {mode:'document',document_id:doc.document_id,start:range?.start || 0}; renderReading(); document.querySelector(`[data-block-id="${CSS.escape(row.anchor.block_id)}"]`)?.scrollIntoView({block:'center'}); }));
+      list.append(card);
+    }
+    $('draft-status').textContent = `${count} 条本地反馈；已导出 ${draft.export_revision} 次。${draft.feedback.confirmations.length ? '含显式内部确认。' : '尚无内部确认。'}`;
+  }
+  function addAnnotation(anchor) {
+    const note = $('annotation-note').value.trim();
+    if (!note) { tell('先在“独立批注”中填写内容，再选择批注范围。'); $('annotation-note').focus(); return; }
+    draft.feedback.annotations.push({...entry(targetForFeedback(),note),anchor}); $('annotation-note').value = ''; save(); renderReading(); tell('已保存独立批注。');
+  }
+  document.addEventListener('selectionchange',() => {
+    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) return;
+    const range = selection.getRangeAt(0), element = node => node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+    const startNode = element(range.startContainer)?.closest('[data-block-id]'), endNode = element(range.endContainer)?.closest('[data-block-id]');
+    if (!startNode || startNode !== endNode) { selectionAnchor = null; $('selection-tools').hidden = true; if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
+    const block = blocks.get(startNode.dataset.blockId); if (block.kind === 'image') return;
+    const preceding = document.createRange(); preceding.selectNodeContents(startNode); preceding.setEnd(range.startContainer,range.startOffset);
+    const start = preceding.toString().length, quote = range.toString(), end = start+quote.length;
+    if (!quote || block.text.slice(start,end) !== quote) { selectionAnchor = null; $('selection-tools').hidden = true; return; }
+    selectionAnchor = {kind:'text',snapshot_id:w.snapshot_id,block_id:block.id,start,end,exact_quote:quote,prefix:block.text.slice(Math.max(0,start-24),start),suffix:block.text.slice(end,end+24)};
+    $('selection-quote').textContent = `选中：${quote.slice(0,80)} `; $('selection-tools').hidden = false;
+  });
+  $('add-selection').addEventListener('click',() => { if (selectionAnchor) addAnnotation(selectionAnchor); });
+  $('cancel-selection').addEventListener('click',() => { selectionAnchor = null; $('selection-tools').hidden = true; window.getSelection()?.removeAllRanges(); });
+  $('add-object-note').addEventListener('click',() => addAnnotation(null));
+  $('save-request').addEventListener('click',() => {
+    const action = $('disposition').value, note = $('request-note').value.trim(), target = targetForFeedback();
+    if (!action) { draft.feedback.dispositions = draft.feedback.dispositions.filter(row => row.target_id !== target); save(); tell('已清除该对象处置。'); return; }
+    if (action === 'adjust' && !note) { put('dispositions',{...entry(target,''),action:'defer'}); tell('请写明调整内容；这项建议暂待核对。'); $('request-note').focus(); return; }
+    put('dispositions',{...entry(target,note),action}); tell('已保存处置与请求。');
+  });
+  $('disposition').addEventListener('change',() => $('save-request').click());
+  $('request-note').addEventListener('input',() => {
+    const note = $('request-note').value.trim(), target = targetForFeedback();
+    if (!note) { const prior = draft.feedback.dispositions.find(row => row.target_id === target); if (prior) { if (prior.action === 'adjust') draft.feedback.dispositions = draft.feedback.dispositions.filter(row => row !== prior); else prior.note = ''; save(); } return; }
+    const action = $('disposition').value || 'defer';
+    if (!$('disposition').value) $('disposition').value = action;
+    put('dispositions',{...entry(target,note),action});
+  });
+  $('save-overall').addEventListener('click',() => { const scope = currentScope(), note = $('overall').value.trim(); if (!note) { draft.feedback.overall_note = draft.feedback.overall_note.filter(row => row.scope_id !== scope.scope_id); save(); } else put('overall_note',{...entry(`scope:${scope.scope_id}`,note),scope_id:scope.scope_id,target_id:`scope:${scope.scope_id}`}); tell('已保存整体说明。'); });
+  $('focus-request').addEventListener('click',() => { if (selected.startsWith('comment:')) { put('focus_requests',entry(selected,`请评估切换执行焦点到 ${selected.slice(8)}`)); tell('已记录焦点请求；当前执行焦点未改变。'); } });
+  $('target').addEventListener('change',loadRequest);
+  for (const filter of ['search','reviewer','status']) $(filter).addEventListener(filter === 'search' ? 'input' : 'change',renderObjects);
+  function exportResult() {
+    removeBlockedConfirmations();
+    const feedback = structuredClone(draft.feedback), result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
+    const entries = categories.flatMap(category => feedback[category]);
+    if (entries.some(row => !validEntry(row)) || new Set(entries.map(row => row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return; }
+    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return; } }
+    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() => URL.revokeObjectURL(url),1000); draft.export_revision = result.export_revision; save(); tell('已导出完整结果，请交回 Agent。');
+  }
+  $('export').addEventListener('click',exportResult);
+  function renderStages() {
+    $('stages').replaceChildren();
+    const stages = {coverage:['01 · 核对审稿意见','原文、拆分与遗漏'],board:['02 · 安排修订工作','优先级、证据与位置'],strategy:['03 · 确认逐项策略','修改动作与所需材料'],round:['04 · 核对修改和回复','稿件改动与回复覆盖']};
+    for (const [value,[title,hint]] of Object.entries(stages)) { const item = button('',() => { stage = value; renderStages(); renderCandidate(); renderReading(); renderTarget(); }); item.append(el('b',title),el('small',hint)); item.setAttribute('aria-pressed',String(stage === value)); $('stages').append(item); }
+  }
+  $('title').textContent = w.title; document.title = w.title;
+  $('identity').textContent = `任务 ${w.context.task_id} · ${w.context.round_id ? `第 ${w.context.round_id} 轮` : '准备阶段'} · 冻结审阅件`;
+  $('context').textContent = `正式状态：${w.context.formal_status}。执行焦点：${w.context.active_comment_id ? shortComment(w.context.active_comment_id) : '未知'}。交接：${stageNames[w.context.stage]}。`;
+  $('counts').textContent = b.raw_review_threads.length+' 条原始意见 · '+b.atomic_comments.length+' 项修订';
+  fillFilters(); renderStages(); renderObjects(); renderDirectory(); renderCandidate(); renderReading(); renderTarget(); removeBlockedConfirmations(); renderFeedback();
+})();
+</script>
+</body>
+</html>

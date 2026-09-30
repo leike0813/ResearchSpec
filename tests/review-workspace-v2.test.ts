@@ -96,7 +96,7 @@ void test("item placement and humanizer comparison bind both frozen sources with
   const candidateText = "# Results\n\nThe observed effect was modest and uncertain.\n";
   const baseBlocks = reviewBlocksFromMarkdown(baseText, "before.md");
   const blocks = reviewBlocksFromMarkdown(candidateText, "after.md");
-  const itemLocations = [{ item_id: "H1", block_id: blocks[1]!.id, start: 0, end: 19 }];
+  const itemLocations = [{ item_id: "H1", block_id: blocks[1].id, start: 0, end: 19 }];
   const input = {
     workspaceId: "comparison", title: "Candidate review", manuscript: { path: "after.md", content: candidateText },
     base: { path: "before.md", content: baseText }, baseBlocks, blocks, itemLocations,
@@ -111,21 +111,23 @@ void test("item placement and humanizer comparison bind both frozen sources with
   const workspace = paperHumanizerComparisonReviewWorkspaceV2(input);
   assert.equal(workspace.items[0]?.target.kind, "locator");
   assert.equal(workspace.items[0]?.source_pointer, "Results paragraph");
-  assert.equal(workspace.document.item_locations?.[0]?.block_id, `after-${blocks[1]!.id}`);
+  assert.equal(workspace.document.item_locations?.[0]?.block_id, `after-${blocks[1].id}`);
   assert.equal(workspace.document.comparison?.rows.length, blocks.length);
-  const beforeId = workspace.document.comparison!.rows[1]!.before_block_id;
-  const afterId = workspace.document.comparison!.rows[1]!.after_block_id;
+  const comparison = workspace.document.comparison;
+  assert.ok(comparison);
+  const beforeId = comparison.rows[1].before_block_id;
+  const afterId = comparison.rows[1].after_block_id;
   const result = createReviewWorkspaceResultV2({ workspace, revision: 1, exportedAt: "2026-09-29T10:00:00Z", comments: [
     { comment_id: "U1", origin: "user", body: "Original overstates certainty", anchor: { kind: "text", snapshot_id: workspace.snapshot_id, block_id: beforeId, start: 0, end: 3, exact_quote: "The", prefix: "", suffix: " effect" } },
     { comment_id: "U2", origin: "user", body: "Check the new wording", anchor: { kind: "text", snapshot_id: workspace.snapshot_id, block_id: afterId, start: 0, end: 3, exact_quote: "The", prefix: "", suffix: " observed" } },
   ] });
   assert.equal(validateReviewResultAgainstWorkspace(result, workspace).comments.length, 2);
   const bad = (change: (copy: typeof workspace) => void) => { const copy = structuredClone(workspace); change(copy); return ReviewWorkspaceV2Schema.safeParse(copy).success; };
-  assert.equal(bad((copy) => { copy.document.item_locations![0]!.end = 999; }), false);
-  assert.equal(bad((copy) => { copy.document.item_locations!.push(copy.document.item_locations![0]!); }), false);
+  assert.equal(bad((copy) => { const list = copy.document.item_locations; assert.ok(list); list[0].end = 999; }), false);
+  assert.equal(bad((copy) => { const list = copy.document.item_locations; assert.ok(list); list.push(list[0]); }), false);
   assert.equal(bad((copy) => { copy.source.files.pop(); }), false);
-  assert.equal(bad((copy) => { copy.document.comparison!.rows.pop(); }), false);
-  assert.equal(bad((copy) => { copy.document.comparison!.rows[0]!.after_block_id = copy.document.comparison!.rows[1]!.after_block_id; }), false);
+  assert.equal(bad((copy) => { const table = copy.document.comparison; assert.ok(table); table.rows.pop(); }), false);
+  assert.equal(bad((copy) => { const table = copy.document.comparison; assert.ok(table); table.rows[0].after_block_id = table.rows[1].after_block_id; }), false);
   assert.throws(() => paperHumanizerComparisonReviewWorkspaceV2({ ...input, base: { ...input.base, content: baseText + "changed" } }), /hash/);
 });
 

@@ -41,14 +41,39 @@ verdict 仍由 Verify、用户和 owning node 完成。
 
 ## 6. 交互式审阅投影
 
-`researchspec/review-workspace` 提供 `review-workspace.v1` 与
-`review-workspace-result.v1` 的严格 schema，以及三类薄适配器：
+`researchspec/review-workspace` 提供两套独立契约，不互相转换：
 
-- Annotation Set candidate：保留 raw evidence、typed target、interpretation、expected action 和 semantic impact；
-- paper-humanizer plan：保留 finding IDs、locators、operation、preservation constraints、risk、recommendation 和 disposition；
-- review-response workboard：保留 comment ID、source pointer、target locations、priority、evidence gap、confirmation need 和 next action。
+- 通用 `review-workspace.v2` / `review-workspace-result.v2`，含 annotation-intake、paper-humanizer
+  和 review-response workboard 薄适配器。适配器保留各自证据：annotation candidate 保留 raw
+  evidence、typed target、interpretation、expected action 和 semantic impact；paper-humanizer
+  plan 保留 finding IDs、locators、operation、preservation constraints、risk、recommendation 和
+  disposition；workboard 保留 comment ID、source pointer、target locations、priority、evidence gap、
+  confirmation need 和 next action。
+- review-response 的独立业务契约 `revision-master-review-workspace.v1` /
+  `revision-master-review-result.v1`，承载覆盖、整板、当前策略和轮次改稿/回复四个交接点，以及范围内
+  显式内部确认、round seen、处理记录和完整交回闭环。
 
-投影包含精确手稿内容、路径、格式和 SHA-256，以便一个通过 `file://` 打开的静态页面完成本地审阅。页面只产生普通外部结果文件。它不读取或写入 `researchspec/`，不访问
-`revision-master.db`，不修改手稿，也不调用 CLI。Agent 接收结果后必须重新校验 source hash，映射回原生事实源，再从当前 `instructions` 完成合法的 Gate、Decision 或 node 动作。
+`researchspec/review-workspace` 导出业务准备与校验 API：`prepareRevisionMasterReview` 组装并冻结
+快照、写出工作区与嵌入式 HTML；`validateRevisionMasterResult` 按独立留存件校验结果；
+`RevisionMasterWorkspaceSchema` 与 `RevisionMasterResultSchema` 定义两套严格 schema。包内
+`workbench/review_workbench.py` 提供 `project`、`check`、`accept` 三个标准库子命令（用法见包内
+`workbench/README.md`）：`project` 做任务边界的只读投影，`check` 重算各 scope 基线差异，
+`accept` 只在显式语义写入路径内把已核对反馈与最小处理记录放进同一事务。
 
-Markdown/QMD 只通过 DOM text nodes 做有限安全渲染；原始 HTML 不执行。plain 和 LaTeX 以源文本展示，LaTeX project 只展示声明的 `entry_path`，不编译项目。
+两套投影都包含精确手稿内容、路径、格式和 SHA-256，以便一个通过 `file://` 打开的静态页面完成本地
+审阅。页面只产生普通外部结果文件。它不读取或写入 `researchspec/`，不访问 `revision-master.db`，
+不修改手稿，也不调用 CLI。
+
+## 7. 显示坐标与源码坐标
+
+显示位置与原始证据目标是两个身份。显示区块 ID 来自本次冻结显示文档；选区锚点只指向这些显示区块，
+不声称是源码 offset。原始审阅文档的 source span 单独保存文档身份、offset 和原文引文，稿件位置则
+保存其冻结显示身份与内容哈希。一个业务对象可以有多个显示位置，关系边显式保存，页面据此显示全部
+相关位置而不把单一定位当作唯一事实。无法可靠定位的条目保留为未定位且可审阅，不编造位置，也不把
+显示高亮反推成业务真相。
+
+Agent 接收结果后必须重新校验 source hash 与独立留存件，映射回原生事实源，再从当前 `instructions`
+完成合法的 Gate、Decision 或 node 动作。Markdown/QMD 只通过 DOM text nodes 做有限安全渲染；原始
+HTML 不执行。plain 和 LaTeX 可以源文本展示；业务工作台的目录同时提供已捕获的相关项目源文件。
+浏览器不编译项目。
+`review-workspace.v1` 及其结果仍按其原路径与身份规则处理，不与 v2 或 revision-master 契约混用。

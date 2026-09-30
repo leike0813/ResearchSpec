@@ -6,6 +6,13 @@ const INDEX = "authoring/revision-master/extraction-index.json";
 const REVIEW_WORKSPACE = { source_path: "review-workspace/index.html", output_path: "review-workspace/index.html", recovery_only: true };
 const REVIEW_WORKSPACE_V1 = { source_path: "review-workspace/v1.html", output_path: "review-workspace/v1.html", recovery_only: true };
 
+const WORKBENCH_ASSETS: AuthoringPackageAsset[] = [
+  { source_path: "authoring/revision-master/workbench/review_workbench.py", output_path: "workbench/review_workbench.py" },
+  { source_path: "authoring/revision-master/workbench/receipts.sql", output_path: "workbench/receipts.sql" },
+  { source_path: "authoring/revision-master/workbench/README.md", output_path: "workbench/README.md" },
+  { source_path: "review-workspace/revision-master.html", output_path: "review-workspace/revision-master.html" },
+];
+
 export const REVISION_MASTER_AUTHORING_OPTIONS = {
   extractionIndexPath: INDEX,
   origin: "vendor-derived" as const,
@@ -50,6 +57,10 @@ const GATE_RUNTIME_ASSETS: AuthoringPackageAsset[] = [
   RM_ASSET("RM-ASSET-01", "assets/schema/revision-master-schema.yaml"),
   RM_ASSET("RM-ASSET-02", "assets/runtime/skill-runtime-digest.md"),
   RM_ASSET("RM-ASSET-03", "assets/localization/source-messages.yaml"),
+  ...["en", "zh-CN"].map((language): AuthoringPackageAsset => ({
+    source_path: `vendor/revision-master/upstream/skills/revision-master/assets/localization/messages/${language}.json`,
+    output_path: `assets/localization/messages/${language}.json`,
+  })),
   ...TEMPLATE_ASSETS,
 ];
 
@@ -116,7 +127,7 @@ export const REVISION_MASTER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
     gate_policy: "required",
     license: MIT,
     extraction_artifact_id: "RM-CAP-03",
-    package_assets: GATE_RUNTIME_ASSETS,
+    package_assets: [...GATE_RUNTIME_ASSETS, ...WORKBENCH_ASSETS],
     knowledge_sources: COMMON_KNOWLEDGE,
     inputs: [{ role: "review_response_workspace", schema_ref: "review-response-workspace.v1", required: true, source_policy: "node_output" }],
     outputs: [
@@ -135,7 +146,7 @@ export const REVISION_MASTER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
     gate_policy: "required",
     license: MIT,
     extraction_artifact_id: "RM-CAP-04",
-    package_assets: [...GATE_RUNTIME_ASSETS, REVIEW_WORKSPACE, REVIEW_WORKSPACE_V1],
+    package_assets: [...GATE_RUNTIME_ASSETS, REVIEW_WORKSPACE, REVIEW_WORKSPACE_V1, ...WORKBENCH_ASSETS],
     knowledge_sources: COMMON_KNOWLEDGE,
     inputs: [{ role: "review_response_workspace", schema_ref: "review-response-workspace.v1", required: true, source_policy: "node_output" }],
     outputs: [{ role: "review_response_workboard", schema_ref: "review-response-workboard.v1", required: true }],
@@ -158,6 +169,7 @@ export const REVISION_MASTER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
       ...GATE_RUNTIME_ASSETS,
       REVIEW_WORKSPACE,
       REVIEW_WORKSPACE_V1,
+      ...WORKBENCH_ASSETS,
     ],
     knowledge_sources: [
       ...COMMON_KNOWLEDGE,
