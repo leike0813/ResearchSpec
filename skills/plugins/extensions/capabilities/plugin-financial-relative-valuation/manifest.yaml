@@ -40,11 +40,11 @@ validators:
         - --submission
         - "{outputs_json}"
         - --required
-        - scope,source_ledger,assumptions,method_results,sensitivity,fair_value_range,conclusions
+        - scope,source_ledger,assumptions,method_results,sensitivity,fair_value_range,conclusions,comparability_checks,equity_bridge
 knowledge_refs:
   - knowledge_id: relative-valuation-tool
     path: tools/valuation.py
-    content_hash: 35a7b21406d4fae48aa514a894c010503cd16ff92334ef27899c000e8cf1f95e
+    content_hash: f4e9975e2859473925063f73afe42da06fc48c6cde11b22d79ff99ebb8716374
     license: Apache-2.0
   - knowledge_id: financial-support
     path: tools/financial_support.py
@@ -55,9 +55,9 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/finrobot/financial-research-relative-valuation/SKILL.md
-      sha256: 9bd9a483950bc5916e71372aa2b4982cd5807ac2ceb9244d77e5defb3c40ff46
-    - path: skills/plugins/vendors/finrobot/financial-research-relative-valuation/scripts/valuation.py
-      sha256: 35a7b21406d4fae48aa514a894c010503cd16ff92334ef27899c000e8cf1f95e
+      sha256: a4e0ca25d5f3bd461eded7e66bdd8c3fda4ef13ad23d6935075d4a99cd412e13
     - path: skills/plugins/vendors/finrobot/financial-research-relative-valuation/lib/financial_support.py
       sha256: 9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c
+    - path: skills/plugins/vendors/finrobot/financial-research-relative-valuation/scripts/valuation.py
+      sha256: f4e9975e2859473925063f73afe42da06fc48c6cde11b22d79ff99ebb8716374
 license: Apache-2.0

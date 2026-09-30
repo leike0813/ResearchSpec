@@ -139,7 +139,7 @@ Registry Schema 1 SHALL represent the admitted Materials-Science-Skills-For-LLM 
 
 ### Requirement: Reviewed FinRobot Vendor SHALL Be The Fourth Vendor
 Registry Schema 1 SHALL represent the approved FinRobot
-`snapshot-297a8d2` bundle as an isolated fourth vendor with six globally unique
+`snapshot-2717499` bundle as an isolated fourth vendor with six globally unique
 neutral Skill IDs, immutable provenance, empty hard-dependency arrays,
 advisory-only relations, and explicit source-neutral domain memberships.
 

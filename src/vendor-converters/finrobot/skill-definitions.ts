@@ -62,6 +62,7 @@ export const FINROBOT_SKILL_DEFINITIONS: Record<string, FinRobotSkillDefinition>
       procedure("equity-company-overview", "Agent procedure: synthesize the operating profile, financial trajectory, and investment thesis."),
       procedure("equity-major-takeaways", "Agent procedure: rank the decision-relevant takeaways and identify disconfirming evidence."),
       scripted("processor-growth-forecast", "scripts/fundamentals.py"),
+      procedure("financial-numeric-evidence", "Agent procedure: classify each material number as actual, computed, assumed, or forecast and retain its source, dependencies, and limitations."),
     ],
     references: [],
     scripts: [{
@@ -160,6 +161,9 @@ export const FINROBOT_SKILL_DEFINITIONS: Record<string, FinRobotSkillDefinition>
       scripted("sensitivity-table", "scripts/valuation.py"),
       scripted("valuation-ev-ebitda", "scripts/valuation.py"),
       scripted("valuation-peer-comparison", "scripts/valuation.py"),
+      scripted("valuation-comparability", "scripts/valuation.py"),
+      scripted("valuation-ev-bridge", "scripts/valuation.py"),
+      scripted("valuation-dcf-validity", "scripts/valuation.py"),
     ],
     references: [],
     scripts: [{
@@ -191,6 +195,9 @@ export const FINROBOT_SKILL_DEFINITIONS: Record<string, FinRobotSkillDefinition>
       procedure("analyzer-income-summarization", "Agent procedure: explain earnings quality and financial trajectory using normalized calculations and cited disclosures."),
       scripted("processor-extract-api", "scripts/statements.py"),
       scripted("processor-extract-pdf", "scripts/statements.py"),
+      scripted("statement-ttm-coverage", "scripts/statements.py"),
+      scripted("valuation-currency-caliber", "scripts/statements.py"),
+      scripted("statement-source-lineage", "scripts/statements.py"),
     ],
     references: [],
     scripts: [{

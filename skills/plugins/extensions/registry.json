@@ -690,32 +690,32 @@
     {
       "capability_id": "plugin-financial-company-fundamentals",
       "source_path": "capabilities/plugin-financial-company-fundamentals",
-      "manifest_sha256": "e13501e997c354faacdd5e8d4ea1a5e3ce010fb6814a55cfe989ac8922df93a7"
+      "manifest_sha256": "5497a06894403e84a8c58a84c96deb36c12435ad306e8b126a95b656b2186084"
     },
     {
       "capability_id": "plugin-financial-competitive-position",
       "source_path": "capabilities/plugin-financial-competitive-position",
-      "manifest_sha256": "b9b7ff14df4b89a1dc8af2a609f4c427573e93184ec94959a48c209bcf4c1254"
+      "manifest_sha256": "afc30c39ab3063fa182124b16f6996280f31e69e3cfe943bc2d2945963fa8a9f"
     },
     {
       "capability_id": "plugin-financial-corporate-risk",
       "source_path": "capabilities/plugin-financial-corporate-risk",
-      "manifest_sha256": "807daa180eacc38d6de0b8b9f6c5e2df866fced5289375861e5f64c4f423d008"
+      "manifest_sha256": "7a84329c0324591348e5bf984c25be0c1435bf776c1735bf8ee221f09a2c9c45"
     },
     {
       "capability_id": "plugin-financial-event-evidence",
       "source_path": "capabilities/plugin-financial-event-evidence",
-      "manifest_sha256": "d6262292ed35b7941a8a167269be51e3c273d84f5afd587824b5fec221665436"
+      "manifest_sha256": "f5162089013aae243e897c9067d7895fd6ae8d97c0176027b3e1d4827722b4c0"
     },
     {
       "capability_id": "plugin-financial-relative-valuation",
       "source_path": "capabilities/plugin-financial-relative-valuation",
-      "manifest_sha256": "28479c2feab9f906cfd5b8d9c54faba6bb157d13914f538fcb59e496a9d2de33"
+      "manifest_sha256": "458af2af9c32359e650ea18f0ba68fa9b3017898d539eeaa9856df774cc81ea8"
     },
     {
       "capability_id": "plugin-financial-statement-analysis",
       "source_path": "capabilities/plugin-financial-statement-analysis",
-      "manifest_sha256": "f10f3da7b870ad30f8482c3c317a2e2a70472654c5ea09244d5ad2be7c405a64"
+      "manifest_sha256": "f1e89dae4bc4dac8b42556c7304691adea18b9d576121084689dd9a49cf9a9a7"
     },
     {
       "capability_id": "plugin-historical-research",

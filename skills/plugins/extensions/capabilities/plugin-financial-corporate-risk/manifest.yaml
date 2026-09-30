@@ -32,5 +32,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/finrobot/financial-research-corporate-risk/SKILL.md
-      sha256: ed3b2855c35e45cd18d4a6279319393fe0a10a319e84e9d74af9aa0fae3a80df
+      sha256: 6d006582e10bdac81bc008314dbfa53d380c2c65e32ecce8f20e5366cc8fcea0
 license: Apache-2.0

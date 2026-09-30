@@ -1,0 +1,100 @@
+{
+  "schema_version": "1",
+  "registry_version": "snapshot-2717499",
+  "capabilities": [
+    {
+      "capability_id": "plugin-financial-company-fundamentals",
+      "source_path": "capabilities/plugin-financial-company-fundamentals",
+      "manifest_sha256": "40eed58159d193d2887f4aacf195dd86aae53233358be8005646804d096d05e2"
+    },
+    {
+      "capability_id": "plugin-financial-competitive-position",
+      "source_path": "capabilities/plugin-financial-competitive-position",
+      "manifest_sha256": "4c8bc7b2c1baf39877412795bb081709699d46cc2fd2633861453cd97c7c7679"
+    },
+    {
+      "capability_id": "plugin-financial-corporate-risk",
+      "source_path": "capabilities/plugin-financial-corporate-risk",
+      "manifest_sha256": "ca621ca4820aa9efe373d6955e61f3491ee8360385a5a636be8c58a2eb243d1a"
+    },
+    {
+      "capability_id": "plugin-financial-event-evidence",
+      "source_path": "capabilities/plugin-financial-event-evidence",
+      "manifest_sha256": "126b8b09ee57dc50645e5a05aebabd08e184c9dd2ed910c8f6dcb9f8e541b2d7"
+    },
+    {
+      "capability_id": "plugin-financial-relative-valuation",
+      "source_path": "capabilities/plugin-financial-relative-valuation",
+      "manifest_sha256": "4720e3b81227165ca9947e35d5342fbc39adff40c377006dcccd3575d856a038"
+    },
+    {
+      "capability_id": "plugin-financial-statement-analysis",
+      "source_path": "capabilities/plugin-financial-statement-analysis",
+      "manifest_sha256": "ed7bdf679853e79f2f6fd88ce2ff51989db9ac6d70f838a12b980767cdd0ee84"
+    }
+  ],
+  "profiles": [
+    {
+      "profile_id": "plugin-financial-company-fundamentals",
+      "source_path": "profiles/plugin-financial-company-fundamentals.yaml",
+      "profile_sha256": "a1a000fe73c9ccbbc79565969bec18d10c7b7f47bad09137fdde7af79b18648a"
+    },
+    {
+      "profile_id": "plugin-financial-competitive-position",
+      "source_path": "profiles/plugin-financial-competitive-position.yaml",
+      "profile_sha256": "53603aa27c517aadbaa4244ff17ca34a158e3577ffc06377bc9d078c59d3c927"
+    },
+    {
+      "profile_id": "plugin-financial-corporate-risk",
+      "source_path": "profiles/plugin-financial-corporate-risk.yaml",
+      "profile_sha256": "d67d1be5c5c0f733604bd113faeacb8482a17a237edc47f7d6f7a14f2c1a7791"
+    },
+    {
+      "profile_id": "plugin-financial-event-evidence",
+      "source_path": "profiles/plugin-financial-event-evidence.yaml",
+      "profile_sha256": "d1b441c425c107eead5c0d0f4e0e144192f08e5b2acb3ae26d3a00ba5106044f"
+    },
+    {
+      "profile_id": "plugin-financial-relative-valuation",
+      "source_path": "profiles/plugin-financial-relative-valuation.yaml",
+      "profile_sha256": "4e4ce4246971058f469c7f543a8e35176e93606ad16fc36ff19ac0a62beb73ee"
+    },
+    {
+      "profile_id": "plugin-financial-statement-analysis",
+      "source_path": "profiles/plugin-financial-statement-analysis.yaml",
+      "profile_sha256": "12fd1b179b8ec29ffef0e981f6e3241788d85d02762d626cd7b70e6d2be33008"
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "accounting-auditing-and-accountability",
+      "capabilities": [
+        "plugin-financial-company-fundamentals",
+        "plugin-financial-statement-analysis"
+      ],
+      "profiles": [
+        "plugin-financial-company-fundamentals",
+        "plugin-financial-statement-analysis"
+      ]
+    },
+    {
+      "domain_id": "banking-finance-and-investment",
+      "capabilities": [
+        "plugin-financial-company-fundamentals",
+        "plugin-financial-competitive-position",
+        "plugin-financial-corporate-risk",
+        "plugin-financial-event-evidence",
+        "plugin-financial-relative-valuation",
+        "plugin-financial-statement-analysis"
+      ],
+      "profiles": [
+        "plugin-financial-company-fundamentals",
+        "plugin-financial-competitive-position",
+        "plugin-financial-corporate-risk",
+        "plugin-financial-event-evidence",
+        "plugin-financial-relative-valuation",
+        "plugin-financial-statement-analysis"
+      ]
+    }
+  ]
+}

@@ -8,25 +8,33 @@ execution decisions.
 
 ## Requirements
 ### Requirement: Audit SHALL bind the official upstream snapshot
-The audit SHALL identify `https://github.com/AI4Finance-Foundation/FinRobot.git` as its upstream, bind full revision `297a8d28d099be328c8a8eb658b4f782b93f3651`, use release identifier `snapshot-297a8d2`, and require a clean maintainer-only checkout at `vendor/finrobot`. The nested FinNLP gitlink SHALL remain uninitialized.
+The audit SHALL identify `https://github.com/AI4Finance-Foundation/FinRobot.git` as its upstream, bind full revision `2717499b8e30f242640af08c4ad9afd1113c2d45`, use release identifier `snapshot-2717499`, and require a clean maintainer-only checkout at `vendor/finrobot`. The nested FinNLP gitlink SHALL remain uninitialized.
 
 #### Scenario: Maintainer verifies provenance
 - **WHEN** the audit is validated
 - **THEN** checkout origin, exact revision, clean state, snapshot identifier, and uninitialized nested gitlink match the audited source
 
 ### Requirement: Audit SHALL inventory every tracked source entry
-The machine audit SHALL contain one stably ordered `source_entries` record for each of the 146 tracked Git entries and no duplicate or unrecognized entry. Ordinary files and executables SHALL record reproducible content metadata; the FinNLP gitlink SHALL record its immutable object and external relationship without treating it as in-tree content.
+The machine audit SHALL contain one ordered record for every entry of its bound immutable Git tree, without duplicate paths. Summary counts, modes, object IDs, file byte lengths and hashes SHALL agree with the actual inventory. A gitlink SHALL remain an external object with no in-tree byte hash. The `snapshot-2717499` audit SHALL cover all 1,049 entries and its uninitialized migrated FinNLP gitlink.
 
 #### Scenario: Source inventory is reproduced
-- **WHEN** the pinned Git tree is compared with the audit
-- **THEN** paths, kinds, modes, object IDs, file counts, hashes, and byte totals match one-to-one
+- **WHEN** the bound Git tree is compared with its audit
+- **THEN** paths, kinds, modes, objects, counts, hashes and byte totals match one-to-one
 
 ### Requirement: Audit SHALL represent knowledge surfaces without inventing upstream Skills
-The audit SHALL confirm that the pinned source contains zero `SKILL.md` files and SHALL use `knowledge_surfaces` rather than synthetic upstream `skills`. It SHALL cover prompt-bearing roles, orchestration prompts, financial-analysis templates, equity agents, text generators, deterministic financial methods, assumptions, and relevant configuration through safe paths and source symbols.
+Knowledge surfaces SHALL bind real source symbols or actual Skill documents. Each audited snapshot SHALL state whether upstream Skill documents exist. The `snapshot-2717499` audit SHALL record its 56 real third-party Skills separately from four fixtures and preserve the prior 66 surfaces plus seven selected incremental surfaces.
 
 #### Scenario: Knowledge inventory is validated
-- **WHEN** known FinRobot knowledge roots and selectors are enumerated
-- **THEN** every resulting surface appears exactly once with kind, evidence, origin, risks, findings, scope disposition, and recommendation
+- **WHEN** source roots and Skill documents are inventoried
+- **THEN** each surface has a unique ID, source, kind, origin, risk, disposition and recommendation
+- **AND** third-party Skill inventory grants no admission
+
+### Requirement: Incremental audits SHALL preserve source decisions
+The audit SHALL preserve unchanged old evidence through verified blob and byte hashes, record path migrations, distinguish first-party Desktop methods from third-party Skills and datasets, and record current license facts. Third-party copies with unresolved original revisions or missing resources SHALL remain excluded from the reviewed bundle.
+
+#### Scenario: A third-party Skill lacks its resource closure
+- **WHEN** a converted Skill has unpinned attribution or missing referenced resources
+- **THEN** the audit records that uncertainty and the reviewed bundle does not distribute it
 
 ### Requirement: Audit SHALL distinguish candidate capabilities from source surfaces
 The audit SHALL aggregate evidence into exactly six non-production candidate capabilities: `financial-statement-analysis`, `company-fundamentals-analysis`, `corporate-risk-analysis`, `competitive-position-analysis`, `relative-valuation-analysis`, and `financial-news-impact-analysis`. Every candidate SHALL reference existing surfaces, carry a content-license review and ANZSRC metadata, and state future adaptation constraints.
@@ -94,4 +102,3 @@ Release verification SHALL reject npm package entries under `vendor/finrobot/` a
 #### Scenario: Package contents are verified
 - **WHEN** the npm tarball is inspected
 - **THEN** neither the FinRobot source checkout nor maintainer-only audit evidence is published
-

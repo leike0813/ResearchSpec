@@ -348,14 +348,16 @@ updates must follow the maintenance Skill before regenerating any
 `plugin-materials-*` package or profile.
 
 `vendor/finrobot` is the maintainer-only pinned input for the
-`snapshot-297a8d2` audit and converter. FinRobot has no upstream `SKILL.md`; its
-immutable audit covers all 146 tracked Git entries, 66 source-bound knowledge
-surfaces, five origins, six license claims, and six candidates. Production
-policies admit six neutral `financial-research-*` Skills from twelve candidate
-files. The 32 admitted surfaces map exactly once to complete ResearchSpec-authored
-Agent procedures or deterministic Python 3.11 standard-library entrypoints; no
-upstream FinRobot runtime file or provider helper is distributed.
-FinNLP, AutoGen-attributed content, unclear filing/marker trees, and hard
+`snapshot-2717499` audit and converter. FinRobot has no first-party upstream
+`SKILL.md`; its immutable audit covers all 1,049 tracked Git entries, 129
+source-bound knowledge surfaces, eight origins, seven license claims, and six
+candidates. Production policies admit six neutral `financial-research-*` Skills
+from nineteen reviewed source files. The 39 admitted surfaces map exactly once to
+complete ResearchSpec-authored Agent procedures or deterministic Python 3.11
+standard-library entrypoints; no upstream FinRobot runtime file or provider
+helper is distributed.
+FinNLP, AutoGen-attributed content, 56 third-party Skill copies with four
+fixtures, unredistributable datasets, unclear filing/marker trees, and hard
 FinRobot aggregate dependencies remain excluded. All generated Skills carry
 Apache-2.0 licensing, immutable derivation metadata, empty hard Skill
 dependencies, and advisory-only relationships. They contribute to
@@ -375,7 +377,7 @@ in published files, and do not bypass the checked-in admission, source, surface,
 origin, license, resource, relationship, derivation, and review decisions.
 
 FinRobot converter version 2 binds the approved aggregate tree hash
-`eecf6fc9e7669f46ef9c58d4fd5938cabedb6d8d7aceac59e15688e178f3765e`.
+`1a101495abecacbc702a8ce8fd3b376631b88e9cc45de3d9a216d6aaedb3a4c6`.
 Company fundamentals, event evidence, relative valuation, and statement analysis
 are Tier 3 script-assisted Skills with a copied `lib/financial_support.py`;
 competitive position and corporate risk are Tier 1 Agent procedures. The
@@ -401,8 +403,8 @@ validators; only `advance` runs the declared `python3` validator.
 `scripts/finrobot-maintenance.mjs` and
 `.agents/skills/finrobot-maintenance/SKILL.md` provide catalog-driven
 `artifacts / records / baseline / check / diff` anchors and the Agent semantic
-review gate. The current anchor is `snapshot-297a8d2` under
-`audits/finrobot/snapshot-297a8d2/`. Future FinRobot extension updates must
+review gate. The current anchor is `snapshot-2717499` under
+`audits/finrobot/snapshot-2717499/`. Future FinRobot extension updates must
 follow the maintenance Skill before regenerating any `plugin-financial-*`
 package or profile.
 

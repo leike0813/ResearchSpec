@@ -4,7 +4,7 @@ import path from "node:path";
 import { sha256 } from "../../core/workspace/write-plan.js";
 import { validateNonNativeVendorSkill } from "../shared/non-native-skill-standard/index.js";
 import { posix, walkFiles } from "../shared/staging.js";
-import { assertNoSensitiveValues, loadFinRobotDraftPolicies, type FinRobotDraftPolicies } from "./policy.js";
+import { assertNoSensitiveValues, loadFinRobotDraftPolicies, type FinRobotDraftPolicies, type FinRobotPolicyInputs } from "./policy.js";
 import { FINROBOT_SKILL_DEFINITIONS, type FinRobotSkillDefinition } from "./skill-definitions.js";
 
 export interface FinRobotTreeFile { path: string; content: Buffer; sha256: string }
@@ -23,16 +23,22 @@ export interface FinRobotCompleteTreeSet {
   reviewStatus: "pending-human-review" | "rejected" | "approved";
 }
 
-export async function renderFinRobotCompleteTrees(repoRoot: string): Promise<FinRobotCompleteTreeSet> {
-  const policies = await loadFinRobotDraftPolicies(repoRoot);
-  const root = path.join(repoRoot, "src/vendor-converters/finrobot");
-  const license = await readFile(path.join(repoRoot, "vendor/finrobot/LICENSE"));
-  const upstreamNotice = normalize(await readFile(path.join(repoRoot, "vendor/finrobot/NOTICE"), "utf8"));
-  const supportLibrary = await readFile(path.join(root, "lib/financial_support.py"));
+export interface FinRobotTreeInputs extends FinRobotPolicyInputs {
+  authoredRoot?: string;
+  supportPath?: string;
+}
+
+export async function renderFinRobotCompleteTrees(repoRoot: string, inputs: FinRobotTreeInputs = {}): Promise<FinRobotCompleteTreeSet> {
+  const policies = await loadFinRobotDraftPolicies(repoRoot, inputs);
+  const root = inputs.authoredRoot ?? path.join(repoRoot, "src/vendor-converters/finrobot/skills");
+  const sourceRoot = inputs.sourceRoot ?? path.join(repoRoot, "vendor/finrobot");
+  const license = await readFile(path.join(sourceRoot, "LICENSE"));
+  const upstreamNotice = normalize(await readFile(path.join(sourceRoot, "NOTICE"), "utf8"));
+  const supportLibrary = await readFile(inputs.supportPath ?? path.join(repoRoot, "src/vendor-converters/finrobot/lib/financial_support.py"));
   const trees: FinRobotCompleteTree[] = [];
 
-  for (const definition of Object.values(FINROBOT_SKILL_DEFINITIONS).sort((left, right) => compareText(left.skillId, right.skillId))) {
-    const authored = await readTree(path.join(root, "skills", definition.skillId));
+  for (const definition of Object.values(inputs.definitions ?? FINROBOT_SKILL_DEFINITIONS).sort((left, right) => compareText(left.skillId, right.skillId))) {
+    const authored = await readTree(path.join(root, definition.skillId));
     const capabilitySources = definition.capabilities.map((capability) => {
       const surface = policies.audit.knowledge_surfaces.find((item) => item.surface_id === capability.id);
       if (!surface) throw new Error(`Missing FinRobot audited surface: ${capability.id}`);
@@ -83,12 +89,12 @@ export async function renderFinRobotCompleteTrees(repoRoot: string): Promise<Fin
   const treeSetSha256 = sha256(Buffer.from(trees.map((tree) => `${tree.skillId}\0${tree.sha256}\n`).join(""), "utf8"));
   const candidate = policies.review.candidate;
   if (candidate?.tree_set_sha256 && candidate.tree_set_sha256 !== treeSetSha256) throw new Error("FinRobot complete candidate trees differ from the review decision.");
-  if (policies.review.published.converter_version === "2" && policies.review.published.tree_set_sha256 !== treeSetSha256) throw new Error("FinRobot version 2 approval does not bind the complete trees.");
+  if (!inputs.auditPath && policies.review.published.converter_version === "2" && policies.review.published.tree_set_sha256 !== treeSetSha256) throw new Error("FinRobot version 2 approval does not bind the complete trees.");
   return {
     policies,
     trees,
     treeSetSha256,
-    reviewStatus: policies.review.published.converter_version === "2"
+    reviewStatus: !inputs.auditPath && policies.review.published.converter_version === "2"
       ? policies.review.published.review_status
       : candidate?.review_status ?? "pending-human-review",
   };

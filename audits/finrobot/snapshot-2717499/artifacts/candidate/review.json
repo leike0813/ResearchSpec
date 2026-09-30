@@ -1,0 +1,289 @@
+{
+  "schema_version": "1",
+  "review_status": "pending-human-review",
+  "release": "snapshot-2717499",
+  "revision": "2717499b8e30f242640af08c4ad9afd1113c2d45",
+  "audit_sha256": "3a592982ff4bd9f53853ef56b958e330593d7b70594622580975bafa3727884b",
+  "published_tree_set_sha256": "eecf6fc9e7669f46ef9c58d4fd5938cabedb6d8d7aceac59e15688e178f3765e",
+  "candidate_tree_set_sha256": "1a101495abecacbc702a8ce8fd3b376631b88e9cc45de3d9a216d6aaedb3a4c6",
+  "trees": [
+    {
+      "skill_id": "financial-research-company-fundamentals",
+      "tree_sha256": "97d5978147105d728120c59841634d17000a7f3981fb2d37c437c2c5f3b9a46f"
+    },
+    {
+      "skill_id": "financial-research-competitive-position",
+      "tree_sha256": "8e0c69a17a7420fd055946b5b60d57f5d070219d5b883bb868e5b2aac2f4cbb1"
+    },
+    {
+      "skill_id": "financial-research-corporate-risk",
+      "tree_sha256": "28716dec9cacccca694b68eef05307622b499c673eebd442db64370992c8eb74"
+    },
+    {
+      "skill_id": "financial-research-event-evidence",
+      "tree_sha256": "33448526d9568d5fd3879f15d7fae4d79cd02689188b49d68ae4bafa021d1fe9"
+    },
+    {
+      "skill_id": "financial-research-relative-valuation",
+      "tree_sha256": "e5805507b06fe3ae024251a5f866cf4915f677fcddf14a20b1507d895b9fbedd"
+    },
+    {
+      "skill_id": "financial-research-statement-analysis",
+      "tree_sha256": "e884e5c35af1add771506cdd3a45e998c2e2860c4f232b383a6ee76a01464fc4"
+    }
+  ],
+  "files": [
+    {
+      "path": "extensions/capabilities/plugin-financial-company-fundamentals/SKILL.md",
+      "sha256": "9cdf4e3e6fcbbd38a9cf474f3dc1664fb84043dabfcc1d8ad6446c33d2cc284c"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-company-fundamentals/manifest.yaml",
+      "sha256": "40eed58159d193d2887f4aacf195dd86aae53233358be8005646804d096d05e2"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-company-fundamentals/tools/financial_support.py",
+      "sha256": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-company-fundamentals/tools/fundamentals.py",
+      "sha256": "c13a2a3d909a194899ba82ce9f8e11952140f9844ccd5fe545c9a2489b544a2d"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-company-fundamentals/validators/validate_financial_brief.py",
+      "sha256": "e92521265a1eaafefa79c9fa0b013fc91b48316a94ec76e560cc0a02cf9ae803"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-competitive-position/SKILL.md",
+      "sha256": "2e320e57b7909f7e91a861d28b84dc9abfcd957ea8c1631816f3debf3e4d05f8"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-competitive-position/manifest.yaml",
+      "sha256": "4c8bc7b2c1baf39877412795bb081709699d46cc2fd2633861453cd97c7c7679"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-corporate-risk/SKILL.md",
+      "sha256": "30a9b157142a08bb5fe6f2283ffc15642fd6b3091dcd8f1246e1c2d2c8d6d010"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-corporate-risk/manifest.yaml",
+      "sha256": "ca621ca4820aa9efe373d6955e61f3491ee8360385a5a636be8c58a2eb243d1a"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-event-evidence/SKILL.md",
+      "sha256": "f351523af8b0487086f80ac53892ea39dbd4f6eca722a9ffd6525fed64fb5612"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-event-evidence/manifest.yaml",
+      "sha256": "126b8b09ee57dc50645e5a05aebabd08e184c9dd2ed910c8f6dcb9f8e541b2d7"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-event-evidence/tools/event_evidence.py",
+      "sha256": "f564763b655b1ab77de3a92967dce667e6ce70eeba308dbeec5f000a34cdd3a7"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-event-evidence/tools/financial_support.py",
+      "sha256": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-event-evidence/validators/validate_financial_brief.py",
+      "sha256": "e92521265a1eaafefa79c9fa0b013fc91b48316a94ec76e560cc0a02cf9ae803"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-relative-valuation/SKILL.md",
+      "sha256": "d2bc8cb31958505a64da712ee945ded1feda9575b54eb3a6acaff44d25223064"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-relative-valuation/manifest.yaml",
+      "sha256": "4720e3b81227165ca9947e35d5342fbc39adff40c377006dcccd3575d856a038"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-relative-valuation/tools/financial_support.py",
+      "sha256": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-relative-valuation/tools/valuation.py",
+      "sha256": "f4e9975e2859473925063f73afe42da06fc48c6cde11b22d79ff99ebb8716374"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-relative-valuation/validators/validate_financial_brief.py",
+      "sha256": "e92521265a1eaafefa79c9fa0b013fc91b48316a94ec76e560cc0a02cf9ae803"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-statement-analysis/SKILL.md",
+      "sha256": "23c854b72b3401de47d912cb7298627eb449fdf8d4a1aeefdad73498d4de2d19"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-statement-analysis/manifest.yaml",
+      "sha256": "ed7bdf679853e79f2f6fd88ce2ff51989db9ac6d70f838a12b980767cdd0ee84"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-statement-analysis/tools/financial_support.py",
+      "sha256": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-statement-analysis/tools/statements.py",
+      "sha256": "bb5a82877c1d70e6c8c7dff4a509e4451255e2ebe50e858b9bbd2714c7067085"
+    },
+    {
+      "path": "extensions/capabilities/plugin-financial-statement-analysis/validators/validate_financial_brief.py",
+      "sha256": "e92521265a1eaafefa79c9fa0b013fc91b48316a94ec76e560cc0a02cf9ae803"
+    },
+    {
+      "path": "extensions/profiles/plugin-financial-company-fundamentals.yaml",
+      "sha256": "a1a000fe73c9ccbbc79565969bec18d10c7b7f47bad09137fdde7af79b18648a"
+    },
+    {
+      "path": "extensions/profiles/plugin-financial-competitive-position.yaml",
+      "sha256": "53603aa27c517aadbaa4244ff17ca34a158e3577ffc06377bc9d078c59d3c927"
+    },
+    {
+      "path": "extensions/profiles/plugin-financial-corporate-risk.yaml",
+      "sha256": "d67d1be5c5c0f733604bd113faeacb8482a17a237edc47f7d6f7a14f2c1a7791"
+    },
+    {
+      "path": "extensions/profiles/plugin-financial-event-evidence.yaml",
+      "sha256": "d1b441c425c107eead5c0d0f4e0e144192f08e5b2acb3ae26d3a00ba5106044f"
+    },
+    {
+      "path": "extensions/profiles/plugin-financial-relative-valuation.yaml",
+      "sha256": "4e4ce4246971058f469c7f543a8e35176e93606ad16fc36ff19ac0a62beb73ee"
+    },
+    {
+      "path": "extensions/profiles/plugin-financial-statement-analysis.yaml",
+      "sha256": "12fd1b179b8ec29ffef0e981f6e3241788d85d02762d626cd7b70e6d2be33008"
+    },
+    {
+      "path": "extensions/registry.json",
+      "sha256": "d7eacbac9fafc76733df88947e554df33960de766343d0fe05aa97ac6e75089e"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-company-fundamentals/DERIVATION.json",
+      "sha256": "511e9000e14361ee1edbac6e8c7d2c8eb51db07ccb03b71f8b16b25f55a037cf"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-company-fundamentals/LICENSE",
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-company-fundamentals/NOTICE",
+      "sha256": "4e5621ceabe873a3f6258e9e297f0e2d4ebf2c59ce30101f514c0a71e5556a56"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-company-fundamentals/SKILL.md",
+      "sha256": "0aad28130c0cff134f8d45751a61849e5f9e2da050032945ddb45b725b2f2210"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-company-fundamentals/lib/financial_support.py",
+      "sha256": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-company-fundamentals/scripts/fundamentals.py",
+      "sha256": "c13a2a3d909a194899ba82ce9f8e11952140f9844ccd5fe545c9a2489b544a2d"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-competitive-position/DERIVATION.json",
+      "sha256": "9c5167ede4358be62135b23adf8c8ada0132ca19be6a540da3f785b460981ef9"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-competitive-position/LICENSE",
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-competitive-position/NOTICE",
+      "sha256": "4e5621ceabe873a3f6258e9e297f0e2d4ebf2c59ce30101f514c0a71e5556a56"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-competitive-position/SKILL.md",
+      "sha256": "4fa91e07d43dda8a2e7dea079e456dd39a75c5bdbe6cad00a3fe6524ae7feb30"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-corporate-risk/DERIVATION.json",
+      "sha256": "1199d9ff048a416766a2365fb21992c8df1ccdee387104f8109d284d9e4ae9c6"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-corporate-risk/LICENSE",
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-corporate-risk/NOTICE",
+      "sha256": "4e5621ceabe873a3f6258e9e297f0e2d4ebf2c59ce30101f514c0a71e5556a56"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-corporate-risk/SKILL.md",
+      "sha256": "6d006582e10bdac81bc008314dbfa53d380c2c65e32ecce8f20e5366cc8fcea0"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-event-evidence/DERIVATION.json",
+      "sha256": "5f017bba7a1b95a64e2b8b66838cdc31903541992cdc036c5781c6f5c33c1a7d"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-event-evidence/LICENSE",
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-event-evidence/NOTICE",
+      "sha256": "4e5621ceabe873a3f6258e9e297f0e2d4ebf2c59ce30101f514c0a71e5556a56"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-event-evidence/SKILL.md",
+      "sha256": "b5203b38f8fde3a95f39c86eb6b93e76942d61a62de378a95f0a661d12de02c4"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-event-evidence/lib/financial_support.py",
+      "sha256": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-event-evidence/scripts/event_evidence.py",
+      "sha256": "f564763b655b1ab77de3a92967dce667e6ce70eeba308dbeec5f000a34cdd3a7"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-relative-valuation/DERIVATION.json",
+      "sha256": "a98c522f8813277db805a1938dcd034ef5f91ab6e39da4ddcef7cd557dd0ff2d"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-relative-valuation/LICENSE",
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-relative-valuation/NOTICE",
+      "sha256": "4e5621ceabe873a3f6258e9e297f0e2d4ebf2c59ce30101f514c0a71e5556a56"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-relative-valuation/SKILL.md",
+      "sha256": "a4e0ca25d5f3bd461eded7e66bdd8c3fda4ef13ad23d6935075d4a99cd412e13"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-relative-valuation/lib/financial_support.py",
+      "sha256": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-relative-valuation/scripts/valuation.py",
+      "sha256": "f4e9975e2859473925063f73afe42da06fc48c6cde11b22d79ff99ebb8716374"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-statement-analysis/DERIVATION.json",
+      "sha256": "0b76247c3c267f53d583f08512ad25dd87a3e2f75da22dbb1a777fe3225c04d7"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-statement-analysis/LICENSE",
+      "sha256": "bbcb4226500b503737713f0c9a9da17efce56fa6989b9f0538071dcb60826af5"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-statement-analysis/NOTICE",
+      "sha256": "4e5621ceabe873a3f6258e9e297f0e2d4ebf2c59ce30101f514c0a71e5556a56"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-statement-analysis/SKILL.md",
+      "sha256": "94ddb783832bb5dd13439dfa25d3c61acc1950f34f6fa6f677b2d2a6f82c660e"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-statement-analysis/lib/financial_support.py",
+      "sha256": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c"
+    },
+    {
+      "path": "vendors/finrobot/financial-research-statement-analysis/scripts/statements.py",
+      "sha256": "bb5a82877c1d70e6c8c7dff4a509e4451255e2ebe50e858b9bbd2714c7067085"
+    }
+  ]
+}

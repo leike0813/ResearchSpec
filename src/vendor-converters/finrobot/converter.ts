@@ -37,18 +37,18 @@ export interface FinRobotConversionManifest {
   schema_version: "2";
   converter_version: "2";
   vendor_id: "finrobot";
-  release: "snapshot-297a8d2";
+  release: string;
   revision: string;
   audit_sha256: string;
   approved_tree_set_sha256: string;
   generated_skills: string[];
   decision_counts: {
-    source_entries: 146;
-    knowledge_surfaces: 66;
-    admitted_capabilities: 32;
-    content_origins: 5;
-    license_claims: 6;
-    resources: 8;
+    source_entries: number;
+    knowledge_surfaces: number;
+    admitted_capabilities: number;
+    content_origins: number;
+    license_claims: number;
+    resources: number;
   };
   implementation_counts: {
     agent_procedures: number;
@@ -211,18 +211,18 @@ async function generateBundle(
     schema_version: "2",
     converter_version: "2",
     vendor_id: VENDOR_ID,
-    release: "snapshot-297a8d2",
+    release: policies.audit.source.release,
     revision: policies.audit.source.revision,
     audit_sha256: policies.review.audit_sha256,
     approved_tree_set_sha256: rendered.treeSetSha256,
     generated_skills: rendered.trees.map((tree) => tree.skillId),
     decision_counts: {
-      source_entries: 146,
-      knowledge_surfaces: 66,
-      admitted_capabilities: 32,
-      content_origins: 5,
-      license_claims: 6,
-      resources: 8,
+      source_entries: policies.sourceEntries.decisions.length,
+      knowledge_surfaces: policies.surfaces.decisions.length,
+      admitted_capabilities: capabilityMap.length,
+      content_origins: policies.origins.decisions.length,
+      license_claims: policies.licenses.decisions.length,
+      resources: policies.resources.decisions.length,
     },
     implementation_counts: {
       agent_procedures: capabilityMap.filter((item) => item.implementation_kind === "agent-procedure").length,
@@ -255,8 +255,10 @@ async function validatePrerequisites(repoRoot: string, policies: FinRobotDraftPo
   if (stdout.trim() !== policies.audit.source.revision) throw new Error(`FinRobot checkout revision differs from audit: ${stdout.trim()}`);
   const { stdout: status } = await execFileAsync("git", ["-C", sourceRoot, "status", "--porcelain", "--ignore-submodules=all"]);
   if (status.trim()) throw new Error("FinRobot checkout must be clean before conversion.");
-  const { stdout: nested } = await execFileAsync("git", ["-C", sourceRoot, "submodule", "status", "FinNLP"]);
-  if (!nested.startsWith("-")) throw new Error("FinRobot FinNLP gitlink must remain uninitialized.");
+  for (const entry of policies.audit.source_entries.filter((item) => item.kind === "gitlink")) {
+    const { stdout: nested } = await execFileAsync("git", ["-C", sourceRoot, "submodule", "status", entry.path]);
+    if (!nested.startsWith(`-${entry.git_object_id} `)) throw new Error(`FinRobot gitlink must remain uninitialized: ${entry.path}`);
+  }
   if (!(await pathExists(path.join(repoRoot, "openspec/specs/finrobot-domain-skill-audit/spec.md")))) throw new Error("FinRobot audit main specification is absent.");
   const archives = await readdir(path.join(repoRoot, "openspec/changes/archive"));
   if (!archives.some((name) => name.endsWith("-audit-finrobot"))) throw new Error("FinRobot audit change must be archived before conversion.");

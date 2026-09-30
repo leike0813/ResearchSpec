@@ -15,7 +15,7 @@ void test("FinRobot maintenance catalog maps six reviewed Skills to six extensio
     extensions: Array<{ capability_id: string; raw_skill_id: string; execution_type: string; required_brief_fields: string[] }>;
   };
   assert.equal(catalog.vendor_id, "finrobot");
-  assert.equal(catalog.revision, "297a8d28d099be328c8a8eb658b4f782b93f3651");
+  assert.equal(catalog.revision, "2717499b8e30f242640af08c4ad9afd1113c2d45");
   assert.equal(catalog.extensions.length, 6);
   assert.equal(catalog.extensions.filter((item) => item.execution_type === "mixed").length, 4);
   assert.equal(catalog.extensions.filter((item) => item.execution_type === "llm").length, 2);
@@ -32,7 +32,10 @@ void test("FinRobot maintenance catalog maps six reviewed Skills to six extensio
 
 testVendorAnchor(ROOT, {
   "vendor": "finrobot",
-  "anchor": "snapshot-297a8d2",
-  "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
-  "capabilities": 6
+  "anchor": "snapshot-2717499",
+  "revision": "2717499b8e30f242640af08c4ad9afd1113c2d45",
+  "capabilities": 6,
+  "contentFiles": 1048,
+  "toolFiles": 8,
+  "extension": { "mixed_count": 4, "llm_count": 2, "script_validator_count": 4 }
 });

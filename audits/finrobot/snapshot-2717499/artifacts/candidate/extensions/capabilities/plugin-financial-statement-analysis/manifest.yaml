@@ -1,0 +1,63 @@
+schema_version: "1"
+capability_id: plugin-financial-statement-analysis
+title: Financial Statement Analysis
+description: Normalizes statement records and produces an evidence-backed
+  financial statement analysis brief with deterministic calculations.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: statement-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_financial_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,normalized_statements,metrics,conclusions,evidence_checks
+knowledge_refs:
+  - knowledge_id: statement-tool
+    path: tools/statements.py
+    content_hash: bb5a82877c1d70e6c8c7dff4a509e4451255e2ebe50e858b9bbd2714c7067085
+    license: Apache-2.0
+  - knowledge_id: financial-support
+    path: tools/financial_support.py
+    content_hash: 9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: audits/finrobot/snapshot-2717499/artifacts/candidate/vendors/finrobot/financial-research-statement-analysis/SKILL.md
+      sha256: 94ddb783832bb5dd13439dfa25d3c61acc1950f34f6fa6f677b2d2a6f82c660e
+    - path: audits/finrobot/snapshot-2717499/artifacts/candidate/vendors/finrobot/financial-research-statement-analysis/lib/financial_support.py
+      sha256: 9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c
+    - path: audits/finrobot/snapshot-2717499/artifacts/candidate/vendors/finrobot/financial-research-statement-analysis/scripts/statements.py
+      sha256: bb5a82877c1d70e6c8c7dff4a509e4451255e2ebe50e858b9bbd2714c7067085
+license: Apache-2.0

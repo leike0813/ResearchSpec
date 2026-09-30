@@ -1,9 +1,9 @@
 {
   "schema_version": "2",
   "vendor_id": "finrobot",
-  "release": "snapshot-297a8d2",
-  "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
-  "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
+  "release": "snapshot-2717499",
+  "revision": "2717499b8e30f242640af08c4ad9afd1113c2d45",
+  "audit_sha256": "3a592982ff4bd9f53853ef56b958e330593d7b70594622580975bafa3727884b",
   "review_status": "approved",
   "decisions": [
     {
@@ -17,7 +17,8 @@
         "enhanced-forecast-methodology",
         "equity-company-overview",
         "equity-major-takeaways",
-        "processor-growth-forecast"
+        "processor-growth-forecast",
+        "financial-numeric-evidence"
       ],
       "domain_ids": [
         "accounting-auditing-and-accountability",
@@ -116,7 +117,10 @@
         "analyzer-analyze-segment-stmt",
         "analyzer-income-summarization",
         "processor-extract-api",
-        "processor-extract-pdf"
+        "processor-extract-pdf",
+        "statement-ttm-coverage",
+        "valuation-currency-caliber",
+        "statement-source-lineage"
       ],
       "domain_ids": [
         "accounting-auditing-and-accountability",
@@ -144,7 +148,10 @@
         "sensitivity-revenue",
         "sensitivity-table",
         "valuation-ev-ebitda",
-        "valuation-peer-comparison"
+        "valuation-peer-comparison",
+        "valuation-comparability",
+        "valuation-ev-bridge",
+        "valuation-dcf-validity"
       ],
       "domain_ids": [
         "banking-finance-and-investment"

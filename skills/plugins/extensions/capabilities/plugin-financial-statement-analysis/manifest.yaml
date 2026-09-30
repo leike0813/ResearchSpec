@@ -1,8 +1,8 @@
 schema_version: "1"
 capability_id: plugin-financial-statement-analysis
 title: Financial Statement Analysis
-description: Normalizes statement records and produces an evidence-backed financial
-  statement analysis brief with deterministic calculations.
+description: Normalizes statement records and produces an evidence-backed
+  financial statement analysis brief with deterministic calculations.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -40,11 +40,11 @@ validators:
         - --submission
         - "{outputs_json}"
         - --required
-        - scope,source_ledger,normalized_statements,metrics,conclusions
+        - scope,source_ledger,normalized_statements,metrics,conclusions,evidence_checks
 knowledge_refs:
   - knowledge_id: statement-tool
     path: tools/statements.py
-    content_hash: fe06b8a206d189d35983e720407c39fdb06022e600662e74ad62b02994aed388
+    content_hash: bb5a82877c1d70e6c8c7dff4a509e4451255e2ebe50e858b9bbd2714c7067085
     license: Apache-2.0
   - knowledge_id: financial-support
     path: tools/financial_support.py
@@ -55,9 +55,9 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/finrobot/financial-research-statement-analysis/SKILL.md
-      sha256: d164aa203ea0e3a6e37c9c1b87f6d0f5be3c5cf7f728820576adf15c710cb11e
-    - path: skills/plugins/vendors/finrobot/financial-research-statement-analysis/scripts/statements.py
-      sha256: fe06b8a206d189d35983e720407c39fdb06022e600662e74ad62b02994aed388
+      sha256: 94ddb783832bb5dd13439dfa25d3c61acc1950f34f6fa6f677b2d2a6f82c660e
     - path: skills/plugins/vendors/finrobot/financial-research-statement-analysis/lib/financial_support.py
       sha256: 9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c
+    - path: skills/plugins/vendors/finrobot/financial-research-statement-analysis/scripts/statements.py
+      sha256: bb5a82877c1d70e6c8c7dff4a509e4451255e2ebe50e858b9bbd2714c7067085
 license: Apache-2.0

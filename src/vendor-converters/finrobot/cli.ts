@@ -4,14 +4,25 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { checkFinRobotIdempotence, checkFinRobotOutput, convertFinRobot } from "./converter.js";
+import { previewFinRobot } from "./preview.js";
 
-const HELP = `ResearchSpec FinRobot vendor converter\n\nUsage:\n  node dist/src/vendor-converters/finrobot/cli.js <convert|check|idempotence> [--force] [--dry-run] [--json]\n`;
+const HELP = `ResearchSpec FinRobot vendor converter\n\nUsage:\n  node dist/src/vendor-converters/finrobot/cli.js <convert|check|idempotence> [--force] [--dry-run] [--json]\n  node dist/src/vendor-converters/finrobot/cli.js preview --anchor audits/finrobot/<anchor> --source-root <fixed-source-tree> [--check] [--json]\n`;
 
 export async function main(argv = process.argv.slice(2), cwd = process.cwd()): Promise<number> {
   const command = argv.find((item) => !item.startsWith("--"));
   if (!command || argv.includes("--help")) { process.stdout.write(HELP); return 0; }
   const repoRoot = await findRepoRoot(cwd);
   try {
+    if (command === "preview") {
+      const flag = (name: string) => {
+        const index = argv.indexOf(name);
+        const value = index >= 0 ? argv[index + 1] : undefined;
+        if (!value || value.startsWith("--")) throw new Error(`${name} is required for FinRobot preview.`);
+        return path.resolve(cwd, value);
+      };
+      const result = await previewFinRobot(repoRoot, flag("--anchor"), flag("--source-root"), argv.includes("--check"));
+      return output(argv, result, `FinRobot candidate ${argv.includes("--check") ? "check passed" : "prepared"}: ${result.candidate_tree_set_sha256} (${result.review_status})\n`);
+    }
     if (command === "convert") {
       const result = await convertFinRobot({ repoRoot, force: argv.includes("--force"), dryRun: argv.includes("--dry-run") });
       return output(argv, { ok: true, ...result }, `FinRobot conversion ${argv.includes("--dry-run") ? "dry run passed" : "complete"}: ${String(result.generated_skills.length)} Skills\n`);

@@ -1,0 +1,19 @@
+{
+  "schema_version": "2",
+  "vendor_id": "finrobot",
+  "release": "snapshot-2717499",
+  "revision": "2717499b8e30f242640af08c4ad9afd1113c2d45",
+  "audit_sha256": "3a592982ff4bd9f53853ef56b958e330593d7b70594622580975bafa3727884b",
+  "published": {
+    "review_status": "approved",
+    "tree_set_sha256": "eecf6fc9e7669f46ef9c58d4fd5938cabedb6d8d7aceac59e15688e178f3765e",
+    "approval_note": "User explicitly approved complete tree set eecf6fc9e7669f46ef9c58d4fd5938cabedb6d8d7aceac59e15688e178f3765e.",
+    "approved_at": "2026-07-15T21:49:26Z",
+    "converter_version": "2"
+  },
+  "candidate": {
+    "review_status": "pending-human-review",
+    "tree_set_sha256": "1a101495abecacbc702a8ce8fd3b376631b88e9cc45de3d9a216d6aaedb3a4c6",
+    "review_note": "The six complete candidate trees and isolated extension projection are available under artifacts/candidate, with their byte inventory in review.json and semantic review in 05-semantic-review.md. This exact candidate hash awaits explicit human approval. Published approval remains bound only to snapshot-297a8d2."
+  }
+}

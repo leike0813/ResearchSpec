@@ -5,12 +5,12 @@ import { z } from "zod";
 
 import { sha256 } from "../../core/workspace/write-plan.js";
 import { FinRobotAuditSchema, type FinRobotAudit } from "../../vendor-audits/finrobot.js";
-import { FINROBOT_SKILL_DEFINITIONS } from "./skill-definitions.js";
+import { FINROBOT_SKILL_DEFINITIONS, type FinRobotSkillDefinition } from "./skill-definitions.js";
 
 const VENDOR_ID = "finrobot" as const;
-const RELEASE = "snapshot-297a8d2" as const;
-const REVISION = "297a8d28d099be328c8a8eb658b4f782b93f3651" as const;
-const AUDIT_SHA256 = "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3" as const;
+const RELEASE = "snapshot-2717499" as const;
+const REVISION = "2717499b8e30f242640af08c4ad9afd1113c2d45" as const;
+const AUDIT_SHA256 = "3a592982ff4bd9f53853ef56b958e330593d7b70594622580975bafa3727884b" as const;
 
 const IdSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(128);
 const RelativePathSchema = z.string().min(1).refine(
@@ -43,9 +43,9 @@ const ReviewStatusSchema = z.enum(["pending-human-review", "approved", "rejected
 const CatalogMetadataShape = {
   schema_version: z.literal("2"),
   vendor_id: z.literal(VENDOR_ID),
-  release: z.literal(RELEASE),
-  revision: z.literal(REVISION),
-  audit_sha256: z.literal(AUDIT_SHA256),
+  release: z.string().min(1),
+  revision: GitObjectIdSchema,
+  audit_sha256: Sha256Schema,
 };
 
 export const FinRobotAdmissionCatalogSchema = z.strictObject({
@@ -92,7 +92,7 @@ export const FinRobotSourceEntryCatalogSchema = z.strictObject({
     sensitive_scan: z.literal("not-applicable"),
     derivation_notice: z.literal("not-applicable"),
     reason_code: IdSchema,
-  })).length(146),
+  })).min(1),
 });
 
 export const FinRobotSurfaceCatalogSchema = z.strictObject({
@@ -107,7 +107,7 @@ export const FinRobotSurfaceCatalogSchema = z.strictObject({
     output_assets: z.array(RelativePathSchema),
     implementation_kind: z.enum(["agent-procedure", "bundled-script", "external-tool", "none"]),
     reason_code: IdSchema,
-  })).length(66),
+  })).min(1),
 });
 
 export const FinRobotOriginCatalogSchema = z.strictObject({
@@ -118,7 +118,7 @@ export const FinRobotOriginCatalogSchema = z.strictObject({
     license_expression: z.literal("Apache-2.0").nullable(),
     reason_code: IdSchema,
     note: z.string().trim().min(1),
-  })).length(5),
+  })).min(1),
 });
 
 export const FinRobotLicenseCatalogSchema = z.strictObject({
@@ -129,7 +129,7 @@ export const FinRobotLicenseCatalogSchema = z.strictObject({
     effective_expression: z.literal("Apache-2.0").nullable(),
     reason_code: IdSchema,
     note: z.string().trim().min(1),
-  })).length(6),
+  })).min(1),
 });
 
 export const FinRobotResourceCatalogSchema = z.strictObject({
@@ -215,10 +215,18 @@ const POLICY_FILES = {
   review: "review-decision.json",
 } as const;
 
-export async function loadFinRobotDraftPolicies(repoRoot: string): Promise<FinRobotDraftPolicies> {
-  const root = path.join(repoRoot, "src/vendor-converters/finrobot");
-  const auditBytes = await readFile(path.join(repoRoot, "audits/finrobot/snapshot-297a8d2/capability-audit.json"));
-  if (sha256(auditBytes) !== AUDIT_SHA256) throw new Error("FinRobot immutable audit hash differs from the ingestion contract.");
+export interface FinRobotPolicyInputs {
+  policyRoot?: string;
+  auditPath?: string;
+  sourceRoot?: string;
+  definitions?: Record<string, FinRobotSkillDefinition>;
+}
+
+export async function loadFinRobotDraftPolicies(repoRoot: string, inputs: FinRobotPolicyInputs = {}): Promise<FinRobotDraftPolicies> {
+  const root = inputs.policyRoot ?? path.join(repoRoot, "src/vendor-converters/finrobot");
+  const auditBytes = await readFile(inputs.auditPath ?? path.join(repoRoot, `audits/finrobot/${RELEASE}/capability-audit.json`));
+  const auditHash = sha256(auditBytes);
+  if (!inputs.auditPath && auditHash !== AUDIT_SHA256) throw new Error("FinRobot immutable audit hash differs from the ingestion contract.");
   const policies: FinRobotDraftPolicies = {
     audit: FinRobotAuditSchema.parse(JSON.parse(auditBytes.toString("utf8")) as unknown),
     admission: FinRobotAdmissionCatalogSchema.parse(await readJson(path.join(root, POLICY_FILES.admission))),
@@ -230,12 +238,15 @@ export async function loadFinRobotDraftPolicies(repoRoot: string): Promise<FinRo
     relationships: FinRobotRelationshipCatalogSchema.parse(await readJson(path.join(root, POLICY_FILES.relationships))),
     review: FinRobotReviewDecisionSchema.parse(await readJson(path.join(root, POLICY_FILES.review))),
   };
-  await validateFinRobotDraftPolicies(repoRoot, policies);
+  for (const catalog of [policies.admission, policies.sourceEntries, policies.surfaces, policies.origins, policies.licenses, policies.resources, policies.relationships, policies.review]) {
+    if (catalog.audit_sha256 !== auditHash || catalog.release !== policies.audit.source.release || catalog.revision !== policies.audit.source.revision) throw new Error("FinRobot catalog provenance differs from its immutable audit.");
+  }
+  await validateFinRobotDraftPolicies(repoRoot, policies, inputs);
   return policies;
 }
 
-export async function validateFinRobotDraftPolicies(repoRoot: string, policies: FinRobotDraftPolicies): Promise<void> {
-  if (policies.audit.source.release !== RELEASE || policies.audit.source.revision !== REVISION) throw new Error("FinRobot audit provenance differs from the ingestion contract.");
+export async function validateFinRobotDraftPolicies(repoRoot: string, policies: FinRobotDraftPolicies, inputs: FinRobotPolicyInputs = {}): Promise<void> {
+  if (!inputs.auditPath && (policies.audit.source.release !== RELEASE || policies.audit.source.revision !== REVISION)) throw new Error("FinRobot audit provenance differs from the ingestion contract.");
 
   const candidates = new Map(policies.audit.candidate_capabilities.map((item) => [item.capability_id, item]));
   const admissionByCapability = uniqueMap(policies.admission.decisions, (item) => item.capability_id, "FinRobot admission");
@@ -244,35 +255,39 @@ export async function validateFinRobotDraftPolicies(repoRoot: string, policies: 
     const admission = admissionByCapability.get(capabilityId);
     if (!admission || admission.generated_skill_id !== EXPECTED_SKILLS[capabilityId]) throw new Error(`Invalid FinRobot Skill mapping for ${capabilityId}.`);
     if (!sameSet(admission.source_surface_ids, candidate.source_surface_ids)) throw new Error(`FinRobot admission surfaces differ from the audit for ${capabilityId}.`);
-    if (admission.content_review !== policies.review.published.review_status) throw new Error(`FinRobot published review state differs for ${capabilityId}.`);
+    if (admission.content_review !== (inputs.auditPath ? policies.review.candidate?.review_status : policies.review.published.review_status)) throw new Error(`FinRobot review state differs for ${capabilityId}.`);
   }
 
   const auditedSources = uniqueMap(policies.audit.source_entries, (item) => item.path, "audited FinRobot source");
   const sourceDecisions = uniqueMap(policies.sourceEntries.decisions, (item) => item.source_path, "FinRobot source decision");
-  if (sourceDecisions.size !== 146) throw new Error("FinRobot source decisions must cover all 146 entries.");
+  if (sourceDecisions.size !== auditedSources.size) throw new Error("FinRobot source decisions must cover every audited entry.");
   for (const [sourcePath, source] of auditedSources) {
     const decision = sourceDecisions.get(sourcePath);
     if (!decision || decision.git_object_id !== source.git_object_id || decision.sha256 !== source.sha256 || decision.content_origin_id !== source.content_origin_id) throw new Error(`FinRobot source decision differs from the audit: ${sourcePath}`);
+    if (decision.license_claim_id !== null && !policies.audit.license_claims.some((item) => item.claim_id === decision.license_claim_id)) throw new Error(`FinRobot source references an unknown license: ${sourcePath}`);
+    if (decision.dependency_closure.some((item) => !auditedSources.has(item))) throw new Error(`FinRobot source dependency is not inventoried: ${sourcePath}`);
   }
   const capabilityEvidence = policies.sourceEntries.decisions.filter((item) => item.candidate_surface_ids.length > 0);
-  if (capabilityEvidence.length !== 12) throw new Error("FinRobot implementation evidence must contain the twelve audited capability sources.");
+  const candidateSurfaceIds = new Set(policies.audit.candidate_capabilities.flatMap((item) => item.source_surface_ids));
+  if (capabilityEvidence.length !== new Set(policies.audit.knowledge_surfaces.filter((item) => candidateSurfaceIds.has(item.surface_id)).map((item) => item.source_path)).size) throw new Error("FinRobot evidence must cover all admitted source paths.");
   for (const decision of capabilityEvidence) {
     if (decision.production_action !== "evidence-only" || decision.output_assets.length !== 0) throw new Error(`FinRobot source evidence must not publish a runtime asset: ${decision.source_path}`);
-    if (decision.content_origin_id !== "root-apache" || !decision.sha256) throw new Error(`FinRobot source evidence lacks a reviewed Apache source hash: ${decision.source_path}`);
-    const sourceBytes = await readFile(path.join(repoRoot, "vendor/finrobot", decision.source_path));
+    if (!policies.origins.decisions.some((item) => item.origin_id === decision.content_origin_id && item.disposition === "production-source" && item.license_expression === "Apache-2.0") || !decision.sha256) throw new Error(`FinRobot source evidence lacks a reviewed Apache source hash: ${decision.source_path}`);
+    const sourceBytes = await readFile(path.join(inputs.sourceRoot ?? path.join(repoRoot, "vendor/finrobot"), decision.source_path));
     if (sha256(sourceBytes) !== decision.sha256) throw new Error(`FinRobot source hash changed: ${decision.source_path}`);
+    const sourceSurfaces = policies.audit.knowledge_surfaces.filter((item) => item.source_path === decision.source_path && candidateSurfaceIds.has(item.surface_id)).map((item) => item.surface_id);
+    if (!sameSet(sourceSurfaces, decision.candidate_surface_ids)) throw new Error(`FinRobot source surface mapping differs: ${decision.source_path}`);
   }
   if (policies.sourceEntries.decisions.some((item) => item.output_assets.length > 0 || item.replacement_contracts.length > 0)) throw new Error("FinRobot source decisions must not retain obsolete curation or provider outputs.");
 
-  const candidateSurfaceIds = new Set(policies.audit.candidate_capabilities.flatMap((item) => item.source_surface_ids));
-  const definedSkills = Object.values(FINROBOT_SKILL_DEFINITIONS);
+  const definedSkills = Object.values(inputs.definitions ?? FINROBOT_SKILL_DEFINITIONS);
   const definedCapabilities = uniqueMap(
     definedSkills.flatMap((definition) => definition.capabilities.map((capability) => ({ definition, capability }))),
     (item) => item.capability.id,
     "FinRobot capability implementation",
   );
   const definedCapabilityIds = new Set(definedSkills.flatMap((definition) => definition.capabilities.map((item) => item.id)));
-  if (!sameSet([...candidateSurfaceIds], [...definedCapabilityIds])) throw new Error("FinRobot typed Skill definitions must map all 32 admitted surfaces exactly once.");
+  if (!sameSet([...candidateSurfaceIds], [...definedCapabilityIds])) throw new Error("FinRobot typed Skill definitions must map every admitted surface exactly once.");
   if (!sameSet(Object.values(EXPECTED_SKILLS), definedSkills.map((definition) => definition.skillId))) throw new Error("FinRobot typed Skill definitions must preserve the six fixed Skill IDs.");
   for (const definition of definedSkills) {
     const admission = policies.admission.decisions.find((item) => item.generated_skill_id === definition.skillId);
@@ -281,7 +296,7 @@ export async function validateFinRobotDraftPolicies(repoRoot: string, policies: 
   }
   const auditedSurfaces = uniqueMap(policies.audit.knowledge_surfaces, (item) => item.surface_id, "audited FinRobot surface");
   const surfaceDecisions = uniqueMap(policies.surfaces.decisions, (item) => item.surface_id, "FinRobot surface decision");
-  if (candidateSurfaceIds.size !== 32 || surfaceDecisions.size !== 66) throw new Error("FinRobot surface policy must resolve 32 admitted and 34 excluded surfaces.");
+  if (surfaceDecisions.size !== policies.audit.knowledge_surfaces.length) throw new Error("FinRobot surface policy must resolve all audited surfaces.");
   for (const [surfaceId, surface] of auditedSurfaces) {
     const decision = surfaceDecisions.get(surfaceId);
     if (!decision || decision.source_path !== surface.source_path || decision.symbol !== surface.symbol || decision.content_origin_id !== surface.content_origin_id) throw new Error(`FinRobot surface decision differs from the audit: ${surfaceId}`);
@@ -299,10 +314,12 @@ export async function validateFinRobotDraftPolicies(repoRoot: string, policies: 
     const expectedAsset = `skills/${implementation.definition.skillId}/${implementationPath}`;
     if (!sameSet(decision.output_assets, [expectedAsset])) throw new Error(`FinRobot surface output asset differs from its implementation: ${surfaceId}`);
   }
+  if (surfaceDecisions.size !== definedCapabilities.size + policies.surfaces.decisions.filter((item) => item.disposition === "excluded").length) throw new Error("FinRobot surface decisions contain unknown or unimplemented surfaces.");
 
   validateDecisionCoverage(policies.audit.content_origins.map((item) => item.origin_id), policies.origins.decisions.map((item) => item.origin_id), "FinRobot origin");
   const productionOrigins = policies.origins.decisions.filter((item) => item.disposition === "production-source");
-  if (productionOrigins.length !== 1 || productionOrigins[0]?.origin_id !== "root-apache") throw new Error("Only root-Apache FinRobot content may be distributed.");
+  const reviewedOrigins = policies.audit.content_origins.filter((item) => item.redistribution_status === "reviewed" && item.content_license.expression === "Apache-2.0");
+  if (!sameSet(productionOrigins.map((item) => item.origin_id), reviewedOrigins.map((item) => item.origin_id))) throw new Error("Only reviewed Apache FinRobot origins may support production evidence.");
   validateDecisionCoverage(policies.audit.license_claims.map((item) => item.claim_id), policies.licenses.decisions.map((item) => item.claim_id), "FinRobot license claim");
 
   const tierThreeSkills = definedSkills.filter((item) => item.tier === 3).map((item) => item.skillId);

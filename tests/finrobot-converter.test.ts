@@ -15,7 +15,7 @@ import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/productio
 const REPO_ROOT = path.resolve(".");
 const PLUGIN_ROOT = path.resolve("skills/plugins");
 const VENDOR_ROOT = path.join(PLUGIN_ROOT, "vendors/finrobot");
-const APPROVED_HASH = "eecf6fc9e7669f46ef9c58d4fd5938cabedb6d8d7aceac59e15688e178f3765e";
+const APPROVED_HASH = "1a101495abecacbc702a8ce8fd3b376631b88e9cc45de3d9a216d6aaedb3a4c6";
 
 const sharedPythonProject = path.join(homedir(), ".ar");
 const python = existsSync(path.join(sharedPythonProject, "pyproject.toml")) && spawnSync("uv", ["--version"]).status === 0
@@ -141,14 +141,25 @@ void test("FinRobot copied approved trees execute deterministic offline commands
 
     const valuationRoot = path.join(temporaryRoot, "financial-research-relative-valuation");
     await writeJson(path.join(valuationRoot, "value.json"), {
-      currency: "USD", unit: "millions",
-      dcf: { free_cash_flows: [100, 110, 120], discount_rate: 0.1, terminal_growth: 0.03, net_debt: 50, diluted_shares: 100 },
-      multiples: { metric: 120, selected_multiple: 8, net_debt: 50, diluted_shares: 100 },
+      currency: "USD", unit: "millions", period: "FY2025", as_of: "2026-06-30", share_basis: "diluted",
+      applicability: "Free cash flows and peer multiples describe the same non-financial issuer.",
+      weight_rationale: "The DCF and the peer multiple corroborate the same operating evidence.",
+      dcf: { free_cash_flows: [100, 110, 120], discount_rate: 0.1, terminal_growth: 0.03, net_debt: 50, preferred_stock: 20, noncontrolling_interest: 10, diluted_shares: 100 },
+      multiples: { metric: 120, selected_multiple: 8, net_debt: 50, preferred_stock: 20, noncontrolling_interest: 10, diluted_shares: 100 },
       weights: { dcf: 0.6, multiples: 0.4 },
     });
     runPython(["scripts/valuation.py", "value", "--input", "value.json", "--output", "value-output.json"], valuationRoot);
     const value = await readJson(path.join(valuationRoot, "value-output.json"));
-    assert.equal(value.weights !== undefined, true);
+    assert.equal((value.composite as { certified: boolean }).certified, true);
+    assert.equal(typeof value.weighted_value_per_share, "number");
+    await writeJson(path.join(valuationRoot, "single.json"), {
+      currency: "USD", unit: "millions",
+      dcf: { free_cash_flows: [100, 110, 120], discount_rate: 0.1, terminal_growth: 0.03, net_debt: 50, diluted_shares: 100 },
+    });
+    runPython(["scripts/valuation.py", "value", "--input", "single.json", "--output", "single-output.json"], valuationRoot);
+    const single = await readJson(path.join(valuationRoot, "single-output.json"));
+    assert.equal((single.composite as { certified: boolean }).certified, false);
+    assert.equal(single.weighted_value_per_share, (single.methods as Record<string, { value_per_share: number }>).dcf.value_per_share);
     await writeJson(path.join(valuationRoot, "sensitivity.json"), {
       kind: "dcf",
       base: { free_cash_flows: [100, 110, 120], discount_rate: 0.1, terminal_growth: 0.03, net_debt: 50, diluted_shares: 100 },
@@ -163,17 +174,20 @@ void test("FinRobot copied approved trees execute deterministic offline commands
 
     const statementsRoot = path.join(temporaryRoot, "financial-research-statement-analysis");
     await writeJson(path.join(statementsRoot, "records.json"), { records: [
-      { statement: "income", line_item: "revenue", period: "2025", value: 100, currency: "USD", unit: "millions", source: "Filing p. 10" },
-      { statement: "income", line_item: "operating_income", period: "2025", value: 20, currency: "USD", unit: "millions", source: "Filing p. 10" },
-      { statement: "income", line_item: "net_income", period: "2025", value: 14, currency: "USD", unit: "millions", source: "Filing p. 10" },
-      { statement: "balance", line_item: "assets", period: "2025", value: 200, currency: "USD", unit: "millions", source: "Filing p. 11" },
-      { statement: "balance", line_item: "liabilities", period: "2025", value: 120, currency: "USD", unit: "millions", source: "Filing p. 11" },
-      { statement: "balance", line_item: "equity", period: "2025", value: 80, currency: "USD", unit: "millions", source: "Filing p. 11" },
+      { statement: "income", line_item: "revenue", period: "2024", value: 100, currency: "USD", unit: "millions", source: "Filing p. 9", frequency: "annual", kind: "actual", period_start: "2024-01-01", period_end: "2024-12-31" },
+      { statement: "income", line_item: "revenue", period: "2025", value: 110, currency: "USD", unit: "millions", source: "Filing p. 10", frequency: "annual", kind: "actual", period_start: "2025-01-01", period_end: "2025-12-31" },
+      { statement: "income", line_item: "operating_income", period: "2025", value: 20, currency: "USD", unit: "millions", source: "Filing p. 10", frequency: "annual", kind: "actual", period_start: "2025-01-01", period_end: "2025-12-31" },
+      { statement: "income", line_item: "net_income", period: "2025", value: 14, currency: "USD", unit: "millions", source: "Filing p. 10", frequency: "annual", kind: "actual", period_start: "2025-01-01", period_end: "2025-12-31" },
+      { statement: "balance", line_item: "assets", period: "2025", value: 200, currency: "USD", unit: "millions", source: "Filing p. 11", frequency: "instant", kind: "actual", period_start: "2025-12-31", period_end: "2025-12-31" },
+      { statement: "balance", line_item: "liabilities", period: "2025", value: 120, currency: "USD", unit: "millions", source: "Filing p. 11", frequency: "instant", kind: "actual", period_start: "2025-12-31", period_end: "2025-12-31" },
+      { statement: "balance", line_item: "equity", period: "2025", value: 80, currency: "USD", unit: "millions", source: "Filing p. 11", frequency: "instant", kind: "actual", period_start: "2025-12-31", period_end: "2025-12-31" },
     ] });
     runPython(["scripts/statements.py", "normalize", "--input", "records.json", "--output", "normalized.json"], statementsRoot);
     runPython(["scripts/statements.py", "metrics", "--input", "normalized.json", "--output", "statement-metrics.json"], statementsRoot);
     const statementMetrics = await readJson(path.join(statementsRoot, "statement-metrics.json"));
-    assert.equal((statementMetrics.periods as Array<{ checks: { balance_sheet_residual: number } }>)[0]?.checks.balance_sheet_residual, 0);
+    const metricsPeriods = statementMetrics.periods as Array<{ metrics: { revenue_growth: number | null }; checks: { balance_sheet_residual: number | null } }>;
+    assert.equal(metricsPeriods[1]?.metrics.revenue_growth, 0.1);
+    assert.equal(metricsPeriods[1]?.checks.balance_sheet_residual, 0);
     await writeJson(path.join(statementsRoot, "statement-forecast.json"), {
       currency: "USD", unit: "millions", base_period: { period: "2025", revenue: 100, debt: 50, cash: 20 }, years: 2,
       assumptions: { revenue_growth: 0.08, operating_margin: 0.2, tax_rate: 0.21, depreciation_rate: 0.03, capex_rate: 0.04, working_capital_rate: 0.01 },

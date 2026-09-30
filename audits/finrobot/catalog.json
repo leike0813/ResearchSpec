@@ -6,11 +6,11 @@
   "upstream_root": "vendor/finrobot",
   "generated_root": "skills/plugins/vendors/finrobot",
   "extension_root": "skills/plugins/extensions",
-  "release": "snapshot-297a8d2",
-  "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
-  "anchor_id": "snapshot-297a8d2",
-  "audit_file": "audits/finrobot/snapshot-297a8d2/capability-audit.json",
-  "audit_report": "audits/finrobot/snapshot-297a8d2/report.md",
+  "release": "snapshot-2717499",
+  "revision": "2717499b8e30f242640af08c4ad9afd1113c2d45",
+  "anchor_id": "snapshot-2717499",
+  "audit_file": "audits/finrobot/snapshot-2717499/capability-audit.json",
+  "audit_report": "audits/finrobot/snapshot-2717499/report.md",
   "extension_domains": [
     "accounting-auditing-and-accountability",
     "banking-finance-and-investment"
@@ -28,7 +28,8 @@
         "historical_metrics",
         "scenarios",
         "forecast_tables",
-        "conclusions"
+        "conclusions",
+        "numeric_evidence"
       ],
       "tool_files": [
         {
@@ -111,7 +112,9 @@
         "method_results",
         "sensitivity",
         "fair_value_range",
-        "conclusions"
+        "conclusions",
+        "comparability_checks",
+        "equity_bridge"
       ],
       "tool_files": [
         {
@@ -134,7 +137,8 @@
         "source_ledger",
         "normalized_statements",
         "metrics",
-        "conclusions"
+        "conclusions",
+        "evidence_checks"
       ],
       "tool_files": [
         {

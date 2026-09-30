@@ -1,0 +1,32 @@
+{
+  "schema_version": "1",
+  "review_status": "pending-human-review",
+  "verified_at": "2026-09-30T11:24:33.064Z",
+  "revision": "2717499b8e30f242640af08c4ad9afd1113c2d45",
+  "audit_sha256": "3a592982ff4bd9f53853ef56b958e330593d7b70594622580975bafa3727884b",
+  "candidate_tree_set_sha256": "1a101495abecacbc702a8ce8fd3b376631b88e9cc45de3d9a216d6aaedb3a4c6",
+  "targeted": {
+    "tests": 34,
+    "pass": 34,
+    "fail": 0,
+    "skipped": 0
+  },
+  "full": {
+    "tests": 423,
+    "pass": 423,
+    "fail": 0,
+    "skipped": 0
+  },
+  "build": "passed",
+  "typecheck": "passed",
+  "lint": "passed",
+  "candidate_check": "passed",
+  "production": {
+    "anchor": "snapshot-297a8d2",
+    "check": "passed",
+    "idempotence": "passed",
+    "maintenance_check": "OK"
+  },
+  "openspec": "valid",
+  "human_approval": "pending"
+}

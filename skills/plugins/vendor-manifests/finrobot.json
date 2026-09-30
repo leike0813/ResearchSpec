@@ -2,10 +2,10 @@
   "schema_version": "2",
   "converter_version": "2",
   "vendor_id": "finrobot",
-  "release": "snapshot-297a8d2",
-  "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
-  "audit_sha256": "6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3",
-  "approved_tree_set_sha256": "eecf6fc9e7669f46ef9c58d4fd5938cabedb6d8d7aceac59e15688e178f3765e",
+  "release": "snapshot-2717499",
+  "revision": "2717499b8e30f242640af08c4ad9afd1113c2d45",
+  "audit_sha256": "3a592982ff4bd9f53853ef56b958e330593d7b70594622580975bafa3727884b",
+  "approved_tree_set_sha256": "1a101495abecacbc702a8ce8fd3b376631b88e9cc45de3d9a216d6aaedb3a4c6",
   "generated_skills": [
     "financial-research-company-fundamentals",
     "financial-research-competitive-position",
@@ -15,16 +15,16 @@
     "financial-research-statement-analysis"
   ],
   "decision_counts": {
-    "source_entries": 146,
-    "knowledge_surfaces": 66,
-    "admitted_capabilities": 32,
-    "content_origins": 5,
-    "license_claims": 6,
+    "source_entries": 1049,
+    "knowledge_surfaces": 129,
+    "admitted_capabilities": 39,
+    "content_origins": 8,
+    "license_claims": 7,
     "resources": 8
   },
   "implementation_counts": {
-    "agent_procedures": 16,
-    "bundled_scripts": 16,
+    "agent_procedures": 17,
+    "bundled_scripts": 22,
     "external_tools": 0,
     "formal_entrypoints": 4,
     "shared_support_copies": 4,
@@ -176,6 +176,12 @@
       "implementation_path": "SKILL.md"
     },
     {
+      "surface_id": "financial-numeric-evidence",
+      "skill_id": "financial-research-company-fundamentals",
+      "implementation_kind": "agent-procedure",
+      "implementation_path": "SKILL.md"
+    },
+    {
       "surface_id": "processor-extract-api",
       "skill_id": "financial-research-statement-analysis",
       "implementation_kind": "bundled-script",
@@ -212,6 +218,42 @@
       "implementation_path": "scripts/valuation.py"
     },
     {
+      "surface_id": "statement-source-lineage",
+      "skill_id": "financial-research-statement-analysis",
+      "implementation_kind": "bundled-script",
+      "implementation_path": "scripts/statements.py"
+    },
+    {
+      "surface_id": "statement-ttm-coverage",
+      "skill_id": "financial-research-statement-analysis",
+      "implementation_kind": "bundled-script",
+      "implementation_path": "scripts/statements.py"
+    },
+    {
+      "surface_id": "valuation-comparability",
+      "skill_id": "financial-research-relative-valuation",
+      "implementation_kind": "bundled-script",
+      "implementation_path": "scripts/valuation.py"
+    },
+    {
+      "surface_id": "valuation-currency-caliber",
+      "skill_id": "financial-research-statement-analysis",
+      "implementation_kind": "bundled-script",
+      "implementation_path": "scripts/statements.py"
+    },
+    {
+      "surface_id": "valuation-dcf-validity",
+      "skill_id": "financial-research-relative-valuation",
+      "implementation_kind": "bundled-script",
+      "implementation_path": "scripts/valuation.py"
+    },
+    {
+      "surface_id": "valuation-ev-bridge",
+      "skill_id": "financial-research-relative-valuation",
+      "implementation_kind": "bundled-script",
+      "implementation_path": "scripts/valuation.py"
+    },
+    {
       "surface_id": "valuation-ev-ebitda",
       "skill_id": "financial-research-relative-valuation",
       "implementation_kind": "bundled-script",
@@ -224,19 +266,19 @@
       "implementation_path": "scripts/valuation.py"
     }
   ],
-  "admission_policy_sha256": "44a6841ec61951ae429340e35fb19d654cd2a6b65a8a2bb431be51a06fb98e5b",
-  "source_policy_sha256": "9eedf67e10c216ced5cde5bae045bec25062ce223e55b3d1e756afb2db385f0c",
-  "surface_policy_sha256": "2c7974be4c9009e045a893977b3728d82b4fddc024bd2ef77617eddda29d6322",
-  "resource_policy_sha256": "7083c8dbcee36857653f2d3afb7966e5212820371ff62698cbcd5381fb888a4c",
-  "relationship_policy_sha256": "993e37d97f0693a5de7ca942af168d5df6cbc81361f9be03176b43d510048638",
-  "review_policy_sha256": "4945f8f3aa1333b6491eeb27dedb3c381f107c54a50646cd0b7bbd866b064edc",
+  "admission_policy_sha256": "931e64146969e4d5059d8c7881350d62ebf98a80d6299381c4dfd96ba571557b",
+  "source_policy_sha256": "519837b11138a4b8a421b17b3be91d1c9081597d9130073f481d0493a3dfcc89",
+  "surface_policy_sha256": "afc758cc34a9205160306c0679a3322fe0439d6694d2dfb31b5c00016f6148bf",
+  "resource_policy_sha256": "64fc24b9a4afd8f9247984c1fcf7060d92ddbe5fe52edad412117843950908b5",
+  "relationship_policy_sha256": "bc815713c3e8e3e4db8711031cc1aa564286c626b54d68e2c98456acd1e3ca83",
+  "review_policy_sha256": "1da035afb9d9ba08bcedbe4e233aa41d163c3c61c2b0e49abe495a7aee01365e",
   "tree_sha256": {
-    "financial-research-company-fundamentals": "a8df7c19b89c53a792370373d3fae53cf6353e9e7db9144934bd51409347efd7",
-    "financial-research-competitive-position": "d2aef99ec9593b8d3ec00e3c999e44231061dbe7247dc6f0097c8ce86cd527eb",
-    "financial-research-corporate-risk": "e64ba8253c1a5c2ec233b02cf2a38fe5db0979d14016731b3ef8e40246df0fee",
-    "financial-research-event-evidence": "a4d867a96fcc9dd960d98eb4b96f7fb9ef7ffe7e40f4f71a0b9e3d24dd21a681",
-    "financial-research-relative-valuation": "882699d08e5bbb1f290aaec3c940465a8cf9061a63d777b3b1b4b767672c4866",
-    "financial-research-statement-analysis": "152f62220d36c4ca4643fb167644a370f87ee451379fb930c9bcdb6498e09137"
+    "financial-research-company-fundamentals": "97d5978147105d728120c59841634d17000a7f3981fb2d37c437c2c5f3b9a46f",
+    "financial-research-competitive-position": "8e0c69a17a7420fd055946b5b60d57f5d070219d5b883bb868e5b2aac2f4cbb1",
+    "financial-research-corporate-risk": "28716dec9cacccca694b68eef05307622b499c673eebd442db64370992c8eb74",
+    "financial-research-event-evidence": "33448526d9568d5fd3879f15d7fae4d79cd02689188b49d68ae4bafa021d1fe9",
+    "financial-research-relative-valuation": "e5805507b06fe3ae024251a5f866cf4915f677fcddf14a20b1507d895b9fbedd",
+    "financial-research-statement-analysis": "e884e5c35af1add771506cdd3a45e998c2e2860c4f232b383a6ee76a01464fc4"
   },
   "relationship_decisions": [
     {
@@ -288,7 +330,7 @@
       "output_path": "vendors/finrobot/financial-research-company-fundamentals/DERIVATION.json",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "43568a9312260ff0d07b196ff4619a4f85329eae2a01e154b6f538194f503082"
+      "sha256": "511e9000e14361ee1edbac6e8c7d2c8eb51db07ccb03b71f8b16b25f55a037cf"
     },
     {
       "source_path": "authored-tree/financial-research-company-fundamentals/LICENSE",
@@ -309,7 +351,7 @@
       "output_path": "vendors/finrobot/financial-research-company-fundamentals/SKILL.md",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "2cdfca4e64aee816f60ee3ed0aa593b7a8c3704d4a97655fc42d12e90c22a0d0"
+      "sha256": "0aad28130c0cff134f8d45751a61849e5f9e2da050032945ddb45b725b2f2210"
     },
     {
       "source_path": "authored-tree/financial-research-company-fundamentals/lib/financial_support.py",
@@ -330,7 +372,7 @@
       "output_path": "vendors/finrobot/financial-research-competitive-position/DERIVATION.json",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "797c701e1ae0122371c3cb44565d87fc23fd14ed80394658ad8d9533a6841009"
+      "sha256": "9c5167ede4358be62135b23adf8c8ada0132ca19be6a540da3f785b460981ef9"
     },
     {
       "source_path": "authored-tree/financial-research-competitive-position/LICENSE",
@@ -351,14 +393,14 @@
       "output_path": "vendors/finrobot/financial-research-competitive-position/SKILL.md",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "1e60a56e12aa20e99b1e60668df4f2b5249172ae2ac76e273a4db89c66685337"
+      "sha256": "4fa91e07d43dda8a2e7dea079e456dd39a75c5bdbe6cad00a3fe6524ae7feb30"
     },
     {
       "source_path": "authored-tree/financial-research-corporate-risk/DERIVATION.json",
       "output_path": "vendors/finrobot/financial-research-corporate-risk/DERIVATION.json",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "a7586b252910d0a1a330c70589e8714d02039e0b3cfc2ee14ee5b96f29e335a9"
+      "sha256": "1199d9ff048a416766a2365fb21992c8df1ccdee387104f8109d284d9e4ae9c6"
     },
     {
       "source_path": "authored-tree/financial-research-corporate-risk/LICENSE",
@@ -379,14 +421,14 @@
       "output_path": "vendors/finrobot/financial-research-corporate-risk/SKILL.md",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "ed3b2855c35e45cd18d4a6279319393fe0a10a319e84e9d74af9aa0fae3a80df"
+      "sha256": "6d006582e10bdac81bc008314dbfa53d380c2c65e32ecce8f20e5366cc8fcea0"
     },
     {
       "source_path": "authored-tree/financial-research-event-evidence/DERIVATION.json",
       "output_path": "vendors/finrobot/financial-research-event-evidence/DERIVATION.json",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "e62060b49d3775c0c59084ab2b598e6cd637b83addc62aef35b5fdb0fb128723"
+      "sha256": "5f017bba7a1b95a64e2b8b66838cdc31903541992cdc036c5781c6f5c33c1a7d"
     },
     {
       "source_path": "authored-tree/financial-research-event-evidence/LICENSE",
@@ -407,7 +449,7 @@
       "output_path": "vendors/finrobot/financial-research-event-evidence/SKILL.md",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "49be990d036ce828b5b6a7603180e187354cbbbb1f118f98c6a747f14aeedfa6"
+      "sha256": "b5203b38f8fde3a95f39c86eb6b93e76942d61a62de378a95f0a661d12de02c4"
     },
     {
       "source_path": "authored-tree/financial-research-event-evidence/lib/financial_support.py",
@@ -428,7 +470,7 @@
       "output_path": "vendors/finrobot/financial-research-relative-valuation/DERIVATION.json",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "e9850b05ecf32e7d8cd1c04ce2e961a3cdd564e04695bbff9b00c84250785aa9"
+      "sha256": "a98c522f8813277db805a1938dcd034ef5f91ab6e39da4ddcef7cd557dd0ff2d"
     },
     {
       "source_path": "authored-tree/financial-research-relative-valuation/LICENSE",
@@ -449,7 +491,7 @@
       "output_path": "vendors/finrobot/financial-research-relative-valuation/SKILL.md",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "9bd9a483950bc5916e71372aa2b4982cd5807ac2ceb9244d77e5defb3c40ff46"
+      "sha256": "a4e0ca25d5f3bd461eded7e66bdd8c3fda4ef13ad23d6935075d4a99cd412e13"
     },
     {
       "source_path": "authored-tree/financial-research-relative-valuation/lib/financial_support.py",
@@ -463,14 +505,14 @@
       "output_path": "vendors/finrobot/financial-research-relative-valuation/scripts/valuation.py",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "35a7b21406d4fae48aa514a894c010503cd16ff92334ef27899c000e8cf1f95e"
+      "sha256": "f4e9975e2859473925063f73afe42da06fc48c6cde11b22d79ff99ebb8716374"
     },
     {
       "source_path": "authored-tree/financial-research-statement-analysis/DERIVATION.json",
       "output_path": "vendors/finrobot/financial-research-statement-analysis/DERIVATION.json",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "e57a07611743e96929c963ee5b20ce48b77b43c01cfdf630d77b534f1ce0169a"
+      "sha256": "0b76247c3c267f53d583f08512ad25dd87a3e2f75da22dbb1a777fe3225c04d7"
     },
     {
       "source_path": "authored-tree/financial-research-statement-analysis/LICENSE",
@@ -491,7 +533,7 @@
       "output_path": "vendors/finrobot/financial-research-statement-analysis/SKILL.md",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "d164aa203ea0e3a6e37c9c1b87f6d0f5be3c5cf7f728820576adf15c710cb11e"
+      "sha256": "94ddb783832bb5dd13439dfa25d3c61acc1950f34f6fa6f677b2d2a6f82c660e"
     },
     {
       "source_path": "authored-tree/financial-research-statement-analysis/lib/financial_support.py",
@@ -505,7 +547,7 @@
       "output_path": "vendors/finrobot/financial-research-statement-analysis/scripts/statements.py",
       "disposition": "included",
       "reason": "approved complete-tree asset",
-      "sha256": "fe06b8a206d189d35983e720407c39fdb06022e600662e74ad62b02994aed388"
+      "sha256": "bb5a82877c1d70e6c8c7dff4a509e4451255e2ebe50e858b9bbd2714c7067085"
     }
   ]
 }

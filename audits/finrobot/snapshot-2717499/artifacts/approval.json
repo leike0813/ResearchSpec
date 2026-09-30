@@ -1,0 +1,11 @@
+{
+  "schema_version": "1",
+  "vendor_id": "finrobot",
+  "revision": "2717499b8e30f242640af08c4ad9afd1113c2d45",
+  "approved_tree_set_sha256": "1a101495abecacbc702a8ce8fd3b376631b88e9cc45de3d9a216d6aaedb3a4c6",
+  "review_report": "artifacts/candidate/review.json",
+  "semantic_review": "artifacts/preapproval-records/05-semantic-review.md",
+  "approval_status": "approved",
+  "approval_note": "After the six complete candidate trees, review report, exact tree-set hash and test results were presented, the user explicitly replied 批准, authorizing production promotion of this exact tree.",
+  "recorded_at": "2026-09-30T11:29:56Z"
+}

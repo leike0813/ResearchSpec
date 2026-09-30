@@ -19,7 +19,6 @@ import {
 } from "./lib/vendor-maintenance.mjs";
 
 const ROOT = process.cwd();
-const ANCHOR_CREATED_AT = "2026-08-17T00:00:00+08:00";
 const CATALOG_PATH = path.join(ROOT, "audits", "finrobot", "catalog.json");
 const AUDIT_README = path.join(ROOT, "audits", "finrobot", "README.md");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "finrobot-maintenance", "SKILL.md");
@@ -30,6 +29,22 @@ function catalog() {
   if (parsed.schema_version !== "1") throw new Error(`Unsupported FinRobot maintenance catalog schema: ${parsed.schema_version}`);
   if (parsed.vendor_id !== "finrobot") throw new Error(`FinRobot maintenance catalog must own vendor_id finrobot, found ${parsed.vendor_id}`);
   return parsed;
+}
+
+const anchorCreatedAtCache = new Map();
+function anchorCreatedAt(anchorId) {
+  if (!anchorCreatedAtCache.has(anchorId)) {
+    const approvalPath = path.join(ROOT, "audits", "finrobot", anchorId, "artifacts", "approval.json");
+    const recordedAt = existsSync(approvalPath) ? json(approvalPath).recorded_at : undefined;
+    if (typeof recordedAt === "string" && recordedAt.length > 0) {
+      anchorCreatedAtCache.set(anchorId, recordedAt);
+      return recordedAt;
+    }
+    const data = catalog();
+    const upstreamRoot = path.join(ROOT, data.upstream_root);
+    anchorCreatedAtCache.set(anchorId, execFileSync("git", ["-C", upstreamRoot, "show", "-s", "--format=%cI", data.revision], { encoding: "utf8" }).trim());
+  }
+  return anchorCreatedAtCache.get(anchorId);
 }
 
 function anchorDir(anchorId) { return path.join(ROOT, "audits", "finrobot", anchorId); }
@@ -47,11 +62,13 @@ function upstreamState() {
   const auditFile = path.join(ROOT, data.audit_file);
   const auditReport = path.join(ROOT, data.audit_report);
   if (!existsSync(auditFile) || !existsSync(auditReport)) throw new Error("FinRobot immutable audit files are missing");
+  const audit = json(auditFile);
   return {
     release: data.release,
     revision,
-    root_license_claim: "Apache-2.0 (metadata conflict under review)",
-    tracked_entry_count: 146,
+    root_license: audit.source.root_license,
+    tracked_entry_count: audit.summary.tracked_entries,
+    knowledge_surface_count: audit.knowledge_surfaces.length,
     content_file_count: inv.total,
     tree_sha256: inv.treeSha,
     inventory: { total: inv.total, treeSha: inv.treeSha, byTop: invByTop, byExt: invByExt },
@@ -76,7 +93,7 @@ function vendorBundleState() {
       tree_sha256: treeSha(skillRoot),
     });
   }
-  if (skills.length !== 6) throw new Error(`Expected six FinRobot vendor-bundle Skills, found ${skills.length}`);
+  if (skills.length !== data.extensions.length) throw new Error(`Expected ${data.extensions.length} FinRobot vendor-bundle Skills, found ${skills.length}`);
   return {
     root: data.generated_root,
     file_count: inv.total,
@@ -252,11 +269,14 @@ function currentState(anchorId) {
     schema_version: "1",
     vendor_id: data.vendor_id,
     anchor_id: anchorId,
-    created_at: ANCHOR_CREATED_AT,
+    created_at: anchorCreatedAt(anchorId),
     upstream: {
       root: data.upstream_root,
       release: upstream.release,
       revision: upstream.revision,
+      root_license: upstream.root_license,
+      tracked_entry_count: upstream.tracked_entry_count,
+      knowledge_surface_count: upstream.knowledge_surface_count,
       content_file_count: upstream.content_file_count,
       tree_sha256: upstream.tree_sha256,
       audit_path: data.audit_file,
@@ -304,6 +324,25 @@ function currentState(anchorId) {
   };
 }
 
+function verificationBlock(anchorId) {
+  const file = path.join(artifactDir(anchorId), "verification.json");
+  if (!existsSync(file)) return "- 实测结果未记录：运行验证并写入 `artifacts/verification.json` 后重新生成记录。";
+  const value = json(file);
+  const lines = [`- 实测记录：\`${path.relative(ROOT, file)}\`（verified_at ${value.verified_at ?? "unknown"} · review_status ${value.review_status ?? "unknown"}）`];
+  for (const key of ["build", "typecheck", "lint", "openspec", "candidate_check"]) {
+    if (value[key] !== undefined) lines.push(`- ${key}: ${value[key]}`);
+  }
+  for (const key of ["targeted", "full"]) {
+    const counts = value[key];
+    if (counts && typeof counts === "object") lines.push(`- ${key} tests: ${counts.tests} / ${counts.pass} pass / ${counts.fail} fail / ${counts.skipped} skip`);
+  }
+  if (value.production && typeof value.production === "object") {
+    lines.push(`- production ${value.production.anchor}: check ${value.production.check} · idempotence ${value.production.idempotence} · maintenance ${value.production.maintenance_check}`);
+  }
+  if (value.human_approval !== undefined) lines.push(`- human approval: ${value.human_approval}`);
+  return lines.join("\n");
+}
+
 function writeRecords(anchorId) {
   const dir = anchorDir(anchorId);
   mkdirSync(dir, { recursive: true });
@@ -340,8 +379,8 @@ ${rows.map((row) => `| \`${row.raw_skill_id}\` | \`${row.capability_id}\` | ${ro
 ## Decisions
 
 - [x] 上游身份固定为 \`${data.release}\` @ \`${state.upstream.revision}\`。
-- [x] 六个 reviewed vendor-bundle Skills 一对一映射为六个 extension capability，raw Skills 继续保留为 advisory surface。
-- [x] 四个 mixed capability 使用 Python 3.11 标准库工具与 evidence-bound brief validator；两个 llm capability 仅使用 output-role policy validator。
+- [x] ${state.advisory.raw_skill_count} reviewed vendor-bundle Skills 一对一映射为 ${state.extension.capability_count} extension capability，raw Skills 继续保留为 advisory surface。
+- [x] ${state.extension.mixed_count} mixed capability 使用 Python 3.11 标准库工具与 evidence-bound brief validator；${state.extension.llm_count} llm capability 仅使用 output-role policy validator。
 - [x] 上游 runtime/provider 内容不进入 extension package；流程权威由 graph profile 承接。
 `;
 
@@ -365,7 +404,7 @@ ${rows.flatMap((row) => row.tool_files).map((tool) => `| \`${tool.target}\` | \`
 
 ## Verification
 
-- 每个 mixed package 的 \`tools/\` 与 reviewed vendor bundle 逐字节一致。
+- 每个 mixed package 的 \`tools/\` 与 reviewed vendor bundle ${state.review.tools_byte_identical ? "逐字节一致" : "存在差异（需重新同步）"}。
 - Agent-only package 不复制脚本，语义程序完整落在 \`SKILL.md\`。
 - 上游可执行文件只审计，不执行、不安装依赖、不访问服务。
 `;
@@ -392,10 +431,10 @@ ${rows.map((row) => `| \`${row.capability_id}\` | ${inlineCode(row.required_brie
 
 ## Verification
 
-- [x] \`plugin install banking-finance-and-investment\` 投影六个 FinRobot extension。
-- [x] 每个 profile 通过 \`start -> instructions -> advance\` 全流程。
-- [x] 四个 mixed profile 覆盖 invalid-then-valid script validator 路径。
-- [x] \`pnpm check\` / \`pnpm lint\` / 全量 \`pnpm test\` 通过。
+- [x] \`plugin install banking-finance-and-investment\` 投影 ${state.extension.capability_count} 个 FinRobot extension。
+- [x] ${state.extension.mixed_count} 个 mixed package 的 \`tools/\` 与 reviewed vendor bundle ${state.review.tools_byte_identical ? "逐字节一致" : "存在差异"}；required brief fields ${state.review.required_fields_bound ? "全部绑定" : "尚未绑定"}。
+- [x] 共 ${state.review.tool_file_count} 个 tool file；${state.extension.script_validator_count} 个 profile 声明 script validator，其余使用 output-role policy。
+${verificationBlock(anchorId)}
 `;
 
   const review = `# FinRobot Extension Anchor Review — ${data.release}
@@ -405,7 +444,7 @@ ${rows.map((row) => `| \`${row.capability_id}\` | ${inlineCode(row.required_brie
 - capability entries: ${state.extension.capability_count}
 - profile entries: ${state.extension.profile_count}
 - \`accounting-auditing-and-accountability\`: company-fundamentals + statement-analysis
-- \`banking-finance-and-investment\`: all six FinRobot extensions
+- \`banking-finance-and-investment\`: all ${state.extension.capability_count} FinRobot extensions
 - extension capability IDs 与 raw Skill IDs 不冲突；与 bundled capabilities 不冲突。
 
 ## Package Review
@@ -422,7 +461,7 @@ ${rows.map((row) => `| \`${row.capability_id}\` | \`${row.package_tree_sha256}\`
 
 ## Human Confirmation
 
-- [x] 六个上游语义义务均由 extension SKILL 或 graph profile 承接。
+- [x] ${state.extension.capability_count} 个上游语义义务均由 extension SKILL 或 graph profile 承接。
 - [x] extension SKILL 不含 next-node / next-phase / agent-team orchestration。
 - [x] 命名、registry、审计记录、锚点 manifest 身份一致。
 - [x] Agent 语义审阅见 \`05-semantic-review.md\`。
@@ -463,8 +502,17 @@ ${rows.map((row) => `| \`${row.capability_id}\` | \`${row.package_tree_sha256}\`
     "03-conversion.md": conversion,
     "04-review.md": review,
   };
-  for (const [name, content] of Object.entries(records)) writeFileSync(path.join(dir, name), content, "utf8");
-  process.stdout.write(`wrote ${dir}/{${Object.keys(records).join(", ")}}${existsSync(semanticReviewPath) ? "; preserved 05-semantic-review.md" : ""}\n`);
+  const preserved = [];
+  for (const [name, content] of Object.entries(records)) {
+    const target = path.join(dir, name);
+    if (name === "01-analysis.md" && existsSync(target)) {
+      preserved.push(name);
+      continue;
+    }
+    writeFileSync(target, content, "utf8");
+  }
+  if (existsSync(semanticReviewPath)) preserved.push("05-semantic-review.md");
+  process.stdout.write(`wrote ${dir}/{${Object.keys(records).join(", ")}}${preserved.length ? `; preserved ${preserved.join(", ")}` : ""}\n`);
 }
 
 const commands = createMaintenanceCommands({
@@ -477,7 +525,7 @@ const commands = createMaintenanceCommands({
   vendorId: "finrobot",
   vendorLabel: "FinRobot",
   scriptName: "finrobot-maintenance.mjs",
-  anchorCreatedAt: ANCHOR_CREATED_AT,
+  anchorCreatedAt: anchorCreatedAt(catalog().anchor_id),
 });
 
 try {

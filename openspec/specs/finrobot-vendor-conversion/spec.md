@@ -7,10 +7,10 @@ approval, and isolated maintenance contract for the reviewed FinRobot vendor.
 
 ### Requirement: Production Decisions SHALL Bind The Complete Immutable Audit
 ResearchSpec SHALL bind every FinRobot production catalog to vendor `finrobot`,
-release `snapshot-297a8d2`, revision
-`297a8d28d099be328c8a8eb658b4f782b93f3651`, and the immutable audit JSON hash.
-The catalogs SHALL cover all 146 source entries, 66 knowledge surfaces, five
-content origins, six license claims, and six candidates exactly once.
+release `snapshot-2717499`, revision
+`2717499b8e30f242640af08c4ad9afd1113c2d45`, and the immutable audit JSON hash.
+The catalogs SHALL cover all 1,049 source entries, 129 knowledge surfaces, eight
+content origins, seven license claims, and six candidates exactly once.
 
 #### Scenario: Complete policy is validated
 - **WHEN** production policy is loaded
@@ -31,7 +31,7 @@ tree.
 
 #### Scenario: Admitted surfaces are resolved
 - **WHEN** the production capability map is validated
-- **THEN** all 32 admitted surfaces map exactly once to a supported primary mechanism
+- **THEN** all 39 admitted surfaces map exactly once to a supported primary mechanism
 - **AND** every bundled script, Agent procedure, and external-tool contract resolves to a concrete authored-tree path or section
 
 #### Scenario: FinRobot aggregate import expands the closure
@@ -107,9 +107,10 @@ Skill SHALL carry the complete Apache-2.0 license and a notice binding official
 source, snapshot, revision, source paths, capability mechanisms, and
 non-endorsement. `DERIVATION.json` SHALL trace every authored procedure, bundled
 script, shared support copy, optional reference, and generated metadata file to
-reviewed source evidence or ResearchSpec authorship. FinNLP, AutoGen-attributed code,
-unclear filing/marker sources, provider wrappers, prompt factories, and
-unconsumed schemas SHALL remain excluded.
+reviewed source evidence or ResearchSpec authorship. FinNLP, AutoGen-attributed
+code, third-party Skill copies, unredistributable datasets and fixtures, unclear
+filing/marker sources, provider wrappers, prompt factories, and unconsumed
+schemas SHALL remain excluded.
 
 #### Scenario: Generated attribution is inspected
 - **WHEN** a Skill tree is rendered
@@ -199,3 +200,22 @@ remain in the corresponding entrypoint.
 - **WHEN** the four Tier 3 trees are composed
 - **THEN** each contains a byte-identical tree-local support module
 - **AND** the two Agent-procedure trees contain no unused script or support directory
+
+### Requirement: Incremental previews SHALL remain isolated from production
+Maintainer preview SHALL produce six complete candidate trees, a tree-set hash and a review report marked pending-human-review. Candidate source, policies and authored bytes SHALL be validated independently. Default production checks SHALL continue validating the exact published source and tree until human approval of the displayed current candidate hash. Preview SHALL not update production pin, catalogs, packages, registries or workflow state.
+
+#### Scenario: A pending candidate differs from published trees
+- **WHEN** preview assembles a changed candidate
+- **THEN** all candidate bytes and hashes are available for review
+- **AND** the existing production output remains independently verifiable
+
+### Requirement: Financial increments SHALL preserve evidential limits
+Candidate procedures SHALL distinguish actual, computed and assumed values; preserve provenance, conflicts and limitations; and keep diagnostics advisory. EV bridges SHALL avoid duplicate debt deduction, identify unverified claims and reject invalid DCF publication. Weighted estimates SHALL require comparable currency, date and share basis, explicit applicability and weights. Period checks SHALL expose gaps and overlaps without certifying TTM from labels alone. Currency conversion SHALL require explicit sourced dated rates; source labels alone SHALL not prove independent validation.
+
+#### Scenario: A composite lacks comparability
+- **WHEN** method bases differ or necessary assumptions are unverified
+- **THEN** individual method results remain visible and the composite point estimate is withheld
+
+#### Scenario: A statement check has incomplete dates or dependent evidence
+- **WHEN** interval boundaries or independent input provenance are absent
+- **THEN** the result reports the evidential limitation rather than certifying completeness or independence

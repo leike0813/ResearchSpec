@@ -41,7 +41,7 @@ validators:
         - --submission
         - "{outputs_json}"
         - --required
-        - scope,source_ledger,business_model,historical_metrics,scenarios,forecast_tables,conclusions
+        - scope,source_ledger,business_model,historical_metrics,scenarios,forecast_tables,conclusions,numeric_evidence
 knowledge_refs:
   - knowledge_id: company-fundamentals-tool
     path: tools/fundamentals.py
@@ -56,9 +56,9 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/finrobot/financial-research-company-fundamentals/SKILL.md
-      sha256: 2cdfca4e64aee816f60ee3ed0aa593b7a8c3704d4a97655fc42d12e90c22a0d0
-    - path: skills/plugins/vendors/finrobot/financial-research-company-fundamentals/scripts/fundamentals.py
-      sha256: c13a2a3d909a194899ba82ce9f8e11952140f9844ccd5fe545c9a2489b544a2d
+      sha256: 0aad28130c0cff134f8d45751a61849e5f9e2da050032945ddb45b725b2f2210
     - path: skills/plugins/vendors/finrobot/financial-research-company-fundamentals/lib/financial_support.py
       sha256: 9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c
+    - path: skills/plugins/vendors/finrobot/financial-research-company-fundamentals/scripts/fundamentals.py
+      sha256: c13a2a3d909a194899ba82ce9f8e11952140f9844ccd5fe545c9a2489b544a2d
 license: Apache-2.0

@@ -7,23 +7,23 @@ import { assertFinRobotProductionReady, loadFinRobotDraftPolicies } from "../src
 import { FINROBOT_SKILL_DEFINITIONS } from "../src/vendor-converters/finrobot/skill-definitions.js";
 
 const REPO_ROOT = path.resolve(".");
-const APPROVED_HASH = "eecf6fc9e7669f46ef9c58d4fd5938cabedb6d8d7aceac59e15688e178f3765e";
+const APPROVED_HASH = "1a101495abecacbc702a8ce8fd3b376631b88e9cc45de3d9a216d6aaedb3a4c6";
 
-void test("FinRobot policy preserves immutable audit decisions and maps 32 admitted surfaces", async () => {
+void test("FinRobot policy preserves immutable audit decisions and maps 39 admitted surfaces", async () => {
   const policies = await loadFinRobotDraftPolicies(REPO_ROOT);
   assert.equal(policies.admission.decisions.length, 6);
-  assert.equal(policies.sourceEntries.decisions.length, 146);
-  assert.equal(policies.surfaces.decisions.length, 66);
-  assert.equal(policies.surfaces.decisions.filter((item) => item.disposition === "admitted-capability").length, 32);
-  assert.equal(policies.surfaces.decisions.filter((item) => item.disposition === "excluded").length, 34);
+  assert.equal(policies.sourceEntries.decisions.length, 1049);
+  assert.equal(policies.surfaces.decisions.length, 129);
+  assert.equal(policies.surfaces.decisions.filter((item) => item.disposition === "admitted-capability").length, 39);
+  assert.equal(policies.surfaces.decisions.filter((item) => item.disposition === "excluded").length, 90);
   assert.ok(policies.admission.decisions.every((item) => item.disposition === "admitted"));
   assert.ok(policies.sourceEntries.decisions.every((item) => item.output_assets.length === 0));
-  assert.equal(policies.surfaces.decisions.filter((item) => item.implementation_kind === "agent-procedure").length, 16);
-  assert.equal(policies.surfaces.decisions.filter((item) => item.implementation_kind === "bundled-script").length, 16);
-  assert.equal(Object.values(FINROBOT_SKILL_DEFINITIONS).flatMap((item) => item.capabilities).length, 32);
-  assert.equal(new Set(Object.values(FINROBOT_SKILL_DEFINITIONS).flatMap((item) => item.capabilities.map((capability) => capability.id))).size, 32);
+  assert.equal(policies.surfaces.decisions.filter((item) => item.implementation_kind === "agent-procedure").length, 17);
+  assert.equal(policies.surfaces.decisions.filter((item) => item.implementation_kind === "bundled-script").length, 22);
+  assert.equal(Object.values(FINROBOT_SKILL_DEFINITIONS).flatMap((item) => item.capabilities).length, 39);
+  assert.equal(new Set(Object.values(FINROBOT_SKILL_DEFINITIONS).flatMap((item) => item.capabilities.map((capability) => capability.id))).size, 39);
 
-  assert.deepEqual(policies.origins.decisions.filter((item) => item.disposition === "production-source").map((item) => item.origin_id), ["root-apache"]);
+  assert.deepEqual(policies.origins.decisions.filter((item) => item.disposition === "production-source").map((item) => item.origin_id), ["root-apache", "native-desktop"]);
   assert.deepEqual(policies.licenses.decisions.filter((item) => item.disposition === "preserve").map((item) => item.claim_id), ["root-apache", "trademark-attribution"]);
   assert.ok(policies.admission.decisions.every((item) => item.dependencies.length === 0));
   assert.ok(policies.relationships.decisions.every((item) => item.disposition === "advisory"));

@@ -1,0 +1,171 @@
+{
+  "schema_version": "2",
+  "vendor_id": "finrobot",
+  "release": "snapshot-2717499",
+  "revision": "2717499b8e30f242640af08c4ad9afd1113c2d45",
+  "audit_sha256": "3a592982ff4bd9f53853ef56b958e330593d7b70594622580975bafa3727884b",
+  "review_status": "pending-human-review",
+  "decisions": [
+    {
+      "capability_id": "company-fundamentals-analysis",
+      "generated_skill_id": "financial-research-company-fundamentals",
+      "disposition": "admitted",
+      "source_surface_ids": [
+        "analyzer-analyze-business-highlights",
+        "analyzer-analyze-company-description",
+        "analyzer-get-key-data",
+        "enhanced-forecast-methodology",
+        "equity-company-overview",
+        "equity-major-takeaways",
+        "processor-growth-forecast",
+        "financial-numeric-evidence"
+      ],
+      "domain_ids": [
+        "accounting-auditing-and-accountability",
+        "banking-finance-and-investment"
+      ],
+      "license_expression": "Apache-2.0",
+      "dependencies": [],
+      "content_review": "pending-human-review",
+      "safety_constraints": [
+        "converter-never-executes-resources",
+        "credentials-user-configured-not-persisted",
+        "derived-assets-sensitive-value-scan",
+        "provenance-and-derivation-required",
+        "human-review-before-consequential-use"
+      ]
+    },
+    {
+      "capability_id": "competitive-position-analysis",
+      "generated_skill_id": "financial-research-competitive-position",
+      "disposition": "admitted",
+      "source_surface_ids": [
+        "analyzer-get-competitors-analysis",
+        "equity-competitor-analysis"
+      ],
+      "domain_ids": [
+        "banking-finance-and-investment"
+      ],
+      "license_expression": "Apache-2.0",
+      "dependencies": [],
+      "content_review": "pending-human-review",
+      "safety_constraints": [
+        "converter-never-executes-resources",
+        "credentials-user-configured-not-persisted",
+        "derived-assets-sensitive-value-scan",
+        "provenance-and-derivation-required",
+        "human-review-before-consequential-use"
+      ]
+    },
+    {
+      "capability_id": "corporate-risk-analysis",
+      "generated_skill_id": "financial-research-corporate-risk",
+      "disposition": "admitted",
+      "source_surface_ids": [
+        "analyzer-get-risk-assessment",
+        "enhanced-risk-factors",
+        "equity-risks"
+      ],
+      "domain_ids": [
+        "banking-finance-and-investment"
+      ],
+      "license_expression": "Apache-2.0",
+      "dependencies": [],
+      "content_review": "pending-human-review",
+      "safety_constraints": [
+        "converter-never-executes-resources",
+        "credentials-user-configured-not-persisted",
+        "derived-assets-sensitive-value-scan",
+        "provenance-and-derivation-required",
+        "human-review-before-consequential-use"
+      ]
+    },
+    {
+      "capability_id": "financial-news-impact-analysis",
+      "generated_skill_id": "financial-research-event-evidence",
+      "disposition": "admitted",
+      "source_surface_ids": [
+        "catalyst-assess-impact",
+        "catalyst-classify-event",
+        "catalyst-estimate-probability",
+        "catalyst-identify",
+        "enhanced-catalyst-analysis",
+        "equity-news-summary"
+      ],
+      "domain_ids": [
+        "banking-finance-and-investment"
+      ],
+      "license_expression": "Apache-2.0",
+      "dependencies": [],
+      "content_review": "pending-human-review",
+      "safety_constraints": [
+        "converter-never-executes-resources",
+        "credentials-user-configured-not-persisted",
+        "derived-assets-sensitive-value-scan",
+        "provenance-and-derivation-required",
+        "human-review-before-consequential-use"
+      ]
+    },
+    {
+      "capability_id": "financial-statement-analysis",
+      "generated_skill_id": "financial-research-statement-analysis",
+      "disposition": "admitted",
+      "source_surface_ids": [
+        "analyzer-analyze-balance-sheet",
+        "analyzer-analyze-cash-flow",
+        "analyzer-analyze-income-stmt",
+        "analyzer-analyze-segment-stmt",
+        "analyzer-income-summarization",
+        "processor-extract-api",
+        "processor-extract-pdf",
+        "statement-ttm-coverage",
+        "valuation-currency-caliber",
+        "statement-source-lineage"
+      ],
+      "domain_ids": [
+        "accounting-auditing-and-accountability",
+        "banking-finance-and-investment"
+      ],
+      "license_expression": "Apache-2.0",
+      "dependencies": [],
+      "content_review": "pending-human-review",
+      "safety_constraints": [
+        "converter-never-executes-resources",
+        "credentials-user-configured-not-persisted",
+        "derived-assets-sensitive-value-scan",
+        "provenance-and-derivation-required",
+        "human-review-before-consequential-use"
+      ]
+    },
+    {
+      "capability_id": "relative-valuation-analysis",
+      "generated_skill_id": "financial-research-relative-valuation",
+      "disposition": "admitted",
+      "source_surface_ids": [
+        "enhanced-valuation-analysis",
+        "equity-valuation-overview",
+        "sensitivity-margin",
+        "sensitivity-revenue",
+        "sensitivity-table",
+        "valuation-ev-ebitda",
+        "valuation-peer-comparison",
+        "valuation-comparability",
+        "valuation-ev-bridge",
+        "valuation-dcf-validity"
+      ],
+      "domain_ids": [
+        "banking-finance-and-investment"
+      ],
+      "license_expression": "Apache-2.0",
+      "dependencies": [],
+      "content_review": "pending-human-review",
+      "safety_constraints": [
+        "converter-never-executes-resources",
+        "credentials-user-configured-not-persisted",
+        "derived-assets-sensitive-value-scan",
+        "provenance-and-derivation-required",
+        "human-review-before-consequential-use"
+      ]
+    }
+  ]
+}

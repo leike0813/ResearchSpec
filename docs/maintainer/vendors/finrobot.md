@@ -1,23 +1,24 @@
 # FinRobot Vendor Adapter
 
 The FinRobot adapter is the maintainer-only deterministic converter for the
-pinned `vendor/finrobot` submodule at `snapshot-297a8d2`, revision
-`297a8d28d099be328c8a8eb658b4f782b93f3651`. FinRobot has no upstream
-`SKILL.md`; its production package is derived from an immutable capability audit,
-reviewed policy catalogs, and an approved authored tree set.
+pinned `vendor/finrobot` submodule at `snapshot-2717499`, revision
+`2717499b8e30f242640af08c4ad9afd1113c2d45`. FinRobot has no first-party
+upstream `SKILL.md`; its production package is derived from an immutable
+capability audit, reviewed policy catalogs, and an approved authored tree set.
 
 ## Production decisions
 
-The immutable audit covers all 146 tracked Git entries, 66 knowledge surfaces,
-five content origins, six license claims, and six candidate capabilities.
-Production policies retain every source decision as evidence and map the 32
-admitted surfaces exactly once through `skill-definitions.ts`. No upstream
-FinRobot file is copied into a published runtime tree.
+The immutable audit covers all 1,049 tracked Git entries, 129 knowledge
+surfaces, eight content origins, seven license claims, and six candidate
+capabilities. Production policies retain every source decision as evidence and
+map the 39 admitted surfaces exactly once through `skill-definitions.ts`. No
+upstream FinRobot file is copied into a published runtime tree.
 
 The approved aggregate tree hash is
-`eecf6fc9e7669f46ef9c58d4fd5938cabedb6d8d7aceac59e15688e178f3765e`.
+`1a101495abecacbc702a8ce8fd3b376631b88e9cc45de3d9a216d6aaedb3a4c6`.
 Converter version 2 emits only those exact trees. The FinNLP gitlink,
-AutoGen-attributed content, unclear filing and marker trees, provider helpers,
+AutoGen-attributed content, 56 third-party Skill copies with four fixtures,
+unredistributable datasets, unclear filing and marker trees, provider helpers,
 and hard FinRobot aggregate dependencies remain non-distributed evidence or
 excluded inputs.
 
@@ -115,8 +116,34 @@ pnpm finrobot-maintenance:baseline
 pnpm finrobot-maintenance:check
 ```
 
-The suite anchors at `audits/finrobot/snapshot-297a8d2`, binds the immutable
+The suite anchors at `audits/finrobot/snapshot-2717499`, binds the immutable
 audit, the vendor bundle, the extension registry subset, package/profile trees,
 the maintenance Skill, the maintenance catalog, and records 01–05 in
 `manifest.json`. The Agent semantic review is mandatory and `baseline` refuses
 an anchor whose `05-semantic-review.md` is not completed.
+
+## Candidate preview
+
+Build and compose an isolated candidate from a file-only extraction of a pinned
+source tree:
+
+```bash
+pnpm build
+node dist/src/vendor-converters/finrobot/cli.js preview \
+  --anchor audits/finrobot/<anchor> \
+  --source-root /path/to/verified-snapshot
+node dist/src/vendor-converters/finrobot/cli.js preview \
+  --anchor audits/finrobot/<anchor> \
+  --source-root /path/to/verified-snapshot --check
+```
+
+`preview` validates every inventoried file's length, Git blob ID and SHA-256,
+composes the six complete candidate trees, projects six isolated extension
+packages and unchanged profiles, and records all bytes in
+`artifacts/candidate/review.json`. `--check` is read-only and verifies exact
+closure and reproducibility. A preview requires a `pending-human-review`
+candidate policy and leaves the production pin, catalogs, packages, registries
+and workflow state unchanged until the exact displayed tree-set hash is
+approved. Candidate authored inputs are frozen under `candidate-authoring/`,
+and `artifacts/source-evidence/` holds only audit evidence used for offline
+candidate tests, never part of a distributed Skill.

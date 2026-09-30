@@ -56,9 +56,9 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/finrobot/financial-research-event-evidence/SKILL.md
-      sha256: 49be990d036ce828b5b6a7603180e187354cbbbb1f118f98c6a747f14aeedfa6
-    - path: skills/plugins/vendors/finrobot/financial-research-event-evidence/scripts/event_evidence.py
-      sha256: f564763b655b1ab77de3a92967dce667e6ce70eeba308dbeec5f000a34cdd3a7
+      sha256: b5203b38f8fde3a95f39c86eb6b93e76942d61a62de378a95f0a661d12de02c4
     - path: skills/plugins/vendors/finrobot/financial-research-event-evidence/lib/financial_support.py
       sha256: 9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c
+    - path: skills/plugins/vendors/finrobot/financial-research-event-evidence/scripts/event_evidence.py
+      sha256: f564763b655b1ab77de3a92967dce667e6ce70eeba308dbeec5f000a34cdd3a7
 license: Apache-2.0

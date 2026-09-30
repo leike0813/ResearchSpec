@@ -42,7 +42,7 @@ void test("all 318 Field-audited vendor records carry valid metadata independent
     { path: path.resolve("audits/tooluniverse/v1.3.1/skill-audit.json"), records: "skills" },
     { path: path.resolve("audits/scientific-agent-skills/v2.53.0/skill-audit.json"), records: "skills" },
     { path: path.resolve("audits/materials-science-skills-for-llm/snapshot-fafd3ab/skill-audit.json"), records: "skills" },
-    { path: path.resolve("audits/finrobot/snapshot-297a8d2/capability-audit.json"), records: "candidate_capabilities" },
+    { path: path.resolve("audits/finrobot/snapshot-2717499/capability-audit.json"), records: "candidate_capabilities" },
     { path: path.resolve("audits/histagent/snapshot-47bbe21/capability-audit.json"), records: "candidate_skills" },
   ];
   let records = 0;

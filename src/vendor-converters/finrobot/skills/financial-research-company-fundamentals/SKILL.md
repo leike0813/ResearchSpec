@@ -4,7 +4,7 @@ description: Analyze a public company's business drivers, historical fundamental
 license: Apache-2.0
 metadata:
   vendor: finrobot
-  vendor-release: snapshot-297a8d2
+  vendor-release: snapshot-2717499
 ---
 
 # Company Fundamentals Research
@@ -47,7 +47,10 @@ conclusion.
    logic from cited evidence. Connect disclosed business highlights to
    measurable drivers and limits.
 4. Prepare normalized period values and run `metrics`. Inspect growth, margins,
-   returns, leverage, cash conversion, and any missing denominators.
+   returns, leverage, cash conversion, and any missing denominators. Reuse the
+   normalized statements and the period coverage, cross-source, and market-cap
+   audit already produced for the same entity, period, and currency instead of
+   recomputing them.
 5. Choose base, upside, and downside driver assumptions. The base case is the
    best-supported path, not an arithmetic midpoint. Change coherent driver sets,
    avoid double-counting one shock across revenue and margin, and record each
@@ -95,6 +98,12 @@ If the support library is missing, stop because the copied tree is incomplete.
 
 - Preserve source dates, reporting periods, currencies, units, and restatement
   status; never silently coerce incomparable data.
+- Keep actual, computed, assumed, forecast, and unsupported numbers
+  distinguishable, and consume the shared statement normalization and evidence
+  audit rather than recomputing the same values.
+- Judge evidence independence by provenance lineage, never by source count, and
+  withdraw or restate a rating, target, or thesis whose supporting number is
+  invalidated.
 - Treat management targets as attributed guidance rather than observed
   performance, and preserve both original and overridden assumptions.
 - Do not invent missing values, citations, peers, management guidance, ratings,
@@ -110,7 +119,10 @@ If the support library is missing, stop because the copied tree is incomplete.
 
 The Agent selects and evaluates sources, interprets the business model, chooses
 forecast drivers and scenarios, resolves conflicts, assesses materiality, and
-writes the thesis and rating rationale. Agent procedure: connect disclosed business highlights to measurable drivers and limits. Agent procedure: describe the business model, segments, customers, geography, and revenue logic from cited evidence. Agent procedure: choose forecast assumptions and explain why each assumption fits the evidence. Agent procedure: synthesize the operating profile, financial trajectory, and investment thesis. Agent procedure: rank the decision-relevant takeaways and identify disconfirming evidence.
+writes the thesis and rating rationale. Agent procedure: connect disclosed business highlights to measurable drivers and limits. Agent procedure: describe the business model, segments, customers, geography, and revenue logic from cited evidence. Agent procedure: choose forecast assumptions and explain why each assumption fits the evidence. Agent procedure: synthesize the operating profile, financial trajectory, and investment thesis. Agent procedure: rank the decision-relevant takeaways and identify disconfirming evidence. Agent procedure: classify each material number as actual, computed, assumed, or forecast and retain its source, dependencies, and limitations.
+
+The Agent re-evaluates any rating, target, or thesis whose supporting number was
+invalidated instead of retaining the earlier conclusion.
 
 The script validates structured input, calculates ratios and scenario paths,
 sorts output deterministically, hashes the result, and writes atomically. It

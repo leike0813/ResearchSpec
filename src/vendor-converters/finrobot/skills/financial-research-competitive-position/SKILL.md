@@ -4,7 +4,7 @@ description: Compare a company with defensible peers across business model, oper
 license: Apache-2.0
 metadata:
   vendor: finrobot
-  vendor-release: snapshot-297a8d2
+  vendor-release: snapshot-2717499
 ---
 
 # Competitive Position Research
@@ -41,7 +41,10 @@ provenance. Never read or persist credentials.
    cyclicality. Record each candidate as included, excluded, or limited-purpose;
    use separate operating and valuation peer groups when appropriate.
 3. Align reporting periods, currency, units, accounting definitions, enterprise
-   value date, and exceptional events.
+   value date, and exceptional events. Reuse the normalized statements and the
+   coverage, cross-source, and market-cap audit already produced for the same
+   dates, and align the quote and reporting currencies with user-supplied
+   exchange-rate evidence that carries a source and date.
 4. Compare business model, segment mix, growth, margins, returns, balance-sheet
    capacity, cash conversion, capital allocation, valuation, and relevant
    operating indicators.
@@ -51,7 +54,8 @@ provenance. Never read or persist credentials.
    intellectual property, regulation, or network effects to an observable
    mechanism and a falsifying metric.
 6. Explain relative valuation only after identifying comparability limits and
-   the operating differences that could justify a premium or discount.
+   currency alignment and the operating differences that could justify a premium
+   or discount.
 7. Synthesize moat durability, peer advantages, investment attractiveness,
    uncertainty, and monitoring indicators.
 
@@ -65,6 +69,10 @@ provenance. Never read or persist credentials.
   multiple or growth rate.
 - Preserve rejected peers, contradictory evidence, data gaps, and structural
   differences that limit comparison.
+- Reuse the shared normalized statements and evidence audit for the focal company
+  and each peer instead of recomputing the same values.
+- Judge evidence independence by provenance lineage, never by source label or
+  count, and never resolve a data conflict with a fixed materiality threshold.
 - Treat high margins and growth as evidence requiring causal explanation, not
   automatic proof of moat durability.
 - External tools retrieve authorized evidence only; they do not decide the peer

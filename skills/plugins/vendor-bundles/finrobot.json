@@ -4,8 +4,8 @@
     "vendor_id": "finrobot",
     "name": "FinRobot",
     "repository_url": "https://github.com/AI4Finance-Foundation/FinRobot.git",
-    "release": "snapshot-297a8d2",
-    "revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+    "release": "snapshot-2717499",
+    "revision": "2717499b8e30f242640af08c4ad9afd1113c2d45",
     "license": "Apache-2.0",
     "converter_version": "2",
     "skills": [
@@ -16,7 +16,8 @@
         "upstreams": [
           {
             "source_paths": [
-              "finrobot/functional/analyzer.py",
+              "finrobot_autogen/finrobot/functional/analyzer.py",
+              "finrobot_desktop/finrobot/engine/models/numeric_claim.py",
               "finrobot_equity/core/src/modules/enhanced_text_generator.py",
               "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py",
               "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py",
@@ -33,7 +34,7 @@
         "upstreams": [
           {
             "source_paths": [
-              "finrobot/functional/analyzer.py",
+              "finrobot_autogen/finrobot/functional/analyzer.py",
               "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py"
             ],
             "adaptation": "curated"
@@ -47,7 +48,7 @@
         "upstreams": [
           {
             "source_paths": [
-              "finrobot/functional/analyzer.py",
+              "finrobot_autogen/finrobot/functional/analyzer.py",
               "finrobot_equity/core/src/modules/enhanced_text_generator.py",
               "finrobot_equity/core/src/modules/equity_agents/risks_agent.py"
             ],
@@ -77,6 +78,9 @@
         "upstreams": [
           {
             "source_paths": [
+              "finrobot_desktop/finrobot/engine/compute/operators/audit/ev_bridge.py",
+              "finrobot_desktop/finrobot/engine/compute/operators/dcf.py",
+              "finrobot_desktop/finrobot/engine/compute/operators/valuation_synthesis.py",
               "finrobot_equity/core/src/modules/enhanced_text_generator.py",
               "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py",
               "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
@@ -93,7 +97,10 @@
         "upstreams": [
           {
             "source_paths": [
-              "finrobot/functional/analyzer.py",
+              "finrobot_autogen/finrobot/functional/analyzer.py",
+              "finrobot_desktop/finrobot/engine/compute/operators/audit/currency_caliber.py",
+              "finrobot_desktop/finrobot/engine/compute/operators/audit/ttm_period.py",
+              "finrobot_desktop/finrobot/engine/data/validator.py",
               "finrobot_equity/core/src/modules/financial_data_processor.py"
             ],
             "adaptation": "curated"

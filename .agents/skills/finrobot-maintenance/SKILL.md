@@ -17,8 +17,8 @@ description: Maintain the FinRobot plugin extension absorption path through anal
 
 ## 输入与前置条件
 
-- 已 pin 的 `vendor/finrobot` 子模块（当前锚点：`snapshot-297a8d2` @
-  `297a8d28d099be328c8a8eb658b4f782b93f3651`）。
+- 已 pin 的 `vendor/finrobot` 子模块（当前锚点：`snapshot-2717499` @
+  `2717499b8e30f242640af08c4ad9afd1113c2d45`）。
 - 项目依赖安装完成（`pnpm install`）。
 - 子模块必须处于预期 commit 且无脏文件。
 - 生成链路可用：`pnpm check`、`pnpm lint`、`pnpm test`。
@@ -34,7 +34,7 @@ description: Maintain the FinRobot plugin extension absorption path through anal
 
 ## 锚点命名
 
-`<release>-<short_revision>`，例如 `snapshot-297a8d2`。目录：
+`<release>-<short_revision>`，例如 `snapshot-2717499`。目录：
 
 ```
 audits/finrobot/<anchor>/
@@ -54,8 +54,9 @@ audits/finrobot/<anchor>/
    - `git -C vendor/finrobot describe --tags --always`
    - `git -C vendor/finrobot rev-parse HEAD`
 2. 确定分析范围：
-   - 首锚点：全部 146 个 tracked entries、66 个 knowledge surfaces、六项候选能力与
-     `capability-audit.json` 的 admission/security 决策。
+   - 当前锚点：全部 1,049 个 tracked entries、129 个 knowledge surfaces（含 56 个
+     排除的第三方 Skill 与四个 fixture）、六项候选能力与 `capability-audit.json`
+     的 admission/security 决策。
    - 增量：`git -C vendor/finrobot diff <old>..<new> --stat`，单独检查六个
      vendor-bundle `SKILL.md`、`scripts/*.py`、`lib/financial_support.py` 与审计事实。
 3. 分类影响：

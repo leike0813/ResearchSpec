@@ -1,0 +1,64 @@
+schema_version: "1"
+capability_id: plugin-financial-company-fundamentals
+title: Company Fundamentals Research
+description: Build an evidence-backed view of company drivers, historical
+  fundamentals, scenarios, thesis, and rating rationale with deterministic
+  metrics and forecast calculations.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: company-fundamentals-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_financial_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,business_model,historical_metrics,scenarios,forecast_tables,conclusions,numeric_evidence
+knowledge_refs:
+  - knowledge_id: company-fundamentals-tool
+    path: tools/fundamentals.py
+    content_hash: c13a2a3d909a194899ba82ce9f8e11952140f9844ccd5fe545c9a2489b544a2d
+    license: Apache-2.0
+  - knowledge_id: financial-support
+    path: tools/financial_support.py
+    content_hash: 9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: audits/finrobot/snapshot-2717499/artifacts/candidate/vendors/finrobot/financial-research-company-fundamentals/SKILL.md
+      sha256: 0aad28130c0cff134f8d45751a61849e5f9e2da050032945ddb45b725b2f2210
+    - path: audits/finrobot/snapshot-2717499/artifacts/candidate/vendors/finrobot/financial-research-company-fundamentals/lib/financial_support.py
+      sha256: 9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c
+    - path: audits/finrobot/snapshot-2717499/artifacts/candidate/vendors/finrobot/financial-research-company-fundamentals/scripts/fundamentals.py
+      sha256: c13a2a3d909a194899ba82ce9f8e11952140f9844ccd5fe545c9a2489b544a2d
+license: Apache-2.0

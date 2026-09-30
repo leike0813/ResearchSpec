@@ -13,10 +13,11 @@ import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/productio
 import { assertAuditSourceInitialized, assertEvidencePaths, gitOutput } from "./helpers/vendor-audit.js";
 
 const SOURCE_ROOT = path.resolve("vendor/finrobot");
-const AUDIT_PATH = path.resolve("audits/finrobot/snapshot-297a8d2/capability-audit.json");
-const REPORT_PATH = path.resolve("audits/finrobot/snapshot-297a8d2/report.md");
+const AUDIT_PATH = path.resolve("audits/finrobot/snapshot-2717499/capability-audit.json");
+const OLD_AUDIT_PATH = path.resolve("audits/finrobot/snapshot-297a8d2/capability-audit.json");
+const REPORT_PATH = path.resolve("audits/finrobot/snapshot-2717499/report.md");
 const TAXONOMY_PATH = path.resolve("src/plugins/taxonomy/anzsrc-for-2020.json");
-const REVISION = "297a8d28d099be328c8a8eb658b4f782b93f3651";
+const REVISION = "2717499b8e30f242640af08c4ad9afd1113c2d45";
 const REPOSITORY_URL = "https://github.com/AI4Finance-Foundation/FinRobot.git";
 
 void test("FinRobot audit pins the official untagged snapshot without initializing FinNLP", async () => {
@@ -27,14 +28,14 @@ void test("FinRobot audit pins the official untagged snapshot without initializi
   assert.equal(gitOutput(SOURCE_ROOT, ["config", "--get", "remote.origin.url"]), REPOSITORY_URL);
   assert.equal(gitOutput(SOURCE_ROOT, ["tag", "--points-at", "HEAD"]), "");
   assert.equal(gitOutput(SOURCE_ROOT, ["status", "--porcelain"]), "");
-  assert.match(gitOutput(SOURCE_ROOT, ["submodule", "status", "FinNLP"]), /^-587f04f473507ddea6453e43796797fce17155ce /);
+  assert.match(gitOutput(SOURCE_ROOT, ["submodule", "status", "finrobot_autogen/FinNLP"]), /^-587f04f473507ddea6453e43796797fce17155ce /);
   assert.deepEqual(audit.source, {
     source_id: "finrobot",
     name: "FinRobot",
     repository_url: REPOSITORY_URL,
-    release: "snapshot-297a8d2",
+    release: "snapshot-2717499",
     revision: REVISION,
-    root_license: "Apache-2.0 (metadata conflict under review)",
+    root_license: "Apache-2.0",
     license_path: "LICENSE",
   });
 });
@@ -55,24 +56,24 @@ void test("repository source extraction preserves the existing Skill-source cont
   assert.throws(() => VendorAuditSourceSchema.parse(repository));
 });
 
-void test("audit reproduces all 146 tracked entries and confirms zero upstream Skills", async () => {
+void test("audit reproduces all 1049 tracked entries and records 60 upstream Skill documents", async () => {
   const audit = await readAudit();
   const tree = parseGitTree();
-  assert.equal(tree.length, 146);
+  assert.equal(tree.length, 1049);
   assert.deepEqual(audit.source_entries.map((entry) => entry.path), tree.map((entry) => entry.path));
-  assert.equal(new Set(audit.source_entries.map((entry) => entry.path)).size, 146);
-  assert.equal(audit.source_entries.filter((entry) => entry.kind === "file").length, 143);
-  assert.equal(audit.source_entries.filter((entry) => entry.kind === "executable").length, 2);
+  assert.equal(new Set(audit.source_entries.map((entry) => entry.path)).size, 1049);
+  assert.equal(audit.source_entries.filter((entry) => entry.kind === "file").length, 1042);
+  assert.equal(audit.source_entries.filter((entry) => entry.kind === "executable").length, 6);
   assert.equal(audit.source_entries.filter((entry) => entry.kind === "gitlink").length, 1);
-  assert.deepEqual(audit.source_entries.filter((entry) => path.basename(entry.path) === "SKILL.md"), []);
-  assert.equal(gitOutput(SOURCE_ROOT, ["ls-files", "--", "*SKILL.md"]), "");
+  assert.equal(audit.source_entries.filter((entry) => path.basename(entry.path) === "SKILL.md").length, 60);
+  assert.equal(gitOutput(SOURCE_ROOT, ["ls-files", "--", "*SKILL.md"]).split("\n").length, 60);
 
   for (const [index, sourceEntry] of audit.source_entries.entries()) {
     const treeEntry = tree[index];
     assert.equal(sourceEntry.git_mode, treeEntry.mode, sourceEntry.path);
     assert.equal(sourceEntry.git_object_id, treeEntry.objectId, sourceEntry.path);
     if (sourceEntry.kind === "gitlink") {
-      assert.equal(sourceEntry.path, "FinNLP");
+      assert.equal(sourceEntry.path, "finrobot_autogen/FinNLP");
       assert.equal(sourceEntry.bytes, null);
       assert.equal(sourceEntry.sha256, null);
     } else {
@@ -81,21 +82,21 @@ void test("audit reproduces all 146 tracked entries and confirms zero upstream S
       assert.equal(sourceEntry.sha256, createHash("sha256").update(contents).digest("hex"), sourceEntry.path);
     }
   }
-  assert.equal(audit.summary.file_bytes, 25_906_666);
+  assert.equal(audit.summary.file_bytes, 45_380_198);
 });
 
 void test("origins and license claims preserve conflicts and external boundaries", async () => {
   const audit = await readAudit();
-  assert.deepEqual(audit.content_origins.map((origin) => origin.origin_id), ["attributed-autogen", "external-finnlp", "root-apache", "unclear-filings", "unclear-marker"]);
+  assert.deepEqual(audit.content_origins.map((origin) => origin.origin_id), ["attributed-autogen", "external-finnlp", "external-dataset-fixture", "root-apache", "unclear-filings", "unclear-marker", "native-desktop", "anthropic-derived"]);
   assert.equal(audit.content_origins.find((origin) => origin.origin_id === "root-apache")?.content_license.status, "confirmed");
-  assert.equal(audit.content_origins.filter((origin) => origin.redistribution_status === "blocked").length, 4);
-  assert.equal(audit.license_claims.find((claim) => claim.claim_id === "setup-mit")?.status, "conflicting");
+  assert.equal(audit.content_origins.filter((origin) => origin.redistribution_status === "blocked").length, 6);
+  assert.equal(audit.license_claims.find((claim) => claim.claim_id === "anthropic-skills-attribution")?.status, "conflicting");
   assert.equal(audit.license_claims.find((claim) => claim.claim_id === "finnlp-external")?.status, "external");
-  assert.equal(audit.source_entries.find((entry) => entry.path === "FinNLP")?.content_origin_id, "external-finnlp");
-  assert.equal(audit.source_entries.find((entry) => entry.path === "finrobot/functional/coding.py")?.content_origin_id, "attributed-autogen");
+  assert.equal(audit.source_entries.find((entry) => entry.path === "finrobot_autogen/FinNLP")?.content_origin_id, "external-finnlp");
+  assert.equal(audit.source_entries.find((entry) => entry.path === "finrobot_autogen/finrobot/functional/coding.py")?.content_origin_id, "attributed-autogen");
 
   assert.match(await readFile(path.join(SOURCE_ROOT, "LICENSE"), "utf8"), /Apache License/);
-  assert.match(await readFile(path.join(SOURCE_ROOT, "setup.py"), "utf8"), /license="MIT"/);
+  assert.doesNotMatch(await readFile(path.join(SOURCE_ROOT, "setup.py"), "utf8"), /license\s*=\s*"MIT"/);
   for (const origin of audit.content_origins) {
     await assertEvidencePaths(SOURCE_ROOT, origin.scope);
     await assertEvidencePaths(SOURCE_ROOT, origin.content_license.evidence);
@@ -106,12 +107,16 @@ void test("origins and license claims preserve conflicts and external boundaries
   }
 });
 
-void test("audit covers 66 source-bound knowledge surfaces and six candidate capabilities", async () => {
+void test("audit covers 129 source-bound knowledge surfaces and six candidate capabilities", async () => {
   const audit = await readAudit();
   const surfaceIds = audit.knowledge_surfaces.map((surface) => surface.surface_id);
-  assert.equal(surfaceIds.length, 66);
-  assert.deepEqual(surfaceIds, [...surfaceIds].sort(compareText));
-  assert.equal(new Set(surfaceIds).size, 66);
+  assert.equal(surfaceIds.length, 129);
+  assert.equal(new Set(surfaceIds).size, 129);
+  const priorAudit = await readOldAudit();
+  const priorSurfaces = priorAudit.knowledge_surfaces.map((surface) => surface.surface_id);
+  assert.equal(priorSurfaces.length, 66);
+  assert.deepEqual(priorSurfaces, [...priorSurfaces].sort(compareText));
+  assert.ok(priorSurfaces.every((surfaceId) => surfaceIds.includes(surfaceId)), "every immutable prior surface must remain in the new audit");
   assert.deepEqual(audit.candidate_capabilities.map((candidate) => candidate.capability_id), [
     "company-fundamentals-analysis",
     "competitive-position-analysis",
@@ -124,7 +129,22 @@ void test("audit covers 66 source-bound knowledge surfaces and six candidate cap
   const fieldIds = new Set((await loadAnzsrcSnapshot(TAXONOMY_PATH)).fields.map((field) => field.code));
   for (const surface of audit.knowledge_surfaces) {
     await assertEvidencePaths(SOURCE_ROOT, [surface.source_path]);
-    for (const item of surface.findings) await assertEvidencePaths(SOURCE_ROOT, item.evidence);
+    for (const item of surface.findings) {
+      for (const evidencePath of item.evidence) {
+        const historical = priorAudit.knowledge_surfaces.find((prior) => prior.surface_id === surface.surface_id)
+          ?.findings.some((prior) => prior.code === item.code && prior.evidence.includes(evidencePath));
+        if (historical && !audit.source_entries.some((entry) => entry.path === evidencePath)) {
+          const priorEntry = priorAudit.source_entries.find((entry) => entry.path === evidencePath);
+          assert.ok(priorEntry, evidencePath);
+          const currentEntry = audit.source_entries.find((entry) => entry.git_object_id === priorEntry.git_object_id);
+          assert.ok(currentEntry, evidencePath);
+          assert.equal(currentEntry.sha256, priorEntry.sha256, evidencePath);
+          await assertEvidencePaths(SOURCE_ROOT, [currentEntry.path]);
+        } else {
+          await assertEvidencePaths(SOURCE_ROOT, [evidencePath]);
+        }
+      }
+    }
   }
   for (const candidate of audit.candidate_capabilities) {
     assert.ok(candidate.source_surface_ids.every((surfaceId) => surfaceIds.includes(surfaceId)), candidate.capability_id);
@@ -150,15 +170,18 @@ void test("audit records implementation drift, fixed assumptions, provider risks
   const audit = await readAudit();
   const findingCodes = new Set(audit.findings.map((item) => item.code));
   assert.deepEqual(findingCodes, new Set([
-    "NO-UPSTREAM-SKILL",
-    "LICENSE-METADATA-CONFLICT",
+    "DATA-FRESHNESS",
+    "EXTERNAL-DATA-REDISTRIBUTION",
+    "FIXED-ASSUMPTION",
+    "IMPLEMENTATION-DOC-DRIFT",
+    "NO-TRANSACTION-AUTHORITY",
+    "PROVIDER-BINDING",
+    "RUNTIME-NOT-DISTRIBUTED",
+    "SKILL-RESOURCE-CLOSURE-LOST",
+    "THIRD-PARTY-SKILL-ORIGIN-UNVERIFIED",
     "UNINITIALIZED-SUBMODULE",
     "UNKNOWN-ORIGIN",
-    "IMPLEMENTATION-DOC-DRIFT",
-    "FIXED-ASSUMPTION",
-    "PROVIDER-BINDING",
-    "DATA-FRESHNESS",
-    "NO-TRANSACTION-AUTHORITY",
+    "UPSTREAM-SKILLS-PRESENT",
   ]));
   for (const item of audit.findings) await assertEvidencePaths(SOURCE_ROOT, item.evidence);
 
@@ -171,12 +194,12 @@ void test("audit records implementation drift, fixed assumptions, provider risks
   assert.match(valuation, /default_assumptions/);
   assert.match(await readFile(path.join(SOURCE_ROOT, "finrobot_equity/core/src/modules/sensitivity_analyzer.py"), "utf8"), /std_ratio = 0\.15/);
   const sourcePaths = audit.source_entries.map((entry) => entry.path);
-  assert.equal(sourcePaths.some((entry) => /(?:^|\/)(?:package\.json|Cargo\.toml)$|\.(?:rs|tsx?)$/.test(entry)), false);
+  assert.equal(sourcePaths.some((entry) => /(?:^|\/)(?:package\.json|Cargo\.toml)$|\.(?:rs|tsx?)$/.test(entry)), true);
 
   assert.deepEqual(audit.policy, {
     audit_is_admission: false,
     future_change: "ingest-finrobot",
-    source_has_upstream_skills: false,
+    source_has_upstream_skills: true,
     nested_gitlinks_initialized: false,
     allowed_domains: ["accounting-auditing-and-accountability", "banking-finance-and-investment"],
     anzsrc_field_creates_membership: false,
@@ -196,13 +219,17 @@ void test("audit remains immutable while production ingestion is separately poli
   const packageJson = JSON.parse(await readFile(path.resolve("package.json"), "utf8")) as { scripts: Record<string, string> };
   assert.deepEqual(Object.keys(packageJson.scripts).filter((script) => script.startsWith("finrobot:")).sort(), ["finrobot:check", "finrobot:convert", "finrobot:idempotence"]);
   const report = await readFile(REPORT_PATH, "utf8");
-  assert.match(report, /snapshot-297a8d2/);
-  assert.match(report, /ingest-finrobot/);
+  assert.match(report, /snapshot-2717499/);
+  assert.match(report, /2717499b8e30f242640af08c4ad9afd1113c2d45/);
   assert.ok(report.length > 500);
 });
 
 async function readAudit() {
   return FinRobotAuditSchema.parse(JSON.parse(await readFile(AUDIT_PATH, "utf8")));
+}
+
+async function readOldAudit() {
+  return FinRobotAuditSchema.parse(JSON.parse(await readFile(OLD_AUDIT_PATH, "utf8")));
 }
 
 function parseGitTree(): Array<{ mode: string; objectId: string; path: string }> {

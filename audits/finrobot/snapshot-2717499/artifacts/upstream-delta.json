@@ -1,0 +1,5198 @@
+{
+  "schema_version": "1",
+  "record_kind": "incremental-analysis-evidence",
+  "audited_at": "2026-09-30",
+  "production_admission": false,
+  "production_baseline": "snapshot-297a8d2",
+  "repository_url": "https://github.com/AI4Finance-Foundation/FinRobot.git",
+  "old_revision": "297a8d28d099be328c8a8eb658b4f782b93f3651",
+  "new_revision": "2717499b8e30f242640af08c4ad9afd1113c2d45",
+  "new_tree": "eee135451d83398acd925f061483f0c864331749",
+  "latest_default_branch": "master",
+  "latest_commit_date": "2026-09-28T19:24:51+08:00",
+  "latest_release": {
+    "tag": "desktop-v0.1.0",
+    "revision": "6a8161ff5cfa66ec3df9c11a0bf7a84a1ac11f01",
+    "published_at": "2026-07-07T07:49:05Z",
+    "contains_desktop_source": false
+  },
+  "summary": {
+    "commits": 25,
+    "old_tracked_entries": 146,
+    "new_tracked_entries": 1049,
+    "changed_entries": 987,
+    "diff_counts": {
+      "A": 905,
+      "M": 6,
+      "D": 2,
+      "R100": 69,
+      "R099": 1,
+      "R092": 1,
+      "R095": 1,
+      "R051": 1,
+      "R089": 1
+    },
+    "insertions": 258687,
+    "deletions": 457,
+    "roots": {
+      "(root)": 9,
+      ".github": 1,
+      "figs": 11,
+      "finrobot_autogen": 71,
+      "finrobot_desktop": 893,
+      "finrobot_equity": 64
+    },
+    "gitlinks": [
+      {
+        "path": "finrobot_autogen/FinNLP",
+        "mode": "160000",
+        "kind": "commit",
+        "object_id": "587f04f473507ddea6453e43796797fce17155ce"
+      }
+    ],
+    "old_knowledge_surfaces": 66,
+    "old_surface_source_files": 18,
+    "all_old_surface_sources_byte_identical": true,
+    "admitted_surfaces": 32,
+    "admitted_source_files": 12,
+    "production_skills": 56,
+    "fixture_skills": 4,
+    "skill_desks": {
+      "equity-research": 9,
+      "financial-analysis": 11,
+      "investment-banking": 9,
+      "partner-lseg": 8,
+      "partner-spglobal": 3,
+      "private-equity": 10,
+      "wealth-management": 6
+    },
+    "skill_structural_triage": {
+      "no-local-resource-gap-identified": 32,
+      "resource-or-tool-repair-required": 11,
+      "defer-service-or-maintainer-scope": 13
+    }
+  },
+  "root_legal_files": [
+    {
+      "path": "LICENSE",
+      "git_blob": "6cc0d28c44e482825bba73c84761e3d65f138f42",
+      "same_git_blob": true
+    },
+    {
+      "path": "NOTICE",
+      "git_blob": "4ad1671f14994630695c91b14ee7cfa14cacb6af",
+      "same_git_blob": true
+    },
+    {
+      "path": "TRADEMARK_POLICY.md",
+      "git_blob": "3c0a9297b07c7b5c6748aac41096a0ab56c96708",
+      "same_git_blob": true
+    }
+  ],
+  "anthropic_license_evidence": {
+    "repository_url": "https://github.com/anthropics/financial-services",
+    "historical_license_revision": "b891783b23f4c46050bd4c7c34128d19351917cb",
+    "historical_license_commit_date": "2026-02-23T19:28:34Z",
+    "historical_license": "Apache-2.0",
+    "finrobot_attribution_claim": "MIT",
+    "conversion_timestamp": "2026-03-31T01:58:26.903151+00:00",
+    "exact_conversion_source_revision": null,
+    "content_rights_review": "requires-exact-source-and-resource-verification"
+  },
+  "admitted_source_map": [
+    {
+      "old_path": "finrobot/functional/analyzer.py",
+      "new_path": "finrobot_autogen/finrobot/functional/analyzer.py",
+      "same_git_blob": true,
+      "surfaces": [
+        {
+          "id": "analyzer-analyze-balance-sheet",
+          "skill": "financial-research-statement-analysis",
+          "symbol": "ReportAnalysisUtils.analyze_balance_sheet"
+        },
+        {
+          "id": "analyzer-analyze-business-highlights",
+          "skill": "financial-research-company-fundamentals",
+          "symbol": "ReportAnalysisUtils.analyze_business_highlights"
+        },
+        {
+          "id": "analyzer-analyze-cash-flow",
+          "skill": "financial-research-statement-analysis",
+          "symbol": "ReportAnalysisUtils.analyze_cash_flow"
+        },
+        {
+          "id": "analyzer-analyze-company-description",
+          "skill": "financial-research-company-fundamentals",
+          "symbol": "ReportAnalysisUtils.analyze_company_description"
+        },
+        {
+          "id": "analyzer-analyze-income-stmt",
+          "skill": "financial-research-statement-analysis",
+          "symbol": "ReportAnalysisUtils.analyze_income_stmt"
+        },
+        {
+          "id": "analyzer-analyze-segment-stmt",
+          "skill": "financial-research-statement-analysis",
+          "symbol": "ReportAnalysisUtils.analyze_segment_stmt"
+        },
+        {
+          "id": "analyzer-get-competitors-analysis",
+          "skill": "financial-research-competitive-position",
+          "symbol": "ReportAnalysisUtils.get_competitors_analysis"
+        },
+        {
+          "id": "analyzer-get-key-data",
+          "skill": "financial-research-company-fundamentals",
+          "symbol": "ReportAnalysisUtils.get_key_data"
+        },
+        {
+          "id": "analyzer-get-risk-assessment",
+          "skill": "financial-research-corporate-risk",
+          "symbol": "ReportAnalysisUtils.get_risk_assessment"
+        },
+        {
+          "id": "analyzer-income-summarization",
+          "skill": "financial-research-statement-analysis",
+          "symbol": "ReportAnalysisUtils.income_summarization"
+        }
+      ],
+      "git_blob": "16042fa76c3aadd5935b473ff7ea3233900aa78d",
+      "sha256": "a7af9f74bca58c5105beb3a48b53622ae41cec4330e851d4702160833c5060d2"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "new_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "same_git_blob": true,
+      "surfaces": [
+        {
+          "id": "catalyst-assess-impact",
+          "skill": "financial-research-event-evidence",
+          "symbol": "CatalystAnalyzer.assess_catalyst_impact"
+        },
+        {
+          "id": "catalyst-classify-event",
+          "skill": "financial-research-event-evidence",
+          "symbol": "CatalystAnalyzer._classify_event_type"
+        },
+        {
+          "id": "catalyst-estimate-probability",
+          "skill": "financial-research-event-evidence",
+          "symbol": "CatalystAnalyzer._estimate_probability"
+        },
+        {
+          "id": "catalyst-identify",
+          "skill": "financial-research-event-evidence",
+          "symbol": "CatalystAnalyzer.identify_catalysts"
+        }
+      ],
+      "git_blob": "c4364fdf3966beb899176184d21e5ca7f7752460",
+      "sha256": "65a4ebba92f7ee98944cbe01b0b9c30feb334a5ed344e50100cac0e08416e530"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "new_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "same_git_blob": true,
+      "surfaces": [
+        {
+          "id": "enhanced-catalyst-analysis",
+          "skill": "financial-research-event-evidence",
+          "symbol": "EnhancedTextGenerator.generate_catalyst_analysis"
+        },
+        {
+          "id": "enhanced-forecast-methodology",
+          "skill": "financial-research-company-fundamentals",
+          "symbol": "EnhancedTextGenerator.generate_forecast_methodology"
+        },
+        {
+          "id": "enhanced-risk-factors",
+          "skill": "financial-research-corporate-risk",
+          "symbol": "EnhancedTextGenerator.generate_risk_factors"
+        },
+        {
+          "id": "enhanced-valuation-analysis",
+          "skill": "financial-research-relative-valuation",
+          "symbol": "EnhancedTextGenerator.generate_valuation_analysis"
+        }
+      ],
+      "git_blob": "082890ae1a88b3b10af4be73a04f1a757a63a0f2",
+      "sha256": "e09107b59bbb5f65423a30ab475aecf84f36d934e0d5750e26656ed76daace97"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py",
+      "same_git_blob": true,
+      "surfaces": [
+        {
+          "id": "equity-company-overview",
+          "skill": "financial-research-company-fundamentals",
+          "symbol": "COMPANY_OVERVIEW_PROMPT"
+        }
+      ],
+      "git_blob": "8dac1c7a5e12141ffee42563513c22e3c3c2756b",
+      "sha256": "f2678311f6fa5741216dd4c13153f8d81367d615d27a04428f070cb25c44abaf"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py",
+      "same_git_blob": true,
+      "surfaces": [
+        {
+          "id": "equity-competitor-analysis",
+          "skill": "financial-research-competitive-position",
+          "symbol": "COMPETITOR_ANALYSIS_PROMPT"
+        }
+      ],
+      "git_blob": "7f3f3debaa9e290b2409fb0ec28f9228b340f16a",
+      "sha256": "ccc21dced3c850a7cb8bba3c6256c27045062757e24dad49f6ad6b12c0c928bf"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py",
+      "same_git_blob": true,
+      "surfaces": [
+        {
+          "id": "equity-major-takeaways",
+          "skill": "financial-research-company-fundamentals",
+          "symbol": "MAJOR_TAKEAWAYS_PROMPT"
+        }
+      ],
+      "git_blob": "5ade681875cf8c0ddd87b45b68c11d4127a7df91",
+      "sha256": "47bf4b4e16fc0c308bbc4d42986bba696f1de34ecc3c8ab65f1718e26d5a6081"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py",
+      "same_git_blob": true,
+      "surfaces": [
+        {
+          "id": "equity-news-summary",
+          "skill": "financial-research-event-evidence",
+          "symbol": "NEWS_SUMMARY_PROMPT"
+        }
+      ],
+      "git_blob": "c5cd5218e87ec1efbd17c30d9657220f19137c2f",
+      "sha256": "ebb0a705d26ed185b7cdaed21d6bd202bb83e6a968b890ed1957f0c22f77b8fb"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/risks_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/risks_agent.py",
+      "same_git_blob": true,
+      "surfaces": [
+        {
+          "id": "equity-risks",
+          "skill": "financial-research-corporate-risk",
+          "symbol": "RISKS_PROMPT"
+        }
+      ],
+      "git_blob": "1d78c12a27170ec243dbb07980e9b073c353843f",
+      "sha256": "cfcf9793a184dfa55cc6e40a4444a9ce7848a5045285c0abadcf06d9e20c87b0"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py",
+      "same_git_blob": true,
+      "surfaces": [
+        {
+          "id": "equity-valuation-overview",
+          "skill": "financial-research-relative-valuation",
+          "symbol": "VALUATION_OVERVIEW_PROMPT"
+        }
+      ],
+      "git_blob": "0ded77ee1638c27509579961e18719b2b4d40af3",
+      "sha256": "c3d02d5c07c0498b1e0e892ff0ddac88327f2efa6c39db64520a4607dda2f092"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "new_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "same_git_blob": true,
+      "surfaces": [
+        {
+          "id": "processor-extract-api",
+          "skill": "financial-research-statement-analysis",
+          "symbol": "extract_historical_metrics_from_api_data"
+        },
+        {
+          "id": "processor-extract-pdf",
+          "skill": "financial-research-statement-analysis",
+          "symbol": "extract_historical_metrics_from_pdf_data"
+        },
+        {
+          "id": "processor-growth-forecast",
+          "skill": "financial-research-company-fundamentals",
+          "symbol": "calculate_growth_and_forecasts"
+        }
+      ],
+      "git_blob": "288328c7b903d43ae067dd8d422a7f0c0647472d",
+      "sha256": "0cfc251b8f8a1fba8dc16ba1ca52d6eb92ccf160a5bc881c24adfa885425c726"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "new_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "same_git_blob": true,
+      "surfaces": [
+        {
+          "id": "sensitivity-margin",
+          "skill": "financial-research-relative-valuation",
+          "symbol": "SensitivityAnalyzer.analyze_margin_sensitivity"
+        },
+        {
+          "id": "sensitivity-revenue",
+          "skill": "financial-research-relative-valuation",
+          "symbol": "SensitivityAnalyzer.analyze_revenue_sensitivity"
+        },
+        {
+          "id": "sensitivity-table",
+          "skill": "financial-research-relative-valuation",
+          "symbol": "SensitivityAnalyzer.generate_sensitivity_table"
+        }
+      ],
+      "git_blob": "f5c186821a744792b90bdcdec776c11c28a23810",
+      "sha256": "edc42f04d39361d20d130595d8bdde506da6a42e4dfead180d427471728cfa34"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/valuation_engine.py",
+      "new_path": "finrobot_equity/core/src/modules/valuation_engine.py",
+      "same_git_blob": true,
+      "surfaces": [
+        {
+          "id": "valuation-ev-ebitda",
+          "skill": "financial-research-relative-valuation",
+          "symbol": "ValuationEngine.calculate_ev_ebitda_valuation"
+        },
+        {
+          "id": "valuation-peer-comparison",
+          "skill": "financial-research-relative-valuation",
+          "symbol": "ValuationEngine.calculate_peer_comparison_valuation"
+        }
+      ],
+      "git_blob": "532de76720fe3ad9004475fd5fbd052236852c10",
+      "sha256": "3256aa3bfc5aa7378a904696930ab4437c752f028a1e16a253f654b7e22a54b0"
+    }
+  ],
+  "all_old_surface_source_map": [
+    {
+      "old_path": "finrobot/functional/analyzer.py",
+      "new_path": "finrobot_autogen/finrobot/functional/analyzer.py",
+      "surfaces": 10,
+      "same_git_blob": true,
+      "git_blob": "16042fa76c3aadd5935b473ff7ea3233900aa78d"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "new_path": "finrobot_equity/core/src/modules/catalyst_analyzer.py",
+      "surfaces": 4,
+      "same_git_blob": true,
+      "git_blob": "c4364fdf3966beb899176184d21e5ca7f7752460"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "new_path": "finrobot_equity/core/src/modules/enhanced_text_generator.py",
+      "surfaces": 7,
+      "same_git_blob": true,
+      "git_blob": "082890ae1a88b3b10af4be73a04f1a757a63a0f2"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/company_overview_agent.py",
+      "surfaces": 1,
+      "same_git_blob": true,
+      "git_blob": "8dac1c7a5e12141ffee42563513c22e3c3c2756b"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/competitor_analysis_agent.py",
+      "surfaces": 1,
+      "same_git_blob": true,
+      "git_blob": "7f3f3debaa9e290b2409fb0ec28f9228b340f16a"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/investment_overview_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/investment_overview_agent.py",
+      "surfaces": 1,
+      "same_git_blob": true,
+      "git_blob": "c8a4d57c799c5db7d568b35b65d92fb7b06b7e27"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/major_takeaways_agent.py",
+      "surfaces": 1,
+      "same_git_blob": true,
+      "git_blob": "5ade681875cf8c0ddd87b45b68c11d4127a7df91"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/news_summary_agent.py",
+      "surfaces": 1,
+      "same_git_blob": true,
+      "git_blob": "c5cd5218e87ec1efbd17c30d9657220f19137c2f"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/risks_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/risks_agent.py",
+      "surfaces": 1,
+      "same_git_blob": true,
+      "git_blob": "1d78c12a27170ec243dbb07980e9b073c353843f"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/tagline_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/tagline_agent.py",
+      "surfaces": 1,
+      "same_git_blob": true,
+      "git_blob": "adb2bb5aabaf089957c44bccf6cb5e15d1b6033c"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py",
+      "new_path": "finrobot_equity/core/src/modules/equity_agents/valuation_overview_agent.py",
+      "surfaces": 1,
+      "same_git_blob": true,
+      "git_blob": "0ded77ee1638c27509579961e18719b2b4d40af3"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "new_path": "finrobot_equity/core/src/modules/text_generator_agents.py",
+      "surfaces": 8,
+      "same_git_blob": true,
+      "git_blob": "fa3d6262c01bfd9633b1c7595cb7c1dfa200f122"
+    },
+    {
+      "old_path": "configs/save_config_forecaster.json",
+      "new_path": "finrobot_autogen/configs/save_config_forecaster.json",
+      "surfaces": 6,
+      "same_git_blob": true,
+      "git_blob": "15f277c4b6f14f507e04bf4f1fd85dcdd3910fc0"
+    },
+    {
+      "old_path": "finrobot/agents/prompts.py",
+      "new_path": "finrobot_autogen/finrobot/agents/prompts.py",
+      "surfaces": 3,
+      "same_git_blob": true,
+      "git_blob": "90996f14120a168f19c8d30f0ddb8cc7b90605b2"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "new_path": "finrobot_equity/core/src/modules/financial_data_processor.py",
+      "surfaces": 3,
+      "same_git_blob": true,
+      "git_blob": "288328c7b903d43ae067dd8d422a7f0c0647472d"
+    },
+    {
+      "old_path": "finrobot/agents/agent_library.py",
+      "new_path": "finrobot_autogen/finrobot/agents/agent_library.py",
+      "surfaces": 10,
+      "same_git_blob": true,
+      "git_blob": "8fc08507bd0b547dc7bb0869fe626df68a5d7ded"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "new_path": "finrobot_equity/core/src/modules/sensitivity_analyzer.py",
+      "surfaces": 4,
+      "same_git_blob": true,
+      "git_blob": "f5c186821a744792b90bdcdec776c11c28a23810"
+    },
+    {
+      "old_path": "finrobot_equity/core/src/modules/valuation_engine.py",
+      "new_path": "finrobot_equity/core/src/modules/valuation_engine.py",
+      "surfaces": 3,
+      "same_git_blob": true,
+      "git_blob": "532de76720fe3ad9004475fd5fbd052236852c10"
+    }
+  ],
+  "upstream_skills": [
+    {
+      "path": "finrobot_desktop/skills/equity-research/catalyst-calendar/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "b1552d8ad4407d934821ea7256a8ce052464fb71",
+      "sha256": "de64fd60ec59f4f2022199897be4ad9a38662bf43e36095f89520b028a99cc88",
+      "desk": "equity-research",
+      "skill_id": "catalyst-calendar",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/equity-research/earnings-analysis/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "bf1345cf85b5bacbc508be302a58547bec6ece47",
+      "sha256": "aee545fb1110a78866184ec233624b91c4e434ef45e71045c1039d32277c95d7",
+      "desk": "equity-research",
+      "skill_id": "earnings-analysis",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "resource-or-tool-repair-required"
+    },
+    {
+      "path": "finrobot_desktop/skills/equity-research/earnings-preview/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "b9e379e5511002a8792cfdcd177aa8423146336b",
+      "sha256": "75cd6c3948024fc02cf1989ec345cabf604f50c572bee26bdf9f958c6c748f29",
+      "desk": "equity-research",
+      "skill_id": "earnings-preview",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/equity-research/idea-generation/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "f6b24354cbc56f70c786a75513e7e440b30ed069",
+      "sha256": "af25cba7ed3947f69a42a56f7fbbc0eb45b599175edb9ccb09c2b6acbb741cc6",
+      "desk": "equity-research",
+      "skill_id": "idea-generation",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/equity-research/initiating-coverage/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "a80d2b7243ae867c0e68ca39db8f6206ce18880f",
+      "sha256": "953e1cfa0851aea87c35754d1c1ab11c382df86db8225a9d763cadd986b1c732",
+      "desk": "equity-research",
+      "skill_id": "initiating-coverage",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/equity-research/model-update/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "c91f80c0b0f28a8a8c54c85f14f067b34073e5c7",
+      "sha256": "8d37763d3fa2a9120444bf1d57c3f4692b53992db3fcf401e0e79cc6938dda19",
+      "desk": "equity-research",
+      "skill_id": "model-update",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/equity-research/morning-note/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "901b289753006e13f2a9bd5b128a5c12317b677a",
+      "sha256": "d7f8a176b8c364c3d6bdc26348077772afc9f733ab91ca384f0749ed4ba5688e",
+      "desk": "equity-research",
+      "skill_id": "morning-note",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/equity-research/sector-overview/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "8c901c4faed3e8d286524b3e51b7c2bfb094c52f",
+      "sha256": "65c1fd6f586db5d00d07802ecd1069fe1be2960f28ad88aaf897adb2e1649f79",
+      "desk": "equity-research",
+      "skill_id": "sector-overview",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/equity-research/thesis-tracker/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "cf77dbec8573c632c345e320228185a3c61ce82d",
+      "sha256": "b160a41acdadf6c2b935d985d8a1392d5a6b5ee3d1d0ceeb45c2c66570b81de0",
+      "desk": "equity-research",
+      "skill_id": "thesis-tracker",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/financial-analysis/3-statement-model/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "28ee7009c467b9ad09b80d702a50d20c7d9ca688",
+      "sha256": "28077562d7a81b5aa71b1a3202c85a06ebae27c2116aabdb040c7023fe009e14",
+      "desk": "financial-analysis",
+      "skill_id": "3-statement-model",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "resource-or-tool-repair-required"
+    },
+    {
+      "path": "finrobot_desktop/skills/financial-analysis/audit-xls/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "b7760b2f849596356f2cfd56e56649975f8b8b5e",
+      "sha256": "e1aae6e85655639fd08d071da104769a65e9af28614d97edc7bef2e36168581c",
+      "desk": "financial-analysis",
+      "skill_id": "audit-xls",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/financial-analysis/clean-data-xls/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "7cb9c6dacb508cdbf02b62793ab2f901b3e25fcd",
+      "sha256": "64a0ea6508f107823cc5fcdc7455427fd3855448dfaaba6ac94c0f221d1bdc06",
+      "desk": "financial-analysis",
+      "skill_id": "clean-data-xls",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/financial-analysis/competitive-analysis/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "de1a353ae15fae6601738ebc496d567caee846fd",
+      "sha256": "47ba8af952eea5c25d8ee5946a771d65c5eb0835cc75b7938a435a8b81f4ca8c",
+      "desk": "financial-analysis",
+      "skill_id": "competitive-analysis",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "resource-or-tool-repair-required"
+    },
+    {
+      "path": "finrobot_desktop/skills/financial-analysis/comps-analysis/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "053c74eae77a90f5626ade5609f07ae64bcdedf8",
+      "sha256": "dc66e790b9e95a8df7e6f4b85487d4e74c85771fbc8837f755bada24c378fc1e",
+      "desk": "financial-analysis",
+      "skill_id": "comps-analysis",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "resource-or-tool-repair-required"
+    },
+    {
+      "path": "finrobot_desktop/skills/financial-analysis/dcf-model/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "1cd1266ba30721835aecc5a85ec9da07559d6894",
+      "sha256": "955d2c16200109fd8d2e66857b858d1acbdf9d76262b1320af1283ecb0d683cf",
+      "desk": "financial-analysis",
+      "skill_id": "dcf-model",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "resource-or-tool-repair-required"
+    },
+    {
+      "path": "finrobot_desktop/skills/financial-analysis/deck-refresh/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "eae16472741f1f4dbec8406d0acdb2ec9218d8d7",
+      "sha256": "c9c9c0db5dcb372225d089bdce026c8d4c27b6b89ffc19656c68cfa1379ea067",
+      "desk": "financial-analysis",
+      "skill_id": "deck-refresh",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/financial-analysis/ib-check-deck/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "fa273a2d9d95a47f7cc01f510fbf3264d792a3a2",
+      "sha256": "b9815b8bf4a3bf9870a25108075c865c960d5be14e93ec66269a1693f4189f3e",
+      "desk": "financial-analysis",
+      "skill_id": "ib-check-deck",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "resource-or-tool-repair-required"
+    },
+    {
+      "path": "finrobot_desktop/skills/financial-analysis/lbo-model/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "2d812f829be144762bf642a22edaa927fbb1380d",
+      "sha256": "a0ca7bd46e08fb62f9c6c620add62c22d5f7bc550726ed9f766b673e921d170f",
+      "desk": "financial-analysis",
+      "skill_id": "lbo-model",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "resource-or-tool-repair-required"
+    },
+    {
+      "path": "finrobot_desktop/skills/financial-analysis/ppt-template-creator/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "38686064272e8bf2ecb7c3485bc78843467538a2",
+      "sha256": "ef54a99426d96745077cb2c3967985028eebc76ef94c53e8a029764364febb1a",
+      "desk": "financial-analysis",
+      "skill_id": "ppt-template-creator",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/financial-analysis/skill-creator/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "7aba1f61d3fd9a3d3022fb32b8d14b19ca6c54d4",
+      "sha256": "48b99cfe50a79851ee86f3715506bc9701ceec778d4e67dd49a797e7407af23e",
+      "desk": "financial-analysis",
+      "skill_id": "skill-creator",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/investment-banking/buyer-list/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "cdbdd25a1e22e38ffe9349cb37917268ee0b3362",
+      "sha256": "afc3e4a6bf2813c0459eef0e3e687287b4fa243d98177d18ce792ce34b71d81a",
+      "desk": "investment-banking",
+      "skill_id": "buyer-list",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/investment-banking/cim-builder/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "f82f57e8dff162fceee39fce5db18064a30aa00f",
+      "sha256": "84d6c767752ff14b4d0f32347630a54559e001dcf6a0640a1ddcbd7d80144ad4",
+      "desk": "investment-banking",
+      "skill_id": "cim-builder",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/investment-banking/datapack-builder/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "3a26267f0535db5b5204ade86e2ac35baa4362cd",
+      "sha256": "da492854d9c05e4e9b3ae2f571235657a700eaf8cea6504f28f9a0ad4b33e3df",
+      "desk": "investment-banking",
+      "skill_id": "datapack-builder",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "resource-or-tool-repair-required"
+    },
+    {
+      "path": "finrobot_desktop/skills/investment-banking/deal-tracker/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "d1ed6c7a0d9e212d3bb861710f07b9904baade77",
+      "sha256": "3fcc0a4bfd0566e6392b9fc04ff6c2dd02b696547c0ab91e3e0ec84580afb26a",
+      "desk": "investment-banking",
+      "skill_id": "deal-tracker",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/investment-banking/merger-model/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "d3b1ced8897a991e143aca5710bf249070fc6554",
+      "sha256": "1a7fa363af0f264e42ddabedca149146d8b105cd3450e281f335d9e2699b4932",
+      "desk": "investment-banking",
+      "skill_id": "merger-model",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/investment-banking/pitch-deck/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "8b6de476818169a66697b23901d6b5e9b11f52e0",
+      "sha256": "275762c9c48b1a917f811168d526138db49aa00a571aa9e593a01639ee001971",
+      "desk": "investment-banking",
+      "skill_id": "pitch-deck",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "resource-or-tool-repair-required"
+    },
+    {
+      "path": "finrobot_desktop/skills/investment-banking/process-letter/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "86d61bc39752e9f86baf02bdfc3326479a19fb7c",
+      "sha256": "80f60bb7c368ce3c20315c45e1b22e73671e367629769bb3f08505c4c8239f87",
+      "desk": "investment-banking",
+      "skill_id": "process-letter",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/investment-banking/strip-profile/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "53630f38a726343a76eca0aaf32b2e376e42a1cb",
+      "sha256": "1d67ce93374eaa22b0d057d3bd1021f92e54cadbce606b3d24ada477bfbb8b85",
+      "desk": "investment-banking",
+      "skill_id": "strip-profile",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "resource-or-tool-repair-required"
+    },
+    {
+      "path": "finrobot_desktop/skills/investment-banking/teaser/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "435a7f4313944fcc83d643eab344a1590b83c324",
+      "sha256": "594135097b6fa51cb5586282ebc63bb5aecbcfa08543547c82ad7ee0e0e77896",
+      "desk": "investment-banking",
+      "skill_id": "teaser",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/partner-lseg/bond-futures-basis/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "1d69afd1481161818da3f9b695d72147bf6c7087",
+      "sha256": "7acbb8f8eeb1829be3596db2b0bac63b8f0f74f5ac56e9d241e189da6ce9fdb7",
+      "desk": "partner-lseg",
+      "skill_id": "bond-futures-basis",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/partner-lseg/bond-relative-value/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "d3812c76fbbb1de15d14891d7d620f213df78fe0",
+      "sha256": "5085be8770ee1e61cd1628929a13b7d87c10df41e2e1390bdca88c23ed240288",
+      "desk": "partner-lseg",
+      "skill_id": "bond-relative-value",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/partner-lseg/equity-research/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "b9e23bd83a4e5edd8c3766723cd8ad28b4402471",
+      "sha256": "c9ca1fece2813a42d7a724c038d2edd7179a9a21e372eadc12a21787755cb3b8",
+      "desk": "partner-lseg",
+      "skill_id": "equity-research",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/partner-lseg/fixed-income-portfolio/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "2974f5ae53d9065f1605fc73297361fa24be603f",
+      "sha256": "11d665a9015c2776c508447401ce624a99e50549862ac619d390b7c8f34ff250",
+      "desk": "partner-lseg",
+      "skill_id": "fixed-income-portfolio",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/partner-lseg/fx-carry-trade/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "8c4e355a60e7f85cee7510ee0515f4119e6f54d4",
+      "sha256": "beeee5201a84ecdfe401fd619ee166bb08ae578c956a7a6983ea0eaa1016d04d",
+      "desk": "partner-lseg",
+      "skill_id": "fx-carry-trade",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/partner-lseg/macro-rates-monitor/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "68c1ca1c256036ad298d22e47b20f26d70b60411",
+      "sha256": "2993b914e026d031066b95880cbdfdc788d7a7253dc405ef7672f9269be8493b",
+      "desk": "partner-lseg",
+      "skill_id": "macro-rates-monitor",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/partner-lseg/option-vol-analysis/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "1be210efc86102d6886806c7dcb34cac67ceed46",
+      "sha256": "8923fe34ce6edfa5b6a43e095efc26c195f43a1409199a700629a018a680f8f9",
+      "desk": "partner-lseg",
+      "skill_id": "option-vol-analysis",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/partner-lseg/swap-curve-strategy/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "284008e249dd60595bf3c3a5f2edaa2a3d80deec",
+      "sha256": "b103877e72b3b63f135156fe21014c52e3e4dedfd2c8d36cb0a52ffb47de29ea",
+      "desk": "partner-lseg",
+      "skill_id": "swap-curve-strategy",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/partner-spglobal/earnings-preview-beta/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "d6258458e2712b280ba68d402f530cb45a102641",
+      "sha256": "c252d027c3b998f2741363ab7e0fd1d170ea7fa502c5b7856858f1a4f326f5ea",
+      "desk": "partner-spglobal",
+      "skill_id": "earnings-preview-beta",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/partner-spglobal/funding-digest/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "327cf87e0cdaf64d2bae680a28c2fd74ef3ba2b2",
+      "sha256": "a71ce94f75b4b842fab4964bbed17324fed92a6d0b9e3b265801de74414a99d4",
+      "desk": "partner-spglobal",
+      "skill_id": "funding-digest",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/partner-spglobal/tear-sheet/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "486cf5f8679e9d5c5051abfa08159e87349875b4",
+      "sha256": "2ff93348bc2111e4a5c23e90dfe6852a845645f2545983eb7418566b65416b2a",
+      "desk": "partner-spglobal",
+      "skill_id": "tear-sheet",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "defer-service-or-maintainer-scope"
+    },
+    {
+      "path": "finrobot_desktop/skills/private-equity/ai-readiness/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "8537ae1fef4be84f3bafe0578ac0fe691d235df7",
+      "sha256": "39017ad7a4bc297fa063f9a06477e58fcf9f18ca5d19de76636e26e36da951ae",
+      "desk": "private-equity",
+      "skill_id": "ai-readiness",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "resource-or-tool-repair-required"
+    },
+    {
+      "path": "finrobot_desktop/skills/private-equity/dd-checklist/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "d7b90d4dcc3fc8a23f3c7d63f07f943ad022dd6c",
+      "sha256": "1a5fee6ae6c2aad9a645ea32a37b2dae5d1618ed8e100e94799393507a5b99f5",
+      "desk": "private-equity",
+      "skill_id": "dd-checklist",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/private-equity/dd-meeting-prep/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "da49a8ea2fb9baf55acda0de767a5d8a4762932c",
+      "sha256": "40f503ac0bcce27bee80a807056ba56299a2c1c730ab41757a561a3303d175a2",
+      "desk": "private-equity",
+      "skill_id": "dd-meeting-prep",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/private-equity/deal-screening/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "8e4367fa7b783565b30bb7656c9c7491da06b412",
+      "sha256": "16aa8372b9913da5da9c5976d17610442111d3de19818131072cf613b395dffa",
+      "desk": "private-equity",
+      "skill_id": "deal-screening",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/private-equity/deal-sourcing/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "ade4df9ca8f4e17cde4fae9deabb3387e7c7ebb1",
+      "sha256": "13442a4b476e07697631f3acba78f8bf2807967ec9563d2cffa9d4b06a9d8513",
+      "desk": "private-equity",
+      "skill_id": "deal-sourcing",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/private-equity/ic-memo/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "943e33cc63e50a520f7590adfee1e2202098b5eb",
+      "sha256": "24a5de0f9f961bf3b9ea0c52e67b712115bb24601545f1bc993eec02644ca19c",
+      "desk": "private-equity",
+      "skill_id": "ic-memo",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/private-equity/portfolio-monitoring/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "926a89e813c7776386535952c57eb6dbbf9c5fe6",
+      "sha256": "340f8bf4d5d679e45574eb63c102ddfda8fc2893d675a61f41d8dc6d762a7ec5",
+      "desk": "private-equity",
+      "skill_id": "portfolio-monitoring",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/private-equity/returns-analysis/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "aeef89043dea99d2f55db0bdbf3c33f591c8725b",
+      "sha256": "4064501e29bf8919e3eb74dc46e117612b6ef030d9bc5a2b036132039acebbf3",
+      "desk": "private-equity",
+      "skill_id": "returns-analysis",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/private-equity/unit-economics/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "d23ccf68f8609c4184135be42340f2e16dd1d11d",
+      "sha256": "9107c7a0b11f1eece54e04e1d3ac4db0a5928fbb76e0333c60d0e174d8d6f899",
+      "desk": "private-equity",
+      "skill_id": "unit-economics",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/private-equity/value-creation-plan/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "9edd60f83d48ca1b0dbb8200166dbbb3bb94cb9f",
+      "sha256": "0e7bb21058e0085d5076182bbe0efb962db50cb2159fdace90b927d4733e9f6e",
+      "desk": "private-equity",
+      "skill_id": "value-creation-plan",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/wealth-management/client-report/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "99ccf41dcf17eeed81470c295e27e9af333dd996",
+      "sha256": "854995d77d7a65912b5c6680e68b6eed3cdae391e4418621eb5fdc5fe8d8f481",
+      "desk": "wealth-management",
+      "skill_id": "client-report",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/wealth-management/client-review/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "740e00cdaf6c0c3538bc4c774c583db9e653f58b",
+      "sha256": "c8de087c5569b7c41ec890e1ff0a33ab285732614f1784f2f02d7621491b4411",
+      "desk": "wealth-management",
+      "skill_id": "client-review",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/wealth-management/financial-plan/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "4c98f5f71372c2a4aec3a0278ff50a5018360a4f",
+      "sha256": "0cdc296b969391c5c6b98d8a61106d375f4e7531a863fc92e4c9ca66bf9fce20",
+      "desk": "wealth-management",
+      "skill_id": "financial-plan",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/wealth-management/investment-proposal/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "de101b426ae63f7da38c70c4f2dc171c03f58f34",
+      "sha256": "928d4d1249f6e4cad718f2710e12001f09f91f07e55b3f33d521b63daa615766",
+      "desk": "wealth-management",
+      "skill_id": "investment-proposal",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/wealth-management/portfolio-rebalance/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "b1fabec216efa12ca687180c66037f9150a49983",
+      "sha256": "dd3c88ef76a34db933f0a338cbeae345b840405e4706aeebf5c6507cbd01c808",
+      "desk": "wealth-management",
+      "skill_id": "portfolio-rebalance",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    },
+    {
+      "path": "finrobot_desktop/skills/wealth-management/tax-loss-harvesting/SKILL.md",
+      "mode": "100644",
+      "kind": "blob",
+      "object_id": "b91d936eeeb576cca08363d4481b84d665517888",
+      "sha256": "6661191dec03b2cde1debae2b76316b13eb5adf17e04a7727e52048b0e33a1d9",
+      "desk": "wealth-management",
+      "skill_id": "tax-loss-harvesting",
+      "source_identity": "anthropic-derived-unpinned",
+      "production_admission": "not-reviewed",
+      "structural_triage": "no-local-resource-gap-identified"
+    }
+  ],
+  "diff": [
+    {
+      "status": "A",
+      "path": ".github/workflows/desktop-ci.yml"
+    },
+    {
+      "status": "M",
+      "path": ".gitignore"
+    },
+    {
+      "status": "M",
+      "path": ".gitmodules"
+    },
+    {
+      "status": "D",
+      "path": ".vscode/settings.json"
+    },
+    {
+      "status": "M",
+      "path": "Dockerfile"
+    },
+    {
+      "status": "M",
+      "path": "README.md"
+    },
+    {
+      "status": "A",
+      "path": "figs/desktop-cockpit.png"
+    },
+    {
+      "status": "A",
+      "path": "figs/desktop-data-sources.png"
+    },
+    {
+      "status": "A",
+      "path": "figs/desktop-dcf.png"
+    },
+    {
+      "status": "A",
+      "path": "figs/desktop-financials.png"
+    },
+    {
+      "status": "A",
+      "path": "figs/desktop-report.png"
+    },
+    {
+      "status": "A",
+      "path": "figs/desktop-valuation.png"
+    },
+    {
+      "status": "A",
+      "path": "figs/desktop-workspace.png"
+    },
+    {
+      "status": "A",
+      "path": "figs/equity-charts.png"
+    },
+    {
+      "status": "A",
+      "path": "figs/equity-report.png"
+    },
+    {
+      "status": "A",
+      "path": "figs/equity-webapp.png"
+    },
+    {
+      "status": "R100",
+      "old_path": "FinNLP",
+      "new_path": "finrobot_autogen/FinNLP"
+    },
+    {
+      "status": "R100",
+      "old_path": "OAI_CONFIG_LIST",
+      "new_path": "finrobot_autogen/OAI_CONFIG_LIST_sample"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_autogen/README.md"
+    },
+    {
+      "status": "R100",
+      "old_path": "agent_builder_demo.py",
+      "new_path": "finrobot_autogen/agent_builder_demo.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "config_api_keys",
+      "new_path": "finrobot_autogen/config_api_keys_sample"
+    },
+    {
+      "status": "R100",
+      "old_path": "configs/save_config_forecaster.json",
+      "new_path": "finrobot_autogen/configs/save_config_forecaster.json"
+    },
+    {
+      "status": "R100",
+      "old_path": "experiments/investment_group.py",
+      "new_path": "finrobot_autogen/experiments/investment_group.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "experiments/multi_factor_agents.py",
+      "new_path": "finrobot_autogen/experiments/multi_factor_agents.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "experiments/portfolio_optimization.py",
+      "new_path": "finrobot_autogen/experiments/portfolio_optimization.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "experiments/quantitative_investment_group_config.json",
+      "new_path": "finrobot_autogen/experiments/quantitative_investment_group_config.json"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/__init__.py",
+      "new_path": "finrobot_autogen/finrobot/__init__.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/agents/__init__.py",
+      "new_path": "finrobot_autogen/finrobot/agents/__init__.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/agents/agent_library.py",
+      "new_path": "finrobot_autogen/finrobot/agents/agent_library.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/agents/prompts.py",
+      "new_path": "finrobot_autogen/finrobot/agents/prompts.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/agents/utils.py",
+      "new_path": "finrobot_autogen/finrobot/agents/utils.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/agents/workflow.py",
+      "new_path": "finrobot_autogen/finrobot/agents/workflow.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/__init__.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/__init__.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/earnings_calls_src/__init__.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/earnings_calls_src/__init__.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/earnings_calls_src/earningsData.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/earnings_calls_src/earningsData.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/earnings_calls_src/main_earningsData.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/earnings_calls_src/main_earningsData.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/filings_src/__init__.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/filings_src/__init__.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/filings_src/prepline_sec_filings/__init__.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/filings_src/prepline_sec_filings/__init__.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/filings_src/prepline_sec_filings/api/__init__.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/filings_src/prepline_sec_filings/api/__init__.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/filings_src/prepline_sec_filings/api/app.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/filings_src/prepline_sec_filings/api/app.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/filings_src/prepline_sec_filings/api/section.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/filings_src/prepline_sec_filings/api/section.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/filings_src/prepline_sec_filings/fetch.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/filings_src/prepline_sec_filings/fetch.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/filings_src/prepline_sec_filings/sec_document.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/filings_src/prepline_sec_filings/sec_document.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/filings_src/prepline_sec_filings/sections.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/filings_src/prepline_sec_filings/sections.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/filings_src/secData.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/filings_src/secData.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/filings_src/sec_filings.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/filings_src/sec_filings.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/filings_src/section_names.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/filings_src/section_names.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/finance_data.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/finance_data.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/finnhub_utils.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/finnhub_utils.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/finnlp_utils.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/finnlp_utils.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/fmp_utils.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/fmp_utils.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/marker_sec_src/__init__.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/marker_sec_src/__init__.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/marker_sec_src/pdf_to_md.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/marker_sec_src/pdf_to_md.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/marker_sec_src/pdf_to_md_parallel.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/marker_sec_src/pdf_to_md_parallel.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/marker_sec_src/sec_filings_to_pdf.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/marker_sec_src/sec_filings_to_pdf.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/reddit_utils.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/reddit_utils.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/sec_utils.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/sec_utils.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/data_source/yfinance_utils.py",
+      "new_path": "finrobot_autogen/finrobot/data_source/yfinance_utils.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/functional/__init__.py",
+      "new_path": "finrobot_autogen/finrobot/functional/__init__.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/functional/analyzer.py",
+      "new_path": "finrobot_autogen/finrobot/functional/analyzer.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/functional/charting.py",
+      "new_path": "finrobot_autogen/finrobot/functional/charting.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/functional/coding.py",
+      "new_path": "finrobot_autogen/finrobot/functional/coding.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/functional/quantitative.py",
+      "new_path": "finrobot_autogen/finrobot/functional/quantitative.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/functional/rag.py",
+      "new_path": "finrobot_autogen/finrobot/functional/rag.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/functional/ragquery.py",
+      "new_path": "finrobot_autogen/finrobot/functional/ragquery.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/functional/reportlab.py",
+      "new_path": "finrobot_autogen/finrobot/functional/reportlab.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/functional/text.py",
+      "new_path": "finrobot_autogen/finrobot/functional/text.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/toolkits.py",
+      "new_path": "finrobot_autogen/finrobot/toolkits.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "finrobot/utils.py",
+      "new_path": "finrobot_autogen/finrobot/utils.py"
+    },
+    {
+      "status": "R100",
+      "old_path": "report/2023-07-27_10-K_msft-20230630.htm.pdf",
+      "new_path": "finrobot_autogen/report/2023-07-27_10-K_msft-20230630.htm.pdf"
+    },
+    {
+      "status": "R100",
+      "old_path": "report/Microsoft_Annual_Report_2023.pdf",
+      "new_path": "finrobot_autogen/report/Microsoft_Annual_Report_2023.pdf"
+    },
+    {
+      "status": "R100",
+      "old_path": "report/NVDA_report.pdf",
+      "new_path": "finrobot_autogen/report/NVDA_report.pdf"
+    },
+    {
+      "status": "R100",
+      "old_path": "requirements.txt",
+      "new_path": "finrobot_autogen/requirements.txt"
+    },
+    {
+      "status": "R100",
+      "old_path": "test_module.py",
+      "new_path": "finrobot_autogen/test_module.py"
+    },
+    {
+      "status": "R099",
+      "old_path": "tutorials_advanced/agent_annual_report.ipynb",
+      "new_path": "finrobot_autogen/tutorials_advanced/agent_annual_report.ipynb"
+    },
+    {
+      "status": "R100",
+      "old_path": "tutorials_advanced/agent_fingpt_forecaster.ipynb",
+      "new_path": "finrobot_autogen/tutorials_advanced/agent_fingpt_forecaster.ipynb"
+    },
+    {
+      "status": "R100",
+      "old_path": "tutorials_advanced/agent_openbb.ipynb",
+      "new_path": "finrobot_autogen/tutorials_advanced/agent_openbb.ipynb"
+    },
+    {
+      "status": "R100",
+      "old_path": "tutorials_advanced/agent_trade_strategist.ipynb",
+      "new_path": "finrobot_autogen/tutorials_advanced/agent_trade_strategist.ipynb"
+    },
+    {
+      "status": "R100",
+      "old_path": "tutorials_advanced/lmm_agent_mplfinance.ipynb",
+      "new_path": "finrobot_autogen/tutorials_advanced/lmm_agent_mplfinance.ipynb"
+    },
+    {
+      "status": "R100",
+      "old_path": "tutorials_advanced/lmm_agent_opt_smacross.ipynb",
+      "new_path": "finrobot_autogen/tutorials_advanced/lmm_agent_opt_smacross.ipynb"
+    },
+    {
+      "status": "R100",
+      "old_path": "tutorials_beginner/agent_annual_report.ipynb",
+      "new_path": "finrobot_autogen/tutorials_beginner/agent_annual_report.ipynb"
+    },
+    {
+      "status": "R100",
+      "old_path": "tutorials_beginner/agent_fingpt_forecaster.ipynb",
+      "new_path": "finrobot_autogen/tutorials_beginner/agent_fingpt_forecaster.ipynb"
+    },
+    {
+      "status": "R100",
+      "old_path": "tutorials_beginner/agent_rag_earnings_call_sec_filings.ipynb",
+      "new_path": "finrobot_autogen/tutorials_beginner/agent_rag_earnings_call_sec_filings.ipynb"
+    },
+    {
+      "status": "R100",
+      "old_path": "tutorials_beginner/agent_rag_qa.ipynb",
+      "new_path": "finrobot_autogen/tutorials_beginner/agent_rag_qa.ipynb"
+    },
+    {
+      "status": "R100",
+      "old_path": "tutorials_beginner/agent_rag_qa_up.ipynb",
+      "new_path": "finrobot_autogen/tutorials_beginner/agent_rag_qa_up.ipynb"
+    },
+    {
+      "status": "R100",
+      "old_path": "tutorials_beginner/ollama function call.ipynb",
+      "new_path": "finrobot_autogen/tutorials_beginner/ollama function call.ipynb"
+    },
+    {
+      "status": "R100",
+      "old_path": "tutorials_beginner/ollama stock chart.ipynb",
+      "new_path": "finrobot_autogen/tutorials_beginner/ollama stock chart.ipynb"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/.gitignore"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/.pre-commit-config.yaml"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/LICENSE"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/README.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/.gitignore"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/.prettierrc"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/eslint.config.js"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/index.html"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/lingui.config.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/package-lock.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/package.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/playwright.config.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/scripts/check-i18n-orphans.mjs"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/scripts/check-i18n-orphans.test.mjs"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/scripts/check-lingui-catalogs.mjs"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/scripts/release.sh"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/.gitignore"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/Cargo.lock"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/Cargo.toml"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/build.rs"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/capabilities/default.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/128x128.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/128x128@2x.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/32x32.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/64x64.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/Square107x107Logo.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/Square142x142Logo.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/Square150x150Logo.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/Square284x284Logo.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/Square30x30Logo.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/Square310x310Logo.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/Square44x44Logo.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/Square71x71Logo.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/Square89x89Logo.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/StoreLogo.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/icon.icns"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/icon.ico"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/icons/icon.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/sidecar/build.sh"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/sidecar/build_sidecar.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/sidecar/entry.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/sidecar/finrobot-server.spec"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/src/lib.rs"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/src/main.rs"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/src/sidecar.rs"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/tauri.conf.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src-tauri/tauri.windows.conf.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/App.css"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/__tests__/cosmic-token-guard.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/backendUrl.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/capability.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/capability.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/client.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/coverage.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/errors.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/fetch.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/fetch.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/queryClient.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/requestLanes.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/requestLanes.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/schema.d.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/api/search.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/assets/app-icon.png"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/AiOnboardingGate.hosted.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/AiOnboardingGate.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/AiOnboardingGate.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/AppFooter.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/ArchivedPill.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/BootSplash.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/BrandAbout.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/ConfidenceChip.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/ErrorBoundary.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/ImpactMeter.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/ImpactMeter.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/MandatoryUpdateGate.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/MarkdownLite.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/MarkdownLite.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/Skeleton.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/SourcedNumber.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/SourcedNumber.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/SplineHero.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/TargetGauge.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/TargetGauge.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/TargetRange.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/TargetRange.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/TermTip.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/Toast.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/ToolCard.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/ToolCard.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/UpdatePill.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/VersionDiffBanner.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/VersionDiffBanner.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/WarningBanner.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/WarningBanner.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/BankTrajectoryChart.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/CashFlowChart.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/CashFlowChart.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/CompanyRadarChart.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/CompanyRadarChart.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/EpsTrendChart.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/EpsTrendChart.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/FootballField.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/FootballField.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/MarginTrendChart.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/MarginTrendChart.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/PeerComparisonChart.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/PeerComparisonChart.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/PriceTrendChart.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/PriceTrendChart.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/RevenueEbitdaChart.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/RevenueEbitdaChart.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/SensitivityHeatmap.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/SensitivityHeatmap.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/WaterfallChart.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/WaterfallChart.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/chartTooltip.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/charts/chartTooltip.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/CoverageCard.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/CoverageCard.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/CoverageCardGrid.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/CoverageEmptyState.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/CoverageHero.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/CoverageHero.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/TickerSuggestions.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/TickerSuggestions.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/coveragePriority.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/coveragePriority.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/coverageSort.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/coverageSort.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/coverageTriage.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/coverage/coverageTriage.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/termDictionary.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/valuation/MarketImpliedPanel.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/components/valuation/MarketImpliedPanel.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/config/deployment.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/config/features.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/config/links.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/export/ReportExportBody.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/export/ReportExportBody.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/export/bundle.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/export/reportExportQueries.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/export/reportExportQueries.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/export/viewer.css"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/export/viewer.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useChatSessions.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useChatSessions.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useCoverage.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useHealth.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useHealth.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useHistoryBack.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useTickerData.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useTickerData.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useTickerSearch.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useTickerSearch.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useTickerSentiment.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useTickerSentiment.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/hooks/useV5Artifacts.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/i18n/__tests__/lingui-smoke.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/i18n/__tests__/missing-key-fallback.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/i18n/index.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/i18n/lingui.d.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/i18n/locales/en/messages.po"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/i18n/locales/zh/messages.po"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/AIPanel/ContextBar.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/AppShell.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/AppShell.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/AiChatTab.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/CoverageTriageStrip.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/CoverageTriageStrip.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/SessionsDrawer.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/chat/AiInputArea.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/chat/AiPanelHeader.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/chat/IconColumn.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/chat/MessageBubble.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/chat/MessageList.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/chat/StatusIndicator.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/chat/constants.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/chat/useChatStream.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/RightChatPanel/index.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/layout/TitleBar.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/lib/__tests__/exportReport.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/lib/artifactKind.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/lib/exportReport.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/lib/icons.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/lib/tauri.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/lib/transcriptReplay.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/lib/transcriptReplay.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/lib/updater.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/main.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/ArtifactDetailPage.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/ArtifactDetailPage.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/CoveragePage.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/CoveragePage.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/ResearchPage.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/SettingsPage.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/CompactArtifactViewer.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/CompactArtifactViewer.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/ComputeWarningsPanel.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/ReportChapters.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/BulletList.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterAuditBanner.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterAuditBanner.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterBase.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterCatalysts.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterCatalysts.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterCompanyOverview.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterCompanyOverview.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterCompetitive.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterCompetitive.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterCover.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterCover.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterDisclaimer.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterDisclaimer.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterFinancialAnalysis.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterFinancialAnalysis.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterFinancialData.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterFinancialData.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterNews.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterNews.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterOwnershipGovernance.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterOwnershipGovernance.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterSensitivity.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterSensitivity.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterTechnical.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterTechnical.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterThesis.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterThesis.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterValuation.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ChapterValuation.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/CompanySnapshot.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/DcfForecastTable.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/DdmPanel.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/FieldCaveat.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/LboPanel.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/MetricModule.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ProfitWaterfall.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/ReverseDcfHeadline.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/__tests__/labels.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/index.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/labels.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/chapters/types.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/reportData.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/reportData.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/shell/ReportLeftRail.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/shell/ReportRightRail.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/shell/ReportToolbar.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/pages/artifact-detail/shell/__tests__/ReportRightRail.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/router.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/stores/coverageStore.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/stores/coverageStore.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/stores/navMemoryStore.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/stores/runStreamStore.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/stores/runStreamStore.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/stores/toastStore.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/stores/uiStore.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/stores/updaterStore.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/styles/tabs.css"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/test-setup.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/types/finance.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/types/v5.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/utils/__tests__/chartAdapters.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/utils/__tests__/errorMessage.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/utils/__tests__/format.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/utils/chartAdapters.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/utils/errorMessage.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/utils/format.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/utils/format.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/utils/ticker.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/utils/verdict.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/PipelineProgressPanel.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/SettingsView.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/SettingsView.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/StockWorkspace.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/StockWorkspace.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/TickerHero.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/TickerHero.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/settings/AiModelPanel.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/settings/AiModelPanel.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/settings/ClearKeyConfirmModal.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/settings/DataSourcesPanel.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/settings/ProviderDropdown.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/settings/SecHoldingsSection.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/settings/UpdatesSection.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/settings/controls.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/settings/secIdentity.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/settings/useSettingsSave.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/settings/useSettingsSave.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/AIZone.autoadvance.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/AIZone.gauge.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/AIZone.runvisibility.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/AIZone.states.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/AIZone.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/MarketDataZone.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/MarketDataZone.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/TechnicalsStrip.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/TickerNotFoundView.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/TickerNotFoundView.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/ValuationInstruments.test.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/ValuationInstruments.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/WorkspaceBackBar.tsx"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/artifactLabels.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/degradedLabel.test.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/degradedLabel.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/src/views/workspace/layout.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/tsconfig.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/tsconfig.node.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/tsconfig.web.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/vite.config.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/desktop/vite.viewer.config.ts"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/dev.sh"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/artifact/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/artifact/builders.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/artifact/contract.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/artifact/field_registry.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/artifact/migrate.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/artifact/models.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/artifact/semantic_diff.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/artifact/sqlite_store.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/artifact/store.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/artifact/summary_extractor.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/audit/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/audit/persistence.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/audit/transcript.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/auth.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/cli.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/config.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/coverage/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/coverage/models.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/coverage/prompt.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/coverage/service.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/coverage/sqlite_store.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/agents/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/agents/factory.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/agents/instructions/analysis_agent.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/agents/instructions/bear_agent.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/agents/instructions/bull_agent.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/agents/instructions/data_agent.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/agents/instructions/judge_agent.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/agents/instructions/modeling_agent.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/agents/instructions/report_agent.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/agents/instructions/synthesis_agent.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/aggregations/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/aggregations/hit_rate_overview.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/aggregations/recent_research.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/analysis/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/analysis/news_classifier.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/analysis/prompts.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/analysis/qa.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/backtest/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/backtest/backtrader_adapter.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/backtest/engine.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/backtest/strategy_agent.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/coordinators/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/coordinators/dcf_seed.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/coordinators/extractor.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/coordinators/historical_extractor.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/coordinators/market.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/coordinators/news.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/coordinators/segment_extractor.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/coordinators/technical_payload.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/audit/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/audit/currency_caliber.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/audit/ev_bridge.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/audit/narrative_divergence.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/audit/narrative_numeric_grounding.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/audit/sector_sign.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/audit/ttm_period.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/catalyst.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/cyclical_peers.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/data_processor.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/dcf.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/dcf_seed.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/ddm.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/ddm_seed.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/earnings.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/forward_estimates.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/fx_normalize.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/lbo.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/lbo_seed.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/monte_carlo.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/multiples.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/ownership.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/peer_screen.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/report_drift.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/residual_income.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/signal.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/sniper.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/sotp.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/sotp_scenario.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/valuation_aggregator.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/valuation_synthesis.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/wacc.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/compute/operators/xbrl_aligned_comps.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/cache.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/datasets/README.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/datasets/build_industry_medians.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/datasets/damodaran_betas_2026-01.xls"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/datasets/damodaran_capex_2026-01.xls"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/datasets/damodaran_margin_2026-01.xls"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/datasets/damodaran_taxrate_2026-01.xls"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/datasets/industry_medians.csv"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/factory.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/historical_loaders.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/industry_defaults.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/interface.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/layer.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/normalize/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/normalize/contracts.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/normalize/currency.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/normalize/financials.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/normalize/forward_estimates.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/normalize/price.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/normalize/session.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/normalize/window.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/provider_health.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/providers/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/providers/adanos_provider.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/providers/edgar_provider.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/providers/finnhub_provider.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/providers/fmp_provider.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/providers/fx.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/providers/news_aggregator.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/providers/yfinance_provider.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/quote_batch.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/quote_cache.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/sec_holdings_cache.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/sec_holdings_sync.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/symbol_index.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/ticker.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/types.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/data/validator.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/deps.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/instructions.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/models/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/models/earnings_call.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/models/financial.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/models/numeric_claim.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/models/reconcile_tolerances.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/models/sec.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/models/valuation_thresholds.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/orchestrator.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/_helpers.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/_thesis_prompt.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/base.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/comps.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/dcf.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/ddm.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/earnings_analysis.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/equity_research.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/ic_memo.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/lbo.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/protocols.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/registry.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/result.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/runner.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/step.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/pipelines/validators.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/primitives/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/primitives/book_value.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/primitives/corporate_actions.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/primitives/dividend.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/primitives/ebitda.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/primitives/historical_valuation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/primitives/industry.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/primitives/market_cap.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/primitives/rag.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/primitives/sentiment.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/services/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/services/market_data.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/skills/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/skills/loader.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/skills/pipeline_methodology.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/skills/registry.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/engine/skills/spec.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/events.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/llm_probe.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/models/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/obs/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/obs/context.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/obs/filters.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/obs/formatters.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/obs/middleware.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/obs/setup.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/paths.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/py.typed"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/ratelimit.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/_artifact_signal.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/_ready.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/artifacts.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/chat_sessions.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/compute.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/coverage.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/dashboard.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/data.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/health.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/runs.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/search.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/sec_holdings.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/sentiment.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/settings.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/routes/valuation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/run_store.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/sdk.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/secret_store.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/server.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/finrobot/warning_text.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/pyproject.toml"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_audit_balance_sheet_truth.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_b1b2_fix_validation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_bank_ddm_research_validation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_cyclical_classifier_basket.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_cyclical_normalization_validation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_cyclical_probe_peers.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_cyclical_probe_profiles.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_cyclical_probe_sec.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_dcf_base_caliber_validation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_dcf_protocol_validation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_ddm_blume_validation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_forward_seed_integration_validation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_peer_determinism_validation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_probe_fmp_stinv_coverage.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_prompt_eval_equity_research.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_regen_aapl_report.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_terminal_fcf_fix_validation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/_verify_gate_live.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/build_truth_anchor.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/convert_skills.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/deploy.sh"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/find_refs.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/probe_cross_caliber.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/probe_derived_fields_truth.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/probe_edgartools_api.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/probe_edgartools_v2.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/probe_foreign_fx_end_to_end.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/probe_numeric_audit_basket.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/probe_review_map.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/probe_workspace_waterfall.cjs"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/refresh_sec_holdings.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/scan_artifact_contract.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/verify_ceo_name_basket.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/verify_fmp_stable_migration.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/verify_report_field_basket.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/verify_rivn_financials.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/scripts/wf_operator_fuzz.js"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/ATTRIBUTION.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/UPSTREAM_VERSION.txt"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/equity-research/catalyst-calendar/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/equity-research/earnings-analysis/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/equity-research/earnings-preview/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/equity-research/idea-generation/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/equity-research/initiating-coverage/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/equity-research/model-update/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/equity-research/morning-note/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/equity-research/sector-overview/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/equity-research/thesis-tracker/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/financial-analysis/3-statement-model/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/financial-analysis/audit-xls/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/financial-analysis/clean-data-xls/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/financial-analysis/competitive-analysis/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/financial-analysis/comps-analysis/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/financial-analysis/dcf-model/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/financial-analysis/deck-refresh/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/financial-analysis/ib-check-deck/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/financial-analysis/lbo-model/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/financial-analysis/ppt-template-creator/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/financial-analysis/skill-creator/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/investment-banking/buyer-list/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/investment-banking/cim-builder/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/investment-banking/datapack-builder/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/investment-banking/deal-tracker/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/investment-banking/merger-model/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/investment-banking/pitch-deck/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/investment-banking/process-letter/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/investment-banking/strip-profile/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/investment-banking/teaser/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/partner-lseg/bond-futures-basis/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/partner-lseg/bond-relative-value/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/partner-lseg/equity-research/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/partner-lseg/fixed-income-portfolio/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/partner-lseg/fx-carry-trade/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/partner-lseg/macro-rates-monitor/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/partner-lseg/option-vol-analysis/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/partner-lseg/swap-curve-strategy/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/partner-spglobal/earnings-preview-beta/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/partner-spglobal/funding-digest/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/partner-spglobal/tear-sheet/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/private-equity/ai-readiness/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/private-equity/dd-checklist/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/private-equity/dd-meeting-prep/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/private-equity/deal-screening/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/private-equity/deal-sourcing/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/private-equity/ic-memo/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/private-equity/portfolio-monitoring/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/private-equity/returns-analysis/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/private-equity/unit-economics/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/private-equity/value-creation-plan/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/wealth-management/client-report/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/wealth-management/client-review/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/wealth-management/financial-plan/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/wealth-management/investment-proposal/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/wealth-management/portfolio-rebalance/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/skills/wealth-management/tax-loss-harvesting/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/conftest.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_artifact_integration.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_catalyst_serialization.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_currency_passthrough.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_field_registry.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_git_commit_stamp.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_historical_metrics_freeze.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_migrate.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_narrative_fallback.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_numeric_audit_gate.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_report_drift_flag.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_routes.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_semantic_diff.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_sqlite_store.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_store.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/artifact/test_summary_text.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_architecture.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_canonical_consumption.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_canonical_contract_traceability.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_chapter_data_sanity.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_chat_integration.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_dcf_red_lines.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_ddm_red_lines.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_fcf_formula_invariants.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_financial_sanity.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_forward_estimates_red_lines.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_historical_nan_resilience.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_historical_valuation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_lbo_red_lines.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_no_direct_yfinance_imports.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_operator_finiteness_gate.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_provider_price_shape.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_proxy_compensation_sanity.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_sec_provenance.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_signal_rules.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_sse_event_contract.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_thesis_prompt_discipline.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_transcript.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_valuation_aggregator.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_valuation_synthesis_methods.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/audit/test_yfinance_error_mapping.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/conftest.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/engine/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/edgar_top_exceptions.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/eightk_tsla.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/eightk_tsla_v2.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/filing_meta_AAPL.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/filing_meta_BRK-B.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/filing_meta_JPM.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/filing_meta_MSFT.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/filing_meta_NVDA.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/filing_meta_TSLA.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/form4_tsla.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/form4_tsla_v2.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/probe_summary.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/proxy_aapl.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/tenk_attributes_real.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/tenk_sections_AAPL.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/tenk_sections_BRK-B.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/tenk_sections_JPM.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/tenk_sections_MSFT.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/tenk_sections_NVDA.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/tenk_sections_TSLA.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/tenk_text_AAPL.txt"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/tenk_text_BRK-B.txt"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/tenk_text_JPM.txt"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/tenq_aapl.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/tenq_aapl_v2.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/thirteenf_probe.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/edgar/xbrl_facts_real.json"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/skills/test-domain-a/test-skill-1/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/skills/test-domain-b/test-skill-2/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/skills/test-domain-b/test-skill-3/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/fixtures/skills/test-domain/test-skill/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/integration/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/integration/conftest.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/integration/test_p0_acceptance.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/integration/test_p1_5_acceptance.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/integration/test_p1a_acceptance.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/integration/test_p1b_acceptance.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_chat_fallback.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_chat_sessions_routes.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_cold_start_warming.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_compute_dcf_sensitivity.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_compute_error_mapping.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_compute_input_validation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_coverage_routes.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_dashboard_landing.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_financials_sector_suppression.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_health.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_historical_bands_route.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_provider_health_route.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_rate_limit.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_search_routes.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_sec_holdings.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_sentiment_route.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/routes/test_valuation_routes.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/test_events.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/__init__.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_adanos_provider.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_agent_factory.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_aggregator_degenerate.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_analysis_prompts.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_analysis_qa.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_artifact_contract.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_artifact_summary_backcompat.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_artifact_summary_extractor.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_audit_company.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_audit_currency_caliber.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_audit_ev_bridge.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_audit_sector_sign.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_audit_ttm_period.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_auth_capability.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_backtest_engine.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_backtrader_adapter.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_bands_current_override.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_batch4.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_beta_relative_floor.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_book_value_primitive.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_cache.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_cache_inflight_lock_gc.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_canonical_currency_normalize.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_catalyst.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_cli.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_cli_logging.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_cold_import.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_comps_pipeline.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_comps_premise_guards.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_config.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_config_p2a.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_corporate_actions.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_coverage_market_implied.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_coverage_prompt.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_coverage_service.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_coverage_store.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_cross_currency_valuation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_cyclical_comps.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_data_interface.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_data_layer.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_data_processor.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_data_types.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_data_validator.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_datatype_alias.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_dcf.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_dcf_pipeline.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_dcf_reconciliation.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_dcf_reference.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_dcf_reverse.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_dcf_reverse_terminal_guard.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_dcf_seed.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_ddm.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_ddm_negative_growth.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_ddm_seed.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_desktop_v1_api.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_dividend_primitive.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_earnings.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_edgar_provider.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_equity_research_forward_seed.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_equity_research_pipeline.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_extractor.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_extractor_da.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_factory.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_financial_data_currency_invariant.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_financial_models.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_financial_models_split.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_find_refs.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_finnhub_provider.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_fmp_provider.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_fmp_provider_pe.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_forward_estimates_canonical.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_forward_estimates_provenance.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_forward_growth_coordinator.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_forward_revenue_growth.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_fx_normalize.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_fx_provider.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_growth_scale_override.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_helpers.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_historical_loaders_fx.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_historical_metrics_cashflow.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_hit_rate_overview.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_industry.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_industry_defaults.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_instructions.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_lbo.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_lbo_reference.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_margin_sanitize.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_market_cap_consistency.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_market_cap_finiteness.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_market_cap_primitive.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_market_data_service.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_market_technicals.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_monte_carlo.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_multiples.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_multiples_finiteness.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_multiples_reference.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_narrative_divergence.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_narrative_numeric_grounding.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_narrative_target_reconcile.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_news.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_normalize_contracts.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_normalize_functions.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_numeric_claim.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_obs_context.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_obs_filters.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_obs_formatters.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_obs_middleware.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_obs_setup.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_orchestrator.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_ownership_compute.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_paths.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_peer_screen.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_pipeline_base.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_pipeline_deterministic_flags.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_pipeline_methodology.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_pipeline_registry.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_price_cross_validate.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_probe_derived_fields_truth.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_prompt_opt.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_property_dcf.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_property_metamorphic.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_provider_health.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_quote_batch.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_quote_cache.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_rag.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_recent_research.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_refresh_sec_holdings.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_report_drift.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_rerating_disclosure.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_residual_income.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_route_artifact_signal.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_routes_catalysts.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_routes_data_provider_note.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_routes_earnings_calls.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_routes_historical.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_routes_price_period.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_routes_runs_trace.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_routes_settings.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_run_store_migration.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_run_store_reconcile.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_runs_routes.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_sdk.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_sec_holdings_cache.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_sec_holdings_sync.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_secret_store.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_segment_extractor.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_server.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_session.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_signal_band_scale.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_signal_finite_prices.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_signal_zero_progress.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_skill_loader.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_skill_registry.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_skill_spec.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_sniper.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_sotp.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_sotp_scenario.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_step_output_typed.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_strategy_agent.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_streaming.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_surprise_finiteness.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_symbol_index.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_technical_payload.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_thesis_prompt.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_ticker.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_ttm_frequency.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_validators.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_validators_v2.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_valuation_synthesis.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_verify_report_field_basket.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_wacc.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_wacc_reference.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_warning_text.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_xbrl_aligned_comps.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tests/unit/test_yfinance_provider.py"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tutorials/01_equity_research.ipynb"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tutorials/02_dcf_valuation.ipynb"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tutorials/03_backtest.ipynb"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/tutorials/04_rag_qa.ipynb"
+    },
+    {
+      "status": "A",
+      "path": "finrobot_desktop/uv.lock"
+    },
+    {
+      "status": "M",
+      "path": "finrobot_equity/README.md"
+    },
+    {
+      "status": "D",
+      "path": "finrobot_equity/core/requirements.txt"
+    },
+    {
+      "status": "R092",
+      "old_path": "deploy.gcloud.sh",
+      "new_path": "finrobot_equity/deploy.gcloud.sh"
+    },
+    {
+      "status": "R095",
+      "old_path": "deploy.sh",
+      "new_path": "finrobot_equity/deploy.sh"
+    },
+    {
+      "status": "R051",
+      "old_path": "requirements-equity.txt",
+      "new_path": "finrobot_equity/requirements.txt"
+    },
+    {
+      "status": "R089",
+      "old_path": "run_web_app.py",
+      "new_path": "finrobot_equity/run_web_app.py"
+    },
+    {
+      "status": "M",
+      "path": "setup.py"
+    }
+  ]
+}

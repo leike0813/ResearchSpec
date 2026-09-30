@@ -1,0 +1,238 @@
+{
+  "schema_version": "1",
+  "vendor_id": "finrobot",
+  "anchor_id": "snapshot-2717499",
+  "generated": "2026-09-30T11:29:56Z",
+  "registry_version": "0.7.0",
+  "capabilities": [
+    {
+      "capability_id": "plugin-financial-company-fundamentals",
+      "raw_skill_id": "financial-research-company-fundamentals",
+      "execution_type": "mixed",
+      "class": "analysis",
+      "node_kind": "producer",
+      "maturity": "operational",
+      "gate_policy": "advisory",
+      "inputs": 1,
+      "outputs": 1,
+      "knowledge_refs": 2,
+      "validators": 2,
+      "script_validator": "company-fundamentals-brief-validator",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "business_model",
+        "historical_metrics",
+        "scenarios",
+        "forecast_tables",
+        "conclusions",
+        "numeric_evidence"
+      ],
+      "required_ok": true,
+      "package_tree_sha256": "38deebaaab8f3d8c3304829cb895c65d8fd300d90a104505ffc3c9425eb0ff97",
+      "profile_sha256": "a1a000fe73c9ccbbc79565969bec18d10c7b7f47bad09137fdde7af79b18648a",
+      "manifest_sha256": "5497a06894403e84a8c58a84c96deb36c12435ad306e8b126a95b656b2186084",
+      "files": 5,
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/finrobot/financial-research-company-fundamentals/scripts/fundamentals.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-financial-company-fundamentals/tools/fundamentals.py",
+          "sha256": "c13a2a3d909a194899ba82ce9f8e11952140f9844ccd5fe545c9a2489b544a2d",
+          "byte_identical": true
+        },
+        {
+          "source": "skills/plugins/vendors/finrobot/financial-research-company-fundamentals/lib/financial_support.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-financial-company-fundamentals/tools/financial_support.py",
+          "sha256": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c",
+          "byte_identical": true
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-financial-competitive-position",
+      "raw_skill_id": "financial-research-competitive-position",
+      "execution_type": "llm",
+      "class": "analysis",
+      "node_kind": "producer",
+      "maturity": "operational",
+      "gate_policy": "advisory",
+      "inputs": 1,
+      "outputs": 1,
+      "knowledge_refs": 0,
+      "validators": 1,
+      "script_validator": null,
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "peer_ledger",
+        "normalized_comparison",
+        "moat_assessment",
+        "valuation_interpretation",
+        "conclusions"
+      ],
+      "required_ok": true,
+      "package_tree_sha256": "cecb765b11ae254f8ec40dafbac76b94734aec3c3a7a62b2625f600e421989d2",
+      "profile_sha256": "53603aa27c517aadbaa4244ff17ca34a158e3577ffc06377bc9d078c59d3c927",
+      "manifest_sha256": "afc30c39ab3063fa182124b16f6996280f31e69e3cfe943bc2d2945963fa8a9f",
+      "files": 2,
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-financial-corporate-risk",
+      "raw_skill_id": "financial-research-corporate-risk",
+      "execution_type": "llm",
+      "class": "analysis",
+      "node_kind": "producer",
+      "maturity": "operational",
+      "gate_policy": "advisory",
+      "inputs": 1,
+      "outputs": 1,
+      "knowledge_refs": 0,
+      "validators": 1,
+      "script_validator": null,
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "risk_register",
+        "transmission_paths",
+        "mitigants",
+        "residual_exposure",
+        "monitoring_indicators",
+        "conclusions"
+      ],
+      "required_ok": true,
+      "package_tree_sha256": "6c8fd287cd0deaf4427b57d5419cc212bc7594aa4cea8e9c0668d76f4e44f281",
+      "profile_sha256": "d67d1be5c5c0f733604bd113faeacb8482a17a237edc47f7d6f7a14f2c1a7791",
+      "manifest_sha256": "7a84329c0324591348e5bf984c25be0c1435bf776c1735bf8ee221f09a2c9c45",
+      "files": 2,
+      "tool_files": []
+    },
+    {
+      "capability_id": "plugin-financial-event-evidence",
+      "raw_skill_id": "financial-research-event-evidence",
+      "execution_type": "mixed",
+      "class": "analysis",
+      "node_kind": "producer",
+      "maturity": "operational",
+      "gate_policy": "advisory",
+      "inputs": 1,
+      "outputs": 1,
+      "knowledge_refs": 2,
+      "validators": 2,
+      "script_validator": "event-evidence-brief-validator",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "event_timeline",
+        "duplicate_decisions",
+        "assessments",
+        "ranking",
+        "conclusions"
+      ],
+      "required_ok": true,
+      "package_tree_sha256": "2f3667d543a9d0397e4b6484ab1891c765a3d383b259fef01751807a1e525f95",
+      "profile_sha256": "d1b441c425c107eead5c0d0f4e0e144192f08e5b2acb3ae26d3a00ba5106044f",
+      "manifest_sha256": "f5162089013aae243e897c9067d7895fd6ae8d97c0176027b3e1d4827722b4c0",
+      "files": 5,
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/finrobot/financial-research-event-evidence/scripts/event_evidence.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-financial-event-evidence/tools/event_evidence.py",
+          "sha256": "f564763b655b1ab77de3a92967dce667e6ce70eeba308dbeec5f000a34cdd3a7",
+          "byte_identical": true
+        },
+        {
+          "source": "skills/plugins/vendors/finrobot/financial-research-event-evidence/lib/financial_support.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-financial-event-evidence/tools/financial_support.py",
+          "sha256": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c",
+          "byte_identical": true
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-financial-relative-valuation",
+      "raw_skill_id": "financial-research-relative-valuation",
+      "execution_type": "mixed",
+      "class": "analysis",
+      "node_kind": "producer",
+      "maturity": "operational",
+      "gate_policy": "advisory",
+      "inputs": 1,
+      "outputs": 1,
+      "knowledge_refs": 2,
+      "validators": 2,
+      "script_validator": "relative-valuation-brief-validator",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "assumptions",
+        "method_results",
+        "sensitivity",
+        "fair_value_range",
+        "conclusions",
+        "comparability_checks",
+        "equity_bridge"
+      ],
+      "required_ok": true,
+      "package_tree_sha256": "d44ce5e311f1fda1ae402f760b48a27e0853531495f96991e03813cc6da6de79",
+      "profile_sha256": "4e4ce4246971058f469c7f543a8e35176e93606ad16fc36ff19ac0a62beb73ee",
+      "manifest_sha256": "458af2af9c32359e650ea18f0ba68fa9b3017898d539eeaa9856df774cc81ea8",
+      "files": 5,
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/finrobot/financial-research-relative-valuation/scripts/valuation.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-financial-relative-valuation/tools/valuation.py",
+          "sha256": "f4e9975e2859473925063f73afe42da06fc48c6cde11b22d79ff99ebb8716374",
+          "byte_identical": true
+        },
+        {
+          "source": "skills/plugins/vendors/finrobot/financial-research-relative-valuation/lib/financial_support.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-financial-relative-valuation/tools/financial_support.py",
+          "sha256": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c",
+          "byte_identical": true
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-financial-statement-analysis",
+      "raw_skill_id": "financial-research-statement-analysis",
+      "execution_type": "mixed",
+      "class": "analysis",
+      "node_kind": "producer",
+      "maturity": "operational",
+      "gate_policy": "advisory",
+      "inputs": 1,
+      "outputs": 1,
+      "knowledge_refs": 2,
+      "validators": 2,
+      "script_validator": "statement-brief-validator",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "normalized_statements",
+        "metrics",
+        "conclusions",
+        "evidence_checks"
+      ],
+      "required_ok": true,
+      "package_tree_sha256": "0c8daf72a99995b438e831e2cef9b4f32991da886cf29a870e5f57d95d8f9e83",
+      "profile_sha256": "12fd1b179b8ec29ffef0e981f6e3241788d85d02762d626cd7b70e6d2be33008",
+      "manifest_sha256": "f1e89dae4bc4dac8b42556c7304691adea18b9d576121084689dd9a49cf9a9a7",
+      "files": 5,
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/finrobot/financial-research-statement-analysis/scripts/statements.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-financial-statement-analysis/tools/statements.py",
+          "sha256": "bb5a82877c1d70e6c8c7dff4a509e4451255e2ebe50e858b9bbd2714c7067085",
+          "byte_identical": true
+        },
+        {
+          "source": "skills/plugins/vendors/finrobot/financial-research-statement-analysis/lib/financial_support.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-financial-statement-analysis/tools/financial_support.py",
+          "sha256": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c",
+          "byte_identical": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "schema_version": "1",
+  "vendor_id": "finrobot",
+  "anchor_id": "snapshot-2717499",
+  "review_status": "pending-human-review",
+  "revision": "2717499b8e30f242640af08c4ad9afd1113c2d45",
+  "audit_sha256": "3a592982ff4bd9f53853ef56b958e330593d7b70594622580975bafa3727884b",
+  "candidate_tree_set_sha256": "1a101495abecacbc702a8ce8fd3b376631b88e9cc45de3d9a216d6aaedb3a4c6",
+  "review_sha256": "c589313de43ec4926bcec01871f55cd6a1eeab6239330f5c083e5c9cdcdb10dc",
+  "registry_subset_sha256": "d7eacbac9fafc76733df88947e554df33960de766343d0fe05aa97ac6e75089e",
+  "packages_tree_sha256": "ee56c24ea0be04691cbdc8fa5f2b0911feab6e6ce7ae36440a89a34b7a5854e7",
+  "profiles_tree_sha256": "82ca68e84308925a269845cf5316f61b4acad4265329ebe31d2d8f8154996f49",
+  "capabilities": [
+    {
+      "capability_id": "plugin-financial-company-fundamentals",
+      "execution_type": "mixed",
+      "manifest_sha256": "40eed58159d193d2887f4aacf195dd86aae53233358be8005646804d096d05e2",
+      "package_tree_sha256": "69fbe0e0d44c751c8ecb3247c391a90e636450944facbbeeb757c0a399734559",
+      "file_count": 5,
+      "profile_sha256": "a1a000fe73c9ccbbc79565969bec18d10c7b7f47bad09137fdde7af79b18648a",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "business_model",
+        "historical_metrics",
+        "scenarios",
+        "forecast_tables",
+        "conclusions",
+        "numeric_evidence"
+      ],
+      "knowledge_refs": [
+        {
+          "knowledge_id": "company-fundamentals-tool",
+          "path": "tools/fundamentals.py",
+          "content_hash": "c13a2a3d909a194899ba82ce9f8e11952140f9844ccd5fe545c9a2489b544a2d",
+          "license": "Apache-2.0"
+        },
+        {
+          "knowledge_id": "financial-support",
+          "path": "tools/financial_support.py",
+          "content_hash": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c",
+          "license": "Apache-2.0"
+        }
+      ],
+      "gate_policy": "advisory"
+    },
+    {
+      "capability_id": "plugin-financial-competitive-position",
+      "execution_type": "llm",
+      "manifest_sha256": "4c8bc7b2c1baf39877412795bb081709699d46cc2fd2633861453cd97c7c7679",
+      "package_tree_sha256": "14d96607bd765728fcf332364451ff8e783f06f48d9323624441b9b77d7315fa",
+      "file_count": 2,
+      "profile_sha256": "53603aa27c517aadbaa4244ff17ca34a158e3577ffc06377bc9d078c59d3c927",
+      "required_brief_fields": [],
+      "knowledge_refs": [],
+      "gate_policy": "advisory"
+    },
+    {
+      "capability_id": "plugin-financial-corporate-risk",
+      "execution_type": "llm",
+      "manifest_sha256": "ca621ca4820aa9efe373d6955e61f3491ee8360385a5a636be8c58a2eb243d1a",
+      "package_tree_sha256": "1da4f8136e41f5e495afc0c73490ffb3010d0d1165146887dae42a652bec40cb",
+      "file_count": 2,
+      "profile_sha256": "d67d1be5c5c0f733604bd113faeacb8482a17a237edc47f7d6f7a14f2c1a7791",
+      "required_brief_fields": [],
+      "knowledge_refs": [],
+      "gate_policy": "advisory"
+    },
+    {
+      "capability_id": "plugin-financial-event-evidence",
+      "execution_type": "mixed",
+      "manifest_sha256": "126b8b09ee57dc50645e5a05aebabd08e184c9dd2ed910c8f6dcb9f8e541b2d7",
+      "package_tree_sha256": "5c667f68162bd4539802cb31a7966aba8a0788b78476713f72f78f31d8213007",
+      "file_count": 5,
+      "profile_sha256": "d1b441c425c107eead5c0d0f4e0e144192f08e5b2acb3ae26d3a00ba5106044f",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "event_timeline",
+        "duplicate_decisions",
+        "assessments",
+        "ranking",
+        "conclusions"
+      ],
+      "knowledge_refs": [
+        {
+          "knowledge_id": "event-evidence-tool",
+          "path": "tools/event_evidence.py",
+          "content_hash": "f564763b655b1ab77de3a92967dce667e6ce70eeba308dbeec5f000a34cdd3a7",
+          "license": "Apache-2.0"
+        },
+        {
+          "knowledge_id": "financial-support",
+          "path": "tools/financial_support.py",
+          "content_hash": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c",
+          "license": "Apache-2.0"
+        }
+      ],
+      "gate_policy": "advisory"
+    },
+    {
+      "capability_id": "plugin-financial-relative-valuation",
+      "execution_type": "mixed",
+      "manifest_sha256": "4720e3b81227165ca9947e35d5342fbc39adff40c377006dcccd3575d856a038",
+      "package_tree_sha256": "605008808b2de3398862324a4f50ad1ec7e14b30860b4f2702a954b5e51fa063",
+      "file_count": 5,
+      "profile_sha256": "4e4ce4246971058f469c7f543a8e35176e93606ad16fc36ff19ac0a62beb73ee",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "assumptions",
+        "method_results",
+        "sensitivity",
+        "fair_value_range",
+        "conclusions",
+        "comparability_checks",
+        "equity_bridge"
+      ],
+      "knowledge_refs": [
+        {
+          "knowledge_id": "relative-valuation-tool",
+          "path": "tools/valuation.py",
+          "content_hash": "f4e9975e2859473925063f73afe42da06fc48c6cde11b22d79ff99ebb8716374",
+          "license": "Apache-2.0"
+        },
+        {
+          "knowledge_id": "financial-support",
+          "path": "tools/financial_support.py",
+          "content_hash": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c",
+          "license": "Apache-2.0"
+        }
+      ],
+      "gate_policy": "advisory"
+    },
+    {
+      "capability_id": "plugin-financial-statement-analysis",
+      "execution_type": "mixed",
+      "manifest_sha256": "ed7bdf679853e79f2f6fd88ce2ff51989db9ac6d70f838a12b980767cdd0ee84",
+      "package_tree_sha256": "d0dab79e1251c23c114b67c6f9815e5c7e060e3cfb219fbc272f0d4107d9f841",
+      "file_count": 5,
+      "profile_sha256": "12fd1b179b8ec29ffef0e981f6e3241788d85d02762d626cd7b70e6d2be33008",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "normalized_statements",
+        "metrics",
+        "conclusions",
+        "evidence_checks"
+      ],
+      "knowledge_refs": [
+        {
+          "knowledge_id": "statement-tool",
+          "path": "tools/statements.py",
+          "content_hash": "bb5a82877c1d70e6c8c7dff4a509e4451255e2ebe50e858b9bbd2714c7067085",
+          "license": "Apache-2.0"
+        },
+        {
+          "knowledge_id": "financial-support",
+          "path": "tools/financial_support.py",
+          "content_hash": "9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c",
+          "license": "Apache-2.0"
+        }
+      ],
+      "gate_policy": "advisory"
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "accounting-auditing-and-accountability",
+      "capabilities": [
+        "plugin-financial-company-fundamentals",
+        "plugin-financial-statement-analysis"
+      ],
+      "profiles": [
+        "plugin-financial-company-fundamentals",
+        "plugin-financial-statement-analysis"
+      ]
+    },
+    {
+      "domain_id": "banking-finance-and-investment",
+      "capabilities": [
+        "plugin-financial-company-fundamentals",
+        "plugin-financial-competitive-position",
+        "plugin-financial-corporate-risk",
+        "plugin-financial-event-evidence",
+        "plugin-financial-relative-valuation",
+        "plugin-financial-statement-analysis"
+      ],
+      "profiles": [
+        "plugin-financial-company-fundamentals",
+        "plugin-financial-competitive-position",
+        "plugin-financial-corporate-risk",
+        "plugin-financial-event-evidence",
+        "plugin-financial-relative-valuation",
+        "plugin-financial-statement-analysis"
+      ]
+    }
+  ]
+}

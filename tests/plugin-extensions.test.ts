@@ -204,6 +204,7 @@ void test("script-validated plugin extension capability runs through advance", a
       source_ledger: [{ source: "10-K", period: "2024" }],
       normalized_statements: [{ period: "2024", revenue: 100 }],
       metrics: { net_margin: 0.1 },
+      evidence_checks: { period_comparability: "annual, consolidated, USD", source_independence: "single filing; corroboration pending" },
       conclusions: "Traceable normalized results with unresolved assumptions noted.",
     }), "utf8");
     const valid = parseEnvelope<{ node: { state: string } }>(runCli(["advance", `node:${runId}/research`, "--input", advanceInput, "--json"], root));
@@ -226,6 +227,7 @@ void test("every FinRobot extension profile runs through the graph engine", asyn
         historical_metrics: { net_margin: 0.1 },
         scenarios: [{ name: "base", years: 3 }],
         forecast_tables: [{ year: 2027, revenue: 110 }],
+        numeric_evidence: [{ metric: "revenue", reported: 100, normalized: 100, unit: "USD millions", source: "10-K" }],
         conclusions: "Traceable calculations with explicit assumptions.",
       },
     },
@@ -279,6 +281,8 @@ void test("every FinRobot extension profile runs through the graph engine", asyn
         method_results: { dcf: { value_per_share: 42 } },
         sensitivity: [{ variable: "discount_rate", values: [{ value: 0.09, result: 45 }] }],
         fair_value_range: { low: 38, high: 47 },
+        comparability_checks: { status: "conditional", reason: "Single-method result; no certified composite" },
+        equity_bridge: { enterprise_value: 450, net_debt: 30, shares: 10, value_per_share: 42 },
         conclusions: "Explained range with counterevidence.",
       },
     },
@@ -290,6 +294,7 @@ void test("every FinRobot extension profile runs through the graph engine", asyn
         source_ledger: [{ source: "10-K", period: "2024" }],
         normalized_statements: [{ period: "2024", revenue: 100 }],
         metrics: { net_margin: 0.1 },
+        evidence_checks: { period_comparability: "annual, consolidated, USD", source_independence: "single filing; corroboration pending" },
         conclusions: "Traceable normalized results with unresolved assumptions noted.",
       },
     },

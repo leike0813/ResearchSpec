@@ -81,6 +81,7 @@ export const FinRobotKnowledgeSurfaceSchema = z.strictObject({
     "financial-assumption",
     "orchestration-prompt",
     "text-generation-prompt",
+    "skill-document",
   ]),
   scope: z.enum(["financial-research", "generic-agent-runtime", "execution-runtime", "data-provider-integration"]),
   disposition: z.enum(["candidate", "evidence-only", "exclude"]),
@@ -137,7 +138,7 @@ export const FinRobotAuditSchema = z.strictObject({
   policy: z.strictObject({
     audit_is_admission: z.literal(false),
     future_change: z.literal("ingest-finrobot"),
-    source_has_upstream_skills: z.literal(false),
+    source_has_upstream_skills: z.boolean(),
     nested_gitlinks_initialized: z.literal(false),
     allowed_domains: z.array(FinRobotProspectiveDomainSchema).length(2),
     anzsrc_field_creates_membership: z.literal(false),
@@ -146,12 +147,12 @@ export const FinRobotAuditSchema = z.strictObject({
     personalized_advice_authority: z.literal(false),
   }),
   summary: z.strictObject({
-    tracked_entries: z.literal(146),
+    tracked_entries: z.number().int().positive(),
     files: z.number().int().nonnegative(),
     executables: z.number().int().nonnegative(),
-    gitlinks: z.literal(1),
+    gitlinks: z.number().int().nonnegative(),
     file_bytes: z.number().int().nonnegative(),
-    knowledge_surfaces: z.literal(66),
+    knowledge_surfaces: z.number().int().nonnegative(),
     candidate_capabilities: z.literal(6),
     content_origins: z.number().int().positive(),
     license_claims: z.number().int().positive(),
@@ -160,8 +161,8 @@ export const FinRobotAuditSchema = z.strictObject({
   content_origins: z.array(FinRobotContentOriginSchema).min(1),
   license_claims: z.array(FinRobotLicenseClaimSchema).min(1),
   findings: z.array(VendorAuditFindingSchema).min(1),
-  source_entries: z.array(FinRobotSourceEntrySchema).length(146),
-  knowledge_surfaces: z.array(FinRobotKnowledgeSurfaceSchema).length(66),
+  source_entries: z.array(FinRobotSourceEntrySchema).min(1),
+  knowledge_surfaces: z.array(FinRobotKnowledgeSurfaceSchema),
   candidate_capabilities: z.array(FinRobotCandidateCapabilitySchema).length(6),
 }).superRefine((value, context) => {
   validateUnique(value.content_origins.map((item) => item.origin_id), "content origins", ["content_origins"], context);
@@ -177,14 +178,36 @@ export const FinRobotAuditSchema = z.strictObject({
   for (const [index, surface] of value.knowledge_surfaces.entries()) {
     if (!origins.has(surface.content_origin_id)) context.addIssue({ code: "custom", message: "unknown content origin", path: ["knowledge_surfaces", index, "content_origin_id"] });
     if (!sourcePaths.has(surface.source_path)) context.addIssue({ code: "custom", message: "knowledge surface source is not inventoried", path: ["knowledge_surfaces", index, "source_path"] });
+    if (value.source_entries.find((entry) => entry.path === surface.source_path)?.content_origin_id !== surface.content_origin_id) context.addIssue({ code: "custom", message: "surface origin differs from its source", path: ["knowledge_surfaces", index, "content_origin_id"] });
   }
   for (const [index, candidate] of value.candidate_capabilities.entries()) {
     for (const surfaceId of candidate.source_surface_ids) if (!surfaceIds.has(surfaceId)) context.addIssue({ code: "custom", message: "candidate references unknown surface", path: ["candidate_capabilities", index, "source_surface_ids"] });
+  }
+  for (const [index, origin] of value.content_origins.entries()) {
+    for (const scope of origin.scope) if (![...sourcePaths].some((source) => source === scope || source.startsWith(`${scope}/`))) context.addIssue({ code: "custom", message: "origin scope is not inventoried", path: ["content_origins", index] });
+    for (const evidence of origin.content_license.evidence) if (!sourcePaths.has(evidence)) context.addIssue({ code: "custom", message: "origin evidence is not inventoried", path: ["content_origins", index] });
+  }
+  for (const [index, claim] of value.license_claims.entries()) {
+    for (const scope of claim.scope) if (![...sourcePaths].some((source) => source === scope || source.startsWith(`${scope}/`))) context.addIssue({ code: "custom", message: "license scope is not inventoried", path: ["license_claims", index] });
+    for (const evidence of claim.evidence) if (!sourcePaths.has(evidence)) context.addIssue({ code: "custom", message: "license evidence is not inventoried", path: ["license_claims", index] });
   }
 
   const files = value.source_entries.filter((entry) => entry.kind === "file").length;
   const executables = value.source_entries.filter((entry) => entry.kind === "executable").length;
   const bytes = value.source_entries.reduce((sum, entry) => sum + (entry.bytes ?? 0), 0);
+  const counts = {
+    tracked_entries: value.source_entries.length,
+    knowledge_surfaces: value.knowledge_surfaces.length,
+    candidate_capabilities: value.candidate_capabilities.length,
+    gitlinks: value.source_entries.filter((entry) => entry.kind === "gitlink").length,
+  };
+  const risks: Record<string, number> = {};
+  for (const surface of value.knowledge_surfaces) for (const risk of surface.operational_risks) risks[risk] = (risks[risk] ?? 0) + 1;
+  if (Object.entries(risks).some(([key, count]) => value.summary.risk_counts[key] !== count) || Object.keys(value.summary.risk_counts).some((key) => !(key in risks))) context.addIssue({ code: "custom", message: "risk summary mismatch", path: ["summary", "risk_counts"] });
+  for (const [key, count] of Object.entries(counts)) {
+    if (value.summary[key as keyof typeof counts] !== count) context.addIssue({ code: "custom", message: `${key} summary mismatch`, path: ["summary", key] });
+  }
+  if (value.policy.source_has_upstream_skills !== value.source_entries.some((entry) => entry.path.endsWith("/SKILL.md") || entry.path === "SKILL.md")) context.addIssue({ code: "custom", message: "upstream Skill presence mismatch", path: ["policy", "source_has_upstream_skills"] });
   if (value.summary.files !== files) context.addIssue({ code: "custom", message: "file summary mismatch", path: ["summary", "files"] });
   if (value.summary.executables !== executables) context.addIssue({ code: "custom", message: "executable summary mismatch", path: ["summary", "executables"] });
   if (value.summary.file_bytes !== bytes) context.addIssue({ code: "custom", message: "byte summary mismatch", path: ["summary", "file_bytes"] });

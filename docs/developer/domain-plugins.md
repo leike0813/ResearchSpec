@@ -41,9 +41,10 @@ v2.53.0 contributes 49 reviewed, vendor-prefixed Skills after complete admission
 decisions for all 147 audit records and finding-level decisions for all 40
 manual-security targets. Materials-Science-Skills-For-LLM
 `snapshot-fafd3ab` contributes seven curated Skills after resolving all twelve
-audit records and all 24 admitted source files. FinRobot `snapshot-297a8d2`
+audit records and all 24 admitted source files. FinRobot `snapshot-2717499`
 contributes six neutral, capability-complete financial research Skills after
-resolving all 146 source entries and 66 knowledge surfaces. HistAgent
+resolving all 1,049 source entries and 129 knowledge surfaces (56 third-party
+Skill copies remain excluded). HistAgent
 `snapshot-47bbe21` contributes three independently authored, hash-approved
 historical research Skills after resolving all 120 source entries and 21
 admitted capability surfaces. Education Agent Skills `snapshot-32fce5c`
@@ -112,7 +113,7 @@ The Materials-Science-Skills-For-LLM converter independently:
 
 The FinRobot converter independently:
 
-- binds the archived immutable `snapshot-297a8d2` audit and the explicitly approved complete-tree hash;
+- binds the archived immutable `snapshot-2717499` audit and the explicitly approved complete-tree hash;
 - admits six neutral `financial-research-*` Skills as complete ResearchSpec-authored non-native trees;
 - publishes four script-assisted Skills with tree-local deterministic Python entrypoints and two complete Agent-procedure Skills;
 - excludes provider wrappers, AgentSpec JSON, dependency manifests, prompt factories, credential handling, and automatic network access;

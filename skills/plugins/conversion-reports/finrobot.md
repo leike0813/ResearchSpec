@@ -1,12 +1,12 @@
 # FinRobot Vendor Conversion
 
-- Release: `snapshot-297a8d2`
-- Revision: `297a8d28d099be328c8a8eb658b4f782b93f3651`
-- Audit SHA-256: `6b518a933f036333203276263b94cc5b4bd45a924f426972c4547165c5cbb9c3`
+- Release: `snapshot-2717499`
+- Revision: `2717499b8e30f242640af08c4ad9afd1113c2d45`
+- Audit SHA-256: `3a592982ff4bd9f53853ef56b958e330593d7b70594622580975bafa3727884b`
 - Converter version: `2`
-- Approved complete-tree SHA-256: `eecf6fc9e7669f46ef9c58d4fd5938cabedb6d8d7aceac59e15688e178f3765e`
+- Approved complete-tree SHA-256: `1a101495abecacbc702a8ce8fd3b376631b88e9cc45de3d9a216d6aaedb3a4c6`
 - Generated Skills: 6
-- Capability implementations: 16 Agent procedures, 16 bundled-script mappings, 0 external-tool mappings
+- Capability implementations: 17 Agent procedures, 22 bundled-script mappings, 0 external-tool mappings
 - Formal entrypoints: 4; shared support copies: 4; references: 0
 - Generated files: 32
 - Advisory relationships: 6; 0 hard dependencies

@@ -4,7 +4,7 @@ description: Identify, trace, prioritize, and monitor company and investment ris
 license: Apache-2.0
 metadata:
   vendor: finrobot
-  vendor-release: snapshot-297a8d2
+  vendor-release: snapshot-2717499
 ---
 
 # Corporate Risk Research

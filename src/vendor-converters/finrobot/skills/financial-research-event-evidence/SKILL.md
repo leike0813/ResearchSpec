@@ -4,7 +4,7 @@ description: Prepare, deduplicate, assess, and rank financial events and catalys
 license: Apache-2.0
 metadata:
   vendor: finrobot
-  vendor-release: snapshot-297a8d2
+  vendor-release: snapshot-2717499
 ---
 
 # Financial Event And Catalyst Research

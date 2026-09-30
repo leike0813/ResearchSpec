@@ -45,8 +45,8 @@ Package, service, dataset, hardware, and runtime licenses referenced by those Sk
 ResearchSpec distributes reviewed Skills derived from FinRobot:
 
 - Source: https://github.com/AI4Finance-Foundation/FinRobot
-- Release: snapshot-297a8d2
-- Revision: 297a8d28d099be328c8a8eb658b4f782b93f3651
+- Release: snapshot-2717499
+- Revision: 2717499b8e30f242640af08c4ad9afd1113c2d45
 - Content license: Apache License 2.0, preserved in every generated Skill's `LICENSE` and `NOTICE`
 
 FinRobot-derived Skills contain ResearchSpec-authored Agent procedures and four

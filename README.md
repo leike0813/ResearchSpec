@@ -56,7 +56,7 @@ ResearchSpec 不是从零构建——它吸纳并整合了多个优秀上游项�
 | **ToolUniverse** | v1.3.1 | 130 | 28 个 ANZSRC 学科组 + 2 个工具领域 |
 | **Scientific Agent Skills** | v2.53.0 | 49 | 19 个 ANZSRC 学科组 + 5 个工具领域 |
 | **Materials-Science-Skills-For-LLM** | snapshot-fafd3ab | 7 | 材料工程、高分子与材料化学、计算建模与模拟 |
-| **FinRobot** | snapshot-297a8d2 | 6 | 银行金融与投资、会计审计 |
+| **FinRobot** | snapshot-2717499 | 6 | 银行金融与投资、会计审计 |
 | **HistAgent** | snapshot-47bbe21 | 3 | 历史研究、遗产档案与博物馆研究 |
 | **Education Agent Skills** | snapshot-32fce5c | 136 | 课程与教学法、教育系统、特殊教育研究 |
 

@@ -1,0 +1,63 @@
+schema_version: "1"
+capability_id: plugin-financial-relative-valuation
+title: Relative Valuation Research
+description: Calculate and interpret DCF, peer-multiple, weighted valuation, and
+  sensitivity ranges with explicit assumptions and uncertainty.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: relative-valuation-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_financial_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,assumptions,method_results,sensitivity,fair_value_range,conclusions,comparability_checks,equity_bridge
+knowledge_refs:
+  - knowledge_id: relative-valuation-tool
+    path: tools/valuation.py
+    content_hash: f4e9975e2859473925063f73afe42da06fc48c6cde11b22d79ff99ebb8716374
+    license: Apache-2.0
+  - knowledge_id: financial-support
+    path: tools/financial_support.py
+    content_hash: 9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c
+    license: Apache-2.0
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: audits/finrobot/snapshot-2717499/artifacts/candidate/vendors/finrobot/financial-research-relative-valuation/SKILL.md
+      sha256: a4e0ca25d5f3bd461eded7e66bdd8c3fda4ef13ad23d6935075d4a99cd412e13
+    - path: audits/finrobot/snapshot-2717499/artifacts/candidate/vendors/finrobot/financial-research-relative-valuation/lib/financial_support.py
+      sha256: 9e0ae3d35906d5b0cf65e25b409641c14a32b3262aa3ce59ce294662173daa7c
+    - path: audits/finrobot/snapshot-2717499/artifacts/candidate/vendors/finrobot/financial-research-relative-valuation/scripts/valuation.py
+      sha256: f4e9975e2859473925063f73afe42da06fc48c6cde11b22d79ff99ebb8716374
+license: Apache-2.0
