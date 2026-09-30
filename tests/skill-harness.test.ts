@@ -6,6 +6,7 @@ import { test } from "node:test";
 
 import { COMPANION_INTENTS, renderCompanionSkill, renderCompanionSkillFiles } from "../src/adapters/companion/index.js";
 import { LITERATURE_ADAPTER_SKILL_IDS } from "../src/literature-adapters/catalog.js";
+import { loadPluginExtensionRegistry } from "../src/plugins/extensions.js";
 import { loadProcedureCatalog } from "../src/procedures/catalog.js";
 import { loadHarnessCatalog, readHarnessFile, validateHarnessSkillRoot, type HarnessFileTreeNode } from "../harness/catalog.js";
 import { createSkillHarnessServer, HARNESS_DEFAULT_HOST, renderHarnessMarkdown } from "../harness/server.js";
@@ -21,7 +22,8 @@ void test("harness separates visible entries from the complete hidden procedure 
   assert.equal(loaded.catalog.summary.arsu_procedures, 4);
   assert.equal(loaded.catalog.summary.companion_procedures, COMPANION_INTENTS.length - 1);
   assert.equal(loaded.catalog.summary.core_procedures, 47);
-  assert.equal(loaded.catalog.summary.plugin_procedures, 332);
+  const extensions = await loadPluginExtensionRegistry();
+  assert.equal(loaded.catalog.summary.plugin_procedures, extensions.capabilities.size);
   assert.equal(loaded.catalog.summary.literature_adapter_skills, LITERATURE_ADAPTER_SKILL_IDS.length);
   const adapterSkills = loaded.catalog.visible_entries.filter((skill) => skill.family === "literature-adapter");
   assert.equal(adapterSkills.length, 7);

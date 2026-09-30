@@ -8,7 +8,7 @@ import { sha256 } from "../../core/workspace/write-plan.js";
 import { assemblePluginRegistry } from "../../plugins/assembler.js";
 import { availableDomains, loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
 import { commitVendorStage, pathExists, posix, prepareVendorStage, vendorProjectionDiff, walkFiles } from "../shared/staging.js";
-import { PRODUCTION_DOMAIN_COUNTS, productionVendorInventoryErrors } from "../shared/production-vendors.js";
+import { loadProductionDomainCounts, productionVendorInventoryErrors } from "../shared/production-vendors.js";
 import { renderFinRobotCompleteTrees } from "./complete-tree.js";
 import { assertFinRobotProductionReady, loadFinRobotDraftPolicies, type FinRobotDraftPolicies } from "./policy.js";
 import { FINROBOT_SKILL_DEFINITIONS } from "./skill-definitions.js";
@@ -118,8 +118,9 @@ export async function checkFinRobotOutput(repoRoot: string): Promise<{ ok: boole
       if (vendor.skills.some((skill) => skill.dependencies.length !== 0)) errors.push("FinRobot Registry Schema 1 dependencies must remain empty");
     }
     errors.push(...productionVendorInventoryErrors(loaded.vendors.keys()));
-    if (loaded.domains.size !== PRODUCTION_DOMAIN_COUNTS.internal) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.internal)} internal domains, found ${String(loaded.domains.size)}`);
-    if (availableDomains(loaded).length !== PRODUCTION_DOMAIN_COUNTS.available) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.available)} available domains, found ${String(availableDomains(loaded).length)}`);
+    const domainCounts = await loadProductionDomainCounts(repoRoot);
+    if (loaded.domains.size !== domainCounts.internal) errors.push(`Expected ${String(domainCounts.internal)} internal domains, found ${String(loaded.domains.size)}`);
+    if (availableDomains(loaded).length !== domainCounts.available) errors.push(`Expected ${String(domainCounts.available)} available domains, found ${String(availableDomains(loaded).length)}`);
     const banking = loaded.domains.get("banking-finance-and-investment")?.skills.filter((skillId) => skillId.startsWith("financial-research-")).sort(compareText) ?? [];
     const accounting = loaded.domains.get("accounting-auditing-and-accountability")?.skills.filter((skillId) => skillId.startsWith("financial-research-")).sort(compareText) ?? [];
     if (!sameValues(banking, rendered.trees.map((tree) => tree.skillId).sort(compareText))) errors.push("Banking, finance and investment does not contain all six FinRobot Skills");

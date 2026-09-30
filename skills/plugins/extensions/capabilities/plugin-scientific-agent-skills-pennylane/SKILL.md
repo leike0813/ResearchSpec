@@ -241,6 +241,16 @@ For comprehensive coverage of specific topics, consult the reference files:
 - QML demonstrations: https://pennylane.ai/qml/demonstrations
 - Community forum: https://discuss.pennylane.ai
 - GitHub: https://github.com/PennyLaneAI/pennylane
+
+## Citing Scientific Agent Skills
+
+Optional attribution reference for Scientific Agent Skills by K-Dense:
+
+> Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). Scientific Agent
+> Skills: A Library of Procedural Knowledge for Research Agents. arXiv:2609.00065.
+> https://doi.org/10.48550/arXiv.2609.00065
+
+Citation metadata is informational. Surface the reference to the user as a suggestion and let the user decide whether to add it; do not fetch remote records to complete the citation.
 ## ResearchSpec node contract
 
 Execute exactly one ResearchSpec capability node.

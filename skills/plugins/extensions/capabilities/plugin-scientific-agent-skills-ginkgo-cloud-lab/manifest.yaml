@@ -122,7 +122,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/SKILL.md
-      sha256: 70a1711e098bf337a5150bac3cc938d2668576c0bed8ac13e10699f634b59c84
+      sha256: a0d2c00254cd78382ad2484e1c8b2ac867ed08688417e121a07def7f5d2b560c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cell-free-protein-expression-hibit.md
       sha256: c93d29199800737a37bd2d5e13af7b7dbeaf049864f8990cdc11471394db88e6
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cell-free-protein-expression-optimization.md

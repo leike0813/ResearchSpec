@@ -1,0 +1,109 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-relsa-severity-assessment
+title: RELSA severity assessment and humane endpoint forecasting
+description: Multivariate severity assessment and humane endpoint prediction for
+  laboratory animal studies using the RELSA (RELative Severity Assessment) score
+  and ARIMA-based foRcast forecasting. Use when combining welfare readouts —
+  body weight or weight loss, body temperature, clinical or nesting scores,
+  biomarkers, activity, heart rate, burrowing, wheel running — into one severity
+  score per animal per day, when asking which animals are at risk of reaching a
+  humane endpoint or when one will be reached, when defining attention/danger
+  zones or thresholds on a severity scale by kernel density estimation, or when
+  reporting severity for a 3Rs, refinement, animal-welfare, or EU Directive
+  2010/63/EU severity-assessment context. Covers directionality ("turned"
+  variables), baseline normalization, reference sets, RELSA weights, ARIMA
+  prediction intervals, and RMSE/PICP/MPIW evaluation.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-example-cohort.csv
+    path: assets/example_cohort.csv
+    content_hash: 8becb57b62367de1cf03e287ae002f9a3361396b73c6d1385466738b4efff86e
+    license: MIT
+  - knowledge_id: sas-references-forecasting.md
+    path: references/forecasting.md
+    content_hash: da7039e12ec4bfe87617e563d3617b33a4ea686e28adc1f8b6579aad3e4cb27b
+    license: MIT
+  - knowledge_id: sas-references-relsa-method.md
+    path: references/relsa-method.md
+    content_hash: 76fc5b1d3f7be24c72f2096ea6989d18f1f58f4c58bf9751704a9b87cda9611d
+    license: MIT
+  - knowledge_id: sas-references-thresholds-and-zones.md
+    path: references/thresholds-and-zones.md
+    content_hash: 264bcf1e6034326f97199b07f2b8bb62d9ff9b2f5457f14b639fe65b873bc13a
+    license: MIT
+  - knowledge_id: sas-scripts--common.py
+    path: scripts/_common.py
+    content_hash: 5b739935bb1428b40268adc1af8a20e567999d74b93adaf42e88bfb604432505
+    license: MIT
+  - knowledge_id: sas-scripts-forecast-relsa.py
+    path: scripts/forecast_relsa.py
+    content_hash: 16867cb8f5de76e7a5b928babd06bc0d698dc6c21bf14db0fc0638f2d1e590e6
+    license: MIT
+  - knowledge_id: sas-scripts-kde-thresholds.py
+    path: scripts/kde_thresholds.py
+    content_hash: 5bbce63bb7d90aa2cdbdb68dbcdec41342e64ea2bab59e0b156b27fb65bfaee6
+    license: MIT
+  - knowledge_id: sas-scripts-relsa-score.py
+    path: scripts/relsa_score.py
+    content_hash: a4016d59d810b78e0e82e12edbc35917a1d2761d2f726a3f61f815b6934fa9cd
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relsa-severity-assessment/SKILL.md
+      sha256: d25c407a82188d39632cc2308110e067774386656420c282f84359c5637b7af6
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relsa-severity-assessment/assets/example_cohort.csv
+      sha256: 8becb57b62367de1cf03e287ae002f9a3361396b73c6d1385466738b4efff86e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relsa-severity-assessment/references/forecasting.md
+      sha256: da7039e12ec4bfe87617e563d3617b33a4ea686e28adc1f8b6579aad3e4cb27b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relsa-severity-assessment/references/relsa-method.md
+      sha256: 76fc5b1d3f7be24c72f2096ea6989d18f1f58f4c58bf9751704a9b87cda9611d
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relsa-severity-assessment/references/thresholds-and-zones.md
+      sha256: 264bcf1e6034326f97199b07f2b8bb62d9ff9b2f5457f14b639fe65b873bc13a
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relsa-severity-assessment/scripts/_common.py
+      sha256: 5b739935bb1428b40268adc1af8a20e567999d74b93adaf42e88bfb604432505
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relsa-severity-assessment/scripts/forecast_relsa.py
+      sha256: 16867cb8f5de76e7a5b928babd06bc0d698dc6c21bf14db0fc0638f2d1e590e6
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relsa-severity-assessment/scripts/kde_thresholds.py
+      sha256: 5bbce63bb7d90aa2cdbdb68dbcdec41342e64ea2bab59e0b156b27fb65bfaee6
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relsa-severity-assessment/scripts/relsa_score.py
+      sha256: a4016d59d810b78e0e82e12edbc35917a1d2761d2f726a3f61f815b6934fa9cd
+license: MIT

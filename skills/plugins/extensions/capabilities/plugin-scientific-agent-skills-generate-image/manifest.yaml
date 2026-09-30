@@ -1,11 +1,11 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-generate-image
 title: Generate Image
-description: Generate or edit images using AI models (FLUX, Nano Banana 2). Use
-  for general-purpose image generation including photos, illustrations, artwork,
-  visual assets, concept art, and any image that is not a technical diagram or
-  schematic. For flowcharts, circuits, pathways, and technical diagrams, use the
-  scientific-schematics skill instead.
+description: Generate or edit images with AI models through the OpenRouter Image
+  API (Gemini, Seedream, Recraft, GPT-Image, Riverflow). Use for photos,
+  illustrations, artwork, concept art, visual assets, logos, and image editing
+  or compositing from reference images. For flowcharts, circuits, pathways, and
+  other technical diagrams, use the scientific-schematics skill instead.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -45,16 +45,22 @@ validators:
         - --required
         - scope,source_ledger,method_plan,work_products,validation_results,conclusions
 knowledge_refs:
+  - knowledge_id: sas-references-models.md
+    path: references/models.md
+    content_hash: 4b05e69e8576ccb90225c8e5526ec1864a27ae46bcb964f2d94abb1e44b29117
+    license: MIT
   - knowledge_id: sas-scripts-generate-image.py
     path: scripts/generate_image.py
-    content_hash: f4aee183b7f192cae34813e53f094d2d14f0ca265189343f018b218415b63d9a
+    content_hash: 9b96422bf9b6e5bf7e4e0b8668d9303e1f751436e1aabb10db1dbfdec990d48a
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-generate-image/SKILL.md
-      sha256: 0287947083b8af8439778d4c6f80f4f4d35311067d515db727d18c2429fb31da
+      sha256: 2fd326b777a8b30914a7bd963b306cc7ec6980e8ab286c1c05034b491503cb89
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-generate-image/references/models.md
+      sha256: 4b05e69e8576ccb90225c8e5526ec1864a27ae46bcb964f2d94abb1e44b29117
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-generate-image/scripts/generate_image.py
-      sha256: f4aee183b7f192cae34813e53f094d2d14f0ca265189343f018b218415b63d9a
+      sha256: 9b96422bf9b6e5bf7e4e0b8668d9303e1f751436e1aabb10db1dbfdec990d48a
 license: MIT

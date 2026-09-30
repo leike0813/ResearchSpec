@@ -1,8 +1,8 @@
 {
   "schema_version": "1",
   "vendor_id": "scientific-agent-skills",
-  "release": "v2.53.0",
-  "revision": "9c9bd2e92af12311ecd0c1a643e0931643f9ea04",
+  "release": "v2.70.0",
+  "revision": "d0c48af8c7b7a71ccc81fcd04c9db53b48439f9b",
   "decisions": [
     {
       "upstream_skill_id": "adaptyv",
@@ -68,6 +68,89 @@
           "skills/aeon/SKILL.md"
         ],
         "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "alphagenome",
+      "generated_skill_id": "scientific-agent-skills-alphagenome",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/alphagenome/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/alphagenome/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/alphagenome/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-regulatory-variant-analysis",
+          "tooluniverse-variant-functional-annotation"
+        ],
+        "evidence": [
+          "skills/alphagenome/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "analytical-method-validation",
+      "generated_skill_id": "scientific-agent-skills-analytical-method-validation",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/analytical-method-validation/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/analytical-method-validation/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/analytical-method-validation/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
       },
       "arsu_overlap": {
         "targets": [],
@@ -234,12 +317,12 @@
       ],
       "license": null,
       "security_review": {
-        "outcome": "not-applicable",
+        "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/autoskill/SKILL.md"
         ],
-        "note": "The source is outside the production admission boundary."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "not-applicable",
@@ -307,10 +390,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/bgpt-paper-search/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -344,10 +427,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/bids/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -492,10 +575,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/cellxgene-census/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -567,10 +650,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/citation-management/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -604,10 +687,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/clinical-decision-support/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -641,10 +724,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/clinical-reports/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -715,10 +798,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/consciousness-council/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -785,10 +868,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/database-lookup/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -808,6 +891,44 @@
         "evidence": [
           "skills/database-lookup/SKILL.md"
         ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "datalad",
+      "generated_skill_id": "scientific-agent-skills-datalad",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/datalad/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/datalad/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/datalad/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
       },
       "domain_eligibility": "classified"
     },
@@ -881,6 +1002,44 @@
         ],
         "evidence": [
           "skills/deepchem/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "deepspot-m",
+      "generated_skill_id": "scientific-agent-skills-deepspot-m",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap",
+        "content-license-unresolved"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/deepspot-m/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/deepspot-m/SKILL.md"
+        ],
+        "note": "The content license declaration lacks a corresponding verified license text and copyright scope; no production tree is emitted."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-spatial-transcriptomics"
+        ],
+        "evidence": [
+          "skills/deepspot-m/SKILL.md"
         ]
       },
       "domain_eligibility": "classified"
@@ -971,10 +1130,10 @@
       "security_review": {
         "outcome": "failed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/dhdna-profiler/SKILL.md"
         ],
-        "note": "Completed finding-level manual review retained the security blocker for the pinned revision; see security-review-decisions.json."
+        "note": "The current source retains unsupported cognitive-scoring claims; the scanner reports zero findings but does not overturn the independent content failure."
       },
       "content_review": {
         "outcome": "passed",
@@ -1286,6 +1445,46 @@
       "domain_eligibility": "classified"
     },
     {
+      "upstream_skill_id": "fictiv",
+      "generated_skill_id": "scientific-agent-skills-fictiv",
+      "disposition": "excluded",
+      "reason_codes": [
+        "outside-plugin-authority"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/fictiv/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/fictiv/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "The current scanner omits this Skill; explicit transaction and account authority independently excludes it."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/fictiv/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
       "upstream_skill_id": "flowio",
       "generated_skill_id": "scientific-agent-skills-flowio",
       "disposition": "excluded",
@@ -1296,10 +1495,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/flowio/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -1338,10 +1537,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/fluidsim/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -1357,6 +1556,51 @@
       "tooluniverse_overlap": {
         "targets": [],
         "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "folklore-variant-evidence",
+      "generated_skill_id": "scientific-agent-skills-folklore-variant-evidence",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/folklore-variant-evidence/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/folklore-variant-evidence/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/folklore-variant-evidence/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-variant-interpretation",
+          "tooluniverse-acmg-variant-classification"
+        ],
+        "evidence": [
+          "skills/folklore-variant-evidence/SKILL.md"
+        ]
       },
       "domain_eligibility": "classified"
     },
@@ -1436,6 +1680,89 @@
       "domain_eligibility": "classified"
     },
     {
+      "upstream_skill_id": "genomic-coordinates",
+      "generated_skill_id": "scientific-agent-skills-genomic-coordinates",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/genomic-coordinates/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/genomic-coordinates/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/genomic-coordinates/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "genomic-intelligence",
+      "generated_skill_id": "scientific-agent-skills-genomic-intelligence",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/genomic-intelligence/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/genomic-intelligence/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/genomic-intelligence/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-regulatory-genomics",
+          "tooluniverse-epigenomics-chromatin"
+        ],
+        "evidence": [
+          "skills/genomic-intelligence/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
       "upstream_skill_id": "geomaster",
       "generated_skill_id": "scientific-agent-skills-geomaster",
       "disposition": "admitted",
@@ -1451,10 +1778,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/geomaster/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -1704,10 +2031,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/histolab/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -1816,10 +2143,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/hypothesis-generation/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -1895,10 +2222,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/infographics/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -1918,27 +2245,34 @@
       "domain_eligibility": "classified"
     },
     {
-      "upstream_skill_id": "iso-13485-certification",
-      "generated_skill_id": "scientific-agent-skills-iso-13485-certification",
+      "upstream_skill_id": "iso-standards-readiness",
+      "generated_skill_id": "scientific-agent-skills-iso-standards-readiness",
       "disposition": "excluded",
       "reason_codes": [
         "tooluniverse-semantic-overlap"
       ],
-      "license": null,
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/iso-standards-readiness/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
-          "skills/iso-13485-certification/SKILL.md"
+          "skills/iso-standards-readiness/SKILL.md",
+          "docs/security-report.json"
         ],
-        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
       },
       "content_review": {
         "outcome": "passed",
         "evidence": [
-          "skills/iso-13485-certification/SKILL.md"
+          "skills/iso-standards-readiness/SKILL.md"
         ],
-        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
       },
       "arsu_overlap": {
         "targets": [],
@@ -1949,8 +2283,46 @@
           "tooluniverse-drug-regulatory"
         ],
         "evidence": [
-          "skills/iso-13485-certification/SKILL.md"
+          "skills/iso-standards-readiness/SKILL.md"
         ]
+      },
+      "domain_eligibility": "none"
+    },
+    {
+      "upstream_skill_id": "lab-hardware-cad",
+      "generated_skill_id": "scientific-agent-skills-lab-hardware-cad",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/lab-hardware-cad/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/lab-hardware-cad/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/lab-hardware-cad/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
       },
       "domain_eligibility": "classified"
     },
@@ -2082,10 +2454,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/latex-posters/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -2154,10 +2526,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/literature-review/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -2271,10 +2643,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/markitdown/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -2459,10 +2831,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/modal/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -2551,6 +2923,51 @@
         ],
         "evidence": [
           "skills/molfeat/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "ncats-arax",
+      "generated_skill_id": "scientific-agent-skills-ncats-arax",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/ncats-arax/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/ncats-arax/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/ncats-arax/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-network-pharmacology",
+          "tooluniverse-target-research"
+        ],
+        "evidence": [
+          "skills/ncats-arax/SKILL.md"
         ]
       },
       "domain_eligibility": "classified"
@@ -2742,6 +3159,88 @@
       "domain_eligibility": "classified"
     },
     {
+      "upstream_skill_id": "onekgpd",
+      "generated_skill_id": "scientific-agent-skills-onekgpd",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/onekgpd/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/onekgpd/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/onekgpd/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-population-genetics-1000genomes"
+        ],
+        "evidence": [
+          "skills/onekgpd/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "ontology-term-resolution",
+      "generated_skill_id": "scientific-agent-skills-ontology-term-resolution",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/ontology-term-resolution/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/ontology-term-resolution/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/ontology-term-resolution/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
       "upstream_skill_id": "open-notebook",
       "generated_skill_id": "scientific-agent-skills-open-notebook",
       "disposition": "admitted",
@@ -2768,6 +3267,39 @@
           "skills/open-notebook/SKILL.md"
         ],
         "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "openpiv",
+      "generated_skill_id": "scientific-agent-skills-openpiv",
+      "disposition": "excluded",
+      "reason_codes": [
+        "content-license-unresolved"
+      ],
+      "license": null,
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/openpiv/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/openpiv/SKILL.md"
+        ],
+        "note": "The content license declaration lacks a corresponding verified license text and copyright scope; no production tree is emitted."
       },
       "arsu_overlap": {
         "targets": [],
@@ -2871,10 +3403,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/pacsomatic/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -2931,6 +3463,55 @@
       "domain_eligibility": "classified"
     },
     {
+      "upstream_skill_id": "paperclip",
+      "generated_skill_id": "scientific-agent-skills-paperclip",
+      "disposition": "excluded",
+      "reason_codes": [
+        "arsu-surface-overlap",
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/paperclip/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/paperclip/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/paperclip/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [
+          "deep-research"
+        ],
+        "evidence": [
+          "skills/paperclip/SKILL.md"
+        ]
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-literature-deep-research"
+        ],
+        "evidence": [
+          "skills/paperclip/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
       "upstream_skill_id": "paperzilla",
       "generated_skill_id": "scientific-agent-skills-paperzilla",
       "disposition": "excluded",
@@ -2941,10 +3522,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/paperzilla/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -2983,10 +3564,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/parallel-web/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -3016,10 +3597,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/pathml/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -3038,6 +3619,51 @@
         ],
         "evidence": [
           "skills/pathml/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pathogen-variant-surveillance",
+      "generated_skill_id": "scientific-agent-skills-pathogen-variant-surveillance",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pathogen-variant-surveillance/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pathogen-variant-surveillance/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pathogen-variant-surveillance/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-infectious-disease",
+          "tooluniverse-variant-analysis"
+        ],
+        "evidence": [
+          "skills/pathogen-variant-surveillance/SKILL.md"
         ]
       },
       "domain_eligibility": "classified"
@@ -3124,10 +3750,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/peer-review/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -3259,6 +3885,51 @@
       "domain_eligibility": "none"
     },
     {
+      "upstream_skill_id": "pkpd-modeling",
+      "generated_skill_id": "scientific-agent-skills-pkpd-modeling",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pkpd-modeling/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pkpd-modeling/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pkpd-modeling/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-pharmacokinetics",
+          "tooluniverse-dose-response"
+        ],
+        "evidence": [
+          "skills/pkpd-modeling/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
       "upstream_skill_id": "polars",
       "generated_skill_id": "scientific-agent-skills-polars",
       "disposition": "excluded",
@@ -3381,10 +4052,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/pptx-posters/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -3414,10 +4085,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/primekg/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -4019,10 +4690,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/qutip/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -4079,6 +4750,44 @@
       "domain_eligibility": "classified"
     },
     {
+      "upstream_skill_id": "relsa-severity-assessment",
+      "generated_skill_id": "scientific-agent-skills-relsa-severity-assessment",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/relsa-severity-assessment/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/relsa-severity-assessment/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/relsa-severity-assessment/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
       "upstream_skill_id": "research-grants",
       "generated_skill_id": "scientific-agent-skills-research-grants",
       "disposition": "excluded",
@@ -4122,10 +4831,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/research-lookup/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -4233,10 +4942,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/scholar-evaluation/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -4351,10 +5060,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/scientific-schematics/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -4389,10 +5098,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/scientific-slides/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -4460,10 +5169,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/scientific-writing/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -4688,10 +5397,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/seaborn/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -4974,6 +5683,52 @@
       "domain_eligibility": "classified"
     },
     {
+      "upstream_skill_id": "tamarind",
+      "generated_skill_id": "scientific-agent-skills-tamarind",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/tamarind/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/tamarind/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/tamarind/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-protein-structure-prediction",
+          "tooluniverse-binder-discovery",
+          "tooluniverse-antibody-engineering"
+        ],
+        "evidence": [
+          "skills/tamarind/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
       "upstream_skill_id": "tiledbvcf",
       "generated_skill_id": "scientific-agent-skills-tiledbvcf",
       "disposition": "excluded",
@@ -4984,10 +5739,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/tiledbvcf/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -5139,10 +5894,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/transformers/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -5172,10 +5927,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/treatment-plans/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -5214,10 +5969,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/umap-learn/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -5225,6 +5980,44 @@
           "skills/umap-learn/SKILL.md"
         ],
         "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "uncertainty-and-units",
+      "generated_skill_id": "scientific-agent-skills-uncertainty-and-units",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/uncertainty-and-units/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/uncertainty-and-units/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Current source and declared tool boundaries were reviewed independently; scanner flags do not grant admission."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/uncertainty-and-units/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
       },
       "arsu_overlap": {
         "targets": [],
@@ -5247,10 +6040,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/usfiscaldata/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -5326,10 +6119,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/venue-templates/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",
@@ -5345,6 +6138,51 @@
       "tooluniverse_overlap": {
         "targets": [],
         "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "waypoint-bio",
+      "generated_skill_id": "scientific-agent-skills-waypoint-bio",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/waypoint-bio/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "docs/security-report.json",
+          "skills/waypoint-bio/SKILL.md"
+        ],
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/waypoint-bio/SKILL.md"
+        ],
+        "note": "Reviewed research method, output discipline and overlap against current source and existing registries."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-microbiome-research",
+          "tooluniverse-metagenomics-analysis"
+        ],
+        "evidence": [
+          "skills/waypoint-bio/SKILL.md"
+        ]
       },
       "domain_eligibility": "classified"
     },
@@ -5425,10 +6263,10 @@
       "security_review": {
         "outcome": "passed",
         "evidence": [
-          "SECURITY.md",
+          "docs/security-report.json",
           "skills/zarr-python/SKILL.md"
         ],
-        "note": "Completed finding-level manual review (clear-with-adaptation) is authoritative for the pinned revision; see security-review-decisions.json."
+        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
       },
       "content_review": {
         "outcome": "passed",

@@ -31,23 +31,27 @@ void test("internal catalog contains every Group and five tools while public cat
     assert.equal(domain?.domain_type, "discipline");
     if (domain?.domain_type === "discipline") assert.equal(domain.anzsrc_group_code, group.code);
   }
-  assert.equal(availableDomains(registry).length, 56);
+  const catalog = JSON.parse(await readFile(path.resolve("src/plugins/domain-catalog.json"), "utf8")) as { domains: Array<{ skills: string[] }> };
+  assert.equal(availableDomains(registry).length, catalog.domains.filter((domain) => domain.skills.length > 0).length);
   assert.equal(tools.filter((domain) => domain.skills.length > 0).length, 5);
 });
 
-void test("all 318 Field-audited vendor records carry valid metadata independent of membership", async () => {
+void test("all Field-audited vendor records carry valid metadata independent of membership", async () => {
   const snapshot = await loadAnzsrcSnapshot(SNAPSHOT_PATH);
   const fields = new Set(snapshot.fields.map((field) => field.code));
+  const scientificCatalog = JSON.parse(await readFile(path.resolve("audits/scientific-agent-skills/catalog.json"), "utf8")) as { audit_file: string };
   const sources = [
-    { path: path.resolve("audits/tooluniverse/v1.3.1/skill-audit.json"), records: "skills" },
-    { path: path.resolve("audits/scientific-agent-skills/v2.53.0/skill-audit.json"), records: "skills" },
-    { path: path.resolve("audits/materials-science-skills-for-llm/snapshot-fafd3ab/skill-audit.json"), records: "skills" },
-    { path: path.resolve("audits/finrobot/snapshot-2717499/capability-audit.json"), records: "candidate_capabilities" },
-    { path: path.resolve("audits/histagent/snapshot-47bbe21/capability-audit.json"), records: "candidate_skills" },
+    { path: path.resolve("audits/tooluniverse/v1.3.1/skill-audit.json"), records: "skills", declared: "top_level_skills" },
+    { path: path.resolve(scientificCatalog.audit_file), records: "skills", declared: "top_level_skills" },
+    { path: path.resolve("audits/materials-science-skills-for-llm/snapshot-fafd3ab/skill-audit.json"), records: "skills", declared: "top_level_skills" },
+    { path: path.resolve("audits/finrobot/snapshot-2717499/capability-audit.json"), records: "candidate_capabilities", declared: "candidate_capabilities" },
+    { path: path.resolve("audits/histagent/snapshot-47bbe21/capability-audit.json"), records: "candidate_skills", declared: "candidate_skills" },
   ];
   let records = 0;
+  let declared = 0;
   for (const source of sources) {
-    const audit = JSON.parse(await readFile(source.path, "utf8")) as Record<string, AuditFieldRecord[]>;
+    const audit = JSON.parse(await readFile(source.path, "utf8")) as { summary: Record<string, number> } & Record<string, AuditFieldRecord[]>;
+    declared += audit.summary[source.declared];
     for (const item of audit[source.records] ?? []) {
       records += 1;
       const recordId = item.skill_id ?? item.capability_id;
@@ -62,7 +66,7 @@ void test("all 318 Field-audited vendor records carry valid metadata independent
       }
     }
   }
-  assert.equal(records, 318);
+  assert.equal(records, declared);
 });
 
 void test("all 165 Education audit records carry one manually reviewed ANZSRC Group candidate", async () => {

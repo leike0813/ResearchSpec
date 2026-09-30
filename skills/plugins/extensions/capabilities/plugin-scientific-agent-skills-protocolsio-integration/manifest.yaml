@@ -1,17 +1,15 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-protocolsio-integration
-title: Protocols.io Integration
-description: Integration with protocols.io API for managing scientific
-  protocols. This skill should be used when working with protocols.io to search,
-  create, update, or publish protocols; manage protocol steps and materials;
-  handle discussions and comments; organize workspaces; upload and manage files;
-  or integrate protocols.io functionality into workflows. Applicable for
-  protocol discovery, collaborative protocol development, experiment tracking,
-  lab protocol management, and scientific documentation.
+title: protocols.io Integration
+description: Read, validate, and safely export protocols.io data with current
+  official REST/MCP contracts, or create non-executing mutation plans. The
+  bundled client makes bounded official-host GET requests only with explicit
+  --execute. Use only for tasks explicitly targeting protocols.io or an exact
+  protocols.io protocol version.
 maturity: operational
 class: analysis
 node_kind: producer
-execution_type: llm
+execution_type: mixed
 params: {}
 inputs:
   - role: task_request
@@ -47,46 +45,94 @@ validators:
         - --required
         - scope,source_ledger,method_plan,work_products,validation_results,conclusions
 knowledge_refs:
+  - knowledge_id: sas-assets-protocol-snapshot.schema.json
+    path: assets/protocol-snapshot.schema.json
+    content_hash: fe8d38db7f3e6e2c7dc6ae5c61ff9eee1b785e9621c4792a2fa509371c9bce13
+    license: MIT
   - knowledge_id: sas-references-additional-features.md
     path: references/additional_features.md
-    content_hash: 55af83378e4e427de8e3f2ac242c5063d15ac08957f8b719b646d33164179c62
+    content_hash: 1c85e15366b931818841057fe1888fcbdb0a6a263521cb4e5f44cd14609a179e
     license: MIT
   - knowledge_id: sas-references-authentication.md
     path: references/authentication.md
-    content_hash: 227a44f0514f5fdfffa72eeb45eb6edb798a780810ce7f5c8cbf91ded6421215
+    content_hash: add21cf216447bdd5d81a626492b59c7d7ce36bdc22a245f19bd04694f4b5c7f
     license: MIT
   - knowledge_id: sas-references-discussions.md
     path: references/discussions.md
-    content_hash: 67885f9d635af994e02cd685d8a7435e0fd7f7ed6ebfb441272dd20d557962fe
+    content_hash: cbd0d0f84d65c19a96f76b06f27c15ca4db510d24f82cbe73f3180cb7994ec89
     license: MIT
   - knowledge_id: sas-references-file-manager.md
     path: references/file_manager.md
-    content_hash: eb2a7170e8ca4944070a0282e434921f37fee4bef405296119d91c6cf16e8b31
+    content_hash: a485dbea277bc680d3cd475fedb414caa98c25f805e35a7cc715fa65201b7ff1
     license: MIT
   - knowledge_id: sas-references-protocols-api.md
     path: references/protocols_api.md
-    content_hash: ba32892bd66eb70066a455e63fd32187b9c01c97d142d40cae24a34fee396ced
+    content_hash: c9080c0b68dd1cfec78dc2c23e3086ca39082e2dc6341e6e26f0fbc645c0089a
     license: MIT
   - knowledge_id: sas-references-workspaces.md
     path: references/workspaces.md
-    content_hash: b3e4d3a9d31886274cbde594398d24ceb321565aa2f430d4c16d2a1d18ed3aba
+    content_hash: f1625e90cd0a84c1f0b5ae6e4dd48bd59447e3ff57d77ae3ce507c5e5afa3b76
+    license: MIT
+  - knowledge_id: sas-scripts--init-.py
+    path: scripts/__init__.py
+    content_hash: 9a90481692132a90b81854de4e6380dee81e7769b5adb57ffde2cd9cb36abcf2
+    license: MIT
+  - knowledge_id: sas-scripts--common.py
+    path: scripts/_common.py
+    content_hash: d8278731f2e4ae450abac53bfbe1a208f563e2769f2c830ea7c620cc7a362778
+    license: MIT
+  - knowledge_id: sas-scripts-pagination-helper.py
+    path: scripts/pagination_helper.py
+    content_hash: 90bb406939f562223c91306738a1abf57c06a2d3933272a77a881f53ec696d41
+    license: MIT
+  - knowledge_id: sas-scripts-plan-write-request.py
+    path: scripts/plan_write_request.py
+    content_hash: 8a087cc06f8dacdb8d693a803b2ec2e5d8d536b60c4c7044daaa26b9064858e3
+    license: MIT
+  - knowledge_id: sas-scripts-protocols-read.py
+    path: scripts/protocols_read.py
+    content_hash: 8433afd642d4b80b90575bcf5b19687b356f46c3ffc014d297ce9cee23c9b667
+    license: MIT
+  - knowledge_id: sas-scripts-validate-auth-config.py
+    path: scripts/validate_auth_config.py
+    content_hash: fb3e49f7bda0f38889f79fc198232e19d3dda8bea3ea843670d508d1202eef95
+    license: MIT
+  - knowledge_id: sas-scripts-validate-protocol-json.py
+    path: scripts/validate_protocol_json.py
+    content_hash: ecacd47f3b56f3bcb2349a432f4586d17de96921efaec64a387e787b4535e3f0
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/SKILL.md
-      sha256: 1e783deda6276674942acf1a6bb54e9eefc50a2089db69b1f70e31e0f165511c
+      sha256: 3b83048ff398305df375a9f667136921d12fc3c507bfebc429f987cace7baff9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/assets/protocol-snapshot.schema.json
+      sha256: fe8d38db7f3e6e2c7dc6ae5c61ff9eee1b785e9621c4792a2fa509371c9bce13
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/additional_features.md
-      sha256: 55af83378e4e427de8e3f2ac242c5063d15ac08957f8b719b646d33164179c62
+      sha256: 1c85e15366b931818841057fe1888fcbdb0a6a263521cb4e5f44cd14609a179e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/authentication.md
-      sha256: 227a44f0514f5fdfffa72eeb45eb6edb798a780810ce7f5c8cbf91ded6421215
+      sha256: add21cf216447bdd5d81a626492b59c7d7ce36bdc22a245f19bd04694f4b5c7f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/discussions.md
-      sha256: 67885f9d635af994e02cd685d8a7435e0fd7f7ed6ebfb441272dd20d557962fe
+      sha256: cbd0d0f84d65c19a96f76b06f27c15ca4db510d24f82cbe73f3180cb7994ec89
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/file_manager.md
-      sha256: eb2a7170e8ca4944070a0282e434921f37fee4bef405296119d91c6cf16e8b31
+      sha256: a485dbea277bc680d3cd475fedb414caa98c25f805e35a7cc715fa65201b7ff1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/protocols_api.md
-      sha256: ba32892bd66eb70066a455e63fd32187b9c01c97d142d40cae24a34fee396ced
+      sha256: c9080c0b68dd1cfec78dc2c23e3086ca39082e2dc6341e6e26f0fbc645c0089a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/references/workspaces.md
-      sha256: b3e4d3a9d31886274cbde594398d24ceb321565aa2f430d4c16d2a1d18ed3aba
+      sha256: f1625e90cd0a84c1f0b5ae6e4dd48bd59447e3ff57d77ae3ce507c5e5afa3b76
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/scripts/__init__.py
+      sha256: 9a90481692132a90b81854de4e6380dee81e7769b5adb57ffde2cd9cb36abcf2
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/scripts/_common.py
+      sha256: d8278731f2e4ae450abac53bfbe1a208f563e2769f2c830ea7c620cc7a362778
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/scripts/pagination_helper.py
+      sha256: 90bb406939f562223c91306738a1abf57c06a2d3933272a77a881f53ec696d41
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/scripts/plan_write_request.py
+      sha256: 8a087cc06f8dacdb8d693a803b2ec2e5d8d536b60c4c7044daaa26b9064858e3
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/scripts/protocols_read.py
+      sha256: 8433afd642d4b80b90575bcf5b19687b356f46c3ffc014d297ce9cee23c9b667
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/scripts/validate_auth_config.py
+      sha256: fb3e49f7bda0f38889f79fc198232e19d3dda8bea3ea843670d508d1202eef95
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-protocolsio-integration/scripts/validate_protocol_json.py
+      sha256: ecacd47f3b56f3bcb2349a432f4586d17de96921efaec64a387e787b4535e3f0
 license: MIT

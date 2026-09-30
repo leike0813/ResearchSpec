@@ -1,16 +1,14 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-fluidsim
 title: FluidSim
-description: Framework for computational fluid dynamics simulations using
-  Python. Use when running fluid dynamics simulations including Navier-Stokes
-  equations (2D/3D), shallow water equations, stratified flows, or when
-  analyzing turbulence, vortex dynamics, or geophysical flows. Provides
-  pseudospectral methods with FFT, HPC support, and comprehensive output
-  analysis.
+description: Plan, configure, inspect, restart, and analyze bounded FluidSim
+  computational-fluid-dynamics simulations with explicit numerical-validity and
+  HPC safety checks. Use for FluidSim solver selection, parameter review,
+  FFT/MPI setup, output diagnostics, or restart compatibility.
 maturity: operational
 class: analysis
 node_kind: producer
-execution_type: llm
+execution_type: mixed
 params: {}
 inputs:
   - role: task_request
@@ -48,44 +46,98 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-advanced-features.md
     path: references/advanced_features.md
-    content_hash: 43409fcaadd5b6b3b2bdf307d204183c5c29b2e91e61b75a1039b9a1486982df
+    content_hash: 31301c75c39b622f1bbd7f06ed9d80d79b65bdeb90287130042d0123e044a84a
     license: MIT
   - knowledge_id: sas-references-installation.md
     path: references/installation.md
-    content_hash: a2f971b5a24d489723d3aa36a40f6ce51058ea853f6f034615b9285dfebaadee
+    content_hash: 3c5a5d8462cb8dc7584d767057a9be1ff01e3e013213c3f09776d5a8005df7b9
     license: MIT
   - knowledge_id: sas-references-output-analysis.md
     path: references/output_analysis.md
-    content_hash: 88ed758bd4986ea068024884ce3633764535ccfc84af5f7cdb6c3b61ef2a52f9
+    content_hash: 2725ed5f7e6bead7fe1cb3d859ba9a8a7327cca1c5e2f4e06d4cb3fe05fd85ae
     license: MIT
   - knowledge_id: sas-references-parameters.md
     path: references/parameters.md
-    content_hash: 41ae6976c8a950b7cd1a0e3cf8bce2f5c2120ed4cd4bcfb2b2d42899fc2cf701
+    content_hash: f464352a4832b85d0185ae3403aaab5709843448fa83fc72aa60d650c13431ff
     license: MIT
   - knowledge_id: sas-references-simulation-workflow.md
     path: references/simulation_workflow.md
-    content_hash: 38adf5b402e878b8c929cdd94ef014320345140ff0939efb422afe24168e2daa
+    content_hash: 028e565f3a17f082bf759961dbe569e67743077a411689e74ceb9777a8046ffa
     license: MIT
   - knowledge_id: sas-references-solvers.md
     path: references/solvers.md
-    content_hash: 3abe711620b8c463e2916851985ebab1bfbbbacfa9f944e07b1e7d38c2887bb4
+    content_hash: 36c9699b6d4f14c561223e063c72de2df11ac5d2e8534f17777dbf02568e4e15
+    license: MIT
+  - knowledge_id: sas-scripts--init-.py
+    path: scripts/__init__.py
+    content_hash: 93b33cb86288cb882ac5876c2cc1db9bae72fc96296abc75c7ecfab97a052989
+    license: MIT
+  - knowledge_id: sas-scripts--common.py
+    path: scripts/_common.py
+    content_hash: a256d979afd2eb376fe7a907e717a5f356d02daba6c9772208c0b295d58dff64
+    license: MIT
+  - knowledge_id: sas-scripts--schema.py
+    path: scripts/_schema.py
+    content_hash: f59c034ff6dee3677b19759c04ee5472d38aa7f03406ea1c31c68d1c32e83d18
+    license: MIT
+  - knowledge_id: sas-scripts-budget-summary.py
+    path: scripts/budget_summary.py
+    content_hash: 06c2761406a6d6907002ce6db77958af32e3bf2d7e88dc524ec3410323496d83
+    license: MIT
+  - knowledge_id: sas-scripts-grid-resource-estimator.py
+    path: scripts/grid_resource_estimator.py
+    content_hash: 8164f8b24616c7aa606570a2cb54e6316178a31a841e3aabe73f9f1125bd7322
+    license: MIT
+  - knowledge_id: sas-scripts-output-inventory.py
+    path: scripts/output_inventory.py
+    content_hash: b57238d1a3d02c0a440676642b562f79a8e9338559b228d14d7f40b5d7517194
+    license: MIT
+  - knowledge_id: sas-scripts-restart-compatibility.py
+    path: scripts/restart_compatibility.py
+    content_hash: 19b25f93906a2bd3bfd15f3da61f11da887b9fc979d295baa2ff91654f717aa1
+    license: MIT
+  - knowledge_id: sas-scripts-simulation-dry-run.py
+    path: scripts/simulation_dry_run.py
+    content_hash: 9345635846c484a74921d44af0aed3f52e5251edaf611f9e02ab803f8be06f7a
+    license: MIT
+  - knowledge_id: sas-scripts-solver-config-validator.py
+    path: scripts/solver_config_validator.py
+    content_hash: afd7f5d9581fee0229bfb3ad167e57fe6fe407b16fe404ab60bef4aed51cec4b
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/SKILL.md
-      sha256: 9e28ca927b1d887795aa9ee60e59aa2a5e47f5516ba2b61c8731ac2b5642d27e
+      sha256: 58c92fcc924714f0fa40264bde5178615e80ea5cb9474ead5c8ff8052185e3c9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/references/advanced_features.md
-      sha256: 43409fcaadd5b6b3b2bdf307d204183c5c29b2e91e61b75a1039b9a1486982df
+      sha256: 31301c75c39b622f1bbd7f06ed9d80d79b65bdeb90287130042d0123e044a84a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/references/installation.md
-      sha256: a2f971b5a24d489723d3aa36a40f6ce51058ea853f6f034615b9285dfebaadee
+      sha256: 3c5a5d8462cb8dc7584d767057a9be1ff01e3e013213c3f09776d5a8005df7b9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/references/output_analysis.md
-      sha256: 88ed758bd4986ea068024884ce3633764535ccfc84af5f7cdb6c3b61ef2a52f9
+      sha256: 2725ed5f7e6bead7fe1cb3d859ba9a8a7327cca1c5e2f4e06d4cb3fe05fd85ae
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/references/parameters.md
-      sha256: 41ae6976c8a950b7cd1a0e3cf8bce2f5c2120ed4cd4bcfb2b2d42899fc2cf701
+      sha256: f464352a4832b85d0185ae3403aaab5709843448fa83fc72aa60d650c13431ff
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/references/simulation_workflow.md
-      sha256: 38adf5b402e878b8c929cdd94ef014320345140ff0939efb422afe24168e2daa
+      sha256: 028e565f3a17f082bf759961dbe569e67743077a411689e74ceb9777a8046ffa
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/references/solvers.md
-      sha256: 3abe711620b8c463e2916851985ebab1bfbbbacfa9f944e07b1e7d38c2887bb4
+      sha256: 36c9699b6d4f14c561223e063c72de2df11ac5d2e8534f17777dbf02568e4e15
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/scripts/__init__.py
+      sha256: 93b33cb86288cb882ac5876c2cc1db9bae72fc96296abc75c7ecfab97a052989
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/scripts/_common.py
+      sha256: a256d979afd2eb376fe7a907e717a5f356d02daba6c9772208c0b295d58dff64
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/scripts/_schema.py
+      sha256: f59c034ff6dee3677b19759c04ee5472d38aa7f03406ea1c31c68d1c32e83d18
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/scripts/budget_summary.py
+      sha256: 06c2761406a6d6907002ce6db77958af32e3bf2d7e88dc524ec3410323496d83
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/scripts/grid_resource_estimator.py
+      sha256: 8164f8b24616c7aa606570a2cb54e6316178a31a841e3aabe73f9f1125bd7322
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/scripts/output_inventory.py
+      sha256: b57238d1a3d02c0a440676642b562f79a8e9338559b228d14d7f40b5d7517194
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/scripts/restart_compatibility.py
+      sha256: 19b25f93906a2bd3bfd15f3da61f11da887b9fc979d295baa2ff91654f717aa1
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/scripts/simulation_dry_run.py
+      sha256: 9345635846c484a74921d44af0aed3f52e5251edaf611f9e02ab803f8be06f7a
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/scripts/solver_config_validator.py
+      sha256: afd7f5d9581fee0229bfb3ad167e57fe6fe407b16fe404ab60bef4aed51cec4b
 license: MIT

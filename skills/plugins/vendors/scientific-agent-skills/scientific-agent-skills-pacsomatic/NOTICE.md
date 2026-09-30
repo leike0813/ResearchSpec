@@ -1,6 +1,6 @@
 # Notice
 
-This Skill is adapted by ResearchSpec from Scientific Agent Skills (https://github.com/K-Dense-AI/scientific-agent-skills) release v2.53.0, revision 9c9bd2e92af12311ecd0c1a643e0931643f9ea04.
+This Skill is adapted by ResearchSpec from Scientific Agent Skills (https://github.com/K-Dense-AI/scientific-agent-skills) release v2.70.0, revision d0c48af8c7b7a71ccc81fcd04c9db53b48439f9b.
 
 Upstream source: `skills/pacsomatic`. Generated Skill ID: `scientific-agent-skills-pacsomatic`. Skill content license: MIT. Package, service, dataset, and runtime licenses named by the upstream instructions remain separately applicable.
 
@@ -8,5 +8,4 @@ ResearchSpec normalized packaging, compatibility, resource disclosure, and autho
 
 Explicit resource exclusions:
 
-- `skills/pacsomatic/scripts/run_pacsomatic.py`: Exclude cloning, environment creation, executable script generation, raw module commands, shell submission, and scheduler execution.
-- `skills/pacsomatic/tests/test_run_pacsomatic.py`: Exclude tests for the removed executable helper.
+- `skills/pacsomatic/scripts/run_pacsomatic.py`: Exclude host-mutating execution: cloning an arbitrary repository, creating conda/mamba environments, generating executable launch scripts and submitting jobs to schedulers.

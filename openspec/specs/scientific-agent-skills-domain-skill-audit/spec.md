@@ -7,7 +7,7 @@ between audit findings and production admission.
 ## Requirements
 
 ### Requirement: Immutable Scientific Agent Skills Audit Source
-ResearchSpec SHALL keep the audited Scientific Agent Skills source as a repository submodule at `vendor/scientific-agent-skills`, pinned to release `v2.53.0` commit `9c9bd2e92af12311ecd0c1a643e0931643f9ea04`, and SHALL keep that checkout outside npm distribution.
+ResearchSpec SHALL keep the audited Scientific Agent Skills source as a repository submodule at `vendor/scientific-agent-skills`, pinned to release `v2.70.0` commit `d0c48af8c7b7a71ccc81fcd04c9db53b48439f9b`, and SHALL keep that checkout outside npm distribution.
 
 #### Scenario: Pinned source is reproducible
 - **WHEN** a maintainer or validation check resolves the Scientific Agent Skills audit source
@@ -20,11 +20,11 @@ ResearchSpec SHALL keep the audited Scientific Agent Skills source as a reposito
 - **AND** runtime SHALL NOT read the submodule
 
 ### Requirement: Complete Vendor Skill Audit
-ResearchSpec SHALL maintain one versioned machine record for every top-level v2.53.0 directory containing `SKILL.md`, and each record SHALL separate scope, adaptation, security, licensing, authority, and domain-fit evidence.
+ResearchSpec SHALL maintain one versioned machine record for every top-level v2.70.0 directory containing `SKILL.md`, and each record SHALL separate scope, adaptation, security, licensing, authority, and domain-fit evidence.
 
 #### Scenario: Every source Skill has one record
 - **WHEN** the audit is validated against the pinned source
-- **THEN** all 147 source Skills SHALL appear exactly once in stable order
+- **THEN** all 167 source Skills SHALL appear exactly once in stable order
 - **AND** no record SHALL reference an absent or unsafe source path
 
 #### Scenario: Blocked review remains distinct from exclusion
@@ -33,7 +33,7 @@ ResearchSpec SHALL maintain one versioned machine record for every top-level v2.
 - **AND** its ingest readiness SHALL block production admission until the finding is resolved
 
 ### Requirement: Source Classification And Existing Domain Fit
-The audit SHALL preserve upstream categories and SHALL record validated ANZSRC Field metadata or an explicit unclassified reason for all 147 Scientific Agent Skills without creating a vendor bundle, production membership, or installable object.
+The audit SHALL preserve upstream categories and SHALL record validated ANZSRC Field metadata or an explicit unclassified reason for all 167 Scientific Agent Skills without creating a vendor bundle, production membership, or installable object.
 
 #### Scenario: Field classification is explicit
 - **WHEN** an audited Skill maps to one or more ANZSRC Fields

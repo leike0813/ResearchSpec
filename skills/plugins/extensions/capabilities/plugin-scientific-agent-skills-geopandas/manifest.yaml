@@ -1,19 +1,12 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-geopandas
 title: GeoPandas
-description: Python library for working with geospatial vector data including
-  shapefiles, GeoJSON, and GeoPackage files. Use when working with geographic
-  data for spatial analysis, geometric operations, coordinate transformations,
-  spatial joins, overlay operations, choropleth mapping, or any task involving
-  reading/writing/analyzing vector geographic data. Supports PostGIS databases,
-  interactive maps, and integration with matplotlib/folium/cartopy. Use for
-  tasks like buffer analysis, spatial joins between datasets, dissolving
-  boundaries, clipping data, calculating areas/distances, reprojecting
-  coordinate systems, creating maps, or converting between spatial file formats.
+description: Guidance and local audit tools for Python workflows that directly
+  use GeoPandas GeoSeries, GeoDataFrame, spatial operations, or vector-data I/O.
 maturity: operational
 class: analysis
 node_kind: producer
-execution_type: llm
+execution_type: mixed
 params: {}
 inputs:
   - role: task_request
@@ -51,44 +44,86 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-crs-management.md
     path: references/crs-management.md
-    content_hash: 3e78919eef20638352689a2419b28ad7367bbd0f64686f438f3496625db6f48d
+    content_hash: c86db70e56d27727e8e4e159bfe063c81ccb0b79764d8c60aa7d594c61373ee2
     license: MIT
   - knowledge_id: sas-references-data-io.md
     path: references/data-io.md
-    content_hash: 8bfd8fc74b34e79fd42f31daef06ca582a500469c711371a6eba04cd6f8f59dc
+    content_hash: 5da20aa9279fd6349b0301a89646040bf9361b5460feb8e1864849f099643ed0
     license: MIT
   - knowledge_id: sas-references-data-structures.md
     path: references/data-structures.md
-    content_hash: 9cd950173409b04e3c57b40b24e296646931de938ebcc86b8bf6806a97fcaab8
+    content_hash: 00a6d89c53d860c9e81bc5864e46e804cefb74c7f5a643297c495a7235f3f38c
     license: MIT
   - knowledge_id: sas-references-geometric-operations.md
     path: references/geometric-operations.md
-    content_hash: f9d55230cae612770de98fb873f32d004d06f4e24624541dc9513be229c176f3
+    content_hash: e68ad33ec5181fd39630ee9c98229b96098c1fe7f9a8f59807371a6cdeb9a00e
     license: MIT
   - knowledge_id: sas-references-spatial-analysis.md
     path: references/spatial-analysis.md
-    content_hash: 9e846073426fdb00da1f04465036e3c992b5fb3f556f2e264c8db56e1f9e4924
+    content_hash: 16c86d764ff8c738ec1b691bc741f016b155639de5da1e9771dc20e0fb91332a
     license: MIT
   - knowledge_id: sas-references-visualization.md
     path: references/visualization.md
-    content_hash: b84ea68adec0fe229bb46973efc2747de69465f6bcc9ad835d526860bbfeddc4
+    content_hash: e93f6c9e9418fbae3dad78e4b537839c83140c5081aa332f84caf12e442c5368
+    license: MIT
+  - knowledge_id: sas-scripts--common.py
+    path: scripts/_common.py
+    content_hash: f4ef80f3259a4f1da6d8fa4c7b9cab63673aedf637c81727c1822a70ada3423c
+    license: MIT
+  - knowledge_id: sas-scripts-crs-reprojection-plan.py
+    path: scripts/crs_reprojection_plan.py
+    content_hash: f4490bac304b735835c8986620e76e64ea142e655e241908565dd17834e5e314
+    license: MIT
+  - knowledge_id: sas-scripts-export-plan.py
+    path: scripts/export_plan.py
+    content_hash: 77aa0bae19d1a60128a7dc2a24d06d4f9288d882d960905b154d46c76ebab3d4
+    license: MIT
+  - knowledge_id: sas-scripts-geometry-validity-report.py
+    path: scripts/geometry_validity_report.py
+    content_hash: d1727489a97f8b5941fecb9e7612da727416f4bc3c91a6bc5a8b86052e62f798
+    license: MIT
+  - knowledge_id: sas-scripts-sensitive-coordinates-checklist.py
+    path: scripts/sensitive_coordinates_checklist.py
+    content_hash: b53830e89bae6c359d237895d8836df29f11b0220facb97eda444d0d98b89079
+    license: MIT
+  - knowledge_id: sas-scripts-spatial-join-audit.py
+    path: scripts/spatial_join_audit.py
+    content_hash: 91911e184de4aeb48371134b77c034497026163172b4fdcc2ae2a038ba287672
+    license: MIT
+  - knowledge_id: sas-scripts-vector-inventory.py
+    path: scripts/vector_inventory.py
+    content_hash: 5b69d0c0f1e99cb9c7c663e4286f703c797b0d150711e1e4c293f6082767483f
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/SKILL.md
-      sha256: 61d10f69e9c9fea2cfe6013d91c1a069e475b17981f6eea1d94f93447b558982
+      sha256: 0d5ccec9c57a461f94e5f6c34ced9b8d6dc70dadac06d0149c81bcfeeaf43821
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/crs-management.md
-      sha256: 3e78919eef20638352689a2419b28ad7367bbd0f64686f438f3496625db6f48d
+      sha256: c86db70e56d27727e8e4e159bfe063c81ccb0b79764d8c60aa7d594c61373ee2
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/data-io.md
-      sha256: 8bfd8fc74b34e79fd42f31daef06ca582a500469c711371a6eba04cd6f8f59dc
+      sha256: 5da20aa9279fd6349b0301a89646040bf9361b5460feb8e1864849f099643ed0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/data-structures.md
-      sha256: 9cd950173409b04e3c57b40b24e296646931de938ebcc86b8bf6806a97fcaab8
+      sha256: 00a6d89c53d860c9e81bc5864e46e804cefb74c7f5a643297c495a7235f3f38c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/geometric-operations.md
-      sha256: f9d55230cae612770de98fb873f32d004d06f4e24624541dc9513be229c176f3
+      sha256: e68ad33ec5181fd39630ee9c98229b96098c1fe7f9a8f59807371a6cdeb9a00e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/spatial-analysis.md
-      sha256: 9e846073426fdb00da1f04465036e3c992b5fb3f556f2e264c8db56e1f9e4924
+      sha256: 16c86d764ff8c738ec1b691bc741f016b155639de5da1e9771dc20e0fb91332a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/references/visualization.md
-      sha256: b84ea68adec0fe229bb46973efc2747de69465f6bcc9ad835d526860bbfeddc4
+      sha256: e93f6c9e9418fbae3dad78e4b537839c83140c5081aa332f84caf12e442c5368
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/scripts/_common.py
+      sha256: f4ef80f3259a4f1da6d8fa4c7b9cab63673aedf637c81727c1822a70ada3423c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/scripts/crs_reprojection_plan.py
+      sha256: f4490bac304b735835c8986620e76e64ea142e655e241908565dd17834e5e314
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/scripts/export_plan.py
+      sha256: 77aa0bae19d1a60128a7dc2a24d06d4f9288d882d960905b154d46c76ebab3d4
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/scripts/geometry_validity_report.py
+      sha256: d1727489a97f8b5941fecb9e7612da727416f4bc3c91a6bc5a8b86052e62f798
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/scripts/sensitive_coordinates_checklist.py
+      sha256: b53830e89bae6c359d237895d8836df29f11b0220facb97eda444d0d98b89079
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/scripts/spatial_join_audit.py
+      sha256: 91911e184de4aeb48371134b77c034497026163172b4fdcc2ae2a038ba287672
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geopandas/scripts/vector_inventory.py
+      sha256: 5b69d0c0f1e99cb9c7c663e4286f703c797b0d150711e1e4c293f6082767483f
 license: MIT

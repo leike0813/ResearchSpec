@@ -1,17 +1,14 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-shap
-title: SHAP (SHapley Additive exPlanations)
-description: Model interpretability and explainability using SHAP (SHapley
-  Additive exPlanations). Use this skill when explaining machine learning model
-  predictions, computing feature importance, generating SHAP plots (waterfall,
-  beeswarm, bar, scatter, force, heatmap), debugging models, analyzing model
-  bias or fairness, comparing models, or implementing explainable AI. Works with
-  tree-based models (XGBoost, LightGBM, Random Forest), deep learning
-  (TensorFlow, PyTorch), linear models, and any black-box model.
+title: SHAP
+description: Explain and audit machine-learning predictions with SHAP. Use for
+  selecting SHAP explainers and maskers, computing and validating feature
+  attributions, handling multi-output explanations, and producing local or
+  global SHAP visualizations.
 maturity: operational
 class: analysis
 node_kind: producer
-execution_type: llm
+execution_type: mixed
 params: {}
 inputs:
   - role: task_request
@@ -47,34 +44,64 @@ validators:
         - --required
         - scope,source_ledger,method_plan,work_products,validation_results,conclusions
 knowledge_refs:
+  - knowledge_id: sas-references-data-maskers.md
+    path: references/data-maskers.md
+    content_hash: 78e17ba406456e8011d8679274bef37b7776f4e3df666b25e64b1749b43d7982
+    license: MIT
   - knowledge_id: sas-references-explainers.md
     path: references/explainers.md
-    content_hash: 2c3ea2706977790aafa13024b876b75bc198886cf75c83cfb29518bf0d5f108f
+    content_hash: 08894d631c9c57f55a50c08fc87d9146b6cc309e6fad463e69041b642ba5c070
+    license: MIT
+  - knowledge_id: sas-references-migration.md
+    path: references/migration.md
+    content_hash: 95dff2096d3d263f0fcb0ac6b6ebf9f668f626ee7ab4ef0b7897edfd4b9ad305
+    license: MIT
+  - knowledge_id: sas-references-modalities.md
+    path: references/modalities.md
+    content_hash: 4c9dbd964cf03d45396767ccac4851c2a96dabca0ebb50a3f88cc300260b9044
     license: MIT
   - knowledge_id: sas-references-plots.md
     path: references/plots.md
-    content_hash: cb1a7392e4592f67a5a231ba33627342e4343876ce715e83eb0fa461ebd3f6ed
+    content_hash: a0fac565709d5becf560a9c4f998ef949471a9dda02fe375340b9643638af395
     license: MIT
   - knowledge_id: sas-references-theory.md
     path: references/theory.md
-    content_hash: 7afc74836fa44354799727f22fec89bd6b86b798d6b56bbf0f642c9f87cf1610
+    content_hash: bbe0067c7f1e864aa70990ec3089606509e50d1a87152aaaffc72f3b109b94a7
+    license: MIT
+  - knowledge_id: sas-references-troubleshooting.md
+    path: references/troubleshooting.md
+    content_hash: 045d0bbedb98c227ce76675a225d4b7628b5b7d511ce437b95a707a8ff53f587
     license: MIT
   - knowledge_id: sas-references-workflows.md
     path: references/workflows.md
-    content_hash: 649baa278103cce7c54be74ce7e97ce82328deb64a5599f74bd0a11d6739e864
+    content_hash: 8406a3a92cd8dd5fd07f7abd87b6554aef2b796917b1bd0d5a61d3f72a39e388
+    license: MIT
+  - knowledge_id: sas-scripts-tabular-report.py
+    path: scripts/tabular_report.py
+    content_hash: 1faf1c554207d8cb0561dc7ea96cd143df6ce5ddfc2322af89f25f38e3bad8a2
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/SKILL.md
-      sha256: 1a2c509c63a987a2ec1cf1b7f31d16fde9c1d6a1ee7a3a61805ced8d353e7eab
+      sha256: a17950feb5b63ad357060c1bf95a6cdb4409cb53b2c77a0ea2bd6fa450aecaf0
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/data-maskers.md
+      sha256: 78e17ba406456e8011d8679274bef37b7776f4e3df666b25e64b1749b43d7982
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/explainers.md
-      sha256: 2c3ea2706977790aafa13024b876b75bc198886cf75c83cfb29518bf0d5f108f
+      sha256: 08894d631c9c57f55a50c08fc87d9146b6cc309e6fad463e69041b642ba5c070
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/migration.md
+      sha256: 95dff2096d3d263f0fcb0ac6b6ebf9f668f626ee7ab4ef0b7897edfd4b9ad305
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/modalities.md
+      sha256: 4c9dbd964cf03d45396767ccac4851c2a96dabca0ebb50a3f88cc300260b9044
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/plots.md
-      sha256: cb1a7392e4592f67a5a231ba33627342e4343876ce715e83eb0fa461ebd3f6ed
+      sha256: a0fac565709d5becf560a9c4f998ef949471a9dda02fe375340b9643638af395
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/theory.md
-      sha256: 7afc74836fa44354799727f22fec89bd6b86b798d6b56bbf0f642c9f87cf1610
+      sha256: bbe0067c7f1e864aa70990ec3089606509e50d1a87152aaaffc72f3b109b94a7
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/troubleshooting.md
+      sha256: 045d0bbedb98c227ce76675a225d4b7628b5b7d511ce437b95a707a8ff53f587
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/workflows.md
-      sha256: 649baa278103cce7c54be74ce7e97ce82328deb64a5599f74bd0a11d6739e864
+      sha256: 8406a3a92cd8dd5fd07f7abd87b6554aef2b796917b1bd0d5a61d3f72a39e388
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/scripts/tabular_report.py
+      sha256: 1faf1c554207d8cb0561dc7ea96cd143df6ce5ddfc2322af89f25f38e3bad8a2
 license: MIT

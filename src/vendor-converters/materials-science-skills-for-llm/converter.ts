@@ -8,7 +8,7 @@ import { sha256 } from "../../core/workspace/write-plan.js";
 import { assemblePluginRegistry } from "../../plugins/assembler.js";
 import { availableDomains, loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
 import { commitVendorStage, pathExists, prepareVendorStage, vendorProjectionDiff } from "../shared/staging.js";
-import { PRODUCTION_DOMAIN_COUNTS, productionVendorInventoryErrors } from "../shared/production-vendors.js";
+import { loadProductionDomainCounts, productionVendorInventoryErrors } from "../shared/production-vendors.js";
 import { renderMaterialsCompleteTrees, type MaterialsCompleteTreeSet } from "./complete-tree.js";
 import { type MaterialsFileDecision, type MaterialsRelationshipCatalog } from "./policy.js";
 import { MATERIALS_SKILL_DEFINITIONS } from "./skill-definitions.js";
@@ -92,8 +92,9 @@ export async function checkMaterialsOutput(repoRoot: string): Promise<{ ok: bool
       if (!sameArray(actualDomains, [...definition.domainIds].sort(compareText))) errors.push(`Materials domain membership differs from the definition: ${definition.skillId}`);
     }
     errors.push(...productionVendorInventoryErrors(loaded.vendors.keys()));
-    if (loaded.domains.size !== PRODUCTION_DOMAIN_COUNTS.internal) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.internal)} internal domains, found ${String(loaded.domains.size)}`);
-    if (availableDomains(loaded).length !== PRODUCTION_DOMAIN_COUNTS.available) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.available)} available domains, found ${String(availableDomains(loaded).length)}`);
+    const domainCounts = await loadProductionDomainCounts(repoRoot);
+    if (loaded.domains.size !== domainCounts.internal) errors.push(`Expected ${String(domainCounts.internal)} internal domains, found ${String(loaded.domains.size)}`);
+    if (availableDomains(loaded).length !== domainCounts.available) errors.push(`Expected ${String(domainCounts.available)} available domains, found ${String(availableDomains(loaded).length)}`);
     warnings.push(...loaded.diagnostics.map((item) => item.message));
   } catch (error) { errors.push(error instanceof Error ? error.message : String(error)); }
   return { ok: errors.length === 0, errors, warnings };

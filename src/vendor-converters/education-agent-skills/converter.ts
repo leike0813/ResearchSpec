@@ -5,7 +5,7 @@ import path from "node:path";
 import { assemblePluginRegistry } from "../../plugins/assembler.js";
 import { availableDomains, loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
 import { commitVendorStage, pathExists, prepareVendorStage, vendorProjectionDiff } from "../shared/staging.js";
-import { PRODUCTION_DOMAIN_COUNTS, productionVendorInventoryErrors } from "../shared/production-vendors.js";
+import { loadProductionDomainCounts, productionVendorInventoryErrors } from "../shared/production-vendors.js";
 import { renderEducationCompleteTrees } from "./complete-tree.js";
 import { assertEducationProductionApproved } from "./policy.js";
 
@@ -89,8 +89,9 @@ export async function checkEducationAgentSkillsOutput(repoRoot: string): Promise
       }
     }
     errors.push(...productionVendorInventoryErrors(loaded.vendors.keys()));
-    if (loaded.domains.size !== PRODUCTION_DOMAIN_COUNTS.internal) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.internal)} internal domains, found ${String(loaded.domains.size)}`);
-    if (availableDomains(loaded).length !== PRODUCTION_DOMAIN_COUNTS.available) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.available)} available domains, found ${String(availableDomains(loaded).length)}`);
+    const domainCounts = await loadProductionDomainCounts(repoRoot);
+    if (loaded.domains.size !== domainCounts.internal) errors.push(`Expected ${String(domainCounts.internal)} internal domains, found ${String(loaded.domains.size)}`);
+    if (availableDomains(loaded).length !== domainCounts.available) errors.push(`Expected ${String(domainCounts.available)} available domains, found ${String(availableDomains(loaded).length)}`);
     for (const domainId of rendered.policies.policy.domains.allowed) {
       const expected = rendered.trees.filter((tree) => tree.domainId === domainId).map((tree) => tree.skillId);
       const actual = loaded.domains.get(domainId)?.skills ?? [];

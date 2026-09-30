@@ -19,7 +19,7 @@ import {
 } from "./lib/vendor-maintenance.mjs";
 
 const ROOT = process.cwd();
-const ANCHOR_CREATED_AT = "2026-08-17T00:00:00+08:00";
+const ANCHOR_CREATED_AT = "2026-09-30T00:00:00+08:00";
 const CATALOG_PATH = path.join(ROOT, "audits", "scientific-agent-skills", "catalog.json");
 const AUDIT_README = path.join(ROOT, "audits", "scientific-agent-skills", "README.md");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "scientific-agent-skills-maintenance", "SKILL.md");
@@ -52,7 +52,6 @@ function upstreamState() {
     release: data.release,
     revision,
     root_license_claim: "MIT",
-    tracked_entry_count: 1483,
     content_file_count: inv.total,
     tree_sha256: inv.treeSha,
     inventory: { total: inv.total, treeSha: inv.treeSha, byTop: invByTop, byExt: invByExt },
@@ -77,7 +76,6 @@ function vendorBundleState() {
       tree_sha256: treeSha(skillRoot),
     });
   }
-  if (skills.length !== 49) throw new Error(`Expected 49 Scientific Agent Skills vendor-bundle Skills, found ${skills.length}`);
   return {
     root: data.generated_root,
     file_count: inv.total,
@@ -320,6 +318,10 @@ function writeRecords(anchorId) {
   const state = currentState(anchorId);
   const upstreamInventory = upstreamState().inventory;
   const rows = state.extension.rows;
+  const security = json(path.join(ROOT, "src/vendor-converters/scientific-agent-skills/security-review-decisions.json"));
+  const admissions = new Map(json(path.join(ROOT, "src/vendor-converters/scientific-agent-skills/admission-decisions.json")).decisions.map((decision) => [decision.upstream_skill_id, decision]));
+  const incrementalPath = path.join(artifactDir(anchorId), "incremental-review.json");
+  const incremental = existsSync(incrementalPath) ? json(incrementalPath) : null;
 
   const analysis = `# Scientific Agent Skills Extension Anchor Analysis — ${data.release}
 
@@ -330,6 +332,7 @@ function writeRecords(anchorId) {
 - immutable audit SHA-256: \`${state.upstream.audit_sha256}\`
 - advisory vendor bundle SHA-256: \`${state.advisory.tree_sha256}\`
 
+${incremental ? `## Incremental Source Review\n\n- Source: ${esc(incremental.from)} -> ${esc(incremental.to)}; ${incremental.source_changes.length} changed paths.\n- Added upstream Skills: ${incremental.additions.length}; removed: ${inlineCode(incremental.removed)}.\n- Added capabilities: ${inlineCode(incremental.added_capabilities)}.\n- Existing affected capabilities: ${incremental.changed_capabilities.length}; all are listed below.\n- Full source diff, additions and exclusion decisions: \`${path.relative(ROOT, incrementalPath)}\`, SHA-256 \`${fileSha(incrementalPath)}\`.\n` : ""}
 ## Upstream Inventory
 
 | top-level area | files |
@@ -349,8 +352,8 @@ ${rows.map((row) => `| \`${row.raw_skill_id}\` | \`${row.capability_id}\` | ${ro
 ## Decisions
 
 - [x] 上游身份固定为 \`${data.release}\` @ \`${state.upstream.revision}\`。
-- [x] 49 个 reviewed vendor-bundle Skills 一对一映射为 49 个 extension capability，raw Skills 继续保留为 advisory surface。
-- [x] 49 个 capability 使用统一 evidence-bound brief validator；410 个 reviewed 资源按原相对路径逐字节打包为 knowledge refs（含二进制示例资产）。
+- [x] ${state.advisory.raw_skill_count} 个 reviewed vendor-bundle Skills 一对一映射为 ${rows.length} 个 extension capability，raw Skills 继续保留为 advisory surface。
+- [x] ${rows.length} 个 capability 使用统一 evidence-bound brief validator；${state.review.tool_file_count} 个 reviewed 资源按原相对路径逐字节打包为 knowledge refs（含二进制示例资产）。
 - [x] 上游 runtime/provider 内容不进入 extension package；流程权威由 graph profile 承接。
 `;
 
@@ -374,7 +377,7 @@ ${rows.flatMap((row) => row.tool_files).map((tool) => `| \`${tool.target}\` | \`
 
 ## Verification
 
-- 每个 mixed package 的 \`tools/\` 与 reviewed vendor bundle 逐字节一致。
+- 每个 package 的 knowledge 文件按原相对路径与 reviewed vendor bundle 逐字节一致。
 - Agent-only package 不复制脚本，语义程序完整落在 \`SKILL.md\`。
 - 上游可执行文件只审计，不执行、不安装依赖、不访问服务。
 `;
@@ -401,9 +404,9 @@ ${rows.map((row) => `| \`${row.capability_id}\` | ${inlineCode(row.required_brie
 
 ## Verification
 
-- [x] 24 个 Scientific Agent Skills 领域按 source-neutral domain catalog 投影对应 extension。
-- [x] 每个 profile 通过 \`start -> instructions -> advance\` 全流程。
-- [x] 代表性 profile 覆盖 invalid-then-valid script validator 路径；全部 49 个 profile 通过 registry/维护检查。
+- [x] ${data.extension_domains.length} 个 Scientific Agent Skills 领域按 source-neutral domain catalog 投影对应 extension。
+- [x] 代表性 profile 通过 \`start -> instructions -> advance\` 全流程。
+- [x] 代表性 profile 覆盖 invalid-then-valid script validator 路径；全部 ${rows.length} 个 profile 通过 registry/维护检查。
 - [x] \`pnpm check\` / \`pnpm lint\` / 全量 \`pnpm test\` 通过。
 `;
 
@@ -431,10 +434,17 @@ ${rows.map((row) => `| \`${row.capability_id}\` | \`${row.package_tree_sha256}\`
 
 ## Human Confirmation
 
-- [x] 49 个上游语义义务均由 extension SKILL 或 graph profile 承接。
+- [x] ${rows.length} 个上游语义义务均由 extension SKILL 或 graph profile 承接。
 - [x] extension SKILL 不含 next-node / next-phase / agent-team orchestration。
 - [x] 命名、registry、审计记录、锚点 manifest 身份一致。
 - [x] Agent 语义审阅见 \`05-semantic-review.md\`。
+
+## Manual Security Decisions
+
+Structured source: \`src/vendor-converters/scientific-agent-skills/security-review-decisions.json\`.
+Current report observations and retained curation targets are reviewed separately from admission.
+
+${security.reviews.map((item) => `### ${item.skill_id}\n\n- Maintainer action: ${item.maintainer_decision}; production: ${admissions.get(item.skill_id)?.disposition}.\n- Independent blockers: ${item.independent_blockers.join(", ") || "none"}.\n- Reviewed inventory: ${item.reviewed_paths.length}/${item.inventory.files.length} files; findings: ${item.findings.length}.\n\n${item.findings.map((finding) => `- ${finding.finding_id} (${finding.severity}, ${finding.verdict}): ${finding.analysis}\n  Residual risk: ${finding.residual_risk}\n  Evidence: ${inlineCode(finding.evidence)}.`).join("\n")}\n${item.adaptations.map((adaptation) => `- ${adaptation.kind}${adaptation.source_path ? ` (${adaptation.source_path})` : ""}: ${adaptation.note}`).join("\n")}\n`).join("\n")}
 `;
 
   const semanticReviewPath = path.join(dir, "05-semantic-review.md");

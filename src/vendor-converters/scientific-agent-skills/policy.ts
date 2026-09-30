@@ -4,9 +4,10 @@ import path from "node:path";
 import { z } from "zod";
 
 import { AuditRelativePathSchema } from "../../vendor-audits/contracts.js";
-import { ScientificAgentSkillsAuditSchema, type ScientificAgentSkillsAudit } from "../../vendor-audits/scientific-agent-skills.js";
+import type { ScientificAgentSkillsAudit } from "../../vendor-audits/scientific-agent-skills.js";
 import {
   assertScientificAgentSkillsSecurityReviewComplete,
+  loadScientificAgentSkillsIdentity,
   loadScientificAgentSkillsSecurityReview,
   type ScientificAgentSkillsSecurityReviewCatalog,
 } from "./security-review.js";
@@ -40,9 +41,9 @@ export const ScientificAgentSkillsAdmissionDecisionSchema = z.strictObject({
 export const ScientificAgentSkillsAdmissionCatalogSchema = z.strictObject({
   schema_version: z.literal("1"),
   vendor_id: z.literal("scientific-agent-skills"),
-  release: z.literal("v2.53.0"),
-  revision: z.literal("9c9bd2e92af12311ecd0c1a643e0931643f9ea04"),
-  decisions: z.array(ScientificAgentSkillsAdmissionDecisionSchema).length(147),
+  release: z.string().min(1),
+  revision: z.string().regex(/^[a-f0-9]{40}$/, "must be a full immutable git revision"),
+  decisions: z.array(ScientificAgentSkillsAdmissionDecisionSchema).min(1),
 });
 
 export const ScientificAgentSkillsDependencyDecisionSchema = z.strictObject({
@@ -57,7 +58,7 @@ export const ScientificAgentSkillsDependencyDecisionSchema = z.strictObject({
 
 export const ScientificAgentSkillsDependencyCatalogSchema = z.strictObject({
   schema_version: z.literal("1"),
-  decisions: z.array(ScientificAgentSkillsDependencyDecisionSchema).length(22),
+  decisions: z.array(ScientificAgentSkillsDependencyDecisionSchema).min(1),
 });
 
 export const ScientificAgentSkillsResourceDecisionSchema = z.strictObject({
@@ -89,14 +90,17 @@ export interface ScientificAgentSkillsPolicies {
 
 export async function loadScientificAgentSkillsPolicies(repoRoot: string): Promise<ScientificAgentSkillsPolicies> {
   const policyRoot = path.join(repoRoot, "src/vendor-converters/scientific-agent-skills");
-  const audit = ScientificAgentSkillsAuditSchema.parse(await readJson(path.join(repoRoot, "audits/scientific-agent-skills/v2.53.0/skill-audit.json")));
+  const identity = await loadScientificAgentSkillsIdentity(repoRoot);
   const admission = ScientificAgentSkillsAdmissionCatalogSchema.parse(await readJson(path.join(policyRoot, "admission-decisions.json")));
   const dependencies = ScientificAgentSkillsDependencyCatalogSchema.parse(await readJson(path.join(policyRoot, "dependency-decisions.json")));
   const resources = ScientificAgentSkillsResourceCatalogSchema.parse(await readJson(path.join(policyRoot, "resource-decisions.json")));
-  const securityReview = await loadScientificAgentSkillsSecurityReview(repoRoot);
+  const securityReview = await loadScientificAgentSkillsSecurityReview(repoRoot, identity);
+  if (admission.release !== identity.release || admission.revision !== identity.revision) {
+    throw new Error(`Admission catalog identity ${admission.release}@${admission.revision} differs from the pinned maintenance identity ${identity.release}@${identity.revision}.`);
+  }
   assertScientificAgentSkillsSecurityReviewComplete(securityReview);
-  validateScientificAgentSkillsPolicies({ audit, admission, dependencies, resources, securityReview });
-  return { audit, admission, dependencies, resources, securityReview };
+  validateScientificAgentSkillsPolicies({ audit: identity.audit, admission, dependencies, resources, securityReview });
+  return { audit: identity.audit, admission, dependencies, resources, securityReview };
 }
 
 export function validateScientificAgentSkillsPolicies(policies: ScientificAgentSkillsPolicies): void {
@@ -175,7 +179,7 @@ function reviewEvidence(decision: ScientificAgentSkillsAdmissionDecision): strin
 }
 
 function safeEvidenceExists(audit: ScientificAgentSkillsAudit, skillRoot: string, evidence: string): boolean {
-  return evidence === audit.source.license_path || evidence === "SECURITY.md" || evidence === "docs/skills.md" || evidence === skillRoot || evidence.startsWith(`${skillRoot}/`);
+  return evidence === audit.source.license_path || evidence === "SECURITY.md" || evidence === "docs/security-report.json" || evidence === "docs/skills.md" || evidence === skillRoot || evidence.startsWith(`${skillRoot}/`);
 }
 
 async function readJson(filePath: string): Promise<unknown> {

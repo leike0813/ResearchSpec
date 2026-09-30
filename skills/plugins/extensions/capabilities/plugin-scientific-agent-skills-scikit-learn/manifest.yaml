@@ -46,6 +46,14 @@ validators:
         - --required
         - scope,source_ledger,method_plan,work_products,validation_results,conclusions
 knowledge_refs:
+  - knowledge_id: sas-references-common-workflows.md
+    path: references/common_workflows.md
+    content_hash: 46622a76232e595eafa8b568c4f52ee11479e24482ff36a1b6a1590cc3d95931
+    license: MIT
+  - knowledge_id: sas-references-core-capabilities.md
+    path: references/core_capabilities.md
+    content_hash: 071aa20353e1ab33c3d20a6e2f81c43ef5847142bdabd8fa3658fd424e098b13
+    license: MIT
   - knowledge_id: sas-references-model-evaluation.md
     path: references/model_evaluation.md
     content_hash: 95825afc97206a6588c7fd1f9358e2b130bbbbe6ae5f1032923ee7dbaf6c11e5
@@ -83,7 +91,11 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/SKILL.md
-      sha256: f2cdc300dbe9eef603127b9091fdc2c706d0888c7605c62be2a8140ac077add5
+      sha256: e05ed4a1d5868fd1857a471019570c5a7d23cbf645b7e8ab192923dc765d0db9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/common_workflows.md
+      sha256: 46622a76232e595eafa8b568c4f52ee11479e24482ff36a1b6a1590cc3d95931
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/core_capabilities.md
+      sha256: 071aa20353e1ab33c3d20a6e2f81c43ef5847142bdabd8fa3658fd424e098b13
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/model_evaluation.md
       sha256: 95825afc97206a6588c7fd1f9358e2b130bbbbe6ae5f1032923ee7dbaf6c11e5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/pipelines_and_composition.md

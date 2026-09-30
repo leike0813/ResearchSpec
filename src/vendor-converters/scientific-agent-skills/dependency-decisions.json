@@ -242,6 +242,72 @@
         "skills/scientific-writing/SKILL.md"
       ],
       "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "alphagenome",
+      "to": "genomic-coordinates",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/alphagenome/SKILL.md"
+      ],
+      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
+    },
+    {
+      "from": "folklore-variant-evidence",
+      "to": "genomic-coordinates",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/folklore-variant-evidence/SKILL.md"
+      ],
+      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
+    },
+    {
+      "from": "relsa-severity-assessment",
+      "to": "statistical-analysis",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "advisory",
+      "evidence": [
+        "skills/relsa-severity-assessment/SKILL.md"
+      ],
+      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
+    },
+    {
+      "from": "relsa-severity-assessment",
+      "to": "experimental-design",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "advisory",
+      "evidence": [
+        "skills/relsa-severity-assessment/SKILL.md"
+      ],
+      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
+    },
+    {
+      "from": "uncertainty-and-units",
+      "to": "statistical-analysis",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "advisory",
+      "evidence": [
+        "skills/uncertainty-and-units/SKILL.md"
+      ],
+      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
+    },
+    {
+      "from": "uncertainty-and-units",
+      "to": "experimental-design",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "advisory",
+      "evidence": [
+        "skills/uncertainty-and-units/SKILL.md"
+      ],
+      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
     }
   ]
 }

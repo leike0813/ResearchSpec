@@ -63,11 +63,23 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-references-readme.md
     path: references/README.md
-    content_hash: 4fa87e237adfb8a5d0eb18bc9f0e9469f4397325f2af49b9491b5568859e27bc
+    content_hash: 90f2c05757aa87043e59bfd057b1b685b0cfa1f63f89be42c920eae6ede33936
+    license: MIT
+  - knowledge_id: sas-references-ai-graphics-for-posters.md
+    path: references/ai_graphics_for_posters.md
+    content_hash: cc5c4319e28511e58be236de1a8041cc0471eddd3cdd4f1e661695a6879f7fe7
+    license: MIT
+  - knowledge_id: sas-references-compilation-and-quality-control.md
+    path: references/compilation_and_quality_control.md
+    content_hash: b059bb5bbe041ca7229bd2d3909904a0e19865f50f9c79763c13225ccf7bad5f
     license: MIT
   - knowledge_id: sas-references-latex-poster-packages.md
     path: references/latex_poster_packages.md
     content_hash: 75a1be24675df874f17cbea891bcfd3fc16f17e29275dd3c62d79eb9a1e1f87b
+    license: MIT
+  - knowledge_id: sas-references-latex-poster-reference.md
+    path: references/latex_poster_reference.md
+    content_hash: cb5c034726d3f2a479ebf16eb830394df55085cb0f12446be5832f1e9153ea4f
     license: MIT
   - knowledge_id: sas-references-poster-content-guide.md
     path: references/poster_content_guide.md
@@ -81,6 +93,10 @@ knowledge_refs:
     path: references/poster_layout_design.md
     content_hash: f674c0fe352321b9bc0eb2be09d95379714a6b77624689ba100da4898c4f20df
     license: MIT
+  - knowledge_id: sas-references-poster-patterns-and-presentation.md
+    path: references/poster_patterns_and_presentation.md
+    content_hash: 8b42305d892c1c4cb80f9c183d44922b1a6f3a0dd0b8536a3ec7860aa2d0eae4
+    license: MIT
   - knowledge_id: sas-scripts-review-poster.sh
     path: scripts/review_poster.sh
     content_hash: db1fcfcda80c0ae1be5ceb075ec9e7f00df6908aa1bc395c029f8dfcb97f43a9
@@ -90,7 +106,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/SKILL.md
-      sha256: 2fe76569b3485e295a9969bd75f2cae683b3fb28fff714ce55b6c7c2643f92fd
+      sha256: 71c8834a732400133ae3ca263b3f5c6f093df43bdcf076dea41da37bb5f56f4b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/assets/baposter_template.tex
       sha256: 2caa29d36e3269e84b1fb7a74a39814c7b7c8747573c46023fe2243cfe4ae45e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/assets/beamerposter_template.tex
@@ -100,15 +116,23 @@ provenance:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/assets/tikzposter_template.tex
       sha256: 1f58c0ebe3281ed85fbc87f03632312028205a1bd585e35a7f4058515c58dda6
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/README.md
-      sha256: 4fa87e237adfb8a5d0eb18bc9f0e9469f4397325f2af49b9491b5568859e27bc
+      sha256: 90f2c05757aa87043e59bfd057b1b685b0cfa1f63f89be42c920eae6ede33936
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/ai_graphics_for_posters.md
+      sha256: cc5c4319e28511e58be236de1a8041cc0471eddd3cdd4f1e661695a6879f7fe7
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/compilation_and_quality_control.md
+      sha256: b059bb5bbe041ca7229bd2d3909904a0e19865f50f9c79763c13225ccf7bad5f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/latex_poster_packages.md
       sha256: 75a1be24675df874f17cbea891bcfd3fc16f17e29275dd3c62d79eb9a1e1f87b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/latex_poster_reference.md
+      sha256: cb5c034726d3f2a479ebf16eb830394df55085cb0f12446be5832f1e9153ea4f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/poster_content_guide.md
       sha256: 2af1cbfa45878041de15459ccbac49f85f810d045ed5231a011bee5f54641b26
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/poster_design_principles.md
       sha256: 6c3618133764687a19f30f563805bbf13996f818ba267cfbd5bbc908b9f7102b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/poster_layout_design.md
       sha256: f674c0fe352321b9bc0eb2be09d95379714a6b77624689ba100da4898c4f20df
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/poster_patterns_and_presentation.md
+      sha256: 8b42305d892c1c4cb80f9c183d44922b1a6f3a0dd0b8536a3ec7860aa2d0eae4
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/scripts/review_poster.sh
       sha256: db1fcfcda80c0ae1be5ceb075ec9e7f00df6908aa1bc395c029f8dfcb97f43a9
 license: MIT

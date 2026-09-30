@@ -770,247 +770,282 @@
     {
       "capability_id": "plugin-scientific-agent-skills-aeon",
       "source_path": "capabilities/plugin-scientific-agent-skills-aeon",
-      "manifest_sha256": "29b8621ed2ef11b98d1dc5b035ae364ed0e63067720692998d80ffdb38bee741"
+      "manifest_sha256": "73f72eb96e141dece8235e2cb303b9468a7026ddb185efe93c073e2dc6705639"
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-analytical-method-validation",
+      "source_path": "capabilities/plugin-scientific-agent-skills-analytical-method-validation",
+      "manifest_sha256": "56d26b38c749fcd84e9296b05da9e758fae5c60a31fe5f8a975da49e269c476c"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-astropy",
       "source_path": "capabilities/plugin-scientific-agent-skills-astropy",
-      "manifest_sha256": "d6204ade70d75dc78fe1f7e6fcd0505e8a144c6a1c2131953fe9a3ae23e261b0"
+      "manifest_sha256": "9efb80dd8383d048d21e7bafcbccab1b5919227131ace7dcbbb3591571c7a664"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-benchling-integration",
       "source_path": "capabilities/plugin-scientific-agent-skills-benchling-integration",
-      "manifest_sha256": "54f97318b4187da7a501ab3a81a285bf64727e1cb9a7402b7392caa6bafdaea8"
+      "manifest_sha256": "f1b81203e4d7abfc7dea078e6a5f1ce1642a215d74203788a48b89e1678add23"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-cirq",
       "source_path": "capabilities/plugin-scientific-agent-skills-cirq",
-      "manifest_sha256": "8eea5f441fcabff7b9ac0f663293e6c24ca85b2e136a57af3ee1f10ce70aee89"
+      "manifest_sha256": "33197ac2218660212357d16e3652981d15c5b5abab590a2e992d4b4f488a5a39"
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-datalad",
+      "source_path": "capabilities/plugin-scientific-agent-skills-datalad",
+      "manifest_sha256": "ca1580f1c837f2f4f4308f49285a8890f46c9651597ff02db5a9a245c8e9951a"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-fluidsim",
       "source_path": "capabilities/plugin-scientific-agent-skills-fluidsim",
-      "manifest_sha256": "e1208bda60177a87d9428d9af7e5f4dc0a8fa415b68a9c43ffbdf5a3ca65ddc0"
+      "manifest_sha256": "f944703d96edd9efdc85de16ad6d9a9b5a1e1e9333b9ef437991344b67ce107a"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-generate-image",
       "source_path": "capabilities/plugin-scientific-agent-skills-generate-image",
-      "manifest_sha256": "9f32fad52659d2ddd94d7275c79f5ac4a91ba193d040378c3b9a2d4768e9b9e6"
+      "manifest_sha256": "03eee0a4dfefca446a45750cf60529adfeeb51b74967517a53ec21ab5f16fef6"
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-genomic-coordinates",
+      "source_path": "capabilities/plugin-scientific-agent-skills-genomic-coordinates",
+      "manifest_sha256": "16cb8986a68c175d4f3fa83dea4a63690ae1f8b9ca63c05a82f5b6a1d79f5914"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-geomaster",
       "source_path": "capabilities/plugin-scientific-agent-skills-geomaster",
-      "manifest_sha256": "07b5f7253b32c5f39bda97b8a3f79791f0cf8fb5466d341209e4043049496538"
+      "manifest_sha256": "5767fcedbe70b33ea956998e7a43cc95e1d3965be2beb571599769b27d890ebb"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-geopandas",
       "source_path": "capabilities/plugin-scientific-agent-skills-geopandas",
-      "manifest_sha256": "082b286bad7a674520dac5698f57f2a77c62a20308b2f978eb2c78b0368778e4"
+      "manifest_sha256": "22b78500e223d2708f7c6bc7cb75247bfd4dc06ef270b3e0b9d3afadd03faf75"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-ginkgo-cloud-lab",
       "source_path": "capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab",
-      "manifest_sha256": "ddd9364fce350276ed9aecb06f7e56f3382e6928e694108ff6aa2071a5fc2a66"
+      "manifest_sha256": "2149364f67b43d4e793f3ea94d8863773f71a8d786ece4aada5f569375ffe5fc"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-infographics",
       "source_path": "capabilities/plugin-scientific-agent-skills-infographics",
-      "manifest_sha256": "295b3b19a92a359f704d1dd041a47860a78936ba73979376a059820a0f3962cd"
+      "manifest_sha256": "34929ac4977dbaa8079b2f3845b8b90f3222372e3612a0737b682a303a043129"
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-lab-hardware-cad",
+      "source_path": "capabilities/plugin-scientific-agent-skills-lab-hardware-cad",
+      "manifest_sha256": "d8c16cd366ca0f5f6b048d93d5f6d7257a026a40f1356edc23f43f2e7bdf4be5"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-labarchive-integration",
       "source_path": "capabilities/plugin-scientific-agent-skills-labarchive-integration",
-      "manifest_sha256": "f534684bb37f5bc1f55f9c0d35aa0d4cf1551d86d15b1920b1c5dc88d568d2ef"
+      "manifest_sha256": "6fea0904e4983f378d4b2629faed415bf988291ca1d80e15b7c6b4d64ff4d920"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-latex-posters",
       "source_path": "capabilities/plugin-scientific-agent-skills-latex-posters",
-      "manifest_sha256": "afa54de5adf91ae98a6779470b034ae65db11c54a52fda8d786350a4add10eb4"
+      "manifest_sha256": "46466d7c732cc2c4da4a457f0484759a61d948087b94ddb10b647bd928c726f4"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-liteparse",
       "source_path": "capabilities/plugin-scientific-agent-skills-liteparse",
-      "manifest_sha256": "732a23c27d603426c7d72e9623c276dda9798b62846583e8b4d187efb6930be4"
+      "manifest_sha256": "48a9fade0cc754a9f7aa70875ddf55fd3e4c824952d5b37ab9b812919fe73096"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-markdown-mermaid-writing",
       "source_path": "capabilities/plugin-scientific-agent-skills-markdown-mermaid-writing",
-      "manifest_sha256": "b636341ce09b2abfb99a6d197be12fadbe4c4c86ec1575156d1a5255f8c41bb9"
+      "manifest_sha256": "9eaa2dbb747e70a895ded30e93c4ad75f3a0e3197e78238087e3d0e058e39264"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-markitdown",
       "source_path": "capabilities/plugin-scientific-agent-skills-markitdown",
-      "manifest_sha256": "756ef2345963079bfb811b089e36ce0adc1062d28af0ce78c1adfcc471c1e4cc"
+      "manifest_sha256": "ccb5300ac4fd0b6d36d28c554f9b88d7ac869cffff168c3b3edd97616e5b8fe1"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-matlab",
       "source_path": "capabilities/plugin-scientific-agent-skills-matlab",
-      "manifest_sha256": "474cb1a6e7e48ccefd803571859125859ea7c1d3c3b1a8e9022545ea09be1d0e"
+      "manifest_sha256": "13169767cd91d0d11f9e2de3627c50b6fb7b04af45562d5d843e53cff76bbba1"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-matplotlib",
       "source_path": "capabilities/plugin-scientific-agent-skills-matplotlib",
-      "manifest_sha256": "ae6e0baabe4d24ef4a2535bd5fddd658a8a99881dc1d85e9c20642e9a490285f"
+      "manifest_sha256": "f33716fbea1087589ea5a2cf6c621dac7a20ae2ad2b17cb2e5591e94730c2946"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-modal",
       "source_path": "capabilities/plugin-scientific-agent-skills-modal",
-      "manifest_sha256": "7b984ec9bb6f675ca3922886147bca9423ce6c30da45d4cb3bcdb11ce30af038"
+      "manifest_sha256": "807e962bf8c5fe5e8863a9b76db198c872482e97f618e8a3ba72323fb8ebb486"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-networkx",
       "source_path": "capabilities/plugin-scientific-agent-skills-networkx",
-      "manifest_sha256": "c5fc9033eb496016a8269ecf70eae61f3fa69db75245549410c5d7eaf6e4f545"
+      "manifest_sha256": "519ebbb3b2edd28ba9babd9be1930825b125740fa978faf72804df922cb09c59"
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-ontology-term-resolution",
+      "source_path": "capabilities/plugin-scientific-agent-skills-ontology-term-resolution",
+      "manifest_sha256": "26bfbafc1ea9d1551ed840d96ecdc69e168fdb84d11f2b75a59c5128f22b4069"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-open-notebook",
       "source_path": "capabilities/plugin-scientific-agent-skills-open-notebook",
-      "manifest_sha256": "c2cabb5721847ef73ad25e846841b128ae49b3332d1f852ebb8fbe122c9b5881"
+      "manifest_sha256": "345f1e4c1105f9be63d66ca1f8f918b185bf48b7a20416928b106967ccacb84a"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-opentrons-integration",
       "source_path": "capabilities/plugin-scientific-agent-skills-opentrons-integration",
-      "manifest_sha256": "ef59c14eba9f13856e8a6476e9f8c9f0f8b53321ab91e8ca4b122b9c290a83b8"
+      "manifest_sha256": "bbe7f0e2b72baf289a120b3149db0c5a8efdff38818d4fdc8dc3d41a10b9e6a8"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-optimize-for-gpu",
       "source_path": "capabilities/plugin-scientific-agent-skills-optimize-for-gpu",
-      "manifest_sha256": "a41e09eadf8e8802b9351823b99242097d47e90515cbf1d17da8659ecca069b6"
+      "manifest_sha256": "20de87f0e68c7743a14d9425a98d6fe732a835179206d785b63d8b3037d76c70"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pacsomatic",
       "source_path": "capabilities/plugin-scientific-agent-skills-pacsomatic",
-      "manifest_sha256": "ea504ac5e8c700d311f98e3adb0cf21aee03b0c57dc52d125aecb493fd53aeb6"
+      "manifest_sha256": "ade07ea50be13739748ea3b758fe1361aea6e59546d841900fc1cea6f57fd068"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-parallel-web",
       "source_path": "capabilities/plugin-scientific-agent-skills-parallel-web",
-      "manifest_sha256": "a7a8f60dcb8e1c6ef910559fcc2037cc9ef9df4fbec5969620996f5c5aef6d13"
+      "manifest_sha256": "126fb581c45439fd99d891224aba6da61ab112bdf1c5fb9a30e5413ec364b79e"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pennylane",
       "source_path": "capabilities/plugin-scientific-agent-skills-pennylane",
-      "manifest_sha256": "f1fdd8671d6a5ab4aaabcfe34e7928f8b33b484bc12ae133d3202b8d6991b50a"
+      "manifest_sha256": "85056cda604e0b085aa6156dad59ea3c70c1b9c64ce83ff96b71f556cdb17f7b"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pptx-posters",
       "source_path": "capabilities/plugin-scientific-agent-skills-pptx-posters",
-      "manifest_sha256": "9ac93adf2fa7928768c6a57c803d5abb412fcec7422304a22427f81aefc14d53"
+      "manifest_sha256": "72dce7cb85426c9b1c43be95f49af22ddb636b7e0b153414f4919a67be926e6a"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-protocolsio-integration",
       "source_path": "capabilities/plugin-scientific-agent-skills-protocolsio-integration",
-      "manifest_sha256": "2f19f1eef020ba357881b2612700cf32c78256ac647bc18d9cdadb2dfb4f3917"
+      "manifest_sha256": "481054aa71b49e243d69fbc5a3ad4bc27c5bdd426e8bc5639dad1dbac109fcc0"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pufferlib",
       "source_path": "capabilities/plugin-scientific-agent-skills-pufferlib",
-      "manifest_sha256": "2a1a69615322a31d49586e364c94cfeb8890f5916c044f726c13dca4002d7063"
+      "manifest_sha256": "57ce73655551ffd3587c7337d8cc553cadf93283a7f8ba18f703ba0e702abef7"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pylabrobot",
       "source_path": "capabilities/plugin-scientific-agent-skills-pylabrobot",
-      "manifest_sha256": "596c45f243b7468b5bcb98c2691279f09e45455635d196774b0d3e4ada8ad676"
+      "manifest_sha256": "1f5581a4888b978405e8a9be7a944a6c9d203a64179b78043c576e7a46979cce"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pymatgen",
       "source_path": "capabilities/plugin-scientific-agent-skills-pymatgen",
-      "manifest_sha256": "8a584cb0791c049cb3ac5e3e68fd030999c0b02794bcbd4af01b0fee44fbcc8b"
+      "manifest_sha256": "5c3863c514271210ad12b6f747164e0c5b63e06492dfcdca889e88d672d07d9b"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pymoo",
       "source_path": "capabilities/plugin-scientific-agent-skills-pymoo",
-      "manifest_sha256": "8c7978e4403887df9cfcfc1c374224f35057636bc01b8e69239b5182df3e22d2"
+      "manifest_sha256": "07a49c1752bd35ebd8865648c9e30459e8ace979a246a7aa110500a103dce80b"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pytorch-lightning",
       "source_path": "capabilities/plugin-scientific-agent-skills-pytorch-lightning",
-      "manifest_sha256": "404cad58cd917dd250e3ffc2f7104c309e649ef7de5da7f2dca1d087779a58e4"
+      "manifest_sha256": "89cb1c5ca7f88021308db801a72d68f4112d819bce8f22a465f99eac8fc1aab1"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-pyzotero",
       "source_path": "capabilities/plugin-scientific-agent-skills-pyzotero",
-      "manifest_sha256": "2891b9ad77f189d569a204293fb9e0301805d1d424ec40aefa6f905adcda50ba"
+      "manifest_sha256": "0baecdfa1f6d1a7895837937c42cff8b8746980db6cf8fc73c69305960e4b20c"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-qiskit",
       "source_path": "capabilities/plugin-scientific-agent-skills-qiskit",
-      "manifest_sha256": "efd9f83cd69a1779d1b111b046de1eb1ae6250a07f81261f10c78822003a90bf"
+      "manifest_sha256": "702cc87e28d50a0302379ce0ee11376905c2beb507f3c64a4bfb53007ca9c4dd"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-qutip",
       "source_path": "capabilities/plugin-scientific-agent-skills-qutip",
-      "manifest_sha256": "c4d1fd9cfdd169eb3486add0315c9ea7a40b0f83d5391f43e1e82505bae698a3"
+      "manifest_sha256": "bd378eb298a2b382476db05fae579f948a0f57d592695f3c1727517fe8bff384"
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-relsa-severity-assessment",
+      "source_path": "capabilities/plugin-scientific-agent-skills-relsa-severity-assessment",
+      "manifest_sha256": "2664dd1c536848e1bcb1795f865d356d15eebefdc90c599462e1ac141c739983"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-scientific-schematics",
       "source_path": "capabilities/plugin-scientific-agent-skills-scientific-schematics",
-      "manifest_sha256": "1d3841d66a76ff725cec1e175e740b02253ecddb01dbcc21f7f41e316e51ac84"
+      "manifest_sha256": "572e0a725369c7617b4bc2ef167a604555f4103197ea12c36bea1b93969630de"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-scientific-slides",
       "source_path": "capabilities/plugin-scientific-agent-skills-scientific-slides",
-      "manifest_sha256": "56f60aba503f6c43a21978b567c5e79983916ae5ee87eabc165c7d442bc4881e"
+      "manifest_sha256": "6e1f3f6a60ef17e57f91a2d336a767ea344291d7dab51992b5995182421f438a"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-scientific-visualization",
       "source_path": "capabilities/plugin-scientific-agent-skills-scientific-visualization",
-      "manifest_sha256": "e8cda8f25b3857578eab5a61bd96a8eb112f51d58e7afda6ca14562bd8d9c2a7"
+      "manifest_sha256": "b0a829c86ba2b75ec406fde7e67ab72789539ee0be3ac168b73d79ab4ff454f3"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-scikit-learn",
       "source_path": "capabilities/plugin-scientific-agent-skills-scikit-learn",
-      "manifest_sha256": "0cb2d652bc770996f740ca46e40e1b50420ea672b5371ceaa1ac3afb1e39f456"
+      "manifest_sha256": "0409c2a15ea990b628d50d45315c0236e0f124edb0754ef89efe730381797d7c"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-seaborn",
       "source_path": "capabilities/plugin-scientific-agent-skills-seaborn",
-      "manifest_sha256": "2f8415f010e88976e817a15e38949c0f90f212de8937119f3c118bd5a8d279eb"
+      "manifest_sha256": "9c321917b329ae489d8f6331e85d5dff2de48b6151d25b29cec4434acc51f16b"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-shap",
       "source_path": "capabilities/plugin-scientific-agent-skills-shap",
-      "manifest_sha256": "10915ff2a5f5e764ef94d33488407f16d635d1bd31baf9c5e620420e02be3340"
+      "manifest_sha256": "f12c3e5a5afd1e522e21f00fa516296b75cf097e6989eef50030a2c74bd33478"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-simpy",
       "source_path": "capabilities/plugin-scientific-agent-skills-simpy",
-      "manifest_sha256": "377b59c3acf1cffd61967293b8eb7613396ef3002ff39d6a04cfd961dbeb65ff"
+      "manifest_sha256": "372354938797fcd9f77ee470b7d95a39d98efa0e561817996ece49b3f6f6df4f"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-stable-baselines3",
       "source_path": "capabilities/plugin-scientific-agent-skills-stable-baselines3",
-      "manifest_sha256": "b147f0c2d6dd92972913db4a126fc21905f3566b920b669c18877c3550d6dd93"
+      "manifest_sha256": "6ee13fd58a6cfa28f9414e146bae7a90e77f584fe1b184149568d58a43b98afb"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-sympy",
       "source_path": "capabilities/plugin-scientific-agent-skills-sympy",
-      "manifest_sha256": "4e3994c5e13493472f727e93f2cd2d65626db1cd96dbdff6bdae70330780c7e0"
+      "manifest_sha256": "3a10cbee091b835ffd086f63796549edd6a40947beeac3ef47455f8ea3e905c5"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-timesfm-forecasting",
       "source_path": "capabilities/plugin-scientific-agent-skills-timesfm-forecasting",
-      "manifest_sha256": "4de0c117463eb9150da045e0f269b8eb53ae4ca74ffae25cb86798b6c28413d9"
+      "manifest_sha256": "7e1b1d0fca154efd3742befc48f8e7b8d168c6041ffab24ad9c993d9f8a39802"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-torch-geometric",
       "source_path": "capabilities/plugin-scientific-agent-skills-torch-geometric",
-      "manifest_sha256": "b25f0153e6f2dbe58fa3e5009256d2d96db9467ddf1636aef4426126f22c03b5"
+      "manifest_sha256": "f08d78517c1e26b7e144f2a3d379a6075ab7988e2307bf1cd19ddc3e008eb4de"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-transformers",
       "source_path": "capabilities/plugin-scientific-agent-skills-transformers",
-      "manifest_sha256": "66ccaba261bf66cacca33be0d5e34566f1a4efd645da429058b3313c7cd8be7a"
+      "manifest_sha256": "df99147e2c40c63a064d78a671fe4472356780c2212b01eea50d833f5213c251"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-umap-learn",
       "source_path": "capabilities/plugin-scientific-agent-skills-umap-learn",
-      "manifest_sha256": "2a60f1d7fe8674af4efafeac9a008245e96384f66b5b0ff1bf160e34cf9108ce"
+      "manifest_sha256": "44b72e33dc1a8e5f890228ab3a27408fa67fce69f8b0993825c1f17fca7b286c"
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-uncertainty-and-units",
+      "source_path": "capabilities/plugin-scientific-agent-skills-uncertainty-and-units",
+      "manifest_sha256": "027b24e668df6ac99ff94aaf74835d01fd7dcaecc0de5b513c5052e42be6a330"
     },
     {
       "capability_id": "plugin-scientific-agent-skills-venue-templates",
       "source_path": "capabilities/plugin-scientific-agent-skills-venue-templates",
-      "manifest_sha256": "37315045020d29c1a17c44a5107f58d5eae52d9c5a8e2caeb9334ffbc92e4210"
+      "manifest_sha256": "15ee1f8be00b0afdd76ff185b76d6d17616461ab390f3432ef3b9923576b7a96"
     },
     {
       "capability_id": "plugin-tooluniverse-acmg-variant-classification",
@@ -2435,6 +2470,11 @@
       "profile_sha256": "ad7fc7838bbad822dfa343750222de1efd06920ace7d296f298aa1e56cd552e4"
     },
     {
+      "profile_id": "plugin-scientific-agent-skills-analytical-method-validation",
+      "source_path": "profiles/plugin-scientific-agent-skills-analytical-method-validation.yaml",
+      "profile_sha256": "75823d3c7ebae81eb094b05f3312d38a6c8ce1e51e8a723d1e79a04d23ff7df6"
+    },
+    {
       "profile_id": "plugin-scientific-agent-skills-astropy",
       "source_path": "profiles/plugin-scientific-agent-skills-astropy.yaml",
       "profile_sha256": "de8cdadeda6f83558e71ed75352921c8b34d62f481ec4550589385b2782dc66e"
@@ -2450,6 +2490,11 @@
       "profile_sha256": "75619696bec6a10fc806d78f5c602bfec3b27541b06ef58a49b67439adee7ac6"
     },
     {
+      "profile_id": "plugin-scientific-agent-skills-datalad",
+      "source_path": "profiles/plugin-scientific-agent-skills-datalad.yaml",
+      "profile_sha256": "db01add65406090cfe83d57561e5c388bda3f8f04a5d6307f384c9a89f32dd44"
+    },
+    {
       "profile_id": "plugin-scientific-agent-skills-fluidsim",
       "source_path": "profiles/plugin-scientific-agent-skills-fluidsim.yaml",
       "profile_sha256": "17c28bbf59f832e09d781da0a327176499cd93afb9cad4cb71c1cd3ec81a08f8"
@@ -2458,6 +2503,11 @@
       "profile_id": "plugin-scientific-agent-skills-generate-image",
       "source_path": "profiles/plugin-scientific-agent-skills-generate-image.yaml",
       "profile_sha256": "34818885084cfb22cc86319bdbb07454ad7eee78ac0320a1f4fecef1bc912c60"
+    },
+    {
+      "profile_id": "plugin-scientific-agent-skills-genomic-coordinates",
+      "source_path": "profiles/plugin-scientific-agent-skills-genomic-coordinates.yaml",
+      "profile_sha256": "0ca55c88fa7bcd6f50efd09788b0239a39e0fdfcbc700a6c0a8427a6341d77f2"
     },
     {
       "profile_id": "plugin-scientific-agent-skills-geomaster",
@@ -2478,6 +2528,11 @@
       "profile_id": "plugin-scientific-agent-skills-infographics",
       "source_path": "profiles/plugin-scientific-agent-skills-infographics.yaml",
       "profile_sha256": "bc9f0ddfe578cc8497b5158901165cb722ae534a8a3d4c3bb692989aa930d33b"
+    },
+    {
+      "profile_id": "plugin-scientific-agent-skills-lab-hardware-cad",
+      "source_path": "profiles/plugin-scientific-agent-skills-lab-hardware-cad.yaml",
+      "profile_sha256": "ba24aefbd1829bde1c09cddf701a3b6b8456d7d0842b8134b4b0a80ef7e30e24"
     },
     {
       "profile_id": "plugin-scientific-agent-skills-labarchive-integration",
@@ -2523,6 +2578,11 @@
       "profile_id": "plugin-scientific-agent-skills-networkx",
       "source_path": "profiles/plugin-scientific-agent-skills-networkx.yaml",
       "profile_sha256": "7683f47da83ebc03915b70979176d9f1cf12a14dae44067e08b66128528dabca"
+    },
+    {
+      "profile_id": "plugin-scientific-agent-skills-ontology-term-resolution",
+      "source_path": "profiles/plugin-scientific-agent-skills-ontology-term-resolution.yaml",
+      "profile_sha256": "7dd2fbaafd7f7a719d37d0decf707507634806165149ca8df0fde7059a3fe0b7"
     },
     {
       "profile_id": "plugin-scientific-agent-skills-open-notebook",
@@ -2605,6 +2665,11 @@
       "profile_sha256": "624dc5d1d20f2ac8c12a4875184164d5ab1b3ba7249812d32119e5f64233287b"
     },
     {
+      "profile_id": "plugin-scientific-agent-skills-relsa-severity-assessment",
+      "source_path": "profiles/plugin-scientific-agent-skills-relsa-severity-assessment.yaml",
+      "profile_sha256": "09423506c6e4152eb3f6e3562e31f5d9f3fec3ae45318aa4768aa235611259f6"
+    },
+    {
       "profile_id": "plugin-scientific-agent-skills-scientific-schematics",
       "source_path": "profiles/plugin-scientific-agent-skills-scientific-schematics.yaml",
       "profile_sha256": "da86d124d6c428cd69b82cae08f6f9d2a8655afa5e87d405a7b72f5ef9c04cb6"
@@ -2668,6 +2733,11 @@
       "profile_id": "plugin-scientific-agent-skills-umap-learn",
       "source_path": "profiles/plugin-scientific-agent-skills-umap-learn.yaml",
       "profile_sha256": "5a25f9a251f9a2e76db1f439033e37c7d0a7bccf0a96d262c430755f2c94e540"
+    },
+    {
+      "profile_id": "plugin-scientific-agent-skills-uncertainty-and-units",
+      "source_path": "profiles/plugin-scientific-agent-skills-uncertainty-and-units.yaml",
+      "profile_sha256": "8a2d27739590da7fdd235da54ee8ef7d6fb61f4f473fe1cb082a3b05382d0338"
     },
     {
       "profile_id": "plugin-scientific-agent-skills-venue-templates",
@@ -3340,19 +3410,23 @@
     {
       "domain_id": "analytical-chemistry",
       "capabilities": [
+        "plugin-scientific-agent-skills-analytical-method-validation",
         "plugin-tooluniverse-metabolomics"
       ],
       "profiles": [
+        "plugin-scientific-agent-skills-analytical-method-validation",
         "plugin-tooluniverse-metabolomics"
       ]
     },
     {
       "domain_id": "applied-mathematics",
       "capabilities": [
-        "plugin-scientific-agent-skills-simpy"
+        "plugin-scientific-agent-skills-simpy",
+        "plugin-scientific-agent-skills-uncertainty-and-units"
       ],
       "profiles": [
-        "plugin-scientific-agent-skills-simpy"
+        "plugin-scientific-agent-skills-simpy",
+        "plugin-scientific-agent-skills-uncertainty-and-units"
       ]
     },
     {
@@ -3438,6 +3512,8 @@
     {
       "domain_id": "bioinformatics-and-computational-biology",
       "capabilities": [
+        "plugin-scientific-agent-skills-genomic-coordinates",
+        "plugin-scientific-agent-skills-ontology-term-resolution",
         "plugin-scientific-agent-skills-pacsomatic",
         "plugin-tooluniverse-cancer-genomics-tcga",
         "plugin-tooluniverse-comparative-genomics",
@@ -3494,6 +3570,8 @@
         "plugin-tooluniverse-variant-to-mechanism"
       ],
       "profiles": [
+        "plugin-scientific-agent-skills-genomic-coordinates",
+        "plugin-scientific-agent-skills-ontology-term-resolution",
         "plugin-scientific-agent-skills-pacsomatic",
         "plugin-tooluniverse-cancer-genomics-tcga",
         "plugin-tooluniverse-comparative-genomics",
@@ -3775,6 +3853,7 @@
       "domain_id": "data-management-and-data-science",
       "capabilities": [
         "plugin-scientific-agent-skills-benchling-integration",
+        "plugin-scientific-agent-skills-datalad",
         "plugin-scientific-agent-skills-networkx",
         "plugin-scientific-agent-skills-parallel-web",
         "plugin-tooluniverse-data-wrangling",
@@ -3782,6 +3861,7 @@
       ],
       "profiles": [
         "plugin-scientific-agent-skills-benchling-integration",
+        "plugin-scientific-agent-skills-datalad",
         "plugin-scientific-agent-skills-networkx",
         "plugin-scientific-agent-skills-parallel-web",
         "plugin-tooluniverse-data-wrangling",
@@ -4133,6 +4213,15 @@
       ]
     },
     {
+      "domain_id": "manufacturing-engineering",
+      "capabilities": [
+        "plugin-scientific-agent-skills-lab-hardware-cad"
+      ],
+      "profiles": [
+        "plugin-scientific-agent-skills-lab-hardware-cad"
+      ]
+    },
+    {
       "domain_id": "materials-engineering",
       "capabilities": [
         "plugin-materials-apex-alloy-workflows",
@@ -4149,6 +4238,15 @@
         "plugin-materials-dpgen-workflow",
         "plugin-materials-gpumd-workflow",
         "plugin-materials-phonopy-workflows"
+      ]
+    },
+    {
+      "domain_id": "mechanical-engineering",
+      "capabilities": [
+        "plugin-scientific-agent-skills-lab-hardware-cad"
+      ],
+      "profiles": [
+        "plugin-scientific-agent-skills-lab-hardware-cad"
       ]
     },
     {
@@ -4380,6 +4478,7 @@
     {
       "domain_id": "research-computing-infrastructure",
       "capabilities": [
+        "plugin-scientific-agent-skills-datalad",
         "plugin-scientific-agent-skills-liteparse",
         "plugin-scientific-agent-skills-markitdown",
         "plugin-scientific-agent-skills-modal",
@@ -4391,6 +4490,7 @@
         "plugin-scientific-agent-skills-transformers"
       ],
       "profiles": [
+        "plugin-scientific-agent-skills-datalad",
         "plugin-scientific-agent-skills-liteparse",
         "plugin-scientific-agent-skills-markitdown",
         "plugin-scientific-agent-skills-modal",
@@ -4589,6 +4689,7 @@
     {
       "domain_id": "statistics",
       "capabilities": [
+        "plugin-scientific-agent-skills-uncertainty-and-units",
         "plugin-tooluniverse-clinical-trial-design",
         "plugin-tooluniverse-diagnostic-test-evaluation",
         "plugin-tooluniverse-drug-synergy",
@@ -4600,6 +4701,7 @@
         "plugin-tooluniverse-variant-predictor-dms-validation"
       ],
       "profiles": [
+        "plugin-scientific-agent-skills-uncertainty-and-units",
         "plugin-tooluniverse-clinical-trial-design",
         "plugin-tooluniverse-diagnostic-test-evaluation",
         "plugin-tooluniverse-drug-synergy",
@@ -4620,6 +4722,15 @@
       "profiles": [
         "plugin-scientific-agent-skills-matlab",
         "plugin-scientific-agent-skills-sympy"
+      ]
+    },
+    {
+      "domain_id": "veterinary-sciences",
+      "capabilities": [
+        "plugin-scientific-agent-skills-relsa-severity-assessment"
+      ],
+      "profiles": [
+        "plugin-scientific-agent-skills-relsa-severity-assessment"
       ]
     }
   ]

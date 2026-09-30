@@ -68,7 +68,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/SKILL.md
-      sha256: f80d66adcaea889bb408bf365bc47166f49b8deee2a760ee69aebe84cf2dbda6
+      sha256: 4cf64e2121f153f18b1fa50f0f223ab5e8e4c416fb4cad44eabebe0d42b3acc5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/config.yaml
       sha256: 689203b8480b3a0f5ae2c45f165fd073573053026d16f0f57a02df18a00f5e82
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/references/agent-playbook.md

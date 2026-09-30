@@ -80,7 +80,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/SKILL.md
-      sha256: 40aec2eeed16f351a000d041765e607baefcf91407b180930840b27a8f33c08e
+      sha256: 5ff255d0b6a1da52b8a07c5e31f366393d0ebc2d1df1d5c19c9e3d65eea84255
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/advanced_features.md
       sha256: 81a52e3f1f437ceef2b20e0f447627e3acad18a4e98139eb46d93f5083f860c2
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/devices_backends.md

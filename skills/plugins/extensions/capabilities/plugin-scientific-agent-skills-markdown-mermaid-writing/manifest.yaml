@@ -147,11 +147,11 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-references-markdown-style-guide.md
     path: references/markdown_style_guide.md
-    content_hash: 01338438471ff723403a9a948262f2ecd81e341924352c1e2dadbe9b0f65e28a
+    content_hash: 8e4f4b49339fbc125df3ce6983c4841f18b31a814a7cf866fa60568a03ed3a12
     license: MIT
   - knowledge_id: sas-references-mermaid-style-guide.md
     path: references/mermaid_style_guide.md
-    content_hash: f4aaeebe99d640cae23abf7b087505ef10149903fc108e864395b4ce86a162d0
+    content_hash: a67987f78f2b39c6acb2980e866a92fecdee8efe1b6297e733dc8e94fec19c3b
     license: MIT
   - knowledge_id: sas-templates-decision-record.md
     path: templates/decision_record.md
@@ -194,7 +194,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/SKILL.md
-      sha256: 3917a761fd0deece374eb00b25def2135a6a3cadc0b9aa7d56ee334ab6db8952
+      sha256: b0eb3148d53e8814c6907acb7eda43ffae3ada71e741ab2ee111cc82bbfa7f8c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/assets/examples/example-research-report.md
       sha256: 05a9e64bf13415f2b4e49c46c02ce48869a4a4e4922d64b752b0cbc79fbbf6e0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/architecture.md
@@ -246,9 +246,9 @@ provenance:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/zenuml.md
       sha256: 69cfe24fd119eb3223d404dd9c07d58954cabbc70d2b3df3ecffd527f671ff2b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/markdown_style_guide.md
-      sha256: 01338438471ff723403a9a948262f2ecd81e341924352c1e2dadbe9b0f65e28a
+      sha256: 8e4f4b49339fbc125df3ce6983c4841f18b31a814a7cf866fa60568a03ed3a12
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/mermaid_style_guide.md
-      sha256: f4aaeebe99d640cae23abf7b087505ef10149903fc108e864395b4ce86a162d0
+      sha256: a67987f78f2b39c6acb2980e866a92fecdee8efe1b6297e733dc8e94fec19c3b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/decision_record.md
       sha256: 30192e491938d799284bc76dcf7e47600896a1815bd76a55c044bff2f47a2ead
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/how_to_guide.md

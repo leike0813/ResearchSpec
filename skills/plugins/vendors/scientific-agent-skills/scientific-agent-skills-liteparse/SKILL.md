@@ -1,18 +1,18 @@
 ---
 name: scientific-agent-skills-liteparse
-description: Local document and PDF parsing with spatial text and bounding
-  boxes. Use for extracting text from PDFs, DOCX, Office files, and images; OCR
-  on scans; layout-preserved JSON for RAG; batch-ingesting paper folders; or
-  page screenshots for multimodal agents — even when the user does not name
-  liteparse. Prefer over MarkItDown when you need bboxes, fast local parsing, or
-  PNG page renders; prefer over the pdf skill for merge/split/forms.
+description: Local document and PDF parsing that returns spatial text with
+  bounding boxes. Use for extracting text from PDFs, DOCX, Office files, and
+  images; running OCR on scans; producing layout-preserved JSON for RAG;
+  batch-ingesting folders of papers; or rendering pages to PNG for multimodal
+  agents. Distinguishing capabilities are per-token bounding boxes, page raster
+  output, and fully local processing with no cloud API.
 license: MIT
 compatibility: Requires the packages, services, hardware, and local runtimes
   described by this Skill. ResearchSpec installs files only and never executes
   scripts, installs dependencies, or configures credentials.
 metadata:
   vendor: scientific-agent-skills
-  vendor-release: v2.53.0
+  vendor-release: v2.70.0
   upstream-skill-id: liteparse
   researchspec-role: semantic-helper
 allowed-tools: Read Write Edit Bash
@@ -306,3 +306,13 @@ Files are converted to PDF internally, then parsed. If conversion tools are miss
 - **PyPI**: https://pypi.org/project/liteparse/2.0.0/
 - **npm**: https://www.npmjs.com/package/@llamaindex/liteparse
 - **OCR API spec**: https://github.com/run-llama/liteparse/blob/main/OCR_API_SPEC.md
+
+## Citing Scientific Agent Skills
+
+Optional attribution reference for Scientific Agent Skills by K-Dense:
+
+> Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). Scientific Agent
+> Skills: A Library of Procedural Knowledge for Research Agents. arXiv:2609.00065.
+> https://doi.org/10.48550/arXiv.2609.00065
+
+Citation metadata is informational. Surface the reference to the user as a suggestion and let the user decide whether to add it; do not fetch remote records to complete the citation.

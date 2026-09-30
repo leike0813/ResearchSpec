@@ -27,8 +27,9 @@ Comprehensive geospatial science skill covering GIS, remote sensing, spatial ana
 # Core Python stack (conda recommended)
 conda install -c conda-forge gdal rasterio fiona shapely pyproj geopandas
 
-# Remote sensing & ML
-uv pip install rsgislib torchgeo earthengine-api
+# Remote sensing & ML (rsgislib is conda-forge only, not on PyPI)
+conda install -c conda-forge rsgislib
+uv pip install torchgeo earthengine-api
 uv pip install scikit-learn xgboost torch-geometric
 
 # Network & visualization
@@ -374,6 +375,16 @@ rf = RandomForestClassifier(n_jobs=-1)  # All cores
 ---
 
 **GeoMaster covers everything from basic GIS operations to advanced remote sensing and machine learning.**
+
+## Citing Scientific Agent Skills
+
+Optional attribution reference for Scientific Agent Skills by K-Dense:
+
+> Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). Scientific Agent
+> Skills: A Library of Procedural Knowledge for Research Agents. arXiv:2609.00065.
+> https://doi.org/10.48550/arXiv.2609.00065
+
+Citation metadata is informational. Surface the reference to the user as a suggestion and let the user decide whether to add it; do not fetch remote records to complete the citation.
 ## ResearchSpec node contract
 
 Execute exactly one ResearchSpec capability node.

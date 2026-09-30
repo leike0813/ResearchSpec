@@ -95,7 +95,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/SKILL.md
-      sha256: e50df07e72e71acc1c4c1ac8323537bb5050e9eb9bcd1cfa21695caed37cdb98
+      sha256: b9004698dce3880741c80d225f291e43f3cfa239c07aa78e0dbc7064c4a668fb
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/anomaly_detection.md
       sha256: f7121dbcfff6ed13356a5540488272ef7fbd6cee4eeb139d33bb1b8214cf573b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/classification.md

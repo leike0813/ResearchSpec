@@ -2082,8 +2082,8 @@
       "vendor_id": "scientific-agent-skills",
       "name": "Scientific Agent Skills",
       "repository_url": "https://github.com/K-Dense-AI/scientific-agent-skills",
-      "release": "v2.53.0",
-      "revision": "9c9bd2e92af12311ecd0c1a643e0931643f9ea04",
+      "release": "v2.70.0",
+      "revision": "d0c48af8c7b7a71ccc81fcd04c9db53b48439f9b",
       "license": "MIT",
       "converter_version": "2",
       "skills": [
@@ -2095,6 +2095,19 @@
             {
               "source_paths": [
                 "skills/aeon"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "scientific-agent-skills-analytical-method-validation",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/analytical-method-validation"
               ],
               "adaptation": "converted"
             }
@@ -2140,6 +2153,19 @@
           ]
         },
         {
+          "skill_id": "scientific-agent-skills-datalad",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/datalad"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
           "skill_id": "scientific-agent-skills-fluidsim",
           "license": "MIT",
           "dependencies": [],
@@ -2160,6 +2186,19 @@
             {
               "source_paths": [
                 "skills/generate-image"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "scientific-agent-skills-genomic-coordinates",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/genomic-coordinates"
               ],
               "adaptation": "converted"
             }
@@ -2212,6 +2251,19 @@
             {
               "source_paths": [
                 "skills/infographics"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "scientific-agent-skills-lab-hardware-cad",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/lab-hardware-cad"
               ],
               "adaptation": "converted"
             }
@@ -2329,6 +2381,19 @@
             {
               "source_paths": [
                 "skills/networkx"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "scientific-agent-skills-ontology-term-resolution",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/ontology-term-resolution"
               ],
               "adaptation": "converted"
             }
@@ -2543,6 +2608,19 @@
           ]
         },
         {
+          "skill_id": "scientific-agent-skills-relsa-severity-assessment",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/relsa-severity-assessment"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
           "skill_id": "scientific-agent-skills-scientific-schematics",
           "license": "MIT",
           "dependencies": [],
@@ -2706,6 +2784,19 @@
             {
               "source_paths": [
                 "skills/umap-learn"
+              ],
+              "adaptation": "converted"
+            }
+          ]
+        },
+        {
+          "skill_id": "scientific-agent-skills-uncertainty-and-units",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "skills/uncertainty-and-units"
               ],
               "adaptation": "converted"
             }
@@ -4524,7 +4615,9 @@
       "title": "Veterinary sciences",
       "description": "ANZSRC 2020 FoR Group 3009: Veterinary sciences.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "scientific-agent-skills-relsa-severity-assessment"
+      ]
     },
     {
       "domain_id": "other-agricultural-veterinary-and-food-sciences",
@@ -4571,6 +4664,8 @@
       "description": "ANZSRC 2020 FoR Group 3102: Bioinformatics and computational biology.",
       "version": "0.1.0",
       "skills": [
+        "scientific-agent-skills-genomic-coordinates",
+        "scientific-agent-skills-ontology-term-resolution",
         "scientific-agent-skills-pacsomatic",
         "tooluniverse-cancer-genomics-tcga",
         "tooluniverse-comparative-genomics",
@@ -4995,6 +5090,7 @@
       "description": "ANZSRC 2020 FoR Group 3401: Analytical chemistry.",
       "version": "0.1.0",
       "skills": [
+        "scientific-agent-skills-analytical-method-validation",
         "tooluniverse-metabolomics"
       ]
     },
@@ -5690,7 +5786,9 @@
       "title": "Manufacturing engineering",
       "description": "ANZSRC 2020 FoR Group 4014: Manufacturing engineering.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "scientific-agent-skills-lab-hardware-cad"
+      ]
     },
     {
       "domain_id": "maritime-engineering",
@@ -5724,7 +5822,9 @@
       "title": "Mechanical engineering",
       "description": "ANZSRC 2020 FoR Group 4017: Mechanical engineering.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "scientific-agent-skills-lab-hardware-cad"
+      ]
     },
     {
       "domain_id": "nanotechnology",
@@ -6283,6 +6383,7 @@
       "version": "0.2.0",
       "skills": [
         "scientific-agent-skills-benchling-integration",
+        "scientific-agent-skills-datalad",
         "scientific-agent-skills-networkx",
         "scientific-agent-skills-parallel-web",
         "tooluniverse-data-wrangling",
@@ -6530,7 +6631,8 @@
       "description": "ANZSRC 2020 FoR Group 4901: Applied mathematics.",
       "version": "0.2.0",
       "skills": [
-        "scientific-agent-skills-simpy"
+        "scientific-agent-skills-simpy",
+        "scientific-agent-skills-uncertainty-and-units"
       ]
     },
     {
@@ -6570,6 +6672,7 @@
       "description": "ANZSRC 2020 FoR Group 4905: Statistics.",
       "version": "0.1.0",
       "skills": [
+        "scientific-agent-skills-uncertainty-and-units",
         "tooluniverse-clinical-trial-design",
         "tooluniverse-diagnostic-test-evaluation",
         "tooluniverse-drug-synergy",
@@ -6898,6 +7001,7 @@
       "description": "Cross-disciplinary research computing environments, scalable execution, workflow infrastructure, and data storage operations.",
       "version": "0.2.0",
       "skills": [
+        "scientific-agent-skills-datalad",
         "scientific-agent-skills-liteparse",
         "scientific-agent-skills-markitdown",
         "scientific-agent-skills-modal",

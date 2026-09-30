@@ -12,7 +12,7 @@ compatibility: Requires the packages, services, hardware, and local runtimes
   scripts, installs dependencies, or configures credentials.
 metadata:
   vendor: scientific-agent-skills
-  vendor-release: v2.53.0
+  vendor-release: v2.70.0
   upstream-skill-id: aeon
   researchspec-role: semantic-helper
 allowed-tools: Read Write Edit Bash
@@ -410,3 +410,13 @@ Detailed information available in `references/`:
 - GitHub: https://github.com/aeon-toolkit/aeon
 - Examples: https://www.aeon-toolkit.org/en/stable/examples.html
 - API Reference: https://www.aeon-toolkit.org/en/stable/api_reference.html
+
+## Citing Scientific Agent Skills
+
+Optional attribution reference for Scientific Agent Skills by K-Dense:
+
+> Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). Scientific Agent
+> Skills: A Library of Procedural Knowledge for Research Agents. arXiv:2609.00065.
+> https://doi.org/10.48550/arXiv.2609.00065
+
+Citation metadata is informational. Surface the reference to the user as a suggestion and let the user decide whether to add it; do not fetch remote records to complete the citation.

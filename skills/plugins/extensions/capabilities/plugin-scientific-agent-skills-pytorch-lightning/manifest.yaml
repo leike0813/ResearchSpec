@@ -59,7 +59,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-references-distributed-training.md
     path: references/distributed_training.md
-    content_hash: 0828867cbfea2483ffbfec2398fa1f35784f62b4832d71a311dc10d7ae1ef9d9
+    content_hash: 7a555a90d4257fb12e5bc063a64e6373242d29a02d8337d22a5d4cd59350acfc
     license: MIT
   - knowledge_id: sas-references-lightning-module.md
     path: references/lightning_module.md
@@ -75,7 +75,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-quick-trainer-setup.py
     path: scripts/quick_trainer_setup.py
-    content_hash: a2bf7df7ea87d341b6caa282d16a0970a123ed7b17c7bbcaaf6b6b3df77aec4b
+    content_hash: 8b9a8e926f0c2841b5dfcd49597126defe0b55132ab5c8122ab531a4506f7eb3
     license: MIT
   - knowledge_id: sas-scripts-template-datamodule.py
     path: scripts/template_datamodule.py
@@ -83,14 +83,14 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-template-lightning-module.py
     path: scripts/template_lightning_module.py
-    content_hash: 0337c694bc33f2de5bd93af0221b78d0ffcad3841ca1f540b78eb3a309e9d1c2
+    content_hash: 7c93eb6abfcaa938fefd4c3c5fd62fade2ad448955f54abb95e4fd2424c4de00
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/SKILL.md
-      sha256: dd59c6ccd9cbf2e414dccd99628fad415a1f1bbf1e526470ff6b586f89e7293d
+      sha256: 50383c315a284ed5edc7698070ae98cf4c19bf476cd6ece779fd08a9c51fd52c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/best_practices.md
       sha256: 3172921ba31cd2e59d0d84b533210b852a4f8d651f06f74e2f907d28e11933ef
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/callbacks.md
@@ -98,7 +98,7 @@ provenance:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/data_module.md
       sha256: a94cb2aeb0ac6e04d07d05cd8a3f96bb64d0623cfb310dfcc6d2c255b03d86f9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/distributed_training.md
-      sha256: 0828867cbfea2483ffbfec2398fa1f35784f62b4832d71a311dc10d7ae1ef9d9
+      sha256: 7a555a90d4257fb12e5bc063a64e6373242d29a02d8337d22a5d4cd59350acfc
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/lightning_module.md
       sha256: 952354340eb7fa6d09fa235392ccd4eb31e023422c45068e8c780f6523363a90
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/logging.md
@@ -106,9 +106,9 @@ provenance:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/trainer.md
       sha256: d7761218deb392bfac4f373d4238c0595b5094115bd1645ae00bff0940b54887
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/quick_trainer_setup.py
-      sha256: a2bf7df7ea87d341b6caa282d16a0970a123ed7b17c7bbcaaf6b6b3df77aec4b
+      sha256: 8b9a8e926f0c2841b5dfcd49597126defe0b55132ab5c8122ab531a4506f7eb3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/template_datamodule.py
       sha256: 82d1601800fa17a80250b640b4df530ebd78bb852316bc75c6441b1d592c80cf
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/template_lightning_module.py
-      sha256: 0337c694bc33f2de5bd93af0221b78d0ffcad3841ca1f540b78eb3a309e9d1c2
+      sha256: 7c93eb6abfcaa938fefd4c3c5fd62fade2ad448955f54abb95e4fd2424c4de00
 license: MIT

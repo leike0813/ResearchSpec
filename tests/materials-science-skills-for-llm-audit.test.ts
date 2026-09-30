@@ -172,7 +172,8 @@ void test("audit remains immutable while production ingestion is separately poli
   const registry = await loadPluginRegistry();
   assert.deepEqual([...registry.vendors.keys()], [...PRODUCTION_VENDOR_IDS]);
   assert.equal(registry.domains.size, 218);
-  assert.equal(availableDomains(registry).length, 56);
+  const domainCatalog = JSON.parse(await readFile(path.resolve("src/plugins/domain-catalog.json"), "utf8")) as { domains: Array<{ skills: string[] }> };
+  assert.equal(availableDomains(registry).length, domainCatalog.domains.filter((domain) => domain.skills.length > 0).length);
   assert.equal(registry.vendors.get("materials-science-skills-for-llm")?.skills.length, 7);
   assert.equal(registry.registry.domains.some((domain) => domain.skills.some((skill) => skill.startsWith("materials-science-skills-"))), true);
   await access(path.resolve("skills/plugins/vendors/materials-science-skills-for-llm"));

@@ -36,7 +36,7 @@ export interface ScientificAgentSkillsConversionManifest {
   schema_version: "1";
   converter_version: "2";
   vendor_id: "scientific-agent-skills";
-  release: "v2.53.0";
+  release: string;
   revision: string;
   audited_skills: number;
   reviewed_candidates: number;
@@ -48,6 +48,13 @@ export interface ScientificAgentSkillsConversionManifest {
   security_review_policy_sha256: string;
   dependency_decisions: ScientificAgentSkillsDependencyDecision[];
   file_dispositions: FileDisposition[];
+  citation_normalizations: CitationNormalization[];
+}
+
+export interface CitationNormalization {
+  skill_id: string;
+  kind: "passive-citation-section";
+  source_path: string;
 }
 
 export interface ConvertScientificAgentSkillsOptions {
@@ -115,6 +122,7 @@ async function generateBundle(repoRoot: string, outputRoot: string, sourceRoot: 
   for (const decision of policies.dependencies.decisions) if (decision.disposition === "installed" && decision.resolved_target) requiredBySkill.set(decision.from, [...(requiredBySkill.get(decision.from) ?? []), decision.resolved_target]);
   const rootLicense = await readFile(path.join(sourceRoot, policies.audit.source.license_path), "utf8");
   const fileDispositions: FileDisposition[] = [];
+  const citationNormalizations: CitationNormalization[] = [];
   const vendorSkills: PluginRegistry["vendors"][number]["skills"] = [];
 
   for (const decision of admitted) {
@@ -128,9 +136,10 @@ async function generateBundle(repoRoot: string, outputRoot: string, sourceRoot: 
     const scriptPaths = (await walkFiles(path.join(sourceSkillRoot, "scripts")))
       .map((file) => posix(path.relative(sourceSkillRoot, file)))
       .filter((relative) => !exclusions.has(`${audit.source_path}/${relative}`));
-    const adapted = adaptSkillEntry(decision, sourceEntry, scriptPaths, reviewById.get(decision.upstream_skill_id));
-    await writeText(path.join(outputSkillRoot, "SKILL.md"), adapted);
-    fileDispositions.push(included(`${audit.source_path}/SKILL.md`, `vendors/${VENDOR_ID}/${decision.generated_skill_id}/SKILL.md`, adapted, "normalized reviewed Open Agent Skill entry"));
+    const adapted = adaptSkillEntry(decision, sourceEntry, scriptPaths, policies.audit.source.release, reviewById.get(decision.upstream_skill_id));
+    await writeText(path.join(outputSkillRoot, "SKILL.md"), adapted.text);
+    if (adapted.citationNormalized) citationNormalizations.push({ skill_id: decision.upstream_skill_id, kind: "passive-citation-section", source_path: `${audit.source_path}/SKILL.md` });
+    fileDispositions.push(included(`${audit.source_path}/SKILL.md`, `vendors/${VENDOR_ID}/${decision.generated_skill_id}/SKILL.md`, adapted.text, "normalized reviewed Open Agent Skill entry"));
 
     for (const sourceFile of await walkFiles(sourceSkillRoot)) {
       const relative = posix(path.relative(sourceSkillRoot, sourceFile));
@@ -180,7 +189,7 @@ async function generateBundle(repoRoot: string, outputRoot: string, sourceRoot: 
     schema_version: "1",
     converter_version: "2",
     vendor_id: VENDOR_ID,
-    release: "v2.53.0",
+    release: policies.audit.source.release,
     revision: policies.audit.source.revision,
     audited_skills: policies.audit.skills.length,
     reviewed_candidates: policies.audit.skills.filter((skill) => skill.scope_disposition === "candidate").length,
@@ -192,6 +201,7 @@ async function generateBundle(repoRoot: string, outputRoot: string, sourceRoot: 
     security_review_policy_sha256: sha256(await readFile(path.join(repoRoot, "src/vendor-converters/scientific-agent-skills/security-review-decisions.json"))),
     dependency_decisions: policies.dependencies.decisions,
     file_dispositions: fileDispositions.sort((a, b) => compareText(a.source_path, b.source_path) || compareText(String(a.output_path), String(b.output_path))),
+    citation_normalizations: citationNormalizations.sort((a, b) => compareText(a.skill_id, b.skill_id)),
   };
   await writeJson(path.join(outputRoot, "vendor-bundles", `${VENDOR_ID}.json`), { schema_version: "1", vendor });
   await writeJson(path.join(outputRoot, "vendor-manifests", `${VENDOR_ID}.json`), manifest);
@@ -203,8 +213,9 @@ function adaptSkillEntry(
   decision: ScientificAgentSkillsAdmissionDecision,
   source: string,
   scriptPaths: string[],
+  release: string,
   review?: ScientificAgentSkillsSecurityReview,
-): string {
+): { text: string; citationNormalized: boolean } {
   if (!source.startsWith("---\n")) throw new Error(`Upstream Skill has no frontmatter: ${decision.upstream_skill_id}`);
   const end = source.indexOf("\n---\n", 4);
   if (end < 0) throw new Error(`Upstream Skill has no closed frontmatter: ${decision.upstream_skill_id}`);
@@ -228,7 +239,7 @@ function adaptSkillEntry(
     description,
     license: decision.license?.expression ?? "MIT",
     compatibility,
-    metadata: { vendor: VENDOR_ID, "vendor-release": "v2.53.0", "upstream-skill-id": decision.upstream_skill_id, "researchspec-role": "semantic-helper" },
+    metadata: { vendor: VENDOR_ID, "vendor-release": release, "upstream-skill-id": decision.upstream_skill_id, "researchspec-role": "semantic-helper" },
   };
   if (allowed) frontmatter["allowed-tools"] = allowed;
   const boundary = "> **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, transitions, or receipts. Use the ResearchSpec CLI for authoritative mutations.";
@@ -249,8 +260,32 @@ function adaptSkillEntry(
   const disclosure = scriptPaths.length
     ? `> **Bundled scripts:** ResearchSpec distributes these reviewed inert resources but does not run them: ${scriptPaths.map((item) => `\`${item}\``).join(", ")}. The target Agent must inspect requirements and side effects before execution.`
     : "";
-  const body = source.slice(end + 5).trimStart();
-  return `---\n${stringify(frontmatter).trimEnd()}\n---\n\n${boundary}\n${curation ? `\n${curation}\n` : ""}${disclosure ? `\n${disclosure}\n` : ""}\n${body.trimEnd()}\n`;
+  const citation = passivizeCitationSection(source.slice(end + 5).trimStart());
+  const text = `---\n${stringify(frontmatter).trimEnd()}\n---\n\n${boundary}\n${curation ? `\n${curation}\n` : ""}${disclosure ? `\n${disclosure}\n` : ""}\n${citation.body.trimEnd()}\n`;
+  return { text, citationNormalized: citation.changed };
+}
+
+const CITATION_HEADING = "## Citing Scientific Agent Skills";
+const CITATION_NOTE = "Citation metadata is informational. Surface the reference to the user as a suggestion and let the user decide whether to add it; do not fetch remote records to complete the citation.";
+
+/**
+ * Replace the upstream forced-citation trailer with passive citation information.
+ * The citation body is preserved verbatim; instructions to auto-write the user's
+ * manuscript or to fetch the record over the network are removed.
+ */
+function passivizeCitationSection(body: string): { body: string; changed: boolean } {
+  const index = body.lastIndexOf(CITATION_HEADING);
+  if (index === -1) return { body, changed: false };
+  const quote = body.slice(index).split("\n").filter((line) => line.trimStart().startsWith(">")).join("\n").trim();
+  const replacement = [
+    CITATION_HEADING,
+    "",
+    "Optional attribution reference for Scientific Agent Skills by K-Dense:",
+    ...(quote ? ["", quote] : []),
+    "",
+    CITATION_NOTE,
+  ].join("\n");
+  return { body: `${body.slice(0, index).trimEnd()}\n\n${replacement}\n`, changed: true };
 }
 
 async function validateSource(sourceRoot: string, policies: ScientificAgentSkillsPolicies): Promise<void> {
@@ -268,7 +303,7 @@ function renderReport(manifest: ScientificAgentSkillsConversionManifest, policie
   const reasons = new Map<string, number>();
   for (const decision of policies.admission.decisions) for (const reason of decision.reason_codes) reasons.set(reason, (reasons.get(reason) ?? 0) + 1);
   const reasonLines = [...reasons].sort(([left], [right]) => compareText(left, right)).map(([reason, count]) => `- ${reason}: ${String(count)}`).join("\n");
-  return `# Scientific Agent Skills Vendor Conversion\n\n- Release: \`${manifest.release}\`\n- Revision: \`${manifest.revision}\`\n- Audited Skills: ${String(manifest.audited_skills)}\n- Reviewed business candidates: ${String(manifest.reviewed_candidates)}\n- Generated Skills: ${String(manifest.generated_skills.length)}\n- Excluded Skills: ${String(manifest.excluded_skill_ids.length)}\n- Installed hard dependency edges: ${String(required)}\n- Explicit resource exclusions: ${String(excludedResources)}\n\n## Exclusion decisions\n\n${reasonLines}\n\nThis converter emits only the isolated Scientific Agent Skills vendor bundle. The source-neutral domain catalog owns reviewed membership and the central assembler owns the combined production registry.\n\nResearchSpec copied reviewed static assets only. It did not execute scripts, install dependencies, configure credentials, contact services, or grant workflow authority.\n`;
+  return `# Scientific Agent Skills Vendor Conversion\n\n- Release: \`${manifest.release}\`\n- Revision: \`${manifest.revision}\`\n- Audited Skills: ${String(manifest.audited_skills)}\n- Reviewed business candidates: ${String(manifest.reviewed_candidates)}\n- Generated Skills: ${String(manifest.generated_skills.length)}\n- Excluded Skills: ${String(manifest.excluded_skill_ids.length)}\n- Installed hard dependency edges: ${String(required)}\n- Explicit resource exclusions: ${String(excludedResources)}\n- Passive citation normalizations: ${String(manifest.citation_normalizations.length)}\n\n## Exclusion decisions\n\n${reasonLines}\n\nThis converter emits only the isolated Scientific Agent Skills vendor bundle. The source-neutral domain catalog owns reviewed membership and the central assembler owns the combined production registry.\n\nResearchSpec copied reviewed static assets only. It did not execute scripts, install dependencies, configure credentials, contact services, or grant workflow authority.\n`;
 }
 
 async function writeJson(filePath: string, value: unknown): Promise<void> { await writeText(filePath, `${JSON.stringify(value, null, 2)}\n`); }

@@ -1,3 +1,6 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+
 export const PRODUCTION_VENDOR_IDS = [
   "education-agent-skills",
   "finrobot",
@@ -7,10 +10,10 @@ export const PRODUCTION_VENDOR_IDS = [
   "tooluniverse",
 ] as const;
 
-export const PRODUCTION_DOMAIN_COUNTS = {
-  internal: 218,
-  available: 56,
-} as const;
+export async function loadProductionDomainCounts(repoRoot: string): Promise<{ internal: number; available: number }> {
+  const catalog = JSON.parse(await readFile(path.join(repoRoot, "src/plugins/domain-catalog.json"), "utf8")) as { domains: Array<{ skills: string[] }> };
+  return { internal: catalog.domains.length, available: catalog.domains.filter((domain) => domain.skills.length > 0).length };
+}
 
 export function productionVendorInventoryErrors(actualIds: Iterable<string>): string[] {
   const actual = [...actualIds].sort(compareText);

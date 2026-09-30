@@ -15,7 +15,7 @@ compatibility: Requires the packages, services, hardware, and local runtimes
   scripts, installs dependencies, or configures credentials.
 metadata:
   vendor: scientific-agent-skills
-  vendor-release: v2.53.0
+  vendor-release: v2.70.0
   upstream-skill-id: open-notebook
   researchspec-role: semantic-helper
 ---
@@ -301,3 +301,13 @@ Open Notebook uses a modern stack:
 - For free local inference without API costs, use Ollama
 - The `OPEN_NOTEBOOK_ENCRYPTION_KEY` must be set before first launch and kept consistent across restarts
 - All data is stored locally in Docker volumes for complete data sovereignty
+
+## Citing Scientific Agent Skills
+
+Optional attribution reference for Scientific Agent Skills by K-Dense:
+
+> Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). Scientific Agent
+> Skills: A Library of Procedural Knowledge for Research Agents. arXiv:2609.00065.
+> https://doi.org/10.48550/arXiv.2609.00065
+
+Citation metadata is informational. Surface the reference to the user as a suggestion and let the user decide whether to add it; do not fetch remote records to complete the citation.

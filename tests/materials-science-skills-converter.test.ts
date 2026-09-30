@@ -99,7 +99,8 @@ void test("Materials generated bundle is hash-bound, dependency-free, and in onl
 
   const loaded = await loadPluginRegistry(PLUGIN_ROOT);
   assert.deepEqual([...loaded.vendors.keys()], [...PRODUCTION_VENDOR_IDS]);
-  assert.equal(availableDomains(loaded).length, 56);
+  const domainCatalog = JSON.parse(await readFile(path.resolve("src/plugins/domain-catalog.json"), "utf8")) as { domains: Array<{ skills: string[] }> };
+  assert.equal(availableDomains(loaded).length, domainCatalog.domains.filter((domain) => domain.skills.length > 0).length);
   assert.equal(loaded.domains.get("materials-engineering")?.skills.filter((id) => id.startsWith("materials-science-skills-")).length, 6);
   assert.equal(loaded.domains.get("macromolecular-and-materials-chemistry")?.skills.filter((id) => id.startsWith("materials-science-skills-")).length, 2);
   assert.equal(loaded.domains.get("computational-modeling-and-simulation")?.skills.filter((id) => id.startsWith("materials-science-skills-")).length, 7);

@@ -8,12 +8,12 @@ ResearchSpec-owned isolated vendor bundle.
 ## Requirements
 
 ### Requirement: Complete Scientific Agent Skills Admission Decisions
-ResearchSpec SHALL resolve every top-level Scientific Agent Skills v2.53.0 Skill into exactly one evidenced production admission decision, SHALL require a completed finding-level maintainer decision for every candidate previously carrying `static-security-review-failed`, and SHALL generate only candidates whose license, manual security, content, overlap, dependency, resource, and domain decisions are complete and passing.
+ResearchSpec SHALL resolve every top-level Scientific Agent Skills v2.70.0 Skill into exactly one evidenced production admission decision, SHALL require a completed finding-level maintainer decision for every candidate previously carrying `static-security-review-failed`, and SHALL generate only candidates whose license, manual security, content, overlap, dependency, resource, and domain decisions are complete and passing.
 
 #### Scenario: Candidate admission is evidence governed
-- **WHEN** the converter evaluates the pinned 147-Skill audit and manual security policy
+- **WHEN** the converter evaluates the pinned 167-Skill audit and manual security policy
 - **THEN** every audit record has exactly one admitted or excluded production decision
-- **AND** all 40 static-security targets have one completed finding-level maintainer decision
+- **AND** all catalogued manual-security targets have one completed finding-level maintainer decision
 - **AND** aggregate readiness labels or upstream scanner severities alone do not grant or deny admission
 - **AND** the final generated count equals the reviewed admitted set
 
@@ -27,7 +27,7 @@ ResearchSpec SHALL resolve every top-level Scientific Agent Skills v2.53.0 Skill
 - **AND** the Skill remains excluded for the independent reason
 
 ### Requirement: Deterministic Source-Specific Adaptation
-The Scientific Agent Skills converter SHALL validate the pinned v2.53.0 source, generate vendor-prefixed Open Agent Skills, normalize reviewed entry metadata, preserve reviewed resources, and record every source file disposition without executing upstream content.
+The Scientific Agent Skills converter SHALL validate the pinned v2.70.0 source, generate vendor-prefixed Open Agent Skills, normalize reviewed entry metadata, preserve reviewed resources, and record every source file disposition without executing upstream content.
 
 #### Scenario: Admitted Skill is converted
 - **WHEN** an admitted source Skill passes conversion
@@ -50,7 +50,7 @@ Every admitted Scientific Agent Skill SHALL carry a verified applicable content 
 ResearchSpec SHALL provide convert, check, and idempotence maintainer commands for the Scientific Agent Skills vendor using the same immutable policy inputs and generated output contract.
 
 #### Scenario: Generated output is reproducible
-- **WHEN** maintainers run check and idempotence against unchanged v2.53.0 inputs
+- **WHEN** maintainers run check and idempotence against unchanged v2.70.0 inputs
 - **THEN** the vendor tree, bundle, manifest, report, central registry, and domain availability match the committed output byte-for-byte
 
 ### Requirement: Approved Manual Curation Boundary
@@ -67,10 +67,10 @@ The Scientific Agent Skills converter SHALL apply only maintainer-approved gener
 - **AND** the converter does not embed a local script patch
 
 ### Requirement: Atomic Post-Review Reconciliation
-Scientific Agent Skills production policy and generated output SHALL remain unchanged while manual decisions are incomplete and SHALL be reconciled as one complete multi-vendor projection after all 40 decisions are final.
+Scientific Agent Skills production policy and generated output SHALL remain unchanged while manual decisions are incomplete and SHALL be reconciled as one complete multi-vendor projection after all catalogued decisions are final.
 
 #### Scenario: All manual decisions are complete
-- **WHEN** the 40 target records have validated non-pending decisions
+- **WHEN** the catalogued target records have validated non-pending decisions
 - **THEN** admission, resources, existing domain membership, vendor output, reports, and central registry are regenerated from the completed policy set
 - **AND** unchanged ToolUniverse assets remain byte-identical
 

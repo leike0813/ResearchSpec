@@ -1,12 +1,12 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-liteparse
 title: LiteParse — Local Document Parsing
-description: Local document and PDF parsing with spatial text and bounding
-  boxes. Use for extracting text from PDFs, DOCX, Office files, and images; OCR
-  on scans; layout-preserved JSON for RAG; batch-ingesting paper folders; or
-  page screenshots for multimodal agents — even when the user does not name
-  liteparse. Prefer over MarkItDown when you need bboxes, fast local parsing, or
-  PNG page renders; prefer over the pdf skill for merge/split/forms.
+description: Local document and PDF parsing that returns spatial text with
+  bounding boxes. Use for extracting text from PDFs, DOCX, Office files, and
+  images; running OCR on scans; producing layout-preserved JSON for RAG;
+  batch-ingesting folders of papers; or rendering pages to PNG for multimodal
+  agents. Distinguishing capabilities are per-token bounding boxes, page raster
+  output, and fully local processing with no cloud API.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -75,7 +75,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/SKILL.md
-      sha256: 925f471d45bb5d8a526bd6a07a08895838c6b0432a912b0f2075b8081d1cf73f
+      sha256: b387042f66b55e7a8feec7e56481464fc2dd914148c2eab2f8132f23514cd0a9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/api_reference.md
       sha256: f9f6561f4497d5e17457f1802b19fe9f8c72523069d7143fbae68afc98e3d886
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/choosing_a_parser.md

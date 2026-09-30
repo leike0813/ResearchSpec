@@ -1,0 +1,128 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-lab-hardware-cad
+title: Lab Hardware CAD
+description: Design custom laboratory hardware as parametric build123d models
+  and export fabrication-ready STEP, STL, and DXF files - microfluidic chips and
+  molds, optomechanical mounts and breadboard adapters, cuvette and microplate
+  holders, tube racks, animal-behavior rigs, and 3D-printed instrument fixtures.
+  Use when a research task needs a physical part that must mate with
+  standardized labware, an optical table, a cage system, or a printer, CNC, or
+  laser process.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-standards.json
+    path: assets/standards.json
+    content_hash: ac081483e0d70fb41cd37821093bd3602fc081a54384abb77e49148831d153d9
+    license: MIT
+  - knowledge_id: sas-references-behavior-rigs.md
+    path: references/behavior-rigs.md
+    content_hash: 4e1500f623067571244f361c97f0f13ae530055ad7daa88df06709474e1a6d41
+    license: MIT
+  - knowledge_id: sas-references-build123d-patterns.md
+    path: references/build123d-patterns.md
+    content_hash: 2d536d09771772c9140653e7ef86df35351d33ad4fa6c45d4954a8fd5290b256
+    license: MIT
+  - knowledge_id: sas-references-fabrication-limits.md
+    path: references/fabrication-limits.md
+    content_hash: a4d87f56bb95db8bb7ffd267f38c4337841b7735198527fecaf0ac6d2bcaedb9
+    license: MIT
+  - knowledge_id: sas-references-labware-adapters.md
+    path: references/labware-adapters.md
+    content_hash: 6e54cabb0ad4eea78411599d146ab1a66b9378b3407cfcb76fb7e7d3d00ab71e
+    license: MIT
+  - knowledge_id: sas-references-microfluidics.md
+    path: references/microfluidics.md
+    content_hash: 6b1554443e94690389b560127620c3c459635e0eadb4418ef770eecb5d257496
+    license: MIT
+  - knowledge_id: sas-references-optomechanics.md
+    path: references/optomechanics.md
+    content_hash: 89774b6645fc61fdb7700e563191552d9f2b3a934193216bbbb7ada61b31f217
+    license: MIT
+  - knowledge_id: sas-references-validation.md
+    path: references/validation.md
+    content_hash: ca1fa6e45247cbd01e042a555c8b2c393eda8fdf9710a6bc3160b4d8bd0d2751
+    license: MIT
+  - knowledge_id: sas-scripts--common.py
+    path: scripts/_common.py
+    content_hash: 384732d6d14b039aab3f4e2a1f9867f1f6d0ee394d1699ef19e64a3f6ea56c2c
+    license: MIT
+  - knowledge_id: sas-scripts-check.py
+    path: scripts/check.py
+    content_hash: f6f1cd304c327a237f5e079c13a208f7ee3bb1bebcc9d08735ababaf6235557d
+    license: MIT
+  - knowledge_id: sas-scripts-gen.py
+    path: scripts/gen.py
+    content_hash: d159d22429d2983921726e4ea2256935a5a63eca030463fe5ab45416ec3a7f27
+    license: MIT
+  - knowledge_id: sas-scripts-snapshot.py
+    path: scripts/snapshot.py
+    content_hash: 4d6887482d83df8f20093238597d5b8053294ab7e22de0cad24c5ae32e898e21
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/SKILL.md
+      sha256: a12d380b04e4719f0aab61265b7c352aa713bd89cba7fbb7df35456851331355
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/assets/standards.json
+      sha256: ac081483e0d70fb41cd37821093bd3602fc081a54384abb77e49148831d153d9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/references/behavior-rigs.md
+      sha256: 4e1500f623067571244f361c97f0f13ae530055ad7daa88df06709474e1a6d41
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/references/build123d-patterns.md
+      sha256: 2d536d09771772c9140653e7ef86df35351d33ad4fa6c45d4954a8fd5290b256
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/references/fabrication-limits.md
+      sha256: a4d87f56bb95db8bb7ffd267f38c4337841b7735198527fecaf0ac6d2bcaedb9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/references/labware-adapters.md
+      sha256: 6e54cabb0ad4eea78411599d146ab1a66b9378b3407cfcb76fb7e7d3d00ab71e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/references/microfluidics.md
+      sha256: 6b1554443e94690389b560127620c3c459635e0eadb4418ef770eecb5d257496
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/references/optomechanics.md
+      sha256: 89774b6645fc61fdb7700e563191552d9f2b3a934193216bbbb7ada61b31f217
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/references/validation.md
+      sha256: ca1fa6e45247cbd01e042a555c8b2c393eda8fdf9710a6bc3160b4d8bd0d2751
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/scripts/_common.py
+      sha256: 384732d6d14b039aab3f4e2a1f9867f1f6d0ee394d1699ef19e64a3f6ea56c2c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/scripts/check.py
+      sha256: f6f1cd304c327a237f5e079c13a208f7ee3bb1bebcc9d08735ababaf6235557d
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/scripts/gen.py
+      sha256: d159d22429d2983921726e4ea2256935a5a63eca030463fe5ab45416ec3a7f27
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-lab-hardware-cad/scripts/snapshot.py
+      sha256: 4d6887482d83df8f20093238597d5b8053294ab7e22de0cad24c5ae32e898e21
+license: MIT

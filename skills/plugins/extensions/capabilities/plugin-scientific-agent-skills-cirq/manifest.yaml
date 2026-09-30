@@ -74,7 +74,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/SKILL.md
-      sha256: f40ef63258effb4752fc049e2e0522197f41a1e2c6203757dc786c7f2e0bef81
+      sha256: 5bb1507ee526c05111d893b66a4dc743c16a911f834faf562189655e856e9f75
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/building.md
       sha256: 14c6f9fd8a684b99748801e4219e631d8e9876b7f0ce051e944d337c908f7cba
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/experiments.md

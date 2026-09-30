@@ -2,9 +2,9 @@ schema_version: "1"
 capability_id: plugin-scientific-agent-skills-infographics
 title: Infographics
 description: Create professional infographics using Nano Banana Pro AI with
-  smart iterative refinement. Uses Gemini 3 Pro for quality review. Integrates
-  research-lookup and web search for accurate data. Supports 10 infographic
-  types, 8 industry styles, and colorblind-safe palettes.
+  smart iterative refinement. Uses Gemini 3.6 Flash for quality review.
+  Integrates research-lookup and web search for accurate data. Supports 10
+  infographic types, 8 industry styles, and colorblind-safe palettes.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -52,20 +52,32 @@ knowledge_refs:
     path: references/design_principles.md
     content_hash: 8eac51fd0b0493c0968c8abe0716b4c34895d0950f8db8d252c2c74f8196abc9
     license: MIT
+  - knowledge_id: sas-references-infographic-type-catalog.md
+    path: references/infographic_type_catalog.md
+    content_hash: 4960c47cb2d5d767c0b765822fdfdb9eb6162ccf70d5974c8eaae4a024c82306
+    license: MIT
   - knowledge_id: sas-references-infographic-types.md
     path: references/infographic_types.md
     content_hash: f45f97e79fa0962984766b59816182263366180a6b47af65b33df9bb4600c054
+    license: MIT
+  - knowledge_id: sas-references-iterative-refinement.md
+    path: references/iterative_refinement.md
+    content_hash: dd82ab6e3c26ac365bcb4d0c5a262689244ccc9739dda0103db3e4ba61d7767f
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/SKILL.md
-      sha256: e2cd5e10552d71badb95edcce4d8e098a2667d0739746f13ab98a0f9080a3e65
+      sha256: 957ab5a5b93dda40786a1ef5de861b8f5ce1390f9ff65f102586d41256ad2338
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/references/color_palettes.md
       sha256: a195e6a32af06d224a0f4057c14804771f6293677365bbd14032e5f90bddef31
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/references/design_principles.md
       sha256: 8eac51fd0b0493c0968c8abe0716b4c34895d0950f8db8d252c2c74f8196abc9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/references/infographic_type_catalog.md
+      sha256: 4960c47cb2d5d767c0b765822fdfdb9eb6162ccf70d5974c8eaae4a024c82306
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/references/infographic_types.md
       sha256: f45f97e79fa0962984766b59816182263366180a6b47af65b33df9bb4600c054
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/references/iterative_refinement.md
+      sha256: dd82ab6e3c26ac365bcb4d0c5a262689244ccc9739dda0103db3e4ba61d7767f
 license: MIT

@@ -1,9 +1,10 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-labarchive-integration
 title: LabArchives Integration
-description: Electronic lab notebook API integration. Access notebooks, manage
-  entries/attachments, backup notebooks, integrate with
-  Protocols.io/Jupyter/REDCap, for programmatic ELN workflows.
+description: Securely integrate with the official LabArchives ELN REST-like API
+  and Inventory API v1. Use for regional endpoint selection, signed-request
+  construction, user authorization and UID flows, local LA container validation,
+  and verified LabArchives integration workflows.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -45,44 +46,50 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
-    content_hash: 9680fe9f2378f8f2e2b75fe3da9890df580c6254067028ca2e78f5fa6e55c304
+    content_hash: 60fa2eb4810f70715791abcccec8aa6110329de6cb6bd0bb22b25c2118d827e1
     license: MIT
   - knowledge_id: sas-references-authentication-guide.md
     path: references/authentication_guide.md
-    content_hash: 9736d35612b4f89d0d6ef3b148de05e95befb48c2a5d59fe1e39fb0b431d6afb
+    content_hash: 82438902da65f1dc98e6a2549c82d2f24f37e80ada2650cf97c45ec318942af0
     license: MIT
   - knowledge_id: sas-references-integrations.md
     path: references/integrations.md
-    content_hash: 6d7b514173089ef2e291de64c4441b8d1c9ec2a5b9e9a0eb1950842c3bf32717
+    content_hash: fc2ee885dfc9019e8bedda4796c8994c059c68cc959bd3c577b14f5d5d32f352
+    license: MIT
+  - knowledge_id: sas-references-sources.md
+    path: references/sources.md
+    content_hash: e441589dd2997a63c53e17b7fb05e927cb6e62a2e879df6fb02c4f369fc178c4
     license: MIT
   - knowledge_id: sas-scripts-entry-operations.py
     path: scripts/entry_operations.py
-    content_hash: e15516532d740d65b01375c4b7b2eab1832697304a4f4ce9baf8b3c68c66e3e7
+    content_hash: e55a82dd338772d7b54d2105e52a408a487d05a2b4d996cdf21780715484cd8b
     license: MIT
   - knowledge_id: sas-scripts-notebook-operations.py
     path: scripts/notebook_operations.py
-    content_hash: ae836f9c9732d5e1465acb56c110f2e45edbcd7dada2abb36d053825b492e5b7
+    content_hash: b3c3c12202a844ffe221c0b426ef3e3b89a00c25adba62d7b4b9df48d1f40a57
     license: MIT
   - knowledge_id: sas-scripts-setup-config.py
     path: scripts/setup_config.py
-    content_hash: 0d0b486065f1aed4444c6e4fdaf6e6408dcc6a9592cd39aae423fe3c80b61c17
+    content_hash: 11134ea85c48ad1035355f48484fcd8f49e9061f9c8982fa4845c535cf2075d6
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/SKILL.md
-      sha256: 4a386ebbb1dbb63b6e42f3da83c31a361d05dfb1356febef6005b516f6265ce8
+      sha256: b006878db7086bb523f1b878e46c82d4bf92026822bd0d5ae24840bc5bd161c9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/references/api_reference.md
-      sha256: 9680fe9f2378f8f2e2b75fe3da9890df580c6254067028ca2e78f5fa6e55c304
+      sha256: 60fa2eb4810f70715791abcccec8aa6110329de6cb6bd0bb22b25c2118d827e1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/references/authentication_guide.md
-      sha256: 9736d35612b4f89d0d6ef3b148de05e95befb48c2a5d59fe1e39fb0b431d6afb
+      sha256: 82438902da65f1dc98e6a2549c82d2f24f37e80ada2650cf97c45ec318942af0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/references/integrations.md
-      sha256: 6d7b514173089ef2e291de64c4441b8d1c9ec2a5b9e9a0eb1950842c3bf32717
+      sha256: fc2ee885dfc9019e8bedda4796c8994c059c68cc959bd3c577b14f5d5d32f352
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/references/sources.md
+      sha256: e441589dd2997a63c53e17b7fb05e927cb6e62a2e879df6fb02c4f369fc178c4
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/scripts/entry_operations.py
-      sha256: e15516532d740d65b01375c4b7b2eab1832697304a4f4ce9baf8b3c68c66e3e7
+      sha256: e55a82dd338772d7b54d2105e52a408a487d05a2b4d996cdf21780715484cd8b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/scripts/notebook_operations.py
-      sha256: ae836f9c9732d5e1465acb56c110f2e45edbcd7dada2abb36d053825b492e5b7
+      sha256: b3c3c12202a844ffe221c0b426ef3e3b89a00c25adba62d7b4b9df48d1f40a57
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-labarchive-integration/scripts/setup_config.py
-      sha256: 0d0b486065f1aed4444c6e4fdaf6e6408dcc6a9592cd39aae423fe3c80b61c17
+      sha256: 11134ea85c48ad1035355f48484fcd8f49e9061f9c8982fa4845c535cf2075d6
 license: MIT

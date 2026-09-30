@@ -4,7 +4,7 @@ import path from "node:path";
 import { z } from "zod";
 
 import { AuditRelativePathSchema, VendorAuditResourcesSchema } from "../../vendor-audits/contracts.js";
-import { ScientificAgentSkillsAuditSchema } from "../../vendor-audits/scientific-agent-skills.js";
+import { ScientificAgentSkillsAuditSchema, type ScientificAgentSkillsAudit } from "../../vendor-audits/scientific-agent-skills.js";
 
 const SkillIdSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(64);
 const DomainIdSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
@@ -44,17 +44,17 @@ const ReviewAdaptationSchema = z.strictObject({
 
 export const ScientificAgentSkillsSecurityReviewSchema = z.strictObject({
   skill_id: SkillIdSchema,
-  batch: z.number().int().min(1).max(8),
+  batch: z.number().int().min(1),
   upstream: z.strictObject({
-    highest_severity: z.enum(["critical", "high"]),
-    finding_count: z.number().int().positive(),
+    highest_severity: z.enum(["critical", "high", "medium", "low", "info", "none"]),
+    finding_count: z.number().int().nonnegative(),
   }),
   inventory: z.strictObject({
     summary: VendorAuditResourcesSchema,
     files: z.array(InventoryFileSchema).min(1),
   }),
   reviewed_paths: z.array(AuditRelativePathSchema),
-  findings: z.array(UpstreamFindingReviewSchema).min(1),
+  findings: z.array(UpstreamFindingReviewSchema),
   recommendation: ReviewActionSchema,
   maintainer_decision: ReviewActionSchema,
   adaptations: z.array(ReviewAdaptationSchema),
@@ -65,50 +65,95 @@ export const ScientificAgentSkillsSecurityReviewSchema = z.strictObject({
 export const ScientificAgentSkillsSecurityReviewCatalogSchema = z.strictObject({
   schema_version: z.literal("1"),
   vendor_id: z.literal("scientific-agent-skills"),
-  release: z.literal("v2.53.0"),
-  revision: z.literal("9c9bd2e92af12311ecd0c1a643e0931643f9ea04"),
-  source_report: z.literal("SECURITY.md"),
+  release: z.string().min(1),
+  revision: z.string().regex(/^[a-f0-9]{40}$/, "must be a full immutable git revision"),
+  source_report: AuditRelativePathSchema,
   target_reason: z.literal("static-security-review-failed"),
-  reviews: z.array(ScientificAgentSkillsSecurityReviewSchema).length(40),
+  reviews: z.array(ScientificAgentSkillsSecurityReviewSchema),
 });
 
 export type ScientificAgentSkillsSecurityReviewCatalog = z.infer<typeof ScientificAgentSkillsSecurityReviewCatalogSchema>;
 export type ScientificAgentSkillsSecurityReview = z.infer<typeof ScientificAgentSkillsSecurityReviewSchema>;
 
-export const SCIENTIFIC_AGENT_SKILLS_SECURITY_REVIEW_BATCHES = [
-  ["fluidsim", "geomaster", "infographics", "latex-posters", "markitdown"],
-  ["modal", "pacsomatic", "parallel-web", "pptx-posters", "qutip"],
-  ["scientific-schematics", "scientific-slides", "seaborn", "transformers", "umap-learn"],
-  ["venue-templates", "bgpt-paper-search", "bids", "cellxgene-census", "citation-management"],
-  ["clinical-decision-support", "clinical-reports", "consciousness-council", "database-lookup", "dhdna-profiler"],
-  ["flowio", "histolab", "hypothesis-generation", "literature-review", "paperzilla"],
-  ["pathml", "peer-review", "primekg", "research-lookup", "scholar-evaluation"],
-  ["scientific-writing", "tiledbvcf", "treatment-plans", "usfiscaldata", "zarr-python"],
-] as const;
+export interface ScientificAgentSkillsIdentity {
+  release: string;
+  revision: string;
+  auditFile: string;
+  auditReport: string;
+  audit: ScientificAgentSkillsAudit;
+}
 
-export async function loadScientificAgentSkillsSecurityReview(repoRoot: string): Promise<ScientificAgentSkillsSecurityReviewCatalog> {
+const MaintenanceCatalogSchema = z.object({
+  release: z.string().min(1),
+  revision: z.string().regex(/^[a-f0-9]{40}$/, "must be a full immutable git revision"),
+  audit_file: AuditRelativePathSchema,
+  audit_report: AuditRelativePathSchema,
+});
+
+/**
+ * Resolve the pinned upstream identity from the maintenance catalog, which owns
+ * the immutable audit path, release, and revision. The audit itself is the
+ * source of truth for the reviewed inventory.
+ */
+export async function loadScientificAgentSkillsIdentity(repoRoot: string): Promise<ScientificAgentSkillsIdentity> {
+  const maintenancePath = path.join(repoRoot, "audits/scientific-agent-skills/catalog.json");
+  const maintenance = MaintenanceCatalogSchema.parse(JSON.parse(await readFile(maintenancePath, "utf8")) as unknown);
+  const audit = ScientificAgentSkillsAuditSchema.parse(JSON.parse(await readFile(path.join(repoRoot, maintenance.audit_file), "utf8")) as unknown);
+  if (audit.source.release !== maintenance.release) throw new Error(`Maintenance catalog release ${maintenance.release} differs from the bound audit release ${audit.source.release}.`);
+  if (audit.source.revision !== maintenance.revision) throw new Error(`Maintenance catalog revision ${maintenance.revision} differs from the bound audit revision ${audit.source.revision}.`);
+  return { release: maintenance.release, revision: maintenance.revision, auditFile: maintenance.audit_file, auditReport: maintenance.audit_report, audit };
+}
+
+/** Current review IDs grouped by batch. Derived from the explicit review catalog, never an independent source. */
+export function securityReviewBatches(catalog: ScientificAgentSkillsSecurityReviewCatalog): string[][] {
+  const groups = new Map<number, string[]>();
+  for (const review of catalog.reviews) {
+    const group = groups.get(review.batch) ?? [];
+    group.push(review.skill_id);
+    groups.set(review.batch, group);
+  }
+  return [...groups.keys()].sort((left, right) => left - right).map((key) => groups.get(key) ?? []);
+}
+
+export async function loadScientificAgentSkillsSecurityReview(
+  repoRoot: string,
+  identity?: ScientificAgentSkillsIdentity,
+): Promise<ScientificAgentSkillsSecurityReviewCatalog> {
   const catalogPath = path.join(repoRoot, "src/vendor-converters/scientific-agent-skills/security-review-decisions.json");
   const catalog = ScientificAgentSkillsSecurityReviewCatalogSchema.parse(JSON.parse(await readFile(catalogPath, "utf8")) as unknown);
-  await validateScientificAgentSkillsSecurityReview(repoRoot, catalog);
+  await validateScientificAgentSkillsSecurityReview(repoRoot, catalog, identity);
   return catalog;
 }
 
 export async function validateScientificAgentSkillsSecurityReview(
   repoRoot: string,
   catalog: ScientificAgentSkillsSecurityReviewCatalog,
+  identity?: ScientificAgentSkillsIdentity,
 ): Promise<void> {
   const sourceRoot = path.join(repoRoot, "vendor/scientific-agent-skills");
-  const audit = ScientificAgentSkillsAuditSchema.parse(JSON.parse(await readFile(path.join(repoRoot, "audits/scientific-agent-skills/v2.53.0/skill-audit.json"), "utf8")) as unknown);
+  const resolved = identity ?? await loadScientificAgentSkillsIdentity(repoRoot);
+  const audit = resolved.audit;
   const admission = AdmissionSummaryCatalogSchema.parse(JSON.parse(await readFile(path.join(repoRoot, "src/vendor-converters/scientific-agent-skills/admission-decisions.json"), "utf8")) as unknown);
   const domainCatalog = z.object({ domains: z.array(z.object({ domain_id: DomainIdSchema })) }).parse(JSON.parse(await readFile(path.join(repoRoot, "src/plugins/domain-catalog.json"), "utf8")) as unknown);
   const domainIds = new Set(domainCatalog.domains.map((domain) => domain.domain_id));
   const auditById = new Map(audit.skills.map((skill) => [skill.skill_id, skill]));
   const admissionById = new Map(admission.decisions.map((decision) => [decision.upstream_skill_id, decision]));
-  const expected = SCIENTIFIC_AGENT_SKILLS_SECURITY_REVIEW_BATCHES.flat();
 
-  if (catalog.release !== audit.source.release || catalog.revision !== audit.source.revision) throw new Error("Manual security review source does not match the pinned audit.");
-  if (new Set(expected).size !== 40) throw new Error("Manual security review batches must contain 40 unique Skills.");
-  if (catalog.reviews.map((review) => review.skill_id).join("\0") !== expected.join("\0")) throw new Error("Manual security review targets or stable order do not match the approved batches.");
+  if (catalog.release !== resolved.release || catalog.revision !== resolved.revision) throw new Error("Manual security review source does not match the pinned maintenance catalog identity.");
+  const seen = new Set<string>();
+  for (const review of catalog.reviews) {
+    if (seen.has(review.skill_id)) throw new Error(`Manual security review repeats Skill ${review.skill_id}.`);
+    seen.add(review.skill_id);
+  }
+  await access(path.join(sourceRoot, catalog.source_report));
+  const required = new Set<string>();
+  for (const skill of audit.skills) {
+    if (["critical", "high"].includes(skill.security.highest_severity) && admissionById.get(skill.skill_id)?.disposition === "admitted") required.add(skill.skill_id);
+  }
+  for (const decision of admission.decisions) if (decision.reason_codes.includes(catalog.target_reason)) required.add(decision.upstream_skill_id);
+  for (const skillId of required) {
+    if (!seen.has(skillId)) throw new Error(`Manual security review is missing a required Skill: ${skillId}.`);
+  }
 
   for (const [index, review] of catalog.reviews.entries()) {
     const expectedBatch = Math.floor(index / 5) + 1;

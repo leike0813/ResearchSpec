@@ -52,6 +52,10 @@ knowledge_refs:
     path: references/authentication.md
     content_hash: 277a3fffdd9ec7e5c767168ef6b2af040229015f451895e96f57cfa4d2493d39
     license: MIT
+  - knowledge_id: sas-references-core-capabilities.md
+    path: references/core_capabilities.md
+    content_hash: 87d3c9d4e4fe7c137954fe79d1e3ce18f302f5a0c016f5a82d1089fc790bee72
+    license: MIT
   - knowledge_id: sas-references-eventbridge.md
     path: references/eventbridge.md
     content_hash: 6e89cfdcc0c150a0bf466630f7d0ea7da3e1734607afdb08f9df5bf00b774606
@@ -65,11 +69,13 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/SKILL.md
-      sha256: c0ec30fd340b46a97c53e08464c2899b2155c7b7f39c8a9f1e6617178ebe41ce
+      sha256: 110bffd7c65a2f2555890598d08f42647eea63ba0310ae22b46b8448a90d9aac
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/api_endpoints.md
       sha256: 4a5c8565551089485ea6033554b8c8427766b752bf987cafc8d3582c19c47808
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/authentication.md
       sha256: 277a3fffdd9ec7e5c767168ef6b2af040229015f451895e96f57cfa4d2493d39
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/core_capabilities.md
+      sha256: 87d3c9d4e4fe7c137954fe79d1e3ce18f302f5a0c016f5a82d1089fc790bee72
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/eventbridge.md
       sha256: 6e89cfdcc0c150a0bf466630f7d0ea7da3e1734607afdb08f9df5bf00b774606
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-benchling-integration/references/sdk_reference.md

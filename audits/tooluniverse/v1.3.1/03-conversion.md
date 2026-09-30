@@ -1,7 +1,7 @@
 # ToolUniverse Extension Anchor Conversion — v1.3.1
 
 - extension registry version: `0.7.0`
-- registry subset SHA-256: `8ed5f68818934d20769c2d6e91c9ea5b48d8345024df100407414a1b5fdd64b7`
+- registry subset SHA-256: `6cc37eb2baa98ae9fa0e2c2e474bcd1d7e303925bc9c616fdf0986954cd08a43`
 - packages tree SHA-256: `2f1d3b4da2adf88ef28ef630732eaffe1c3e3b848f8d9e1e1ced1bca7440c214`
 - profiles tree SHA-256: `3775aa27c4c626d6d68de1ec051d4d6832938ed8509583e194e4258c6796c27e`
 - capability count: 130 · mixed: 42 · llm: 88

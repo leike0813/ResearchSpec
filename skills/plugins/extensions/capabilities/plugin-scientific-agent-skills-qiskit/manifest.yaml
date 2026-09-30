@@ -1,16 +1,15 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-qiskit
 title: Qiskit
-description: IBM quantum computing framework. Use when targeting IBM Quantum
-  hardware, working with Qiskit Runtime for production workloads, or needing IBM
-  optimization tools. Best for IBM hardware execution, quantum error mitigation,
-  and enterprise quantum computing. For Google hardware use cirq; for
-  gradient-based quantum ML use pennylane; for open quantum system simulations
-  use qutip.
+description: Build, simulate, transpile, and execute quantum circuits with
+  Qiskit and IBM Quantum Runtime. Use for Qiskit 2.x circuits and operators, V2
+  Sampler or Estimator primitives, target-aware transpilation, local or noisy
+  simulation, IBM QPU execution, Runtime sessions or batches, error mitigation,
+  and Qiskit ecosystem packages.
 maturity: operational
 class: analysis
 node_kind: producer
-execution_type: llm
+execution_type: mixed
 params: {}
 inputs:
   - role: task_request
@@ -48,56 +47,92 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-algorithms.md
     path: references/algorithms.md
-    content_hash: 06f48e2a63464b711d37851983ad1d050bcdc003cb8afe70c98c3ce1f01c7b3b
+    content_hash: f931da04a8f88683a3628ac5ad60b22ef6c5f6ca2f4fb4330eb732cb307f3445
     license: MIT
   - knowledge_id: sas-references-backends.md
     path: references/backends.md
-    content_hash: e1336784fcdfc487e3ba4a07d1be22061938749e5975c49eae69a96742c6b1c4
+    content_hash: 037e7786d4c11b459060c39526935f1f0a0b41c6da2f2253fbb78047ba8e927b
     license: MIT
   - knowledge_id: sas-references-circuits.md
     path: references/circuits.md
-    content_hash: 4708eed5c9ecef6055673c101ef1642e88062f9a987f8b71eafaefa3572d632d
+    content_hash: 78fc58e941cd4971b162d10d87827ec27c8155415bbb4f9632ac89c6f7d8c4f8
+    license: MIT
+  - knowledge_id: sas-references-migration.md
+    path: references/migration.md
+    content_hash: 974575cea4edf88f0cd6ab0e89cd0009e62fc99feb138f7e26987be8e2276266
     license: MIT
   - knowledge_id: sas-references-patterns.md
     path: references/patterns.md
-    content_hash: 02e8359f367dc5618ed7ea5287100e61336eef798e642aaf8074c794de588411
+    content_hash: e745439a97adcffdfc0f11dd1bf23199c8945b0833b30b30caf350416726960b
     license: MIT
   - knowledge_id: sas-references-primitives.md
     path: references/primitives.md
-    content_hash: 6fea9e6ad7ea039e44b05400d48caf80e2b3110364fb6ee545108cc3d2a27c9d
+    content_hash: 479865427d4ff0b6dec87a91c8f608d0124a3875e16be7889fe1611cf0571a08
     license: MIT
   - knowledge_id: sas-references-setup.md
     path: references/setup.md
-    content_hash: deeed00097127b28da39926a777f2b1945957969d2e02852f31efd00e398b897
+    content_hash: fe773e1d90d8712fcdd0c911d70b537e6996d67c88ce3886c519476592996874
+    license: MIT
+  - knowledge_id: sas-references-sources.md
+    path: references/sources.md
+    content_hash: 38d1ee960c58c44f5cf833e887579fff147f63921f5a472354111daac50daa19
+    license: MIT
+  - knowledge_id: sas-references-testing.md
+    path: references/testing.md
+    content_hash: 0ea7bbc905efb5848509d680b089416be236be44cea3a8570ddf421e46a1a486
     license: MIT
   - knowledge_id: sas-references-transpilation.md
     path: references/transpilation.md
-    content_hash: a30b3f6e66eea9a61716cdd339d4aec1a58437cf6d7fba6915b2b6963fd5eca5
+    content_hash: 1491b9a8edf917e41f1863798a9e64f6dd5a657173d74670f155eae8490a0307
     license: MIT
   - knowledge_id: sas-references-visualization.md
     path: references/visualization.md
-    content_hash: 612660942719fb14c9d91247ccf8b4ce5c7c980117ef7d8c4955aef053f72c54
+    content_hash: 465b09397ad1c31921e0aa8d822714ac6771879a70f06e4c7cc7484439623d75
+    license: MIT
+  - knowledge_id: sas-scripts-check-environment.py
+    path: scripts/check_environment.py
+    content_hash: dd9f44b7378041d236755c37c4a0e77286a0dbc5eddec1cdd34de7894cfa3e06
+    license: MIT
+  - knowledge_id: sas-scripts-inspect-runtime.py
+    path: scripts/inspect_runtime.py
+    content_hash: 7f42b7446303c5ddb8683ec41c4d495f001f076247cb6d6e5512c8dd48c87d16
+    license: MIT
+  - knowledge_id: sas-scripts-run-local-primitives.py
+    path: scripts/run_local_primitives.py
+    content_hash: 84cb5a992e2ddf56bd21e4ce95a5edcadaef6da31074f372f227b418afe4fb07
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/SKILL.md
-      sha256: a076023dc6461a9c9651d4103f375b512a9c159379ea258c080bfef6817d2a6f
+      sha256: 18bb594329cbf86d33e11a00596287c8e2da3642c88a6133625d2c338998b4e9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/algorithms.md
-      sha256: 06f48e2a63464b711d37851983ad1d050bcdc003cb8afe70c98c3ce1f01c7b3b
+      sha256: f931da04a8f88683a3628ac5ad60b22ef6c5f6ca2f4fb4330eb732cb307f3445
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/backends.md
-      sha256: e1336784fcdfc487e3ba4a07d1be22061938749e5975c49eae69a96742c6b1c4
+      sha256: 037e7786d4c11b459060c39526935f1f0a0b41c6da2f2253fbb78047ba8e927b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/circuits.md
-      sha256: 4708eed5c9ecef6055673c101ef1642e88062f9a987f8b71eafaefa3572d632d
+      sha256: 78fc58e941cd4971b162d10d87827ec27c8155415bbb4f9632ac89c6f7d8c4f8
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/migration.md
+      sha256: 974575cea4edf88f0cd6ab0e89cd0009e62fc99feb138f7e26987be8e2276266
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/patterns.md
-      sha256: 02e8359f367dc5618ed7ea5287100e61336eef798e642aaf8074c794de588411
+      sha256: e745439a97adcffdfc0f11dd1bf23199c8945b0833b30b30caf350416726960b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/primitives.md
-      sha256: 6fea9e6ad7ea039e44b05400d48caf80e2b3110364fb6ee545108cc3d2a27c9d
+      sha256: 479865427d4ff0b6dec87a91c8f608d0124a3875e16be7889fe1611cf0571a08
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/setup.md
-      sha256: deeed00097127b28da39926a777f2b1945957969d2e02852f31efd00e398b897
+      sha256: fe773e1d90d8712fcdd0c911d70b537e6996d67c88ce3886c519476592996874
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/sources.md
+      sha256: 38d1ee960c58c44f5cf833e887579fff147f63921f5a472354111daac50daa19
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/testing.md
+      sha256: 0ea7bbc905efb5848509d680b089416be236be44cea3a8570ddf421e46a1a486
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/transpilation.md
-      sha256: a30b3f6e66eea9a61716cdd339d4aec1a58437cf6d7fba6915b2b6963fd5eca5
+      sha256: 1491b9a8edf917e41f1863798a9e64f6dd5a657173d74670f155eae8490a0307
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/references/visualization.md
-      sha256: 612660942719fb14c9d91247ccf8b4ce5c7c980117ef7d8c4955aef053f72c54
+      sha256: 465b09397ad1c31921e0aa8d822714ac6771879a70f06e4c7cc7484439623d75
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/scripts/check_environment.py
+      sha256: dd9f44b7378041d236755c37c4a0e77286a0dbc5eddec1cdd34de7894cfa3e06
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/scripts/inspect_runtime.py
+      sha256: 7f42b7446303c5ddb8683ec41c4d495f001f076247cb6d6e5512c8dd48c87d16
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiskit/scripts/run_local_primitives.py
+      sha256: 84cb5a992e2ddf56bd21e4ce95a5edcadaef6da31074f372f227b418afe4fb07
 license: MIT

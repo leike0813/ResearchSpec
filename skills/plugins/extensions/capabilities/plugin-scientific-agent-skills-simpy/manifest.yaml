@@ -1,11 +1,10 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-simpy
-title: SimPy - Discrete-Event Simulation
-description: Process-based discrete-event simulation framework in Python. Use
-  this skill when building simulations of systems with processes, queues,
-  resources, and time-based events such as manufacturing systems, service
-  operations, network traffic, logistics, or any system where entities interact
-  with shared resources over time.
+title: SimPy
+description: Build, inspect, test, and analyze bounded process-based
+  discrete-event simulations with SimPy, including events, resources,
+  interrupts, monitoring, replications, warm-up, and reproducible output
+  analysis.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -45,52 +44,100 @@ validators:
         - --required
         - scope,source_ledger,method_plan,work_products,validation_results,conclusions
 knowledge_refs:
+  - knowledge_id: sas-references-cli-guide.md
+    path: references/cli-guide.md
+    content_hash: 648c73619ad2e52b0edf4cc34c99d499acf739eea01ae516b79d537ae46368fb
+    license: MIT
   - knowledge_id: sas-references-events.md
     path: references/events.md
-    content_hash: ec53d2242372565fdbbe15c6d85ac65be79558bec589abda9f658851ea2856a7
+    content_hash: f4c0ff9b027718dcc81dff9fc912f5dc90ef52c58fedfcac63238390c5b622fd
     license: MIT
   - knowledge_id: sas-references-monitoring.md
     path: references/monitoring.md
-    content_hash: 115230919df1c97b49a599720e025ac9f7514cf12613b2765e208ed708aad20a
+    content_hash: 8bb3ed670ce153fcc873b15e6f1bd15760babd0241a42929e64672b7fe7a0bf5
     license: MIT
   - knowledge_id: sas-references-process-interaction.md
     path: references/process-interaction.md
-    content_hash: 07607eae087b6bd07b83acd76c23135a8376a52c01b06f02f2ebc4e8bd2bf5b5
+    content_hash: 463911ab1a26e2a743a943b7db1262c4ddb1901cbc14c9ce1a9c410338012f79
     license: MIT
   - knowledge_id: sas-references-real-time.md
     path: references/real-time.md
-    content_hash: 70c08f55ab65c5ff92d2b17023485b42be8a82b2a8139b6437263352b9fb3aa2
+    content_hash: 0ffd48a9199297339d17f21ad668c839e4531cf8f678da234f98b42ca684f36c
     license: MIT
   - knowledge_id: sas-references-resources.md
     path: references/resources.md
-    content_hash: 3f87b67d8db3bdf7101dfe31f952bf9688fdba3c1b86b5c3a8bec0bfdc5d0e1b
+    content_hash: a73f016673ae0afd9b8c7fd53cf70d5193d566d5c7372af95cfe61ab8e7d0bbf
+    license: MIT
+  - knowledge_id: sas-references-simulation-methodology.md
+    path: references/simulation-methodology.md
+    content_hash: 48149207316ed6f3f248169d207dbc1770393486d7cc57fe27daf953cf1f4656
+    license: MIT
+  - knowledge_id: sas-references-sources.md
+    path: references/sources.md
+    content_hash: 09c4f7545968e88a56a98060d44f441fb88e59b83e5d1fa25709612ddfd3c182
+    license: MIT
+  - knowledge_id: sas-scripts--common.py
+    path: scripts/_common.py
+    content_hash: 076d0d9a36f9bb58dd8b1e5058ef12008cb02fb281bffe1fa25c205cf1e6bf62
     license: MIT
   - knowledge_id: sas-scripts-basic-simulation-template.py
     path: scripts/basic_simulation_template.py
-    content_hash: 664c2d8427a14f0a9db9e4f9cd3138e1d8f8a83702fa31e99115b6c2d8bd0210
+    content_hash: 5cb1ffb974a74669e0596dbaa54e392483e2f74ea8cb757ab181ae0b64f19e66
+    license: MIT
+  - knowledge_id: sas-scripts-bounded-queue-scenario.py
+    path: scripts/bounded_queue_scenario.py
+    content_hash: 8d8de80d5c241c8c677754810ce293d667498e618493a75418b35247e5613f0f
+    license: MIT
+  - knowledge_id: sas-scripts-event-trace-summary.py
+    path: scripts/event_trace_summary.py
+    content_hash: 03c3a6a5b619d816fbf3e32609b0cbffbbed70c3c8b77ed8025bd1b86612dc5e
+    license: MIT
+  - knowledge_id: sas-scripts-replication-runner.py
+    path: scripts/replication_runner.py
+    content_hash: 99f0d16710a0dd472e3bdbb903b2ed38578c5a1523a7a87781a1053c8a34c23e
     license: MIT
   - knowledge_id: sas-scripts-resource-monitor.py
     path: scripts/resource_monitor.py
-    content_hash: e069449c87109851e8fe0b6d9e899dfef8c37065e420a6d5f661765e58588b86
+    content_hash: dc04b5b66c3734deb03b4408b8b241f7b483195a4704b1eae2e963b8df582db0
+    license: MIT
+  - knowledge_id: sas-scripts-validate-simulation-config.py
+    path: scripts/validate_simulation_config.py
+    content_hash: 2482b5a7d8f389ed892d0e4edfcce13cbd4144e64490513194791f8d1f0e555e
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/SKILL.md
-      sha256: 0ec8d49443be378939a390421baa3082ef156b1e53ff54b871eb1deb20583a14
+      sha256: b7e80c7d8185f965488ac507cc5e0f5f4b2b4db744583ffcafb8cc35a0130cb3
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/cli-guide.md
+      sha256: 648c73619ad2e52b0edf4cc34c99d499acf739eea01ae516b79d537ae46368fb
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/events.md
-      sha256: ec53d2242372565fdbbe15c6d85ac65be79558bec589abda9f658851ea2856a7
+      sha256: f4c0ff9b027718dcc81dff9fc912f5dc90ef52c58fedfcac63238390c5b622fd
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/monitoring.md
-      sha256: 115230919df1c97b49a599720e025ac9f7514cf12613b2765e208ed708aad20a
+      sha256: 8bb3ed670ce153fcc873b15e6f1bd15760babd0241a42929e64672b7fe7a0bf5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/process-interaction.md
-      sha256: 07607eae087b6bd07b83acd76c23135a8376a52c01b06f02f2ebc4e8bd2bf5b5
+      sha256: 463911ab1a26e2a743a943b7db1262c4ddb1901cbc14c9ce1a9c410338012f79
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/real-time.md
-      sha256: 70c08f55ab65c5ff92d2b17023485b42be8a82b2a8139b6437263352b9fb3aa2
+      sha256: 0ffd48a9199297339d17f21ad668c839e4531cf8f678da234f98b42ca684f36c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/resources.md
-      sha256: 3f87b67d8db3bdf7101dfe31f952bf9688fdba3c1b86b5c3a8bec0bfdc5d0e1b
+      sha256: a73f016673ae0afd9b8c7fd53cf70d5193d566d5c7372af95cfe61ab8e7d0bbf
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/simulation-methodology.md
+      sha256: 48149207316ed6f3f248169d207dbc1770393486d7cc57fe27daf953cf1f4656
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/references/sources.md
+      sha256: 09c4f7545968e88a56a98060d44f441fb88e59b83e5d1fa25709612ddfd3c182
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/scripts/_common.py
+      sha256: 076d0d9a36f9bb58dd8b1e5058ef12008cb02fb281bffe1fa25c205cf1e6bf62
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/scripts/basic_simulation_template.py
-      sha256: 664c2d8427a14f0a9db9e4f9cd3138e1d8f8a83702fa31e99115b6c2d8bd0210
+      sha256: 5cb1ffb974a74669e0596dbaa54e392483e2f74ea8cb757ab181ae0b64f19e66
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/scripts/bounded_queue_scenario.py
+      sha256: 8d8de80d5c241c8c677754810ce293d667498e618493a75418b35247e5613f0f
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/scripts/event_trace_summary.py
+      sha256: 03c3a6a5b619d816fbf3e32609b0cbffbbed70c3c8b77ed8025bd1b86612dc5e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/scripts/replication_runner.py
+      sha256: 99f0d16710a0dd472e3bdbb903b2ed38578c5a1523a7a87781a1053c8a34c23e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/scripts/resource_monitor.py
-      sha256: e069449c87109851e8fe0b6d9e899dfef8c37065e420a6d5f661765e58588b86
+      sha256: dc04b5b66c3734deb03b4408b8b241f7b483195a4704b1eae2e963b8df582db0
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-simpy/scripts/validate_simulation_config.py
+      sha256: 2482b5a7d8f389ed892d0e4edfcce13cbd4144e64490513194791f8d1f0e555e
 license: MIT

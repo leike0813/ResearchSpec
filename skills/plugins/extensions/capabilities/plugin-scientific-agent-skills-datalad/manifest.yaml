@@ -1,0 +1,76 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-datalad
+title: DataLad
+description: Retrieve, version, and publish scientific datasets with DataLad and
+  git-annex, and capture computational provenance with datalad run, rerun, and
+  containers-run. Use when cloning or fetching data from OpenNeuro, DANDI,
+  datasets.datalad.org, or any DataLad dataset; when a file in a dataset reads
+  as a broken symlink or a small pointer instead of real data; when an analysis
+  needs a machine-readable record of how each output was produced so it can be
+  re-executed; or when publishing a dataset to siblings such as a GitHub
+  repository plus a storage remote. Also use to decide between DataLad and plain
+  Git for a data-carrying repository.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-data-access.md
+    path: references/data-access.md
+    content_hash: 37cb3f35c82ba9dcb3d7be051d6dd6116c7d1fc19d0d4484510578e596083e11
+    license: MIT
+  - knowledge_id: sas-references-provenance.md
+    path: references/provenance.md
+    content_hash: 402f87d448e2369cb594d9a3002ec3acf0a7477a3908dbe39afd6a2ec4fe4a16
+    license: MIT
+  - knowledge_id: sas-references-publishing.md
+    path: references/publishing.md
+    content_hash: 859b7f496f49b9e63815dea3a91e57b04f2f029a8a8a30a2d15e39aad4c9599d
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-datalad/SKILL.md
+      sha256: 26b6ed36fa4a3c8e639f9cab0016fb172d02fba301b90b6291971b682c3160b5
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-datalad/references/data-access.md
+      sha256: 37cb3f35c82ba9dcb3d7be051d6dd6116c7d1fc19d0d4484510578e596083e11
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-datalad/references/provenance.md
+      sha256: 402f87d448e2369cb594d9a3002ec3acf0a7477a3908dbe39afd6a2ec4fe4a16
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-datalad/references/publishing.md
+      sha256: 859b7f496f49b9e63815dea3a91e57b04f2f029a8a8a30a2d15e39aad4c9599d
+license: MIT

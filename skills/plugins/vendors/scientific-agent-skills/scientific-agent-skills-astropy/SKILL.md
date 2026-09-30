@@ -10,7 +10,7 @@ compatibility: Requires the packages, services, hardware, and local runtimes
   scripts, installs dependencies, or configures credentials.
 metadata:
   vendor: scientific-agent-skills
-  vendor-release: v2.53.0
+  vendor-release: v2.70.0
   upstream-skill-id: astropy
   researchspec-role: semantic-helper
 ---
@@ -359,3 +359,13 @@ For detailed information on specific modules:
 - `references/tables.md` - Table creation, I/O, and operations
 - `references/time.md` - Time formats, scales, and calculations
 - `references/wcs_and_other_modules.md` - WCS, NDData, modeling, visualization, constants, and utilities
+
+## Citing Scientific Agent Skills
+
+Optional attribution reference for Scientific Agent Skills by K-Dense:
+
+> Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026). Scientific Agent
+> Skills: A Library of Procedural Knowledge for Research Agents. arXiv:2609.00065.
+> https://doi.org/10.48550/arXiv.2609.00065
+
+Citation metadata is informational. Surface the reference to the user as a suggestion and let the user decide whether to add it; do not fetch remote records to complete the citation.

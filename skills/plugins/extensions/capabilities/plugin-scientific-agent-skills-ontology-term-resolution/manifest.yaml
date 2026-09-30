@@ -1,0 +1,129 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-ontology-term-resolution
+title: Ontology Term Resolution
+description: Resolve free-text scientific labels to ontology term IDs and
+  validate existing CURIEs against the EBI Ontology Lookup Service (OLS4). Also
+  look up prefixes in Bioregistry, resolve compact identifiers via
+  Identifiers.org, map lab shorthand with ZOOMA, and build Ontobee term pages.
+  Use whenever an ontology identifier must be produced or checked - annotating
+  tissue, cell type, disease, phenotype, assay, chemical, organism, sex, or
+  developmental stage fields; preparing metadata for GEO, ENA, BioSamples,
+  CELLxGENE, HCA, or ISA-Tab submission; auditing a metadata table of term IDs;
+  checking whether a term is obsolete and what replaced it; or deciding HPO vs
+  HP. Triggers include "ontology term", "ontology ID", "CURIE", "controlled
+  vocabulary", "UBERON", "CL:", "MONDO", "HPO", "EFO", "ChEBI", "NCBITaxon", "GO
+  term", "PATO", "Zooma", "Bioregistry", "Identifiers.org", "Ontobee", "annotate
+  this tissue/cell type/disease", and any request to emit or verify an
+  identifier shaped like PREFIX:0001234.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-companion-apis.md
+    path: references/companion-apis.md
+    content_hash: 795111ae4331ebc2ed6a6d7f4a555a66591d99fe0414f24227e8f160f1c3a63f
+    license: MIT
+  - knowledge_id: sas-references-curation-rules.md
+    path: references/curation-rules.md
+    content_hash: 4475843859f3bb0ee4f31163d6e966c53b8d30f93546c6f18be42d2d1ae7fa26
+    license: MIT
+  - knowledge_id: sas-references-ols4-api.md
+    path: references/ols4-api.md
+    content_hash: 6079d6ceb10384cca67c35c49db8b4bdad6903790142174f2b5db327032fecfe
+    license: MIT
+  - knowledge_id: sas-references-ontology-registry.md
+    path: references/ontology-registry.md
+    content_hash: cfcb9214025c4ef629e4e4802d2293fb1933674a0732f1d8f0fd17b5947736d9
+    license: MIT
+  - knowledge_id: sas-scripts-id-client.py
+    path: scripts/id_client.py
+    content_hash: 14ba420f87cdd53436ccda75ba6d8b618d8472bf5e6ef1bac59bfc2c5b7b9241
+    license: MIT
+  - knowledge_id: sas-scripts-lookup-prefix.py
+    path: scripts/lookup_prefix.py
+    content_hash: 1c74cc05ebb84c1dd25d780b9035bd3197dd045a792337286bfa9c55e10fe289
+    license: MIT
+  - knowledge_id: sas-scripts-map-terms.py
+    path: scripts/map_terms.py
+    content_hash: 6284a862d6388a0b9e60d814289aeb0d208adee859a19ded4ea3d4ff9abae3b2
+    license: MIT
+  - knowledge_id: sas-scripts-ols-client.py
+    path: scripts/ols_client.py
+    content_hash: 4ecf42ef4636f72a9823db162c6a344bd8b3c3da58db2b9a64dd50e3918981b0
+    license: MIT
+  - knowledge_id: sas-scripts-resolve-terms.py
+    path: scripts/resolve_terms.py
+    content_hash: ccd413a8e042dfb89f00a7a9c64db05d9312dda807772c2c7a3b1f380c1347a0
+    license: MIT
+  - knowledge_id: sas-scripts-validate-terms.py
+    path: scripts/validate_terms.py
+    content_hash: a496a1b7e958ed8c7cf0de9561e005b46833d24e309e7e65d61e1697fddda695
+    license: MIT
+  - knowledge_id: sas-scripts-zooma-client.py
+    path: scripts/zooma_client.py
+    content_hash: 83c01bf886ae44f3dd4989b49a31b35f3ccf059efe3a7e612d9e99277bd16a8b
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ontology-term-resolution/SKILL.md
+      sha256: c29a2cf23692fbeb913f38a160b91fe68eade3259f469a721baa8d9d474e528a
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ontology-term-resolution/references/companion-apis.md
+      sha256: 795111ae4331ebc2ed6a6d7f4a555a66591d99fe0414f24227e8f160f1c3a63f
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ontology-term-resolution/references/curation-rules.md
+      sha256: 4475843859f3bb0ee4f31163d6e966c53b8d30f93546c6f18be42d2d1ae7fa26
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ontology-term-resolution/references/ols4-api.md
+      sha256: 6079d6ceb10384cca67c35c49db8b4bdad6903790142174f2b5db327032fecfe
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ontology-term-resolution/references/ontology-registry.md
+      sha256: cfcb9214025c4ef629e4e4802d2293fb1933674a0732f1d8f0fd17b5947736d9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ontology-term-resolution/scripts/id_client.py
+      sha256: 14ba420f87cdd53436ccda75ba6d8b618d8472bf5e6ef1bac59bfc2c5b7b9241
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ontology-term-resolution/scripts/lookup_prefix.py
+      sha256: 1c74cc05ebb84c1dd25d780b9035bd3197dd045a792337286bfa9c55e10fe289
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ontology-term-resolution/scripts/map_terms.py
+      sha256: 6284a862d6388a0b9e60d814289aeb0d208adee859a19ded4ea3d4ff9abae3b2
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ontology-term-resolution/scripts/ols_client.py
+      sha256: 4ecf42ef4636f72a9823db162c6a344bd8b3c3da58db2b9a64dd50e3918981b0
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ontology-term-resolution/scripts/resolve_terms.py
+      sha256: ccd413a8e042dfb89f00a7a9c64db05d9312dda807772c2c7a3b1f380c1347a0
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ontology-term-resolution/scripts/validate_terms.py
+      sha256: a496a1b7e958ed8c7cf0de9561e005b46833d24e309e7e65d61e1697fddda695
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ontology-term-resolution/scripts/zooma_client.py
+      sha256: 83c01bf886ae44f3dd4989b49a31b35f3ccf059efe3a7e612d9e99277bd16a8b
+license: MIT

@@ -8,7 +8,7 @@ import { sha256 } from "../../core/workspace/write-plan.js";
 import { assemblePluginRegistry } from "../../plugins/assembler.js";
 import { availableDomains, loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
 import { commitVendorStage, pathExists, posix, prepareVendorStage, vendorProjectionDiff, walkFiles } from "../shared/staging.js";
-import { PRODUCTION_DOMAIN_COUNTS, productionVendorInventoryErrors } from "../shared/production-vendors.js";
+import { loadProductionDomainCounts, productionVendorInventoryErrors } from "../shared/production-vendors.js";
 import { renderHistAgentCompleteTrees } from "./complete-tree.js";
 import {
   assertHistAgentProductionReady,
@@ -115,8 +115,9 @@ export async function checkHistAgentOutput(repoRoot: string): Promise<{ ok: bool
       if (vendor.skills.some((skill) => skill.dependencies.length !== 0)) errors.push("HistAgent Registry Schema 1 dependencies must remain empty");
     }
     errors.push(...productionVendorInventoryErrors(loaded.vendors.keys()));
-    if (loaded.domains.size !== PRODUCTION_DOMAIN_COUNTS.internal) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.internal)} internal domains, found ${String(loaded.domains.size)}`);
-    if (availableDomains(loaded).length !== PRODUCTION_DOMAIN_COUNTS.available) errors.push(`Expected ${String(PRODUCTION_DOMAIN_COUNTS.available)} available domains, found ${String(availableDomains(loaded).length)}`);
+    const domainCounts = await loadProductionDomainCounts(repoRoot);
+    if (loaded.domains.size !== domainCounts.internal) errors.push(`Expected ${String(domainCounts.internal)} internal domains, found ${String(loaded.domains.size)}`);
+    if (availableDomains(loaded).length !== domainCounts.available) errors.push(`Expected ${String(domainCounts.available)} available domains, found ${String(availableDomains(loaded).length)}`);
     const historical = loaded.domains.get("historical-studies")?.skills.filter((skillId) => skillId.startsWith("histagent-")).sort(compareText) ?? [];
     const heritage = loaded.domains.get("heritage-archive-and-museum-studies")?.skills.filter((skillId) => skillId.startsWith("histagent-")).sort(compareText) ?? [];
     if (!sameValues(historical, rendered.trees.map((tree) => tree.skillId).sort(compareText))) errors.push("Historical studies does not contain all three HistAgent Skills");

@@ -67,22 +67,22 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-chat-interaction.py
     path: scripts/chat_interaction.py
-    content_hash: 64cb5283ea2ea17d00e046b902e93bc768b671f917bb9739aac0104dfaf95119
+    content_hash: d3b843b69ef8969745d9762b00e6baa32be6f5572b6b80f17c8eb96f86b13cfa
     license: MIT
   - knowledge_id: sas-scripts-notebook-management.py
     path: scripts/notebook_management.py
-    content_hash: 6939dc1657930eabac310a4068178776860f15fdc6447fc86f1325cced236add
+    content_hash: 012815f018be883d7e09d615b483d3a424127af64d5b0a681dd39efc2d150d92
     license: MIT
   - knowledge_id: sas-scripts-source-ingestion.py
     path: scripts/source_ingestion.py
-    content_hash: 96cd97e9512edf5013091607ad6bab3fec132d510446b7a8fb87a9f559b34ade
+    content_hash: 124b43bde0bab5fafc7e43916ca7d78353583b47454adfbcf74ddcc509dcdafe
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/SKILL.md
-      sha256: 546480d5df5e67e3ea21e501a7efef7a822ec17f1296ac618473067d22a14f0f
+      sha256: b3143f724bc3e65a889ae7fab184a516920ec6921bb816c1e3e9c336eb5492d3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/api_reference.md
       sha256: 6d368df0f9368d297c4db06ed0f78f23db9cbb488b986574fdf267cb8ec373c0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/architecture.md
@@ -92,9 +92,9 @@ provenance:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/examples.md
       sha256: b6bc527544e04b7291aa377821733089a724cee32e6e265a54d574dab0404c54
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/chat_interaction.py
-      sha256: 64cb5283ea2ea17d00e046b902e93bc768b671f917bb9739aac0104dfaf95119
+      sha256: d3b843b69ef8969745d9762b00e6baa32be6f5572b6b80f17c8eb96f86b13cfa
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/notebook_management.py
-      sha256: 6939dc1657930eabac310a4068178776860f15fdc6447fc86f1325cced236add
+      sha256: 012815f018be883d7e09d615b483d3a424127af64d5b0a681dd39efc2d150d92
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/source_ingestion.py
-      sha256: 96cd97e9512edf5013091607ad6bab3fec132d510446b7a8fb87a9f559b34ade
+      sha256: 124b43bde0bab5fafc7e43916ca7d78353583b47454adfbcf74ddcc509dcdafe
 license: MIT

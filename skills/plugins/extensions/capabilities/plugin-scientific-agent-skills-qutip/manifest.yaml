@@ -1,15 +1,14 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-qutip
-title: "QuTiP: Quantum Toolbox in Python"
-description: Quantum physics simulation library for open quantum systems. Use
-  when studying master equations, Lindblad dynamics, decoherence, quantum
-  optics, or cavity QED. Best for physics research, open system dynamics, and
-  educational simulations. NOT for circuit-based quantum computing—use qiskit,
-  cirq, or pennylane for quantum algorithms and hardware execution.
+title: QuTiP 5
+description: Simulate and audit closed and open quantum-system models with QuTiP
+  5, including deterministic, trajectory, steady-state, spectral, and
+  phase-space workflows. Use for local quantum-dynamics work where physical
+  assumptions, dimensions, and numerical convergence must be explicit.
 maturity: operational
 class: analysis
 node_kind: producer
-execution_type: llm
+execution_type: mixed
 params: {}
 inputs:
   - role: task_request
@@ -47,38 +46,80 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-advanced.md
     path: references/advanced.md
-    content_hash: afd329f6c754d8c287277db651e82fa7114d0c50824ce18f01e6fb0797bec2f3
+    content_hash: 880b2236f1ee3abb014e6644fdb67486e2fe9b86718a981f1f2625abb2afd5dd
     license: MIT
   - knowledge_id: sas-references-analysis.md
     path: references/analysis.md
-    content_hash: 87172f2a375ca9caf9daa74f58fc046bab1d77db0baca7b6aba260fb822c20bf
+    content_hash: d33cd8548db07adc3ffce52a9bf65de30767e4b811e24798a8bae7f6b8498f38
     license: MIT
   - knowledge_id: sas-references-core-concepts.md
     path: references/core_concepts.md
-    content_hash: 313e2781add21335cb0fc00f4bde2060a4510e0c08c9a1742aeb2ac53db59c96
+    content_hash: 907b9f55e43ccee13c9c9d2e2252d63df529b48d8f08318b05359dc06a535e43
     license: MIT
   - knowledge_id: sas-references-time-evolution.md
     path: references/time_evolution.md
-    content_hash: 7c5bca95cb69a61752cc30266c1b1a6f57992a4b63b40e66926d5bf1c8a2ac52
+    content_hash: f0698d03c390fc325a0bebc5c254884031da478ef6625019f354430a42b2bf1c
     license: MIT
   - knowledge_id: sas-references-visualization.md
     path: references/visualization.md
-    content_hash: 962c51c0a617be95700d251b51d140f03cc7e5d8bf1df9ee5e46580409b89564
+    content_hash: 70d6a642ed95ece96e67caa2776633e2292fbbcfb8b63bc2bd81a885972c193d
+    license: MIT
+  - knowledge_id: sas-scripts--common.py
+    path: scripts/_common.py
+    content_hash: 8519b7f7041f30e2548c3396431c556bfb7517ff148911927ee79451066e1dfb
+    license: MIT
+  - knowledge_id: sas-scripts-convergence-sweep.py
+    path: scripts/convergence_sweep.py
+    content_hash: d341087e7d208b77e4b1ae180edf50401f0d11b1612a3e3598d5c51231cc8364
+    license: MIT
+  - knowledge_id: sas-scripts-qobj-model-validator.py
+    path: scripts/qobj_model_validator.py
+    content_hash: bc8a03260d1cf8b7a64d6b0ee7a9546acde24a01bc249a5fa501bffe9160ccfd
+    license: MIT
+  - knowledge_id: sas-scripts-result-audit.py
+    path: scripts/result_audit.py
+    content_hash: f886933613670c655e82f7635d586a1ca4a23d222464808649b7543a30283ed4
+    license: MIT
+  - knowledge_id: sas-scripts-solver-config-planner.py
+    path: scripts/solver_config_planner.py
+    content_hash: 3c7b7fea5d43b8d94af15db5df809e36dc54133f4d3dd8859e806fed29bbc40b
+    license: MIT
+  - knowledge_id: sas-scripts-steady-state-spectrum-planner.py
+    path: scripts/steady_state_spectrum_planner.py
+    content_hash: 9fbc4016d1e636a49133d5a8ab585e70aef791a5390ef1e8e644ea9d9cd57cac
+    license: MIT
+  - knowledge_id: sas-scripts-two-level-simulation.py
+    path: scripts/two_level_simulation.py
+    content_hash: e963c392215c7b2a471dd229d2dabf9e515f24fac2a0b124228a0bfd42651936
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/SKILL.md
-      sha256: 3388274e810954e81fff1b22cf02e3d0a8fe456b392fd5a611b850dc3e1472b8
+      sha256: e1c5172916480f4bfbee2e2f13c87790e69dfb97bd730b7f12009ae4b5aae3e3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/advanced.md
-      sha256: afd329f6c754d8c287277db651e82fa7114d0c50824ce18f01e6fb0797bec2f3
+      sha256: 880b2236f1ee3abb014e6644fdb67486e2fe9b86718a981f1f2625abb2afd5dd
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/analysis.md
-      sha256: 87172f2a375ca9caf9daa74f58fc046bab1d77db0baca7b6aba260fb822c20bf
+      sha256: d33cd8548db07adc3ffce52a9bf65de30767e4b811e24798a8bae7f6b8498f38
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/core_concepts.md
-      sha256: 313e2781add21335cb0fc00f4bde2060a4510e0c08c9a1742aeb2ac53db59c96
+      sha256: 907b9f55e43ccee13c9c9d2e2252d63df529b48d8f08318b05359dc06a535e43
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/time_evolution.md
-      sha256: 7c5bca95cb69a61752cc30266c1b1a6f57992a4b63b40e66926d5bf1c8a2ac52
+      sha256: f0698d03c390fc325a0bebc5c254884031da478ef6625019f354430a42b2bf1c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/visualization.md
-      sha256: 962c51c0a617be95700d251b51d140f03cc7e5d8bf1df9ee5e46580409b89564
+      sha256: 70d6a642ed95ece96e67caa2776633e2292fbbcfb8b63bc2bd81a885972c193d
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/_common.py
+      sha256: 8519b7f7041f30e2548c3396431c556bfb7517ff148911927ee79451066e1dfb
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/convergence_sweep.py
+      sha256: d341087e7d208b77e4b1ae180edf50401f0d11b1612a3e3598d5c51231cc8364
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/qobj_model_validator.py
+      sha256: bc8a03260d1cf8b7a64d6b0ee7a9546acde24a01bc249a5fa501bffe9160ccfd
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/result_audit.py
+      sha256: f886933613670c655e82f7635d586a1ca4a23d222464808649b7543a30283ed4
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/solver_config_planner.py
+      sha256: 3c7b7fea5d43b8d94af15db5df809e36dc54133f4d3dd8859e806fed29bbc40b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/steady_state_spectrum_planner.py
+      sha256: 9fbc4016d1e636a49133d5a8ab585e70aef791a5390ef1e8e644ea9d9cd57cac
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/two_level_simulation.py
+      sha256: e963c392215c7b2a471dd229d2dabf9e515f24fac2a0b124228a0bfd42651936
 license: MIT

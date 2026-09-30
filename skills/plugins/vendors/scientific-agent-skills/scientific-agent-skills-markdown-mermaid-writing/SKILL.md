@@ -11,7 +11,7 @@ compatibility: Requires the packages, services, hardware, and local runtimes
   scripts, installs dependencies, or configures credentials.
 metadata:
   vendor: scientific-agent-skills
-  vendor-release: v2.53.0
+  vendor-release: v2.70.0
   upstream-skill-id: markdown-mermaid-writing
   researchspec-role: semantic-helper
 allowed-tools: Read Write Edit Bash

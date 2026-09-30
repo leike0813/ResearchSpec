@@ -74,7 +74,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/SKILL.md
-      sha256: 7bf25bdec31d2bea29154ad0b160fd79c6202563d6d4804b47405852cf20997e
+      sha256: 15c2992c37b8f08854cb3d989d8ef9f815cd5d0aff027b16f2f0cf70355da133
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/custom_datasets.md
       sha256: 48700ef231c9d727f34d5ef4daf5b087fec1238c91e4a2051f51d85137a85f7b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/explainability.md

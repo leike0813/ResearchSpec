@@ -108,7 +108,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/SKILL.md
-      sha256: afe409e37d373f10d2e03cf622a4ff84615612e359882632e5811f49e6652067
+      sha256: 061551e37b9530ab9d8bb8a1e3d2373cc3b9237df6c646e716b1f97be10c5c2d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/authentication.md
       sha256: 9c14d8f8d68fee3e8ea01c9ceb598449c9f3ef0dd171503b5063fed4dc0a0934
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/cli.md

@@ -1,17 +1,14 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-optimize-for-gpu
 title: GPU Optimization for Python with NVIDIA
-description: GPU-accelerate Python code using CuPy, Numba CUDA, Warp, cuDF,
-  cuML, cuGraph, KvikIO, cuCIM, cuxfilter, cuVS, cuSpatial, and RAFT. Use
-  whenever the user mentions GPU/CUDA/NVIDIA acceleration, or wants to speed up
-  NumPy, pandas, scikit-learn, scikit-image, NetworkX, GeoPandas, or Faiss
-  workloads. Covers physics simulation, differentiable rendering, mesh ray
-  casting, particle systems (DEM/SPH/fluids), vector/similarity search,
-  GPUDirect Storage file IO, interactive dashboards, geospatial analysis,
-  medical imaging, and sparse eigensolvers. Also use when you see CPU-bound
-  Python code (loops, large arrays, ML pipelines, graph analytics, image
-  processing) that would benefit from GPU acceleration, even if not explicitly
-  requested.
+description: GPU-accelerates scientific Python on NVIDIA hardware and verifies
+  that the result is correct and faster. Use for CUDA/GPU optimization;
+  CPU-bound NumPy, SciPy, pandas, scikit-learn, NetworkX, scikit-image,
+  vector-search, image-processing, graph, simulation, or file-I/O workloads;
+  CuPy, cuDF, cuML, cuGraph, cuVS, cuCIM, KvikIO, Warp, Newton, Numba-CUDA, or
+  RAFT questions; and profiling, memory-transfer, kernel, or multi-GPU
+  bottlenecks. Also use when large data-parallel Python code is slow and GPU
+  acceleration is a plausible option, even if the user does not name CUDA.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -51,82 +48,100 @@ validators:
         - --required
         - scope,source_ledger,method_plan,work_products,validation_results,conclusions
 knowledge_refs:
+  - knowledge_id: sas-references-code-transformation-patterns.md
+    path: references/code_transformation_patterns.md
+    content_hash: 1766aa5f7d4dea57b51c42c93681ee4748bc84f144d0d64645fe62a51556a41b
+    license: MIT
   - knowledge_id: sas-references-cucim.md
     path: references/cucim.md
-    content_hash: e48a46e85a4f52f250aa88034abf681b564535e4605d66885bcc3c323947a270
+    content_hash: 14e021bd53b592314af31d19e37ae0b100cd937e0dba6c39dd62e8e5ae0541fd
     license: MIT
   - knowledge_id: sas-references-cudf.md
     path: references/cudf.md
-    content_hash: a9d7091a07c995b54a9461c554f4755f41a75614b60d7d0fbae7815d5d3424b9
+    content_hash: 88ea7d1dfe8758038676404d952d9f5468d65b12471eed51d11d484019568ab1
     license: MIT
   - knowledge_id: sas-references-cugraph.md
     path: references/cugraph.md
-    content_hash: d0db8b3ca776d7c13ec8fba42c32a2b2926180b6a5f049ee8a9ae63c41083d17
+    content_hash: 38e36051e4f4615c1f3f2563d478802b7468a361135664546a3c5860ff2f4d3c
     license: MIT
   - knowledge_id: sas-references-cuml.md
     path: references/cuml.md
-    content_hash: d30e601364b20ab2ec006790e0ddccfef18242a531d45c18f42be05e55f5787c
+    content_hash: 0da7da491ce948dad3261ae04e0dbf3be847b4a02597f9cfd977615020bf6c2c
     license: MIT
   - knowledge_id: sas-references-cupy.md
     path: references/cupy.md
-    content_hash: d3bf80d9ce29e331dee20b71b01b9f5a206c86bd56830c83c991b4c341cc9e94
+    content_hash: b251aae7c4fbfd332bbb3f56dc78a073e509ff08985724ab26f6aebdb03f1578
     license: MIT
   - knowledge_id: sas-references-cuspatial.md
     path: references/cuspatial.md
-    content_hash: 689983c53215ba8c91105f3c5f5aa1fce35afc9ec337f5298633d0a33422c9e6
+    content_hash: 65435175f23998bf89202b7eba5b5e0e342b917ea03b1fa2385d5326dff58de9
     license: MIT
   - knowledge_id: sas-references-cuvs.md
     path: references/cuvs.md
-    content_hash: 9c32b6a8c80a84da5270242fa32e61990de56807da723d91f15f61993e8d446f
+    content_hash: abc6fff81fa954491ffa6cb304136e986ca5d9341cd70daf038a4b0ffdf648e3
     license: MIT
   - knowledge_id: sas-references-cuxfilter.md
     path: references/cuxfilter.md
-    content_hash: ecfedef1d944010081c7303d807c257b7d99bfd8b2c58b1b415e03662c06466b
+    content_hash: c6f7c648492681774040c4adcdcb680fea06e2de1353a06a792b60f8cd224bba
+    license: MIT
+  - knowledge_id: sas-references-decision-framework.md
+    path: references/decision_framework.md
+    content_hash: 51c802e10a814f4fe0a771773216be9f34a9e249b325c1cd3876f68a0017852c
+    license: MIT
+  - knowledge_id: sas-references-installation.md
+    path: references/installation.md
+    content_hash: fa4d588cd566d7fbe1a9970f3b805f91e00a55d6e406c3a2db93cd97b32e24f2
     license: MIT
   - knowledge_id: sas-references-kvikio.md
     path: references/kvikio.md
-    content_hash: a02084a5fdfe1bc7ed3bdb0fe2646ef7266145a951b76f7b3df6c6d7f2036485
+    content_hash: 530253e0663a930f86874a5d985b7dee4eea7a2db6a946a0930f955c78fcac53
     license: MIT
   - knowledge_id: sas-references-numba.md
     path: references/numba.md
-    content_hash: 7a368623d584619842a66808e32a31ecbfeff4d6258f97235f87eb6c0e219af2
+    content_hash: 164ad7f8f38d0185353aa16d43ef6995cd0a2d267af936bf220edf33a604b5f8
     license: MIT
   - knowledge_id: sas-references-raft.md
     path: references/raft.md
-    content_hash: 40f36f7bb9165b654f6f45ea78899a1698d910541d739ef30b36d7d38b32ad40
+    content_hash: 4877e33aba9d23228b4f4376011d76f62f53a669440f341d1a93d28a8fe5acd5
     license: MIT
   - knowledge_id: sas-references-warp.md
     path: references/warp.md
-    content_hash: a32a920a9694b2c94edbd7cde4d378467a290060c07ee3ca4b66bf7e32b68a2e
+    content_hash: 6dc21c784f59d600d711d4da114582f0dbf1e37b18ff07ba6127dd631bd31204
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/SKILL.md
-      sha256: 451502ed7f75ecad35cbdb78b01307e0c3e97d7144e19abd39369eeb51cd3a40
+      sha256: d89b549a3a7b3bd16c801a8e7b9bd0ccde1a5e583c359ee891e054bd7fabd1f0
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/code_transformation_patterns.md
+      sha256: 1766aa5f7d4dea57b51c42c93681ee4748bc84f144d0d64645fe62a51556a41b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cucim.md
-      sha256: e48a46e85a4f52f250aa88034abf681b564535e4605d66885bcc3c323947a270
+      sha256: 14e021bd53b592314af31d19e37ae0b100cd937e0dba6c39dd62e8e5ae0541fd
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cudf.md
-      sha256: a9d7091a07c995b54a9461c554f4755f41a75614b60d7d0fbae7815d5d3424b9
+      sha256: 88ea7d1dfe8758038676404d952d9f5468d65b12471eed51d11d484019568ab1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cugraph.md
-      sha256: d0db8b3ca776d7c13ec8fba42c32a2b2926180b6a5f049ee8a9ae63c41083d17
+      sha256: 38e36051e4f4615c1f3f2563d478802b7468a361135664546a3c5860ff2f4d3c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cuml.md
-      sha256: d30e601364b20ab2ec006790e0ddccfef18242a531d45c18f42be05e55f5787c
+      sha256: 0da7da491ce948dad3261ae04e0dbf3be847b4a02597f9cfd977615020bf6c2c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cupy.md
-      sha256: d3bf80d9ce29e331dee20b71b01b9f5a206c86bd56830c83c991b4c341cc9e94
+      sha256: b251aae7c4fbfd332bbb3f56dc78a073e509ff08985724ab26f6aebdb03f1578
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cuspatial.md
-      sha256: 689983c53215ba8c91105f3c5f5aa1fce35afc9ec337f5298633d0a33422c9e6
+      sha256: 65435175f23998bf89202b7eba5b5e0e342b917ea03b1fa2385d5326dff58de9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cuvs.md
-      sha256: 9c32b6a8c80a84da5270242fa32e61990de56807da723d91f15f61993e8d446f
+      sha256: abc6fff81fa954491ffa6cb304136e986ca5d9341cd70daf038a4b0ffdf648e3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/cuxfilter.md
-      sha256: ecfedef1d944010081c7303d807c257b7d99bfd8b2c58b1b415e03662c06466b
+      sha256: c6f7c648492681774040c4adcdcb680fea06e2de1353a06a792b60f8cd224bba
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/decision_framework.md
+      sha256: 51c802e10a814f4fe0a771773216be9f34a9e249b325c1cd3876f68a0017852c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/installation.md
+      sha256: fa4d588cd566d7fbe1a9970f3b805f91e00a55d6e406c3a2db93cd97b32e24f2
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/kvikio.md
-      sha256: a02084a5fdfe1bc7ed3bdb0fe2646ef7266145a951b76f7b3df6c6d7f2036485
+      sha256: 530253e0663a930f86874a5d985b7dee4eea7a2db6a946a0930f955c78fcac53
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/numba.md
-      sha256: 7a368623d584619842a66808e32a31ecbfeff4d6258f97235f87eb6c0e219af2
+      sha256: 164ad7f8f38d0185353aa16d43ef6995cd0a2d267af936bf220edf33a604b5f8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/raft.md
-      sha256: 40f36f7bb9165b654f6f45ea78899a1698d910541d739ef30b36d7d38b32ad40
+      sha256: 4877e33aba9d23228b4f4376011d76f62f53a669440f341d1a93d28a8fe5acd5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-optimize-for-gpu/references/warp.md
-      sha256: a32a920a9694b2c94edbd7cde4d378467a290060c07ee3ca4b66bf7e32b68a2e
+      sha256: 6dc21c784f59d600d711d4da114582f0dbf1e37b18ff07ba6127dd631bd31204
 license: MIT

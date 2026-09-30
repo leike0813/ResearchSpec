@@ -7,50 +7,59 @@ import { parse } from "yaml";
 
 import { availableDomains, loadPluginRegistry } from "../src/plugins/registry.js";
 import { loadAnzsrcSnapshot } from "../src/plugins/taxonomy.js";
-import { ScientificAgentSkillsAuditSchema } from "../src/vendor-audits/scientific-agent-skills.js";
+import { ScientificAgentSkillsAuditSchema, type ScientificAgentSkillsAudit } from "../src/vendor-audits/scientific-agent-skills.js";
 import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/production-vendors.js";
-import { assertAuditSourceInitialized, assertEvidencePaths, gitOutput, repositoryResourceSummary, topLevelSkillIds } from "./helpers/vendor-audit.js";
+import { assertAuditSourceInitialized, assertEvidencePaths, gitOutput, repositoryResourceSummary, topLevelSkillIds, type RepositoryResourceSummary } from "./helpers/vendor-audit.js";
 
-const SOURCE_ROOT = path.resolve("vendor/scientific-agent-skills");
-const AUDIT_PATH = path.resolve("audits/scientific-agent-skills/v2.53.0/skill-audit.json");
+const CATALOG_PATH = path.resolve("audits/scientific-agent-skills/catalog.json");
 const TAXONOMY_PATH = path.resolve("src/plugins/taxonomy/anzsrc-for-2020.json");
-const DERIVED_ROOT = path.resolve("skills/plugins/vendors/scientific-agent-skills");
-const REVISION = "9c9bd2e92af12311ecd0c1a643e0931643f9ea04";
-const REPOSITORY_URL = "https://github.com/K-Dense-AI/scientific-agent-skills.git";
+const DOMAIN_CATALOG_PATH = path.resolve("src/plugins/domain-catalog.json");
+const PLUGIN_ROOT = path.resolve("skills/plugins");
 
-void test("Scientific Agent Skills audit pins the official v2.53.0 source", async () => {
-  await assertAuditSourceInitialized(SOURCE_ROOT, "skills/scanpy/SKILL.md", "git submodule update --init vendor/scientific-agent-skills");
-  const audit = await readAudit();
+interface MaintenanceCatalog {
+  vendor_id: string;
+  upstream_root: string;
+  generated_root: string;
+  release: string;
+  revision: string;
+  repository_url: string;
+  audit_file: string;
+}
 
-  assert.equal(gitOutput(SOURCE_ROOT, ["rev-parse", "HEAD"]), REVISION);
-  assert.equal(gitOutput(SOURCE_ROOT, ["config", "--get", "remote.origin.url"]), REPOSITORY_URL);
-  assert.equal(gitOutput(SOURCE_ROOT, ["rev-list", "-n", "1", "v2.53.0"]), REVISION);
-  assert.equal(gitOutput(SOURCE_ROOT, ["status", "--porcelain"]), "");
-  assert.deepEqual(audit.source, {
-    source_id: "scientific-agent-skills",
-    name: "Scientific Agent Skills",
-    repository_url: "https://github.com/K-Dense-AI/scientific-agent-skills",
-    release: "v2.53.0",
-    revision: REVISION,
-    root_license: "MIT",
-    license_path: "LICENSE.md",
-    skill_root: "skills",
-  });
+void test("Scientific Agent Skills audit pins the official pinned source", async () => {
+  const catalog = await readCatalog();
+  const sourceRoot = path.resolve(catalog.upstream_root);
+  await assertAuditSourceInitialized(sourceRoot, "LICENSE.md", "git submodule update --init vendor/scientific-agent-skills");
+  const audit = await readAudit(catalog);
+
+  assert.equal(gitOutput(sourceRoot, ["rev-parse", "HEAD"]), catalog.revision);
+  assert.equal(gitOutput(sourceRoot, ["config", "--get", "remote.origin.url"]), catalog.repository_url);
+  assert.equal(gitOutput(sourceRoot, ["rev-list", "-n", "1", catalog.release]), catalog.revision);
+  assert.equal(gitOutput(sourceRoot, ["status", "--porcelain"]), "");
+  assert.equal(audit.source.source_id, "scientific-agent-skills");
+  assert.equal(audit.source.release, catalog.release);
+  assert.equal(audit.source.revision, catalog.revision);
+  assert.equal(audit.source.repository_url, catalog.repository_url.replace(/\.git$/, ""));
+  assert.ok(audit.source.root_license.length > 0);
+  assert.ok(audit.source.license_path.length > 0);
+  assert.equal(audit.source.skill_root, "skills");
 });
 
 void test("Scientific Agent Skills audit covers every Skill and evidence path", async () => {
-  const audit = await readAudit();
-  const sourceIds = await topLevelSkillIds(SOURCE_ROOT);
+  const catalog = await readCatalog();
+  const sourceRoot = path.resolve(catalog.upstream_root);
+  const audit = await readAudit(catalog);
+  const sourceIds = await topLevelSkillIds(sourceRoot, audit.source.skill_root);
   const auditIds = audit.skills.map((item) => item.skill_id);
   const categoryTitles = new Set(audit.upstream_categories.map((item) => item.title));
   const fieldIds = new Set((await loadAnzsrcSnapshot(TAXONOMY_PATH)).fields.map((field) => field.code));
 
-  assert.equal(sourceIds.length, 147);
+  assert.equal(audit.skills.length, sourceIds.length);
   assert.deepEqual(auditIds, sourceIds);
   assert.equal(new Set(auditIds).size, auditIds.length);
 
   for (const item of audit.skills) {
-    assert.equal(item.source_path, `skills/${item.skill_id}`);
+    assert.equal(item.source_path, audit.source.skill_root + "/" + item.skill_id);
     assert.ok(item.upstream_categories.every((category) => categoryTitles.has(category)));
     assert.equal(new Set(item.upstream_categories).size, item.upstream_categories.length);
     if (item.primary_anzsrc_field === null) {
@@ -65,7 +74,7 @@ void test("Scientific Agent Skills audit covers every Skill and evidence path", 
 
     assert.deepEqual(
       item.resources,
-      await repositoryResourceSummary(path.join(SOURCE_ROOT, item.source_path)),
+      await repositoryResourceSummary(path.join(sourceRoot, item.source_path)),
       item.skill_id,
     );
 
@@ -75,80 +84,98 @@ void test("Scientific Agent Skills audit covers every Skill and evidence path", 
       assert.notEqual(relationship.target_skill_id, item.skill_id);
       assert.equal(relationshipTargets.has(relationship.target_skill_id), false);
       relationshipTargets.add(relationship.target_skill_id);
-      await assertEvidencePaths(SOURCE_ROOT, relationship.evidence);
+      await assertEvidencePaths(sourceRoot, relationship.evidence);
     }
-    await assertEvidencePaths(SOURCE_ROOT, item.content_license.evidence);
-    await assertEvidencePaths(SOURCE_ROOT, item.security.evidence);
-    for (const finding of item.findings) await assertEvidencePaths(SOURCE_ROOT, finding.evidence);
+    await assertEvidencePaths(sourceRoot, item.content_license.evidence);
+    await assertEvidencePaths(sourceRoot, item.security.evidence);
+    for (const finding of item.findings) await assertEvidencePaths(sourceRoot, finding.evidence);
   }
 });
 
 void test("Scientific Agent Skills structural, license, and security summaries are reproducible", async () => {
-  const audit = await readAudit();
-  const counts = (selector: (item: typeof audit.skills[number]) => string): Record<string, number> => {
-    const result: Record<string, number> = {};
-    for (const item of audit.skills) result[selector(item)] = (result[selector(item)] ?? 0) + 1;
-    return Object.fromEntries(Object.entries(result).sort(([left], [right]) => left.localeCompare(right, "en")));
-  };
+  const catalog = await readCatalog();
+  const sourceRoot = path.resolve(catalog.upstream_root);
+  const audit = await readAudit(catalog);
+  const sourceIds = await topLevelSkillIds(sourceRoot, audit.source.skill_root);
 
-  assert.equal(audit.summary.top_level_skills, 147);
-  assert.equal(audit.summary.files, 1_468);
-  assert.equal(audit.summary.bytes, 19_783_777);
-  assert.equal(audit.summary.skills_with_references, 135);
-  assert.equal(audit.summary.skills_with_scripts, 70);
-  assert.equal(audit.summary.script_files, 387);
-  assert.equal(audit.summary.skills_with_assets, 24);
-  assert.equal(audit.summary.validator_adaptation_skills, 38);
-  assert.equal(audit.summary.required_environment_variable_skills, 31);
-  assert.equal(audit.summary.install_or_download_instruction_skills, 109);
-  assert.equal(audit.summary.upstream_security_findings, 877);
-  assert.equal(audit.summary.upstream_tabulated_skill_findings, 667);
+  const summaries = await Promise.all(sourceIds.map(async (skillId) => repositoryResourceSummary(path.join(sourceRoot, audit.source.skill_root, skillId))));
+  const totals = summaries.reduce<RepositoryResourceSummary>((sum, item) => ({
+    files: sum.files + item.files,
+    bytes: sum.bytes + item.bytes,
+    references: sum.references + item.references,
+    scripts: sum.scripts + item.scripts,
+    assets: sum.assets + item.assets,
+    tests_or_evals: sum.tests_or_evals + item.tests_or_evals,
+    environment_templates: sum.environment_templates + item.environment_templates,
+  }), { files: 0, bytes: 0, references: 0, scripts: 0, assets: 0, tests_or_evals: 0, environment_templates: 0 });
+
+  assert.equal(audit.summary.top_level_skills, sourceIds.length);
+  assert.equal(audit.summary.files, totals.files);
+  assert.equal(audit.summary.bytes, totals.bytes);
+  assert.equal(audit.summary.skills_with_references, summaries.filter((item) => item.references > 0).length);
+  assert.equal(audit.summary.skills_with_scripts, summaries.filter((item) => item.scripts > 0).length);
+  assert.equal(audit.summary.script_files, totals.scripts);
+  assert.equal(audit.summary.skills_with_assets, summaries.filter((item) => item.assets > 0).length);
+
+  const frontmatter = await recomputeFrontmatterFindings(sourceRoot, audit.source.skill_root, sourceIds);
+  assert.equal(audit.summary.validator_adaptation_skills, frontmatter.validatorAdaptation.size);
+  assert.equal(audit.summary.required_environment_variable_skills, frontmatter.requiredEnvironment.size);
+  assert.equal(audit.summary.install_or_download_instruction_skills, frontmatter.installInstructions.size);
+  for (const skillId of frontmatter.validatorAdaptation) assert.ok(hasAnyFinding(audit, skillId, ["metadata-normalization-required", "allowed-tools-normalization-required", "description-over-limit"]));
+  for (const skillId of frontmatter.requiredEnvironment) assert.ok(hasAnyFinding(audit, skillId, ["environment-contract-normalization-required"]));
+
+  const counts = countsBy(audit.skills);
   assert.deepEqual(audit.summary.upstream_severity_skill_counts, counts((item) => item.security.highest_severity));
   assert.deepEqual(audit.summary.license_status_counts, counts((item) => item.content_license.status));
-  assert.equal(audit.skills.reduce((sum, item) => sum + item.security.findings, 0), 667);
+  assert.equal(audit.skills.reduce((sum, item) => sum + item.security.findings, 0), audit.summary.upstream_tabulated_skill_findings);
+  assert.ok(audit.summary.upstream_security_findings >= audit.summary.upstream_tabulated_skill_findings);
 
-  const frontmatterFindings = await recomputeFrontmatterFindings(auditIds(audit));
-  assert.equal(frontmatterFindings.validatorAdaptation.size, 38);
-  assert.equal(frontmatterFindings.requiredEnvironment.size, 31);
-  assert.equal(frontmatterFindings.installInstructions.size, 109);
-  for (const skillId of frontmatterFindings.validatorAdaptation) assert.ok(hasAnyFinding(audit, skillId, ["metadata-normalization-required", "allowed-tools-normalization-required", "description-over-limit"]));
-  for (const skillId of frontmatterFindings.requiredEnvironment) assert.ok(hasAnyFinding(audit, skillId, ["environment-contract-normalization-required"]));
-
-  assert.deepEqual(
-    audit.skills.filter((item) => item.content_license.status === "prohibited").map((item) => item.skill_id),
-    ["docx", "pdf", "pptx", "xlsx"],
-  );
-  assert.deepEqual(
-    audit.skills.filter((item) => item.scope_disposition === "exclude").map((item) => item.skill_id),
-    ["arbor", "autoskill", "docx", "get-available-resources", "pdf", "pi-agent", "pptx", "xlsx"],
-  );
+  for (const item of audit.skills.filter((skill) => skill.content_license.status === "prohibited")) assert.equal(item.scope_disposition, "exclude", item.skill_id);
   for (const item of audit.skills.filter((skill) => ["critical", "high"].includes(skill.security.highest_severity))) {
-    assert.ok(item.ingest_readiness === "blocked-review" || item.scope_disposition === "exclude");
+    assert.ok(item.ingest_readiness === "blocked-review" || item.scope_disposition === "exclude", item.skill_id);
   }
 });
 
 void test("Scientific Agent Skills production admission remains separately policy governed", async () => {
+  const catalog = await readCatalog();
   const registry = await loadPluginRegistry();
   assert.deepEqual([...registry.vendors.keys()], [...PRODUCTION_VENDOR_IDS]);
-  assert.equal(registry.vendors.get("scientific-agent-skills")?.skills.length, 49);
-  assert.equal(registry.domains.size, 218);
-  assert.equal(availableDomains(registry).length, 56);
-  assert.equal((await readFile(path.join(DERIVED_ROOT, "scientific-agent-skills-astropy", "SKILL.md"), "utf8")).startsWith("---\n"), true);
+
+  const bundle = JSON.parse(await readFile(path.join(PLUGIN_ROOT, "vendor-bundles/scientific-agent-skills.json"), "utf8")) as {
+    vendor: { skills: Array<{ skill_id: string }> };
+  };
+  assert.equal(registry.vendors.get("scientific-agent-skills")?.skills.length, bundle.vendor.skills.length);
+
+  const domains = JSON.parse(await readFile(DOMAIN_CATALOG_PATH, "utf8")) as { domains: Array<{ skills: string[] }> };
+  assert.equal(registry.domains.size, domains.domains.length);
+  assert.equal(availableDomains(registry).length, domains.domains.filter((domain) => domain.skills.length > 0).length);
+
+  const sample = bundle.vendor.skills[0]?.skill_id;
+  assert.ok(sample);
+  assert.equal((await readFile(path.join(path.resolve(catalog.generated_root), sample, "SKILL.md"), "utf8")).startsWith("---\n"), true);
 });
 
-async function readAudit() {
-  return ScientificAgentSkillsAuditSchema.parse(JSON.parse(await readFile(AUDIT_PATH, "utf8")));
+async function readCatalog(): Promise<MaintenanceCatalog> {
+  return JSON.parse(await readFile(CATALOG_PATH, "utf8")) as MaintenanceCatalog;
 }
 
-function auditIds(audit: Awaited<ReturnType<typeof readAudit>>): string[] {
-  return audit.skills.map((item) => item.skill_id);
+async function readAudit(catalog: MaintenanceCatalog): Promise<ScientificAgentSkillsAudit> {
+  return ScientificAgentSkillsAuditSchema.parse(JSON.parse(await readFile(path.resolve(catalog.audit_file), "utf8")));
 }
 
-function hasAnyFinding(audit: Awaited<ReturnType<typeof readAudit>>, skillId: string, codes: string[]): boolean {
+function countsBy(skills: ScientificAgentSkillsAudit["skills"]): (selector: (item: ScientificAgentSkillsAudit["skills"][number]) => string) => Record<string, number> {
+  return (selector) => {
+    const result: Record<string, number> = {};
+    for (const item of skills) result[selector(item)] = (result[selector(item)] ?? 0) + 1;
+    return Object.fromEntries(Object.entries(result).sort(([left], [right]) => left.localeCompare(right, "en")));
+  };
+}
+
+function hasAnyFinding(audit: ScientificAgentSkillsAudit, skillId: string, codes: string[]): boolean {
   return Boolean(audit.skills.find((item) => item.skill_id === skillId)?.findings.some((finding) => codes.includes(finding.code)));
 }
 
-async function recomputeFrontmatterFindings(skillIds: string[]): Promise<{
+async function recomputeFrontmatterFindings(sourceRoot: string, skillRoot: string, skillIds: string[]): Promise<{
   validatorAdaptation: Set<string>;
   requiredEnvironment: Set<string>;
   installInstructions: Set<string>;
@@ -159,7 +186,7 @@ async function recomputeFrontmatterFindings(skillIds: string[]): Promise<{
   const installPattern = /(?:uv\s+(?:pip\s+)?install|pip(?:3)?\s+install|conda\s+install|mamba\s+install|apt(?:-get)?\s+install|brew\s+install|npm\s+install|npx\s+|git\s+clone|curl\s+[^\n|]*(?:\||-o|-O)|wget\s+)/i;
 
   for (const skillId of skillIds) {
-    const text = await readFile(path.join(SOURCE_ROOT, "skills", skillId, "SKILL.md"), "utf8");
+    const text = await readFile(path.join(sourceRoot, skillRoot, skillId, "SKILL.md"), "utf8");
     const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
     assert.ok(match);
     const frontmatter = parse(match[1]) as Record<string, unknown>;

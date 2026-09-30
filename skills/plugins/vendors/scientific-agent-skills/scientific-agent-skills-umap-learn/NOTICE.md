@@ -1,6 +1,6 @@
 # Notice
 
-This Skill is adapted by ResearchSpec from Scientific Agent Skills (https://github.com/K-Dense-AI/scientific-agent-skills) release v2.53.0, revision 9c9bd2e92af12311ecd0c1a643e0931643f9ea04.
+This Skill is adapted by ResearchSpec from Scientific Agent Skills (https://github.com/K-Dense-AI/scientific-agent-skills) release v2.70.0, revision d0c48af8c7b7a71ccc81fcd04c9db53b48439f9b.
 
 Upstream source: `skills/umap-learn`. Generated Skill ID: `scientific-agent-skills-umap-learn`. Skill content license: MIT. Package, service, dataset, and runtime licenses named by the upstream instructions remain separately applicable.
 

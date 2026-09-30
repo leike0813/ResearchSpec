@@ -1,15 +1,14 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-pylabrobot
 title: PyLabRobot
-description: Vendor-agnostic lab automation framework. Use when controlling
-  multiple equipment types (Hamilton, Tecan, Opentrons, plate readers, pumps) or
-  needing unified programming across different vendors. Best for complex
-  workflows, multi-vendor setups, simulation. For Opentrons-only protocols with
-  official API, opentrons-integration may be simpler.
+description: Develop and review PyLabRobot lab-automation resources,
+  liquid-handling plans, offline simulations, and supported-device integrations.
+  Use for PyLabRobot protocols or API questions; keep physical execution behind
+  an explicit operator safety gate.
 maturity: operational
 class: analysis
 node_kind: producer
-execution_type: llm
+execution_type: mixed
 params: {}
 inputs:
   - role: task_request
@@ -45,46 +44,94 @@ validators:
         - --required
         - scope,source_ledger,method_plan,work_products,validation_results,conclusions
 knowledge_refs:
+  - knowledge_id: sas-assets-protocol-manifest.schema.json
+    path: assets/protocol-manifest.schema.json
+    content_hash: f77d6d3237f48267281ee2ab71b0eec76c31bd8d852feb98108eb2ef8055236d
+    license: MIT
   - knowledge_id: sas-references-analytical-equipment.md
     path: references/analytical-equipment.md
-    content_hash: b22c5107dcceb62d5e16b2b2cfb4d61bec1f2dcc4252cd56337b134b21ea9ee4
+    content_hash: d699a61be9fb15572a0cf7c2f3a6d2865007f75e6c508225e302fb9d29f3afea
     license: MIT
   - knowledge_id: sas-references-hardware-backends.md
     path: references/hardware-backends.md
-    content_hash: ae007727fd5b887c090632686fe3f2f53dd7c0493234736b4ceee6548617a5bd
+    content_hash: 0df6a7606526b5be1a727968bbc18986a2c7af2f3559e2d8d028741af61ab2ae
     license: MIT
   - knowledge_id: sas-references-liquid-handling.md
     path: references/liquid-handling.md
-    content_hash: 71a6f02e2871133318803f3d798d98a7f8b272dba75b6ae5f6a2f3f20bf4ac16
+    content_hash: 777b9db97453134fb224d38e886e9539eb18dc1ab7e328455cc9181e487583fa
     license: MIT
   - knowledge_id: sas-references-material-handling.md
     path: references/material-handling.md
-    content_hash: 030aaa791eaccf2e998b7c01e74c573ca4b891ab0e19a1994cd82540e36980fd
+    content_hash: af8529cfc15591127b7f0ccb23623392887dbdc62c8d542d46e2df6a36648aad
     license: MIT
   - knowledge_id: sas-references-resources.md
     path: references/resources.md
-    content_hash: 2d187c3f65c68acadb4d1ef443243a252ff94fd16877931dc8604415ecfea897
+    content_hash: 2b4f197616f83543c446d421863141bea0508ede2bb828e88fcabdfb8a5e19d1
     license: MIT
   - knowledge_id: sas-references-visualization.md
     path: references/visualization.md
-    content_hash: bda040591f0b0c58889fe6bc4e0a50b54a10e1b9582563b25ae414d4a1c7da51
+    content_hash: 7c7778ed6858caf7ced217c35081cb3f96ecda1718c8fe732b6db666f8f9b3f9
+    license: MIT
+  - knowledge_id: sas-scripts--init-.py
+    path: scripts/__init__.py
+    content_hash: d1a981fe4edf160c2ed51409244c623b0bb6d73b1ffc9b50e6b729303c640cca
+    license: MIT
+  - knowledge_id: sas-scripts--common.py
+    path: scripts/_common.py
+    content_hash: 4a69f32c3d847c14bf8f8d5a0b2775b1372be88eb314ec8f37160c3e9e0c2939
+    license: MIT
+  - knowledge_id: sas-scripts-check-deck-geometry.py
+    path: scripts/check_deck_geometry.py
+    content_hash: 0e219941e7013cb1a812966ec730a29f17037be819c19a08d4ab3342a5b0b74b
+    license: MIT
+  - knowledge_id: sas-scripts-generate-simulation-plan.py
+    path: scripts/generate_simulation_plan.py
+    content_hash: 071e42a404830476134331af47bc0d103882c2d5a5f2773b8b220bdd7efa6092
+    license: MIT
+  - knowledge_id: sas-scripts-inspect-backends.py
+    path: scripts/inspect_backends.py
+    content_hash: efac335c04818643415b0fc143f057852cdf2ab111dc76709994fe3dadda232b
+    license: MIT
+  - knowledge_id: sas-scripts-plan-transfers.py
+    path: scripts/plan_transfers.py
+    content_hash: 92a059726a5707506c2bd68877e7bf3fc36a61201f4de4f8e0d8ad66963fd0ab
+    license: MIT
+  - knowledge_id: sas-scripts-validate-manifest.py
+    path: scripts/validate_manifest.py
+    content_hash: 6fe09732a1fc75fa5ee534a2e79abd8724bd149c4ef3a698c0960c093762ca1c
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/SKILL.md
-      sha256: 5bea03f7d38650c6775448aa3b2fa931d444f86ecd79d46e7ccddb346556bbc8
+      sha256: 2a4a313eb8c2bd39e23d6a2dfb195279fd76923b4ec1a0929d1c3b900cafb74c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/assets/protocol-manifest.schema.json
+      sha256: f77d6d3237f48267281ee2ab71b0eec76c31bd8d852feb98108eb2ef8055236d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/analytical-equipment.md
-      sha256: b22c5107dcceb62d5e16b2b2cfb4d61bec1f2dcc4252cd56337b134b21ea9ee4
+      sha256: d699a61be9fb15572a0cf7c2f3a6d2865007f75e6c508225e302fb9d29f3afea
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/hardware-backends.md
-      sha256: ae007727fd5b887c090632686fe3f2f53dd7c0493234736b4ceee6548617a5bd
+      sha256: 0df6a7606526b5be1a727968bbc18986a2c7af2f3559e2d8d028741af61ab2ae
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/liquid-handling.md
-      sha256: 71a6f02e2871133318803f3d798d98a7f8b272dba75b6ae5f6a2f3f20bf4ac16
+      sha256: 777b9db97453134fb224d38e886e9539eb18dc1ab7e328455cc9181e487583fa
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/material-handling.md
-      sha256: 030aaa791eaccf2e998b7c01e74c573ca4b891ab0e19a1994cd82540e36980fd
+      sha256: af8529cfc15591127b7f0ccb23623392887dbdc62c8d542d46e2df6a36648aad
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/resources.md
-      sha256: 2d187c3f65c68acadb4d1ef443243a252ff94fd16877931dc8604415ecfea897
+      sha256: 2b4f197616f83543c446d421863141bea0508ede2bb828e88fcabdfb8a5e19d1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/visualization.md
-      sha256: bda040591f0b0c58889fe6bc4e0a50b54a10e1b9582563b25ae414d4a1c7da51
+      sha256: 7c7778ed6858caf7ced217c35081cb3f96ecda1718c8fe732b6db666f8f9b3f9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/scripts/__init__.py
+      sha256: d1a981fe4edf160c2ed51409244c623b0bb6d73b1ffc9b50e6b729303c640cca
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/scripts/_common.py
+      sha256: 4a69f32c3d847c14bf8f8d5a0b2775b1372be88eb314ec8f37160c3e9e0c2939
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/scripts/check_deck_geometry.py
+      sha256: 0e219941e7013cb1a812966ec730a29f17037be819c19a08d4ab3342a5b0b74b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/scripts/generate_simulation_plan.py
+      sha256: 071e42a404830476134331af47bc0d103882c2d5a5f2773b8b220bdd7efa6092
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/scripts/inspect_backends.py
+      sha256: efac335c04818643415b0fc143f057852cdf2ab111dc76709994fe3dadda232b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/scripts/plan_transfers.py
+      sha256: 92a059726a5707506c2bd68877e7bf3fc36a61201f4de4f8e0d8ad66963fd0ab
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/scripts/validate_manifest.py
+      sha256: 6fe09732a1fc75fa5ee534a2e79abd8724bd149c4ef3a698c0960c093762ca1c
 license: MIT

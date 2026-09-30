@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync as writeBytes } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
@@ -15,6 +15,11 @@ const VENDOR_BUNDLE_PATH = path.join(ROOT, "skills/plugins/vendor-bundles/scient
 const VALIDATOR_TEMPLATE = path.join(ROOT, "scripts/scientific-agent-skills-validator-template.py");
 const REQUIRED_FIELDS = ["scope", "source_ledger", "method_plan", "work_products", "validation_results", "conclusions"];
 const STANDARD_FILES = new Set(["SKILL.md", "LICENSE", "NOTICE.md"]);
+
+function writeFileSync(file, content) {
+  const bytes = Buffer.isBuffer(content) ? content : Buffer.from(content);
+  if (!existsSync(file) || !readFileSync(file).equals(bytes)) writeBytes(file, bytes);
+}
 
 function sha256(value) { return createHash("sha256").update(value).digest("hex"); }
 function fileSha(pathName) { return sha256(readFileSync(pathName)); }
@@ -118,6 +123,10 @@ function domainAssignments() {
 
 function currentRegistry() {
   try { return json(REGISTRY_PATH); } catch { return { schema_version: "1", registry_version: "0.0.0", capabilities: [], profiles: [], domains: [] }; }
+}
+
+function existingCatalog() {
+  try { return json(CATALOG_PATH); } catch { return null; }
 }
 
 function existingNonScientificAgentSkills(registry) {
@@ -228,11 +237,18 @@ function generate() {
   const bundle = json(VENDOR_BUNDLE_PATH);
   const licenses = new Map(bundle.vendor.skills.map((skill) => [skill.skill_id, skill.license]));
   if (bundle.vendor.license !== "MIT") throw new Error(`Unexpected Scientific Agent Skills vendor license: ${bundle.vendor.license}`);
+  const release = bundle.vendor.release;
+  const revision = bundle.vendor.revision;
+  if (typeof release !== "string" || release.length === 0) throw new Error("Scientific Agent Skills vendor bundle is missing a release.");
+  if (typeof revision !== "string" || !/^[a-f0-9]{40}$/.test(revision)) throw new Error("Scientific Agent Skills vendor bundle is missing a full revision.");
+  const previous = existingCatalog();
+  const anchorId = typeof previous?.anchor_id === "string" && previous.anchor_id.length > 0 ? previous.anchor_id : release;
+  const auditFile = typeof previous?.audit_file === "string" && previous.audit_file.length > 0 ? previous.audit_file : `audits/scientific-agent-skills/${anchorId}/skill-audit.json`;
+  const auditReport = typeof previous?.audit_report === "string" && previous.audit_report.length > 0 ? previous.audit_report : `audits/scientific-agent-skills/${anchorId}/report.md`;
   const rawIds = readdirSync(VENDOR_ROOT, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && entry.name.startsWith("scientific-agent-skills-"))
     .map((entry) => entry.name)
     .sort();
-  if (rawIds.length !== 49) throw new Error(`Expected 49 Scientific Agent Skills, found ${rawIds.length}`);
   const validatorTemplate = readFileSync(VALIDATOR_TEMPLATE);
   const catalogExtensions = [];
 
@@ -262,14 +278,19 @@ function generate() {
     }
     const allExtras = [...extras, ...nestedExtras].sort();
     const copied = [];
+    const knowledgeIds = new Set();
     for (const relativePath of allExtras) {
+      const baseId = safeKnowledgeId(relativePath);
+      let knowledgeId = baseId;
+      for (let suffix = 2; knowledgeIds.has(knowledgeId); suffix += 1) knowledgeId = `${baseId}-${suffix}`;
+      knowledgeIds.add(knowledgeId);
       const source = path.join(rawSkillRoot, relativePath);
       const target = path.join(packageRoot, relativePath);
       mkdirSync(path.dirname(target), { recursive: true });
       writeFileSync(target, readFileSync(source));
       copied.push({
         relativePath,
-        knowledgeId: safeKnowledgeId(relativePath),
+        knowledgeId,
         sourceSha256: fileSha(source),
         targetSha256: fileSha(target),
       });
@@ -344,11 +365,11 @@ function generate() {
     upstream_root: "vendor/scientific-agent-skills",
     generated_root: "skills/plugins/vendors/scientific-agent-skills",
     extension_root: "skills/plugins/extensions",
-    release: "v2.53.0",
-    revision: "9c9bd2e92af12311ecd0c1a643e0931643f9ea04",
-    anchor_id: "v2.53.0",
-    audit_file: "audits/scientific-agent-skills/v2.53.0/skill-audit.json",
-    audit_report: "audits/scientific-agent-skills/v2.53.0/report.md",
+    release,
+    revision,
+    anchor_id: anchorId,
+    audit_file: auditFile,
+    audit_report: auditReport,
     extension_domains: [...domainAssignments().keys()].sort(),
     extensions: catalogExtensions,
   };

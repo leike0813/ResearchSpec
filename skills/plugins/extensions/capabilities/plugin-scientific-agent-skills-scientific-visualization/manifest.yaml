@@ -1,11 +1,10 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-scientific-visualization
 title: Scientific Visualization
-description: Meta-skill for publication-ready figures. Use when creating journal
-  submission figures requiring multi-panel layouts, significance annotations,
-  error bars, colorblind-safe palettes, and specific journal formatting (Nature,
-  Science, Cell). Orchestrates matplotlib/seaborn/plotly with publication
-  styles. For quick exploration use seaborn or plotly directly.
+description: Create and audit truthful, accessible, publication-ready scientific
+  figures with Matplotlib, Seaborn, or Plotly. Use for figure design,
+  multi-panel layouts, uncertainty and missing-data displays, color/contrast
+  review, image metadata validation, and journal export planning.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -47,68 +46,110 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-assets-color-palettes.py
     path: assets/color_palettes.py
-    content_hash: ffea28da930406ecb11bbeaebfc530dfac40b772827a7653f449cb3b0bb35309
+    content_hash: 173d95887be654867db3602430ade84f6362ae80477c5373de0b44ce40375f57
     license: MIT
   - knowledge_id: sas-assets-nature.mplstyle
     path: assets/nature.mplstyle
-    content_hash: 05b5cab4b5286cd812ff3ceba31845c08baa083d77382df05ec100383e4ff040
+    content_hash: 1c0c6bcb4d6add27247f43541d8e588aa562f21c4c88c7eaa673a2eac63dfb35
     license: MIT
   - knowledge_id: sas-assets-presentation.mplstyle
     path: assets/presentation.mplstyle
-    content_hash: a47167d633cd0695bc428a42ed4e790a69f90d0204ed560bae6902785ba2b823
+    content_hash: db47ccdf7267a39407a959141b851d72295a66489f01c9a23ec8e963a02144c8
     license: MIT
   - knowledge_id: sas-assets-publication.mplstyle
     path: assets/publication.mplstyle
-    content_hash: 38244036fb563bdf50b6b15ac927ae62afa3a8f6acf03ec5c9b317adad9c5a14
+    content_hash: 45973599d92b27e5b156b4a23aa794795b5d83173633acb47e55658af304f999
+    license: MIT
+  - knowledge_id: sas-assets-publisher-profiles.json
+    path: assets/publisher_profiles.json
+    content_hash: 12633ca62d1b7539b40fa31c01aa5b266546a25734961a41fc79250a5b328b9b
     license: MIT
   - knowledge_id: sas-references-color-palettes.md
     path: references/color_palettes.md
-    content_hash: 4d9ec64478dee9fc8de43fbde9983a413520c436099b0c560b21eadec572270b
+    content_hash: 9b6e7d74922d64e333aff67fd41c0b53891736f5d37b01f11e96225d2dc1bfc1
     license: MIT
   - knowledge_id: sas-references-journal-requirements.md
     path: references/journal_requirements.md
-    content_hash: 69157b820c78e9bca299ea6f7dcb49624ea778ec3ed619a98e82c3b60e6dc782
+    content_hash: 17d36a91d5afc4975682038f36a3b13470e886f64d53b23100b3ea5688e07daa
     license: MIT
   - knowledge_id: sas-references-matplotlib-examples.md
     path: references/matplotlib_examples.md
-    content_hash: d9195bb8c1b80f235495ac8a63e86fef0462e99cc2cc7d5d244818bfe5ee08cf
+    content_hash: 0f603898a5ac91757fec3dccd62bb5ee2e24e254fdebfb97f8d2b3ecec167dd5
     license: MIT
   - knowledge_id: sas-references-publication-guidelines.md
     path: references/publication_guidelines.md
-    content_hash: c8430dfe7d374edc771c55a0d9c6e1f07ab803f16321d21941835e93944da2d1
+    content_hash: abfd60dbf157dcf87d396e5859d100b8d98a25bfe8b802bfcc149b049300dc20
+    license: MIT
+  - knowledge_id: sas-references-sources.md
+    path: references/sources.md
+    content_hash: 186544985dba77fe948393483cd2c7fd2c4b543c04c1fc1bcc652190d0fb9cd0
+    license: MIT
+  - knowledge_id: sas-scripts--common.py
+    path: scripts/_common.py
+    content_hash: 1bbbfb48500af7dd6df98076584085b2b2a24aee3024a7d9ce91dcb27ebd4b15
+    license: MIT
+  - knowledge_id: sas-scripts-export-plan.py
+    path: scripts/export_plan.py
+    content_hash: 29e33fbb4a8a4f558e0a190afda50721f7bcb0fabf39a4f2b8f465152d9f20bf
     license: MIT
   - knowledge_id: sas-scripts-figure-export.py
     path: scripts/figure_export.py
-    content_hash: 542f604c2a4dc642c055b24ef26b9e9e808616a33fde0cd2154c975dc83318d0
+    content_hash: 5fc7dd947621b861b12fad2c053f80f465f686b92258c9a7991db618d62b8627
+    license: MIT
+  - knowledge_id: sas-scripts-image-metadata.py
+    path: scripts/image_metadata.py
+    content_hash: bd8df685ae0a31f92ab10ac5e5ac7472275d06a62e1543adb94a4de6bfe78693
+    license: MIT
+  - knowledge_id: sas-scripts-palette-audit.py
+    path: scripts/palette_audit.py
+    content_hash: 3a90b3c9a4a39dde6a341dc3de7b99cd2bca4773c66564fc90cdc2706a5a8165
     license: MIT
   - knowledge_id: sas-scripts-style-presets.py
     path: scripts/style_presets.py
-    content_hash: 3a4163c6aaaf6792665cf890ab497a2b5070c0ed0adfa524fcaee5262a3f1792
+    content_hash: 3c811ecb16c012691b69e9f27993ef096977754c3a6e73d247e816a674efff21
+    license: MIT
+  - knowledge_id: sas-scripts-style-preview.py
+    path: scripts/style_preview.py
+    content_hash: f96f2ec01b86423418446eebdd2ed887da83f0a1b54f499d920191d56a3542c0
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/SKILL.md
-      sha256: 9408d11855df69aae69dcb36985fa1b4be2016a1cc90fdf7cde0fbc0b8299b33
+      sha256: 08e644c6c93fbdd3f89c9288d65edf281463580f8cc559079698948f638c6b06
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/color_palettes.py
-      sha256: ffea28da930406ecb11bbeaebfc530dfac40b772827a7653f449cb3b0bb35309
+      sha256: 173d95887be654867db3602430ade84f6362ae80477c5373de0b44ce40375f57
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/nature.mplstyle
-      sha256: 05b5cab4b5286cd812ff3ceba31845c08baa083d77382df05ec100383e4ff040
+      sha256: 1c0c6bcb4d6add27247f43541d8e588aa562f21c4c88c7eaa673a2eac63dfb35
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/presentation.mplstyle
-      sha256: a47167d633cd0695bc428a42ed4e790a69f90d0204ed560bae6902785ba2b823
+      sha256: db47ccdf7267a39407a959141b851d72295a66489f01c9a23ec8e963a02144c8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/publication.mplstyle
-      sha256: 38244036fb563bdf50b6b15ac927ae62afa3a8f6acf03ec5c9b317adad9c5a14
+      sha256: 45973599d92b27e5b156b4a23aa794795b5d83173633acb47e55658af304f999
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/assets/publisher_profiles.json
+      sha256: 12633ca62d1b7539b40fa31c01aa5b266546a25734961a41fc79250a5b328b9b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/color_palettes.md
-      sha256: 4d9ec64478dee9fc8de43fbde9983a413520c436099b0c560b21eadec572270b
+      sha256: 9b6e7d74922d64e333aff67fd41c0b53891736f5d37b01f11e96225d2dc1bfc1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/journal_requirements.md
-      sha256: 69157b820c78e9bca299ea6f7dcb49624ea778ec3ed619a98e82c3b60e6dc782
+      sha256: 17d36a91d5afc4975682038f36a3b13470e886f64d53b23100b3ea5688e07daa
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/matplotlib_examples.md
-      sha256: d9195bb8c1b80f235495ac8a63e86fef0462e99cc2cc7d5d244818bfe5ee08cf
+      sha256: 0f603898a5ac91757fec3dccd62bb5ee2e24e254fdebfb97f8d2b3ecec167dd5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/publication_guidelines.md
-      sha256: c8430dfe7d374edc771c55a0d9c6e1f07ab803f16321d21941835e93944da2d1
+      sha256: abfd60dbf157dcf87d396e5859d100b8d98a25bfe8b802bfcc149b049300dc20
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/references/sources.md
+      sha256: 186544985dba77fe948393483cd2c7fd2c4b543c04c1fc1bcc652190d0fb9cd0
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/scripts/_common.py
+      sha256: 1bbbfb48500af7dd6df98076584085b2b2a24aee3024a7d9ce91dcb27ebd4b15
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/scripts/export_plan.py
+      sha256: 29e33fbb4a8a4f558e0a190afda50721f7bcb0fabf39a4f2b8f465152d9f20bf
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/scripts/figure_export.py
-      sha256: 542f604c2a4dc642c055b24ef26b9e9e808616a33fde0cd2154c975dc83318d0
+      sha256: 5fc7dd947621b861b12fad2c053f80f465f686b92258c9a7991db618d62b8627
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/scripts/image_metadata.py
+      sha256: bd8df685ae0a31f92ab10ac5e5ac7472275d06a62e1543adb94a4de6bfe78693
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/scripts/palette_audit.py
+      sha256: 3a90b3c9a4a39dde6a341dc3de7b99cd2bca4773c66564fc90cdc2706a5a8165
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/scripts/style_presets.py
-      sha256: 3a4163c6aaaf6792665cf890ab497a2b5070c0ed0adfa524fcaee5262a3f1792
+      sha256: 3c811ecb16c012691b69e9f27993ef096977754c3a6e73d247e816a674efff21
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-visualization/scripts/style_preview.py
+      sha256: f96f2ec01b86423418446eebdd2ed887da83f0a1b54f499d920191d56a3542c0
 license: MIT

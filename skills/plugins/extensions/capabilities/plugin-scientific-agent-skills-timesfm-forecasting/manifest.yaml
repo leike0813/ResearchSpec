@@ -59,7 +59,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-examples-covariates-forecasting-demo-covariates.py
     path: examples/covariates-forecasting/demo_covariates.py
-    content_hash: b3f57e5b7e0af827e8e34674c2e16d4104e1b5467833a47e67a5ceafcc8ded2f
+    content_hash: 2f9d005a4feb3c796c802ec4b5cfbca90c75cc892621a068c5dc5a251676b3a1
     license: MIT
   - knowledge_id: sas-examples-covariates-forecasting-output-covariates-data.png
     path: examples/covariates-forecasting/output/covariates_data.png
@@ -137,9 +137,25 @@ knowledge_refs:
     path: references/data_preparation.md
     content_hash: d7f1209ff1134b71e8f65d3627461a9e81f7daabd3addd93b229fb2f8813526c
     license: MIT
+  - knowledge_id: sas-references-examples-and-validation.md
+    path: references/examples_and_validation.md
+    content_hash: 17bb0ade20f4edfb1b2a95c944df1f8bff203b2f0d5b7472d4c8876a3f603a62
+    license: MIT
+  - knowledge_id: sas-references-output-and-config.md
+    path: references/output_and_config.md
+    content_hash: 04c82850a31e095b5aa4673c4a79eb60945a963ade741b6a47be795b6b4497b8
+    license: MIT
+  - knowledge_id: sas-references-performance-tuning.md
+    path: references/performance_tuning.md
+    content_hash: ea64143ae97a90263bdddb70eb7f0d73e244b9f4399fcfda4540d96702324b6d
+    license: MIT
   - knowledge_id: sas-references-system-requirements.md
     path: references/system_requirements.md
-    content_hash: 6b2225f558ec00d2624f2060f1067d6b27792b6fe185bcf1e19eead53a24c8dd
+    content_hash: a299f03a37e408a9ef461290394f4475cb661be0739db1df6bc9bfaf8771998a
+    license: MIT
+  - knowledge_id: sas-references-workflows.md
+    path: references/workflows.md
+    content_hash: 166e59df894e8df90296f7719e73f3bbe9097c36da136fbe3f507af9270e8542
     license: MIT
   - knowledge_id: sas-scripts-check-system.py
     path: scripts/check_system.py
@@ -154,7 +170,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/SKILL.md
-      sha256: 665670017a30a2b809afd804a5f5cd45fc48becfba4f4d893f42a228eb6c8b0d
+      sha256: 9d9734ff7a54c5f2cd7408e9024599644eff202990558860f49eeebbc522a4a0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/detect_anomalies.py
       sha256: 2320b725adfaf4e45c40a34bd253ce56020c911bb804ceeeb1b9704f5fb61ffb
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.json
@@ -162,7 +178,7 @@ provenance:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.png
       sha256: c4b30e01bb01847c0eabf8367f28cd16368fd28e450c38c1cc089abb18672276
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/demo_covariates.py
-      sha256: b3f57e5b7e0af827e8e34674c2e16d4104e1b5467833a47e67a5ceafcc8ded2f
+      sha256: 2f9d005a4feb3c796c802ec4b5cfbca90c75cc892621a068c5dc5a251676b3a1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/covariates_data.png
       sha256: 24682a190ecae753d5531bce9841040709a64abb044bfb372bab34a6c7c17070
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/covariates_metadata.json
@@ -201,8 +217,16 @@ provenance:
       sha256: 69942b90d4b9979746955087cde76e3e6403f2a36e7680e4fca96ce37a3c0faf
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/data_preparation.md
       sha256: d7f1209ff1134b71e8f65d3627461a9e81f7daabd3addd93b229fb2f8813526c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/examples_and_validation.md
+      sha256: 17bb0ade20f4edfb1b2a95c944df1f8bff203b2f0d5b7472d4c8876a3f603a62
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/output_and_config.md
+      sha256: 04c82850a31e095b5aa4673c4a79eb60945a963ade741b6a47be795b6b4497b8
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/performance_tuning.md
+      sha256: ea64143ae97a90263bdddb70eb7f0d73e244b9f4399fcfda4540d96702324b6d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/system_requirements.md
-      sha256: 6b2225f558ec00d2624f2060f1067d6b27792b6fe185bcf1e19eead53a24c8dd
+      sha256: a299f03a37e408a9ef461290394f4475cb661be0739db1df6bc9bfaf8771998a
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/workflows.md
+      sha256: 166e59df894e8df90296f7719e73f3bbe9097c36da136fbe3f507af9270e8542
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/scripts/check_system.py
       sha256: 1ddc967b105522390e706a5ab83c6de9f173e276d11a96382cf954011031284a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/scripts/forecast_csv.py

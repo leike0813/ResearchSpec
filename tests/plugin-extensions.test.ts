@@ -16,8 +16,12 @@ import { cleanup, parseEnvelope, runCli, tempProject } from "./helpers/cli.js";
 void test("plugin extension registry loads all extension packages", async () => {
   const extensions = await loadPluginExtensionRegistry();
   assert.equal(extensions.registry.schema_version, "1");
-  assert.equal(extensions.capabilities.size, 332);
-  assert.equal(extensions.profiles.size, 332);
+  const registryFile = JSON.parse(await readFile(path.join(PLUGIN_EXTENSION_ROOT, "registry.json"), "utf8")) as {
+    capabilities: Array<{ capability_id: string }>;
+    profiles: Array<{ profile_id: string }>;
+  };
+  assert.deepEqual([...extensions.capabilities.keys()].sort(), registryFile.capabilities.map((item) => item.capability_id).sort());
+  assert.deepEqual([...extensions.profiles.keys()].sort(), registryFile.profiles.map((item) => item.profile_id).sort());
 
   const capability = extensions.capabilities.get("plugin-ecology-biodiversity");
   assert.ok(capability);

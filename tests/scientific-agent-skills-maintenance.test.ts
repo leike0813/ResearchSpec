@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 
@@ -8,37 +9,40 @@ import { testVendorAnchor } from "./helpers/vendor-maintenance.js";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
-void test("Scientific Agent Skills maintenance catalog maps 49 reviewed Skills to 49 extensions", async () => {
-  const catalog = JSON.parse(await readFile(path.join(ROOT, "audits/scientific-agent-skills/catalog.json"), "utf8")) as {
-    vendor_id: string;
-    revision: string;
-    extensions: Array<{ capability_id: string; raw_skill_id: string; execution_type: string; required_brief_fields: string[] }>;
-  };
-  assert.equal(catalog.vendor_id, "scientific-agent-skills");
-  assert.equal(catalog.revision, "9c9bd2e92af12311ecd0c1a643e0931643f9ea04");
-  assert.equal(catalog.extensions.length, 49);
-  assert.equal(catalog.extensions.filter((item) => item.execution_type === "mixed").length, 18);
-  assert.equal(catalog.extensions.filter((item) => item.execution_type === "llm").length, 31);
-  assert.deepEqual(catalog.extensions.map((item) => item.raw_skill_id).slice(0, 1), ["scientific-agent-skills-aeon"]);
-  for (const extension of catalog.extensions) assert.deepEqual(extension.required_brief_fields, [
-    "scope",
-    "source_ledger",
-    "method_plan",
-    "work_products",
-    "validation_results",
-    "conclusions",
-  ]);
+interface MaintenanceCatalog {
+  vendor_id: string;
+  upstream_root: string;
+  release: string;
+  revision: string;
+  anchor_id: string;
+  extensions: Array<{ capability_id: string; raw_skill_id: string; execution_type: string; required_brief_fields: string[] }>;
+}
+
+const CATALOG = JSON.parse(readFileSync(path.join(ROOT, "audits/scientific-agent-skills/catalog.json"), "utf8")) as MaintenanceCatalog;
+
+void test("Scientific Agent Skills maintenance catalog maps every reviewed Skill to an extension", () => {
+  assert.equal(CATALOG.vendor_id, "scientific-agent-skills");
+  assert.equal(CATALOG.revision, execFileSync("git", ["-C", path.join(ROOT, CATALOG.upstream_root), "rev-parse", "HEAD"], { encoding: "utf8" }).trim());
+  assert.ok(CATALOG.extensions.length > 0);
+  assert.equal(new Set(CATALOG.extensions.map((extension) => extension.capability_id)).size, CATALOG.extensions.length);
+  assert.equal(new Set(CATALOG.extensions.map((extension) => extension.raw_skill_id)).size, CATALOG.extensions.length);
+
+  const expectedBriefFields = CATALOG.extensions[0]?.required_brief_fields ?? [];
+  assert.ok(expectedBriefFields.length > 0);
+  for (const extension of CATALOG.extensions) {
+    assert.equal(extension.capability_id, "plugin-" + extension.raw_skill_id);
+    assert.ok(["llm", "mixed"].includes(extension.execution_type), extension.capability_id);
+    assert.deepEqual(extension.required_brief_fields, expectedBriefFields);
+  }
 });
 
 testVendorAnchor(ROOT, {
-  "vendor": "scientific-agent-skills",
-  "anchor": "v2.53.0",
-  "revision": "9c9bd2e92af12311ecd0c1a643e0931643f9ea04",
-  "capabilities": 49,
-  "contentFiles": 1483,
-  "extension": {
-    "mixed_count": 18,
-    "llm_count": 31
+  vendor: "scientific-agent-skills",
+  anchor: CATALOG.anchor_id,
+  revision: CATALOG.revision,
+  capabilities: CATALOG.extensions.length,
+  extension: {
+    mixed_count: CATALOG.extensions.filter((extension) => extension.execution_type === "mixed").length,
+    llm_count: CATALOG.extensions.filter((extension) => extension.execution_type === "llm").length,
   },
-  "toolFiles": 410
 });

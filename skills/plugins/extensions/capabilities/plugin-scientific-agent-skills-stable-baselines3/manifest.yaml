@@ -52,7 +52,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-references-callbacks.md
     path: references/callbacks.md
-    content_hash: 54b8253ac089f949d4d1da7d19a06bf6e0819415e5f03f7c95294e718c1c1e48
+    content_hash: 23aa3dd756ca40740e597bece1fd13306c59b6b3ea53440d6f010a20d821ce3b
     license: MIT
   - knowledge_id: sas-references-custom-environments.md
     path: references/custom_environments.md
@@ -60,7 +60,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-references-vectorized-envs.md
     path: references/vectorized_envs.md
-    content_hash: be23ef237442efb1b9ac68f196652beb962bc6c7d2ee94059751cdc65746ab73
+    content_hash: fdcef73236c429e5297898b00403f7eb13069c8d017fdcca1ce0e066d8a90a3c
     license: MIT
   - knowledge_id: sas-scripts-custom-env-template.py
     path: scripts/custom_env_template.py
@@ -79,15 +79,15 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/SKILL.md
-      sha256: 48f2bae2bfeb79d8116778f2eccfd42dfacfc2b941f520f4e25bc061ccae85f8
+      sha256: e74718967941a91a940098497b47e93de7cf6c5ff8a59dfcf8648ce248b98c69
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/references/algorithms.md
       sha256: 364effdb558ed7104dcf94b7c4407ca1c34e6b3d7bc36e2b0ea0591f09e73cae
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/references/callbacks.md
-      sha256: 54b8253ac089f949d4d1da7d19a06bf6e0819415e5f03f7c95294e718c1c1e48
+      sha256: 23aa3dd756ca40740e597bece1fd13306c59b6b3ea53440d6f010a20d821ce3b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/references/custom_environments.md
       sha256: 24a30a48fbdbaf7cf226fcd0916bf4ae8c3ec25d1fbeb500c13ccfb78fb5325c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/references/vectorized_envs.md
-      sha256: be23ef237442efb1b9ac68f196652beb962bc6c7d2ee94059751cdc65746ab73
+      sha256: fdcef73236c429e5297898b00403f7eb13069c8d017fdcca1ce0e066d8a90a3c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/scripts/custom_env_template.py
       sha256: 10d4d2f55fef72b091d65faa409746484fa8ef9472578c6f96de551f2b37512d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/scripts/evaluate_agent.py

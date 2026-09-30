@@ -85,7 +85,9 @@
       "title": "Veterinary sciences",
       "description": "ANZSRC 2020 FoR Group 3009: Veterinary sciences.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "scientific-agent-skills-relsa-severity-assessment"
+      ]
     },
     {
       "domain_id": "other-agricultural-veterinary-and-food-sciences",
@@ -132,6 +134,8 @@
       "description": "ANZSRC 2020 FoR Group 3102: Bioinformatics and computational biology.",
       "version": "0.1.0",
       "skills": [
+        "scientific-agent-skills-genomic-coordinates",
+        "scientific-agent-skills-ontology-term-resolution",
         "scientific-agent-skills-pacsomatic",
         "tooluniverse-cancer-genomics-tcga",
         "tooluniverse-comparative-genomics",
@@ -556,6 +560,7 @@
       "description": "ANZSRC 2020 FoR Group 3401: Analytical chemistry.",
       "version": "0.1.0",
       "skills": [
+        "scientific-agent-skills-analytical-method-validation",
         "tooluniverse-metabolomics"
       ]
     },
@@ -1251,7 +1256,9 @@
       "title": "Manufacturing engineering",
       "description": "ANZSRC 2020 FoR Group 4014: Manufacturing engineering.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "scientific-agent-skills-lab-hardware-cad"
+      ]
     },
     {
       "domain_id": "maritime-engineering",
@@ -1285,7 +1292,9 @@
       "title": "Mechanical engineering",
       "description": "ANZSRC 2020 FoR Group 4017: Mechanical engineering.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "scientific-agent-skills-lab-hardware-cad"
+      ]
     },
     {
       "domain_id": "nanotechnology",
@@ -1844,6 +1853,7 @@
       "version": "0.2.0",
       "skills": [
         "scientific-agent-skills-benchling-integration",
+        "scientific-agent-skills-datalad",
         "scientific-agent-skills-networkx",
         "scientific-agent-skills-parallel-web",
         "tooluniverse-data-wrangling",
@@ -2091,7 +2101,8 @@
       "description": "ANZSRC 2020 FoR Group 4901: Applied mathematics.",
       "version": "0.2.0",
       "skills": [
-        "scientific-agent-skills-simpy"
+        "scientific-agent-skills-simpy",
+        "scientific-agent-skills-uncertainty-and-units"
       ]
     },
     {
@@ -2131,6 +2142,7 @@
       "description": "ANZSRC 2020 FoR Group 4905: Statistics.",
       "version": "0.1.0",
       "skills": [
+        "scientific-agent-skills-uncertainty-and-units",
         "tooluniverse-clinical-trial-design",
         "tooluniverse-diagnostic-test-evaluation",
         "tooluniverse-drug-synergy",
@@ -2459,6 +2471,7 @@
       "description": "Cross-disciplinary research computing environments, scalable execution, workflow infrastructure, and data storage operations.",
       "version": "0.2.0",
       "skills": [
+        "scientific-agent-skills-datalad",
         "scientific-agent-skills-liteparse",
         "scientific-agent-skills-markitdown",
         "scientific-agent-skills-modal",

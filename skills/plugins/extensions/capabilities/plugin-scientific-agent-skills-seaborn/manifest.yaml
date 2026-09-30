@@ -53,20 +53,44 @@ knowledge_refs:
     path: references/function_reference.md
     content_hash: d6e3098f0e2eee13c4b863b96f530b8937d4477d1d0c6b3cc3e2973d27deca64
     license: MIT
+  - knowledge_id: sas-references-grids-and-levels.md
+    path: references/grids_and_levels.md
+    content_hash: 2382a4504df55446ead1d8ba3495b1c4bbb010fa1ebafe5f7ee513a648332941
+    license: MIT
   - knowledge_id: sas-references-objects-interface.md
     path: references/objects_interface.md
     content_hash: ab5e4c8ae7309f7842ba5b9dcb7e1a098d64db45ae456c3a41b769f7467a1a5b
+    license: MIT
+  - knowledge_id: sas-references-palettes-and-theming.md
+    path: references/palettes_and_theming.md
+    content_hash: a9e8fbd48256dae8226fee94b215c0e0cde766790cc4e12cb5dfbe9fb208052c
+    license: MIT
+  - knowledge_id: sas-references-patterns-and-troubleshooting.md
+    path: references/patterns_and_troubleshooting.md
+    content_hash: 7c4d2971bdcd6daa40461f145a0c7ef9f11264e20220a8544bab176cae48cfb7
+    license: MIT
+  - knowledge_id: sas-references-plotting-functions.md
+    path: references/plotting_functions.md
+    content_hash: a5177194463865a3bb92568cf66f663cf3692bc891715464defe8275a9b77480
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/SKILL.md
-      sha256: 43c34f5dfc25008b9567033a40dacd89509ff0b37c914ce3e11b50ca22556765
+      sha256: c5b9d9f131f0f790df182377fa70202611f6932ee98ba496720bb8225a62f9ce
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/examples.md
       sha256: 0bf1279af53b7464824853696fa8e06c1904538eafaf1b9a1b1afc874de5d78b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/function_reference.md
       sha256: d6e3098f0e2eee13c4b863b96f530b8937d4477d1d0c6b3cc3e2973d27deca64
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/grids_and_levels.md
+      sha256: 2382a4504df55446ead1d8ba3495b1c4bbb010fa1ebafe5f7ee513a648332941
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/objects_interface.md
       sha256: ab5e4c8ae7309f7842ba5b9dcb7e1a098d64db45ae456c3a41b769f7467a1a5b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/palettes_and_theming.md
+      sha256: a9e8fbd48256dae8226fee94b215c0e0cde766790cc4e12cb5dfbe9fb208052c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/patterns_and_troubleshooting.md
+      sha256: 7c4d2971bdcd6daa40461f145a0c7ef9f11264e20220a8544bab176cae48cfb7
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/plotting_functions.md
+      sha256: a5177194463865a3bb92568cf66f663cf3692bc891715464defe8275a9b77480
 license: MIT

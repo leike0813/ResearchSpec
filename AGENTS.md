@@ -269,30 +269,32 @@ maintenance Skill before regenerating any `plugin-tooluniverse-*` package or
 profile.
 
 `vendor/scientific-agent-skills` is the maintainer-only pinned input for the
-Scientific Agent Skills v2.53.0 converter. Its immutable audit covers all 147
-upstream Skills. The complete production policies admit 49 reviewed,
-vendor-prefixed Skills and exclude 98 for authority, redistribution, ARSU or
+Scientific Agent Skills v2.70.0 converter. Its immutable audit covers all 167
+upstream Skills. The complete production policies admit 56 reviewed,
+vendor-prefixed Skills and exclude 111 for authority, redistribution, ARSU or
 ToolUniverse overlap, manual security, domain fit, or content-review reasons.
-The generated bundle contributes to 19 ANZSRC Group domains and all five tool
-domains. The 40-item manual security catalog is a production SSOT: 39 Skills
-are clear only with their approved adaptations and `dhdna-profiler` remains a
-confirmed failure. Do not execute bundled scripts, install dependencies,
-handle Skill credentials, infer approval from upstream security labels, or
-bypass the checked-in admission, manual-review, dependency, resource, and
+The generated bundle contributes to 24 ANZSRC Group domains and all five tool
+domains. The 42-item manual security catalog is a production SSOT: 41 Skills
+are clear, 39 of them only with their approved adaptations, and
+`dhdna-profiler` remains a confirmed failure. Do not execute bundled scripts,
+install dependencies, handle Skill credentials, infer approval from upstream
+security labels, or bypass the checked-in admission, manual-review,
+dependency, resource, and
 source-neutral domain decisions. External model or service use must remain
 provider-neutral, use the target Agent's user-approved configuration, and
 never expose or persist secrets through ResearchSpec.
 
-All 49 reviewed Scientific Agent Skills also project one-to-one into the new
+All reviewed Scientific Agent Skills also project one-to-one into the new
 plugin extension mode as `plugin-scientific-agent-skills-*` capabilities and
 profiles. `scripts/generate-scientific-agent-skills-extensions.mjs` is the
 deterministic generator: it preserves each reviewed `SKILL.md` body, copies all
-410 non-standard resources at their original relative paths as byte-level
-SHA-256 knowledge refs under MIT, and binds every package to
+632 reviewed non-standard resources at their original relative paths as
+byte-level SHA-256 knowledge refs under MIT, and binds every package to
 `validate_scientific_brief.py` with the six generic evidence fields. Packages
-with `.py` resources are `execution_type: mixed`; the rest are
-`execution_type: llm`. The 24 Scientific Agent Skills domain assignments are
-derived from the source-neutral domain catalog. Knowledge-ref verification is
+with `.py` resources are `execution_type: mixed` (33) and the rest are
+`execution_type: llm` (23). The 29 Scientific Agent Skills domain assignments
+(24 ANZSRC Group and five tool domains) are derived from the source-neutral
+domain catalog. Knowledge-ref verification is
 byte-level so reviewed binary example assets (png/gif) project and verify
 correctly; text hashes are unchanged. ResearchSpec never imports or executes
 packaged scripts, installs dependencies, or configures credentials.
@@ -301,9 +303,9 @@ packaged scripts, installs dependencies, or configures credentials.
 extension maintenance SSOT. `scripts/scientific-agent-skills-maintenance.mjs`
 and `.agents/skills/scientific-agent-skills-maintenance/SKILL.md` provide
 catalog-driven `artifacts / records / baseline / check / diff` anchors and the
-Agent semantic review gate; `artifacts` regenerates the 49 packages first. The
-current anchor is `v2.53.0` under
-`audits/scientific-agent-skills/v2.53.0/`. Future updates must follow the
+Agent semantic review gate; `artifacts` regenerates every reviewed package
+first. The current anchor is `v2.70.0` under
+`audits/scientific-agent-skills/v2.70.0/`. Future updates must follow the
 maintenance Skill before regenerating any `plugin-scientific-agent-skills-*`
 package or profile.
 

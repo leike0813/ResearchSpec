@@ -52,7 +52,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-umap-learn/SKILL.md
-      sha256: b029f53e0985ccea24a9ac15e51aa1163dd328a03efa3006fea439d6d623636e
+      sha256: e355d8776f64909c5de16b98a3bc49f96edc1352d6903992748898562938142c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-umap-learn/references/api_reference.md
       sha256: d06e2ef8d7752c99be4a75209eb81799bb095424966c3204710c4813dbf81b86
 license: MIT

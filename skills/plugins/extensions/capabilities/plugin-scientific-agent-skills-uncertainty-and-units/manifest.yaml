@@ -1,0 +1,139 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-uncertainty-and-units
+title: Uncertainty and units
+description: Track physical units and propagate measurement uncertainty in
+  scientific calculations using pint and uncertainties. Use for unit conversion
+  and dimensional checking, GUM uncertainty budgets, Type A and Type B
+  evaluation, coverage factors and expanded uncertainty, Monte Carlo
+  propagation, significant-figure and plus-minus reporting, error propagation
+  through curve fits, CODATA constants, auditing Python code for stripped units
+  or broken uncertainty propagation, and order-of-magnitude plausibility checks
+  using dimensionless groups (Reynolds, Peclet, Damkohler, Knudsen, Biot,
+  Womersley), characteristic scales such as diffusion time or Debye length, and
+  observed magnitude ranges. Trigger on "is this number physically reasonable",
+  "sanity check these units", "what regime is this flow in", or a result that
+  looks off by orders of magnitude.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-domain-conversions.md
+    path: references/domain-conversions.md
+    content_hash: 5dfbb82624a22cb52a2f13cb033c1ec4a3ceeb9b46294990f2aae0dcd642acbe
+    license: MIT
+  - knowledge_id: sas-references-gum-methodology.md
+    path: references/gum-methodology.md
+    content_hash: 9f7d22d21cbc7d7dded150f04372189c08b8d37c995b583f24cd8cf8935eed49
+    license: MIT
+  - knowledge_id: sas-references-pint-recipes.md
+    path: references/pint-recipes.md
+    content_hash: 4ea48155f005c6211e238edb024baf39cc4d58794a400c15b939950e9f64fe7b
+    license: MIT
+  - knowledge_id: sas-references-plausibility-scales.md
+    path: references/plausibility-scales.md
+    content_hash: bf5d0f118581155912d91388713beb8a3496858405bad7286fb588beea02c20a
+    license: MIT
+  - knowledge_id: sas-references-reporting-rules.md
+    path: references/reporting-rules.md
+    content_hash: 2b3c160df4259f9f33b01099f472d193035baa9f251d165da34423f553c2c8f5
+    license: MIT
+  - knowledge_id: sas-references-uncertainties-recipes.md
+    path: references/uncertainties-recipes.md
+    content_hash: d0c9e283c674c3485fae5d8919fabe4fccb77290d71da73f887c698a9bb5ad3e
+    license: MIT
+  - knowledge_id: sas-scripts--common.py
+    path: scripts/_common.py
+    content_hash: 8f931df6fb32aaaf50d2e0ac6dc1c2f484be6fd6977d5215ba5f382c29acff80
+    license: MIT
+  - knowledge_id: sas-scripts-audit-units.py
+    path: scripts/audit_units.py
+    content_hash: 4d18bc719bbc61b7b17945177ffbb000dc9132e119ccb86b37bc5a04cd3a7663
+    license: MIT
+  - knowledge_id: sas-scripts-check-plausibility.py
+    path: scripts/check_plausibility.py
+    content_hash: e17d3df0a5cc0e967aacf4ccb2966f7d99d26daa0ab6ed9733b30f6b3a3ab8c3
+    license: MIT
+  - knowledge_id: sas-scripts-convert-units.py
+    path: scripts/convert_units.py
+    content_hash: c08723b92765d6d2bd96cde88d7ddcd5f3e15a54aad8e5289b15535e5c2df96e
+    license: MIT
+  - knowledge_id: sas-scripts-format-result.py
+    path: scripts/format_result.py
+    content_hash: 4d628311c9f0ce135a1b71b22fa0c6b9b11410479f63f50005895882cd9ee900
+    license: MIT
+  - knowledge_id: sas-scripts-propagate-uncertainty.py
+    path: scripts/propagate_uncertainty.py
+    content_hash: 55bfcdb2b5739109c537330b86d2c01c82867e3b539856b6f3ad6d15c0e595c7
+    license: MIT
+  - knowledge_id: sas-scripts-uncertainty-budget.py
+    path: scripts/uncertainty_budget.py
+    content_hash: fc9bf5fbbed2f259a4f3348fad282399025fc9f51e23c6737302627f90487c36
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/SKILL.md
+      sha256: bf7e7c61a34bbb2c30cc57f5556dbd57ffa768359cdcc16ac478baebd63c55d3
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/references/domain-conversions.md
+      sha256: 5dfbb82624a22cb52a2f13cb033c1ec4a3ceeb9b46294990f2aae0dcd642acbe
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/references/gum-methodology.md
+      sha256: 9f7d22d21cbc7d7dded150f04372189c08b8d37c995b583f24cd8cf8935eed49
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/references/pint-recipes.md
+      sha256: 4ea48155f005c6211e238edb024baf39cc4d58794a400c15b939950e9f64fe7b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/references/plausibility-scales.md
+      sha256: bf5d0f118581155912d91388713beb8a3496858405bad7286fb588beea02c20a
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/references/reporting-rules.md
+      sha256: 2b3c160df4259f9f33b01099f472d193035baa9f251d165da34423f553c2c8f5
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/references/uncertainties-recipes.md
+      sha256: d0c9e283c674c3485fae5d8919fabe4fccb77290d71da73f887c698a9bb5ad3e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/scripts/_common.py
+      sha256: 8f931df6fb32aaaf50d2e0ac6dc1c2f484be6fd6977d5215ba5f382c29acff80
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/scripts/audit_units.py
+      sha256: 4d18bc719bbc61b7b17945177ffbb000dc9132e119ccb86b37bc5a04cd3a7663
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/scripts/check_plausibility.py
+      sha256: e17d3df0a5cc0e967aacf4ccb2966f7d99d26daa0ab6ed9733b30f6b3a3ab8c3
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/scripts/convert_units.py
+      sha256: c08723b92765d6d2bd96cde88d7ddcd5f3e15a54aad8e5289b15535e5c2df96e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/scripts/format_result.py
+      sha256: 4d628311c9f0ce135a1b71b22fa0c6b9b11410479f63f50005895882cd9ee900
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/scripts/propagate_uncertainty.py
+      sha256: 55bfcdb2b5739109c537330b86d2c01c82867e3b539856b6f3ad6d15c0e595c7
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/scripts/uncertainty_budget.py
+      sha256: fc9bf5fbbed2f259a4f3348fad282399025fc9f51e23c6737302627f90487c36
+license: MIT

@@ -52,7 +52,7 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-readme.md
     path: README.md
-    content_hash: 558f55383ddaee1d82e4467b7f3f2deb3827c88aecbc48f13f0232e88cd6842e
+    content_hash: ceaf18dc6d30634a3aa35f850da659486c44932c7d057404635191bd74875586
     license: MIT
   - knowledge_id: sas-references-advanced-gis.md
     path: references/advanced-gis.md
@@ -108,16 +108,16 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-references-troubleshooting.md
     path: references/troubleshooting.md
-    content_hash: 4b9ac3d3c5eac093cd0557eeb209dc208115f18c8555f057b3d369b045731ce1
+    content_hash: 7be40a157317e04671eb3e802703c0d1fd8d8dcc69f8249d3aab743a5c63e9eb
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/SKILL.md
-      sha256: 7ca9f13d83cca54c012aef2800e2fcee4824eebc28a7558aa12f1308483bdacd
+      sha256: 8ed4238da8afcfee758a820b5edeb0431f52d3e28a11127780a7019aee9cf969
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/README.md
-      sha256: 558f55383ddaee1d82e4467b7f3f2deb3827c88aecbc48f13f0232e88cd6842e
+      sha256: ceaf18dc6d30634a3aa35f850da659486c44932c7d057404635191bd74875586
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/advanced-gis.md
       sha256: cba7a139e06687547a99075e23a093f5748cfc909011d5ed789dc06ef7cc4ef3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/big-data.md
@@ -145,5 +145,5 @@ provenance:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/specialized-topics.md
       sha256: b0cee8b20dd7920087277e7f3286e7c190355bda210baf38c1b715276051cd81
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/troubleshooting.md
-      sha256: 4b9ac3d3c5eac093cd0557eeb209dc208115f18c8555f057b3d369b045731ce1
+      sha256: 7be40a157317e04671eb3e802703c0d1fd8d8dcc69f8249d3aab743a5c63e9eb
 license: MIT
