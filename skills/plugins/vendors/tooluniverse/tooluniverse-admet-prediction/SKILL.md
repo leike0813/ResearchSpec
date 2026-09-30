@@ -13,7 +13,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.4
   researchspec-role: semantic-helper
 ---
 
@@ -41,6 +41,23 @@ Comprehensive pharmacokinetic and toxicity profiling integrating AI-based ADMET 
 - "What is the LD50 / hERG liability of [molecule]?"
 
 **Input**: Drug name (e.g., "ibuprofen") OR SMILES string (e.g., "CC(C)Cc1ccc(cc1)C(C)C(=O)O")
+
+## Before You Run
+
+ADMETAI tools run a local model, so they need the `ml` extra installed in the environment the target Agent is already authorized to use.
+
+**Hard constraint:** ResearchSpec never installs dependencies or probes the environment. Do not run `uv pip install 'tooluniverse[ml]'` or `tooluniverse-doctor` on the user's behalf; report a missing `ml` extra as an unmet prerequisite instead.
+
+Without it the tools still appear in `tu list` (the config loads) but fail at
+call time with `ADMETModel requires 'admet-ai' package`.
+
+**Expected console noise — not errors.** The first ADMETAI call loads PyTorch
+and prints warnings such as missing-GPU / `Trainer` messages from
+PyTorch Lightning, and `TypedStorage is deprecated` from PyTorch. These are
+emitted by the underlying libraries during normal CPU inference. Predictions
+are unaffected — do not report them to the user as failures and do not retry
+the call because of them. Only treat output as a failure if the tool returns an
+`error` field or no predictions.
 
 ---
 

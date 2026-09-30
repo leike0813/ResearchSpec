@@ -52,7 +52,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-product-safety-surveillance/SKILL.md
-      sha256: 4f49e5de31a13e59e419fe36d6d5bf8e240a558e49b59b0dc25b2d83d1a92d40
+      sha256: 9329bd04a9587abf44027613fad1b8a32215f9647e8e5ea83efd0ae0209f5d8b
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-product-safety-surveillance/references/openfda_fields.md
       sha256: 553863b70a19c784a2c20b8d66ed6924ccd484d34cfbf8cca6bc7be6e8c0d5bb
 license: Apache-2.0

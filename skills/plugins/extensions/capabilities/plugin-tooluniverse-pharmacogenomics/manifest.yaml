@@ -50,5 +50,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacogenomics/SKILL.md
-      sha256: ac905bf5ae60c1f488a48e36dd83a89e79ee4cae232ee9cd181086214a05cf9e
+      sha256: c7ca4e49b3682f49889a4f384702b0608a5e301204f6ebbf9bfddfb8a7e5effa
 license: Apache-2.0

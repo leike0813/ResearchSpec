@@ -139,9 +139,9 @@ class_warnings = tu.tools.FDA_get_warnings_and_cautions_by_drug_name(
 )
 
 # Step 5.2: FAERS data for real-world adverse events
-faers_egfr_tki = tu.tools.FAERS_search_reports_by_drug_and_reaction(
-    drug_name="erlotinib",
-    limit=500
+faers_egfr_tki = tu.tools.FAERS_search_adverse_event_reports(
+    medicinalproduct="erlotinib",
+    limit=100
 )
 
 # Summarize top adverse events

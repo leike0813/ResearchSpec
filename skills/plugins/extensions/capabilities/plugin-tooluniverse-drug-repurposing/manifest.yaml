@@ -48,15 +48,15 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-examples.md
     path: EXAMPLES.md
-    content_hash: 5867f5ccf4ddb12a04c3de79b92223537d24848e49d159c9f7d2db922a912bbd
+    content_hash: 0bceb1edcddc2622311fb0da841330b6607ce1b18918a551be9b8fa4d3310339
     license: Apache-2.0
   - knowledge_id: tu-procedures.md
     path: PROCEDURES.md
-    content_hash: 66068fd8f6855c5066dbc6549665328bc0a0aeb0fd3dcc9fb704340b713e084b
+    content_hash: 6762986c85c5ad86ff64dcd16d177091d2ed4c993ebd96349c24a865879befc9
     license: Apache-2.0
   - knowledge_id: tu-reference.md
     path: REFERENCE.md
-    content_hash: 61719b983625e482d352b1242a9abdc523c6097ab4bce514d7a1adeaacf49663
+    content_hash: a10e444ea849da2e47a4257609d16fea1dfed27d9e60db8aab029fa87c3e282d
     license: Apache-2.0
   - knowledge_id: tu-report-template.md
     path: REPORT_TEMPLATE.md
@@ -64,22 +64,22 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-strategies-and-patterns.md
     path: strategies_and_patterns.md
-    content_hash: 9fe8fed67db86755125cf3abbd53d1c44821e8c86c93b561f08d0c48d22a79a9
+    content_hash: 1a1125e535d6a0b0f0dd1303e9615f36fb5b96db4a35ab6f0e9ccb5ac720840a
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/SKILL.md
-      sha256: d3a750e751a3698348e19921dea36ee9f1fea362d1acbc482e960e20ad6245ea
+      sha256: dbcd2576b96572f7833c3771b1dd53c822959fb6e6a4405de1a732c9b764a280
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/EXAMPLES.md
-      sha256: 5867f5ccf4ddb12a04c3de79b92223537d24848e49d159c9f7d2db922a912bbd
+      sha256: 0bceb1edcddc2622311fb0da841330b6607ce1b18918a551be9b8fa4d3310339
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/PROCEDURES.md
-      sha256: 66068fd8f6855c5066dbc6549665328bc0a0aeb0fd3dcc9fb704340b713e084b
+      sha256: 6762986c85c5ad86ff64dcd16d177091d2ed4c993ebd96349c24a865879befc9
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/REFERENCE.md
-      sha256: 61719b983625e482d352b1242a9abdc523c6097ab4bce514d7a1adeaacf49663
+      sha256: a10e444ea849da2e47a4257609d16fea1dfed27d9e60db8aab029fa87c3e282d
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/REPORT_TEMPLATE.md
       sha256: 447a3b2363627165934bd5324a2863dec71848ddff697162da32a942e904cb77
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-repurposing/strategies_and_patterns.md
-      sha256: 9fe8fed67db86755125cf3abbd53d1c44821e8c86c93b561f08d0c48d22a79a9
+      sha256: 1a1125e535d6a0b0f0dd1303e9615f36fb5b96db4a35ab6f0e9ccb5ac720840a
 license: Apache-2.0

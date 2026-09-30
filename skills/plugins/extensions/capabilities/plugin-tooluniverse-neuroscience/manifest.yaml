@@ -51,5 +51,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-neuroscience/SKILL.md
-      sha256: af8704e8a8a9aa28ee8d6e943babe5da7f58b59d721f2e6d7e2362536fb314c8
+      sha256: 251e9976e43ad3192a28a9b5ef9a6b2fae847426b3a6d0dc2e839f1f6be596db
 license: Apache-2.0

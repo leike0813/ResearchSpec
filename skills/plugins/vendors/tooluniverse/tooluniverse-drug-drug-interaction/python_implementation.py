@@ -339,23 +339,23 @@ class DDIAnalyzer:
     def _query_adverse_events(self, drug_a, drug_b):
         """Query FAERS for adverse events."""
         print("\n6️⃣ Adverse Events (FAERS)")
-        adverse_events = {}
+        adverse_events = {drug_a: None, drug_b: None}
 
         for drug in [drug_a, drug_b]:
             print(f"   Querying FAERS for {drug}...")
             try:
                 result = self.tu.tools.FAERS_count_reactions_by_drug_event(
                     medicinalproduct=drug,
-                    event_name="drug interaction"
+                    reactionmeddraverse="drug interaction"
                 )
 
-                if result.get('data'):
-                    count = result['data'].get('count', 0)
+                if result.get('total_reports_matching_query') is not None:
+                    count = result['total_reports_matching_query']
                     adverse_events[drug] = count
                     print(f"   ✅ Found {count} reports")
             except Exception as e:
                 print(f"   ⚠️ Error: {e}")
-                adverse_events[drug] = 0
+                adverse_events[drug] = None
 
         return adverse_events
 
@@ -381,7 +381,10 @@ class DDIAnalyzer:
             print(f"   ✅ Literature evidence: +20")
 
         # FAERS reports: +20 points
-        faers_total = sum(report.get('clinical_evidence', {}).values())
+        faers_counts = list(report.get('clinical_evidence', {}).values())
+        if any(value is None for value in faers_counts):
+            return None, 'UNKNOWN'
+        faers_total = sum(faers_counts)
         if faers_total > 100:
             score += 20
             print(f"   ✅ FAERS reports ({faers_total}): +20")
@@ -405,7 +408,9 @@ class DDIAnalyzer:
 
         severity = report['severity']
 
-        if severity == "MAJOR":
+        if severity == "UNKNOWN":
+            recommendations.append("Evidence incomplete; do not infer low risk from unavailable FAERS data.")
+        elif severity == "MAJOR":
             recommendations.append("⚠️ AVOID COMBINATION - Consider alternative drugs")
             recommendations.append("If combination unavoidable, close monitoring required")
             recommendations.append("Dose adjustment may be necessary")

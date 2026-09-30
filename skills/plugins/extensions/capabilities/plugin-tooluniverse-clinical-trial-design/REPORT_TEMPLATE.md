@@ -202,7 +202,7 @@ Rationale: [2-3 sentence summary]
 | Hepatotoxicity | 20% | 3% | LFTs weekly (cycle 1), then q3w |
 | [Specific AE] | [%] | [%] | [Plan] |
 
-**Data Source**: FAERS_search_reports (similar drugs), drugbank_get_pharmacology
+**Data Source**: FAERS_search_reports(similar drugs), drugbank_get_pharmacology
 
 ## 7.3 Organ-Specific Monitoring
 

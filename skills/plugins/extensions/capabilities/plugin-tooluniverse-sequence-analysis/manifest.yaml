@@ -66,7 +66,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-analysis/SKILL.md
-      sha256: 56d530331d404087e5c86be54d99832d6478073cc8abe532db4217d0a9b3f976
+      sha256: 3b4f0d2d6b97cb5a0db482ab54f49bc5fdbe748bce0df8736d825711f9b44dd3
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-analysis/scripts/amino_acids.py
       sha256: 11e2b679e100836433fdda0583f8de69e650ab6409a66eea6e1e5c2703bd5032
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-analysis/scripts/biology_facts.py

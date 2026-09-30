@@ -63,14 +63,14 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-tools-reference.md
     path: TOOLS_REFERENCE.md
-    content_hash: f6f7c77513883acb94f4afb9c7ff70aa2c56ddc77229ce6d55e2b03d3a46e6e3
+    content_hash: ddb5142c0c084c311698b376af056e4efaca1aff49a38d4b66754aeebc8d6c1c
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/SKILL.md
-      sha256: cdfc607bbae65eaa4e57e08c9a7bac89c6ed02235ae1cd77167396b0d7d3d0b4
+      sha256: 8508a330ab098c547422daea7bb2f4b434491b6822d055fec7349f30a9e2620d
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/CHECKLIST.md
       sha256: f840ede178348c3fba912f8af275189ef44d24f05f00985f8c5155b2efbe6944
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/EXAMPLES.md
@@ -80,5 +80,5 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/REPORT_TEMPLATE.md
       sha256: 0f9f901ea1a95eb5d6c0a966443f414994dd56f11a13ba4a5101950c092e8982
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-research/TOOLS_REFERENCE.md
-      sha256: f6f7c77513883acb94f4afb9c7ff70aa2c56ddc77229ce6d55e2b03d3a46e6e3
+      sha256: ddb5142c0c084c311698b376af056e4efaca1aff49a38d4b66754aeebc8d6c1c
 license: Apache-2.0

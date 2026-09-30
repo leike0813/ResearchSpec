@@ -55,7 +55,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-comparative-genomics/SKILL.md
-      sha256: 76f80729c73c2c2012b5bc3917d365516acbbe9a566191c0fe0f041b72cecfab
+      sha256: f5688281d891477ea51ff53fd6d56c980c10ab99d9e56cebc55b013670e2074b
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-comparative-genomics/scripts/dnds.py
       sha256: 3ffc1aa0e3d7b967d5ab0571ae625167449194441ce4d651349492ef737e24ba
 license: Apache-2.0

@@ -55,7 +55,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-tools-reference.md
     path: TOOLS_REFERENCE.md
-    content_hash: 3b482d2936706aa5182ad6d10c88feabd9e0a263d2505b27c7cb4e5860467053
+    content_hash: 922a701a59b00537d9a34b49f5abdfdf08e0cafeba0a2ab22a7a6de2d40e810a
     license: Apache-2.0
   - knowledge_id: tu-anova-and-tests.md
     path: anova_and_tests.md
@@ -134,13 +134,13 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/SKILL.md
-      sha256: 8a66e33eb647dca038b4fd4ad2a09f7cd17f64451c9b880126c9eb291db29905
+      sha256: 0a5698d8de655e8b9a85996be1e6361fa2594ef494dd312e1da49f2efc831dbc
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/EXAMPLES.md
       sha256: dea9ee15740bd35639fce36c607fb8bbd186e245535566e8d7874c53002b0be3
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/QUICK_START.md
       sha256: f02d052ea8611d6bef447d721bb5dcb47e172094af4b64297e711a1b4b22a9a6
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/TOOLS_REFERENCE.md
-      sha256: 3b482d2936706aa5182ad6d10c88feabd9e0a263d2505b27c7cb4e5860467053
+      sha256: 922a701a59b00537d9a34b49f5abdfdf08e0cafeba0a2ab22a7a6de2d40e810a
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/anova_and_tests.md
       sha256: 8483b4eb9bad8dff5f4468e5866eae0302117993348b17e9aa90e92c31123cf9
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/common_patterns.md

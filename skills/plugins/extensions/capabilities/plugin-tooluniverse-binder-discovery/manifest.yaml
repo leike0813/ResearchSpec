@@ -71,7 +71,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/SKILL.md
-      sha256: 72457b03c898a9725bfb1689e6d0b0a2c93b982cd8c053f85c2a7ade607e7e3c
+      sha256: 77251ad6dfb1f560830a6cb6fed89ea6ce5ddb734bfd48042e6c623b1747345f
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/CHECKLIST.md
       sha256: 8294664f86e26680cb8262d6a3d1d376ecd3068f514563c8a1924d7e695b0376
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-binder-discovery/EXAMPLES.md

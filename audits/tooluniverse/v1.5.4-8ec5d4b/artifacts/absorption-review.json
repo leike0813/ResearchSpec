@@ -1,0 +1,2874 @@
+{
+  "schema_version": "1",
+  "release": "v1.5.4",
+  "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+  "changed_capabilities": [
+    "plugin-tooluniverse-admet-prediction",
+    "plugin-tooluniverse-adverse-event-detection",
+    "plugin-tooluniverse-adverse-outcome-pathway",
+    "plugin-tooluniverse-antibody-engineering",
+    "plugin-tooluniverse-binder-discovery",
+    "plugin-tooluniverse-cell-line-profiling",
+    "plugin-tooluniverse-clinical-data-integration",
+    "plugin-tooluniverse-clinical-trial-design",
+    "plugin-tooluniverse-comparative-genomics",
+    "plugin-tooluniverse-data-wrangling",
+    "plugin-tooluniverse-dataset-discovery",
+    "plugin-tooluniverse-disease-research",
+    "plugin-tooluniverse-drug-drug-interaction",
+    "plugin-tooluniverse-drug-regulatory",
+    "plugin-tooluniverse-drug-repurposing",
+    "plugin-tooluniverse-drug-research",
+    "plugin-tooluniverse-ecology-biodiversity",
+    "plugin-tooluniverse-epidemiological-analysis",
+    "plugin-tooluniverse-epigenomics",
+    "plugin-tooluniverse-epigenomics-chromatin",
+    "plugin-tooluniverse-gene-enrichment",
+    "plugin-tooluniverse-immunology",
+    "plugin-tooluniverse-kegg-disease-drug",
+    "plugin-tooluniverse-literature-deep-research",
+    "plugin-tooluniverse-molecular-cloning",
+    "plugin-tooluniverse-multiomic-disease-characterization",
+    "plugin-tooluniverse-network-pharmacology",
+    "plugin-tooluniverse-neuroscience",
+    "plugin-tooluniverse-pharmacogenomics",
+    "plugin-tooluniverse-pharmacovigilance",
+    "plugin-tooluniverse-phylogenetics",
+    "plugin-tooluniverse-plant-genomics",
+    "plugin-tooluniverse-precision-oncology",
+    "plugin-tooluniverse-product-safety-surveillance",
+    "plugin-tooluniverse-protein-interactions",
+    "plugin-tooluniverse-protein-structure-prediction",
+    "plugin-tooluniverse-rare-disease-diagnosis",
+    "plugin-tooluniverse-rare-disease-genomics",
+    "plugin-tooluniverse-regulatory-genomics",
+    "plugin-tooluniverse-regulatory-variant-analysis",
+    "plugin-tooluniverse-sequence-analysis",
+    "plugin-tooluniverse-spatial-omics-analysis",
+    "plugin-tooluniverse-spatial-transcriptomics",
+    "plugin-tooluniverse-statistical-modeling",
+    "plugin-tooluniverse-structural-proteomics",
+    "plugin-tooluniverse-target-research",
+    "plugin-tooluniverse-toxicology",
+    "plugin-tooluniverse-variant-interpretation"
+  ],
+  "unchanged_capabilities": [
+    "plugin-tooluniverse-acmg-variant-classification",
+    "plugin-tooluniverse-aging-senescence",
+    "plugin-tooluniverse-cancer-classification",
+    "plugin-tooluniverse-cancer-genomics-tcga",
+    "plugin-tooluniverse-cancer-variant-interpretation",
+    "plugin-tooluniverse-chemical-compound-retrieval",
+    "plugin-tooluniverse-chemical-safety",
+    "plugin-tooluniverse-chemical-sourcing",
+    "plugin-tooluniverse-clinical-guidelines",
+    "plugin-tooluniverse-clinical-risk-scoring",
+    "plugin-tooluniverse-clinical-trial-matching",
+    "plugin-tooluniverse-computational-biophysics",
+    "plugin-tooluniverse-crispr-screen-analysis",
+    "plugin-tooluniverse-data-integration-analysis",
+    "plugin-tooluniverse-diagnostic-test-evaluation",
+    "plugin-tooluniverse-dose-response",
+    "plugin-tooluniverse-drug-mechanism-research",
+    "plugin-tooluniverse-drug-synergy",
+    "plugin-tooluniverse-drug-target-validation",
+    "plugin-tooluniverse-electron-microscopy",
+    "plugin-tooluniverse-enzyme-kinetics",
+    "plugin-tooluniverse-expression-data-retrieval",
+    "plugin-tooluniverse-fastq-qc",
+    "plugin-tooluniverse-functional-genomics-screens",
+    "plugin-tooluniverse-gene-disease-association",
+    "plugin-tooluniverse-gene-regulatory-networks",
+    "plugin-tooluniverse-gpcr-structural-pharmacology",
+    "plugin-tooluniverse-gwas-drug-discovery",
+    "plugin-tooluniverse-gwas-finemapping",
+    "plugin-tooluniverse-gwas-snp-interpretation",
+    "plugin-tooluniverse-gwas-study-explorer",
+    "plugin-tooluniverse-gwas-trait-to-gene",
+    "plugin-tooluniverse-hla-immunogenomics",
+    "plugin-tooluniverse-image-analysis",
+    "plugin-tooluniverse-immune-repertoire-analysis",
+    "plugin-tooluniverse-immunotherapy-response-prediction",
+    "plugin-tooluniverse-infectious-disease",
+    "plugin-tooluniverse-inorganic-physical-chemistry",
+    "plugin-tooluniverse-lipidomics",
+    "plugin-tooluniverse-mendelian-randomization",
+    "plugin-tooluniverse-meta-analysis",
+    "plugin-tooluniverse-metabolomics",
+    "plugin-tooluniverse-metabolomics-analysis",
+    "plugin-tooluniverse-metabolomics-pathway",
+    "plugin-tooluniverse-metagenomics-analysis",
+    "plugin-tooluniverse-microbial-genome-characterization",
+    "plugin-tooluniverse-microbiome-research",
+    "plugin-tooluniverse-model-organism-genetics",
+    "plugin-tooluniverse-multi-omics-integration",
+    "plugin-tooluniverse-natural-product-dereplication",
+    "plugin-tooluniverse-noncoding-rna",
+    "plugin-tooluniverse-organic-chemistry",
+    "plugin-tooluniverse-pathway-disease-genetics",
+    "plugin-tooluniverse-peptide-target-deorphanization",
+    "plugin-tooluniverse-pharmacokinetics",
+    "plugin-tooluniverse-phewas",
+    "plugin-tooluniverse-polygenic-risk-score",
+    "plugin-tooluniverse-population-genetics",
+    "plugin-tooluniverse-population-genetics-1000genomes",
+    "plugin-tooluniverse-precision-medicine-stratification",
+    "plugin-tooluniverse-primer-design",
+    "plugin-tooluniverse-protein-lof-mechanism",
+    "plugin-tooluniverse-protein-modification-analysis",
+    "plugin-tooluniverse-protein-sae-variant-interpretation",
+    "plugin-tooluniverse-protein-structural-annotation-pdb",
+    "plugin-tooluniverse-protein-structure-retrieval",
+    "plugin-tooluniverse-protein-therapeutic-design",
+    "plugin-tooluniverse-proteomics-analysis",
+    "plugin-tooluniverse-proteomics-data-retrieval",
+    "plugin-tooluniverse-residue-functional-mechanism-interpretation",
+    "plugin-tooluniverse-rnaseq-deseq2",
+    "plugin-tooluniverse-sequence-retrieval",
+    "plugin-tooluniverse-single-cell",
+    "plugin-tooluniverse-small-molecule-discovery",
+    "plugin-tooluniverse-stem-cell-organoid",
+    "plugin-tooluniverse-structural-variant-analysis",
+    "plugin-tooluniverse-systems-biology",
+    "plugin-tooluniverse-vaccine-design",
+    "plugin-tooluniverse-variant-analysis",
+    "plugin-tooluniverse-variant-functional-annotation",
+    "plugin-tooluniverse-variant-predictor-dms-validation",
+    "plugin-tooluniverse-variant-to-mechanism"
+  ],
+  "all_profile_bytes_unchanged": true,
+  "body_count": 130,
+  "knowledge_count": 348,
+  "rows": [
+    {
+      "capability_id": "plugin-tooluniverse-acmg-variant-classification",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "eaabb8613d1b9d7f10316e2d66fcb2e851968bf7fac27265965208f9dc1628ee"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-admet-prediction",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "60005ad63c56e3d38cdfa76ffe9aab4b0bc96bc98f318a7d28c4b9941754794a"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-adverse-event-detection",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 4,
+      "package_tree_sha256": "b0a34bf540acedc224333742d4091e9c520a9c3f2260a49ee0708c0b0af03bef"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-adverse-outcome-pathway",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "8a1c3c222213aafd734cfd63e66a4c16cc30ecf134437982041ba3228e8dcfed"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-aging-senescence",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "ee45bd976de5b4f671a630af61a5f6389a938403f200fc296ec44b7a8035f959"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-antibody-engineering",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 7,
+      "package_tree_sha256": "32a190a1e5786b5445291e9f23ae28aec0df58161d4c869cfc3ada03665cee81"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-binder-discovery",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "8c8a66de4934c4565ee26d8e7914796dab390b447bec763357d8e004af06da33"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-cancer-classification",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "e2a505f4798045b6a3b77c05d88010771d0663b13c3c2b6b1b7c52ea4c22f3d2"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-cancer-genomics-tcga",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "c549a658ef9b6b4039fb0da72cddf78cc2fcec95d85eb9989d89823439bcdd14"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-cancer-variant-interpretation",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 7,
+      "package_tree_sha256": "f60ebb506633c3ba098713c9da5a3bfcc7e2e3b4e576184b42d56f5c3f2b9a50"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-cell-line-profiling",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "cd33d0551f4cb69ff563942db67cc8e5073576a39fd8b4cec564fe90763b4976"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-chemical-compound-retrieval",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 2,
+      "package_tree_sha256": "efcbc0b7c74dba3a5b40d11bdd3aab3c7cafbc1b63e9e6ef9248eca01c21c639"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-chemical-safety",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 4,
+      "package_tree_sha256": "b5eea622747cd40fe5152266904b49ff75afe7bc3a5c472063dcb10fc6a2e405"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-chemical-sourcing",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "4d0395a756704720eab82a7efe6987fd9df73ed9a6e3476bd5d5dd33723f9e46"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-clinical-data-integration",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "27705fc6544ef2037f25b54e1e29a34a579026952c70f7761b0c99361c93cd82"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-clinical-guidelines",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "7faa325f4b9fa7734b04356d9bc37ce1e816e74c0647dad28a6aa77811f254c8"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-clinical-risk-scoring",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "3d04e0587d378fcafcf5f671b6a1e7c12140f4d131d7853a2dc498e959fc81ce"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-clinical-trial-design",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 8,
+      "package_tree_sha256": "604c401b81d32c35cda4b0db8eec405cd583dc7e50f94892e13f723a46975993"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-clinical-trial-matching",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 7,
+      "package_tree_sha256": "9ef53ddd1062e16c0521143e7cd2804c73b39fa63316880078fcd3c777cbf5bc"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-comparative-genomics",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "40585449a1338b07b6fbb5fe423e598c347626a058cef2dcacd904faaab61659"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-computational-biophysics",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 9,
+      "package_tree_sha256": "af9ac06bcf943dd87628e3c6b0fbfcf2e4d0eb1d427e27e4cfcb48ab2c47ef90"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-crispr-screen-analysis",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 8,
+      "package_tree_sha256": "70d938e6f3d46c59c09037d456c2c84c7c29953d37f5d30787bd8a9cd25583ff"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-data-integration-analysis",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "309570a6dcf8cf4e95ee7f10f73e50df9fa6194e868bd5e3e3179862621c80b6"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-data-wrangling",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "f85c057f2e0e47d54b1c17b3ee501077918dc55ba1d967b188647f2d2f8cf40f"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-dataset-discovery",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "09dee67bdf875e5f4fe60579b6b793517055a13a256af953db95208a55a1adce"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-diagnostic-test-evaluation",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "4024d8ac4db9c8ee3a79248941d26dd65dcd55cb18e75edab4e9b0d578615c0d"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-disease-research",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "b4cbff25ff797467d7e8193bea5b95845855758f35d7fca93717fe108b581653"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-dose-response",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "212fdbf647651edf033b9bc6c1cce8b3c586f604dea2c875c9523d20310f837b"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-drug-interaction",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "f8c4525571883f28a43251fa16cec2b5a5e92156c240332b377d533cc72bc4f4"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-mechanism-research",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "0d2e77e3b8ea37b6e78aaa65b40b544238552d311c86351ae79ae008da97258a"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-regulatory",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "e302b6867d95ec93ebe50729ae5bcb2176319077b305b3362b911d1968dd4b5d"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-repurposing",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "dadc3d3d3ecf264b63dddd03c978de66ab6d4af2144ad3c5438783a35c4764ae"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-research",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "e2f892497accd46c00f0e3f2a725e2e2f20d99458984326241054b58c0e68e1c"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-synergy",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "1ea96cee1e95ca9248bd19af6455f041806129f81b7bc2ee173c58a29b2aec16"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-target-validation",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 4,
+      "package_tree_sha256": "3860c33197762a4469a6dbf0290a20d4c88bce46fe51caa01bccb05252bd0601"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-ecology-biodiversity",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "312dbe5d10c8604a1ff6c4a4973529f01b6d2ad69e0b10de762226673ab0fae0"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-electron-microscopy",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "3307823c78d9cdba383a00799f68e631af93a1823e6e0eb679ad033291ec2d70"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-enzyme-kinetics",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "603a5ff0cf2a81bb7343e048c894be52a9f5f46464b0b8f557c40826758d5b5f"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-epidemiological-analysis",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "2d031ee2e0a45dd138c654e69b1f32fa0a6c463fdb860b35efa3f1d1be0e23c8"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-epigenomics",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "c4aab0e17634e7b767e17d34e1d3666e782fc089fa42cbd4071ef9e642da1189"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-epigenomics-chromatin",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "7b92676bc080cde0318eb19fdfaf0a1fff50f4b894278c2f182e2923e44483a7"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-expression-data-retrieval",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 2,
+      "package_tree_sha256": "8c9ab02cdb17518f00d81e8ee8e5c60ff2546ac46dbdb0712140af0406135fc9"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-fastq-qc",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 4,
+      "package_tree_sha256": "9976414fdc6de0b18bf58a4b35600e37ef3bcf957d158c821f0a2717c01f7133"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-functional-genomics-screens",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "937ce1aebc25fa9fb45c9727b7b15542d05cd502ca24d2f42e64c55654d0f7df"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gene-disease-association",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "f69b135d56869e8551dca2c792073b1d8c784e55e14970e42006143074bf7871"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gene-enrichment",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 9,
+      "package_tree_sha256": "cf83cfdb5aa62b77a8c92dac5ac827030c54ce4d9173e67395b566c14523d363"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gene-regulatory-networks",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "9c3ae9da978f82a39916a6dc31b7ea7abfb626404163fe5c3c070b4ab038ddd6"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gpcr-structural-pharmacology",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "9a1c7ae474397306e0afc8f693d474e184d9368d3ded75e24d12b6fd07a9a4e8"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gwas-drug-discovery",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 6,
+      "package_tree_sha256": "f1bdab32e53a1660efe0b2f56f9e578993f71791a41ef42e641023b63f6e5c2d"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gwas-finemapping",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "4826862ce7cb6ceff702ea7cac2ad1082a04307a9afedf22417f20ba9f0f31c3"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gwas-snp-interpretation",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 2,
+      "package_tree_sha256": "585569c04ccc53df087eaf93dcfb2dbfc63001487490adcaadcb6090b6d60976"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gwas-study-explorer",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "57e3898aa45e12073191778c6feebe69bc0953529c838ca809645301a0d339c1"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gwas-trait-to-gene",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "604167d409cba697f2425969b76a553ebf7ebecedb0a37be8f912b1df3b183a6"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-hla-immunogenomics",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "3bc6cc03b63b644e3d99bd5e502d8f002e4f536d65b2f7a6a18639d9b3572f93"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-image-analysis",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 9,
+      "package_tree_sha256": "eef94f9091c7949f4312e4eeceba2f435bdf17af18e597e7a814431afc757a83"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-immune-repertoire-analysis",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 2,
+      "package_tree_sha256": "44173ec5d9335b97633b16b838a691d05ecdea8c8eca71ab325c6fd07e603d30"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-immunology",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "a7939412f3d1b5678d07922cf18568d194fe67760254e327e6253b7c3a26de75"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-immunotherapy-response-prediction",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "e315a4649c5731e26f21182c0a4f0b2365b1922a34fc80a0f62129d0de988f7c"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-infectious-disease",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "3d5c94afaa55b8513761a0bee165463f980132b91fdc8ea3d48c088d737e03e4"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-inorganic-physical-chemistry",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "982154a7962dee9ce42c3404fc97740e83d03cf71b3cbd8a753efa89dff7d31c"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-kegg-disease-drug",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "ae16eeefa4e6eb0cce8a0c24e0f9fce7ec9794e72651ea7745e8befa0300cec8"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-lipidomics",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "0ce1932a9dd446b400065eea8fd9d3fd6238792607c884f2ad38f9884fb49aee"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-literature-deep-research",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 6,
+      "package_tree_sha256": "11cf08cd4549589430f056663e38fb39c11032346598b392e74760d75b784bc4"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-mendelian-randomization",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "472a11034a5c271dc80700881e1121323118ff4dedd085d8638c89c4e9cfb9db"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-meta-analysis",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "4fae467fe102f2bcdd34986da07612caef8c293373d2a1e8f1431c2d52ffcdd2"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-metabolomics",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 11,
+      "package_tree_sha256": "06a5c495a24684a0a367ef4760952b97c43ad090c3a8d2f03f2f4d4f6250144f"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-metabolomics-analysis",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 2,
+      "package_tree_sha256": "9757d250751e9aa9eae4e299273bd270c06d830b85b144cb07e08a695253083a"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-metabolomics-pathway",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "6c0cb920d647bda385604a08266440c528e25effaea03e63fbaf2cb69a180838"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-metagenomics-analysis",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "e503eabe1d9bd3d05b139fa1ef4f9b63f30b2984ffd5b300ca1b6984270dcd08"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-microbial-genome-characterization",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "5b82e7b81b8171953a186f3993bfd92d1cbbaf0ec2dbf7e733c79c47b164f9be"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-microbiome-research",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "48b33cd929d53bdd9cbbb5ec601ee0a6c27b991a673610140635e2725a9b92bc"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-model-organism-genetics",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "fd901a3df55d5d1f2f14479c77ae4c1030194a177f1cc4e66bdaaeaf9fd98dae"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-molecular-cloning",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "af0279392c6db8d8b500a14d309417528dccf21c64b9a0da0825b7bd8f7b1814"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-multi-omics-integration",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "609eb9aea6274fdef9127d2a1cf3a92faf7d95920c77e13fbe57755552a84160"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-multiomic-disease-characterization",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "911bc6a02b559040184e8134846a36800255dbbaf410191bf2ca40eae8a205e9"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-natural-product-dereplication",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "b1a4f613b86f9b81af75479cfe80564183e85921b1d0db23ebbd53c9606eddf1"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-network-pharmacology",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 7,
+      "package_tree_sha256": "71243da03e0b05e29d2bfc487e10b95823db5d60e198390e4b1beb611eb749c6"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-neuroscience",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "e7e592a3c452c861e2a59da5c0fbd747ef9bf9416d469beab929988da5741f95"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-noncoding-rna",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "93b6468dcd3b7c3048c64a8f2e48382c8d4fa25bd3c4a0eac13819b9fc6b37c5"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-organic-chemistry",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 7,
+      "package_tree_sha256": "66ac7d8c67a59e01f77bf31dd65bb78ce76c883e1347971ee500c7d6ddd7a3d0"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-pathway-disease-genetics",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "3b53da03eea4b59c9b756fcca716418b38411df0769c6088a2b78d0d41b7a86f"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-peptide-target-deorphanization",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 3,
+      "package_tree_sha256": "bed39a3d72d711be146318b05598afbf5324aa7e89b937e796bae61a79e9218b"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-pharmacogenomics",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "582fe121f32896f5cd707e31d1b5b1aceba6569935785766ed3c16e552b1c696"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-pharmacokinetics",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "005fcbeba81af34c3f44860cd83e5e233a05bd2d0997072a6f5d78ba4ed78433"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-pharmacovigilance",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 6,
+      "package_tree_sha256": "bde1b81656f1ab64284ea8f599932fbe10a9aebe14e22eb9d1e76029039a42a8"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-phewas",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "0fc394a199e18dd07586b121c6e71d80ced7d6b8d36b05541c3073dfcaa6e6e5"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-phylogenetics",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 12,
+      "package_tree_sha256": "024989794ba75bc9ba87afe19fe8bf13866bc0d592c0acc09b2ee1c13938a657"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-plant-genomics",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "2e20de347c581dface066e48d07e955c7991c8cd0ff0b82aa5678a3230f12dac"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-polygenic-risk-score",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 2,
+      "package_tree_sha256": "b8831e34d642c3fd358aab0986758ebf0bc7f2722724dac33bcf52d3f411ae91"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-population-genetics",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "d7250f10f080c2f3ea6ef7e24f34a707eb6798726c3dd32a94c4afe133bd55fd"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-population-genetics-1000genomes",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "ba96882af77f1f5741d139a82509b0cc5803e11d1cd5434db6c88ebc12667687"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-precision-medicine-stratification",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "e9968d8d155037402dda81dbe3d6d9802e2b8f4f1e780310bef16c703b7b7178"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-precision-oncology",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 7,
+      "package_tree_sha256": "8fc4338e8852966c9053b34ac4e8a4c021e5d9726da891fc0cb68c39898e2845"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-primer-design",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "d08cc5c9178e590a5393708a94f5b8467eaa20e972483a8de98bc4a168543195"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-product-safety-surveillance",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "140d924d6b2b26b99bb1707d7307fbb85fa79d14c33f329eabf89a81f5c5721e"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-interactions",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 6,
+      "package_tree_sha256": "58eedbcdf115cdef2827dd09cfaaa79bef527ea06e9e47d361678a8526f18ff4"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-lof-mechanism",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "87e029c9348782cab3c752d705ac37f5818695c6545bdcbb7000387f17df7de0"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-modification-analysis",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "efa8c83009852683026bfba39df053bff2a3ac823deb694dbd09bd233fbf2a13"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-sae-variant-interpretation",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "1eb22e8330b9f8575da265a205d8044c25561ea5c1eae825f19384a99f9902e9"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-structural-annotation-pdb",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "9bc21650abd55bc98626a29ef8567baabe74234e5239d185a3743512b289ed87"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-structure-prediction",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "ce690d683f7197333e056757c2ca5bef1e8ea9d991ea520158f1389f47079dcb"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-structure-retrieval",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 2,
+      "package_tree_sha256": "dc3c02ee013d2eca99f3c14eef8751855da0bbf327f61cf90acb9c1c9d5a4483"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-therapeutic-design",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "4dc5905f10c3048c2089640e699fdc512c9d2f8eafbed57b26acc8cc06b7293a"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-proteomics-analysis",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 3,
+      "package_tree_sha256": "a53faf0ee30caf8706f793d9c7ae5ede8959fe58c0a6aaa2ad6a180d36df55ee"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-proteomics-data-retrieval",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "97aa63c9fa917c9a2eb122aff76ed0fb224a4d46e1fc8be8ece3af728dd14d72"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-rare-disease-diagnosis",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 6,
+      "package_tree_sha256": "776384d56144329e2501c94bd7889878cd35f7a9292ef10677c20d5b6a77e5e7"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-rare-disease-genomics",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "db96dda4b8ab52280f3b674ed740e9962ea74de3d6aaf9c8e71692e461681613"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-regulatory-genomics",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "a0a82a5b50efa51b294bc7f7e22d75a5e774c48bb56960ac3011c6de6d2f00ac"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-regulatory-variant-analysis",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "5eeab1c468e069983637d41ed593bddf7afcee9f73ca9c7e92d5c78d0795bc91"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-residue-functional-mechanism-interpretation",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "b80916d325a35ff15112b67e938d1061acd772c0f3fa07863aab064ec17fc60b"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-rnaseq-deseq2",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 20,
+      "package_tree_sha256": "530f29caf30a3c48262fb2d9faccf3e13e47d0eedc7b0c0a5f2f6c4c001ee3a4"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-sequence-analysis",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 4,
+      "package_tree_sha256": "f39c9edd8edd44d5dd422ca3c573b46d50eb89d36c784e8877e1c1173650597f"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-sequence-retrieval",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 2,
+      "package_tree_sha256": "a2e2b93780034ec4303d5256f37f59709b1b5ffd81b99e55606b15bfd0ed5e2c"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-single-cell",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 13,
+      "package_tree_sha256": "940664887facf36b6fa36e3f15d23a7901f5186dca98297068284abdee93a927"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-small-molecule-discovery",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "2154959d4a0b64020b23f514a61f1c2c9259f14e1a91b4a2a2466897e0f72b61"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-spatial-omics-analysis",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 4,
+      "package_tree_sha256": "9b793671ed0ce98f553c838a9370518f4f5d90d2cf1a91fee9dbd4df0ad44cfd"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-spatial-transcriptomics",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 2,
+      "package_tree_sha256": "8409f1a89383cbac4e8cc08e1dd6b089fc33f1525f13456f6a8be978b3606207"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-statistical-modeling",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 21,
+      "package_tree_sha256": "92244921378c8f4a0abf5afcbcfc4b866a14d1b48f315ac51bec9672c1da532d"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-stem-cell-organoid",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "f4981f6181a426bd52893d9a1abd7d4d61d7d0cbb3c8ec14fdbfa32da78d777d"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-structural-proteomics",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "dbd89fa58f691423deb7aad1a23ad45da25317014fb3cf8b097753815022f915"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-structural-variant-analysis",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 4,
+      "package_tree_sha256": "fe16de9dbabc862594a93bb7697b76ca57f757852ff1cf62463291843096963a"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-systems-biology",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "20057a5e8912e3d1b32528880d2444047f07a190710d9529f1de135356106e57"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-target-research",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "b2803d6d4857095fc81c8895d12b2db69662b140abc74a99fabc0a550234fb13"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-toxicology",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "37d9543dea2b1e9ad8432ca36d7aa8af40ee0469d26a4c0ab8a385eec381297b"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-vaccine-design",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 1,
+      "package_tree_sha256": "0a94487e30e83c1279465d64979a5bb0a341bc3ac4d3e0b886d5e13372f6002c"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-variant-analysis",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 13,
+      "package_tree_sha256": "61616eb509616d12d7abec8b0ef9e91d29a04a3af1732476ce4d3c4899637259"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-variant-functional-annotation",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "f0047d0b5750eb87e38412d2c22c22ac255a603618fd13e2b3d1da8e796ee9e2"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-variant-interpretation",
+      "changed": true,
+      "body_preserved": true,
+      "knowledge_files": 5,
+      "package_tree_sha256": "c2683111ac5669f9ab299b0a83cef84743af559cc222cada5c0162b3aeaf3b60"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-variant-predictor-dms-validation",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "9784c45c13465d69dd7a712202e9c432ae96eb7c06778d1d16576152c419514a"
+    },
+    {
+      "capability_id": "plugin-tooluniverse-variant-to-mechanism",
+      "changed": false,
+      "body_preserved": true,
+      "knowledge_files": 0,
+      "package_tree_sha256": "8d3720ce63375aff0f7df7e70fef40c4ba436c44812fb8e914c8661a1909f0d8"
+    }
+  ],
+  "direct_reviews": [
+    {
+      "capability_id": "plugin-tooluniverse-admet-prediction",
+      "obligations": [
+        {
+          "topic": "runtime dependency: ADMETAI local model needs the 'ml' extra",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-admet-prediction/SKILL.md",
+            "line": 35,
+            "quote": "uv pip install 'tooluniverse[ml]'",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "0bb7112aa5f8e0570e7f77af68d9ff088f29501b91e1053984a84e30c998bf4e"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-admet-prediction/SKILL.md",
+            "line": 42,
+            "quote": "**Hard constraint:** ResearchSpec never installs dependencies or probes the environment. Do not run `uv pip install 'tooluniverse[ml]'` or `tooluniverse-doctor` on the user's behalf; report a missing `ml` extra as an unmet prerequisite instead."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "fail-soft path when the extra is absent",
+          "judgement": "adapted",
+          "source": {
+            "path": "skills/tooluniverse-admet-prediction/SKILL.md",
+            "line": 40,
+            "quote": "`tooluniverse-doctor` to confirm which optional groups are installed.",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "0bb7112aa5f8e0570e7f77af68d9ff088f29501b91e1053984a84e30c998bf4e"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-admet-prediction/SKILL.md",
+            "line": 40,
+            "quote": "ADMETAI tools run a local model, so they need the `ml` extra installed in the environment the target Agent is already authorized to use."
+          },
+          "note": "Reviewed converter rule supplies the execution requirement; upstream tests and malformed frontmatter are not published."
+        },
+        {
+          "topic": "evidence/error-classification boundary: library warnings are not failures",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-admet-prediction/SKILL.md",
+            "line": 42,
+            "quote": "**Expected console noise — not errors.** The first ADMETAI call loads PyTorch",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "0bb7112aa5f8e0570e7f77af68d9ff088f29501b91e1053984a84e30c998bf4e"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-admet-prediction/SKILL.md",
+            "line": 47,
+            "quote": "**Expected console noise — not errors.** The first ADMETAI call loads PyTorch"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-adverse-event-detection",
+      "obligations": [
+        {
+          "topic": "output contract: FAERS detailed-report tools return a paged object, not a list",
+          "judgement": "adapted",
+          "source": {
+            "path": "skills/tooluniverse-adverse-event-detection/test_adverse_event_detection.py",
+            "line": 68,
+            "quote": "assert isinstance(result, dict), f\"Expected dict, got {type(result)}\"",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "6e471d6b83417939cc22c5e86bebabfd4d7d590c7bf7ed6e53a727e71c71031a"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-adverse-event-detection/SKILL.md",
+            "line": 17,
+            "quote": "Detailed searches return `reports`, `count`, `total_available`, and `truncated`; `count` is one page, never the total. Use `medicinalproduct` and at most 100 reports per request. For a reaction-specific search use `FAERS_search_reports_by_drug_and_reaction` with `reactionmeddrapt`; drug-only searches use `FAERS_search_adverse_event_reports`. Serious-only searches require `serious='Yes'`."
+          },
+          "note": "Reviewed converter rule supplies the execution requirement; upstream tests and malformed frontmatter are not published."
+        },
+        {
+          "topic": "page is not the answer: read total_available, not count/len",
+          "judgement": "adapted",
+          "source": {
+            "path": "skills/tooluniverse-adverse-event-detection/test_adverse_event_detection.py",
+            "line": 696,
+            "quote": "assert result[\"total_available\"] > len(reports), \"atorvastatin has many reports\"",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "6e471d6b83417939cc22c5e86bebabfd4d7d590c7bf7ed6e53a727e71c71031a"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-adverse-event-detection/SKILL.md",
+            "line": 17,
+            "quote": "Detailed searches return `reports`, `count`, `total_available`, and `truncated`; `count` is one page, never the total. Use `medicinalproduct` and at most 100 reports per request. For a reaction-specific search use `FAERS_search_reports_by_drug_and_reaction` with `reactionmeddrapt`; drug-only searches use `FAERS_search_adverse_event_reports`. Serious-only searches require `serious='Yes'`."
+          },
+          "note": "Reviewed converter rule supplies the execution requirement; upstream tests and malformed frontmatter are not published."
+        },
+        {
+          "topic": "parameter change: FAERS_search_serious_reports_by_drug gains `serious`",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-adverse-event-detection/TOOL_REFERENCE.md",
+            "line": 19,
+            "quote": "| `FAERS_search_serious_reports_by_drug` | `medicinalproduct` (REQUIRED), `serious`, `seriousnessdeath`, `seriousnesshospitalization`, `seriousnesslifethreatening`, `seriousnessdis",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "025cf6c587010bb7b5b144fd55058b23b20ba0d3c96f23aa21cf7add49a85330"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-adverse-event-detection/TOOL_REFERENCE.md",
+            "line": 19,
+            "quote": "| `FAERS_search_serious_reports_by_drug` | `medicinalproduct` (REQUIRED), `serious`, `seriousnessdeath`, `seriousnesshospitalization`, `seriousnesslifethreatening`, `seriousnessdisabling`, `limit` | Case reports. Despite the name it returns serious AND non-serious reports unless you pass `serious='Yes'` or one of the `seriousness*` criteria |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "name-resolution scope widened for the drug arm",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-adverse-event-detection/TOOL_REFERENCE.md",
+            "line": 19,
+            "quote": "| `FAERS_search_serious_reports_by_drug` | `medicinalproduct` (REQUIRED), `serious`, `seriousnessdeath`, `seriousnesshospitalization`, `seriousnesslifethreatening`, `seriousnessdis",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "025cf6c587010bb7b5b144fd55058b23b20ba0d3c96f23aa21cf7add49a85330"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-adverse-event-detection/TOOL_REFERENCE.md",
+            "line": 19,
+            "quote": "| `FAERS_search_serious_reports_by_drug` | `medicinalproduct` (REQUIRED), `serious`, `seriousnessdeath`, `seriousnesshospitalization`, `seriousnesslifethreatening`, `seriousnessdisabling`, `limit` | Case reports. Despite the name it returns serious AND non-serious reports unless you pass `serious='Yes'` or one of the `seriousness*` criteria |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-antibody-engineering",
+      "obligations": [
+        {
+          "topic": "step now specifies tools and required taxid",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-antibody-engineering/SKILL.md",
+            "line": 255,
+            "quote": "1. Assess codon optimization for CHO, identify rare codons -- `CodonUsage_get_optimal_codons(taxid=<Cricetulus griseus NCBI taxid>)` gives the CHO-preferred codon per amino acid to",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "ead1a6bd36cb47d98f8b94fcbbd88b9e46e6d4e170ba9b43a3a3e630f9d3dac9"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-antibody-engineering/SKILL.md",
+            "line": 263,
+            "quote": "1. Assess codon optimization for CHO, identify rare codons -- `CodonUsage_get_optimal_codons(taxid=<Cricetulus griseus NCBI taxid>)` gives the CHO-preferred codon per amino acid to compare against; resolve the taxid first if not already known rather than assuming one. `CodonUsage_get_table` (same taxid) additionally gives per-codon usage frequency, needed to flag which codons in the actual sequence are rare in CHO specifically -- human codon-usage tables (e.g. from tooluniverse-sequence-analysis) are the wrong reference here, rare-in-human is not the same set as rare-in-CHO"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "evidence boundary: species-correct reference table",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-antibody-engineering/SKILL.md",
+            "line": 255,
+            "quote": "1. Assess codon optimization for CHO, identify rare codons -- `CodonUsage_get_optimal_codons(taxid=<Cricetulus griseus NCBI taxid>)` gives the CHO-preferred codon per amino acid to",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "ead1a6bd36cb47d98f8b94fcbbd88b9e46e6d4e170ba9b43a3a3e630f9d3dac9"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-antibody-engineering/SKILL.md",
+            "line": 263,
+            "quote": "1. Assess codon optimization for CHO, identify rare codons -- `CodonUsage_get_optimal_codons(taxid=<Cricetulus griseus NCBI taxid>)` gives the CHO-preferred codon per amino acid to compare against; resolve the taxid first if not already known rather than assuming one. `CodonUsage_get_table` (same taxid) additionally gives per-codon usage frequency, needed to flag which codons in the actual sequence are rare in CHO specifically -- human codon-usage tables (e.g. from tooluniverse-sequence-analysis) are the wrong reference here, rare-in-human is not the same set as rare-in-CHO"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-binder-discovery",
+      "obligations": [
+        {
+          "topic": "new tool dependency: MolGlueDB for glue-degrader neosubstrates",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-binder-discovery/SKILL.md",
+            "line": 33,
+            "quote": "- **Protein-protein interfaces**: flat, large contact surface. Small molecules rarely compete effectively unless there is a \"hot spot\" cavity. Check whether any allosteric pockets ",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "b222927bb279ad6fbfcac06b30a5904001a267bf49ba27a1124a3c2c4fdf7890"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-binder-discovery/SKILL.md",
+            "line": 41,
+            "quote": "- **Protein-protein interfaces**: flat, large contact surface. Small molecules rarely compete effectively unless there is a \"hot spot\" cavity. Check whether any allosteric pockets exist before committing to small molecule strategy. Warn the user if no pocket is found. If the target is a known molecular-glue-degrader neosubstrate (or the goal is to induce a new PPI rather than block an existing pocket), check `MolGlueDB_search_compounds`/`MolGlueDB_get_compound` for known glue chemotypes before declaring the target undruggable by small molecules."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "IDR branch redirect narrowed",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-binder-discovery/SKILL.md",
+            "line": 34,
+            "quote": "- **Intrinsically disordered regions**: essentially no direct small molecule approach. Redirect to peptide strategies, or check `MolGlueDB_search_compounds` in case the target is a",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "b222927bb279ad6fbfcac06b30a5904001a267bf49ba27a1124a3c2c4fdf7890"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-binder-discovery/SKILL.md",
+            "line": 42,
+            "quote": "- **Intrinsically disordered regions**: essentially no direct small molecule approach. Redirect to peptide strategies, or check `MolGlueDB_search_compounds` in case the target is a documented molecular-glue neosubstrate."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "bioactivity priority order gains item 6",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-binder-discovery/SKILL.md",
+            "line": 145,
+            "quote": "6. `MolGlueDB_search_compounds` - molecular glue degraders specifically (small molecules that induce a novel protein-protein interaction rather than occupy a conventional pocket); ",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "b222927bb279ad6fbfcac06b30a5904001a267bf49ba27a1124a3c2c4fdf7890"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-binder-discovery/SKILL.md",
+            "line": 153,
+            "quote": "6. `MolGlueDB_search_compounds` - molecular glue degraders specifically (small molecules that induce a novel protein-protein interaction rather than occupy a conventional pocket); check this when the target has no tractable pocket but is a known or candidate neosubstrate"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-cell-line-profiling",
+      "obligations": [
+        {
+          "topic": "tool table: CLUE_get_cell_lines dropped",
+          "judgement": "removed",
+          "source": {
+            "path": "skills/tooluniverse-cell-line-profiling/SKILL.md",
+            "line": null,
+            "quote": null,
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "observation": "(absent in target)"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-cell-line-profiling/SKILL.md",
+            "line": 3,
+            "quote": "description: \"Cancer cell-line selection and profiling for experimental model choice. Cross-references DepMap, Cellosaurus, COSMIC, PharmacoDB to deliver identity verification, mutation/CNV profile, gene dependencies, drug sensitivities, and druggable targets. Use to answer 'which cell line should I use for studying gene X?' or 'is this cell line a good model for cancer Y?'. Outputs ranked recommendations with rationale, growth characteristics, and known pitfalls.\""
+          },
+          "note": "Disabled CLUE route removed; retained cell-line identification and dependency/evidence paths remain."
+        },
+        {
+          "topic": "workflow step 4C CLUE removed",
+          "judgement": "removed",
+          "source": {
+            "path": "skills/tooluniverse-cell-line-profiling/SKILL.md",
+            "line": null,
+            "quote": null,
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "observation": "(absent in target)"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-cell-line-profiling/SKILL.md",
+            "line": 3,
+            "quote": "description: \"Cancer cell-line selection and profiling for experimental model choice. Cross-references DepMap, Cellosaurus, COSMIC, PharmacoDB to deliver identity verification, mutation/CNV profile, gene dependencies, drug sensitivities, and druggable targets. Use to answer 'which cell line should I use for studying gene X?' or 'is this cell line a good model for cancer Y?'. Outputs ranked recommendations with rationale, growth characteristics, and known pitfalls.\""
+          },
+          "note": "Disabled CLUE route removed; retained cell-line identification and dependency/evidence paths remain."
+        },
+        {
+          "topic": "troubleshooting row for missing CLUE_API_KEY removed",
+          "judgement": "removed",
+          "source": {
+            "path": "skills/tooluniverse-cell-line-profiling/SKILL.md",
+            "line": null,
+            "quote": null,
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "observation": "(absent in target)"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-cell-line-profiling/SKILL.md",
+            "line": 3,
+            "quote": "description: \"Cancer cell-line selection and profiling for experimental model choice. Cross-references DepMap, Cellosaurus, COSMIC, PharmacoDB to deliver identity verification, mutation/CNV profile, gene dependencies, drug sensitivities, and druggable targets. Use to answer 'which cell line should I use for studying gene X?' or 'is this cell line a good model for cancer Y?'. Outputs ranked recommendations with rationale, growth characteristics, and known pitfalls.\""
+          },
+          "note": "Disabled CLUE route removed; retained cell-line identification and dependency/evidence paths remain."
+        },
+        {
+          "topic": "target correction confirmed; stale baseline artifacts enumerated",
+          "judgement": "removed",
+          "source": {
+            "path": "skills/tooluniverse-cell-line-profiling/SKILL.md",
+            "line": null,
+            "quote": null,
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "observation": "(absent in target 8ec5d4be; 0 'clue' matches)"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-cell-line-profiling/SKILL.md",
+            "line": 3,
+            "quote": "description: \"Cancer cell-line selection and profiling for experimental model choice. Cross-references DepMap, Cellosaurus, COSMIC, PharmacoDB to deliver identity verification, mutation/CNV profile, gene dependencies, drug sensitivities, and druggable targets. Use to answer 'which cell line should I use for studying gene X?' or 'is this cell line a good model for cancer Y?'. Outputs ranked recommendations with rationale, growth characteristics, and known pitfalls.\""
+          },
+          "note": "Disabled CLUE route removed; retained cell-line identification and dependency/evidence paths remain."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-comparative-genomics",
+      "obligations": [
+        {
+          "topic": "new pre-check tool for non-model organisms",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-comparative-genomics/SKILL.md",
+            "line": 96,
+            "quote": "For a species outside Ensembl's well-annotated set (most non-model organisms), check `GoaT_get_species(taxon=...)` first to confirm a reference genome assembly actually exists (and",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "9ed77036fe3d535e4650763125a95a3c3882f01b5d37481bc6a87d9f9486dbe8"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-comparative-genomics/SKILL.md",
+            "line": 104,
+            "quote": "For a species outside Ensembl's well-annotated set (most non-model organisms), check `GoaT_get_species(taxon=...)` first to confirm a reference genome assembly actually exists (and its status: draft/chromosome-level/annotated) before assuming gene-level lookups will work at all."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "evidence boundary: assembly status qualifies what a lookup can claim",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-comparative-genomics/SKILL.md",
+            "line": 96,
+            "quote": "For a species outside Ensembl's well-annotated set (most non-model organisms), check `GoaT_get_species(taxon=...)` first to confirm a reference genome assembly actually exists (and",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "9ed77036fe3d535e4650763125a95a3c3882f01b5d37481bc6a87d9f9486dbe8"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-comparative-genomics/SKILL.md",
+            "line": 104,
+            "quote": "For a species outside Ensembl's well-annotated set (most non-model organisms), check `GoaT_get_species(taxon=...)` first to confirm a reference genome assembly actually exists (and its status: draft/chromosome-level/annotated) before assuming gene-level lookups will work at all."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-dataset-discovery",
+      "obligations": [
+        {
+          "topic": "LMIC health-survey source added (DHS Program)",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-dataset-discovery/SKILL.md",
+            "line": 45,
+            "quote": "- Health surveys: CDC, NHANES (US; search by variable name, not topic keywords); DHS Program (`DHSProgram_search_indicators`/`_get_data`) for the international/LMIC equivalent -- f",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "234cf6dbd26ef2167c59fdce38d8aa2b6a05c727031cc3edcb001cd11af9e2c3"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-dataset-discovery/SKILL.md",
+            "line": 53,
+            "quote": "- Health surveys: CDC, NHANES (US; search by variable name, not topic keywords); DHS Program (`DHSProgram_search_indicators`/`_get_data`) for the international/LMIC equivalent -- fertility, maternal/child mortality, nutrition, immunization, HIV indicators across national surveys, filterable by country and year"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "open genomics archives extended (DDBJ, GSA)",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-dataset-discovery/SKILL.md",
+            "line": 46,
+            "quote": "- Genomics (open): SRA, ENA, ArrayExpress, GEO, and DDBJ (`DDBJ_search_entries`/`_get_entry`/`_get_cross_references`) -- the third INSDC archive alongside SRA/ENA, plus GEA/MetaboB",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "234cf6dbd26ef2167c59fdce38d8aa2b6a05c727031cc3edcb001cd11af9e2c3"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-dataset-discovery/SKILL.md",
+            "line": 54,
+            "quote": "- Genomics (open): SRA, ENA, ArrayExpress, GEO, and DDBJ (`DDBJ_search_entries`/`_get_entry`/`_get_cross_references`) -- the third INSDC archive alongside SRA/ENA, plus GEA/MetaboBank entries; also GSA (`GSA_get_accession`) for China's national genomics archive"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "controlled-access human genomics with permission boundary",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-dataset-discovery/SKILL.md",
+            "line": 47,
+            "quote": "- Genomics (controlled-access, human studies): dbGaP (`DbGaP_search_studies`/`_get_study`) and EGA (`EGA_get_study`/`_get_dataset`/`_get_study_datasets`) -- both require a separate",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "234cf6dbd26ef2167c59fdce38d8aa2b6a05c727031cc3edcb001cd11af9e2c3"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-dataset-discovery/SKILL.md",
+            "line": 55,
+            "quote": "- Genomics (controlled-access, human studies): dbGaP (`DbGaP_search_studies`/`_get_study`) and EGA (`EGA_get_study`/`_get_dataset`/`_get_study_datasets`) -- both require a separate data-access request process; these tools return study/dataset metadata, not the underlying genotype data itself"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-regulatory",
+      "obligations": [
+        {
+          "topic": "new tool dependency and routing for biologics/biosimilars",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-drug-regulatory/SKILL.md",
+            "line": 128,
+            "quote": "**Orange Book covers small-molecule drugs; biologics and biosimilars (e.g. \"is there a biosimilar of adalimumab\") are a different FDA list entirely** — use `FDAPurpleBook_search_pr",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "55481ba66a788172915f3fc74461c8b663ce128644a1d084ac3aa196b4f3d3b8"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-regulatory/SKILL.md",
+            "line": 139,
+            "quote": "**Orange Book covers small-molecule drugs; biologics and biosimilars (e.g. \"is there a biosimilar of adalimumab\") are a different FDA list entirely** — use `FDAPurpleBook_search_products` for those instead of Orange Book, which won't have them."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "existing Orange Book procedure retained",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-drug-regulatory/SKILL.md",
+            "line": 130,
+            "quote": "**FDA_OrangeBook_search_drug**: `brand_name` (string), `generic_name` (string), `application_number` (string), `limit` (int, default 10).",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "55481ba66a788172915f3fc74461c8b663ce128644a1d084ac3aa196b4f3d3b8"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-regulatory/SKILL.md",
+            "line": 141,
+            "quote": "**FDA_OrangeBook_search_drug**: `brand_name` (string), `generic_name` (string), `application_number` (string), `limit` (int, default 10)."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-drug-research",
+      "obligations": [
+        {
+          "topic": "output semantics: unique_PTs_returned is not a total",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-drug-research/TOOLS_REFERENCE.md",
+            "line": 270,
+            "quote": "| `FAERS_rollup_meddra_hierarchy` | Aggregate by Preferred Term level | Most-reported PTs with counts (up to 999). `unique_PTs_returned` is a row count, NOT a total — openFDA repor",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "ddb5142c0c084c311698b376af056e4efaca1aff49a38d4b66754aeebc8d6c1c"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-research/TOOLS_REFERENCE.md",
+            "line": 270,
+            "quote": "| `FAERS_rollup_meddra_hierarchy` | Aggregate by Preferred Term level | Most-reported PTs with counts (up to 999). `unique_PTs_returned` is a row count, NOT a total — openFDA reports no total; check `truncated` |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "报告中的事实须有逐项来源",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-drug-research/SKILL.md",
+            "line": 14,
+            "quote": "3. **Citation requirements** - Every fact must have inline source attribution",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "6cd5ca3945154953419b58c4bde67f7ffa71e67df972b2199e70d5ad20b5d689"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-drug-research/SKILL.md",
+            "line": 28,
+            "quote": "3. **Citation requirements** - Every fact must have inline source attribution"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-ecology-biodiversity",
+      "obligations": [
+        {
+          "topic": "new tool dependency: BOLD barcoding",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-ecology-biodiversity/SKILL.md",
+            "line": 68,
+            "quote": "| `BOLDSystems_search_by_taxon` / `_search_by_bin` / `_get_record` | DNA barcode-based species identification (COI barcoding); BIN clusters group specimens by barcode similarity, u",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "d4b8d0cf0debb876187fd8ac59ce9bbf3035ffdec67f9c2de22b702a85419476"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-ecology-biodiversity/SKILL.md",
+            "line": 76,
+            "quote": "| `BOLDSystems_search_by_taxon` / `_search_by_bin` / `_get_record` | DNA barcode-based species identification (COI barcoding); BIN clusters group specimens by barcode similarity, useful for cryptic-species questions GBIF's name-based search can't resolve |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "物种分类须查询数据库而非凭记忆",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-ecology-biodiversity/SKILL.md",
+            "line": 13,
+            "quote": "1. **LOOK UP DON'T GUESS** — Use `GBIF_search_species` to get taxonomy, `WoRMS_search_species` for marine organisms",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "d4b8d0cf0debb876187fd8ac59ce9bbf3035ffdec67f9c2de22b702a85419476"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-ecology-biodiversity/SKILL.md",
+            "line": 21,
+            "quote": "1. **LOOK UP DON'T GUESS** — Use `GBIF_search_species` to get taxonomy, `WoRMS_search_species` for marine organisms"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-epidemiological-analysis",
+      "obligations": [
+        {
+          "topic": "new tool dependency and population-scope rule",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-epidemiological-analysis/SKILL.md",
+            "line": 105,
+            "quote": "**International/LMIC population health**: for a PECO question outside the US, `DHSProgram_search_indicators`/`DHSProgram_get_data` covers the same kind of national survey indicator",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "3d3d3ff4badb64d29b7d1cd046a54c93f64cf19aac25b659209353e03b2b916c"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-epidemiological-analysis/SKILL.md",
+            "line": 113,
+            "quote": "**International/LMIC population health**: for a PECO question outside the US, `DHSProgram_search_indicators`/`DHSProgram_get_data` covers the same kind of national survey indicators (fertility, maternal/child mortality, nutrition, immunization, HIV) across many countries, filterable by country and survey year — the NHANES/BRFSS-style source when the population isn't the US."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "DHSProgram_search_indicators vs _get_data split",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-epidemiological-analysis/SKILL.md",
+            "line": 105,
+            "quote": "**International/LMIC population health**: for a PECO question outside the US, `DHSProgram_search_indicators`/`DHSProgram_get_data` covers the same kind of national survey indicator",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "3d3d3ff4badb64d29b7d1cd046a54c93f64cf19aac25b659209353e03b2b916c"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-epidemiological-analysis/SKILL.md",
+            "line": 113,
+            "quote": "**International/LMIC population health**: for a PECO question outside the US, `DHSProgram_search_indicators`/`DHSProgram_get_data` covers the same kind of national survey indicators (fertility, maternal/child mortality, nutrition, immunization, HIV) across many countries, filterable by country and survey year — the NHANES/BRFSS-style source when the population isn't the US."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-epigenomics",
+      "obligations": [
+        {
+          "topic": "new tool dependency: EWASCatalog lookup",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-epigenomics/SKILL.md",
+            "line": 154,
+            "quote": "**EWAS Catalog** (published epigenome-wide association study results, not raw methylation data): `EWASCatalog_search_by_cpg` (`cpg_id`, e.g. `\"cg00000029\"`) or `EWASCatalog_search_",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "84b15737c66e292862073f6df1e77f86bcd5b117d87d70e2567dc9876c5cdcb1"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-epigenomics/SKILL.md",
+            "line": 162,
+            "quote": "**EWAS Catalog** (published epigenome-wide association study results, not raw methylation data): `EWASCatalog_search_by_cpg` (`cpg_id`, e.g. `\"cg00000029\"`) or `EWASCatalog_search_by_gene` (`gene_symbol`) — use when the question is \"has this CpG/gene been associated with a trait in a published EWAS,\" not for processing methylation data you already have."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "scope boundary: published associations vs data processing",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-epigenomics/SKILL.md",
+            "line": 154,
+            "quote": "**EWAS Catalog** (published epigenome-wide association study results, not raw methylation data): `EWASCatalog_search_by_cpg` (`cpg_id`, e.g. `\"cg00000029\"`) or `EWASCatalog_search_",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "84b15737c66e292862073f6df1e77f86bcd5b117d87d70e2567dc9876c5cdcb1"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-epigenomics/SKILL.md",
+            "line": 162,
+            "quote": "**EWAS Catalog** (published epigenome-wide association study results, not raw methylation data): `EWASCatalog_search_by_cpg` (`cpg_id`, e.g. `\"cg00000029\"`) or `EWASCatalog_search_by_gene` (`gene_symbol`) — use when the question is \"has this CpG/gene been associated with a trait in a published EWAS,\" not for processing methylation data you already have."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-gene-enrichment",
+      "obligations": [
+        {
+          "topic": "field rename: entities_ratio to entities_coverage",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-gene-enrichment/references/tool_parameters.md",
+            "line": 227,
+            "quote": "- `entities_coverage`: `entities_found / entities_total` — the coverage figure",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "8bb4946e535f8bf923118e830b6bd3cf56d91c51a0cab0cc412deb534bb577aa"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/references/tool_parameters.md",
+            "line": 227,
+            "quote": "- `entities_coverage`: `entities_found / entities_total` — the coverage figure"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "new field pathway_size_fraction_of_reactome; entities_ratio is now its deprecated alias",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-gene-enrichment/references/ora_workflow.md",
+            "line": 275,
+            "quote": "#    entities_coverage, p_value, fdr, reactions_found, reactions_total,",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "e75b124fd72360686b30a0f56ba25394ada361db36cf1fb2da9416c0e4841f4d"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/references/ora_workflow.md",
+            "line": 275,
+            "quote": "#    entities_coverage, p_value, fdr, reactions_found, reactions_total,"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "ranking boundary: never rank by pathway size fraction",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-gene-enrichment/references/tool_parameters.md",
+            "line": 232,
+            "quote": "- `pathway_size_fraction_of_reactome`: pathway size divided by Reactome's entity universe for the species. Depends only on the pathway, not on the identifiers you submitted, so nev",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "8bb4946e535f8bf923118e830b6bd3cf56d91c51a0cab0cc412deb534bb577aa"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/references/tool_parameters.md",
+            "line": 232,
+            "quote": "- `pathway_size_fraction_of_reactome`: pathway size divided by Reactome's entity universe for the species. Depends only on the pathway, not on the identifiers you submitted, so never rank by it. Deprecated alias `entities_ratio` carries the same value — despite its name it is not found/total"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-literature-deep-research",
+      "obligations": [
+        {
+          "topic": "new tool dependency: Consensus_search_papers (triage only)",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-literature-deep-research/SKILL.md",
+            "line": 136,
+            "quote": "| Broad / hard-to-find / OA | `Crossref_search_works`, `CORE_search_papers`, `DOAJ_search_articles`, `Fatcat_search_scholar`, `Consensus_search_papers` | DOI registry + OA aggregat",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "f5defe8a4752c34cf0dbdc8e53ed3b834d7ee53c95b9bd04c263dab44e1f819b"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-literature-deep-research/SKILL.md",
+            "line": 146,
+            "quote": "| Broad / hard-to-find / OA | `Crossref_search_works`, `CORE_search_papers`, `DOAJ_search_articles`, `Fatcat_search_scholar`, `Consensus_search_papers` | DOI registry + OA aggregators + Internet Archive Scholar; Consensus (220M+ papers) adds an AI takeaway + study-design metadata per paper -- useful for fast triage, not a substitute for reading the source |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "opt-in external service: Noodle MCP requires NOODLE_MCP_URL",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-literature-deep-research/SKILL.md",
+            "line": 119,
+            "quote": "**Step 2: Citation expansion**: `PubMed_get_cited_by`, `EuropePMC_get_citations/references`, `PubMed_get_related`, `SemanticScholar_get_recommendations`, `OpenCitations_get_citatio",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "f5defe8a4752c34cf0dbdc8e53ed3b834d7ee53c95b9bd04c263dab44e1f819b"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-literature-deep-research/SKILL.md",
+            "line": 129,
+            "quote": "**Step 2: Citation expansion**: `PubMed_get_cited_by`, `EuropePMC_get_citations/references`, `PubMed_get_related`, `SemanticScholar_get_recommendations`, `OpenCitations_get_citations`. If the opt-in Noodle MCP is connected (`noodle_*`, needs `NOODLE_MCP_URL`), its bounded citation/semantic graph traversal is another angle on the same PubMed corpus -- a discovery signal, not evidence of causality or validity, same caveat as the others."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "last-resort external web search with grade boundary",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-literature-deep-research/SKILL.md",
+            "line": 155,
+            "quote": "Last resort when every structured index above is empty (a brand-new preprint, a dataset page, a project site with no DOI): the opt-in `exa_*` tools (general neural web search, no k",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "f5defe8a4752c34cf0dbdc8e53ed3b834d7ee53c95b9bd04c263dab44e1f819b"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-literature-deep-research/SKILL.md",
+            "line": 165,
+            "quote": "Last resort when every structured index above is empty (a brand-new preprint, a dataset page, a project site with no DOI): the opt-in `exa_*` tools (general neural web search, no key needed for casual use) can still find it, but it's general internet retrieval, not a scientific database -- verify anything it surfaces against a real source before citing, don't grade it T1-T4 as if it were literature."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "tool inventory reference updated",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-literature-deep-research/SKILL.md",
+            "line": 197,
+            "quote": "- `TOOL_NAMES_REFERENCE.md` -- 130+ tools with parameters",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "f5defe8a4752c34cf0dbdc8e53ed3b834d7ee53c95b9bd04c263dab44e1f819b"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-literature-deep-research/SKILL.md",
+            "line": 207,
+            "quote": "- `TOOL_NAMES_REFERENCE.md` -- 130+ tools with parameters"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-molecular-cloning",
+      "obligations": [
+        {
+          "topic": "scope change: forward design plus reverse analysis",
+          "judgement": "adapted",
+          "source": {
+            "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
+            "line": 3,
+            "quote": "description: Molecular cloning, in both directions. DESIGN — Gibson Assembly (overlap design for seamless multi-fragment joining) and Golden Gate Assembly (Type IIS / BsaI / BbsI /",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "12b33f10d99db539b4d69f8c6f4b3f99f475d9a8a070afb876295666152b4613"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-molecular-cloning/SKILL.md",
+            "line": 3,
+            "quote": "description: \"Design Gibson and Golden Gate assemblies, simulate existing digestion and ligation reactions, and check restriction sites, overhang compatibility, domestication, sequence outcomes, and experimental validation limits.\""
+          },
+          "note": "Reviewed converter rule supplies the execution requirement; upstream tests and malformed frontmatter are not published."
+        },
+        {
+          "topic": "new tool: DNA_golden_gate_assemble; do not hand-write a simulator",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
+            "line": 66,
+            "quote": "## Working backwards — what does an existing assembly produce?",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "12b33f10d99db539b4d69f8c6f4b3f99f475d9a8a070afb876295666152b4613"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-molecular-cloning/SKILL.md",
+            "line": 74,
+            "quote": "## Working backwards — what does an existing assembly produce?"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "new tool dependency: REBASE for enzyme sites/isoschizomers",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
+            "line": 49,
+            "quote": "- **Domestication is mandatory.** The chosen enzyme's site (BsaI `GGTCTC`, BbsI `GAAGAC`) must NOT occur **inside** any part, or it will be cut internally. Remove internal sites by",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "12b33f10d99db539b4d69f8c6f4b3f99f475d9a8a070afb876295666152b4613"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-molecular-cloning/SKILL.md",
+            "line": 57,
+            "quote": "- **Domestication is mandatory.** The chosen enzyme's site (BsaI `GGTCTC`, BbsI `GAAGAC`) must NOT occur **inside** any part, or it will be cut internally. Remove internal sites by silent mutation before assembly — check every part. Don't rely on memorized recognition sites for a less common enzyme, or when a part's internal site can't be silently removed and you need an isoschizomer instead: `REBASE_get_enzyme` (site + methylation sensitivity) and `REBASE_list_isoschizomers` (alternative enzymes cutting the same site) are the authoritative lookup."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "limitations rewritten: reaction now simulated, efficiency not modelled",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
+            "line": 101,
+            "quote": "- Digestion and overhang-driven ligation are simulated faithfully (`DNA_virtual_digest`",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "12b33f10d99db539b4d69f8c6f4b3f99f475d9a8a070afb876295666152b4613"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-molecular-cloning/SKILL.md",
+            "line": 109,
+            "quote": "- Digestion and overhang-driven ligation are simulated faithfully (`DNA_virtual_digest`"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-multiomic-disease-characterization",
+      "obligations": [
+        {
+          "topic": "response example: entities_ratio to entities_coverage plus size fraction",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-multiomic-disease-characterization/response-formats.md",
+            "line": 76,
+            "quote": "\"entities_coverage\": 0.0638,",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "e8e3ba47e462eeedbba90066ca1aee5bc57e55453c130c128e67641157b89016"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-multiomic-disease-characterization/response-formats.md",
+            "line": 76,
+            "quote": "        \"entities_coverage\": 0.0638,"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "tool-reference schema and ranking note",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-multiomic-disease-characterization/tool-reference.md",
+            "line": 221,
+            "quote": "- **NOTE**: rank by `fdr`/`p_value`. `entities_coverage` = found/total. `pathway_size_fraction_of_reactome` (deprecated alias `entities_ratio`) is pathway size over Reactome's enti",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "4794aa0b15476422f7227c6b85a4e49b5fb23fe04540363d2ad2e1938150b750"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-multiomic-disease-characterization/tool-reference.md",
+            "line": 221,
+            "quote": "- **NOTE**: rank by `fdr`/`p_value`. `entities_coverage` = found/total. `pathway_size_fraction_of_reactome` (deprecated alias `entities_ratio`) is pathway size over Reactome's entity universe and is independent of the submitted genes — never rank by it"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-neuroscience",
+      "obligations": [
+        {
+          "topic": "new tool dependency: DANDI neurophysiology data",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-neuroscience/SKILL.md",
+            "line": 157,
+            "quote": "| `DANDI_search_datasets`/`DANDI_get_dataset`/`DANDI_list_assets` | Published neurophysiology data (NWB format): spikes, LFP, imaging, behavior | `query`; `dandiset_id` |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "a8a530083620d80bed41ac08be36871c400f72ce821f76686a12def91232d7b3"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-neuroscience/SKILL.md",
+            "line": 165,
+            "quote": "| `DANDI_search_datasets`/`DANDI_get_dataset`/`DANDI_list_assets` | Published neurophysiology data (NWB format): spikes, LFP, imaging, behavior | `query`; `dandiset_id` |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "existing C. elegans route preserved",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-neuroscience/SKILL.md",
+            "line": 181,
+            "quote": "For C. elegans neural circuit questions, ALWAYS use `WormBase_get_gene` to look up specific synapse and connectivity data. Do not guess neural connections from general knowledge.",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "a8a530083620d80bed41ac08be36871c400f72ce821f76686a12def91232d7b3"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-neuroscience/SKILL.md",
+            "line": 189,
+            "quote": "For C. elegans neural circuit questions, ALWAYS use `WormBase_get_gene` to look up specific synapse and connectivity data. Do not guess neural connections from general knowledge."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-phylogenetics",
+      "obligations": [
+        {
+          "topic": "Metric-to-alignment pairing for RCV-based metrics",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-phylogenetics/SKILL.md",
+            "line": 208,
+            "quote": "| **`treeness_over_rcv` / `rcv`** | **`.faa.mafft` (untrimmed)** |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "9053a867fe8b8d137262cfdabf5dd909f081f3d0d5811615afefe310f69bd2b2"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/SKILL.md",
+            "line": 230,
+            "quote": "| **`treeness_over_rcv` / `rcv`** | **`.faa.mafft` (untrimmed)** |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Never loop PhyKIT per file; use phykit_batch_analysis",
+          "judgement": "adapted",
+          "source": {
+            "path": "skills/tooluniverse-phylogenetics/SKILL.md",
+            "line": 388,
+            "quote": "**The batch tool is parallel: ~250 trees finish in about 35 seconds.** A per-tree",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "9053a867fe8b8d137262cfdabf5dd909f081f3d0d5811615afefe310f69bd2b2"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/SKILL.md",
+            "line": 19,
+            "quote": "- `saturation` — the returned value is PhyKIT's second printed column (`1 - slope`); the first column is the slope. Do not report the slope as saturation."
+          },
+          "note": "Reviewed converter rule supplies the execution requirement; upstream tests and malformed frontmatter are not published."
+        },
+        {
+          "topic": "PhyKIT multi-column output; state which column was read",
+          "judgement": "adapted",
+          "source": {
+            "path": "skills/tooluniverse-phylogenetics/SKILL.md",
+            "line": 414,
+            "quote": "### PhyKIT column conventions — take the right one",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "9053a867fe8b8d137262cfdabf5dd909f081f3d0d5811615afefe310f69bd2b2"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/SKILL.md",
+            "line": 19,
+            "quote": "- `saturation` — the returned value is PhyKIT's second printed column (`1 - slope`); the first column is the slope. Do not report the slope as saturation."
+          },
+          "note": "Reviewed converter rule supplies the execution requirement; upstream tests and malformed frontmatter are not published."
+        },
+        {
+          "topic": "Batch function set and treeness_over_rcv alias",
+          "judgement": "adapted",
+          "source": {
+            "path": "skills/tooluniverse-phylogenetics/SKILL.md",
+            "line": 396,
+            "quote": "`treeness_over_rcv` (alias `toverr`). `dvmc` and `long_branch_score` are",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "9053a867fe8b8d137262cfdabf5dd909f081f3d0d5811615afefe310f69bd2b2"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/SKILL.md",
+            "line": 19,
+            "quote": "- `saturation` — the returned value is PhyKIT's second printed column (`1 - slope`); the first column is the slope. Do not report the slope as saturation."
+          },
+          "note": "Reviewed converter rule supplies the execution requirement; upstream tests and malformed frontmatter are not published."
+        },
+        {
+          "topic": "Gap percentage means gapped alignment columns, not gapped residues",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-phylogenetics/SKILL.md",
+            "line": 235,
+            "quote": "**Gap percentage** in these questions means the fraction of alignment",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "9053a867fe8b8d137262cfdabf5dd909f081f3d0d5811615afefe310f69bd2b2"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-phylogenetics/SKILL.md",
+            "line": 257,
+            "quote": "**Gap percentage** in these questions means the fraction of alignment"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-plant-genomics",
+      "obligations": [
+        {
+          "topic": "Plant gene expression source added",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-plant-genomics/SKILL.md",
+            "line": 50,
+            "quote": "| `BAR_get_gene_info` / `BAR_get_rnaseq_expression` | Plant gene expression (RNA-seq) — the expression-data source this skill was otherwise missing |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "5199cd2624668d53d642fd8c810785b1571926d92104294e6620a14aed9a79fd"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-plant-genomics/SKILL.md",
+            "line": 58,
+            "quote": "| `BAR_get_gene_info` / `BAR_get_rnaseq_expression` | Plant gene expression (RNA-seq) — the expression-data source this skill was otherwise missing |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Plant ontology tools added",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-plant-genomics/SKILL.md",
+            "line": 51,
+            "quote": "| `Planteome_search_terms` / `Planteome_get_term` / `Planteome_search_annotations` | Plant ontology (trait, structure, growth-stage terms) and gene-to-term annotations, GO-style bu",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "5199cd2624668d53d642fd8c810785b1571926d92104294e6620a14aed9a79fd"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-plant-genomics/SKILL.md",
+            "line": 59,
+            "quote": "| `Planteome_search_terms` / `Planteome_get_term` / `Planteome_search_annotations` | Plant ontology (trait, structure, growth-stage terms) and gene-to-term annotations, GO-style but plant-specific |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Existing keyless tool map preserved",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-plant-genomics/SKILL.md",
+            "line": 52,
+            "quote": "| `kegg_search_pathway` | Search KEGG pathways (use plant organism codes: ath, osa, zma) |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "5199cd2624668d53d642fd8c810785b1571926d92104294e6620a14aed9a79fd"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-plant-genomics/SKILL.md",
+            "line": 60,
+            "quote": "| `kegg_search_pathway` | Search KEGG pathways (use plant organism codes: ath, osa, zma) |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-precision-oncology",
+      "obligations": [
+        {
+          "topic": "Drug-mechanism tool rename and parameter change",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-precision-oncology/TOOLS_REFERENCE.md",
+            "line": 318,
+            "quote": "| `ChEMBL_get_drug_mechanisms` | Drug MOA | `drug_chembl_id` |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "6cec2b4cc60cce928b69fdd0b18c22a106e3859f9f6933363a56c5cbece6f860"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-oncology/TOOLS_REFERENCE.md",
+            "line": 318,
+            "quote": "| `ChEMBL_get_drug_mechanisms` | Drug MOA | `drug_chembl_id` |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Treatment query order step 3",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-precision-oncology/API_USAGE_PATTERNS.md",
+            "line": 345,
+            "quote": "3. `ChEMBL_get_drug_mechanisms` -> Mechanism",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "70c5591034a14d7e66d3dabcf0b9138be4f742d5f1b59f7b693c5c0446cdb852"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-oncology/API_USAGE_PATTERNS.md",
+            "line": 345,
+            "quote": "3. `ChEMBL_get_drug_mechanisms` -> Mechanism"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Neighbouring ChEMBL target-activity contract preserved",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-precision-oncology/TOOLS_REFERENCE.md",
+            "line": 319,
+            "quote": "| `ChEMBL_get_target_activities` | Bioactivity data | `target_chembl_id` |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "6cec2b4cc60cce928b69fdd0b18c22a106e3859f9f6933363a56c5cbece6f860"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-precision-oncology/TOOLS_REFERENCE.md",
+            "line": 319,
+            "quote": "| `ChEMBL_get_target_activities` | Bioactivity data | `target_chembl_id` |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-product-safety-surveillance",
+      "obligations": [
+        {
+          "topic": "Device UDI, classification and PMA tools added",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
+            "line": 71,
+            "quote": "| Device | Premarket Approval (PMA, Class 3 devices) | `OpenFDADevice_search_pma` | -- |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "852b0f8849e36e3373450d6f11b24d919ebdaccb1692a5c05e422d8b38f6a281"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-product-safety-surveillance/SKILL.md",
+            "line": 68,
+            "quote": "| Device | Premarket Approval (PMA, Class 3 devices) | `OpenFDADevice_search_pma` | -- |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Duplicate wrapper families must not both be called",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
+            "line": 82,
+            "quote": "**Note**: `OpenFDADevice_search_recalls`/`_search_adverse_events`/`_search_510k` return the same underlying openFDA data as `OpenFDA_search_device_recalls`/`_device_adverse_events`",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "852b0f8849e36e3373450d6f11b24d919ebdaccb1692a5c05e422d8b38f6a281"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-product-safety-surveillance/SKILL.md",
+            "line": 79,
+            "quote": "**Note**: `OpenFDADevice_search_recalls`/`_search_adverse_events`/`_search_510k` return the same underlying openFDA data as `OpenFDA_search_device_recalls`/`_device_adverse_events`/`_device_510k` above (two independently-added wrappers over the same endpoints) — either works, no need to call both. Use whichever is already in your loaded toolset; the `OpenFDADevice_*` family additionally has the three UDI/classification/PMA tools with no equivalent in the other family."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Keyless retrieval boundary preserved",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
+            "line": 69,
+            "quote": "| Device | Unique Device Identifier (UDI) lookup | `OpenFDADevice_search_udi` | -- |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "852b0f8849e36e3373450d6f11b24d919ebdaccb1692a5c05e422d8b38f6a281"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-product-safety-surveillance/SKILL.md",
+            "line": 66,
+            "quote": "| Device | Unique Device Identifier (UDI) lookup | `OpenFDADevice_search_udi` | -- |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-interactions",
+      "obligations": [
+        {
+          "topic": "SASBDB structural-analysis tool inventory collapses from five to two",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-protein-interactions/DOMAIN_ANALYSIS.md",
+            "line": 180,
+            "quote": "2. `SASBDB_get_entry` - Get entry metadata, experimental conditions, publication info, and data file URLs (one call covers structure/scattering data access — there is no separate d",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "be2031e6bf1bab474bb4b8746aa1a5d67ca84b76fe95f862222e66ae4537026e"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-interactions/DOMAIN_ANALYSIS.md",
+            "line": 180,
+            "quote": "2. `SASBDB_get_entry` - Get entry metadata, experimental conditions, publication info, and data file URLs (one call covers structure/scattering data access — there is no separate download tool)"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "SASBDB search entry description",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-protein-interactions/DOMAIN_ANALYSIS.md",
+            "line": 179,
+            "quote": "1. `SASBDB_search_entries` - Find structural data (by molecular type, or list all entries)",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "be2031e6bf1bab474bb4b8746aa1a5d67ca84b76fe95f862222e66ae4537026e"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-interactions/DOMAIN_ANALYSIS.md",
+            "line": 179,
+            "quote": "1. `SASBDB_search_entries` - Find structural data (by molecular type, or list all entries)"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Surrounding SAXS/SANS section otherwise unchanged",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-protein-interactions/DOMAIN_ANALYSIS.md",
+            "line": 176,
+            "quote": "- **API**: Public REST API",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "be2031e6bf1bab474bb4b8746aa1a5d67ca84b76fe95f862222e66ae4537026e"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-interactions/DOMAIN_ANALYSIS.md",
+            "line": 176,
+            "quote": "- **API**: Public REST API"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-protein-structure-prediction",
+      "obligations": [
+        {
+          "topic": "Boltz complex and ligand-binding path with consent and cost boundary",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-protein-structure-prediction/SKILL.md",
+            "line": 200,
+            "quote": "ESMFold and standard AlphaFold (above) predict single chains only. When the question is specifically about a **complex** -- multi-chain assembly, or protein-ligand binding -- the o",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "205ff6fc16dfa75a747162b5f0f6803b7600f8fd1b1fd1e1ccdcf4133f4e48cd"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-structure-prediction/SKILL.md",
+            "line": 210,
+            "quote": "ESMFold and standard AlphaFold (above) predict single chains only. When the question is specifically about a **complex** -- multi-chain assembly, or protein-ligand binding -- the official Boltz API (`Boltz_*` tools) covers that gap, but it's operationally different from everything else in this skill: it requires `BOLTZ_API_KEY`, it's a **paid**, asynchronous job (submit, poll, retrieve), not a free synchronous call."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Complex prediction no longer described as unavailable",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-protein-structure-prediction/SKILL.md",
+            "line": 349,
+            "quote": "- **Single-chain only (ESMFold/AlphaFold)**: both predict monomers; for a multi-chain complex or protein-ligand binding, see the Boltz section above -- paid, not a free default",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "205ff6fc16dfa75a747162b5f0f6803b7600f8fd1b1fd1e1ccdcf4133f4e48cd"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-structure-prediction/SKILL.md",
+            "line": 359,
+            "quote": "- **Single-chain only (ESMFold/AlphaFold)**: both predict monomers; for a multi-chain complex or protein-ligand binding, see the Boltz section above -- paid, not a free default"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Databases-integrated table gains a paid entry",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-protein-structure-prediction/SKILL.md",
+            "line": 342,
+            "quote": "| **Boltz API** (paid, `BOLTZ_API_KEY`) | Multi-chain complexes, protein-ligand binding | Async job; estimate cost first (see dedicated section above) |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "205ff6fc16dfa75a747162b5f0f6803b7600f8fd1b1fd1e1ccdcf4133f4e48cd"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-structure-prediction/SKILL.md",
+            "line": 352,
+            "quote": "| **Boltz API** (paid, `BOLTZ_API_KEY`) | Multi-chain complexes, protein-ligand binding | Async job; estimate cost first (see dedicated section above) |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Free synchronous monomer default preserved",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-protein-structure-prediction/SKILL.md",
+            "line": 194,
+            "quote": "- If AlphaFold confidence is very high (mean pLDDT > 85): recommend using AlphaFold as primary reference",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "205ff6fc16dfa75a747162b5f0f6803b7600f8fd1b1fd1e1ccdcf4133f4e48cd"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-protein-structure-prediction/SKILL.md",
+            "line": 204,
+            "quote": "- If AlphaFold confidence is very high (mean pLDDT > 85): recommend using AlphaFold as primary reference"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-rare-disease-diagnosis",
+      "obligations": [
+        {
+          "topic": "STRING fallback tool rename",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-rare-disease-diagnosis/TOOLS_REFERENCE.md",
+            "line": 751,
+            "quote": "| `intact_search_interactions` | `STRING_get_interaction_partners` | Literature search |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "091f814e1bc5aae0bebaf20f8dab86c472c5af2d0a35841a92c3485ad57b16e9"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rare-disease-diagnosis/TOOLS_REFERENCE.md",
+            "line": 751,
+            "quote": "| `intact_search_interactions` | `STRING_get_interaction_partners` | Literature search |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Variant-annotation fallback table preserved",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-rare-disease-diagnosis/TOOLS_REFERENCE.md",
+            "line": 753,
+            "quote": "### Variant Annotation",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "091f814e1bc5aae0bebaf20f8dab86c472c5af2d0a35841a92c3485ad57b16e9"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rare-disease-diagnosis/TOOLS_REFERENCE.md",
+            "line": 753,
+            "quote": "### Variant Annotation"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-rare-disease-genomics",
+      "obligations": [
+        {
+          "topic": "Deep intronic variant caveat with cross-skill referral",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-rare-disease-genomics/SKILL.md",
+            "line": 42,
+            "quote": "- Synonymous / intronic: usually benign unless at splice junction -- but \"usually\" is doing real work: a *deep* intronic variant can still be pathogenic by creating a cryptic splic",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "374cdb7263dcd051f7186048968818e467ae2ab37fa9318f6f16b7a8afef2360"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rare-disease-genomics/SKILL.md",
+            "line": 47,
+            "quote": "   - Synonymous / intronic: usually benign unless at splice junction -- but \"usually\" is doing real work: a *deep* intronic variant can still be pathogenic by creating a cryptic splice site far from the canonical boundary, which consequence filtering alone won't flag. If a deep intronic or otherwise unannotated variant survives Steps 1-2 (rare, correct inheritance, phenotype match) despite a bland consequence label, don't dismiss it yet -- see `tooluniverse-regulatory-variant-analysis` for a direct sequence-based check on whether it actually disrupts splicing, expression, or another regulatory readout."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Orphadata versus Orphanet tool-family choice",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-rare-disease-genomics/SKILL.md",
+            "line": 106,
+            "quote": "**Note on `Orphadata_*` tools**: a separate, smaller tool family (`Orphadata_get_disorder`/`_search_by_name`/`_get_epidemiology`/`_get_phenotypes`) wraps the same underlying Orphan",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "374cdb7263dcd051f7186048968818e467ae2ab37fa9318f6f16b7a8afef2360"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rare-disease-genomics/SKILL.md",
+            "line": 111,
+            "quote": "**Note on `Orphadata_*` tools**: a separate, smaller tool family (`Orphadata_get_disorder`/`_search_by_name`/`_get_epidemiology`/`_get_phenotypes`) wraps the same underlying Orphanet data with substantial overlap with the `Orphanet_*` family above. `Orphanet_*` is more complete (10 tools vs. 4, including gene associations, classification, and natural history that Orphadata doesn't have) -- use it as the default. Reach for `Orphadata_get_disorder` specifically only when you need its cross-references to MeSH/UMLS/MedDRA, which `Orphanet_get_icd_mapping` doesn't cover (it maps to ICD-10/ICD-11/OMIM/SNOMED-CT instead)."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Consequence-prioritization hierarchy preserved",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-rare-disease-genomics/SKILL.md",
+            "line": 40,
+            "quote": "- Loss-of-function (frameshift, nonsense, splice-site): strongest candidates",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "374cdb7263dcd051f7186048968818e467ae2ab37fa9318f6f16b7a8afef2360"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-rare-disease-genomics/SKILL.md",
+            "line": 45,
+            "quote": "   - Loss-of-function (frameshift, nonsense, splice-site): strongest candidates"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-regulatory-genomics",
+      "obligations": [
+        {
+          "topic": "AlphaGenome Atlas and ISM operations added",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-regulatory-genomics/SKILL.md",
+            "line": 78,
+            "quote": "| `AlphaGenome_predict_interval` / `AlphaGenome_score_variant` / `AlphaGenome_score_ism_variants` | profile region / score variant / saturation-mutagenesis scan | RNA-seq, ATAC, CA",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "0038790fcfd74c0743842b0bd656a9a0d225d60912fd14ad51eeefcd87d11458"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-regulatory-genomics/SKILL.md",
+            "line": 88,
+            "quote": "| `AlphaGenome_predict_interval` / `AlphaGenome_score_variant` / `AlphaGenome_score_ism_variants` | profile region / score variant / saturation-mutagenesis scan | RNA-seq, ATAC, CAGE, splice tracks (frontier accuracy, single-base); ISM ranks every substitution in a ≤500 bp window by effect — good for \"which base in this element matters\" | up to 1 Mb (ISM window ≤500 bp) | hosted API — `ALPHA_GENOME_API_KEY` |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Opt-in remote provider gi_*",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-regulatory-genomics/SKILL.md",
+            "line": 83,
+            "quote": "| `gi_*` (opt-in, `GENOMIC_INTELLIGENCE_MCP_URL`) | profile (6 tasks) + composite find-genes-then-predict | promoter, splice sites, enhancer activity, chromatin state, expression, ",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "0038790fcfd74c0743842b0bd656a9a0d225d60912fd14ad51eeefcd87d11458"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-regulatory-genomics/SKILL.md",
+            "line": 93,
+            "quote": "| `gi_*` (opt-in, `GENOMIC_INTELLIGENCE_MCP_URL`) | profile (6 tasks) + composite find-genes-then-predict | promoter, splice sites, enhancer activity, chromatin state, expression, gene annotation | — | public demo server, shared rate-limited quota, no key |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Selection order prefers the precomputed Atlas read",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-regulatory-genomics/SKILL.md",
+            "line": 85,
+            "quote": "**Picking one:** for a known single-nucleotide variant, check `AlphaGenome_atlas_lookup_variant` (or `atlas_scan_interval` for a whole region) first — it's a precomputed database r",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "0038790fcfd74c0743842b0bd656a9a0d225d60912fd14ad51eeefcd87d11458"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-regulatory-genomics/SKILL.md",
+            "line": 95,
+            "quote": "**Picking one:** for a known single-nucleotide variant, check `AlphaGenome_atlas_lookup_variant` (or `atlas_scan_interval` for a whole region) first — it's a precomputed database read covering all ~9B possible human SNVs, far cheaper than a live call, and its AVI_SCORE already fuses AlphaGenome's regulatory signal with AlphaMissense's coding-impact model into one number. Fall back to the live `AlphaGenome_*` operations for indels, custom/synthetic sequences, or full per-track detail (`predict_variant`/`predict_sequence`/`score_interval` are also available for raw-track and no-variant use cases); `run_enformer_*` / `run_borzoi_*` are the published, self-hostable equivalents (Enformer for general regulation, Borzoi when expression/splicing is the question); `run_chrombpnet_*` when the question is specifically chromatin accessibility; `Evo2_score_variant` as a sequence-only check that also covers coding variants. Outputs are Δ (alt − ref) effect sizes, not calibrated probabilities (except AVI_SCORE, which is a unified impact score) — rank/calibrate against known variants. If no key/server is provisioned, fall back to the annotation tools above and say so."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Effect-size framing keeps the AVI_SCORE exception",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-regulatory-genomics/SKILL.md",
+            "line": 85,
+            "quote": "**Picking one:** for a known single-nucleotide variant, check `AlphaGenome_atlas_lookup_variant` (or `atlas_scan_interval` for a whole region) first — it's a precomputed database r",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "0038790fcfd74c0743842b0bd656a9a0d225d60912fd14ad51eeefcd87d11458"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-regulatory-genomics/SKILL.md",
+            "line": 95,
+            "quote": "**Picking one:** for a known single-nucleotide variant, check `AlphaGenome_atlas_lookup_variant` (or `atlas_scan_interval` for a whole region) first — it's a precomputed database read covering all ~9B possible human SNVs, far cheaper than a live call, and its AVI_SCORE already fuses AlphaGenome's regulatory signal with AlphaMissense's coding-impact model into one number. Fall back to the live `AlphaGenome_*` operations for indels, custom/synthetic sequences, or full per-track detail (`predict_variant`/`predict_sequence`/`score_interval` are also available for raw-track and no-variant use cases); `run_enformer_*` / `run_borzoi_*` are the published, self-hostable equivalents (Enformer for general regulation, Borzoi when expression/splicing is the question); `run_chrombpnet_*` when the question is specifically chromatin accessibility; `Evo2_score_variant` as a sequence-only check that also covers coding variants. Outputs are Δ (alt − ref) effect sizes, not calibrated probabilities (except AVI_SCORE, which is a unified impact score) — rank/calibrate against known variants. If no key/server is provisioned, fall back to the annotation tools above and say so."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-regulatory-variant-analysis",
+      "obligations": [
+        {
+          "topic": "Evidence model expands to five questions, including a mechanistic one",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+            "line": 38,
+            "quote": "When evaluating a non-coding variant, build evidence across five questions. The first four are annotation-based (what's already known to be at this position, in this population); t",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "74eb9fcc0315a7be5b3c2638cf521907094dc0d2de1232fdab4087edd9f2ce9d"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-regulatory-variant-analysis/SKILL.md",
+            "line": 48,
+            "quote": "When evaluating a non-coding variant, build evidence across five questions. The first four are annotation-based (what's already known to be at this position, in this population); the fifth is model-based (what the sequence itself predicts, whether or not anything is annotated there yet) — they answer different questions and should corroborate, not substitute for, each other."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "New key-gated phases 0.5 and 4.5 must not block the pipeline",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+            "line": 111,
+            "quote": "**Requires `ALPHA_GENOME_API_KEY`.** If it isn't configured, the AlphaGenome tools won't appear in your toolset at all — skip this phase and Phase 4.5 entirely and proceed with Pha",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "74eb9fcc0315a7be5b3c2638cf521907094dc0d2de1232fdab4087edd9f2ce9d"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-regulatory-variant-analysis/SKILL.md",
+            "line": 121,
+            "quote": "**Requires `ALPHA_GENOME_API_KEY`.** If it isn't configured, the AlphaGenome tools won't appear in your toolset at all — skip this phase and Phase 4.5 entirely and proceed with Phases 1-4, which are a complete, self-sufficient pipeline on their own (this is how the skill worked before AlphaGenome support existed, and nothing below depends on it having run)."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "New impact tier for sequence-model-supported, annotation-silent variants",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+            "line": 178,
+            "quote": "- **Sequence-model-supported, annotation-silent**: No GWAS/eQTL/ENCODE/RegulomeDB evidence, but Phase 4.5 shows a high AVI_SCORE and/or a clear multi-track mechanism (e.g., a creat",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "74eb9fcc0315a7be5b3c2638cf521907094dc0d2de1232fdab4087edd9f2ce9d"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-regulatory-variant-analysis/SKILL.md",
+            "line": 188,
+            "quote": "- **Sequence-model-supported, annotation-silent**: No GWAS/eQTL/ENCODE/RegulomeDB evidence, but Phase 4.5 shows a high AVI_SCORE and/or a clear multi-track mechanism (e.g., a created transcription-factor motif, a disrupted splice junction). Treat this as its own tier, not as \"no evidence\" — it means the variant is plausibly functional but too novel or too rare for existing databases to have caught up, not that nothing is happening. State the confidence honestly: this is a strong hypothesis from an independent, well-validated model, not the multi-source convergence of the tiers above."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Region caps for ISM and Atlas scanning",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+            "line": 285,
+            "quote": "- AlphaGenome/AVI_SCORE predictions are model estimates, not experimental measurements — they corroborate annotation evidence or generate a hypothesis worth validating, but a high ",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "74eb9fcc0315a7be5b3c2638cf521907094dc0d2de1232fdab4087edd9f2ce9d"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-regulatory-variant-analysis/SKILL.md",
+            "line": 295,
+            "quote": "- AlphaGenome/AVI_SCORE predictions are model estimates, not experimental measurements — they corroborate annotation evidence or generate a hypothesis worth validating, but a high score alone is not equivalent to a confirmed functional impact. `AlphaGenome_score_ism_variants` is capped at a 500 bp window and `AlphaGenome_atlas_scan_interval` at 10,000 bp per call — scope the region before calling either."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Cross-skill fallback to other sequence-prediction models",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+            "line": 167,
+            "quote": "AlphaGenome isn't the only sequence-prediction model in ToolUniverse, just the broadest and the one this phase defaults to. If it's unavailable (no key) or a specific case calls fo",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "74eb9fcc0315a7be5b3c2638cf521907094dc0d2de1232fdab4087edd9f2ce9d"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-regulatory-variant-analysis/SKILL.md",
+            "line": 177,
+            "quote": "AlphaGenome isn't the only sequence-prediction model in ToolUniverse, just the broadest and the one this phase defaults to. If it's unavailable (no key) or a specific case calls for something else — a published, self-hostable model instead of a hosted API, or a question specifically about chromatin accessibility rather than a broad multi-modality readout — see `tooluniverse-regulatory-genomics` for Enformer, Borzoi, ChromBPNet, and Evo 2, which cover the same kind of ground with different tradeoffs."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-sequence-analysis",
+      "obligations": [
+        {
+          "topic": "New EBI tools for alignment, translation and topology",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-sequence-analysis/SKILL.md",
+            "line": 151,
+            "quote": "**EBI_pairwise_align**: exactly two sequences (`algorithm='needle'` for global, `'water'` for local), returns percent identity/similarity/gaps and the alignment itself -- no existi",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "f7a04b056d6f96f17f5f6495a2ea63d005c6f9f22204bc9e70d80327b827f52b"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-sequence-analysis/SKILL.md",
+            "line": 159,
+            "quote": "**EBI_pairwise_align**: exactly two sequences (`algorithm='needle'` for global, `'water'` for local), returns percent identity/similarity/gaps and the alignment itself -- no existing tool in this skill does direct pairwise alignment."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Codon-usage script is human-only",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-sequence-analysis/SKILL.md",
+            "line": 264,
+            "quote": "Use this script for any question about the genetic code, codon degeneracy, amino acid chemistry, codon usage bias, or tRNA wobble pairing. All outputs are JSON. **Its codon-usage f",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "f7a04b056d6f96f17f5f6495a2ea63d005c6f9f22204bc9e70d80327b827f52b"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-sequence-analysis/SKILL.md",
+            "line": 272,
+            "quote": "Use this script for any question about the genetic code, codon degeneracy, amino acid chemistry, codon usage bias, or tRNA wobble pairing. All outputs are JSON. **Its codon-usage frequencies are human-only** (\"human codon usage %\") -- for any other organism (e.g. codon-optimizing for *E. coli*, yeast, or CHO expression), use `CodonUsage_get_table`/`CodonUsage_get_optimal_codons(taxid=...)` instead, which cover any NCBI-taxid organism."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Pfam annotation on a sequence without a UniProt accession",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-sequence-analysis/SKILL.md",
+            "line": 147,
+            "quote": "**Pfam_get_protein_annotations**: `accession` (UniProt ID). Returns Pfam domain hits with exact residue coordinates and E-values. For a raw sequence with no UniProt accession yet (",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "f7a04b056d6f96f17f5f6495a2ea63d005c6f9f22204bc9e70d80327b827f52b"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-sequence-analysis/SKILL.md",
+            "line": 155,
+            "quote": "**Pfam_get_protein_annotations**: `accession` (UniProt ID). Returns Pfam domain hits with exact residue coordinates and E-values. For a raw sequence with no UniProt accession yet (e.g. a novel or designed sequence), `EBI_scan_pfam_domains` runs the same Pfam scan directly on the sequence instead."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-spatial-transcriptomics",
+      "obligations": [
+        {
+          "topic": "H&E-only trigger with a local, key-free model and an evidence limit",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
+            "line": 18,
+            "quote": "- User has *only* an H&E histology image and no spatial assay at all -- `DeepSpotM_predict_gene_expression` (local model, no API/key) predicts spatial gene expression for a 224x224",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "58d25a09a93c1cf25d266bdacadff9b1e0ddbc7c47ff7a02f2ec80a91615baad"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-spatial-transcriptomics/SKILL.md",
+            "line": 26,
+            "quote": "- User has *only* an H&E histology image and no spatial assay at all -- `DeepSpotM_predict_gene_expression` (local model, no API/key) predicts spatial gene expression for a 224x224 H&E tile directly, a virtual readout when no real spatial data exists yet. Treat its output as a model prediction to guide follow-up (e.g. which region to actually assay), not a substitute for the platforms above when real spatial data is the goal."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Assay-platform triggers preserved",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
+            "line": 19,
+            "quote": "- Questions about tissue architecture or spatial organization",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "58d25a09a93c1cf25d266bdacadff9b1e0ddbc7c47ff7a02f2ec80a91615baad"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-spatial-transcriptomics/SKILL.md",
+            "line": 27,
+            "quote": "- Questions about tissue architecture or spatial organization"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-statistical-modeling",
+      "obligations": [
+        {
+          "topic": "FAERS reaction-count tool rename and grouping",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-statistical-modeling/TOOLS_REFERENCE.md",
+            "line": 80,
+            "quote": "| `FAERS_count_reactions_by_drug_event` | `medicinalproduct` | `[{term, count}]` (grouped by MedDRA Preferred Term) |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "922a701a59b00537d9a34b49f5abdfdf08e0cafeba0a2ab22a7a6de2d40e810a"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/TOOLS_REFERENCE.md",
+            "line": 80,
+            "quote": "| `FAERS_count_reactions_by_drug_event` | `medicinalproduct` | `[{term, count}]` (grouped by MedDRA Preferred Term) |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Disproportionality and stratification tools preserved",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-statistical-modeling/TOOLS_REFERENCE.md",
+            "line": 78,
+            "quote": "| `FAERS_calculate_disproportionality` | `drug_name`, `adverse_event` | `{metrics: {PRR, ROR, IC}, signal_detection}` |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "922a701a59b00537d9a34b49f5abdfdf08e0cafeba0a2ab22a7a6de2d40e810a"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-statistical-modeling/TOOLS_REFERENCE.md",
+            "line": 78,
+            "quote": "| `FAERS_calculate_disproportionality` | `drug_name`, `adverse_event` | `{metrics: {PRR, ROR, IC}, signal_detection}` |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-structural-proteomics",
+      "obligations": [
+        {
+          "topic": "SKEMPI ddG tools for interface mutations",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-structural-proteomics/SKILL.md",
+            "line": 16,
+            "quote": "- Protein-protein binding mutations (ddG): `SKEMPI_search_by_structure`/`SKEMPI_search_by_protein`/`SKEMPI_get_mutation` -- BindingDB's protein-protein equivalent, for interface-mu",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "4b3a164161a657d4f7308d5392ef1dbf1f63f5229c86aeaed43d08414974d7ea"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-structural-proteomics/SKILL.md",
+            "line": 24,
+            "quote": "- Protein-protein binding mutations (ddG): `SKEMPI_search_by_structure`/`SKEMPI_search_by_protein`/`SKEMPI_get_mutation` -- BindingDB's protein-protein equivalent, for interface-mutation affinity effects rather than small-molecule ligands"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Existing structure and confidence sources preserved",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-structural-proteomics/SKILL.md",
+            "line": 13,
+            "quote": "- PDB structures/resolutions: `PDBeSIFTS_get_best_structures` and `RCSBGraphQL_get_structure_summary`",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "4b3a164161a657d4f7308d5392ef1dbf1f63f5229c86aeaed43d08414974d7ea"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-structural-proteomics/SKILL.md",
+            "line": 21,
+            "quote": "- PDB structures/resolutions: `PDBeSIFTS_get_best_structures` and `RCSBGraphQL_get_structure_summary`"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-target-research",
+      "obligations": [
+        {
+          "topic": "Reactome_query_by_ids parameter contract tightened",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-target-research/REFERENCE.md",
+            "line": 479,
+            "quote": "| `Reactome_query_by_ids` | `ids` | ID query (no species/type filtering — filter results on `speciesName`/`schemaClass`) |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "934f62682cb8d310ef9d390f5ba172b68c4d55512ea6aca81a93991f097333d6"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-target-research/REFERENCE.md",
+            "line": 479,
+            "quote": "| `Reactome_query_by_ids` | `ids` | ID query (no species/type filtering — filter results on `speciesName`/`schemaClass`) |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Other Reactome endpoints preserved",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-target-research/REFERENCE.md",
+            "line": 478,
+            "quote": "| `Reactome_list_species` | - | All species |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "934f62682cb8d310ef9d390f5ba172b68c4d55512ea6aca81a93991f097333d6"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-target-research/REFERENCE.md",
+            "line": 478,
+            "quote": "| `Reactome_list_species` | - | All species |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-tooluniverse-variant-interpretation",
+      "obligations": [
+        {
+          "topic": "Opt-in Folklore MCP with a patient-data prohibition",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-variant-interpretation/SKILL.md",
+            "line": 69,
+            "quote": "Tools: `ClinVar_search_variants`, `gnomad_search_variants`, `gnomad_get_variant`, `OMIM_search`, `OMIM_get_entry`, `ClinGen_search_gene_validity`, `ClinGen_search_dosage_sensitivit",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "94b2d37a1b882e1f5630d0d134c28628d7864c397688b8c22fb30650266fdca8"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-interpretation/SKILL.md",
+            "line": 79,
+            "quote": "Tools: `ClinVar_search_variants`, `gnomad_search_variants`, `gnomad_get_variant`, `OMIM_search`, `OMIM_get_entry`, `ClinGen_search_gene_validity`, `ClinGen_search_dosage_sensitivity`, `ClinGen_search_actionability`, `COSMIC_search_mutations`, `COSMIC_get_mutations_by_gene`, `DisGeNET_search_gene`, `DisGeNET_get_vda`, `SpliceAI_predict_splice`, `SpliceAI_get_max_delta`, `civic_get_variants_by_gene`, `civic_search_evidence_items`, `civic_search_assertions`. If the opt-in Folklore MCP is connected (`folklore_*`, needs `FOLKLORE_MCP_URL`), it adds public GRCh38 germline variant evidence with source-linked literature — accepts no patient/phenotype/family data, and like everything above, its output requires qualified professional review, not a diagnosis on its own."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "Atlas precomputed lookup preferred for known SNVs",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-variant-interpretation/SKILL.md",
+            "line": 100,
+            "quote": "**Which to pick:** for a known single-nucleotide variant, check `AlphaGenome_atlas_lookup_variant` first — it's a precomputed database lookup (much cheaper than a live call) coveri",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "94b2d37a1b882e1f5630d0d134c28628d7864c397688b8c22fb30650266fdca8"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-interpretation/SKILL.md",
+            "line": 110,
+            "quote": "**Which to pick:** for a known single-nucleotide variant, check `AlphaGenome_atlas_lookup_variant` first — it's a precomputed database lookup (much cheaper than a live call) covering all ~9B possible human SNVs. For indels, or when you need the full per-track breakdown or a custom sequence, fall back to `AlphaGenome_score_variant` (broadest live readout, longest context, frontier accuracy); `run_enformer_variant_effect` / `run_borzoi_variant_effect` are the named, self-hostable equivalents (Enformer for general regulation, Borzoi when expression/splicing is the question); `run_chrombpnet_variant_effect` when the hypothesis is specifically chromatin accessibility; `Evo2_score_variant` as a sequence-only check that also works on coding variants. If no key/server is provisioned, fall back to the ChIPAtlas/ENCODE annotation above and note the predictive gap rather than guessing."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "AVI_SCORE exception to the not-a-probability rule",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-variant-interpretation/SKILL.md",
+            "line": 98,
+            "quote": "**Reading the score:** most of these return Δ (alt − ref) effect sizes, *not* calibrated pathogenicity probabilities — a large predicted disruption in a tissue-relevant track is me",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "94b2d37a1b882e1f5630d0d134c28628d7864c397688b8c22fb30650266fdca8"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-interpretation/SKILL.md",
+            "line": 108,
+            "quote": "**Reading the score:** most of these return Δ (alt − ref) effect sizes, *not* calibrated pathogenicity probabilities — a large predicted disruption in a tissue-relevant track is mechanistic support (PS3_supporting / PP3) for a non-coding variant; near-zero across tracks supports BP4. Rank or calibrate against known regulatory variants rather than applying an absolute cutoff. `AlphaGenome_atlas_lookup_variant`'s AVI_SCORE is the exception — it's already a unified impact score (fusing AlphaGenome's regulatory signal with AlphaMissense's coding model), so it can be read more directly, but still corroborate rather than treat as a sole classifier."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "ClinGen tool renames",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-variant-interpretation/TOOLS_REFERENCE.md",
+            "line": 766,
+            "quote": "| `ClinGen_dosage_by_gene` | Dosage sensitivity | `gene` |",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "fd35a621dac541591a9a016193ee60f963385c3c5762af17e4f520bb79cff803"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-interpretation/TOOLS_REFERENCE.md",
+            "line": 766,
+            "quote": "| `ClinGen_dosage_by_gene` | Dosage sensitivity | `gene` |"
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        },
+        {
+          "topic": "AlphaGenome input contract for both operations",
+          "judgement": "preserved",
+          "source": {
+            "path": "skills/tooluniverse-variant-interpretation/TOOLS_REFERENCE.md",
+            "line": 629,
+            "quote": "**Inputs**: `AlphaGenome_atlas_lookup_variant`/`AlphaGenome_score_variant` → `chromosome`,`position`,`reference_bases`,`alternate_bases` (Atlas additionally takes `scorers`, defaul",
+            "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+            "source_sha256": "fd35a621dac541591a9a016193ee60f963385c3c5762af17e4f520bb79cff803"
+          },
+          "target": {
+            "path": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-interpretation/TOOLS_REFERENCE.md",
+            "line": 629,
+            "quote": "**Inputs**: `AlphaGenome_atlas_lookup_variant`/`AlphaGenome_score_variant` → `chromosome`,`position`,`reference_bases`,`alternate_bases` (Atlas additionally takes `scorers`, default `[\"AVI_SCORE\"]`; score_variant takes `output_type`,`sequence_length` — indels only work on score_variant, Atlas is SNV-only). `Evo2_score_variant` → `sequence`+`position`+`alternate` (or `ref_sequence`/`alt_sequence`), optional `model` (`evo2-40b`/`evo2-7b`). The Enformer/Borzoi/ChromBPNet remote tools take the variant locus. Check `AlphaGenome_atlas_lookup_variant` first for a known SNV (cheap precomputed lookup) before reaching for the live `score_variant` call. See SKILL.md Phase 2.5 for selection guidance."
+          },
+          "note": "Reviewed upstream statement retained in the generated package."
+        }
+      ]
+    }
+  ],
+  "evidence_hashes": {
+    "upstream_delta": "7bcb2a25284ac816fc93e8dbe80622d23f86a8a549633b5eb407e07b32616f40",
+    "retained_review": "4e8303411f774ee1a1280dec3f7d0200535c41ae8842839185f8652c629af76d"
+  }
+}

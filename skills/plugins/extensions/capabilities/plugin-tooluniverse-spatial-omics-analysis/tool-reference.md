@@ -33,7 +33,7 @@ Critical parameter names and response formats. Referenced from SKILL.md.
 | Tool | Response Format | Key Fields |
 |------|----------------|------------|
 | `STRING_functional_enrichment` | `{status, data: [{category, term, description, p_value, fdr, inputGenes}]}` | Filter by FDR < 0.05 |
-| `ReactomeAnalysis_pathway_enrichment` | `{data: {pathways: [{pathway_id, name, p_value, fdr, entities_found, entities_total}]}}` | Top 20 returned |
+| `ReactomeAnalysis_pathway_enrichment` | `{data: {pathways: [{pathway_id, name, p_value, fdr, entities_found, entities_total, entities_coverage}]}}` | Top 20 returned |
 | `STRING_get_interaction_partners` | `{status, data: [{preferredName_A, preferredName_B, score}]}` | Score > 0.7 for high confidence |
 | `MyGene_query_genes` | `{hits: [{_id, symbol, name, ensembl: {gene}, entrezgene}]}` | Filter by exact symbol match |
 | `HPA_get_subcellular_location` | `{gene_name, main_locations: [], additional_locations: [], location_summary}` | Direct dict response |

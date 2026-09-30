@@ -36,7 +36,7 @@ vendor converter ──► vendor bundle/Skills ◄── source-neutral domain 
 - A **central assembler** validates all isolated vendor bundles against the source-neutral domain catalog and is the only writer of `skills/plugins/registry.json`.
 - The same Skill may be a direct member of several domains. Its bytes and global Skill ID remain unique.
 
-ToolUniverse v1.3.1 contributes 130 admitted Skills. Scientific Agent Skills
+ToolUniverse v1.5.4 contributes 130 admitted Skills. Scientific Agent Skills
 v2.70.0 contributes 56 reviewed, vendor-prefixed Skills after complete admission
 decisions for all 167 audit records and finding-level decisions for the retained
 42-entry manual-security catalog (historical targets plus current high/critical
@@ -86,9 +86,9 @@ Normal `plugin list`, direct `show` and `install`, JSON, status availability, ch
 
 Vendor converters are repo-local maintainer tools, not a public converter ABI. The ToolUniverse converter:
 
-- validates the pinned v1.3.1 submodule and complete 150-Skill audit;
-- admits 130 research Skills and excludes 20 setup, developer, router, SDK, and platform surfaces;
-- classifies all 223 explicit references as `required`, `related`, or `routing` with evidence;
+- validates the pinned v1.5.4 submodule and complete 185-Skill audit;
+- admits 130 research Skills and excludes 55 surfaces, including three business candidates awaiting separate admission;
+- classifies every audited candidate reference as `required`, `related`, or `routing` with evidence;
 - places only reviewed `required` edges in the dependency graph;
 - normalizes frontmatter and progressive disclosure, retains reviewed resources, and adds license, notice, compatibility, and authority guidance;
 - emits only the ToolUniverse vendor bundle, Skill tree, manifest, and report before invoking central assembly.

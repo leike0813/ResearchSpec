@@ -15,7 +15,7 @@ void test("ToolUniverse maintenance catalog maps 130 reviewed Skills to 130 exte
     extensions: Array<{ capability_id: string; raw_skill_id: string; execution_type: string; required_brief_fields: string[] }>;
   };
   assert.equal(catalog.vendor_id, "tooluniverse");
-  assert.equal(catalog.revision, "9b7ff91ddb45b567cac2fa8ea31b82851e877617");
+  assert.equal(catalog.revision, "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06");
   assert.equal(catalog.extensions.length, 130);
   assert.equal(catalog.extensions.filter((item) => item.execution_type === "mixed").length, 42);
   assert.equal(catalog.extensions.filter((item) => item.execution_type === "llm").length, 88);
@@ -32,10 +32,9 @@ void test("ToolUniverse maintenance catalog maps 130 reviewed Skills to 130 exte
 
 testVendorAnchor(ROOT, {
   "vendor": "tooluniverse",
-  "anchor": "v1.3.1",
-  "revision": "9b7ff91ddb45b567cac2fa8ea31b82851e877617",
+  "anchor": "v1.5.4-8ec5d4b",
+  "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
   "capabilities": 130,
-  "contentFiles": 7365,
   "extension": {
     "mixed_count": 42,
     "llm_count": 88

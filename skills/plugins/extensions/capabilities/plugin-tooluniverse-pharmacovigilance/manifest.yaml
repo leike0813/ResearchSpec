@@ -67,14 +67,14 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-tools-reference.md
     path: TOOLS_REFERENCE.md
-    content_hash: 5939c3b654716fc1ca66cd971aa8aebbb2bca214700b436e95668f48a3fcfd43
+    content_hash: bfc739cb98ba3557583a166144dd576f2ce6f79bdaf57627dc34f09c07b6f058
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/SKILL.md
-      sha256: 736df0c3ffa2a10efd63f7073a6928d64f92194d507ab1ce989247272b0fdcb8
+      sha256: a696594a568a81e8be23c7a485ccbec8ec530118a473181fe47005c836683cdb
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/CHECKLIST.md
       sha256: d6a7ad024110c4860be6d8bab8339cc0a547214a429f5891517dfbf33bae27ee
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/EXAMPLES.md
@@ -86,5 +86,5 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/SIGNAL_DETECTION.md
       sha256: 1b48206aaac055b16ac0d433d7d09b8a7aeee8434098c970fcbdb36d1c9864a2
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/TOOLS_REFERENCE.md
-      sha256: 5939c3b654716fc1ca66cd971aa8aebbb2bca214700b436e95668f48a3fcfd43
+      sha256: bfc739cb98ba3557583a166144dd576f2ce6f79bdaf57627dc34f09c07b6f058
 license: Apache-2.0

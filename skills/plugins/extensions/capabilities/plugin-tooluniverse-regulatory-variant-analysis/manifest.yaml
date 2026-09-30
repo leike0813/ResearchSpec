@@ -3,9 +3,11 @@ capability_id: plugin-tooluniverse-regulatory-variant-analysis
 title: Regulatory Variant Analysis Skill
 description: Non-coding/regulatory variant interpretation — GWAS association
   lookup, eQTL evidence (GTEx), chromatin state (ENCODE), regulatory variant
-  scoring (RegulomeDB, CADD), and TF-binding disruption. Use for non-coding GWAS
-  hit interpretation, eQTL-based gene assignment, and regulatory mechanism
-  reasoning. Distinct from coding-variant tools.
+  scoring (RegulomeDB, CADD), TF-binding disruption, and sequence-based
+  deep-learning prediction (AlphaGenome/AlphaGenome Atlas) for when annotation
+  databases are silent. Use for non-coding GWAS hit interpretation, eQTL-based
+  gene assignment, and regulatory mechanism reasoning. Distinct from
+  coding-variant tools.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -50,5 +52,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-regulatory-variant-analysis/SKILL.md
-      sha256: 66182c376ac4d35d7775a3eaf02892ae8056e790ff09b238b3de15a82456a215
+      sha256: 920e4a42696f6c78bbf2fbc26a47c0a2e5b40df938c617d83dd2d169b5f4d098
 license: Apache-2.0

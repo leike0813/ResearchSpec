@@ -17,8 +17,8 @@ description: Maintain the ToolUniverse plugin extension absorption path through 
 
 ## 输入与前置条件
 
-- 已 pin 的 `vendor/tooluniverse` 子模块（当前锚点：`v1.3.1` @
-  `9b7ff91ddb45b567cac2fa8ea31b82851e877617`）。
+- 已 pin 的 `vendor/tooluniverse` 子模块；版本、revision、审计路径和当前锚点从
+  `audits/tooluniverse/catalog.json` 读取。
 - 项目依赖安装完成（`pnpm install`）。
 - 子模块必须处于预期 commit 且无脏文件。
 - 生成链路可用：`pnpm check`、`pnpm lint`、`pnpm test`。
@@ -34,7 +34,7 @@ description: Maintain the ToolUniverse plugin extension absorption path through 
 
 ## 锚点命名
 
-`<release>-<short_revision>`，例如 `v1.3.1`。目录：
+`<release>-<short_revision>`，例如 `v1.5.4-8ec5d4b`。目录：
 
 ```
 audits/tooluniverse/<anchor>/
@@ -54,7 +54,7 @@ audits/tooluniverse/<anchor>/
    - `git -C vendor/tooluniverse describe --tags --always`
    - `git -C vendor/tooluniverse rev-parse HEAD`
 2. 确定分析范围：
-   - 首锚点：全部 150 个 top-level Skills、130 个 candidate/admitted Skills、223 条
+   - 首锚点：全部 top-level Skills、130 个 candidate/admitted Skills、所有
      cross-skill edges 与 `skill-audit.json` 的 admission/依赖决策。
    - 增量：`git -C vendor/tooluniverse diff <old>..<new> --stat`，单独检查 130 个 vendor-bundle `SKILL.md`、348 个 reviewed 资源文件
      （scripts/references/examples/templates/data）与审计事实。
@@ -62,12 +62,24 @@ audits/tooluniverse/<anchor>/
    - raw Skill 程序变化 -> 对应 extension `SKILL.md` 与 required brief fields。
    - 工具/引用变化 -> knowledge 路径 byte-for-byte 重同步 + 新 hash + registry hash。
    - 上游安装器、示例、私有 tooling 与未经审查的命令变化 -> 仅记录，不得进入 extension package。
+   - 工具声明、实现或默认启用配置变化 -> 搜索全部已准入调用者，核对参数、返回值、
+     分页、停用接口及证据含义；文件未变的调用者也可能需要适配。
+   - 新增 Skill -> 完整记录准入/排除事实；业务候选须单独通过许可、资源、
+     依赖、重叠与领域审阅才能进入生产。
 4. 将分析写入 `audits/tooluniverse/<anchor>/01-analysis.md`，必须包含：上游身份、diff 摘要、
    受影响文件清单、受影响 capability 映射、需要用户确认的决策。
 
 ## 阶段二：吸纳
 
 1. 只改受影响的 extension artifact：
+   - 更新 catalog 所选的新版本 `skill-audit.json` 与 `report.md`，覆盖全部上游
+     Skill；保留已准入集合，除非本轮另有明确准入决定。
+   - 每个已准入 Skill 的 `source_release / source_revision` 标识其内容来源；
+     直接变化或本轮语义适配的 Skill 使用目标身份，未受影响 Skill 保留原身份。
+   - 更新 `dependency-decisions.json` 的全部候选引用和真实证据行；仅 reviewed
+     required 关系产生安装依赖。
+   - 在 `src/vendor-converters/tooluniverse/semantic-adaptations.ts` 维护必要的
+     工具契约与授权边界适配，然后运行 `pnpm tooluniverse:convert --force`。
    - 全部 reviewed 资源必须从 `skills/plugins/vendors/tooluniverse/<raw-skill>/` 按原相对路径逐字节复制。
    - 未受影响 package 一个字节都不能改。
 2. 运行 `node scripts/tooluniverse-maintenance.mjs artifacts <anchor>`：
@@ -134,6 +146,10 @@ audits/tooluniverse/<anchor>/
 
 - 子模块必须可描述（tag/commit），脏子模块禁止生成锚点。
 - 先 `diff` 后改文件；未变化的 extension artifact 不得重写。
+- converter 和 extension generator 从 catalog 读取版本与审计路径；
+  审计中的逐 Skill 来源身份是保留未受影响生成字节的依据。
+- 保存上游预审证据并补充实际生成后的逐能力承载位置、适配结论与验证结果。
+  上游预审的 preserved/adapted 判定不能替代生成物审阅。
 - capability 重命名或删除属于破坏性变更，必须同步 profiles、registry、tests、docs、
   审阅工件与 OpenSpec change。
 - 上游脚本、模型、数据与服务只做审计或参考；转换、检查、安装、更新与 status 不执行

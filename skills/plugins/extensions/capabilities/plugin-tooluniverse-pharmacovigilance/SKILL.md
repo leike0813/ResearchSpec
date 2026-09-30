@@ -12,6 +12,12 @@ metadata:
 
 > **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, or receipts. Use the ResearchSpec CLI for authoritative mutations.
 
+## FAERS evidence contract
+
+Detailed searches return `reports`, `count`, `total_available`, and `truncated`; `count` is one page, never the total. Use `medicinalproduct` and at most 100 reports per request. For a reaction-specific search use `FAERS_search_reports_by_drug_and_reaction` with `reactionmeddrapt`; drug-only searches use `FAERS_search_adverse_event_reports`. Serious-only searches require `serious='Yes'`.
+
+Count tools return `results` with `term/count` rows; read `total_reports_matching_query` for the report denominator and preserve null as unknown. Reaction-row sums can double-count reports. Counts are spontaneous reporting frequencies, not incidence, causal proof, or population risk. Obtain PRR/ROR/IC through `FAERS_calculate_disproportionality`, not count rows. Analytics retain `drug_name`/`adverse_event`. Death-criterion counts do not establish that the drug caused a death; page-level serious or death counts are explicitly partial and cannot form a whole-query rate.
+
 ## COMPUTE, DON'T DESCRIBE
 When analysis requires computation (statistics, data processing, scoring, enrichment), write and run Python code via Bash. Don't describe what you would do — execute it and report actual results. Use ToolUniverse tools to retrieve data, then Python (pandas, scipy, statsmodels, matplotlib) to analyze it.
 
@@ -150,7 +156,7 @@ Every safety signal MUST include source tool, data period, PRR, case counts, and
 
 | Tool | WRONG Parameter | CORRECT Parameter |
 |------|-----------------|-------------------|
-| `FAERS_count_reactions_by_drug_event` | `drug` | `drug_name` |
+| `FAERS_count_reactions_by_drug_event` | `drug` | `medicinalproduct` |
 | `FAERS_filter_serious_events` | American spelling (e.g., "Hemorrhage") | MedDRA British spelling (e.g., "Haemorrhage") |
 | `FAERS_stratify_by_demographics` | Requiring `adverse_event` | `adverse_event` is optional (omit for all-event stratification) |
 | `DailyMed_search_spls` | `name` | `drug_name` |
@@ -210,7 +216,7 @@ Phase 7: Report Synthesis
 
 ## Phase 2: Adverse Event Profiling (FAERS)
 
-1. Query `FAERS_count_reactions_by_drug_event(drug_name=..., limit=50)` for top events
+1. Query `FAERS_count_reactions_by_drug_event(medicinalproduct=..., limit=50)` for top events
 2. For each event, get detailed breakdown (serious, fatal, hospitalization counts)
 3. Calculate PRR: `(A/B) / (C/D)` where A=drug+event, B=drug+any, C=event+any_other, D=total_other
 4. Apply signal thresholds: PRR > 2.0 (signal), > 3.0 (strong signal), case count >= 3

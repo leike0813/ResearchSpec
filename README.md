@@ -53,7 +53,7 @@ ResearchSpec 不是从零构建——它吸纳并整合了多个优秀上游项�
 
 | 上游项目 | 版本 | 经审查输出的 Skills 数量 | 覆盖领域 |
 |---|---|---|---|
-| **ToolUniverse** | v1.3.1 | 130 | 28 个 ANZSRC 学科组 + 2 个工具领域 |
+| **ToolUniverse** | v1.5.4 | 130 | 28 个 ANZSRC 学科组 + 2 个工具领域 |
 | **Scientific Agent Skills** | v2.53.0 | 49 | 19 个 ANZSRC 学科组 + 5 个工具领域 |
 | **Materials-Science-Skills-For-LLM** | snapshot-fafd3ab | 7 | 材料工程、高分子与材料化学、计算建模与模拟 |
 | **FinRobot** | snapshot-2717499 | 6 | 银行金融与投资、会计审计 |

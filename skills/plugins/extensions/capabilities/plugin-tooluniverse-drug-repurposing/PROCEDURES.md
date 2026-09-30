@@ -71,8 +71,8 @@ for drug in top_candidates:
     warnings = tu.tools.FDA_get_warnings_and_cautions_by_drug_name(
         drug_name=drug['name']
     )
-    adverse_events = tu.tools.FAERS_search_reports_by_drug_and_reaction(
-        drug_name=drug['name'],
+    adverse_events = tu.tools.FAERS_search_adverse_event_reports(
+        medicinalproduct=drug['name'],
         limit=100
     )
     interactions = tu.tools.drugbank_get_drug_interactions_by_drug_name_or_id(
@@ -185,9 +185,9 @@ indication_drugs = tu.tools.drugbank_get_drug_name_and_description_by_indication
     indication="[related_indication]"
 )
 # Analyze adverse events as therapeutic effects (e.g., minoxidil → hair growth)
-adverse_as_therapeutic = tu.tools.FAERS_search_reports_by_drug_and_reaction(
-    drug_name="[drug_name]",
-    limit=1000
+adverse_as_therapeutic = tu.tools.FAERS_search_adverse_event_reports(
+    medicinalproduct="[drug_name]",
+    limit=100
 )
 ```
 
@@ -287,8 +287,8 @@ targets = tu.tools.OpenTargets_get_associated_targets_by_disease_efoId(efoId=rel
 ### Use Case 2: Adverse Effect as Therapeutic
 ```python
 # Example: Thalidomide (teratogenic) -> cancer treatment
-adverse_events = tu.tools.FAERS_search_reports_by_drug_and_reaction(
-    drug_name=drug, limit=1000
+adverse_events = tu.tools.FAERS_search_adverse_event_reports(
+    medicinalproduct=drug, limit=100
 )
 # Analyze if adverse effects beneficial in other contexts (e.g., weight loss AE -> obesity)
 ```

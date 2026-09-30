@@ -55,11 +55,11 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-references-ora-workflow.md
     path: references/ora_workflow.md
-    content_hash: 58e808dc23396c7d2a3c0cf3975e48eb9a2fba9b22e441090b807472f51da215
+    content_hash: e75b124fd72360686b30a0f56ba25394ada361db36cf1fb2da9416c0e4841f4d
     license: Apache-2.0
   - knowledge_id: tu-references-tool-parameters.md
     path: references/tool_parameters.md
-    content_hash: 5f73a5d4d00694b1b342571dbbd8d19191931bae6fb6ad0aadc7898d6e56277a
+    content_hash: 8bb4946e535f8bf923118e830b6bd3cf56d91c51a0cab0cc412deb534bb577aa
     license: Apache-2.0
   - knowledge_id: tu-references-troubleshooting.md
     path: references/troubleshooting.md
@@ -86,15 +86,15 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/SKILL.md
-      sha256: fbe9b6f5b158c7c521471f63a41c34b91fcf3bbcfe323002db27057f47f35f05
+      sha256: 718cb1f35bd418eccbc118703f948dcd858adca6be886b06eed6d949fddc06b4
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/enrichr_guide.md
       sha256: 18841df9d7bbaf568f75863661156b88c71b25729fd1e9e54fc388cb5fc09494
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/gsea_workflow.md
       sha256: a0d3edd12a034b0cccaf4c79028bd06ebc8defa12fce698850594824f1e00e0e
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/ora_workflow.md
-      sha256: 58e808dc23396c7d2a3c0cf3975e48eb9a2fba9b22e441090b807472f51da215
+      sha256: e75b124fd72360686b30a0f56ba25394ada361db36cf1fb2da9416c0e4841f4d
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/tool_parameters.md
-      sha256: 5f73a5d4d00694b1b342571dbbd8d19191931bae6fb6ad0aadc7898d6e56277a
+      sha256: 8bb4946e535f8bf923118e830b6bd3cf56d91c51a0cab0cc412deb534bb577aa
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/troubleshooting.md
       sha256: f7e32b840b901ee1c95f0a059e803e156ebc441acf767ffbe8390be0d81173fd
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/scripts/condition_enrichment_screen.py

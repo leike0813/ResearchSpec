@@ -1,14 +1,10 @@
 schema_version: "1"
 capability_id: plugin-tooluniverse-molecular-cloning
 title: Molecular Cloning Assembly Design (Gibson & Golden Gate)
-description: Molecular cloning assembly design — Gibson Assembly (overlap design
-  for seamless multi-fragment joining) and Golden Gate Assembly (Type IIS / BsaI
-  / BbsI design with unique 4-bp fusion overhangs). Use when you need to plan
-  how to join DNA fragments into a construct, design assembly
-  overlaps/overhangs, or decide between cloning methods. Covers the
-  domestication (internal-site removal), overhang-uniqueness, and overlap-Tm
-  rules. For PCR primers to generate the fragments, see
-  tooluniverse-primer-design.
+description: Design Gibson and Golden Gate assemblies, simulate existing
+  digestion and ligation reactions, and check restriction sites, overhang
+  compatibility, domestication, sequence outcomes, and experimental validation
+  limits.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -57,7 +53,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-molecular-cloning/SKILL.md
-      sha256: 68145898667c93c07b93d32b8c743303687ab7d0290382d0bfff12cd440587b7
+      sha256: ea0c43598901f7364eec45663985b2d2e9049afd2f32926a67946ebb095bd607
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-molecular-cloning/scripts/cloning_qc.py
       sha256: b5e8c8a1455e939a08a9e840d9b1526896349519f1c38582a5ec8c9d87d08287
 license: Apache-2.0

@@ -56,11 +56,11 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-response-formats.md
     path: response-formats.md
-    content_hash: 87958b081d7f3d2d5d1edefdf4e02ba2488c1c8c37ddcf4aa2064acd9979176a
+    content_hash: e8e3ba47e462eeedbba90066ca1aee5bc57e55453c130c128e67641157b89016
     license: Apache-2.0
   - knowledge_id: tu-tool-reference.md
     path: tool-reference.md
-    content_hash: d7fd295654eac0ccdae32bc17969f1f8e813f1aef76172f7d95442cd515650c3
+    content_hash: 4794aa0b15476422f7227c6b85a4e49b5fb23fe04540363d2ad2e1938150b750
     license: Apache-2.0
   - knowledge_id: tu-use-patterns.md
     path: use-patterns.md
@@ -71,15 +71,15 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/SKILL.md
-      sha256: 865eeb42c043a610ed0a190a7b92ab3460b8a5cbfd96ef168a774cde8747816a
+      sha256: 9e778ddeb55bfd2eebca2858f85b4e62c77cd6ebbf592376cf57944812c33b13
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/integration-scoring.md
       sha256: 205a6bf10b3228a3bf59d8b66f0c4b366685c814b2426741d176e7b7fa3de67f
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/report-template.md
       sha256: 71649c19a03ae766eb7c95fe23fef26ab1b8f4ea1e26e6c098550231c628dda5
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/response-formats.md
-      sha256: 87958b081d7f3d2d5d1edefdf4e02ba2488c1c8c37ddcf4aa2064acd9979176a
+      sha256: e8e3ba47e462eeedbba90066ca1aee5bc57e55453c130c128e67641157b89016
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/tool-reference.md
-      sha256: d7fd295654eac0ccdae32bc17969f1f8e813f1aef76172f7d95442cd515650c3
+      sha256: 4794aa0b15476422f7227c6b85a4e49b5fb23fe04540363d2ad2e1938150b750
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/use-patterns.md
       sha256: b8758c277d784dcb736cefc1146dfb911cb8624a72dfb448fdbd196679666f85
 license: Apache-2.0

@@ -58,7 +58,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-transcriptomics/SKILL.md
-      sha256: 5fbc5e2030c34fa22f9e10fcdb9a9ce3757e2af705d20191930d69bf4f963ffa
+      sha256: d9e3392d7716455e0444b340570db8a6858124f85d1ee6de24d3ebfb1fb5ef6c
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-transcriptomics/code_examples.md
       sha256: 2be664e70ef9a7ee650e3054886bc2831b03e83777346daab49b918a824eebee
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-transcriptomics/report_template.md

@@ -9,12 +9,13 @@ import { parse, stringify } from "yaml";
 import { sha256 } from "../../core/workspace/write-plan.js";
 import { assemblePluginRegistry } from "../../plugins/assembler.js";
 import { loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
-import { commitVendorStage, pathExists, posix, prepareVendorStage, vendorProjectionDiff, walkFiles } from "../shared/staging.js";
+import { pathExists, posix, prepareVendorStage, vendorProjectionDiff, walkFiles } from "../shared/staging.js";
 import { productionVendorInventoryErrors } from "../shared/production-vendors.js";
+import { adaptReviewedContent } from "./semantic-adaptations.js";
 
 const execFileAsync = promisify(execFile);
 const VENDOR_ID = "tooluniverse";
-const AUDIT_PATH = "audits/tooluniverse/v1.3.1/skill-audit.json";
+const CATALOG_PATH = "audits/tooluniverse/catalog.json";
 const SOURCE_PATH = "vendor/tooluniverse";
 const POLICY_ROOT = "src/vendor-converters/tooluniverse";
 
@@ -26,6 +27,8 @@ interface AuditSkill {
   additional_anzsrc_fields: string[];
   anzsrc_unclassified_reason: string | null;
   cross_skill_references: string[];
+  source_release: string;
+  source_revision: string;
 }
 
 interface Audit {
@@ -62,7 +65,8 @@ export interface ConvertToolUniverseOptions { repoRoot: string; outputRoot?: str
 export async function convertToolUniverse(options: ConvertToolUniverseOptions): Promise<ToolUniverseConversionManifest> {
   const repoRoot = path.resolve(options.repoRoot);
   const outputRoot = path.resolve(options.outputRoot ?? path.join(repoRoot, "skills/plugins"));
-  const audit = await readJson<Audit>(path.join(repoRoot, AUDIT_PATH));
+  const catalog = await readJson<{ audit_file: string }>(path.join(repoRoot, CATALOG_PATH));
+  const audit = await readJson<Audit>(path.join(repoRoot, catalog.audit_file));
   const decisions = await readJson<DependencyDecision[]>(path.join(repoRoot, POLICY_ROOT, "dependency-decisions.json"));
   const sourceRoot = path.join(repoRoot, SOURCE_PATH);
   await validateSource(sourceRoot, audit);
@@ -77,7 +81,14 @@ export async function convertToolUniverse(options: ConvertToolUniverseOptions): 
     if (!options.force && await pathExists(path.join(outputRoot, "vendors", VENDOR_ID)) && (await vendorProjectionDiff(stage, outputRoot, VENDOR_ID)).length) {
       throw new Error("ToolUniverse generated output has drift; run with --force after reviewing the converter inputs.");
     }
-    await commitVendorStage(stage, outputRoot, VENDOR_ID);
+    for (const relative of await vendorProjectionDiff(stage, outputRoot, VENDOR_ID)) {
+      const source = path.join(stage, relative);
+      const target = path.join(outputRoot, relative);
+      if (await pathExists(source)) {
+        await mkdir(path.dirname(target), { recursive: true });
+        await cp(source, target);
+      } else await rm(target);
+    }
     return manifest;
   } finally { await rm(stage, { recursive: true, force: true }); }
 }
@@ -119,7 +130,7 @@ async function generateBundle(outputRoot: string, sourceRoot: string, audit: Aud
     const outputSkillRoot = path.join(outputRoot, "vendors", VENDOR_ID, skill.skill_id);
     await mkdir(outputSkillRoot, { recursive: true });
     const sourceEntry = await readFile(path.join(sourceSkillRoot, "SKILL.md"), "utf8");
-    const adapted = adaptSkillEntry(skill.skill_id, sourceEntry);
+    const adapted = adaptSkillEntry(skill.skill_id, adaptReviewedContent(skill.skill_id, "SKILL.md", sourceEntry), skill.source_release);
     await writeText(path.join(outputSkillRoot, "SKILL.md"), adapted.entry);
     fileDispositions.push(included(`${skill.source_path}/SKILL.md`, `vendors/${VENDOR_ID}/${skill.skill_id}/SKILL.md`, adapted.entry, "normalized Open Agent Skill entry"));
     if (adapted.details) {
@@ -134,12 +145,14 @@ async function generateBundle(outputRoot: string, sourceRoot: string, audit: Aud
       if (exclusion) { fileDispositions.push({ source_path: `${skill.source_path}/${relative}`, disposition: "excluded", reason: exclusion }); continue; }
       const target = path.join(outputSkillRoot, relative);
       await mkdir(path.dirname(target), { recursive: true });
-      await cp(sourceFile, target);
       const bytes = await readFile(sourceFile);
-      fileDispositions.push({ source_path: `${skill.source_path}/${relative}`, output_path: `vendors/${VENDOR_ID}/${skill.skill_id}/${relative}`, disposition: "included", reason: "reviewed runtime resource", sha256: sha256(bytes) });
+      const content = /\.(md|py)$/.test(relative) ? Buffer.from(adaptReviewedContent(skill.skill_id, relative, bytes.toString("utf8"))) : bytes;
+      if (content.equals(bytes)) await cp(sourceFile, target);
+      else await writeFile(target, content);
+      fileDispositions.push({ source_path: `${skill.source_path}/${relative}`, output_path: `vendors/${VENDOR_ID}/${skill.skill_id}/${relative}`, disposition: "included", reason: content.equals(bytes) ? "reviewed runtime resource" : "reviewed tool-contract adaptation", sha256: sha256(content) });
     }
     await writeText(path.join(outputSkillRoot, "LICENSE"), license.endsWith("\n") ? license : `${license}\n`);
-    const notice = `# Notice\n\nThis Skill is adapted by ResearchSpec from ToolUniverse (${audit.source.repository_url}) release ${audit.source.release}, revision ${audit.source.revision}.\n\nSource path: \`${skill.source_path}\`. The adaptation normalizes packaging and ResearchSpec authority boundaries; upstream scientific and runtime requirements remain attributable to ToolUniverse.\n`;
+    const notice = `# Notice\n\nThis Skill is adapted by ResearchSpec from ToolUniverse (${audit.source.repository_url}) release ${skill.source_release}, revision ${skill.source_revision}.\n\nSource path: \`${skill.source_path}\`. The adaptation normalizes packaging and ResearchSpec authority boundaries; upstream scientific and runtime requirements remain attributable to ToolUniverse.\n`;
     await writeText(path.join(outputSkillRoot, "NOTICE.md"), notice);
     vendorSkills.push({ skill_id: skill.skill_id, license: "Apache-2.0", dependencies: [...new Set(requiredBySkill.get(skill.skill_id) ?? [])].sort(), upstreams: [{ source_paths: [skill.source_path], adaptation: "converted" }] });
   }
@@ -174,8 +187,11 @@ async function generateBundle(outputRoot: string, sourceRoot: string, audit: Aud
 }
 
 function validateAuditAndPolicies(audit: Audit, decisions: DependencyDecision[]): void {
-  if (audit.summary.top_level_skills !== 150 || audit.summary.candidate_skills !== 130 || audit.summary.excluded_skills !== 20) throw new Error("ToolUniverse audit inventory does not match the reviewed 150/130/20 baseline.");
+  if (audit.summary.top_level_skills !== audit.skills.length || audit.summary.candidate_skills !== 130 || audit.summary.excluded_skills !== audit.skills.length - 130) throw new Error("ToolUniverse audit inventory does not match the reviewed admission policy.");
   const candidates = new Set(audit.skills.filter((skill) => skill.scope_disposition === "candidate").map((skill) => skill.skill_id));
+  for (const skill of audit.skills.filter((item) => item.scope_disposition === "candidate")) {
+    if (!skill.source_release || !/^[a-f0-9]{40}$/.test(skill.source_revision)) throw new Error(`Missing audited source identity for ${skill.skill_id}`);
+  }
   const expectedEdges = new Set(audit.skills.filter((skill) => skill.scope_disposition === "candidate").flatMap((skill) => skill.cross_skill_references.filter((target) => candidates.has(target)).map((target) => `${skill.skill_id}\0${target}`)));
   const actualEdges = new Set(decisions.map((item) => `${item.from}\0${item.to}`));
   if (expectedEdges.size !== audit.summary.candidate_cross_skill_edges || actualEdges.size !== expectedEdges.size || [...expectedEdges].some((edge) => !actualEdges.has(edge))) throw new Error("Dependency decision catalog must classify every audited candidate-to-candidate reference exactly once.");
@@ -184,13 +200,15 @@ function validateAuditAndPolicies(audit: Audit, decisions: DependencyDecision[])
 async function validateSource(sourceRoot: string, audit: Audit): Promise<void> {
   const { stdout } = await execFileAsync("git", ["-C", sourceRoot, "rev-parse", "HEAD"]);
   if (stdout.trim() !== audit.source.revision) throw new Error(`ToolUniverse checkout revision differs from audit: ${stdout.trim()}`);
+  const status = await execFileAsync("git", ["-C", sourceRoot, "status", "--porcelain"]);
+  if (status.stdout.trim()) throw new Error("ToolUniverse checkout must be clean before conversion.");
   const entries = await readdir(path.join(sourceRoot, "skills"), { withFileTypes: true });
   const skillDirs: string[] = [];
   for (const entry of entries) if (entry.isDirectory() && await pathExists(path.join(sourceRoot, "skills", entry.name, "SKILL.md"))) skillDirs.push(entry.name);
   if (skillDirs.length !== audit.summary.top_level_skills) throw new Error(`ToolUniverse checkout contains ${String(skillDirs.length)} top-level Skills; audit expects ${String(audit.summary.top_level_skills)}.`);
 }
 
-function adaptSkillEntry(skillId: string, source: string): { entry: string; details?: string } {
+function adaptSkillEntry(skillId: string, source: string, release: string): { entry: string; details?: string } {
   const end = source.indexOf("\n---\n", source.startsWith("---\n") ? 4 : 0);
   if (end < 0) throw new Error(`Upstream Skill has no closed frontmatter: ${skillId}`);
   const rawFrontmatter = source.slice(4, end);
@@ -204,7 +222,7 @@ function adaptSkillEntry(skillId: string, source: string): { entry: string; deta
     description,
     license: "Apache-2.0",
     compatibility: "Requires ToolUniverse-compatible retrieval tools and any local runtimes described by this Skill. ResearchSpec installs files only and never executes scripts or installs dependencies.",
-    metadata: { vendor: "tooluniverse", "vendor-release": "v1.3.1", "researchspec-role": "semantic-helper" },
+    metadata: { vendor: "tooluniverse", "vendor-release": release, "researchspec-role": "semantic-helper" },
   }).trimEnd();
   const boundary = "> **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, or receipts. Use the ResearchSpec CLI for authoritative mutations.";
   const assembledBody = `${boundary}\n\n${body}`.trimEnd();
@@ -218,6 +236,7 @@ function adaptSkillEntry(skillId: string, source: string): { entry: string; deta
 }
 
 const DESCRIPTION_OVERRIDES: Record<string, string> = {
+  "tooluniverse-molecular-cloning": "Design Gibson and Golden Gate assemblies, simulate existing digestion and ligation reactions, and check restriction sites, overhang compatibility, domestication, sequence outcomes, and experimental validation limits.",
   "tooluniverse-fastq-qc": "Assess FASTQ read quality with FastQC and MultiQC, interpret quality, adapter, duplication, GC, and overrepresented-sequence findings, and make explicit trimming decisions with local NGS tools before downstream analysis.",
   "tooluniverse-phewas": "Run and interpret phenome-wide association studies across clinical phenotypes, including phenotype coding, association testing, multiple-testing correction, visualization, and evidence-aware follow-up.",
   "tooluniverse-clinical-risk-scoring": "Compute and interpret established bedside clinical risk scores from supplied patient variables, report the deterministic result and limitations, and distinguish individual clinical scoring from genetic risk, epidemiology, and diagnostic-test evaluation.",

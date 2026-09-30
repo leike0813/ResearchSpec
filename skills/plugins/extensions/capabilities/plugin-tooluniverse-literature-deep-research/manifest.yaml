@@ -63,7 +63,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-tool-names-reference.md
     path: TOOL_NAMES_REFERENCE.md
-    content_hash: a569c36d974b66e082c3fcaf28d0a6cdf7a7d655b41420c24e8a82020920b4c3
+    content_hash: 67aa4c231c67866cba7524a28d2f259cb7133cf820953ec7cf3298e214bb1ded
     license: Apache-2.0
   - knowledge_id: tu-workflow.md
     path: WORKFLOW.md
@@ -74,7 +74,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/SKILL.md
-      sha256: af91211306856082ae49b7b8bb34875469d56d18757a7e1976a4f1684aa7573a
+      sha256: 74e69ec3b39edb77f6f6e0cc75aca9d34e478bcbf7ed4885c212ac6df9fd78fb
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/EXAMPLES.md
       sha256: 9c9359654d0d2c683a21ee53ddd030e927d37aaf90cf064d0e5a14744733d6f5
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/FULLTEXT_STRATEGY.md
@@ -84,7 +84,7 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/REPORT_TEMPLATE.md
       sha256: 05724e8df77563fdca2638d78950cd72a998024cb2854b23c4496a380b9bd573
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/TOOL_NAMES_REFERENCE.md
-      sha256: a569c36d974b66e082c3fcaf28d0a6cdf7a7d655b41420c24e8a82020920b4c3
+      sha256: 67aa4c231c67866cba7524a28d2f259cb7133cf820953ec7cf3298e214bb1ded
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-literature-deep-research/WORKFLOW.md
       sha256: 81fb41ace3b972cd51b49be6e41bf0fba03dd4224c72f636334a76c93db8b843
 license: Apache-2.0

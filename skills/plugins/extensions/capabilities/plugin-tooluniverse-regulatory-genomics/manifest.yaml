@@ -55,5 +55,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-regulatory-genomics/SKILL.md
-      sha256: 5043d3dca09734ecb46d1efe4bd15db07fa2b7a082ec46fdb83cffcbb01272b0
+      sha256: fca2dbddb8c63ea0db65b20280e8693e887bf7073671f72093872f91839f67b9
 license: Apache-2.0

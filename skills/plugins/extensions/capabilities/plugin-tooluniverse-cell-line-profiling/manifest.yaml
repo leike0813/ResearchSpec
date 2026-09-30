@@ -56,7 +56,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cell-line-profiling/SKILL.md
-      sha256: 8d2f1a6a7a0180a834bfb1a147e6cd1cd29868aa11fc528e249642958d8a90bf
+      sha256: c0c043a3f31260eb22443a93a3dbcee677b20d2c9610e4be37150e6c17d4a877
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cell-line-profiling/scripts/depmap_gene_dependency.py
       sha256: 57c3f84627d1dc6cba694b76729eb408bb227ea2658098da968ee3ee5e80685c
 license: Apache-2.0

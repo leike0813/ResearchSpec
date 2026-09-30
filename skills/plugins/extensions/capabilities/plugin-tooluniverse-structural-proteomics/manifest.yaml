@@ -51,5 +51,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-structural-proteomics/SKILL.md
-      sha256: f33ec831d0c6587e42b12b728eef60dac14eb768c7c8da387f42eaaecb961bb9
+      sha256: 3a37698603c429c1468ebc06a26662d1c72b01592743ee345c810980869f1042
 license: Apache-2.0

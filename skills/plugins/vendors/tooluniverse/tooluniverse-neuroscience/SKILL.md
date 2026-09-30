@@ -12,7 +12,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.4
   researchspec-role: semantic-helper
 ---
 
@@ -168,6 +168,7 @@ Brain region functions, boundaries, and connectivity are precise anatomical fact
 | `PubMed_search_articles` | Neuroanatomy facts, clinical neurology, circuit studies | `query`, `limit` |
 | `EuropePMC_search_articles` | Broader literature including preprints | `query`, `limit` |
 | `WormBase_get_gene` | C. elegans neurons, connectome, gene expression | `query` |
+| `DANDI_search_datasets`/`DANDI_get_dataset`/`DANDI_list_assets` | Published neurophysiology data (NWB format): spikes, LFP, imaging, behavior | `query`; `dandiset_id` |
 | `AllenCellTypes_search_specimens` | Single-neuron electrophysiology + morphology specimens (firing rate, input resistance, tau, reconstructions); filter by species/brain region | `species` (e.g. `"Homo Sapiens"`, `"Mus musculus"`), `brain_structure`, `limit` |
 | `Alliance_search_genes` | Cross-species gene search (mouse, fly, fish, worm) | `query` |
 | `UniProt_search` | Neural proteins (ion channels, receptors, disease genes) | `query`, `organism` |

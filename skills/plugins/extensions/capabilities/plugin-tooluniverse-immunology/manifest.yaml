@@ -51,5 +51,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-immunology/SKILL.md
-      sha256: 60db512a8ee66dc01639e7733e87c20804997e01bb5008b1de89c57740c3aefd
+      sha256: 6d4f3745cc81ad97607c4160df2b706a81aa7b09ed33b71e4ee027aee895cb14
 license: Apache-2.0

@@ -51,7 +51,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-domain-analysis.md
     path: DOMAIN_ANALYSIS.md
-    content_hash: 94fe4dd814874a224e238a8d052cc2dbb7632620e089c806dbc824b8864be42c
+    content_hash: be2031e6bf1bab474bb4b8746aa1a5d67ca84b76fe95f862222e66ae4537026e
     license: Apache-2.0
   - knowledge_id: tu-phase2-discoveries.md
     path: PHASE2_DISCOVERIES.md
@@ -74,11 +74,11 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/SKILL.md
-      sha256: 9edc3f345c4230430c13687547ae743ec09c7bfca3acce9491afe966f5d89aa1
+      sha256: 6a90244bae1b6931f2d5f93329300157bd76c88818edebe1531b834717568d99
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/DESCRIPTION_UPDATE_COMPLETE.md
       sha256: b531ce92b7a944a7b336a1818a720d4d659bb98c91b4cdce49e63175d4b2f873
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/DOMAIN_ANALYSIS.md
-      sha256: 94fe4dd814874a224e238a8d052cc2dbb7632620e089c806dbc824b8864be42c
+      sha256: be2031e6bf1bab474bb4b8746aa1a5d67ca84b76fe95f862222e66ae4537026e
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/PHASE2_DISCOVERIES.md
       sha256: 3b264bd48c3bd84286951447743347c23723ac1406c51bf01889f37e6439d0ce
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/QUICK_START.md

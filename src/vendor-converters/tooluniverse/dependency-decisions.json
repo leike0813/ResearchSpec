@@ -65,13 +65,25 @@
     ]
   },
   {
+    "from": "tooluniverse-antibody-engineering",
+    "to": "tooluniverse-sequence-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-antibody-engineering/SKILL.md",
+        "line": 255,
+        "text": "1. Assess codon optimization for CHO, identify rare codons -- `CodonUsage_get_optimal_codons(taxid=<Cricetulus griseus NCBI taxid>)` gives the CHO-preferred codon per amino acid to compare against; resolve the taxid first if not already known rather than assuming one. `CodonUsage_get_table` (same taxid) additionally gives per-codon usage frequency, needed to flag which codons in the actual sequenc"
+      }
+    ]
+  },
+  {
     "from": "tooluniverse-binder-discovery",
     "to": "tooluniverse-data-wrangling",
     "relation": "related",
     "evidence": [
       {
         "path": "skills/tooluniverse-binder-discovery/SKILL.md",
-        "line": 277,
+        "line": 278,
         "text": "See `tooluniverse-data-wrangling` skill for format cookbook and pagination patterns."
       }
     ]
@@ -335,7 +347,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-comparative-genomics/SKILL.md",
-        "line": 148,
+        "line": 150,
         "text": "**Genome-assembly context for a comparison species**: When a species' ortholog calls look incomplete or you need the underlying reference assembly, use `NCBIDatasets_list_genomes_by_taxon` (params `taxon` as tax_id, `limit`, `reference_only`) to find the reference genome, `NCBIDatasets_get_genome_assembly` (param `accession`) for assembly metrics (contiguity/N50/completeness — a fragmented assembl"
       }
     ]
@@ -1504,7 +1516,7 @@
       {
         "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
         "line": 3,
-        "text": "description: Molecular cloning assembly design — Gibson Assembly (overlap design for seamless multi-fragment joining) and Golden Gate Assembly (Type IIS / BsaI / BbsI design with unique 4-bp fusion overhangs). Use when you need to plan how to join DNA fragments into a construct, design assembly overlaps/overhangs, or decide between cloning methods. Covers the domestication (internal-site removal),"
+        "text": "description: Molecular cloning, in both directions. DESIGN — Gibson Assembly (overlap design for seamless multi-fragment joining) and Golden Gate Assembly (Type IIS / BsaI / BbsI / Esp3I / BsmBI / SapI design with unique 4-bp fusion overhangs). ANALYSIS — work out what an existing reaction produces: given input plasmid sequences and an enzyme, digest them, join the fragments by their overhangs, an"
       },
       {
         "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
@@ -1518,7 +1530,7 @@
       },
       {
         "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
-        "line": 72,
+        "line": 110,
         "text": "- `tooluniverse-primer-design` — design the PCR primers (with homology arms / Type IIS tails) to make the fragments."
       }
     ]
@@ -1530,7 +1542,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
-        "line": 73,
+        "line": 111,
         "text": "- `tooluniverse-sequence-analysis` — handle the input sequences."
       }
     ]
@@ -2195,7 +2207,7 @@
       },
       {
         "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
-        "line": 230,
+        "line": 235,
         "text": "- **This skill does not compute signal statistics** (PRR/ROR/IC). For drug-AE disproportionality use `tooluniverse-pharmacovigilance` / `tooluniverse-adverse-event-detection`."
       }
     ]
@@ -2222,7 +2234,7 @@
       },
       {
         "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
-        "line": 230,
+        "line": 235,
         "text": "- **This skill does not compute signal statistics** (PRR/ROR/IC). For drug-AE disproportionality use `tooluniverse-pharmacovigilance` / `tooluniverse-adverse-event-detection`."
       }
     ]
@@ -2516,13 +2528,25 @@
     ]
   },
   {
+    "from": "tooluniverse-rare-disease-genomics",
+    "to": "tooluniverse-regulatory-variant-analysis",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-rare-disease-genomics/SKILL.md",
+        "line": 42,
+        "text": "- Synonymous / intronic: usually benign unless at splice junction -- but \"usually\" is doing real work: a *deep* intronic variant can still be pathogenic by creating a cryptic splice site far from the canonical boundary, which consequence filtering alone won't flag. If a deep intronic or otherwise unannotated variant survives Steps 1-2 (rare, correct inheritance, phenotype match) despite a bland co"
+      }
+    ]
+  },
+  {
     "from": "tooluniverse-regulatory-variant-analysis",
     "to": "tooluniverse-epigenomics",
     "relation": "routing",
     "evidence": [
       {
         "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
-        "line": 30,
+        "line": 32,
         "text": "- Epigenomics data processing (BED/narrowPeak files) -> Use `tooluniverse-epigenomics`"
       }
     ]
@@ -2534,7 +2558,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
-        "line": 28,
+        "line": 30,
         "text": "- Gene-disease associations (not variant-specific) -> Use `tooluniverse-gene-disease-association`"
       }
     ]
@@ -2546,8 +2570,25 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
-        "line": 29,
+        "line": 31,
         "text": "- Pharmacogenomic variant annotation -> Use `tooluniverse-pharmacogenomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-regulatory-variant-analysis",
+    "to": "tooluniverse-regulatory-genomics",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+        "line": 167,
+        "text": "AlphaGenome isn't the only sequence-prediction model in ToolUniverse, just the broadest and the one this phase defaults to. If it's unavailable (no key) or a specific case calls for something else — a published, self-hostable model instead of a hosted API, or a question specifically about chromatin accessibility rather than a broad multi-modality readout — see `tooluniverse-regulatory-genomics` fo"
+      },
+      {
+        "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+        "line": 192,
+        "text": "- **AlphaGenome tools aren't in your toolset**: `ALPHA_GENOME_API_KEY` isn't configured. Skip Phases 0.5 and 4.5 and run Phases 1-4 as a standalone pipeline — do not block the analysis waiting on a key that may never be provided. If a sequence-model prediction still matters for the case, `tooluniverse-regulatory-genomics` covers self-hostable alternatives (Enformer, Borzoi, ChromBPNet) that don't "
       }
     ]
   },
@@ -2558,12 +2599,12 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
-        "line": 26,
+        "line": 28,
         "text": "- Coding variant pathogenicity -> Use `tooluniverse-variant-interpretation`"
       },
       {
         "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
-        "line": 27,
+        "line": 29,
         "text": "- Full clinical variant classification (ACMG) -> Use `tooluniverse-variant-interpretation`"
       }
     ]
@@ -2669,7 +2710,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
-        "line": 323,
+        "line": 324,
         "text": "See `tooluniverse-data-wrangling` skill for format cookbook and bulk download patterns."
       }
     ]
@@ -2681,7 +2722,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
-        "line": 167,
+        "line": 168,
         "text": "- `tooluniverse-gene-enrichment`: Pathway enrichment for spatial domain marker genes (Phase 3)"
       }
     ]
@@ -2693,7 +2734,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
-        "line": 168,
+        "line": 169,
         "text": "- `tooluniverse-multi-omics-integration`: Integration with other omics layers (Phase 8)"
       }
     ]
@@ -2705,7 +2746,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
-        "line": 166,
+        "line": 167,
         "text": "- `tooluniverse-single-cell`: scRNA-seq reference for deconvolution (Phase 6) and L-R database (Phase 7)"
       }
     ]
@@ -2787,7 +2828,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-variant-interpretation/SKILL.md",
-        "line": 366,
+        "line": 367,
         "text": "For amino acid properties at variant position, run: `python3 skills/tooluniverse-sequence-analysis/scripts/amino_acids.py --type amino_acid --code X`"
       }
     ]

@@ -40,8 +40,9 @@ void test("all Field-audited vendor records carry valid metadata independent of 
   const snapshot = await loadAnzsrcSnapshot(SNAPSHOT_PATH);
   const fields = new Set(snapshot.fields.map((field) => field.code));
   const scientificCatalog = JSON.parse(await readFile(path.resolve("audits/scientific-agent-skills/catalog.json"), "utf8")) as { audit_file: string };
+  const tooluniverseCatalog = JSON.parse(await readFile(path.resolve("audits/tooluniverse/catalog.json"), "utf8")) as { audit_file: string };
   const sources = [
-    { path: path.resolve("audits/tooluniverse/v1.3.1/skill-audit.json"), records: "skills", declared: "top_level_skills" },
+    { path: path.resolve(tooluniverseCatalog.audit_file), records: "skills", declared: "top_level_skills" },
     { path: path.resolve(scientificCatalog.audit_file), records: "skills", declared: "top_level_skills" },
     { path: path.resolve("audits/materials-science-skills-for-llm/snapshot-fafd3ab/skill-audit.json"), records: "skills", declared: "top_level_skills" },
     { path: path.resolve("audits/finrobot/snapshot-2717499/capability-audit.json"), records: "candidate_capabilities", declared: "candidate_capabilities" },

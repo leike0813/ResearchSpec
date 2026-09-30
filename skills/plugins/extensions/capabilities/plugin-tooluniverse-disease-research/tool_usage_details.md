@@ -142,7 +142,7 @@ tu.tools.GtoPdb_list_ligands(ligand_type="Approved")
 tu.tools.OpenTargets_get_drug_warnings_by_chemblId(chemblId=cid)
 tu.tools.OpenTargets_get_drug_blackbox_status_by_chembl_ID(chemblId=cid)
 tu.tools.extract_clinical_trial_adverse_events(nct_ids=nct_list)
-tu.tools.FAERS_count_reactions_by_drug_event(drug=drug_name, event=event)
+tu.tools.FAERS_count_reactions_by_drug_event(medicinalproduct=drug_name, reactionmeddraverse=event)
 tu.tools.AdverseEventPredictionQuestionGenerator(disease_name=disease, drug_name=drug)
 ```
 

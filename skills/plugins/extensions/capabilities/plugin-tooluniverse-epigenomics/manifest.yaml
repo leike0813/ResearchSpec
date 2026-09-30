@@ -71,7 +71,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/SKILL.md
-      sha256: f502e5137dc51593a8f4abef25e95f8af79ec0208d8b5b716640d0b3436c1db2
+      sha256: 8d3799ff158b0e813b8ea66ed71496bef10de4c25f102773f8593e2bc8a50e81
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/ANALYSIS_PROCEDURES.md
       sha256: 8abe6bc40f468324bd7225a1ab54b9e42032ea59364accbc48127a497102918f
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/CODE_REFERENCE.md

@@ -36,9 +36,9 @@ label = tu.tools.DailyMed_get_spl_by_setid(setid=setid)
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `FAERS_count_reactions_by_drug_event` | AE counts for drug | `drug_name`, `limit` |
-| `FAERS_search_adverse_event_reports` | Detailed event data | `drug_name`, `reaction` |
-| `FAERS_search_adverse_event_reports` | Search all reports | `drug_name` |
+| `FAERS_count_reactions_by_drug_event` | AE counts for drug | `medicinalproduct`, `limit` |
+| `FAERS_search_reports_by_drug_and_reaction` | Detailed event data | `medicinalproduct`, `reactionmeddrapt` |
+| `FAERS_search_adverse_event_reports` | Search all reports | `medicinalproduct` |
 | `FAERS_stratify_by_demographics` | Patient demographics | `drug_name`, `reaction` |
 
 **Parameter Note**: Use `drug_name` not `drug`.
@@ -47,14 +47,14 @@ label = tu.tools.DailyMed_get_spl_by_setid(setid=setid)
 ```python
 # Get top adverse events
 events = tu.tools.FAERS_count_reactions_by_drug_event(
-    drug_name="metformin",
+    medicinalproduct="metformin",
     limit=50
 )
 
 # Get details for specific event
-details = tu.tools.FAERS_search_adverse_event_reports(
-    drug_name="metformin",
-    reaction="Lactic acidosis"
+details = tu.tools.FAERS_search_reports_by_drug_and_reaction(
+    medicinalproduct="metformin",
+    reactionmeddrapt="Lactic acidosis"
 )
 ```
 
@@ -316,7 +316,7 @@ def generate_safety_profile(tu, drug_name):
     
     # Phase 2: FAERS events
     events = tu.tools.FAERS_count_reactions_by_drug_event(
-        drug_name=drug_name,
+        medicinalproduct=drug_name,
         limit=50
     )
     
@@ -353,15 +353,15 @@ def compare_drug_safety(tu, drug_a, drug_b):
     
     # Get events for both drugs
     events_a = tu.tools.FAERS_count_reactions_by_drug_event(
-        drug_name=drug_a, limit=30
+        medicinalproduct=drug_a, limit=30
     )
     events_b = tu.tools.FAERS_count_reactions_by_drug_event(
-        drug_name=drug_b, limit=30
+        medicinalproduct=drug_b, limit=30
     )
     
     # Find common events
-    events_a_dict = {e['reaction']: e for e in events_a}
-    events_b_dict = {e['reaction']: e for e in events_b}
+    events_a_dict = {e['term']: e for e in events_a.get('results', [])}
+    events_b_dict = {e['term']: e for e in events_b.get('results', [])}
     
     common_events = set(events_a_dict.keys()) & set(events_b_dict.keys())
     
@@ -369,9 +369,9 @@ def compare_drug_safety(tu, drug_a, drug_b):
     for event in common_events:
         comparison.append({
             'event': event,
-            'drug_a_prr': events_a_dict[event].get('prr'),
+            'drug_a_prr': tu.tools.FAERS_calculate_disproportionality(operation='calculate_disproportionality', drug_name=drug_a, adverse_event=event).get('metrics', {}).get('PRR', {}).get('value'),
             'drug_a_count': events_a_dict[event].get('count'),
-            'drug_b_prr': events_b_dict[event].get('prr'),
+            'drug_b_prr': tu.tools.FAERS_calculate_disproportionality(operation='calculate_disproportionality', drug_name=drug_b, adverse_event=event).get('metrics', {}).get('PRR', {}).get('value'),
             'drug_b_count': events_b_dict[event].get('count')
         })
     
@@ -382,31 +382,19 @@ def compare_drug_safety(tu, drug_a, drug_b):
 
 ```python
 def detect_emerging_signals(tu, drug_name, threshold_prr=3.0):
-    """Identify signals that may require attention."""
-    
-    events = tu.tools.FAERS_count_reactions_by_drug_event(
-        drug_name=drug_name,
-        limit=100
-    )
-    
+    counts = tu.tools.FAERS_count_reactions_by_drug_event(medicinalproduct=drug_name, limit=100)
     signals = []
-    for event in events:
-        if event.get('prr', 0) >= threshold_prr:
-            # Get details for high-PRR events
-            details = tu.tools.FAERS_search_adverse_event_reports(
-                drug_name=drug_name,
-                reaction=event['reaction']
-            )
-            
-            signals.append({
-                'event': event['reaction'],
-                'prr': event['prr'],
-                'count': event['count'],
-                'serious_pct': details.get('serious_count', 0) / event['count'],
-                'fatal_count': details.get('death_count', 0)
-            })
-    
-    # Sort by signal strength
+    for row in counts.get('results', []):
+        metrics = tu.tools.FAERS_calculate_disproportionality(
+            operation='calculate_disproportionality', drug_name=drug_name, adverse_event=row['term'])
+        prr = metrics.get('metrics', {}).get('PRR', {}).get('value')
+        if prr is not None and prr >= threshold_prr:
+            page = tu.tools.FAERS_search_reports_by_drug_and_reaction(
+                medicinalproduct=drug_name, reactionmeddrapt=row['term'], limit=100)
+            signals.append({'event': row['term'], 'prr': prr, 'reaction_count': row['count'],
+                'total_matching_reports': page.get('total_available'), 'truncated': page.get('truncated'),
+                'page_serious_count': sum(str(r.get('serious')) == '1' for r in page.get('reports', [])),
+                'page_death_criterion_count': sum(str(r.get('seriousnessdeath')) == '1' for r in page.get('reports', []))})
     return sorted(signals, key=lambda x: x['prr'], reverse=True)
 ```
 

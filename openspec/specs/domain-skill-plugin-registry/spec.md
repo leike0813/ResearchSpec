@@ -33,6 +33,11 @@ ResearchSpec SHALL provide one source-neutral catalog containing all 213 ANZSRC 
 - **THEN** all 130 admitted Skills SHALL remain reachable from at least one non-empty domain
 - **AND** the public catalog SHALL initially contain 28 discipline and two tool domains
 
+#### Scenario: Vendor update does not move domain membership
+- **WHEN** the pinned ToolUniverse release changes and the admitted Skill set stays the same
+- **THEN** domain membership SHALL remain the reviewed projection of that set
+- **AND** no new public domain, command, wrapper or registry schema version SHALL be introduced by the update
+
 ### Requirement: Open Agent Skills Content Validation
 Each registered Skill SHALL conform to the supported Open Agent Skills `SKILL.md` frontmatter and SHALL keep its declared name, registry Skill ID, and directory name equal.
 

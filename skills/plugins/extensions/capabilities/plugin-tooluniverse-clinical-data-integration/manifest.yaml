@@ -50,5 +50,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-data-integration/SKILL.md
-      sha256: fead0d5b57cb7386cd20b6fd9dd12fbdd5688abd63f42a5f7267d1023d59be8c
+      sha256: 49693a00651a786bed0953455067ef44b4ba79b5511934bfb6a087e3ed4c19bf
 license: Apache-2.0

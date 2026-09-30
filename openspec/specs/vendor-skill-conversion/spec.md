@@ -18,12 +18,21 @@ ResearchSpec SHALL define an internal isolated vendor bundle contract that recor
 - **AND** it SHALL NOT overwrite another vendor or the source-neutral domain catalog
 
 ### Requirement: ToolUniverse Audit-Governed Admission
-The ToolUniverse converter SHALL consume the pinned v1.3.1 audit as its complete admission inventory, generate all 130 candidate Skills, exclude all 20 non-business Skills, and reject new or unclassified upstream entries.
+The ToolUniverse converter SHALL consume the audit selected by the maintenance catalog as its complete admission inventory, generate every admitted Skill, exclude every other recorded entry, and reject new or unclassified upstream entries.
 
 #### Scenario: Pinned inventory is converted
-- **WHEN** the pinned ToolUniverse checkout matches the audit revision and inventory
-- **THEN** exactly the 130 candidate Skill roots SHALL be generated
-- **AND** no excluded Skill SHALL enter a vendor bundle or domain
+- **WHEN** the pinned ToolUniverse checkout matches the audited revision and inventory
+- **THEN** exactly the 130 admitted Skill roots SHALL be generated
+- **AND** every excluded entry SHALL be absent from the vendor bundle and every domain
+
+#### Scenario: Inventory checks follow evidence rather than historical counts
+- **WHEN** the converter validates the audit and its policies
+- **THEN** admitted and excluded totals SHALL be derived from the audited records
+- **AND** a changed upstream inventory SHALL fail before generated output is modified
+
+#### Scenario: Conversion input is a clean pinned checkout
+- **WHEN** the pinned ToolUniverse checkout contains uncommitted changes or a revision that differs from the audited source
+- **THEN** conversion SHALL fail without writing production output
 
 ### Requirement: Reviewed Dependency Extraction
 The ToolUniverse converter SHALL extract explicit Skill references with evidence and require each relation to be classified as `required`, `related`, or `routing`; only `required` relations SHALL enter the runtime dependency graph.
@@ -36,10 +45,20 @@ The ToolUniverse converter SHALL extract explicit Skill references with evidence
 ### Requirement: Safe Open Agent Skill Adaptation
 The converter SHALL normalize admitted Skills to the supported Open Agent Skills contract, apply reviewed frontmatter and progressive-disclosure overrides, classify every source resource, add compatibility and authority guidance, and retain license and notice files.
 
+#### Scenario: Reviewed tool-contract adaptation is applied
+- **WHEN** an admitted Skill's published content relies on a tool contract that changed in the pinned release
+- **THEN** the converter SHALL apply the reviewed adaptation for that tool family, file and Skill
+- **AND** the adapted content SHALL preserve the scientific intent of the reviewed source
+- **AND** the applied adaptation SHALL be recorded with the generated file disposition
+
+#### Scenario: Adaptation is deterministic
+- **WHEN** the same reviewed content is adapted twice
+- **THEN** the result SHALL be byte-identical
+- **AND** repeated conversion SHALL NOT compound transformations
+
 #### Scenario: Vendor scripts remain inert package assets
 - **WHEN** an admitted Skill contains scripts or environment assumptions
-- **THEN** required runtime scripts MAY be copied with documented compatibility
-- **AND** ResearchSpec SHALL NOT execute scripts, install dependencies, configure credentials, or copy tests, evaluations, environment templates, or maintenance history as runtime assets
+- **THEN** ResearchSpec SHALL NOT execute them, install dependencies, configure credentials or contact services during conversion, checking, packaging or installation
 
 ### Requirement: Vendor Conversion Verification
 ResearchSpec SHALL provide ToolUniverse convert, check, and idempotence maintainer commands; a central assembler SHALL validate all vendor bundles against the source-neutral domain catalog and SHALL be the only writer of the production registry.
@@ -53,6 +72,11 @@ ResearchSpec SHALL provide ToolUniverse convert, check, and idempotence maintain
 - **WHEN** unchanged validated vendor bundles and domain catalog are assembled repeatedly
 - **THEN** the production registry bytes SHALL remain identical
 - **AND** unknown vendor Skills, duplicate Skill IDs, or invalid domain references SHALL block assembly before the registry is replaced
+
+#### Scenario: Unaffected generated assets stay byte-stable
+- **WHEN** the converter regenerates the projection from unchanged pinned inputs
+- **THEN** it SHALL write only files whose content actually changed
+- **AND** capabilities, profiles, resources and vendored files outside the affected set SHALL retain their prior bytes and modification state
 
 ### Requirement: Complete Multi-Vendor Staging
 Each vendor converter SHALL stage its target output together with every unchanged published vendor, validate the complete source-neutral domain catalog through the central assembler, and commit only its own generated vendor outputs plus the assembled registry. The rule SHALL apply to the approved Education Agent Skills sixth vendor.

@@ -2,10 +2,10 @@
   "schema_version": "1",
   "converter_version": "1",
   "vendor_id": "tooluniverse",
-  "release": "v1.3.1",
-  "revision": "9b7ff91ddb45b567cac2fa8ea31b82851e877617",
+  "release": "v1.5.4",
+  "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
   "candidate_skills": 130,
-  "excluded_skills": 20,
+  "excluded_skills": 55,
   "generated_skills": [
     "tooluniverse-acmg-variant-classification",
     "tooluniverse-admet-prediction",
@@ -150,13 +150,48 @@
     "devtu-optimize-descriptions",
     "devtu-optimize-skills",
     "devtu-self-evolve",
+    "host-and-share-remote-tool",
+    "setup-boltz-remote-tool",
+    "setup-borzoi-remote-tool",
+    "setup-cell2location-remote-tool",
+    "setup-cellrank-remote-tool",
+    "setup-celltypist-remote-tool",
+    "setup-chrombpnet-remote-tool",
+    "setup-depmap-24q2-remote-tool",
+    "setup-enformer-remote-tool",
+    "setup-esm-remote-tool",
+    "setup-expert-feedback-remote-tool",
+    "setup-harmony-remote-tool",
+    "setup-immune-compass-remote-tool",
+    "setup-ldsc-remote-tool",
+    "setup-liana-remote-tool",
+    "setup-macs3-remote-tool",
+    "setup-milo-remote-tool",
+    "setup-mofa-remote-tool",
+    "setup-monocle3-remote-tool",
+    "setup-paga-remote-tool",
+    "setup-pinnacle-remote-tool",
+    "setup-scanvi-remote-tool",
+    "setup-scrublet-remote-tool",
+    "setup-scvelo-remote-tool",
+    "setup-scvi-remote-tool",
+    "setup-singler-remote-tool",
+    "setup-slingshot-remote-tool",
+    "setup-squidpy-remote-tool",
+    "setup-tangram-remote-tool",
     "setup-tooluniverse",
+    "setup-transcriptformer-remote-tool",
+    "setup-uspto-downloader-remote-tool",
     "tooluniverse",
+    "tooluniverse-antigravity-plugin",
+    "tooluniverse-biomedical-fact-lookup",
     "tooluniverse-claude-code-plugin",
     "tooluniverse-codex-plugin",
     "tooluniverse-cs-setup",
     "tooluniverse-custom-tool",
+    "tooluniverse-gene-liability",
     "tooluniverse-install-skills",
+    "tooluniverse-nih-funding-landscape",
     "tooluniverse-sdk",
     "tooluniverse-self-review"
   ],
@@ -227,13 +262,25 @@
       ]
     },
     {
+      "from": "tooluniverse-antibody-engineering",
+      "to": "tooluniverse-sequence-analysis",
+      "relation": "related",
+      "evidence": [
+        {
+          "path": "skills/tooluniverse-antibody-engineering/SKILL.md",
+          "line": 255,
+          "text": "1. Assess codon optimization for CHO, identify rare codons -- `CodonUsage_get_optimal_codons(taxid=<Cricetulus griseus NCBI taxid>)` gives the CHO-preferred codon per amino acid to compare against; resolve the taxid first if not already known rather than assuming one. `CodonUsage_get_table` (same taxid) additionally gives per-codon usage frequency, needed to flag which codons in the actual sequenc"
+        }
+      ]
+    },
+    {
       "from": "tooluniverse-binder-discovery",
       "to": "tooluniverse-data-wrangling",
       "relation": "related",
       "evidence": [
         {
           "path": "skills/tooluniverse-binder-discovery/SKILL.md",
-          "line": 277,
+          "line": 278,
           "text": "See `tooluniverse-data-wrangling` skill for format cookbook and pagination patterns."
         }
       ]
@@ -497,7 +544,7 @@
       "evidence": [
         {
           "path": "skills/tooluniverse-comparative-genomics/SKILL.md",
-          "line": 148,
+          "line": 150,
           "text": "**Genome-assembly context for a comparison species**: When a species' ortholog calls look incomplete or you need the underlying reference assembly, use `NCBIDatasets_list_genomes_by_taxon` (params `taxon` as tax_id, `limit`, `reference_only`) to find the reference genome, `NCBIDatasets_get_genome_assembly` (param `accession`) for assembly metrics (contiguity/N50/completeness — a fragmented assembl"
         }
       ]
@@ -1666,7 +1713,7 @@
         {
           "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
           "line": 3,
-          "text": "description: Molecular cloning assembly design — Gibson Assembly (overlap design for seamless multi-fragment joining) and Golden Gate Assembly (Type IIS / BsaI / BbsI design with unique 4-bp fusion overhangs). Use when you need to plan how to join DNA fragments into a construct, design assembly overlaps/overhangs, or decide between cloning methods. Covers the domestication (internal-site removal),"
+          "text": "description: Molecular cloning, in both directions. DESIGN — Gibson Assembly (overlap design for seamless multi-fragment joining) and Golden Gate Assembly (Type IIS / BsaI / BbsI / Esp3I / BsmBI / SapI design with unique 4-bp fusion overhangs). ANALYSIS — work out what an existing reaction produces: given input plasmid sequences and an enzyme, digest them, join the fragments by their overhangs, an"
         },
         {
           "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
@@ -1680,7 +1727,7 @@
         },
         {
           "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
-          "line": 72,
+          "line": 110,
           "text": "- `tooluniverse-primer-design` — design the PCR primers (with homology arms / Type IIS tails) to make the fragments."
         }
       ]
@@ -1692,7 +1739,7 @@
       "evidence": [
         {
           "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
-          "line": 73,
+          "line": 111,
           "text": "- `tooluniverse-sequence-analysis` — handle the input sequences."
         }
       ]
@@ -2357,7 +2404,7 @@
         },
         {
           "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
-          "line": 230,
+          "line": 235,
           "text": "- **This skill does not compute signal statistics** (PRR/ROR/IC). For drug-AE disproportionality use `tooluniverse-pharmacovigilance` / `tooluniverse-adverse-event-detection`."
         }
       ]
@@ -2384,7 +2431,7 @@
         },
         {
           "path": "skills/tooluniverse-product-safety-surveillance/SKILL.md",
-          "line": 230,
+          "line": 235,
           "text": "- **This skill does not compute signal statistics** (PRR/ROR/IC). For drug-AE disproportionality use `tooluniverse-pharmacovigilance` / `tooluniverse-adverse-event-detection`."
         }
       ]
@@ -2678,13 +2725,25 @@
       ]
     },
     {
+      "from": "tooluniverse-rare-disease-genomics",
+      "to": "tooluniverse-regulatory-variant-analysis",
+      "relation": "routing",
+      "evidence": [
+        {
+          "path": "skills/tooluniverse-rare-disease-genomics/SKILL.md",
+          "line": 42,
+          "text": "- Synonymous / intronic: usually benign unless at splice junction -- but \"usually\" is doing real work: a *deep* intronic variant can still be pathogenic by creating a cryptic splice site far from the canonical boundary, which consequence filtering alone won't flag. If a deep intronic or otherwise unannotated variant survives Steps 1-2 (rare, correct inheritance, phenotype match) despite a bland co"
+        }
+      ]
+    },
+    {
       "from": "tooluniverse-regulatory-variant-analysis",
       "to": "tooluniverse-epigenomics",
       "relation": "routing",
       "evidence": [
         {
           "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
-          "line": 30,
+          "line": 32,
           "text": "- Epigenomics data processing (BED/narrowPeak files) -> Use `tooluniverse-epigenomics`"
         }
       ]
@@ -2696,7 +2755,7 @@
       "evidence": [
         {
           "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
-          "line": 28,
+          "line": 30,
           "text": "- Gene-disease associations (not variant-specific) -> Use `tooluniverse-gene-disease-association`"
         }
       ]
@@ -2708,8 +2767,25 @@
       "evidence": [
         {
           "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
-          "line": 29,
+          "line": 31,
           "text": "- Pharmacogenomic variant annotation -> Use `tooluniverse-pharmacogenomics`"
+        }
+      ]
+    },
+    {
+      "from": "tooluniverse-regulatory-variant-analysis",
+      "to": "tooluniverse-regulatory-genomics",
+      "relation": "routing",
+      "evidence": [
+        {
+          "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+          "line": 167,
+          "text": "AlphaGenome isn't the only sequence-prediction model in ToolUniverse, just the broadest and the one this phase defaults to. If it's unavailable (no key) or a specific case calls for something else — a published, self-hostable model instead of a hosted API, or a question specifically about chromatin accessibility rather than a broad multi-modality readout — see `tooluniverse-regulatory-genomics` fo"
+        },
+        {
+          "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
+          "line": 192,
+          "text": "- **AlphaGenome tools aren't in your toolset**: `ALPHA_GENOME_API_KEY` isn't configured. Skip Phases 0.5 and 4.5 and run Phases 1-4 as a standalone pipeline — do not block the analysis waiting on a key that may never be provided. If a sequence-model prediction still matters for the case, `tooluniverse-regulatory-genomics` covers self-hostable alternatives (Enformer, Borzoi, ChromBPNet) that don't "
         }
       ]
     },
@@ -2720,12 +2796,12 @@
       "evidence": [
         {
           "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
-          "line": 26,
+          "line": 28,
           "text": "- Coding variant pathogenicity -> Use `tooluniverse-variant-interpretation`"
         },
         {
           "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
-          "line": 27,
+          "line": 29,
           "text": "- Full clinical variant classification (ACMG) -> Use `tooluniverse-variant-interpretation`"
         }
       ]
@@ -2831,7 +2907,7 @@
       "evidence": [
         {
           "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
-          "line": 323,
+          "line": 324,
           "text": "See `tooluniverse-data-wrangling` skill for format cookbook and bulk download patterns."
         }
       ]
@@ -2843,7 +2919,7 @@
       "evidence": [
         {
           "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
-          "line": 167,
+          "line": 168,
           "text": "- `tooluniverse-gene-enrichment`: Pathway enrichment for spatial domain marker genes (Phase 3)"
         }
       ]
@@ -2855,7 +2931,7 @@
       "evidence": [
         {
           "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
-          "line": 168,
+          "line": 169,
           "text": "- `tooluniverse-multi-omics-integration`: Integration with other omics layers (Phase 8)"
         }
       ]
@@ -2867,7 +2943,7 @@
       "evidence": [
         {
           "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
-          "line": 166,
+          "line": 167,
           "text": "- `tooluniverse-single-cell`: scRNA-seq reference for deconvolution (Phase 6) and L-R database (Phase 7)"
         }
       ]
@@ -2949,7 +3025,7 @@
       "evidence": [
         {
           "path": "skills/tooluniverse-variant-interpretation/SKILL.md",
-          "line": 366,
+          "line": 367,
           "text": "For amino acid properties at variant position, run: `python3 skills/tooluniverse-sequence-analysis/scripts/amino_acids.py --type amino_acid --code X`"
         }
       ]
@@ -3091,7 +3167,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-admet-prediction/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "33d3de98bf1fd2e17700e5a8d1a4e24b6098c5db075cc48cc0f0b9b3855e37df"
+      "sha256": "2997a29512d715ac6fcd45c9e00948f5a3f08232fa53431a794884fb6100f437"
     },
     {
       "source_path": "skills/tooluniverse-adverse-event-detection/PHASE_DETAILS.md",
@@ -3119,7 +3195,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-adverse-event-detection/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "3255e838fdee36bf5ac0b817f91cc403b7284ffc251fe830fa306eae014fa86f"
+      "sha256": "07c498d83e5492a8c65e8eab8de38969cd81c781be8257734da517c9acddd6cf"
     },
     {
       "source_path": "skills/tooluniverse-adverse-event-detection/test_adverse_event_detection.py",
@@ -3131,14 +3207,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-adverse-event-detection/TOOL_REFERENCE.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "84b9af7e71a0cacc1f56d1fdf58099a30fc3383addba2ae666aebd0db34c044a"
+      "sha256": "025cf6c587010bb7b5b144fd55058b23b20ba0d3c96f23aa21cf7add49a85330"
     },
     {
       "source_path": "skills/tooluniverse-adverse-outcome-pathway/SKILL.md",
       "output_path": "vendors/tooluniverse/tooluniverse-adverse-outcome-pathway/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "850ea78c54b2368f446bfb0839e74b0565f1777cc418f2b3f6a9ac70c98b30a7"
+      "sha256": "4844b32106eb6b834da2d2214bfef81460e84d5ab96f0aa0a5a742825eadb683"
     },
     {
       "source_path": "skills/tooluniverse-aging-senescence/SKILL.md",
@@ -3199,7 +3275,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-antibody-engineering/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "ae073a3bbd10b600d1750e3a076db3f6cf2b4ec748074e147c31183bb3e7cd0a"
+      "sha256": "1d3d2b0fab28c6556da490511e89706314d50dfe16f7698908e6619c0944ebcb"
     },
     {
       "source_path": "skills/tooluniverse-antibody-engineering/WORKFLOW_DETAILS.md",
@@ -3234,7 +3310,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-binder-discovery/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "72457b03c898a9725bfb1689e6d0b0a2c93b982cd8c053f85c2a7ade607e7e3c"
+      "sha256": "77251ad6dfb1f560830a6cb6fed89ea6ce5ddb734bfd48042e6c623b1747345f"
     },
     {
       "source_path": "skills/tooluniverse-binder-discovery/TOOLS_REFERENCE.md",
@@ -3337,7 +3413,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-cell-line-profiling/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "8d2f1a6a7a0180a834bfb1a147e6cd1cd29868aa11fc528e249642958d8a90bf"
+      "sha256": "c0c043a3f31260eb22443a93a3dbcee677b20d2c9610e4be37150e6c17d4a877"
     },
     {
       "source_path": "skills/tooluniverse-chemical-compound-retrieval/CHECKLIST.md",
@@ -3412,7 +3488,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-clinical-data-integration/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "fead0d5b57cb7386cd20b6fd9dd12fbdd5688abd63f42a5f7267d1023d59be8c"
+      "sha256": "49693a00651a786bed0953455067ef44b4ba79b5511934bfb6a087e3ed4c19bf"
     },
     {
       "source_path": "skills/tooluniverse-clinical-guidelines/SKILL.md",
@@ -3456,8 +3532,8 @@
       "source_path": "skills/tooluniverse-clinical-trial-design/EXAMPLES.md",
       "output_path": "vendors/tooluniverse/tooluniverse-clinical-trial-design/EXAMPLES.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "c43f6952633be02fc9832cf93ee99f26d8a70623911be2320adfe6d5974b4277"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "a229d5bc134f0905dbc5d6db697e248d471de2273b34ef9b0b2b0ae685818124"
     },
     {
       "source_path": "skills/tooluniverse-clinical-trial-design/python_implementation.py",
@@ -3477,15 +3553,15 @@
       "source_path": "skills/tooluniverse-clinical-trial-design/REPORT_TEMPLATE.md",
       "output_path": "vendors/tooluniverse/tooluniverse-clinical-trial-design/REPORT_TEMPLATE.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "473c689b4b98929d38f80021500501de210624d64925f07eb18e062768151e7b"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "fcc3751bcf3510612796b755df42bb607a06c59f7b24b438cedee7ff6b3b7b83"
     },
     {
       "source_path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
       "output_path": "vendors/tooluniverse/tooluniverse-clinical-trial-design/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "d51922a576bf7296858ba90bad0574cfc4e698dc5e703593d8a9532342c737ac"
+      "sha256": "e4acc96956102cd56cfa5ef88bd8b5ff8af51d67d99ab780504e03a8f20d9b0b"
     },
     {
       "source_path": "skills/tooluniverse-clinical-trial-design/STUDY_DESIGN_PROCEDURES.md",
@@ -3505,8 +3581,8 @@
       "source_path": "skills/tooluniverse-clinical-trial-design/WORKFLOW_DETAILS.md",
       "output_path": "vendors/tooluniverse/tooluniverse-clinical-trial-design/WORKFLOW_DETAILS.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "d2c5ecf92248b4a179c4daf30f11dfcafd1eaf27ae3880accaa73d9e1f28261f"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "d9279ab35ddf40e3b77ca75369566f7aad8d33600dad437c127a5e3c89c57099"
     },
     {
       "source_path": "skills/tooluniverse-clinical-trial-matching/EXAMPLES.md",
@@ -3581,7 +3657,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-comparative-genomics/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "76f80729c73c2c2012b5bc3917d365516acbbe9a566191c0fe0f041b72cecfab"
+      "sha256": "f5688281d891477ea51ff53fd6d56c980c10ab99d9e56cebc55b013670e2074b"
     },
     {
       "source_path": "skills/tooluniverse-computational-biophysics/scripts/burn_fluids.py",
@@ -3740,14 +3816,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-data-wrangling/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "6d4f92340b8924c9234cc1be47c83e9a83cd098cdc21c922e8d39244dd71d862"
+      "sha256": "794f34cf50ee89b7ab7741b0b1e387f1ad1476e54780af3c4face6ae202e683c"
     },
     {
       "source_path": "skills/tooluniverse-dataset-discovery/SKILL.md",
       "output_path": "vendors/tooluniverse/tooluniverse-dataset-discovery/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "41325b535bfd26c88f9db10cf8f5c93a3955cb94d96e60d3a68ad94e0e7b1b8d"
+      "sha256": "b80d69110df8a67a4936c13f864527311e614de74aa6565e4bfb52c1a41d82dd"
     },
     {
       "source_path": "skills/tooluniverse-diagnostic-test-evaluation/scripts/roc_analysis.py",
@@ -3794,21 +3870,21 @@
       "output_path": "vendors/tooluniverse/tooluniverse-disease-research/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "1b1da7518e4a9bec6e7962d755ba81f86ef4bf791f0dac280f0c3bb9e65debe8"
+      "sha256": "62487c8d7ae8a2130091804f00a86241100ff0a55d0c492ba7576a580ba518fc"
     },
     {
       "source_path": "skills/tooluniverse-disease-research/tool_usage_details.md",
       "output_path": "vendors/tooluniverse/tooluniverse-disease-research/tool_usage_details.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "574c718ebfa3c1e230478e821ab3189077db073a8eda731adea5b1248b00601e"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "86650f6e7a39fdcabb4aa3225be451f0dbb89f2e7b76e8e1369f8599aa08be30"
     },
     {
       "source_path": "skills/tooluniverse-disease-research/TOOLS_REFERENCE.md",
       "output_path": "vendors/tooluniverse/tooluniverse-disease-research/TOOLS_REFERENCE.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "35ecb60db7f5390ba49792b504f536577fd01cd2a21a3d2eec899a16b72fe150"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "6431ad03a85924e356b7f1408fd0e19e9a76bb8472712709e92b80ce47fbf4be"
     },
     {
       "source_path": "skills/tooluniverse-dose-response/scripts/fit_dose_response.py",
@@ -3838,15 +3914,15 @@
       "source_path": "skills/tooluniverse-drug-drug-interaction/ddi_pipeline.py",
       "output_path": "vendors/tooluniverse/tooluniverse-drug-drug-interaction/ddi_pipeline.py",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "657cf7e67d0e96d2c52258b704e67a1d5ca9e2bc4d4bb0a91b0fca9a3af480c7"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "6c9727982b2f2db11a37bce085676318c57ca655cc44eb435e62abb413c6d3f4"
     },
     {
       "source_path": "skills/tooluniverse-drug-drug-interaction/ddi_working_example.py",
       "output_path": "vendors/tooluniverse/tooluniverse-drug-drug-interaction/ddi_working_example.py",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "0d6253d7389eb8a11c413d12b3b011d6c390c1b184d7016ce7e7fb350e09b51c"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "4a77315cc338d64a521b0ca067da32fe835110b9cfc5ac03698b9cd502ec588b"
     },
     {
       "source_path": "skills/tooluniverse-drug-drug-interaction/EXAMPLES.md",
@@ -3859,8 +3935,8 @@
       "source_path": "skills/tooluniverse-drug-drug-interaction/python_implementation.py",
       "output_path": "vendors/tooluniverse/tooluniverse-drug-drug-interaction/python_implementation.py",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "657cf7e67d0e96d2c52258b704e67a1d5ca9e2bc4d4bb0a91b0fca9a3af480c7"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "6c9727982b2f2db11a37bce085676318c57ca655cc44eb435e62abb413c6d3f4"
     },
     {
       "source_path": "skills/tooluniverse-drug-drug-interaction/scripts/pharmacology_ref.py",
@@ -3874,7 +3950,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-drug-drug-interaction/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "6b1acd72608716e34dd8251281ff4cdb20996525db33a24c3f762281bd38ee3b"
+      "sha256": "505b3a985f5bfdb7743999086341df3d901b63c4f7e76efbcf0ecf2ff724501f"
     },
     {
       "source_path": "skills/tooluniverse-drug-mechanism-research/SKILL.md",
@@ -3888,28 +3964,28 @@
       "output_path": "vendors/tooluniverse/tooluniverse-drug-regulatory/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "e0a3977cca377f903c1dc2ae23c4397e4c13f7cf1314ec0e5f49faf082ccacea"
+      "sha256": "3663a491c74d18fbe91907bbc02e8d7a1cf590c7f49238a787986becd58de388"
     },
     {
       "source_path": "skills/tooluniverse-drug-repurposing/EXAMPLES.md",
       "output_path": "vendors/tooluniverse/tooluniverse-drug-repurposing/EXAMPLES.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "5867f5ccf4ddb12a04c3de79b92223537d24848e49d159c9f7d2db922a912bbd"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "0bceb1edcddc2622311fb0da841330b6607ce1b18918a551be9b8fa4d3310339"
     },
     {
       "source_path": "skills/tooluniverse-drug-repurposing/PROCEDURES.md",
       "output_path": "vendors/tooluniverse/tooluniverse-drug-repurposing/PROCEDURES.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "66068fd8f6855c5066dbc6549665328bc0a0aeb0fd3dcc9fb704340b713e084b"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "6762986c85c5ad86ff64dcd16d177091d2ed4c993ebd96349c24a865879befc9"
     },
     {
       "source_path": "skills/tooluniverse-drug-repurposing/REFERENCE.md",
       "output_path": "vendors/tooluniverse/tooluniverse-drug-repurposing/REFERENCE.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "61719b983625e482d352b1242a9abdc523c6097ab4bce514d7a1adeaacf49663"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "a10e444ea849da2e47a4257609d16fea1dfed27d9e60db8aab029fa87c3e282d"
     },
     {
       "source_path": "skills/tooluniverse-drug-repurposing/REPORT_TEMPLATE.md",
@@ -3923,14 +3999,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-drug-repurposing/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "d3a750e751a3698348e19921dea36ee9f1fea362d1acbc482e960e20ad6245ea"
+      "sha256": "dbcd2576b96572f7833c3771b1dd53c822959fb6e6a4405de1a732c9b764a280"
     },
     {
       "source_path": "skills/tooluniverse-drug-repurposing/strategies_and_patterns.md",
       "output_path": "vendors/tooluniverse/tooluniverse-drug-repurposing/strategies_and_patterns.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "9fe8fed67db86755125cf3abbd53d1c44821e8c86c93b561f08d0c48d22a79a9"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "1a1125e535d6a0b0f0dd1303e9615f36fb5b96db4a35ab6f0e9ccb5ac720840a"
     },
     {
       "source_path": "skills/tooluniverse-drug-research/CHECKLIST.md",
@@ -3965,14 +4041,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-drug-research/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "cdfc607bbae65eaa4e57e08c9a7bac89c6ed02235ae1cd77167396b0d7d3d0b4"
+      "sha256": "8508a330ab098c547422daea7bb2f4b434491b6822d055fec7349f30a9e2620d"
     },
     {
       "source_path": "skills/tooluniverse-drug-research/TOOLS_REFERENCE.md",
       "output_path": "vendors/tooluniverse/tooluniverse-drug-research/TOOLS_REFERENCE.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "f6f7c77513883acb94f4afb9c7ff70aa2c56ddc77229ce6d55e2b03d3a46e6e3"
+      "sha256": "ddb5142c0c084c311698b376af056e4efaca1aff49a38d4b66754aeebc8d6c1c"
     },
     {
       "source_path": "skills/tooluniverse-drug-synergy/scripts/synergy_reference.py",
@@ -4038,7 +4114,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-ecology-biodiversity/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "1c717a0ebb9c330c02cdc68fbbfa310d0ebf5f9b4618ffa8a1e4f019b3168578"
+      "sha256": "d719418c49dce17c3a03c48e8f3c02927f74d59124124b0e3f8a5f8c6249e3ec"
     },
     {
       "source_path": "skills/tooluniverse-electron-microscopy/SKILL.md",
@@ -4071,14 +4147,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-epidemiological-analysis/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "f34e93bd791331fb9fb2aad98e9177dafae99e0a62c03c2c05668cc2a526ab87"
+      "sha256": "a081b70612880f31bcbea5eab93900ba113abdf3c26022652990ebf3e430c01d"
     },
     {
       "source_path": "skills/tooluniverse-epigenomics-chromatin/SKILL.md",
       "output_path": "vendors/tooluniverse/tooluniverse-epigenomics-chromatin/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "46da2a5d33d33a3805335204fa37d25badb22176925818042b0ea4d8c324eaf3"
+      "sha256": "af919b71df10e9756be993d06eaf005b1652241e38886906322fd438d3e8a646"
     },
     {
       "source_path": "skills/tooluniverse-epigenomics/.env.template",
@@ -4118,7 +4194,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-epigenomics/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "f502e5137dc51593a8f4abef25e95f8af79ec0208d8b5b716640d0b3436c1db2"
+      "sha256": "8d3799ff158b0e813b8ea66ed71496bef10de4c25f102773f8593e2bc8a50e81"
     },
     {
       "source_path": "skills/tooluniverse-epigenomics/test_skill.py",
@@ -4236,14 +4312,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-gene-enrichment/references/ora_workflow.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "58e808dc23396c7d2a3c0cf3975e48eb9a2fba9b22e441090b807472f51da215"
+      "sha256": "e75b124fd72360686b30a0f56ba25394ada361db36cf1fb2da9416c0e4841f4d"
     },
     {
       "source_path": "skills/tooluniverse-gene-enrichment/references/tool_parameters.md",
       "output_path": "vendors/tooluniverse/tooluniverse-gene-enrichment/references/tool_parameters.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "5f73a5d4d00694b1b342571dbbd8d19191931bae6fb6ad0aadc7898d6e56277a"
+      "sha256": "8bb4946e535f8bf923118e830b6bd3cf56d91c51a0cab0cc412deb534bb577aa"
     },
     {
       "source_path": "skills/tooluniverse-gene-enrichment/references/troubleshooting.md",
@@ -4285,7 +4361,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-gene-enrichment/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "fbe9b6f5b158c7c521471f63a41c34b91fcf3bbcfe323002db27057f47f35f05"
+      "sha256": "718cb1f35bd418eccbc118703f948dcd858adca6be886b06eed6d949fddc06b4"
     },
     {
       "source_path": "skills/tooluniverse-gene-enrichment/test_gene_enrichment.py",
@@ -4596,7 +4672,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-immunology/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "60db512a8ee66dc01639e7733e87c20804997e01bb5008b1de89c57740c3aefd"
+      "sha256": "6d4f3745cc81ad97607c4160df2b706a81aa7b09ed33b71e4ee027aee895cb14"
     },
     {
       "source_path": "skills/tooluniverse-immunotherapy-response-prediction/EXAMPLES.md",
@@ -4706,7 +4782,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-kegg-disease-drug/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "01609a6e63cfac01d905344dec67315e5eea66a701f39d495ccaab8cf488bad3"
+      "sha256": "3ee6f39f6ca1d481503ac6fee9b7dffeae4db4bfb877047db426c785d3acdbd0"
     },
     {
       "source_path": "skills/tooluniverse-lipidomics/SKILL.md",
@@ -4748,14 +4824,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-literature-deep-research/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "af91211306856082ae49b7b8bb34875469d56d18757a7e1976a4f1684aa7573a"
+      "sha256": "74e69ec3b39edb77f6f6e0cc75aca9d34e478bcbf7ed4885c212ac6df9fd78fb"
     },
     {
       "source_path": "skills/tooluniverse-literature-deep-research/TOOL_NAMES_REFERENCE.md",
       "output_path": "vendors/tooluniverse/tooluniverse-literature-deep-research/TOOL_NAMES_REFERENCE.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "a569c36d974b66e082c3fcaf28d0a6cdf7a7d655b41420c24e8a82020920b4c3"
+      "sha256": "67aa4c231c67866cba7524a28d2f259cb7133cf820953ec7cf3298e214bb1ded"
     },
     {
       "source_path": "skills/tooluniverse-literature-deep-research/WORKFLOW.md",
@@ -4972,7 +5048,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-molecular-cloning/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "68145898667c93c07b93d32b8c743303687ab7d0290382d0bfff12cd440587b7"
+      "sha256": "ea0c43598901f7364eec45663985b2d2e9049afd2f32926a67946ebb095bd607"
     },
     {
       "source_path": "skills/tooluniverse-molecular-cloning/test_cloning_qc.py",
@@ -5017,14 +5093,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/response-formats.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "87958b081d7f3d2d5d1edefdf4e02ba2488c1c8c37ddcf4aa2064acd9979176a"
+      "sha256": "e8e3ba47e462eeedbba90066ca1aee5bc57e55453c130c128e67641157b89016"
     },
     {
       "source_path": "skills/tooluniverse-multiomic-disease-characterization/SKILL.md",
       "output_path": "vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "865eeb42c043a610ed0a190a7b92ab3460b8a5cbfd96ef168a774cde8747816a"
+      "sha256": "9e778ddeb55bfd2eebca2858f85b4e62c77cd6ebbf592376cf57944812c33b13"
     },
     {
       "source_path": "skills/tooluniverse-multiomic-disease-characterization/test_multiomic_disease.py",
@@ -5036,7 +5112,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-multiomic-disease-characterization/tool-reference.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "d7fd295654eac0ccdae32bc17969f1f8e813f1aef76172f7d95442cd515650c3"
+      "sha256": "4794aa0b15476422f7227c6b85a4e49b5fb23fe04540363d2ad2e1938150b750"
     },
     {
       "source_path": "skills/tooluniverse-multiomic-disease-characterization/use-patterns.md",
@@ -5061,8 +5137,8 @@
       "source_path": "skills/tooluniverse-network-pharmacology/ANALYSIS_PROCEDURES.md",
       "output_path": "vendors/tooluniverse/tooluniverse-network-pharmacology/ANALYSIS_PROCEDURES.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "fe8182b150a28e30a2a8d01143f0b9677cdcb1f9610c185d125ae63702f51acf"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "7108c7ce19270de89e26d44204fa68e50c928227b92a1be295c72f7bcd4813af"
     },
     {
       "source_path": "skills/tooluniverse-network-pharmacology/QUICK_START.md",
@@ -5097,7 +5173,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-network-pharmacology/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "feb53ae7bdd998a54c39782088bf10ba066d7a10bf234be0b065c4c4111f4fc2"
+      "sha256": "2c1b8e035a76052899ea5dcf8f5edcfca53392fef496ff52907b3a6c4882c2f1"
     },
     {
       "source_path": "skills/tooluniverse-network-pharmacology/test_network_pharmacology.py",
@@ -5108,8 +5184,8 @@
       "source_path": "skills/tooluniverse-network-pharmacology/TOOL_REFERENCE.md",
       "output_path": "vendors/tooluniverse/tooluniverse-network-pharmacology/TOOL_REFERENCE.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "d8445b5de3f27f507d8f22f451a45eb36691e633f15bf8c763230f04062ccc33"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "af2c8f5043657873f058cfdc6146fa398d3a2bbbc362e16fe45123d0af04221a"
     },
     {
       "source_path": "skills/tooluniverse-network-pharmacology/USE_PATTERNS.md",
@@ -5123,7 +5199,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-neuroscience/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "af8704e8a8a9aa28ee8d6e943babe5da7f58b59d721f2e6d7e2362536fb314c8"
+      "sha256": "251e9976e43ad3192a28a9b5ef9a6b2fae847426b3a6d0dc2e839f1f6be596db"
     },
     {
       "source_path": "skills/tooluniverse-noncoding-rna/SKILL.md",
@@ -5233,7 +5309,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-pharmacogenomics/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "ac905bf5ae60c1f488a48e36dd83a89e79ee4cae232ee9cd181086214a05cf9e"
+      "sha256": "c7ca4e49b3682f49889a4f384702b0608a5e301204f6ebbf9bfddfb8a7e5effa"
     },
     {
       "source_path": "skills/tooluniverse-pharmacokinetics/scripts/nca_from_csv.py",
@@ -5294,14 +5370,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-pharmacovigilance/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "736df0c3ffa2a10efd63f7073a6928d64f92194d507ab1ce989247272b0fdcb8"
+      "sha256": "a696594a568a81e8be23c7a485ccbec8ec530118a473181fe47005c836683cdb"
     },
     {
       "source_path": "skills/tooluniverse-pharmacovigilance/TOOLS_REFERENCE.md",
       "output_path": "vendors/tooluniverse/tooluniverse-pharmacovigilance/TOOLS_REFERENCE.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "5939c3b654716fc1ca66cd971aa8aebbb2bca214700b436e95668f48a3fcfd43"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "bfc739cb98ba3557583a166144dd576f2ce6f79bdaf57627dc34f09c07b6f058"
     },
     {
       "source_path": "skills/tooluniverse-phewas/evals/evals.json",
@@ -5402,14 +5478,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-phylogenetics/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "b6bdd588bd7f2f3965223db4d3a3fd84e26e2a05fed55f4d5244cd4b91c15282"
+      "sha256": "5313280eb9c060d1930dd48ca64b6786c986e51796336309db8555a6556749ef"
     },
     {
       "source_path": "skills/tooluniverse-phylogenetics/SKILL.md#progressive-disclosure",
       "output_path": "vendors/tooluniverse/tooluniverse-phylogenetics/references/upstream-details.md",
       "disposition": "included",
       "reason": "progressive disclosure extraction",
-      "sha256": "f37dbe49fb467f61bb52f55e74c9538470a038a0f186e1dc4ac3f18ed8129b09"
+      "sha256": "07061c284ae90dc2238cd3316a87ceb565750666460f066bcdbb49d3dcd1612f"
     },
     {
       "source_path": "skills/tooluniverse-phylogenetics/test_phylogenetics.py",
@@ -5421,7 +5497,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-plant-genomics/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "f97c2eda43b6c35be32e08ed53d9f463369a7a94f0e4eeded315f09e390cce46"
+      "sha256": "2cc5754ee452aab114445a3e985edff2f9d0b567546a611469bb81efd0d3f4a8"
     },
     {
       "source_path": "skills/tooluniverse-polygenic-risk-score/.env.template",
@@ -5537,7 +5613,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-precision-oncology/API_USAGE_PATTERNS.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "5e987a68a4894be5f904fb4dd403261a9b8fc641241b5fedf859f01b4ae9f146"
+      "sha256": "70c5591034a14d7e66d3dabcf0b9138be4f742d5f1b59f7b693c5c0446cdb852"
     },
     {
       "source_path": "skills/tooluniverse-precision-oncology/CHECKLIST.md",
@@ -5572,14 +5648,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-precision-oncology/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "5bcb215af2fb17b6237203ff5b0be01807029ebd1f0dac44fd0c080a93338467"
+      "sha256": "37190b25d965586d1f1299978ab9b3a346ae44a6937a3453a366d418ee4f0176"
     },
     {
       "source_path": "skills/tooluniverse-precision-oncology/TOOLS_REFERENCE.md",
       "output_path": "vendors/tooluniverse/tooluniverse-precision-oncology/TOOLS_REFERENCE.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "9e980e93ff6e1531aa2a5837de2136cbe498eb0d413cc3d12b2bc3809ae6a4a1"
+      "sha256": "6cec2b4cc60cce928b69fdd0b18c22a106e3859f9f6933363a56c5cbece6f860"
     },
     {
       "source_path": "skills/tooluniverse-precision-oncology/TREATMENT_ALGORITHMS.md",
@@ -5624,7 +5700,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-product-safety-surveillance/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "4f49e5de31a13e59e419fe36d6d5bf8e240a558e49b59b0dc25b2d83d1a92d40"
+      "sha256": "9329bd04a9587abf44027613fad1b8a32215f9647e8e5ea83efd0ae0209f5d8b"
     },
     {
       "source_path": "skills/tooluniverse-protein-interactions/.env.template",
@@ -5648,7 +5724,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-protein-interactions/DOMAIN_ANALYSIS.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "94fe4dd814874a224e238a8d052cc2dbb7632620e089c806dbc824b8864be42c"
+      "sha256": "be2031e6bf1bab474bb4b8746aa1a5d67ca84b76fe95f862222e66ae4537026e"
     },
     {
       "source_path": "skills/tooluniverse-protein-interactions/KNOWN_ISSUES.md",
@@ -5681,7 +5757,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-protein-interactions/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "9edc3f345c4230430c13687547ae743ec09c7bfca3acce9491afe966f5d89aa1"
+      "sha256": "6a90244bae1b6931f2d5f93329300157bd76c88818edebe1531b834717568d99"
     },
     {
       "source_path": "skills/tooluniverse-protein-interactions/test_protein_tools.py",
@@ -5733,7 +5809,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-protein-structure-prediction/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "eac200a7d2cbb2829fbca4c34110a6f8c7e9bbca1219de26b82c135697de9d64"
+      "sha256": "ee5d1a76f05e40b6c35fd3400fc43aa6e715d8416abcd76efc38337c0e6cf89a"
     },
     {
       "source_path": "skills/tooluniverse-protein-structure-retrieval/CHECKLIST.md",
@@ -5873,35 +5949,35 @@
       "output_path": "vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "773c981570b709c65426ad991de5131c82a079245848781953753b440816fff6"
+      "sha256": "ab35ea02bfb450a29befb2d37faca2f7d2f6de55900a2e530579699b7fe1e7b0"
     },
     {
       "source_path": "skills/tooluniverse-rare-disease-diagnosis/TOOLS_REFERENCE.md",
       "output_path": "vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/TOOLS_REFERENCE.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "117796249c4335d218d1b3accc7dfa897e1c717acd2d05a6d52353b3bbb3977b"
+      "sha256": "091f814e1bc5aae0bebaf20f8dab86c472c5af2d0a35841a92c3485ad57b16e9"
     },
     {
       "source_path": "skills/tooluniverse-rare-disease-genomics/SKILL.md",
       "output_path": "vendors/tooluniverse/tooluniverse-rare-disease-genomics/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "4a3f0a37d79308505162c884647ece31a4f63d92733659423420409d14b8dbcf"
+      "sha256": "2926f3b164bc1da629863f7cdc67aeb84e997cfe42c8032928e86553606b6c5f"
     },
     {
       "source_path": "skills/tooluniverse-regulatory-genomics/SKILL.md",
       "output_path": "vendors/tooluniverse/tooluniverse-regulatory-genomics/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "5043d3dca09734ecb46d1efe4bd15db07fa2b7a082ec46fdb83cffcbb01272b0"
+      "sha256": "fca2dbddb8c63ea0db65b20280e8693e887bf7073671f72093872f91839f67b9"
     },
     {
       "source_path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
       "output_path": "vendors/tooluniverse/tooluniverse-regulatory-variant-analysis/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "66182c376ac4d35d7775a3eaf02892ae8056e790ff09b238b3de15a82456a215"
+      "sha256": "920e4a42696f6c78bbf2fbc26a47c0a2e5b40df938c617d83dd2d169b5f4d098"
     },
     {
       "source_path": "skills/tooluniverse-residue-functional-mechanism-interpretation/SKILL.md",
@@ -6107,7 +6183,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-sequence-analysis/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "56d530331d404087e5c86be54d99832d6478073cc8abe532db4217d0a9b3f976"
+      "sha256": "3b4f0d2d6b97cb5a0db482ab54f49bc5fdbe748bce0df8736d825711f9b44dd3"
     },
     {
       "source_path": "skills/tooluniverse-sequence-retrieval/CHECKLIST.md",
@@ -6271,7 +6347,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-spatial-omics-analysis/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "413c27c82a098212924d9ae38ba968ee0a449d9d78148d0d132bb9bf6d622120"
+      "sha256": "bf6807ec7cdd38146b600eb49555d8d27cdc766d0c1b533f1b0ae404d62dabbc"
     },
     {
       "source_path": "skills/tooluniverse-spatial-omics-analysis/test_spatial_omics.py",
@@ -6282,8 +6358,8 @@
       "source_path": "skills/tooluniverse-spatial-omics-analysis/tool-reference.md",
       "output_path": "vendors/tooluniverse/tooluniverse-spatial-omics-analysis/tool-reference.md",
       "disposition": "included",
-      "reason": "reviewed runtime resource",
-      "sha256": "673af965121d518f8d2cc03573944eb06f73fe06964c7d32c7924ea04d2d6895"
+      "reason": "reviewed tool-contract adaptation",
+      "sha256": "e79dbf37d63753b1b0ffd665ca0a1586a38141b37a48d825929059412eb21193"
     },
     {
       "source_path": "skills/tooluniverse-spatial-transcriptomics/code_examples.md",
@@ -6304,7 +6380,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-spatial-transcriptomics/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "5fbc5e2030c34fa22f9e10fcdb9a9ce3757e2af705d20191930d69bf4f963ffa"
+      "sha256": "d9e3392d7716455e0444b340570db8a6858124f85d1ee6de24d3ebfb1fb5ef6c"
     },
     {
       "source_path": "skills/tooluniverse-statistical-modeling/anova_and_tests.md",
@@ -6444,7 +6520,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-statistical-modeling/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "8a66e33eb647dca038b4fd4ad2a09f7cd17f64451c9b880126c9eb291db29905"
+      "sha256": "0a5698d8de655e8b9a85996be1e6361fa2594ef494dd312e1da49f2efc831dbc"
     },
     {
       "source_path": "skills/tooluniverse-statistical-modeling/SKILL.md#progressive-disclosure",
@@ -6463,7 +6539,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-statistical-modeling/TOOLS_REFERENCE.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "3b482d2936706aa5182ad6d10c88feabd9e0a263d2505b27c7cb4e5860467053"
+      "sha256": "922a701a59b00537d9a34b49f5abdfdf08e0cafeba0a2ab22a7a6de2d40e810a"
     },
     {
       "source_path": "skills/tooluniverse-stem-cell-organoid/SKILL.md",
@@ -6477,7 +6553,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-structural-proteomics/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "f33ec831d0c6587e42b12b728eef60dac14eb768c7c8da387f42eaaecb961bb9"
+      "sha256": "3a37698603c429c1468ebc06a26662d1c72b01592743ee345c810980869f1042"
     },
     {
       "source_path": "skills/tooluniverse-structural-variant-analysis/ANALYSIS_PROCEDURES.md",
@@ -6592,7 +6668,7 @@
       "output_path": "vendors/tooluniverse/tooluniverse-target-research/REFERENCE.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "75cc059f927062e7a81b461c5f828fde849c8fd46608db16564142ad716d77aa"
+      "sha256": "934f62682cb8d310ef9d390f5ba172b68c4d55512ea6aca81a93991f097333d6"
     },
     {
       "source_path": "skills/tooluniverse-target-research/REPORT_FORMAT.md",
@@ -6606,14 +6682,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-target-research/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "a4c0e68ab49bb93b563eed8bb3354391ec6ab62248e2fa33628d9303e1b1b3ff"
+      "sha256": "52e417501712de32715b50ef8331cbf4ca339bf25b5d8d0ae377ff2cc6caf0e2"
     },
     {
       "source_path": "skills/tooluniverse-toxicology/SKILL.md",
       "output_path": "vendors/tooluniverse/tooluniverse-toxicology/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "e975c81ca4cbc02f0a117708034e9e853b0d7bb635beff36e32504f0246c7886"
+      "sha256": "7b40efad1fb174fe3570b28fe3d8cd45325172583a00cac8dc3ead283a05a9b2"
     },
     {
       "source_path": "skills/tooluniverse-vaccine-design/scripts/population_coverage.py",
@@ -6787,14 +6863,14 @@
       "output_path": "vendors/tooluniverse/tooluniverse-variant-interpretation/SKILL.md",
       "disposition": "included",
       "reason": "normalized Open Agent Skill entry",
-      "sha256": "6c8715378dc10ff080ababadab407b699291ea141fca97f8e96f026f1d9b53eb"
+      "sha256": "c327ae016cbaf54c85b2589551a76695a33b0f516972a0dd2d28614b0d78bb4b"
     },
     {
       "source_path": "skills/tooluniverse-variant-interpretation/TOOLS_REFERENCE.md",
       "output_path": "vendors/tooluniverse/tooluniverse-variant-interpretation/TOOLS_REFERENCE.md",
       "disposition": "included",
       "reason": "reviewed runtime resource",
-      "sha256": "1dd350da7e14cf7fce6ed71f41384d1b91814b2e71c7d2730f93ac9c1efbb011"
+      "sha256": "fd35a621dac541591a9a016193ee60f963385c3c5762af17e4f520bb79cff803"
     },
     {
       "source_path": "skills/tooluniverse-variant-predictor-dms-validation/SKILL.md",

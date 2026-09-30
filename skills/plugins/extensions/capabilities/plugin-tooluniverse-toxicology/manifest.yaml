@@ -51,5 +51,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-toxicology/SKILL.md
-      sha256: e975c81ca4cbc02f0a117708034e9e853b0d7bb635beff36e32504f0246c7886
+      sha256: 7b40efad1fb174fe3570b28fe3d8cd45325172583a00cac8dc3ead283a05a9b2
 license: Apache-2.0

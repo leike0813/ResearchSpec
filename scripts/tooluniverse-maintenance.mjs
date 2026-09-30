@@ -19,7 +19,7 @@ import {
 } from "./lib/vendor-maintenance.mjs";
 
 const ROOT = process.cwd();
-const ANCHOR_CREATED_AT = "2026-08-17T00:00:00+08:00";
+const ANCHOR_CREATED_AT = "2026-09-30T00:00:00+08:00";
 const CATALOG_PATH = path.join(ROOT, "audits", "tooluniverse", "catalog.json");
 const AUDIT_README = path.join(ROOT, "audits", "tooluniverse", "README.md");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "tooluniverse-maintenance", "SKILL.md");
@@ -50,8 +50,8 @@ function upstreamState() {
   return {
     release: data.release,
     revision,
-    root_license_claim: "MIT",
-    tracked_entry_count: 7365,
+    root_license_claim: "Apache-2.0",
+    tracked_entry_count: inv.total,
     content_file_count: inv.total,
     tree_sha256: inv.treeSha,
     inventory: { total: inv.total, treeSha: inv.treeSha, byTop: invByTop, byExt: invByExt },
@@ -322,6 +322,8 @@ function writeRecords(anchorId) {
 - immutable audit SHA-256: \`${state.upstream.audit_sha256}\`
 - advisory vendor bundle SHA-256: \`${state.advisory.tree_sha256}\`
 
+${existsSync(path.join(artifactDir(anchorId), "upstream-delta.json")) ? "增量路径、工具声明变化、逐能力原文与新增 Skill 决策见 [artifacts/upstream-delta.json](artifacts/upstream-delta.json) 和 [artifacts/upstream-analysis.md](artifacts/upstream-analysis.md)。实际生成后的语义判定见 [05-semantic-review.md](05-semantic-review.md)。" : ""}
+
 ## Upstream Inventory
 
 | top-level area | files |
@@ -366,7 +368,7 @@ ${rows.flatMap((row) => row.tool_files).map((tool) => `| \`${tool.target}\` | \`
 
 ## Verification
 
-- 每个 mixed package 的 \`tools/\` 与 reviewed vendor bundle 逐字节一致。
+- 每个 package 的 knowledge 资源与 reviewed vendor bundle 逐字节一致。
 - Agent-only package 不复制脚本，语义程序完整落在 \`SKILL.md\`。
 - 上游可执行文件只审计，不执行、不安装依赖、不访问服务。
 `;
@@ -394,9 +396,7 @@ ${rows.map((row) => `| \`${row.capability_id}\` | ${inlineCode(row.required_brie
 ## Verification
 
 - [x] 30 个 ToolUniverse 领域按 source-neutral domain catalog 投影对应 extension。
-- [x] 每个 profile 通过 \`start -> instructions -> advance\` 全流程。
-- [x] 代表性 profile 覆盖 invalid-then-valid script validator 路径；全部 130 个 profile 通过 registry/维护检查。
-- [x] \`pnpm check\` / \`pnpm lint\` / 全量 \`pnpm test\` 通过。
+- 全部 130 个 profile 通过 registry/维护检查；运行验证及实际测试范围见 \`05-semantic-review.md\`。
 `;
 
   const review = `# ToolUniverse Extension Anchor Review — ${data.release}
@@ -421,10 +421,9 @@ ${rows.map((row) => `| \`${row.capability_id}\` | \`${row.package_tree_sha256}\`
 |---|---|---|
 | extension review | \`${esc(state.review.artifact_path)}\` | \`${state.review.artifact_sha256 ?? "missing"}\` |
 
-## Human Confirmation
+## Static Review
 
-- [x] 130 个上游语义义务均由 extension SKILL 或 graph profile 承接。
-- [x] extension SKILL 不含 next-node / next-phase / agent-team orchestration。
+- 逐能力语义义务及权限边界由 Agent 审阅，见 \`05-semantic-review.md\`；机器输出不建立人类确认。
 - [x] 命名、registry、审计记录、锚点 manifest 身份一致。
 - [x] Agent 语义审阅见 \`05-semantic-review.md\`。
 `;

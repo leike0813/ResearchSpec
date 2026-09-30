@@ -52,5 +52,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-kegg-disease-drug/SKILL.md
-      sha256: 01609a6e63cfac01d905344dec67315e5eea66a701f39d495ccaab8cf488bad3
+      sha256: 3ee6f39f6ca1d481503ac6fee9b7dffeae4db4bfb877047db426c785d3acdbd0
 license: Apache-2.0

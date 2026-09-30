@@ -12,7 +12,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.4
   researchspec-role: semantic-helper
 ---
 
@@ -115,6 +115,8 @@ df['outcome_binary'] = (df['outcome_continuous'] >= threshold).astype(int)
 ```
 
 **Survey weights**: Some surveys (NHANES, BRFSS, MEPS) require sampling weights for valid inference. Check the survey documentation. For weighted regression, use `statsmodels.stats.weightstats` or linearmodels.
+
+**International/LMIC population health**: for a PECO question outside the US, `DHSProgram_search_indicators`/`DHSProgram_get_data` covers the same kind of national survey indicators (fertility, maternal/child mortality, nutrition, immunization, HIV) across many countries, filterable by country and survey year — the NHANES/BRFSS-style source when the population isn't the US.
 
 **REST API data**: For sources like GDC (TCGA), ClinicalTrials.gov, or OpenTargets, paginate through the API:
 ```python

@@ -318,7 +318,7 @@ for gene in drug_target_genes[:10]:
 **Step 6.1**: Adverse event profiling.
 
 ```python
-faers_ae = tu.tools.FAERS_search_reports_by_drug_and_reaction(drug_name=drug_name, limit=100)
+faers_ae = tu.tools.FAERS_search_adverse_event_reports(medicinalproduct=drug_name, limit=100)
 faers_serious = tu.tools.FAERS_filter_serious_events(
     operation="filter_serious_events", drug_name=drug_name, seriousness_type="all"
 )

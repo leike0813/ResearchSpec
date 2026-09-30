@@ -12,7 +12,60 @@ metadata:
 
 > **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, or receipts. Use the ResearchSpec CLI for authoritative mutations.
 
+## Hard constraints — PhyKIT statistics
+
+Use `phykit_batch_analysis` for every statistic computed across multiple trees or alignments; do not loop the PhyKIT CLI per file. It returns the correct column for each function, so read its returned value instead of re-parsing PhyKIT stdout.
+
+- `saturation` — the returned value is PhyKIT's second printed column (`1 - slope`); the first column is the slope. Do not report the slope as saturation.
+- `treeness_over_rcv` (alias `toverr`) — pass the **untrimmed** alignment (`directory`/`extension`) and its tree (`tree_directory`/`tree_extension`); trimming changes RCV and the ratio.
+- `parsimony_informative` — the returned percentage (%PIS), not the raw count.
+- `dvmc` and `long_branch_score` are supported functions; never mark them unsupported and never loop for them.
+- `long_branch_score` is multi-valued per tree: set `per_tree_stat` (`mean` or `median`) before any cross-group comparison.
+
+**Gap percentage.** A '>X% gapped columns' filter needs the fraction of alignment **columns** that contain at least one gap. No bundled helper reports that statistic: `phykit_batch_analysis` with `operation=gap_percentage` and every `alignment_gap_percentage` helper (in `scripts/tree_statistics.py`, `scripts/scogs_phykit_pipeline.py`, `scripts/scogs_paired_compare.py`) return gap characters over total positions (a residue fraction), and `filter_by_gap_threshold` in `scripts/format_alignment.py` is residue-based too. Compute the column fraction directly from the alignment (per column: does it contain at least one gap?); `remove_gappy_columns` in `scripts/format_alignment.py` computes a per-column gap fraction but is a column filter, not this reported percentage.
+
+**Cross-group Mann-Whitney U.** The batch result carries per-file `values` only for sets up to 50; larger sets return summary statistics only. Compute the test only from full `values`; when only summaries are available, report that the p-value cannot be computed rather than fabricating one.
+
 # Phylogenetics and Sequence Analysis
+
+## Four traps that produce a confidently wrong number
+
+Each of these was observed producing a wrong answer *while the correct guidance
+was already present further down this file*. Check them before you answer.
+
+1. **PhyKIT prints more than one column, and for `saturation` the two
+   conventions disagree — state which you used.** `phykit saturation` prints
+   `saturation <TAB> |saturation-1|`. Its own `--help` is explicit: *"The first
+   value is the saturation value and the second column is the absolute value of
+   saturation minus 1."* But several published analyses (and some reference
+   answers derived from them) report the **second** column as "the saturation
+   value". The two always sum to 1.0000, which is the tell that you may be
+   looking at the wrong one — on the fungal scogs set the medians are 0.39
+   (col 1) and 0.61 (col 2).
+
+   So: **follow phykit and use column 1** unless the question or source defines
+   saturation the other way, and say in your answer which column you read. Do
+   not silently pick the one that looks closer to an expected number.
+
+   `treeness_over_rcv` has no such ambiguity: it gives
+   `ratio <TAB> treeness <TAB> RCV` and the ratio is first.
+
+2. **"Gap percentage" means the fraction of alignment COLUMNS containing at
+   least one gap**, not the fraction of residues that are gaps. On the fungal
+   scogs set the residue definition maxes out at 0.556, so a ">70% gaps" filter
+   selects **nothing** and the question looks unanswerable; by columns, three
+   orthologs qualify (max 0.783).
+
+3. **`treeness_over_rcv` and `rcv` take the UNTRIMMED `.faa.mafft`**, while
+   `saturation` takes the trimmed `.clipkit`. RCV measures variability across
+   columns, so trimming changes it: median 0.2683 untrimmed against 0.3050
+   trimmed, and among >70%-gap genes the maximum is 0.2572 untrimmed against
+   0.4174 trimmed.
+
+4. **Never loop PhyKIT per file.** `phykit_batch_analysis` is parallel and does
+   ~250 trees in about 35 seconds; a shell loop takes ~9 minutes and runs out of
+   turns mid-way, producing no answer at all. It also selects the right column
+   for every function, which removes trap 1 entirely.
 
 ## RULE ZERO — Check for pre-computed results FIRST
 
@@ -156,7 +209,6 @@ that line when the raw min in a group is 0.
 scogs zips ship in two shapes:
 - **Full**: `<gene>.faa`, `<gene>.faa.mafft`, `<gene>.faa.mafft.clipkit`,
   `<gene>.faa.mafft.clipkit.treefile`, plus iqtree/bionj/log/mldist.
-  Use clipkit alignment + treefile for tree-paired metrics.
 - **Alignment-only**: just `<gene>.faa` + `<gene>.faa.mafft`. No
   trees, no clipkit. Used for parsimony, RCV, gap-percentage
   questions. Use the `.faa.mafft` (NOT raw `.faa`) — the published
@@ -165,6 +217,48 @@ scogs zips ship in two shapes:
 Both bundled scripts auto-detect the layout and use the best available
 alignment per ortholog. Do NOT re-run MAFFT or ClipKit yourself; the
 shipped files are canonical.
+
+#### Which alignment goes with which metric (this changes the answer)
+
+The tree is always the ClipKit-derived `.faa.mafft.clipkit.treefile`. The
+**alignment** argument depends on the metric:
+
+| metric | alignment to pass |
+|---|---|
+| `treeness`, `dvmc`, `total_tree_length`, `long_branch_score` | tree only — no alignment |
+| `saturation` | `.faa.mafft.clipkit` (trimmed) |
+| **`treeness_over_rcv` / `rcv`** | **`.faa.mafft` (untrimmed)** |
+| parsimony-informative sites, gap percentage | `.faa.mafft` (untrimmed) |
+
+RCV measures compositional variability **across the alignment's columns**, so
+trimming changes it materially — and `treeness_over_rcv` divides by RCV, so the
+trimmed alignment shifts the ratio for every gene. Verified on the fungal scogs
+set (249 orthologs, canonical shipped files):
+
+```
+median treeness/RCV   untrimmed .faa.mafft = 0.2683    trimmed .clipkit = 0.3050
+max treeness/RCV      (over the 3 genes with >70% gapped columns:
+                       1260807at2759 0.0861, 1567796at2759 0.1866, 939345at2759 0.2572)
+                      untrimmed .faa.mafft = 0.2572    trimmed .clipkit = 0.4174
+```
+
+Plain `treeness` needs no alignment and is unaffected — it reproduces exactly
+(median 0.0501 on the same 249 files), which is how the alignment choice was
+isolated as the cause rather than the tree set or the tool.
+
+`phykit_batch_analysis` takes the two independently, so pass them explicitly:
+
+```bash
+tu run phykit_batch_analysis '{"operation":"batch","function":"treeness_over_rcv",
+  "directory":"<dir>","extension":".faa.mafft",
+  "tree_directory":"<dir>","tree_extension":".faa.mafft.clipkit.treefile"}'
+```
+
+**Gap percentage** in these questions means the fraction of alignment
+**columns containing at least one gap**, not the fraction of all residues that
+are gaps. The two differ by an order of magnitude: with the residue definition
+no fungal ortholog exceeds 70% gaps, so a ">70% gaps" filter silently selects
+nothing.
 
 **Anti-pattern:** running `phykit` on the raw `*.busco.zip` extracted
 ortholog FASTAs and aligning/tree-building yourself. The pre-computed
@@ -301,115 +395,6 @@ treeness_results = batch_treeness(gene_files)  # → {gene_id: value}
 All files identified; group structure detected; correct PhyKIT function; ALL genes processed (not sample); correct test; 4-decimal rounding; specific statistic (median/max/U/p); Mann-Whitney `alternative='two-sided'`.
 
 ---
-
-## Analysis conventions
-
-### MANDATORY: Use `phykit_batch_analysis` tool for batch computations
-For ANY question asking for statistics across multiple trees/alignments (median treeness, mean saturation, DVMC percentage, gap percentage, long branch scores), use the ToolUniverse tool:
-```bash
-tu run phykit_batch_analysis '{"operation":"batch","function":"treeness","directory":"./trees","extension":".treefile"}'
-tu run phykit_batch_analysis '{"operation":"batch","function":"saturation","directory":"./alignments","extension":".fa","tree_directory":"./trees","tree_extension":".treefile"}'
-tu run phykit_batch_analysis '{"operation":"gap_percentage","directory":"./alignments","extension":".fa"}'
-```
-Do NOT run phykit manually in a loop — the tool handles all files and returns correct summary statistics.
-
-### PhyKIT column-position cheat sheet (parse output carefully)
-
-When parsing PhyKIT stdout for batch metrics, the **column you want** depends on the metric:
-
-| Command | Output columns | Column to take |
-|---------|---------------|----------------|
-| `phykit saturation` | `saturation_value <TAB> abs(saturation-1)` | **col 1** is the "saturation value" (1 = no saturation; closer to 1 = less saturated). **col 2** = `\|saturation - 1\|` (distance from no-saturation; higher = MORE saturated, less signal retained). Use col 1 for "saturation value" questions; col 2 for "distance from saturation" |
-| `phykit toverr` (a.k.a. `treeness_over_rcv`) | `treeness/RCV <TAB> treeness <TAB> RCV` | **col 1** (treeness/RCV ratio) |
-| `phykit long_branch_score -v` (verbose) | `taxon <TAB> score` per line | aggregate scores per tree (mean) |
-| `phykit long_branch_score` (no -v) | `mean <TAB> median <TAB> 25%ile <TAB> 75%ile <TAB> min <TAB> max <TAB> std <TAB> var <TAB> n` | **col 1** (mean) for "mean LB score" |
-| `phykit patristic_distances` (no -v) | summary stats line (same shape as LB) | **col 1** (mean) for "mean patristic distance" |
-
-**Rule of thumb**: phykit `toverr` and `saturation` produce *multi-column lines per alignment*. Don't grep the value that "looks like the answer" — count columns from the header in `phykit <metric> --help`. If your batch median is wildly off the published number (e.g., median treeness/RCV ≈ 0.20 when expected ≈ 0.26), you almost certainly picked the wrong column.
-
-Preferred: don't parse phykit output by hand — call the `phykit_batch_analysis` tool, which already returns the correct column for each metric. Supported `function` values are `treeness`, `saturation`, `dvmc`, `long_branch_score`, `total_tree_length`, `parsimony_informative`:
-
-```bash
-tu run phykit_batch_analysis '{"operation":"batch","function":"saturation","directory":"./alignments","extension":".fa","tree_directory":"./trees","tree_extension":".treefile"}'
-tu run phykit_batch_analysis '{"operation":"batch","function":"treeness","directory":"./alignments","extension":".fa","tree_directory":"./trees","tree_extension":".treefile"}'
-```
-
-For `treeness_over_rcv` (toverr / treeness/RCV ratio) the tool has no matching `function`; use the bundled `scogs_*.py` scripts below, which compute it directly.
-
-Sanity targets for biological scogs trees: median saturation ~0.4–0.7, median treeness/RCV ~0.2–0.4, median treeness ~0.05–0.15. Values an order of magnitude off these mean wrong column.
-
-### Bundled script: BUSCO target_orthologs intersection
-
-When the data folder has `*.busco.zip` files + `target_orthologs.txt`, use the bundled script — do NOT enumerate `single_copy_busco_sequences/*.faa` across all zips manually:
-
-```bash
-python skills/tooluniverse-phylogenetics/scripts/busco_target_orthologs.py \
-  --data-folder /path/to/data
-```
-
-The default run prints FIVE summary lines covering every common
-interpretation of "total amino acids":
-
-```
-# SUMMARY: n_targets=K, n_intersected=N (single-copy in ALL S species), intersected_total_aa=A, sum_all_aa=B
-# SUMMARY group=all: intersected n=N total_aa=A, sum_all total_aa=B
-# SUMMARY group=animals: sum_all total_aa=X        <-- per-group sum (animal species only)
-# SUMMARY group=fungi:   sum_all total_aa=Y        <-- per-group sum (fungal species only)
-```
-
-### Picking the right SUMMARY line (read carefully)
-
-Match the question phrasing to the summary line:
-
-| Question phrasing | Pick this line | Why |
-|---|---|---|
-| "total AA in all single-copy ortholog sequences" with **only animal species in the data folder OR question mentions only one organism group** | `# SUMMARY group=animals: sum_all total_aa=...` (or `group=fungi`) | scogs phylogenomics analyses are run PER GROUP; "all" refers to all orthologs WITHIN that group, not the union across groups |
-| "total AA across orthologs single-copy in **every** / **all** species" | `intersected_total_aa` | strict intersection rule |
-| "total AA across all per-species copies" | `sum_all_aa` (group=all) | only when the question says "all species" or the data folder has just one organism group |
-
-**Default rule when the data folder contains BOTH animal AND fungal busco
-zips**: published "total amino acids" answers almost always refer to
-ONE group (the analysis group), NOT the cross-group union. Use
-`group=animals: sum_all` or `group=fungi: sum_all`. Do NOT pick the
-union number (`sum_all_aa`) unless the question explicitly says
-"across all 8 species" or "fungi and animals combined".
-
-The script emits the per-group sums BEFORE the union sum on stdout for
-this exact reason — read the output line by line and stop at the
-`group=animals` / `group=fungi` line that matches the analysis group
-implied by the question.
-
-### Single-copy orthologs across species — comparison set + intersection
-
-Two-step rule when counting across BUSCO `single_copy_busco_sequences/` data:
-
-1. **Find the comparison set first.** If a `target_orthologs.txt` (or similar named subset list) exists in the data folder, that file IS the comparison set — restrict to those ortholog IDs only. Do not enumerate every BUSCO single-copy file across species. Do not assume "all" means the whole BUSCO output when a target list is provided.
-
-2. **Then apply the intersection rule.** "Single-copy ortholog" across species means single-copy in EVERY species in the comparison set. If an ortholog is missing from one species' `single_copy_busco_sequences/`, exclude it from the count entirely — do not partially count the species that do have it.
-
-Sanity check: if any species shows a much smaller per-ortholog count than others (e.g., one species at ~600 aa while others are 4000+ aa for the same ortholog set), the missing-from-some orthologs are inflating the per-ortholog average — drop them first.
-
-**Worked example.** data folder has 8 species (4 animal, 4 fungal) `*.busco.zip` + `target_orthologs.txt` listing 10 ortholog IDs:
-- Wrong: enumerate all `single_copy_busco_sequences/*.faa` across all 8 species → ≈80 files → sum AA → answer 32228 (treats every per-species copy independently).
-- Right: for each of the 10 target IDs, check it appears as `single_copy` in **all 8** species → keep only intersected IDs (often 5/10 — some target IDs are multi-copy/missing in one species) → for kept IDs, sum AA across the 8 species → 13809.
-- **"5 trees" semantics**: when a question says "5 trees" but you find 10 treefiles, the GT used the intersected subset (orthologs single-copy in all species) — not all 10. Re-derive the intersection before averaging.
-
-### Process the FULL set, not a sample (batch metrics)
-
-When a question asks for a median/percentile/mean across orthologs, your batch must include EVERY ortholog in the relevant comparison set:
-- `scogs_fungi.zip` ships ~255 fungal alignments+trees; `scogs_animals.zip` ships ~241. Median computed from a 10-file sample is NOT the published answer.
-- For `phykit_batch_analysis`, always point at the **extracted scogs directory** containing all per-ortholog files, not a hand-picked subset.
-- If your computed RCV/treeness/DVMC median diverges from a sanity-check target by >10%, count files first — you likely processed a subset.
-
-### Filter THEN compute (don't compute then filter)
-
-Questions of the form "max X in genes with >70% gaps" require the filter to be applied before the max:
-```python
-# 1. Compute gap% per alignment
-# 2. Keep only alignments with gap% > 70
-# 3. Compute treeness/RCV ON THE FILTERED SET
-# 4. Take max
-```
 
 Detailed upstream guidance continues in [references/upstream-details.md](references/upstream-details.md).
 ## ResearchSpec node contract

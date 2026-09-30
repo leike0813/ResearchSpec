@@ -68,14 +68,14 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-tools-reference.md
     path: TOOLS_REFERENCE.md
-    content_hash: 1dd350da7e14cf7fce6ed71f41384d1b91814b2e71c7d2730f93ac9c1efbb011
+    content_hash: fd35a621dac541591a9a016193ee60f963385c3c5762af17e4f520bb79cff803
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/SKILL.md
-      sha256: 6c8715378dc10ff080ababadab407b699291ea141fca97f8e96f026f1d9b53eb
+      sha256: c327ae016cbaf54c85b2589551a76695a33b0f516972a0dd2d28614b0d78bb4b
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/ACMG_CLASSIFICATION.md
       sha256: 55b99a034aa38af4e6e1dc8d1f3f0e22647a5d73a654d4590b76731a516cba56
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/CHECKLIST.md
@@ -85,5 +85,5 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/EXAMPLES.md
       sha256: 5063525d74acaba1ad3fcf2a6c87410b70ce5626fdf29a5033a83fe5cc1729fa
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-interpretation/TOOLS_REFERENCE.md
-      sha256: 1dd350da7e14cf7fce6ed71f41384d1b91814b2e71c7d2730f93ac9c1efbb011
+      sha256: fd35a621dac541591a9a016193ee60f963385c3c5762af17e4f520bb79cff803
 license: Apache-2.0

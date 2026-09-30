@@ -119,7 +119,7 @@ export function syncTools({ root, catalog, displayName }) {
       const target = path.join(root, tool.target);
       const content = readFileSync(source);
       mkdirSync(path.dirname(target), { recursive: true });
-      writeFileSync(target, content);
+      if (!existsSync(target) || !readFileSync(target).equals(content)) writeFileSync(target, content);
       copied += 1;
     }
   }

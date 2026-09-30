@@ -51,5 +51,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-epidemiological-analysis/SKILL.md
-      sha256: f34e93bd791331fb9fb2aad98e9177dafae99e0a62c03c2c05668cc2a526ab87
+      sha256: a081b70612880f31bcbea5eab93900ba113abdf3c26022652990ebf3e430c01d
 license: Apache-2.0

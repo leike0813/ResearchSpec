@@ -197,13 +197,12 @@ def analyze_ddi(tu, drug_a, drug_b):
 
     try:
         result = tu.tools.FAERS_count_reactions_by_drug_event(
-            drug_name=drug_a,
-            event_name="drug interaction"
+            medicinalproduct=drug_a,
+            reactionmeddraverse="drug interaction"
         )
 
-        if result.get('status') == 'success':
-            data = result.get('data', {})
-            count = data.get('count', 0)
+        if result.get('total_reports_matching_query') is not None:
+            count = result['total_reports_matching_query']
             print(f"✅ Found {count} adverse event reports mentioning '{drug_a}' + 'drug interaction'")
             report['clinical_evidence']['faers_count'] = count
         else:
@@ -226,23 +225,26 @@ def analyze_ddi(tu, drug_a, drug_b):
         print("✅ Mechanisms identified: +40 points")
 
     # Add points for FAERS reports
-    faers_count = report['clinical_evidence'].get('faers_count', 0)
-    if faers_count > 100:
+    faers_count = report['clinical_evidence'].get('faers_count')
+    if faers_count is not None and faers_count > 100:
         risk_score += 30
         print(f"✅ High FAERS count ({faers_count}): +30 points")
-    elif faers_count > 10:
+    elif faers_count is not None and faers_count > 10:
         risk_score += 15
         print(f"✅ Moderate FAERS count ({faers_count}): +15 points")
 
-    report['risk_score'] = risk_score
 
-    if risk_score >= 70:
+    if faers_count is None:
+        risk_score = None
+        severity = 'UNKNOWN'
+    elif risk_score >= 70:
         severity = "MAJOR"
     elif risk_score >= 40:
         severity = "MODERATE"
     else:
         severity = "MINOR"
 
+    report['risk_score'] = risk_score
     report['severity'] = severity
 
     print(f"\n📊 Overall Risk Score: {risk_score}/100 ({severity})")
@@ -262,7 +264,7 @@ def analyze_ddi(tu, drug_a, drug_b):
         print(f"  - {direction}: {mech['description'][:80]}...")
 
     print(f"\nClinical Evidence:")
-    print(f"  - FAERS reports: {report['clinical_evidence'].get('faers_count', 0)}")
+    print(f"  - FAERS reports: {report['clinical_evidence'].get('faers_count')}")
 
     print(f"\n{'='*80}\n")
 

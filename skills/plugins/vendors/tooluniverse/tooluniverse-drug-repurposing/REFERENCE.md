@@ -194,8 +194,8 @@ interactions = tu.tools.drugbank_get_drug_interactions_by_drug_name_or_id(
 #### FAERS_search_reports_by_drug_and_reaction
 ```python
 reports = tu.tools.FAERS_search_reports_by_drug_and_reaction(
-    drug_name="LIPITOR",
-    reaction="myalgia",
+    medicinalproduct="LIPITOR",
+    reactionmeddrapt="myalgia",
     limit=100
 )
 # Returns: Adverse event reports
@@ -526,9 +526,9 @@ deaths = tu.tools.FAERS_count_death_related_by_drug(
 )
 
 # Calculate safety score
-total_reports = sum(r['count'] for r in all_reactions.get('results', []))
-death_count = deaths.get('meta', {}).get('total', 0)
-death_ratio = death_count / max(total_reports, 1)
+total_reports = all_reactions.get('total_reports_matching_query')
+death_count = next((r['count'] for r in deaths.get('results', []) if str(r.get('term', '')).startswith('death criterion met')), 0)
+death_ratio = death_count / total_reports if total_reports else None  # reported-death share, not a fatality risk
 
 if death_ratio > 0.01:  # >1% death reports
     print(f"⚠️ HIGH RISK: {death_ratio*100:.2f}% death ratio")

@@ -52,5 +52,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-admet-prediction/SKILL.md
-      sha256: 33d3de98bf1fd2e17700e5a8d1a4e24b6098c5db075cc48cc0f0b9b3855e37df
+      sha256: 2997a29512d715ac6fcd45c9e00948f5a3f08232fa53431a794884fb6100f437
 license: Apache-2.0

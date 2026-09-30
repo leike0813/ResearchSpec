@@ -12,6 +12,12 @@ metadata:
 
 > **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, or receipts. Use the ResearchSpec CLI for authoritative mutations.
 
+## FAERS evidence contract
+
+Detailed searches return `reports`, `count`, `total_available`, and `truncated`; `count` is one page, never the total. Use `medicinalproduct` and at most 100 reports per request. For a reaction-specific search use `FAERS_search_reports_by_drug_and_reaction` with `reactionmeddrapt`; drug-only searches use `FAERS_search_adverse_event_reports`. Serious-only searches require `serious='Yes'`.
+
+Count tools return `results` with `term/count` rows; read `total_reports_matching_query` for the report denominator and preserve null as unknown. Reaction-row sums can double-count reports. Counts are spontaneous reporting frequencies, not incidence, causal proof, or population risk. Obtain PRR/ROR/IC through `FAERS_calculate_disproportionality`, not count rows. Analytics retain `drug_name`/`adverse_event`. Death-criterion counts do not establish that the drug caused a death; page-level serious or death counts are explicitly partial and cannot form a whole-query rate.
+
 # Drug Regulatory Research
 
 **Regulatory status depends on jurisdiction.** FDA approval does not equal EMA approval — check the specific market the user is asking about. Generic availability depends on BOTH patent expiry AND regulatory approval — a patent may have expired but no ANDA may yet be filed or approved. Exclusivity codes (NCE, ODE, PED) can block generics even after patent expiry; always check `FDA_OrangeBook_get_exclusivity` before concluding a generic can enter. A 505(b)(2) NDA is not a generic — it requires its own clinical data and gets its own exclusivity period.
@@ -64,7 +70,7 @@ Phase 5: Label Parsing             -- DailyMed_parse_adverse_reactions, DailyMed
 Phase 6: Clinical Trials           -- search_clinical_trials
   |
   v
-Phase 7: Pharmacovigilance         -- FAERS_count_reactions_by_drug_event (param: medicinalproduct)
+Phase 7: Pharmacovigilance         -- FAERS_count_reactions_by_drug_event(param: medicinalproduct)
   |
   v
 Phase 8: Literature & Approval     -- PubMed_search_articles, OpenFDA_get_approval_history, RxNorm_get_drug_names
@@ -128,7 +134,9 @@ members = tu.tools.RxClass_get_class_members(class_id=class_id, ttys="IN")
 
 ---
 
-## Phase 3: Approval & Generic Status (FDA Orange Book)
+## Phase 3: Approval & Generic Status (FDA Orange Book / Purple Book)
+
+**Orange Book covers small-molecule drugs; biologics and biosimilars (e.g. "is there a biosimilar of adalimumab") are a different FDA list entirely** — use `FDAPurpleBook_search_products` for those instead of Orange Book, which won't have them.
 
 **FDA_OrangeBook_search_drug**: `brand_name` (string), `generic_name` (string), `application_number` (string), `limit` (int, default 10).
 Returns `{status, data: {products: [{brand_name, generic_name, dosage_form, strength, te_code, application_number, approval_date}]}}`.

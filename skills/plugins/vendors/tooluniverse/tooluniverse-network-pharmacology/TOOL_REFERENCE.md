@@ -69,7 +69,7 @@ Verified tool signatures, response structures, and troubleshooting.
 ## Pathway Analysis Tools
 | Tool | Key Parameters | Response Structure |
 |------|---------------|-------------------|
-| `ReactomeAnalysis_pathway_enrichment` | `identifiers: str` (space-separated, NOT array) | `{data: {pathways: [{pathway_id, name, p_value, fdr, entities_found}]}}` |
+| `ReactomeAnalysis_pathway_enrichment` | `identifiers: str` (space-separated, NOT array) | `{data: {pathways: [{pathway_id, name, p_value, fdr, entities_found, entities_coverage}]}}` |
 | `enrichr_gene_enrichment_analysis` | `gene_list: list[str]`, `libs: list[str]` (REQUIRED) | Enrichment per library |
 | `drugbank_get_pathways_reactions_by_drug_or_id` | `query, case_sensitive, exact_match, limit` | Pathway data |
 

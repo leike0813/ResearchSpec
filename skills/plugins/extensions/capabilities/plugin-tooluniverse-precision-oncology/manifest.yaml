@@ -48,7 +48,7 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-api-usage-patterns.md
     path: API_USAGE_PATTERNS.md
-    content_hash: 5e987a68a4894be5f904fb4dd403261a9b8fc641241b5fedf859f01b4ae9f146
+    content_hash: 70c5591034a14d7e66d3dabcf0b9138be4f742d5f1b59f7b693c5c0446cdb852
     license: Apache-2.0
   - knowledge_id: tu-checklist.md
     path: CHECKLIST.md
@@ -64,7 +64,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-tools-reference.md
     path: TOOLS_REFERENCE.md
-    content_hash: 9e980e93ff6e1531aa2a5837de2136cbe498eb0d413cc3d12b2bc3809ae6a4a1
+    content_hash: 6cec2b4cc60cce928b69fdd0b18c22a106e3859f9f6933363a56c5cbece6f860
     license: Apache-2.0
   - knowledge_id: tu-treatment-algorithms.md
     path: TREATMENT_ALGORITHMS.md
@@ -79,9 +79,9 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/SKILL.md
-      sha256: 5bcb215af2fb17b6237203ff5b0be01807029ebd1f0dac44fd0c080a93338467
+      sha256: 37190b25d965586d1f1299978ab9b3a346ae44a6937a3453a366d418ee4f0176
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/API_USAGE_PATTERNS.md
-      sha256: 5e987a68a4894be5f904fb4dd403261a9b8fc641241b5fedf859f01b4ae9f146
+      sha256: 70c5591034a14d7e66d3dabcf0b9138be4f742d5f1b59f7b693c5c0446cdb852
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/CHECKLIST.md
       sha256: e45d8bf5091fb623a0c5fbe40a51c6c5ed322b55355cc780c48c4af980f08619
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/EXAMPLES.md
@@ -89,7 +89,7 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/REPORT_TEMPLATE.md
       sha256: f8cb09026bbfd574bce28a4403949c5f8686f5129102186dc43e52774b3cfff6
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/TOOLS_REFERENCE.md
-      sha256: 9e980e93ff6e1531aa2a5837de2136cbe498eb0d413cc3d12b2bc3809ae6a4a1
+      sha256: 6cec2b4cc60cce928b69fdd0b18c22a106e3859f9f6933363a56c5cbece6f860
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/TREATMENT_ALGORITHMS.md
       sha256: 387d4a1f8dee269b7a7761e96c46135af74da9d86417a5a1055027ed7aea4779
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-precision-oncology/scripts/gdsc_drug_response.py

@@ -12,12 +12,12 @@ const BUNDLE_PATH = path.resolve("skills/plugins/vendor-bundles/tooluniverse.jso
 void test("ToolUniverse conversion manifest admits the audited inventory and classifies every dependency edge", async () => {
   const manifest = JSON.parse(await readFile(MANIFEST_PATH, "utf8")) as ToolUniverseConversionManifest;
   assert.equal(manifest.candidate_skills, 130);
-  assert.equal(manifest.excluded_skills, 20);
+  assert.equal(manifest.excluded_skills, 55);
   assert.equal(manifest.generated_skills.length, 130);
-  assert.equal(manifest.dependency_decisions.length, 223);
+  assert.equal(manifest.dependency_decisions.length, 226);
   assert.deepEqual(
     Object.fromEntries(["required", "related", "routing"].map((relation) => [relation, manifest.dependency_decisions.filter((item) => item.relation === relation).length])),
-    { required: 8, related: 138, routing: 77 },
+    { required: 8, related: 139, routing: 79 },
   );
   const bundle = JSON.parse(await readFile(BUNDLE_PATH, "utf8")) as { schema_version: string; vendor: { vendor_id: string; skills: Array<{ license: string }> } };
   assert.equal(bundle.schema_version, "1");

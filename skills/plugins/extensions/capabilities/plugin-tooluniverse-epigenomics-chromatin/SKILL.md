@@ -167,7 +167,7 @@ result = tu.tools.GTEx_get_multi_tissue_eqtls(
 
 **GTEx_calculate_eqtl**: `operation="calculate_eqtl"`, `gencode_id`, `variant_id` (chr_pos_ref_alt_b38), `tissue_site_detail_id`. Works for non-significant pairs.
 
-**eQTL_list_datasets** / **eQTL_get_associations**: EBI eQTL Catalogue. Use `dataset_id` (from list call), `gene_id` (Ensembl), `variant`. Complementary to GTEx.
+**eQTL evidence:** use the GTEx tools above. Report their tissue and study coverage; when they cannot cover the question, request an independently available, user-authorized source.
 
 ---
 
@@ -239,7 +239,7 @@ Convergence of T1+T2 evidence from independent sources (e.g., ENCODE ChIP-seq ov
 | RNA-seq | ENCODE_search_rnaseq_experiments (total RNA-seq) | retry with polyA plus RNA-seq |
 | ATAC-seq | ENCODE_search_chromatin_accessibility | GEO_search_atacseq_datasets |
 | cCREs | UCSC_get_encode_cCREs | SCREEN_get_regulatory_elements |
-| eQTLs | GTEx_get_single_tissue_eqtls | eQTL_get_associations (EBI) |
+| eQTLs | GTEx_get_single_tissue_eqtls | GTEx_query_eqtl |
 | Expression | GTEx_get_expression_summary | GTEx_get_median_gene_expression |
 | TF motifs | jaspar_search_matrices | ReMap_get_transcription_factor_binding |
 | Variant scoring | RegulomeDB_query_variant | combine eQTL + TF binding manually |

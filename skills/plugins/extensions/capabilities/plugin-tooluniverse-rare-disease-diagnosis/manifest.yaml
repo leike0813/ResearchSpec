@@ -63,7 +63,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-tools-reference.md
     path: TOOLS_REFERENCE.md
-    content_hash: 117796249c4335d218d1b3accc7dfa897e1c717acd2d05a6d52353b3bbb3977b
+    content_hash: 091f814e1bc5aae0bebaf20f8dab86c472c5af2d0a35841a92c3485ad57b16e9
     license: Apache-2.0
   - knowledge_id: tu-scripts-clinical-patterns.py
     path: scripts/clinical_patterns.py
@@ -74,7 +74,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/SKILL.md
-      sha256: 773c981570b709c65426ad991de5131c82a079245848781953753b440816fff6
+      sha256: ab35ea02bfb450a29befb2d37faca2f7d2f6de55900a2e530579699b7fe1e7b0
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/CHECKLIST.md
       sha256: 555912dda5fc56939c6d272cf8c2761dfba510a0f242fa78f48e310c26afeb44
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/DIAGNOSTIC_WORKFLOW.md
@@ -84,7 +84,7 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/REPORT_TEMPLATE.md
       sha256: 76585f3cb12d6bf02975c60845aa35f801dcfa959625d14ccf9929ea40755d19
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/TOOLS_REFERENCE.md
-      sha256: 117796249c4335d218d1b3accc7dfa897e1c717acd2d05a6d52353b3bbb3977b
+      sha256: 091f814e1bc5aae0bebaf20f8dab86c472c5af2d0a35841a92c3485ad57b16e9
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-diagnosis/scripts/clinical_patterns.py
       sha256: 6c1893fa875a5a89d2478a9782e21e8aeda0c6e332e5ee49a282950186d549c6
 license: Apache-2.0

@@ -334,9 +334,9 @@ print(f"Reference drug for class effects: {reference_drug}")
 print(f"FDA warnings: {len(reference_warnings.get('data', []))}")
 
 # 5.2: FAERS data for real-world AEs
-faers_egfr = tu.tools.FAERS_search_reports_by_drug_and_reaction(
-    drug_name=reference_drug,
-    limit=1000
+faers_egfr = tu.tools.FAERS_search_adverse_event_reports(
+    medicinalproduct=reference_drug,
+    limit=100
 )
 
 ae_counts = tu.tools.FAERS_count_reactions_by_drug_event(

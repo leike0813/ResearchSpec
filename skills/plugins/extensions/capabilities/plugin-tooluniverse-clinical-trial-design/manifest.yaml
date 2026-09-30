@@ -53,7 +53,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-examples.md
     path: EXAMPLES.md
-    content_hash: c43f6952633be02fc9832cf93ee99f26d8a70623911be2320adfe6d5974b4277
+    content_hash: a229d5bc134f0905dbc5d6db697e248d471de2273b34ef9b0b2b0ae685818124
     license: Apache-2.0
   - knowledge_id: tu-quick-start.md
     path: QUICK_START.md
@@ -61,7 +61,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-report-template.md
     path: REPORT_TEMPLATE.md
-    content_hash: 473c689b4b98929d38f80021500501de210624d64925f07eb18e062768151e7b
+    content_hash: fcc3751bcf3510612796b755df42bb607a06c59f7b24b438cedee7ff6b3b7b83
     license: Apache-2.0
   - knowledge_id: tu-study-design-procedures.md
     path: STUDY_DESIGN_PROCEDURES.md
@@ -69,7 +69,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-workflow-details.md
     path: WORKFLOW_DETAILS.md
-    content_hash: d2c5ecf92248b4a179c4daf30f11dfcafd1eaf27ae3880accaa73d9e1f28261f
+    content_hash: d9279ab35ddf40e3b77ca75369566f7aad8d33600dad437c127a5e3c89c57099
     license: Apache-2.0
   - knowledge_id: tu-python-implementation.py
     path: python_implementation.py
@@ -84,19 +84,19 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/SKILL.md
-      sha256: d51922a576bf7296858ba90bad0574cfc4e698dc5e703593d8a9532342c737ac
+      sha256: e4acc96956102cd56cfa5ef88bd8b5ff8af51d67d99ab780504e03a8f20d9b0b
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/BEST_PRACTICES.md
       sha256: f9b4663275ffcbff7f75f61954dd767c11d36c1e56823f806425446ebf41c422
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/EXAMPLES.md
-      sha256: c43f6952633be02fc9832cf93ee99f26d8a70623911be2320adfe6d5974b4277
+      sha256: a229d5bc134f0905dbc5d6db697e248d471de2273b34ef9b0b2b0ae685818124
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/QUICK_START.md
       sha256: 8df6166013edae255b2813f39fbdd8585caa15256b704ccbb329d8bf379962b5
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/REPORT_TEMPLATE.md
-      sha256: 473c689b4b98929d38f80021500501de210624d64925f07eb18e062768151e7b
+      sha256: fcc3751bcf3510612796b755df42bb607a06c59f7b24b438cedee7ff6b3b7b83
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/STUDY_DESIGN_PROCEDURES.md
       sha256: 51803333e5decb3e887893a49e3e9eb416d0d8f86104d6d56f80fc880cc97a3a
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/WORKFLOW_DETAILS.md
-      sha256: d2c5ecf92248b4a179c4daf30f11dfcafd1eaf27ae3880accaa73d9e1f28261f
+      sha256: d9279ab35ddf40e3b77ca75369566f7aad8d33600dad437c127a5e3c89c57099
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/python_implementation.py
       sha256: dfd3f71f023cdf94d02dd3137a85a59ae9e12280b33d71c6a94abf4692e2f5c0
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-design/trial_pipeline.py

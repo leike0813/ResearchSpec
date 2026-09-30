@@ -50,5 +50,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics-chromatin/SKILL.md
-      sha256: 46da2a5d33d33a3805335204fa37d25badb22176925818042b0ea4d8c324eaf3
+      sha256: af919b71df10e9756be993d06eaf005b1652241e38886906322fd438d3e8a646
 license: Apache-2.0

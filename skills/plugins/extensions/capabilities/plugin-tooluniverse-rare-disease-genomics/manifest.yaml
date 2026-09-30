@@ -50,5 +50,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rare-disease-genomics/SKILL.md
-      sha256: 4a3f0a37d79308505162c884647ece31a4f63d92733659423420409d14b8dbcf
+      sha256: 2926f3b164bc1da629863f7cdc67aeb84e997cfe42c8032928e86553606b6c5f
 license: Apache-2.0

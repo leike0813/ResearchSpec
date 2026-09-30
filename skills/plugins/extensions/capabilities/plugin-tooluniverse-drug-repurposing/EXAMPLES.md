@@ -86,8 +86,8 @@ if repurposing_candidates:
     )
     
     # Get adverse events
-    adverse_events = tu.tools.FAERS_search_reports_by_drug_and_reaction(
-        drug_name=top_drug,
+    adverse_events = tu.tools.FAERS_search_adverse_event_reports(
+        medicinalproduct=top_drug,
         limit=100
     )
     
@@ -412,7 +412,7 @@ for i, candidate in enumerate(top_candidates, 1):
         print(f"Target: {candidate['target']}")
         print(f"Evidence: {candidate['papers']} papers, {candidate['trials']} trials")
         print(f"FDA Warnings: {len(warnings.get('data', []))}")
-        print(f"Death-related AEs: {adverse.get('meta', {}).get('total', 0)} reports")
+        print(f"Death-related AEs: {next((r['count'] for r in adverse.get('results', []) if str(r.get('term', '')).startswith('death criterion met')), 0)} reports")
         
         # Get mechanism
         pharmacology = tu.tools.drugbank_get_pharmacology_by_drug_name_or_drugbank_id(
@@ -709,7 +709,7 @@ for drug_name in top_drugs:
                 'current_indications': current_uses[:3],
                 'weight_loss_reports': next((r['count'] for r in all_reactions.get('results', []) 
                                             if 'weight' in r['term'].lower()), 0),
-                'serious_reports': seriousness.get('meta', {}).get('serious_count', 0),
+                'serious_reports': next((r['count'] for r in seriousness.get('results', []) if r.get('term') == 'Serious'), 0),
                 'status': drug_info.get('data', {}).get('groups', [])
             })
     except:
@@ -922,10 +922,10 @@ def comprehensive_repurposing_analysis(drug_name, new_indication):
     
     print(f"FDA warnings: {len(warnings.get('data', []))}")
     print(f"Adverse event types: {len(adverse_events.get('results', []))}")
-    print(f"Death-related reports: {death_reports.get('meta', {}).get('total', 0)}")
+    print(f"Death-related reports: {next((r['count'] for r in death_reports.get('results', []) if str(r.get('term', '')).startswith('death criterion met')), 0)}")
     
     # Safety score (inverse - fewer issues = higher score)
-    death_count = death_reports.get('meta', {}).get('total', 0)
+    death_count = next((r['count'] for r in death_reports.get('results', []) if str(r.get('term', '')).startswith('death criterion met')), 0)
     safety_score = max(0, 100 - (death_count / 100))  # Cap at 100
     results['scores']['safety'] = safety_score
     

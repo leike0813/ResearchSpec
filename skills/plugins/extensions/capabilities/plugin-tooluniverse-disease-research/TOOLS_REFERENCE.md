@@ -690,7 +690,7 @@ tu.tools.AdverseEventICDMapper(
 ### FAERS_count_reactions_by_drug_event
 **Purpose**: Get FDA adverse event reports count
 ```python
-tu.tools.FAERS_count_reactions_by_drug_event(drug="metformin", event="nausea")
+tu.tools.FAERS_count_reactions_by_drug_event(medicinalproduct="metformin", reactionmeddraverse="nausea")
 # Returns: count of adverse event reports from FAERS
 ```
 

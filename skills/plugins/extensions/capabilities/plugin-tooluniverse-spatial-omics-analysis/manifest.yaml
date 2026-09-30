@@ -61,14 +61,14 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-tool-reference.md
     path: tool-reference.md
-    content_hash: 673af965121d518f8d2cc03573944eb06f73fe06964c7d32c7924ea04d2d6895
+    content_hash: e79dbf37d63753b1b0ffd665ca0a1586a38141b37a48d825929059412eb21193
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/SKILL.md
-      sha256: 413c27c82a098212924d9ae38ba968ee0a449d9d78148d0d132bb9bf6d622120
+      sha256: bf6807ec7cdd38146b600eb49555d8d27cdc766d0c1b533f1b0ae404d62dabbc
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/phase-procedures.md
       sha256: c8ca26427398e3c0bd65960a541200a18f58674c75c72a63560dca7d79788995
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/reference-data.md
@@ -76,5 +76,5 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/report-template.md
       sha256: 966a1b41b7b7128dba3ace076b2cdbb675e840aed35a0a992d6a6335462b0cfa
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-spatial-omics-analysis/tool-reference.md
-      sha256: 673af965121d518f8d2cc03573944eb06f73fe06964c7d32c7924ea04d2d6895
+      sha256: e79dbf37d63753b1b0ffd665ca0a1586a38141b37a48d825929059412eb21193
 license: Apache-2.0

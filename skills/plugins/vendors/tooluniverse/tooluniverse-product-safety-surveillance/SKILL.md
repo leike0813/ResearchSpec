@@ -9,11 +9,17 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.4
   researchspec-role: semantic-helper
 ---
 
 > **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, or receipts. Use the ResearchSpec CLI for authoritative mutations.
+
+## FAERS evidence contract
+
+Detailed searches return `reports`, `count`, `total_available`, and `truncated`; `count` is one page, never the total. Use `medicinalproduct` and at most 100 reports per request. For a reaction-specific search use `FAERS_search_reports_by_drug_and_reaction` with `reactionmeddrapt`; drug-only searches use `FAERS_search_adverse_event_reports`. Serious-only searches require `serious='Yes'`.
+
+Count tools return `results` with `term/count` rows; read `total_reports_matching_query` for the report denominator and preserve null as unknown. Reaction-row sums can double-count reports. Counts are spontaneous reporting frequencies, not incidence, causal proof, or population risk. Obtain PRR/ROR/IC through `FAERS_calculate_disproportionality`, not count rows. Analytics retain `drug_name`/`adverse_event`. Death-criterion counts do not establish that the drug caused a death; page-level serious or death counts are explicitly partial and cannot form a whole-query rate.
 
 # Product Safety Surveillance (multi-product, openFDA)
 
@@ -60,6 +66,9 @@ This skill **retrieves and interprets multi-product safety records**. It does no
 | Device | Recalls | `OpenFDA_search_device_recalls` | `/device/recall.json` |
 | Device | Enforcement / recall reports | `OpenFDA_search_device_enforcement` | `/device/enforcement.json` |
 | Device | 510(k) clearances (context) | `OpenFDA_search_device_510k` | `/device/510k.json` |
+| Device | Unique Device Identifier (UDI) lookup | `OpenFDADevice_search_udi` | -- |
+| Device | US regulatory class (1/2/3) | `OpenFDADevice_get_classification` | -- |
+| Device | Premarket Approval (PMA, Class 3 devices) | `OpenFDADevice_search_pma` | -- |
 | Food/supplement/cosmetic | Adverse events (CAERS) | `OpenFDA_search_food_adverse_events` | `/food/event.json` |
 | Food | Enforcement / recall reports | `OpenFDA_search_food_enforcement` | `/food/enforcement.json` |
 | Veterinary | Animal drug adverse events | `OpenFDA_search_animalvet_adverse_events` | `/animalandveterinary/event.json` |
@@ -69,6 +78,8 @@ This skill **retrieves and interprets multi-product safety records**. It does no
 | Drug | Labels | `OpenFDA_search_drug_labels` | `/drug/label.json` |
 
 All tools take a Lucene `search` string plus optional `limit` and `skip`. All are keyless and verified live.
+
+**Note**: `OpenFDADevice_search_recalls`/`_search_adverse_events`/`_search_510k` return the same underlying openFDA data as `OpenFDA_search_device_recalls`/`_device_adverse_events`/`_device_510k` above (two independently-added wrappers over the same endpoints) — either works, no need to call both. Use whichever is already in your loaded toolset; the `OpenFDADevice_*` family additionally has the three UDI/classification/PMA tools with no equivalent in the other family.
 
 ---
 

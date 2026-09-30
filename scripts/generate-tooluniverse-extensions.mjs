@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
@@ -17,6 +17,10 @@ const STANDARD_FILES = new Set(["SKILL.md", "LICENSE", "NOTICE.md"]);
 
 function sha256(value) { return createHash("sha256").update(value).digest("hex"); }
 function fileSha(pathName) { return sha256(readFileSync(pathName)); }
+function writeChanged(pathName, content) {
+  const bytes = Buffer.isBuffer(content) ? content : Buffer.from(content);
+  if (!existsSync(pathName) || !readFileSync(pathName).equals(bytes)) writeFileSync(pathName, bytes);
+}
 function json(pathName) { return JSON.parse(readFileSync(pathName, "utf8")); }
 function extensionId(rawId) {
   if (!rawId.startsWith("tooluniverse-")) throw new Error(`Unexpected ToolUniverse skill id: ${rawId}`);
@@ -224,6 +228,7 @@ function manifest(extId, title, description, hasScripts, extras, rawSkillSha256)
 }
 
 function generate() {
+  const policy = json(CATALOG_PATH);
   const rawIds = readdirSync(VENDOR_ROOT, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && entry.name.startsWith("tooluniverse-"))
     .map((entry) => entry.name)
@@ -260,7 +265,7 @@ function generate() {
       const source = path.join(rawSkillRoot, relativePath);
       const target = path.join(packageRoot, relativePath);
       mkdirSync(path.dirname(target), { recursive: true });
-      writeFileSync(target, readFileSync(source));
+      writeChanged(target, readFileSync(source));
       copied.push({
         relativePath,
         knowledgeId: safeKnowledgeId(relativePath),
@@ -268,15 +273,15 @@ function generate() {
         targetSha256: fileSha(target),
       });
     }
-    writeFileSync(path.join(packageRoot, "validators/validate_tooluniverse_brief.py"), validatorTemplate);
+    writeChanged(path.join(packageRoot, "validators/validate_tooluniverse_brief.py"), validatorTemplate);
     const hasScripts = copied.some((item) => item.relativePath.endsWith(".py"));
     const body = skillBody(rawSkillText);
     const title = skillTitle(body) ?? rawSkillId;
     const description = frontmatter.description ?? `Reviewed ToolUniverse ${title} workflow for one graph node.`;
     const resourceLines = copied.map((item) => ({ id: item.knowledgeId, path: item.relativePath }));
-    writeFileSync(path.join(packageRoot, "SKILL.md"), extensionSkill(extId, rawSkillText, frontmatter, hasScripts, resourceLines));
-    writeFileSync(path.join(packageRoot, "manifest.yaml"), `${stringifyYaml(manifest(extId, title, description, hasScripts, copied, sha256(rawSkillText)), { sortKeys: false })}`);
-    writeFileSync(path.join(EXT_ROOT, "profiles", `${extId}.yaml`), profile(extId));
+    writeChanged(path.join(packageRoot, "SKILL.md"), extensionSkill(extId, rawSkillText, frontmatter, hasScripts, resourceLines));
+    writeChanged(path.join(packageRoot, "manifest.yaml"), `${stringifyYaml(manifest(extId, title, description, hasScripts, copied, sha256(rawSkillText)), { sortKeys: false })}`);
+    writeChanged(path.join(EXT_ROOT, "profiles", `${extId}.yaml`), profile(extId));
     catalogExtensions.push({
       capability_id: extId,
       raw_skill_id: rawSkillId,
@@ -327,7 +332,7 @@ function generate() {
     profiles: profileEntries,
     domains: [...domains.values()].sort((a, b) => a.domain_id.localeCompare(b.domain_id)),
   };
-  writeFileSync(REGISTRY_PATH, `${JSON.stringify(nextRegistry, null, 2)}\n`);
+  writeChanged(REGISTRY_PATH, `${JSON.stringify(nextRegistry, null, 2)}\n`);
 
   const catalog = {
     schema_version: "1",
@@ -337,16 +342,16 @@ function generate() {
     upstream_root: "vendor/tooluniverse",
     generated_root: "skills/plugins/vendors/tooluniverse",
     extension_root: "skills/plugins/extensions",
-    release: "v1.3.1",
-    revision: "9b7ff91ddb45b567cac2fa8ea31b82851e877617",
-    anchor_id: "v1.3.1",
-    audit_file: "audits/tooluniverse/v1.3.1/skill-audit.json",
-    audit_report: "audits/tooluniverse/v1.3.1/report.md",
+    release: policy.release,
+    revision: policy.revision,
+    anchor_id: policy.anchor_id,
+    audit_file: policy.audit_file,
+    audit_report: policy.audit_report,
     extension_domains: [...domainAssignments().keys()].sort(),
     extensions: catalogExtensions,
   };
   mkdirSync(path.dirname(CATALOG_PATH), { recursive: true });
-  writeFileSync(CATALOG_PATH, `${JSON.stringify(catalog, null, 2)}\n`);
+  writeChanged(CATALOG_PATH, `${JSON.stringify(catalog, null, 2)}\n`);
   process.stdout.write(`generated ${catalogExtensions.length} ToolUniverse extension capabilities, ${capabilityEntries.length} total registry capabilities\n`);
 }
 

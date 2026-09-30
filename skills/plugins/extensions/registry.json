@@ -1055,17 +1055,17 @@
     {
       "capability_id": "plugin-tooluniverse-admet-prediction",
       "source_path": "capabilities/plugin-tooluniverse-admet-prediction",
-      "manifest_sha256": "cfb6e6f7d2d04e43590977d658c41762a6a4e50b8c90098cb6bdfcfb1e9936fb"
+      "manifest_sha256": "16e89316c1400df9244295d75559801925346828d56a586a6ab3fce9f7e37ffb"
     },
     {
       "capability_id": "plugin-tooluniverse-adverse-event-detection",
       "source_path": "capabilities/plugin-tooluniverse-adverse-event-detection",
-      "manifest_sha256": "4db44d0c58fee0aa47946c0c6789336fd8cdc94032f02aa009c3eb2ccea87c3f"
+      "manifest_sha256": "a9d98d6eb431160b046db0e11fc51fffa1fc48a3c68ced4f303c82e381fe8f55"
     },
     {
       "capability_id": "plugin-tooluniverse-adverse-outcome-pathway",
       "source_path": "capabilities/plugin-tooluniverse-adverse-outcome-pathway",
-      "manifest_sha256": "1ddc2ba2ce5223dab958e453fa43c6ea814f6b61c68935af644c5e38e44bd16c"
+      "manifest_sha256": "79e978b305748b23d4a4029a32f6c72d0e48a3735ac2d1578acf038104950d04"
     },
     {
       "capability_id": "plugin-tooluniverse-aging-senescence",
@@ -1075,12 +1075,12 @@
     {
       "capability_id": "plugin-tooluniverse-antibody-engineering",
       "source_path": "capabilities/plugin-tooluniverse-antibody-engineering",
-      "manifest_sha256": "abbc9ff94afe7b3f955ca3d8712575008c04f8428687936263088151af6611f9"
+      "manifest_sha256": "404e1db459f32b7d904b6924942acb7841e34cddd4d2c746df200df80aef1de3"
     },
     {
       "capability_id": "plugin-tooluniverse-binder-discovery",
       "source_path": "capabilities/plugin-tooluniverse-binder-discovery",
-      "manifest_sha256": "af3cf1c8641b404f73ad54a41ed380c71ed85588f5298d2dad035b7a0aa2b96a"
+      "manifest_sha256": "a224ee22631cb9e74ed11b6cb019bea1825c0e0dbfc286e4a125679e01c120b9"
     },
     {
       "capability_id": "plugin-tooluniverse-cancer-classification",
@@ -1100,7 +1100,7 @@
     {
       "capability_id": "plugin-tooluniverse-cell-line-profiling",
       "source_path": "capabilities/plugin-tooluniverse-cell-line-profiling",
-      "manifest_sha256": "241178977ef18d85718136c04d249bae90ad82e441188c9493881564563efa3d"
+      "manifest_sha256": "b8d47e5f2c86b8c7e99c9700ee777a57a4c23c02ea8ba53e2bc7f3668fe59408"
     },
     {
       "capability_id": "plugin-tooluniverse-chemical-compound-retrieval",
@@ -1120,7 +1120,7 @@
     {
       "capability_id": "plugin-tooluniverse-clinical-data-integration",
       "source_path": "capabilities/plugin-tooluniverse-clinical-data-integration",
-      "manifest_sha256": "e7b6ec1f8dccf01cdd100e93e58318a43f8ccb5d026a53679238c02bf37915b7"
+      "manifest_sha256": "d137e0edfb50da7de28b76bb50c2c32adeb9e847bc2fdc289b6dad04bdf27c5b"
     },
     {
       "capability_id": "plugin-tooluniverse-clinical-guidelines",
@@ -1135,7 +1135,7 @@
     {
       "capability_id": "plugin-tooluniverse-clinical-trial-design",
       "source_path": "capabilities/plugin-tooluniverse-clinical-trial-design",
-      "manifest_sha256": "11e4d09c5778af67d50de0932286a17dc1077265c12e53a2e09c7ab2145a1c36"
+      "manifest_sha256": "fd150860990622b0fdd40256db5073699b399364870bf2a08d73e06128cbc044"
     },
     {
       "capability_id": "plugin-tooluniverse-clinical-trial-matching",
@@ -1145,7 +1145,7 @@
     {
       "capability_id": "plugin-tooluniverse-comparative-genomics",
       "source_path": "capabilities/plugin-tooluniverse-comparative-genomics",
-      "manifest_sha256": "e15c51b2f49d83743bd2c32176c9658a9c6766889643775940eb204a64eb473d"
+      "manifest_sha256": "b111fd43f9081c36c2693e88f72b3dd4a226c970e6dd2a07bcb1545a40d15e33"
     },
     {
       "capability_id": "plugin-tooluniverse-computational-biophysics",
@@ -1165,12 +1165,12 @@
     {
       "capability_id": "plugin-tooluniverse-data-wrangling",
       "source_path": "capabilities/plugin-tooluniverse-data-wrangling",
-      "manifest_sha256": "fdd13507d69abe1f30737d78baf3f07f4b01f3d8ee9375682283983fe44b8092"
+      "manifest_sha256": "a9f96856a6136a0ec564f6da35aacaa496cd291febbecb1d1374eeea4fc2b5a6"
     },
     {
       "capability_id": "plugin-tooluniverse-dataset-discovery",
       "source_path": "capabilities/plugin-tooluniverse-dataset-discovery",
-      "manifest_sha256": "29b6030ee2dc25b2ecc47290cef1a229b073c5092ef5e77fac21fe53bddc5a55"
+      "manifest_sha256": "d7a961db5a41f08dbb08c1798365a15e8cdf649b31a02fe57d7bea268d88d4f2"
     },
     {
       "capability_id": "plugin-tooluniverse-diagnostic-test-evaluation",
@@ -1180,7 +1180,7 @@
     {
       "capability_id": "plugin-tooluniverse-disease-research",
       "source_path": "capabilities/plugin-tooluniverse-disease-research",
-      "manifest_sha256": "796de2bacdcbf88f86d586ea9aaa72e2d4f8e6ecdcad8126a163f449d79cff56"
+      "manifest_sha256": "1b13ef0e106f0b13866743bfd2a5a356968f4956232abdc9a97a5ff44cff56bc"
     },
     {
       "capability_id": "plugin-tooluniverse-dose-response",
@@ -1190,7 +1190,7 @@
     {
       "capability_id": "plugin-tooluniverse-drug-drug-interaction",
       "source_path": "capabilities/plugin-tooluniverse-drug-drug-interaction",
-      "manifest_sha256": "a4f64b672aad4444f5cca0d2ecbf0c4fd6f9072c6ee055ba20ed9a4631f253a8"
+      "manifest_sha256": "92adca389dd699d5e3990ca71e6a37fba86f3cb1a590a9fdd536051089066585"
     },
     {
       "capability_id": "plugin-tooluniverse-drug-mechanism-research",
@@ -1200,17 +1200,17 @@
     {
       "capability_id": "plugin-tooluniverse-drug-regulatory",
       "source_path": "capabilities/plugin-tooluniverse-drug-regulatory",
-      "manifest_sha256": "f003f2f10326145092dbb1da34baa06c1fea0908f85aebf1edb52bf0a738b640"
+      "manifest_sha256": "562500c91f3b6529068b9fa3fe5da7c8570580708c53091a70e1b126b9187a8e"
     },
     {
       "capability_id": "plugin-tooluniverse-drug-repurposing",
       "source_path": "capabilities/plugin-tooluniverse-drug-repurposing",
-      "manifest_sha256": "a88f68448443105b6e138c9a4e153a70bae34e0260e1cf3eaff10b14f3538e60"
+      "manifest_sha256": "9258728585a5320b3ad777c8874c8370be4c96f87219a963a5805fa8eae8acde"
     },
     {
       "capability_id": "plugin-tooluniverse-drug-research",
       "source_path": "capabilities/plugin-tooluniverse-drug-research",
-      "manifest_sha256": "1c9118157109a1efa8e61079fe1ff69b71b3339ddc7d421ec447d72040b5588d"
+      "manifest_sha256": "b2b93e9242effd9f4a3b4a80707b11ed426371eef0d7b516078a32f97528cfc6"
     },
     {
       "capability_id": "plugin-tooluniverse-drug-synergy",
@@ -1225,7 +1225,7 @@
     {
       "capability_id": "plugin-tooluniverse-ecology-biodiversity",
       "source_path": "capabilities/plugin-tooluniverse-ecology-biodiversity",
-      "manifest_sha256": "58d3e971a9e2cad4a76a3b835561c3c74d19168d0bcfbb62cc7c80afc65fc6f5"
+      "manifest_sha256": "5ad0f4f570f7d8744a26ee4ae0a90e5394b96397a6e42f71c8f1f0fa9df605f7"
     },
     {
       "capability_id": "plugin-tooluniverse-electron-microscopy",
@@ -1240,17 +1240,17 @@
     {
       "capability_id": "plugin-tooluniverse-epidemiological-analysis",
       "source_path": "capabilities/plugin-tooluniverse-epidemiological-analysis",
-      "manifest_sha256": "1bd3e28a50a32992e2407f0e7fc784526b4571465149f5557df72343a71eaf37"
+      "manifest_sha256": "0699b7cc8cc24a9a6ce7ad51e35d8f3602a9ab38853817c8d5665a1186befbd6"
     },
     {
       "capability_id": "plugin-tooluniverse-epigenomics",
       "source_path": "capabilities/plugin-tooluniverse-epigenomics",
-      "manifest_sha256": "df2016781557c68890f55f8dafa8361fd7d2f2decd04e571a7f321a670bae284"
+      "manifest_sha256": "eb4748d528ff024fbb984b2b3a45a730cb22714cb929b51bfde8f4ff21771278"
     },
     {
       "capability_id": "plugin-tooluniverse-epigenomics-chromatin",
       "source_path": "capabilities/plugin-tooluniverse-epigenomics-chromatin",
-      "manifest_sha256": "d1438052ba5ba84d602ee17cef3131efaf77c9d291774a992f95fb449e15b4ac"
+      "manifest_sha256": "1edd7397eda0f0ed2a57da67cefeafd9e3c05f765bbe03ba1a82c7ffb4fcc1e9"
     },
     {
       "capability_id": "plugin-tooluniverse-expression-data-retrieval",
@@ -1275,7 +1275,7 @@
     {
       "capability_id": "plugin-tooluniverse-gene-enrichment",
       "source_path": "capabilities/plugin-tooluniverse-gene-enrichment",
-      "manifest_sha256": "2d0191ab75a5882815f9e5c46555639907bb9a34ee4028d25698c1eef1155d07"
+      "manifest_sha256": "214522da103d861f6962a9e67121b7bf26fdbb7d8247548f4899b9fd94956e7e"
     },
     {
       "capability_id": "plugin-tooluniverse-gene-regulatory-networks",
@@ -1330,7 +1330,7 @@
     {
       "capability_id": "plugin-tooluniverse-immunology",
       "source_path": "capabilities/plugin-tooluniverse-immunology",
-      "manifest_sha256": "df66fcdc96c229a8d345e4fa230b12ca54e8a9390482ae41bf2ab2d6100e0567"
+      "manifest_sha256": "072570bcf77fe0c85eff973ee4f68309119ebe021912f2f4ab2afa0e341bad29"
     },
     {
       "capability_id": "plugin-tooluniverse-immunotherapy-response-prediction",
@@ -1350,7 +1350,7 @@
     {
       "capability_id": "plugin-tooluniverse-kegg-disease-drug",
       "source_path": "capabilities/plugin-tooluniverse-kegg-disease-drug",
-      "manifest_sha256": "0d158bed103bcc1dad7ec17c1a9ffa229fc0934e823d38493164ab3fb2e4fb0f"
+      "manifest_sha256": "f77a334a08a550787e6ac815a31f51ae92a4d04a707627fd141da3f335478c39"
     },
     {
       "capability_id": "plugin-tooluniverse-lipidomics",
@@ -1360,7 +1360,7 @@
     {
       "capability_id": "plugin-tooluniverse-literature-deep-research",
       "source_path": "capabilities/plugin-tooluniverse-literature-deep-research",
-      "manifest_sha256": "5d5504dd9f000266f8ad7fcbb0eca91341024cd74e46942c6ce826936a27f48c"
+      "manifest_sha256": "7798033b264ec2d183de34b358f23c5b0b08d05534cba6c3d11e3937fbb6e8f8"
     },
     {
       "capability_id": "plugin-tooluniverse-mendelian-randomization",
@@ -1410,7 +1410,7 @@
     {
       "capability_id": "plugin-tooluniverse-molecular-cloning",
       "source_path": "capabilities/plugin-tooluniverse-molecular-cloning",
-      "manifest_sha256": "020986d414957835beb05297237a23a467fd49186dfa8b324a42770f4db4fff0"
+      "manifest_sha256": "39c25dcd0b8dd43e5bebd7bec66bca50bce9c87ec939ec4e280496b0bcb36dcf"
     },
     {
       "capability_id": "plugin-tooluniverse-multi-omics-integration",
@@ -1420,7 +1420,7 @@
     {
       "capability_id": "plugin-tooluniverse-multiomic-disease-characterization",
       "source_path": "capabilities/plugin-tooluniverse-multiomic-disease-characterization",
-      "manifest_sha256": "09a7dadfe8725e9dfc96d958d564a5b10a5c9a6aca8324bf95e3347208a9c5f9"
+      "manifest_sha256": "953568613782b337a90cb066c402d379a3573be20f2924f915b7592731cba0d2"
     },
     {
       "capability_id": "plugin-tooluniverse-natural-product-dereplication",
@@ -1430,12 +1430,12 @@
     {
       "capability_id": "plugin-tooluniverse-network-pharmacology",
       "source_path": "capabilities/plugin-tooluniverse-network-pharmacology",
-      "manifest_sha256": "58177ad405686796b1ea7eef0e951fcf10bd5d637439316dfe4c5a8b695508ad"
+      "manifest_sha256": "d650acf521bd7a351bbdc8414e3a3aa48d5de837b0802fbeef6102dc4c6372dd"
     },
     {
       "capability_id": "plugin-tooluniverse-neuroscience",
       "source_path": "capabilities/plugin-tooluniverse-neuroscience",
-      "manifest_sha256": "db26a67d4893627285fd8c44af26ac08aa3f5ca22301073d88098b7f6a2ddbc0"
+      "manifest_sha256": "1a6bd75a536c70e2c705eb21635d16bb8a61db0e55c629fe4da033f49fa7671e"
     },
     {
       "capability_id": "plugin-tooluniverse-noncoding-rna",
@@ -1460,7 +1460,7 @@
     {
       "capability_id": "plugin-tooluniverse-pharmacogenomics",
       "source_path": "capabilities/plugin-tooluniverse-pharmacogenomics",
-      "manifest_sha256": "17f1dffe438545339e3beaab6b3746342a77486a98613dd5823c28a9f40bca22"
+      "manifest_sha256": "464ebe912527fab751cab58b99daca41db3b4e5dbd0a9c57e7e86168c1a56059"
     },
     {
       "capability_id": "plugin-tooluniverse-pharmacokinetics",
@@ -1470,7 +1470,7 @@
     {
       "capability_id": "plugin-tooluniverse-pharmacovigilance",
       "source_path": "capabilities/plugin-tooluniverse-pharmacovigilance",
-      "manifest_sha256": "1cb4832a431df0c3d1c0ff15d42101708af66ad352a90289c38c6e3576d2040f"
+      "manifest_sha256": "fc4f119c571388777a579e5d09fbd6adebcea4c0500d43f9f4dc821b0d72ed9f"
     },
     {
       "capability_id": "plugin-tooluniverse-phewas",
@@ -1480,12 +1480,12 @@
     {
       "capability_id": "plugin-tooluniverse-phylogenetics",
       "source_path": "capabilities/plugin-tooluniverse-phylogenetics",
-      "manifest_sha256": "2c4578b081d0df6660e0dc6abeedea8fd2763fde165d63c130c754c54f21b670"
+      "manifest_sha256": "e351327f8a066ac9360aacbc76ccfcc2cd27f56a187dcf175394b29316e2fadf"
     },
     {
       "capability_id": "plugin-tooluniverse-plant-genomics",
       "source_path": "capabilities/plugin-tooluniverse-plant-genomics",
-      "manifest_sha256": "c31bf4ea1aa6370544494dddacd36275f31587099be0d7ec15aa1e7714d6adbd"
+      "manifest_sha256": "f396071b88acbe2dcd5a4d65a297dfcc0a9b5640e8d26c4ce91635f8f7c5928a"
     },
     {
       "capability_id": "plugin-tooluniverse-polygenic-risk-score",
@@ -1510,7 +1510,7 @@
     {
       "capability_id": "plugin-tooluniverse-precision-oncology",
       "source_path": "capabilities/plugin-tooluniverse-precision-oncology",
-      "manifest_sha256": "6331cb94a8fcdf3a087b48031f56db0415508bdd06df4877fe52d75d3b29b30e"
+      "manifest_sha256": "81901be5ac327b25a08bd5e7b4838ba513067956adbe47af0b861236f1a9ab86"
     },
     {
       "capability_id": "plugin-tooluniverse-primer-design",
@@ -1520,12 +1520,12 @@
     {
       "capability_id": "plugin-tooluniverse-product-safety-surveillance",
       "source_path": "capabilities/plugin-tooluniverse-product-safety-surveillance",
-      "manifest_sha256": "0e583a4c5a10ff108994fe3c8fa45cb01f2945aa9d585397e9d5dfdda0f63705"
+      "manifest_sha256": "0f35bd10c1929aded3b8fcfb67c4495b44772ea0cee9c49c4862b7e249a3024b"
     },
     {
       "capability_id": "plugin-tooluniverse-protein-interactions",
       "source_path": "capabilities/plugin-tooluniverse-protein-interactions",
-      "manifest_sha256": "182027d62a39747330855ed7b41688e0515c01dbce428f4e87176511680e23ef"
+      "manifest_sha256": "057ee473a31cd2dde46c38e82c959a8927b041c73b04ce9c33d5f47c083c515f"
     },
     {
       "capability_id": "plugin-tooluniverse-protein-lof-mechanism",
@@ -1550,7 +1550,7 @@
     {
       "capability_id": "plugin-tooluniverse-protein-structure-prediction",
       "source_path": "capabilities/plugin-tooluniverse-protein-structure-prediction",
-      "manifest_sha256": "54f6c6b96b56b793435198842ccebc712a404a153479206d30768d9298e232b4"
+      "manifest_sha256": "cdb37b8518cd0172358756dedb0169f6ea01717f5284b584448371a84cab6103"
     },
     {
       "capability_id": "plugin-tooluniverse-protein-structure-retrieval",
@@ -1575,22 +1575,22 @@
     {
       "capability_id": "plugin-tooluniverse-rare-disease-diagnosis",
       "source_path": "capabilities/plugin-tooluniverse-rare-disease-diagnosis",
-      "manifest_sha256": "9c4b98e790d9255cc051f033b8935e48f78bf289707e77bf2b996fdaac95ebde"
+      "manifest_sha256": "1b6a642a4731ac3e973f15fb2bc9f2a9d43a034a594c30c07ae61d3859466a2a"
     },
     {
       "capability_id": "plugin-tooluniverse-rare-disease-genomics",
       "source_path": "capabilities/plugin-tooluniverse-rare-disease-genomics",
-      "manifest_sha256": "937e6df24ff888d57e9b564f7236f87d57fa5ede1bdc5ae463dc8d3d95d6377a"
+      "manifest_sha256": "02e932c6f00ec18ee11c94bc21156a5374c2417ee68956f4558f11e5af984540"
     },
     {
       "capability_id": "plugin-tooluniverse-regulatory-genomics",
       "source_path": "capabilities/plugin-tooluniverse-regulatory-genomics",
-      "manifest_sha256": "36ec04ad0af63950d5770e73c12a319827343c74cb13ed3815a492d1651b8b55"
+      "manifest_sha256": "24ba39714f0b73a592451f9df3b1f260c3f9f7f390aca59f739b6ff39087dfc3"
     },
     {
       "capability_id": "plugin-tooluniverse-regulatory-variant-analysis",
       "source_path": "capabilities/plugin-tooluniverse-regulatory-variant-analysis",
-      "manifest_sha256": "de5d70a57f007a880aebaa3e1d7c952d8f6b9fdd3c21b5ba0d080fa3aa5f1248"
+      "manifest_sha256": "7ebdffa311943a3ac71c295bc7eaee980f76b54d92cfb9e33ec074e4226d502c"
     },
     {
       "capability_id": "plugin-tooluniverse-residue-functional-mechanism-interpretation",
@@ -1605,7 +1605,7 @@
     {
       "capability_id": "plugin-tooluniverse-sequence-analysis",
       "source_path": "capabilities/plugin-tooluniverse-sequence-analysis",
-      "manifest_sha256": "9fdea18e787f5036dcd52d768d508a4ad122f9fa47e044c74bfbd0c09bb83585"
+      "manifest_sha256": "cf0eeb38fd9510c62bf4695bd9a098586efda5414b08daf2a0c187004e539e18"
     },
     {
       "capability_id": "plugin-tooluniverse-sequence-retrieval",
@@ -1625,17 +1625,17 @@
     {
       "capability_id": "plugin-tooluniverse-spatial-omics-analysis",
       "source_path": "capabilities/plugin-tooluniverse-spatial-omics-analysis",
-      "manifest_sha256": "949637382eaf70d972d71793a5c9fe1ac9a8505a27907a8227beefe752437c2b"
+      "manifest_sha256": "b1509ee67c58a06a5eebbd4ceceb00da22279ac0017c1d3fde30bcc6469e69f0"
     },
     {
       "capability_id": "plugin-tooluniverse-spatial-transcriptomics",
       "source_path": "capabilities/plugin-tooluniverse-spatial-transcriptomics",
-      "manifest_sha256": "8707220ba8bdec531b8260b4e32a8a045196b5b33d09c71a749238f9c689ed06"
+      "manifest_sha256": "f34b649dcd5c0e85f5c86a87448922a92e56ebb45c27a5d6b4f2e80af64bba75"
     },
     {
       "capability_id": "plugin-tooluniverse-statistical-modeling",
       "source_path": "capabilities/plugin-tooluniverse-statistical-modeling",
-      "manifest_sha256": "4c9ed9a806847cc3a36845d73361673a587b7b6d28507c6fee38a22b373fb50d"
+      "manifest_sha256": "3abab7afab193aa36ca102849e03564cc8833a353c64237cfe02674f7b32eb76"
     },
     {
       "capability_id": "plugin-tooluniverse-stem-cell-organoid",
@@ -1645,7 +1645,7 @@
     {
       "capability_id": "plugin-tooluniverse-structural-proteomics",
       "source_path": "capabilities/plugin-tooluniverse-structural-proteomics",
-      "manifest_sha256": "4f34b12a86e0e3262827f9f367da84ebe048ee5d62541cbe11ce10c6b617a602"
+      "manifest_sha256": "fb347fb636b657581cb997c36507556d8d5f215190a5d13a41ae4e1599000e7a"
     },
     {
       "capability_id": "plugin-tooluniverse-structural-variant-analysis",
@@ -1660,12 +1660,12 @@
     {
       "capability_id": "plugin-tooluniverse-target-research",
       "source_path": "capabilities/plugin-tooluniverse-target-research",
-      "manifest_sha256": "e33a239f33857603f644ee0537f50370d5d3182bf13a2cd88c1ec4d56d439852"
+      "manifest_sha256": "19115ede7231e4de9b4f406f9fc49aaa45252d458d24a31889c04ab00fe6a1cd"
     },
     {
       "capability_id": "plugin-tooluniverse-toxicology",
       "source_path": "capabilities/plugin-tooluniverse-toxicology",
-      "manifest_sha256": "85bac4f34857726b7c853fd68bc512a39005cb14568041d32ad2f1d2fee66944"
+      "manifest_sha256": "ee143a357f91777625e6df08da56cbea4b16691a0e8fce38021944c29e369dd7"
     },
     {
       "capability_id": "plugin-tooluniverse-vaccine-design",
@@ -1685,7 +1685,7 @@
     {
       "capability_id": "plugin-tooluniverse-variant-interpretation",
       "source_path": "capabilities/plugin-tooluniverse-variant-interpretation",
-      "manifest_sha256": "1d7ab952c153969335039b6341e0e039900717531f452813a3cf1a34b3bf6e41"
+      "manifest_sha256": "3eac38912bd6b651aa00ef755d4e100f5d73cf0612579335c7f845a97cef4585"
     },
     {
       "capability_id": "plugin-tooluniverse-variant-predictor-dms-validation",

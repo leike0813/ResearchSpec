@@ -59,7 +59,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-reference.md
     path: REFERENCE.md
-    content_hash: 75cc059f927062e7a81b461c5f828fde849c8fd46608db16564142ad716d77aa
+    content_hash: 934f62682cb8d310ef9d390f5ba172b68c4d55512ea6aca81a93991f097333d6
     license: Apache-2.0
   - knowledge_id: tu-report-format.md
     path: REPORT_FORMAT.md
@@ -70,7 +70,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/SKILL.md
-      sha256: a4c0e68ab49bb93b563eed8bb3354391ec6ab62248e2fa33628d9303e1b1b3ff
+      sha256: 52e417501712de32715b50ef8331cbf4ca339bf25b5d8d0ae377ff2cc6caf0e2
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/EVIDENCE_GRADING.md
       sha256: 2d37cdff015566635d9c4b5137ef91144f1c37e08081a78b3cd3a227857ca5bf
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/EXAMPLES.md
@@ -78,7 +78,7 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/IMPLEMENTATION.md
       sha256: 1423041516c0f7a3572e7a9bfe6420b4774c32a2d015046d03755daca5a430fd
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/REFERENCE.md
-      sha256: 75cc059f927062e7a81b461c5f828fde849c8fd46608db16564142ad716d77aa
+      sha256: 934f62682cb8d310ef9d390f5ba172b68c4d55512ea6aca81a93991f097333d6
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/REPORT_FORMAT.md
       sha256: 2dd5db75e5f4253f72fe7d2c897dee9c9da7ab733609e5929f63ecb2b88c95d1
 license: Apache-2.0

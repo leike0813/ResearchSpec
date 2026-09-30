@@ -80,7 +80,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/SKILL.md
-      sha256: ae073a3bbd10b600d1750e3a076db3f6cf2b4ec748074e147c31183bb3e7cd0a
+      sha256: 1d3d2b0fab28c6556da490511e89706314d50dfe16f7698908e6619c0944ebcb
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/CHECKLISTS.md
       sha256: 9ab81d6d8b48680cf6d8c3b984f78f7fb43577f818b42912c616aea4da687a28
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-antibody-engineering/EXAMPLES.md

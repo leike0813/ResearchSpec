@@ -50,5 +50,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-ecology-biodiversity/SKILL.md
-      sha256: 1c717a0ebb9c330c02cdc68fbbfa310d0ebf5f9b4618ffa8a1e4f019b3168578
+      sha256: d719418c49dce17c3a03c48e8f3c02927f74d59124124b0e3f8a5f8c6249e3ec
 license: Apache-2.0

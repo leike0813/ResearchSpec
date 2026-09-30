@@ -70,7 +70,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-references-upstream-details.md
     path: references/upstream-details.md
-    content_hash: f37dbe49fb467f61bb52f55e74c9538470a038a0f186e1dc4ac3f18ed8129b09
+    content_hash: 07061c284ae90dc2238cd3316a87ceb565750666460f066bcdbb49d3dcd1612f
     license: Apache-2.0
   - knowledge_id: tu-scripts-busco-target-orthologs.py
     path: scripts/busco_target_orthologs.py
@@ -101,7 +101,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/SKILL.md
-      sha256: b6bdd588bd7f2f3965223db4d3a3fd84e26e2a05fed55f4d5244cd4b91c15282
+      sha256: 5313280eb9c060d1930dd48ca64b6786c986e51796336309db8555a6556749ef
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/QUICK_START.md
       sha256: daaed23778ab1b4af1b514a80ba279c7401fa1203bb9dfbd79bd9ec88a25e785
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/parsimony_analysis.md
@@ -113,7 +113,7 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/troubleshooting.md
       sha256: 79d00d3b104c7b92566f0c2591632e77ea82c71c2bafb819c075fbcb12db5e6d
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/upstream-details.md
-      sha256: f37dbe49fb467f61bb52f55e74c9538470a038a0f186e1dc4ac3f18ed8129b09
+      sha256: 07061c284ae90dc2238cd3316a87ceb565750666460f066bcdbb49d3dcd1612f
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/busco_target_orthologs.py
       sha256: b8d40841af3b4307be1a8ba056b3187885cc681547820323a33c368bebd00ef7
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/format_alignment.py
