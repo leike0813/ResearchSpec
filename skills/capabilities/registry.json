@@ -5,7 +5,7 @@
     {
       "capability_id": "analysis-evidence-synthesis",
       "source_path": "analysis-evidence-synthesis",
-      "manifest_sha256": "419520198bcb23452af2667f6ac1cfba21d50d805e2d0bf9f06f9173602e7af4"
+      "manifest_sha256": "485bcc6c3cbba1b9797e8bfda922a17a231fde9fdc53f2a4da9090684e35fdb4"
     },
     {
       "capability_id": "analysis-meta-analysis",
@@ -20,42 +20,42 @@
     {
       "capability_id": "analysis-risk-of-bias-assessment",
       "source_path": "analysis-risk-of-bias-assessment",
-      "manifest_sha256": "16e206a3550fb122aadc2c8931cfe8917f5ea3cc68d63e8a1c80e9df847a07a7"
+      "manifest_sha256": "4a9eb17c455595f866cfc427b519dc2c504bd725513424fe41271a037a390030"
     },
     {
       "capability_id": "check-citation-existence-verification",
       "source_path": "check-citation-existence-verification",
-      "manifest_sha256": "c0f42946364d3fb38082335666bf4a9466149fdc41064f807bb6fdea0ddfb91a"
+      "manifest_sha256": "8e4f14ce39f8ae890fd4a52c04ff768408f360e53eec39cab9de6b05f249afd6"
     },
     {
       "capability_id": "check-citation-format-compliance",
       "source_path": "check-citation-format-compliance",
-      "manifest_sha256": "ca61584a0d094927537a6de7ad77664e9c09d8c09e3c0a7b98a831935e8f75fd"
+      "manifest_sha256": "7a8b1818100887fef0c8a6163741bf66251cbb1c610c1938f91c5eb503dad12a"
     },
     {
       "capability_id": "check-citation-verification-summary",
       "source_path": "check-citation-verification-summary",
-      "manifest_sha256": "9bae35c06bcfef5bdf02606f87fca2dc15c6ac460f68e8b3ccecbb360070b750"
+      "manifest_sha256": "4755a27a9b9c0688906e6613f765c1a29000d5f5f7c9e551a028846b3b054aef"
     },
     {
       "capability_id": "check-claim-faithfulness-audit",
       "source_path": "check-claim-faithfulness-audit",
-      "manifest_sha256": "1aaeaed8789cefe2cff735c1453e88fb08a7d44f46523e191398b435e1033209"
+      "manifest_sha256": "fe4a279da524fb1bde70251f4874462b4718115c72b20673cd61a4360f930cc5"
     },
     {
       "capability_id": "check-collaboration-depth-observer",
       "source_path": "check-collaboration-depth-observer",
-      "manifest_sha256": "4e3a8f82f4b3a7071268c24c90297529ab25e4e25aec310adc602f1fe63f1394"
+      "manifest_sha256": "d651c922357a601b2685c6ed631e749bf8a5b6780c6986d72979e86cad3cf4c5"
     },
     {
       "capability_id": "check-compliance-check",
       "source_path": "check-compliance-check",
-      "manifest_sha256": "6eed99da78d0e365bd964dece23d5a343810ff0d73228aa34f1b9a82f4d03307"
+      "manifest_sha256": "ef13c2598520921558f4849da7d2bfbc472bd1f2f00ff59a88a129607ce1d10b"
     },
     {
       "capability_id": "check-contamination-signals",
       "source_path": "check-contamination-signals",
-      "manifest_sha256": "f51695040ee3474d0f1ab31a119edd51163119ad0c6d3c3a1f3ec71ab73b0896"
+      "manifest_sha256": "6e256b4d8f6741d0bd301e1ff1ede295d33948e12e5092ede03caa4bc3a02c75"
     },
     {
       "capability_id": "check-paper-humanization-review",
@@ -70,32 +70,32 @@
     {
       "capability_id": "check-passport-verifier",
       "source_path": "check-passport-verifier",
-      "manifest_sha256": "14321768d02cae09a87e814560b9a97d3869fe77978e4a2c5b35ad6e551535c7"
+      "manifest_sha256": "7f8079712fd7fad3f52eea2f5c703ef10a51c5bb5deaff74e847b387ec4e94a7"
     },
     {
       "capability_id": "check-pdf-read-preflight",
       "source_path": "check-pdf-read-preflight",
-      "manifest_sha256": "e6b46dab4a4accffb1b4410a00338f42bae1a7419e4bf28b917e072f1318956e"
+      "manifest_sha256": "1f60ccfba06f184cdc70713d8d75e1ec1a4108f1be621f747f95e82fbc01ca29"
     },
     {
       "capability_id": "check-pre-submission-self-check",
       "source_path": "check-pre-submission-self-check",
-      "manifest_sha256": "fa74fc2b9f87dcfb691cfb714fb47693ef70eab9d62b64773b914774e015f7a0"
+      "manifest_sha256": "e1356fe7e01e9de94d119cbaf1c80c6f89cbb43b1f84d4ab844d6aeba5d977d1"
     },
     {
       "capability_id": "check-reference-integrity-verification",
       "source_path": "check-reference-integrity-verification",
-      "manifest_sha256": "e0b5889cda7b300f81fd235327bad6915f3ff8fdc21b75b7f1cc9ed28394ac31"
+      "manifest_sha256": "a2c01a2193d261d399be298df146d88e2f73e2efc55966cfb9a09e363cbf1f4d"
     },
     {
       "capability_id": "check-submission-package-verifier",
       "source_path": "check-submission-package-verifier",
-      "manifest_sha256": "1207b10e7255c4ddac9539db6d41f009530dffe31a686ad242bc4b4580b05408"
+      "manifest_sha256": "3ee4dd46845d05d9457a49e5de4c0026659c7826bc901189f26a52455585089a"
     },
     {
       "capability_id": "check-temporal-integrity-verification",
       "source_path": "check-temporal-integrity-verification",
-      "manifest_sha256": "cabc9d37c90b5c2ec4276aecc8139567019ace1d0d9c71eacc34bcb38d32ec1d"
+      "manifest_sha256": "566664b38f07c3156a45e91364d69318485b2d891e02b2023ab6af92956d4911"
     },
     {
       "capability_id": "check-terminal-policy-gate",
@@ -105,12 +105,12 @@
     {
       "capability_id": "design-argument-blueprint",
       "source_path": "design-argument-blueprint",
-      "manifest_sha256": "707cbd977421091d9f1815dee956763c3bb6ddfeadc6a162e2891089f5eaa156"
+      "manifest_sha256": "06f17de0062d34c533cfc4d2d84156333a5cc949b4c1ba97d39c1e1184ac5fe6"
     },
     {
       "capability_id": "design-manuscript-structure-design",
       "source_path": "design-manuscript-structure-design",
-      "manifest_sha256": "2f5a403ccaa8f958aa2aa233485e3fb88775ca99dcd27f98466499d598345550"
+      "manifest_sha256": "8eeafa09704cb0b43ecd73be8046d8a91d56cd57df86cbd0795a2c3010f8c614"
     },
     {
       "capability_id": "design-methodology-design",
@@ -125,7 +125,7 @@
     {
       "capability_id": "design-review-panel-config",
       "source_path": "design-review-panel-config",
-      "manifest_sha256": "a1d8d194d769be3c37ef95c51026d350090a048578c571aad2ee6f27027f4fa4"
+      "manifest_sha256": "2b53b11f7c9e42c7458bec0da1134ca07fe11c2aca2e02d0e459435ff971aaee"
     },
     {
       "capability_id": "design-review-response-intake",
@@ -140,7 +140,7 @@
     {
       "capability_id": "design-writing-intake",
       "source_path": "design-writing-intake",
-      "manifest_sha256": "3d6ebdc8970f245768938acbcd2b5fe2c5f7235c765538fb947ffb56978f9b49"
+      "manifest_sha256": "5d00e9a6c3f3818d6e13b0d71d0620c62fe2c8a4605a173defa79341a7216a95"
     },
     {
       "capability_id": "discovery-literature-monitoring",
@@ -160,7 +160,7 @@
     {
       "capability_id": "generation-abstract-writing",
       "source_path": "generation-abstract-writing",
-      "manifest_sha256": "469dcdd4abb8160ed81424b9298a909496d18ed4ce5bba3d71b93d01457a54f5"
+      "manifest_sha256": "c79b4e4d4c6495b795ba3d9030fe37c810b1130e561bfb3f8e84f57eb6ba8da1"
     },
     {
       "capability_id": "generation-figure-generation",
@@ -170,7 +170,7 @@
     {
       "capability_id": "generation-format-rendering",
       "source_path": "generation-format-rendering",
-      "manifest_sha256": "4de907cf230284e96d491b7e93928d4a579b73271287d9ae610994be057d10ac"
+      "manifest_sha256": "139f4f22d5fc4aac4b30034376000a82ee379dacbad486b66eae7a79c047591f"
     },
     {
       "capability_id": "generation-humanization-reference",
@@ -180,12 +180,12 @@
     {
       "capability_id": "generation-manuscript-drafting",
       "source_path": "generation-manuscript-drafting",
-      "manifest_sha256": "f0a15abcbe5323665b7623d2b081ead87919b085610c9702cd9a2042e7a7a33d"
+      "manifest_sha256": "d8cbee004bf7f8b5550e182a8292acd11c1990911f8a1766545614f3abc75c3c"
     },
     {
       "capability_id": "generation-report-compilation",
       "source_path": "generation-report-compilation",
-      "manifest_sha256": "77cc41f581c8af4e0dca08f0247d8db8c8861bebbc3c409848cb84f3b10944bc"
+      "manifest_sha256": "8636f6ae3918aa82d6e205cc3595ee9bf86fc6ff1807258145758499091361b9"
     },
     {
       "capability_id": "generation-review-response-round",
@@ -195,22 +195,22 @@
     {
       "capability_id": "judgment-devils-advocate-stress-test",
       "source_path": "judgment-devils-advocate-stress-test",
-      "manifest_sha256": "a58e06c72f05d57b0d84531b81a25d3338da4f03f091143219b25f9ac2daa656"
+      "manifest_sha256": "43a784cef896a8e13e12a578d98a47aca6b7fa4aa057e620bb83bb88d9483485"
     },
     {
       "capability_id": "judgment-editorial-judgment",
       "source_path": "judgment-editorial-judgment",
-      "manifest_sha256": "a04d8f827785a8034377478974b4c29285dffc5f4247398b328baeb455668c65"
+      "manifest_sha256": "5d75c7bdd3c35f3b8820d63692b513781cab0928aae71a36b0dc80470d7ebc23"
     },
     {
       "capability_id": "judgment-review-synthesis",
       "source_path": "judgment-review-synthesis",
-      "manifest_sha256": "9ef1fa9a4a948b0a7198aadfa02bf76092d0aa99019d67119cb87f0ac081c297"
+      "manifest_sha256": "fdf1370dccb499d7ebc3728798a703e19f1b1396e86c24562af7c1bbce0410e2"
     },
     {
       "capability_id": "judgment-specialist-review",
       "source_path": "judgment-specialist-review",
-      "manifest_sha256": "99813903429797fa234e6541d3408736579699d0ef5e7d6c66c072b69e4e51a9"
+      "manifest_sha256": "e4719c55d6ea60dc68a06057f561f53657c088fbfc933f880e94b9c77b0f9f60"
     },
     {
       "capability_id": "transform-paper-humanization-revision",
@@ -225,17 +225,17 @@
     {
       "capability_id": "transform-revision-patching",
       "source_path": "transform-revision-patching",
-      "manifest_sha256": "f983a82eca52367eb31ab77ff2e8c40f8b1df12d71b055d849f625fcd861e1d3"
+      "manifest_sha256": "56143408255ece2c5130accdcb9d6608aea8e396e663677bf267451e26e4cbf4"
     },
     {
       "capability_id": "transform-revision-roadmap-parsing",
       "source_path": "transform-revision-roadmap-parsing",
-      "manifest_sha256": "639fd2fc139c80b7016aa4cd82e19a3e15db3ed3e1f73a83f077f19fe6b8f50e"
+      "manifest_sha256": "9b74c5bc3a5e57b736d8b5355ddf6113a2481d821e54f852b57396f1ca89d35f"
     },
     {
       "capability_id": "transform-socratic-mentoring",
       "source_path": "transform-socratic-mentoring",
-      "manifest_sha256": "6709932999891ddb8de4a5060a55f19ef7765628b71043ae5f48559f6cddab05"
+      "manifest_sha256": "04a7545627819cc0167dacfd98abf82ecce9d63f01066f2eb267da70a2e403cb"
     }
   ]
 }

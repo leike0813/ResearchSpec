@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M2 写作段
 来源对照（source mapping）:
     - vendor/ars/academic-paper/references/citation_format_switcher.md（全文）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 全文逐字节保留（含格式对比矩阵、参考表命名、各格式细节）。
     2. [标注] 决策清单 M2 知识包之一（五种引文格式）；上游标注使用者为 citation_compliance_agent 与 formatter_agent；CAP-M2-06 内嵌 5 格式简表是本包的压缩镜像，authoring 阶段改引用。
 说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
@@ -115,7 +116,7 @@ Smith, John A., and Betty C. Jones. "Article Title in Title Case."
     Journal Title, vol. 45, no. 2, 2024, pp. 123-45.
 ```
 
-**Key rules**: No year in in-text, page numbers always, containers model, no DOI in basic format (include if online), title case for all titles.
+**Key rules**: No year in-text, page numbers always, containers model, no DOI in basic format (include if online), title case for all titles.
 
 ---
 

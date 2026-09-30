@@ -27,7 +27,7 @@ validators:
 knowledge_refs:
   - knowledge_id: academic-writing-style
     path: knowledge/academic-writing-style.md
-    content_hash: a4da98798b00bc633bde627b7ca324dba9c9d5feeb4ebd55026a134ab7f63f7d
+    content_hash: 2d15b5182e3e07ec5ab834eaf1d3eca9c8ba6444fe5a360a11a56b85679ec488
     license: CC BY-NC 4.0
   - knowledge_id: anti-leakage
     path: knowledge/anti-leakage.md
@@ -35,7 +35,7 @@ knowledge_refs:
     license: CC BY-NC 4.0
   - knowledge_id: paper-structure-patterns
     path: knowledge/paper-structure-patterns.md
-    content_hash: 9e9555803c33d7048a7b6878d14766d63b118ccc0d4f7ecc353f7a2a46f0db48
+    content_hash: 6190bcc69859dbbb63fd8cf4a2df7cb54c0570ff19dbe87ae619abd73242eef6
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:

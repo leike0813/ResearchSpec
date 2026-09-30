@@ -33,11 +33,11 @@ validators:
 knowledge_refs:
   - knowledge_id: academic-writing-style
     path: knowledge/academic-writing-style.md
-    content_hash: a4da98798b00bc633bde627b7ca324dba9c9d5feeb4ebd55026a134ab7f63f7d
+    content_hash: 2d15b5182e3e07ec5ab834eaf1d3eca9c8ba6444fe5a360a11a56b85679ec488
     license: CC BY-NC 4.0
   - knowledge_id: writing-quality-check
     path: knowledge/writing-quality-check.md
-    content_hash: edf12b9c3c8635d9c85e150d8d239da31a274d69dc326c74d8412aea6477ec7d
+    content_hash: 806af317958b050604602f6f5e5298fd80bb20b5bc35b55539979ff96eaa5feb
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -48,5 +48,5 @@ provenance:
     - KP-M2-07
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/04_drafting.rr-variant.md
-      sha256: 1d86d6163df5cda7f45a686d16abcd81386560cf03dd8e0b20b992556d233cb7
+      sha256: 546fccee1fab315d9a43a528c50862a2d27a17db1275d2fc58e2e312733fcbfd
 license: CC BY-NC 4.0

@@ -145,7 +145,10 @@ capability does not write run state or authorize a patch.
 ### Committee or institutional correspondence
 
 Select this branch only when the user explicitly identifies the source as a real
-committee or institutional review office. Preserve the supplied letter and
+committee or institutional review office. Journal or conference reviewers,
+editors, area chairs, and program committees are peer review, not a committee for
+this variant, even when the user names the venue or the venue calls the role a
+committee. Preserve the supplied letter and
 segment every comment without assigning Major/Minor/Editorial, P1/P2/P3, or a
 peer-review severity. Use only the source-supported action labels
 `design`, `explanation`, `revise_artifact`, `add_artifact`, `administrative`, and
@@ -178,6 +181,7 @@ the committee, or that any artifact is submission-ready.
 - Non-English comments: parse in original language; translate summaries to the user's preferred language.
 - Extremely long reviews: parse fully and group related comments.
 - Unprofessional language: flag it; extract actionable content; suggest consulting the editor.
+- Decision-letter acronym-check attachment: an `Attachment: Acronym Check` section in a supplied decision letter is script output, not reviewer comments. Take no roadmap item from it and write no reply to it.
 
 ### Parsing Errors
 

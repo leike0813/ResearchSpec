@@ -27,7 +27,7 @@ validators:
 knowledge_refs:
   - knowledge_id: collaboration-depth-rubric
     path: knowledge/collaboration-depth-rubric.md
-    content_hash: 9183a8af8c2a94e7d60746bf6dcef412647e7847dcb8dafb5d57a8e541dfd881
+    content_hash: 7a8ade218d7797288186ef802cb6e72abd77a2706299dd9ebd69a968ae3abdb3
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:

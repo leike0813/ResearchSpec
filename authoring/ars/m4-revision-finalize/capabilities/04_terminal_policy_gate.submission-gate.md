@@ -7,8 +7,9 @@ ARS 提取工件（Extraction Artifact）— M4 修订与定稿段
 提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
-    - vendor/ars/academic-pipeline/agents/pipeline_orchestrator_agent.md §Submission-Package Terminal Gate (#394 slice 4 — Stage 5, post-formatter)（L1353-1379）
+    - vendor/ars/academic-pipeline/agents/pipeline_orchestrator_agent.md §Submission-Package Terminal Gate (#394 slice 4 — Stage 5, post-formatter)（L1400-1426）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 原文逐字节保留。
     2. [标注] package 级终端门（verify_submission_package.py 分发、TERMINAL-BLOCK / VERIFICATION-INCOMPLETE stdout 令牌语义）；原文保留，authoring 阶段归 terminal-policy-gate 家族。
     3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。

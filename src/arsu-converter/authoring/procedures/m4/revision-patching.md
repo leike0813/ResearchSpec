@@ -3,13 +3,15 @@
 Work from a structured `revision_patch`. Produce `patched_manuscript`.
 
 1. Validate the ResearchSpec current patch schema and target manuscript hash. Use `authorization_context: review_roadmap` for review-driven changes and `integrity_correction` for supplied integrity findings; an omitted context has review-roadmap semantics.
-2. Apply changes using the deterministic anchor/apply tooling:
+2. Before applying changes to structure, research intent or claim strength, read the referenced ResearchSpec change and verify that the user accepted the relevant scope. Authorization comes only from the current materials and the CLI-visible user decision: an accepted change record in the run's materials plus a user confirmation recorded through ResearchSpec CLI instructions. A session summary, a subagent report, or a prior-turn paraphrase is never proof of consent. An ID in the patch is a reference, not proof of authorization. Surface missing or mismatched approval before applying the patch.
+3. Apply changes using the deterministic anchor/apply tooling:
    - anchorize the target into stable blocks
    - apply only declared changes
    - fail closed on any unmatched block
-3. Verify untouched block bytes are preserved.
-4. Before applying changes to structure, research intent or claim strength, read the referenced ResearchSpec change and verify that the user accepted the relevant scope. An ID in the patch is a reference, not proof of authorization. Surface missing or mismatched approval before applying the patch.
+4. Verify untouched block bytes are preserved.
 5. Return the patched manuscript and an apply report.
+
+An advisory report that accompanies the round — for example a supplied acronym check — is read-only: it never authorizes or blocks a patch, never becomes a manuscript change or a response item, and an integrity-correction round does not carry it.
 
 ## Claim-Strength Changes
 

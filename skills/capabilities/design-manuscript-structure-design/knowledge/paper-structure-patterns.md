@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M2 写作段
 来源对照（source mapping）:
     - vendor/ars/academic-paper/references/paper_structure_patterns.md（全文）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 全文逐字节保留。
     2. [标注-新增] **决策清单外新增**：structure_architect 内嵌 6 模式简表与本包重复（上游标注本包使用者为 structure_architect 与 intake）；authoring 阶段结构设计能力应引用本包。
 说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
@@ -30,8 +31,8 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 
 ```
 1. Title Page
-2. Abstract (150-250 words)
-   Keywords (5-7)
+2. Abstract (length: the guide's Standard row — academic-paper/references/abstract_writing_guide.md)
+   Keywords (count: the same row)
 3. Introduction
    3.1 Context and Background
    3.2 Problem Statement
@@ -304,7 +305,7 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 
 ```
 1. Title, Authors, Affiliations
-2. Abstract (100-200 words)
+2. Abstract (length: the guide's Conference row — academic-paper/references/abstract_writing_guide.md)
    Keywords
 3. Introduction
    3.1 Problem and Motivation

@@ -37,5 +37,5 @@ provenance:
     - KP-M5-02
   upstream_sources:
     - path: authoring/ars/m5-side-branches/capabilities/02_risk_of_bias_assessment.md
-      sha256: d74aa53f86743efdc4e2b0232f92da674bec54866a45ef7964398eac3475ce41
+      sha256: e50b88d08bbd8ed9c4aa8e8fa54809e94d50910f142340dc83593a090a58fd17
 license: CC BY-NC 4.0

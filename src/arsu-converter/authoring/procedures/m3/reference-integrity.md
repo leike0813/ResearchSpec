@@ -254,7 +254,7 @@ Use only a host-native subagent after separate user confirmation of model, conte
 - Give the authorized host-native reviewer one reference at a time with bounded material; its verdict needs actual retrieval evidence.
 - A successful response with no grounding evidence is `NOT_SEARCHED`; an ungrounded verdict never counts as agreement and must be surfaced.
 - Disagreements become `[CROSS-MODEL-DISAGREEMENT]` and are prioritized for human review.
-- Transport-level failure logs `[CROSS-MODEL-ERROR]` and never blocks the report.
+- Transport-level failure logs `[CROSS-MODEL-ERROR]` and never blocks the report. A provider-side safety or misalignment intervention that surfaces as a provider or adapter failure is a transport-level failure, never a citation verdict: it is recorded as unavailable for that item and never counts as agreement or disagreement.
 
 ## Quality Standards
 

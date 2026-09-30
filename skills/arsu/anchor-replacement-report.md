@@ -138,7 +138,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `0c2ed02a77ffc3f671917b06f4755ecc10ed8434c65787e15676a890c4ffc983`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
-- Before SHA-256: `c6e3a8f853bb04f0299cec336bc853ddb597cac8f7ee7cec71bea53c8e2dcd37`
+- Before SHA-256: `14acf28919d04575d26dc16f97765125b086aa3a5f1a5014c3fbb92bce5e0342`
 - After SHA-256: `9778df2ac817625399e47b2f320791f9384afb8dad7f5a6975616fe3c4443515`
 
 #### Before
@@ -154,6 +154,10 @@ For a review-roadmap round, your revision-invocation context carries the
 invent them. An integrity-correction round instead carries the anchored draft,
 manifest, and exact `integrity-correction-list/1.0` proposal plus its
 caller-computed binding. It never carries review-roadmap authority.
+When the acronym report on the anchored draft has findings, a review-roadmap
+round also carries it (#849): fix a finding only inside an authorized
+`will_address` target and operation, and leave every other finding unchanged;
+it adds no revision item. An integrity-correction round makes no acronym fix.
 
 **Emission rules (all machine-checked at apply time — a violation rejects the whole patch):**
 
@@ -304,7 +308,7 @@ Current ResearchSpec owners:
 - Replacement shape: `checklist`
 - Replacement body SHA-256: `2dac2bb7604e74ecb5cdb8b7718b9cc3f3bcb44bc8f15167073094b89eae02a4`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/agents/intake_agent.md`
+- Generated output paths: `academic-paper/agents/intake_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/intake_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/intake_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/intake_agent.md`
 - Before SHA-256: `66fffc1747a10574b1ba1cbacb3fdcb5d0e8ce221b60fc4e8c4114a1c31ea0c5`
 - After SHA-256: `f357b21d730e6ca7d18d82517fc159048b71e89fb7c90769cd16721aacb0a346`
 
@@ -504,7 +508,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `8d3f6e26c07ef3bab2a812b5baf63ba52296c65ef13b45b4edfb6bfc60b34c58`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `work/annotation-intake/`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 - Generated output paths: `academic-paper/references/revision_patch_protocol.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `deep-research/references/cross-skill/academic-paper/references/revision_patch_protocol.md`
-- Before SHA-256: `3b147a3ce4426019de8238ba490c9d11e26426e07ef7970eaf0238d3ac81cdc8`
+- Before SHA-256: `8dbb477a9792e339b4498c3529833ab906082feb508108550cecfcf4cca5adbf`
 - After SHA-256: `055521bb815e38dc48c7b45c567a72c942bfc86776b0ba2026b1821440fa9d07`
 
 #### Before
@@ -545,6 +549,11 @@ The apply report shares the revised draft's lifecycle: it is a **required input 
 #    any rewrite (including a finalizer pass) invalidates the manifest.
 python scripts/ars_anchorize_draft.py draft.md
 
+# 1a. Acronym check (#849): read-only, on the anchored draft. A report with
+#     findings goes to the writer with the round's authority artifacts
+#     (writing_quality_check.md § F); an integrity-correction round skips it.
+python scripts/check_acronyms.py --input draft.md --lang en
+
 # 2. Validate the immutable roadmap, registered claim surfaces, and explicit
 #    author sidecar. The writer receives all exact artifacts/bindings and emits
 #    phase6_*/revision_patch_round1.json (current format 1.1, never a full draft).
@@ -565,9 +574,9 @@ python scripts/ars_apply_revision_patch.py draft.md \
     --artifact-root revision-authority/ \
     --output draft.rev1.md
 
-# 4. Run your normal post-revision steps (finalizer / citation checks)
-#    on draft.rev1.md, then re-review with draft.rev1.md.apply-report.json
-#    attached.
+# 4. Run your normal post-revision steps (finalizer / citation checks, and
+#    the acronym check, whose report goes to the user) on draft.rev1.md,
+#    then re-review with draft.rev1.md.apply-report.json attached.
 ```
 
 Exit codes: `0` applied · `2` Phase 1 rejection (structured failure report on stdout; base byte-untouched) · `3` structural refusal (see escalation) · `4` post-write self-check bug.
@@ -708,7 +717,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `d33e12bc7690018c59630bc1531fd9711bf69d14decd2edccb950249f9b68f2a`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
 - Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
-- Before SHA-256: `3bd2f9351b27b5857b7cec2bcaf47d51ba7356a7add6d378c7a6d095175f5a2e`
+- Before SHA-256: `d711b0df2f9f9451895658fc2ef417b951368eb485cc083fd3b26d52f3e1e730`
 - After SHA-256: `571a1516eb7bee9167e917fd0256edd9a4c8be9c1196a5ecb25e38538652797a`
 
 #### Before
@@ -718,7 +727,7 @@ In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.
 
 Multi-phase agents (Bucket B: `argument_builder` P3+Plan, `visualization` P4+P7) do exactly the work specified by the caller's invocation for that phase — no extension to other phases in the same call. The v3.6.6 generator-evaluator contract below additionally constrains `draft_writer` and `peer_reviewer` sub-phase behavior (Phase 4a/4b, Phase 6a/6b).
 
-Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per `.claude/CLAUDE.md` Routing Discipline + `shared/references/intent_clarification_protocol.md`.
+Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per the routing core near the top of this file (Step 2) + `shared/references/intent_clarification_protocol.md`.
 
 **Enforcement (v3.9.2):** Phase Boundary blocks on Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope remains forward-scope (#134 Slices 3-5).
 ````
@@ -1401,7 +1410,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `3d396cb5caed1f82efd0217708e689850e7712480f2e89397ef8b4bb5e194949`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
-- Before SHA-256: `705235af035ad4891b186f930f741fc99f46bf5f4dae3e5d0b77e281da29cc27`
+- Before SHA-256: `7f21fd6b5f04ff9571a2689d23365ab90a6017f3449822a7515d4b93d18ad320`
 - After SHA-256: `352e7f9c80bad34a424c3fa56257be62c1b5a130e9c107e43ecd3fdabd25595c`
 
 #### Before
@@ -1413,7 +1422,7 @@ The 1 Bucket D agent (`field_analyst` at Phase 0) is meta — it configures the 
 
 The v3.6.2 Sprint Contract Protocol (paper-blind Phase 1 + paper-visible Phase 2 + data delimiter) additionally constrains all reviewer agents' within-phase discipline. Phase Boundary (phase scope) and Sprint Contract (within-phase paper-blind/paper-visible discipline) both apply — neither overrides the other.
 
-Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per `.claude/CLAUDE.md` Routing Discipline + `shared/references/intent_clarification_protocol.md`.
+Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per the routing core near the top of this file (Step 2) + `shared/references/intent_clarification_protocol.md`.
 
 **Enforcement (v3.9.2):** Phase Boundary blocks on Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope remains forward-scope (#134 Slices 3-5).
 ````
@@ -2054,6 +2063,115 @@ Current ResearchSpec owners:
 <!--/rs:STATE-005-->
 ````
 
+### STATE-010
+
+- Anchor name: `pipeline.orchestrator.run-ledger-evidence`
+- Owner skill: `academic-pipeline`
+- Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Severity: `required`
+- Semantic role: `graph_state_boundary`
+- Replacement shape: `protocol_block`
+- Replacement body SHA-256: `3812df6618c20b8895ce573e61eef243c07e62c7ab14c85ed507eae579dde2b0`
+- ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Before SHA-256: `bd30ba900f068bc9aaec5cbc252bc450a2811756546c30c66630cbb1db75255f`
+- After SHA-256: `1c45f667b14bef620c6d7a9f7bb901847972aae21fd5fc44ffe7818f963417ce`
+
+#### Before
+
+````markdown
+## Run ledger and handoff check (#887)
+
+Context compaction replaces older turns with a model-written summary, and a subagent return shows only the subagent's report; either can drop a pending decision, the user's exact words, or a step's outcome. The run ledger keeps them beside the passport as they happen (design `docs/design/2026-09-23-887-handoff-integrity-design.md`, schema `shared/contracts/passport/run_ledger.schema.json`).
+
+- **Write each event when it happens.** Once the run has a passport file, append each entry with `python3 scripts/run_ledger.py append --passport-path <passport> --entry-file <file>`. Write the entry JSON with the file-writing tool into run-local storage outside the repository, never inline in a shell command, because the user's words can contain quotes and shell characters. Record the user's initial instructions first; every FULL, SLIM, and MANDATORY checkpoint when it opens (stage, type, question, options) and when the user's response closes it (the answer and the user's exact words; `view progress`, `pause`, a refused `skip`, or a `continue` with an unmet precondition leaves it open), including audit-gate choices, reset-path overrides, and in-stage questions that change a deliverable; each item of a multi-item answer as the user gives it (coaching triage, E6 dispositions, E5 confirmations, re-review deferral answers, a structural-escalation scope); a receipt for each required step that reports only on stdout or by exit status (command, input files as `input_paths`, exit status, gate tokens or an output digest, status `passed`, `failed`, or `not_run`, retries used); the retry, loop, and fix-round counters, with the stage for a per-stage counter; and the path of each transient input a later step needs (the E6 raw event files, the evidence source text). Name files by path, relative to the passport's folder or absolute, and let the script hash them; it refuses a digest that does not match its file (#898). Under `ARS_PASSPORT_RESET=1`, an opened entry names its boundary hash (`reset_boundary_hash`). Show a refused append to the user as refused; never shorten or paraphrase the user's words to make an entry fit, and never edit the ledger by hand.
+- **Check after compaction, on resume, and after each subagent return.** Write a claims file with the decisions the summary or the report asserts, the outcomes it asserts for steps that report only on stdout or by exit status, and the stage's required steps of that kind, enumerated from the skills' text, and run `python3 scripts/run_ledger.py report --passport-path <passport> --claims <file>`. A paraphrase is not a decision: a checkpoint whose answer survives only as summary text stays open. A step counts as run only with a validating artifact, a receipt whose input files are unchanged (the report gives its outcome under `step_outcomes`), or a fresh run, and is otherwise `not run`, never `passed`; re-run a step with a retry limit only when a receipt shows the retries used, and otherwise ask the user first. At each stage close, run the same report with those required steps as `expected_steps`, alongside the state tracker's Material Gap Detection for deliverables and other artifacts, and name what is missing, including what a report did not mention.
+- **Show the handoff check only when it has something to report.** For the display, run the same report with `--render zh-TW` when the user writes in Traditional Chinese, or `--render en` otherwise, and insert its output verbatim; it prints nothing when there is nothing to report (#898). The block lists the groups that have items (awaiting your answer, cannot confirm, not run, missing) and ends with the number of items the ledger backs; do not re-word, merge, or reorder its lines, and do not ask the backed items again. For a partly collected answer, the recorded items stand and the rest are asked again.
+- **Fail closed.** A missing or unreadable ledger backs nothing, and a broken chain backs nothing from the break onward: ask again for every decision the session cannot show in the user's words. The rendered block names the ledger problem, so do not name it again. If the passport path itself is gone from the session, ask the user for it. Without a passport file, or where `scripts/run_ledger.py` cannot run, there is no ledger; say so once at the first checkpoint and apply these rules to what the session still shows.
+- **Keep it local.** Never put the whole ledger into a dispatch; a dispatch that carries a decision quotes only that decision's words (§ Checkpoint authority fidelity). Never name the ledger as a supporting file for the Codex audit wrapper. When the Stage 6 record quotes the initial instructions or a decision, take the words from the ledger's entries before any break the report names.
+
+*Epistemic status: prompt-level, indexed as risk R12 in `docs/RISK_REGISTER.md`. The report is deterministic only over what the ledger contains. The orchestrator writes the entries, so a fabricated entry stays R11's failure, and anything lost before its entry is written cannot be recovered. The hashes detect accidental damage, not deliberate edits, a lost tail, or a restored older copy.*
+````
+
+#### After
+
+````markdown
+<!--rs:STATE-010-->
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-010` for `academic-pipeline` run evidence.
+
+ResearchSpec CLI owns run, node, Gate and Decision state. The upstream run ledger
+and its deterministic replay are not shipped. Recover current workflow state
+through `status --json` and the exact selector's `instructions`; inspect the
+current material paths and actual command results before continuing semantic work.
+State lives in `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`; semantic
+exchange is described in `researchspec/runs/<run-id>/handoff.md`.
+
+A session summary or delegated report cannot establish user consent, a passed
+check or a completed deliverable. Retain the scope of each actual user decision;
+ask for a required unresolved decision through its owning confirmation surface.
+Disclose missing execution evidence as `not_checked` and missing material or
+approval evidence as unresolved. A supplied ARS ledger is ordinary external
+working material and does not authorize a workflow mutation or certify replay.
+<!--/rs:STATE-010-->
+````
+
+### STATE-011
+
+- Anchor name: `pipeline.orchestrator.checkpoint-steps`
+- Owner skill: `academic-pipeline`
+- Source path: `academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Severity: `required`
+- Semantic role: `graph_state_boundary`
+- Replacement shape: `protocol_block`
+- Replacement body SHA-256: `3c3f98a713be194324a285719ba381658cec2b6f973c68b022e246c214f6d80f`
+- ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Before SHA-256: `8539b22f8cc7b75535597a4090c8143e367ffc743c5f5a46326ffffdd3e25d3c`
+- After SHA-256: `be772d76b869275ebc4ef1bc00282feda115b05b83340b521fc0eb6ceb692560`
+
+#### Before
+
+````markdown
+#### Steps
+
+```
+1. Determine checkpoint_type (FULL / SLIM / MANDATORY) using rules above
+2. Update state_tracker (including checkpoint_type)
+3. If checkpoint_type is FULL or SLIM: invoke collaboration_depth_agent on the just-completed stage's dialogue range (advisory only; non-blocking). If MANDATORY: SKIP this step — integrity gates must not be diluted. See "Collaboration Depth Observer" section below.
+4. Display checkpoint notification matching the type (FULL/SLIM: inject observer output as a named section per templates below; MANDATORY: no observer section); when the run has a passport file, append `checkpoint_opened` to the run ledger (§ Run ledger and handoff check)
+5. Wait for user response
+6. Act on the response per "Checkpoint Confirmation Semantics" (the single authority for
+   response handling); update consecutive_continue_count per "User Engagement Tracking"
+   (increment on "continue", reset on any other action); when the response closes the checkpoint, append `checkpoint_closed` with the user's exact words to the run ledger
+```
+
+**IRON RULE**: the user's response handling above considers only the checkpoint's metrics, deliverables, and integrity results. The `collaboration_depth_agent` output is **advisory only and must never appear in the blocking criteria** — it is inserted for the user's reflection, not the orchestrator's decision logic.
+````
+
+#### After
+
+````markdown
+<!--rs:STATE-011-->
+### ResearchSpec Current Owner
+
+Replacement scope: `STATE-011` for `academic-pipeline` checkpoint steps.
+
+Read current state with `status --json` and the owning selector's `instructions`.
+Present the actual deliverables and check findings. Obtain each formal Gate
+verdict and Decision through its own human confirmation, then use the specified
+CLI mutation; only that owning record closes the control. Advisory observer
+output is available for reflection and cannot become a blocking criterion.
+
+Current state lives in `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`.
+Describe semantic exchange in `researchspec/runs/<run-id>/handoff.md` through the
+CLI's handoff instructions. Preserve the scope of the user's actual choice;
+missing confirmation remains unresolved. An upstream ledger is not shipped
+and does not receive checkpoint events.
+<!--/rs:STATE-011-->
+````
+
 ### ARTIFACT-001
 
 - Anchor name: `pipeline.state-tracker.version-passport`
@@ -2124,7 +2242,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `80e3f6bd0f3a7debba664caaa50977d4dab696828a1743f0c3dbe03cc7bb4844`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-pipeline/agents/state_tracker_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`
-- Before SHA-256: `64d7001c063328c4ce92b68d9397df3764c07ff0ad2843e23551cd651890ed40`
+- Before SHA-256: `005dab7ac516d7ef10cd7c44dbfcfcdc7a7333dd1104179d9aea356e9e8bdda4`
 - After SHA-256: `92808f7d24ea01b973d563a06a48bd7020c3c16e98f6204a256c7b9ad2258bd7`
 
 #### Before
@@ -2259,6 +2377,10 @@ or alters a severity, editorial verdict, pipeline stage decision, checkpoint,
 or author triage. Consumer receipts are written only by the deterministic
 recorder after their ordinary artifacts exist; no missing consumer is
 fabricated for a skipped or mid-entry stage.
+
+### Run ledger (#887)
+
+The tracker's state lives in the conversation, so compaction can rewrite it. The orchestrator appends what must survive to the run ledger beside the passport (`scripts/run_ledger.py`; what it records: `pipeline_orchestrator_agent.md` § Run ledger and handoff check), and the tracker never writes it. When the tracker's state and the ledger's report disagree after compaction or resume, a decision follows `references/pipeline_state_machine.md` § Checkpoint decision provenance, a step outcome follows the report's `step_outcomes`, which gives a receipt's recorded outcome only while its input files are unchanged (#898), and a counter takes the higher of the two values for its stage, so a lost count cannot reopen a retry or loop limit.
 
 ### State Update Protocol
 
@@ -2479,7 +2601,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `167cee028ac09dc914f2109e82790980cd3c1375a644d6766a16c0a021c70a27`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
-- Before SHA-256: `1801291f0d22786b14538e39de3e787ae4a6a143f94cbcd1765b1646d2e1936f`
+- Before SHA-256: `82c374110d2d6e5c4c746f5583540e404f014a4c494612ebb2ccf2d15dad8bf6`
 - After SHA-256: `66603ce38faab2951a187fb540a383a21f0303e782a9de2cfa527567d074bc27`
 
 #### Before
@@ -2493,7 +2615,7 @@ In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.
 - `collaboration_depth_agent` (C — FULL/SLIM checkpoints + Stage 6 record compilation, advisory-only)
 - `claim_ref_alignment_audit_agent` (C — opt-in claim audit, phase-orthogonal)
 
-Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per `.claude/CLAUDE.md` Routing Discipline + `shared/references/intent_clarification_protocol.md`. **Critically:** if `pipeline_orchestrator_agent` is dispatched on ambiguous cross-phase materials, the orchestrator itself currently cannot reconcile (this is the v3.10 conductor #134 work) — v3.9.2 routes such cases to clarification BEFORE the orchestrator runs.
+Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per the routing core near the top of this file (Step 2) + `shared/references/intent_clarification_protocol.md`. **Critically:** if `pipeline_orchestrator_agent` is dispatched on ambiguous cross-phase materials, the orchestrator itself currently cannot reconcile (this is the v3.10 conductor #134 work) — v3.9.2 routes such cases to clarification BEFORE the orchestrator runs.
 
 **Enforcement (v3.9.2):** Phase Boundary blocks on downstream Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope + orchestrator structured intake remain forward-scope (#134 Slices 3-5).
 ````
@@ -2925,7 +3047,7 @@ Current ResearchSpec owners:
 - Replacement body SHA-256: `c0369edf0b5998d8a7dbea3fc26eff395c4d2bfb46269f97aab89aa985ee6ac8`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
 - Generated output paths: `academic-paper/references/cross-skill/deep-research/SKILL.md`, `academic-paper-reviewer/references/cross-skill/deep-research/SKILL.md`, `academic-pipeline/references/cross-skill/deep-research/SKILL.md`, `deep-research/SKILL.md`
-- Before SHA-256: `34fa2a8037254957e47bf3e73b95468c5d28a0cbf180f92abeef97855d83a3ef`
+- Before SHA-256: `5925d3443e95d904eb84ea364bb237570465ac08277c8ee7fcc9f4bc09823f83`
 - After SHA-256: `64f7941091c1fdd7b83d9449d91a1470692af328fe1d585695906680f3c36f97`
 
 #### Before
@@ -2933,7 +3055,7 @@ Current ResearchSpec owners:
 ````markdown
 In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.2-agent-phase-classification.md`) stay strictly within their assigned phase for writes**. Reads from upstream phases are allowed. Multi-phase agents (Bucket B: `devils_advocate_agent`, `report_compiler_agent`) do exactly the work specified by the caller's invocation for that phase — no extension to other phases in the same call.
 
-Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per `.claude/CLAUDE.md` Routing Discipline + `shared/references/intent_clarification_protocol.md`.
+Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per the routing core near the top of this file (Step 2) + `shared/references/intent_clarification_protocol.md`.
 
 **Enforcement (v3.9.2):** Phase Boundary blocks on Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope remains forward-scope (#134 Slices 3-5).
 ````

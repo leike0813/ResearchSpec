@@ -517,7 +517,7 @@ function diff(oldAnchor, newAnchor) {
 
 const args = process.argv.slice(2);
 const command = args[0];
-const anchor = command === "diff" ? args[1] : (args[1] ?? process.env.ARSU_ANCHOR ?? "v3.21.1-127ff85");
+const anchor = command === "diff" ? args[1] : (args[1] ?? process.env.ARSU_ANCHOR ?? "v3.22.2-7de1c9d");
 if (command === "baseline" && anchor) baseline(anchor);
 else if (command === "records" && anchor) records(anchor);
 else if (command === "artifacts" && anchor) artifacts(anchor);

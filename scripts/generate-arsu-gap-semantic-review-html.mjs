@@ -4,7 +4,7 @@ import path from "node:path";
 import process from "node:process";
 import MarkdownIt from "markdown-it";
 
-const anchor = process.env.ARSU_ANCHOR ?? "v3.21.1-127ff85";
+const anchor = process.env.ARSU_ANCHOR ?? "v3.22.2-7de1c9d";
 const output = process.argv[2] ? path.resolve(process.argv[2]) : path.join(process.cwd(), "audits", "arsu", anchor, "artifacts", "arsu-mode-gap-semantic-review.html");
 const source = path.resolve(path.dirname(output), "..", "05-semantic-review.md");
 const markdown = existsSync(source) ? readFileSync(source, "utf8") : "# ARSU 语义审阅\n\n[NOT-COMPLETED] 本锚点的 Agent 语义审阅尚未完成。";

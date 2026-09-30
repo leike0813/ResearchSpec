@@ -7,8 +7,9 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 提取日期: 2026-08-15
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
-    - vendor/ars/deep-research/agents/synthesis_agent.md §Two-Layer Citation Emission (v3.7.1) + §Three-Layer Citation Emission (v3.7.3)（L253-302）
+    - vendor/ars/deep-research/agents/synthesis_agent.md §Two-Layer Citation Emission (v3.7.1) + §Three-Layer Citation Emission (v3.7.3)（L269-317）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 原文逐字节保留（含 R-L3-1-A/B/C/D、anchor 闭集枚举、URL 编码规则含连字符特例）。
     2. [标注] 上游另有 check_v3_7_3_three_layer_citation.py lint；验证器资产在 authoring 阶段归引擎侧（Q6 决策）。
 说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
@@ -65,4 +66,3 @@ Four firm rules:
 URL-encoding for `quote:` values uses standard percent-encoding (`%20` for space, `%2C` for comma, `%3A` for colon, etc.) **AND additionally percent-encodes any consecutive run of two or more hyphen characters: `--` MUST be written as `%2D%2D`** (and `---` as `%2D%2D%2D`, etc.). Standard RFC 3986 encoding treats `-` as an unreserved character and does NOT encode it, but a quote containing `--` (e.g., from an em-dash, a divider, or a nested HTML comment opener) would leave a literal `--` in the anchor value that prematurely closes the HTML comment. A single hyphen between word characters (e.g., `AI-generated`, `well-known`) is safe and may remain raw. Always percent-encode space, comma, colon, AND any consecutive-hyphen run. Never rely on the absence of `-->` in the quoted text. v3.7.3 gemini review F1 + codex round-6 F15 closure (prompt-vs-lint alignment).
 
 The agent's job still ends at emission. The agent does NOT post-process or audit its own anchors. The cite_provenance_finalizer_agent reads `<!--anchor:...-->` markers downstream, applies the 5-cell matrix, and mutates them in place.
-

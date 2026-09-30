@@ -4,7 +4,7 @@ import path from "node:path";
 import process from "node:process";
 
 const ROOT = process.cwd();
-const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.21.1-127ff85";
+const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.22.2-7de1c9d";
 const AUDIT_ARTIFACTS = path.join(ROOT, "audits", "arsu", DEFAULT_ANCHOR, "artifacts");
 const ARS = path.join(ROOT, "vendor", "ars");
 const CAPABILITIES = path.join(ROOT, "skills", "capabilities");
@@ -114,9 +114,9 @@ const ANCHORS = {
   ],
   "academic-paper:abstract-only": [
     A("双语摘要", "Bilingual"),
-    A("关键词数量", "5-7 keywords"),
+    A("关键词数量", "Keywords per language"),
     A("独立写作", "independently"),
-    A("摘要字数", "150-300 words"),
+    A("摘要字数", "Abstract Length & Keyword Regime"),
   ],
   "academic-paper:lit-review": [
     A("注释书目", "Annotated Bibliography"),

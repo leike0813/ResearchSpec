@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M5 支线段
 来源对照（source mapping）:
     - vendor/ars/deep-research/references/socratic_mode_protocol.md（全文）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 全文逐字节保留。
     2. [标注] 支线能力 CAP-M5-03（dr 变体）的直接知识包；原文保留，authoring 阶段改引用。
     3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
@@ -104,7 +105,10 @@ User: "Guide my research on [topic]"
 - If no convergence after 10 rounds -> summarize only user-expressed directions
   and suggest continued questioning, `lit-review`, or an explicit switch to
   `full` mode (see Failure Paths F1/F6); do not generate candidates as a fallback
-- If dialogue exceeds 15 rounds -> automatically compile INSIGHTs and end
+- When the dialogue ends is decided by
+  `deep-research/agents/socratic_mentor_agent.md` § Auto-End Conditions
+  (Precise): round caps, stagnation thresholds, and convergence live there.
+  This file states no round count of its own
 - If user requests direct answers -> gently decline and explain the value of
   guided learning; an explicit request for system-proposed candidates follows
   the visible exit contract above

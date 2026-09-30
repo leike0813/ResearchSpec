@@ -7,8 +7,9 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 提取日期: 2026-08-15
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
-    - vendor/ars/deep-research/agents/synthesis_agent.md §Claim Intent Manifest Emission (v3.8) + §Experiment-backed claims (#260)（L303-356）
+    - vendor/ars/deep-research/agents/synthesis_agent.md §Claim Intent Manifest Emission (v3.8) + §Experiment-backed claims (#260)（L319-372）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 原文逐字节保留（含 R-CIM-A/B/C/D、JSON 示例、实验支撑 claim 的 D 规则）。
     2. [标注] canonical 版 R-CIM-A/B/C 另存 05b（firm_rules 源）；发射协议与 canonical 规则存在叙述性重叠，authoring 阶段单源化。
 说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改

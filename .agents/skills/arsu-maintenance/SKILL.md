@@ -15,7 +15,7 @@ description: Maintain the upstream ARS project absorption path through analysis,
 
 ## 输入与前置条件
 
-- 已 pin 的 `vendor/ars` 子模块（当前维护版本：`v3.21.1` @ `127ff85e4bbfcdd10b95040537b6c6bd7ad17aeb`）。
+- 已 pin 的 `vendor/ars` 子模块（当前维护版本：`v3.22.2` @ `7de1c9dfb7af9c02a9b57750761323f35a743aa2`）。
 - 项目依赖安装完成（`pnpm install`）。
 - 工作区干净或仅包含本次维护改动；子模块必须处于预期 commit。
 - 生成链路可用：`pnpm extraction:index`、`pnpm arsu:author`、`pnpm capability:parity`、`pnpm capability:review-html`、`pnpm capability:assessment-html`。
@@ -31,7 +31,7 @@ description: Maintain the upstream ARS project absorption path through analysis,
 
 ## 锚点命名
 
-`<version>-<short_commit>`，例如 `v3.21.1-127ff85`。目录：
+`<version>-<short_commit>`，例如 `v3.22.2-7de1c9d`。目录：
 
 ```
 audits/arsu/<anchor>/
@@ -79,7 +79,7 @@ audits/arsu/<anchor>/
 1. 按 ingestion 决策更新：
    - `src/arsu-converter/authoring/m1-sources.ts` … `m5-sources.ts`
    - `src/arsu-converter/authoring/procedures/**`
-   - `src/core/graph-profiles/**`
+   - `src/arsu-converter/workflow/graph-profiles/**`
    - capability manifest/registry 约束（命名、角色、validator、knowledge hash）
 2. 硬性不变量：
    - capability ID 必须 kebab-case；`capability_id == source_path == SKILL.md name == 目录名`。
@@ -99,8 +99,8 @@ audits/arsu/<anchor>/
    - `pnpm arsu-maintenance:artifacts`
    - 等价于 `pnpm capability:parity` + `pnpm capability:review-html` + `pnpm capability:assessment-html` + `pnpm capability:gap-review-html`
 2. 机器审计确认：
-   - `artifacts/generated/capability-parity-report.json`：38/38 operational，`below_*`、`output_missing`、`flow_retained` 全部为空。
-   - assessment：116 个锚点中 113 preserved + 3 flow，0 gap（或所有缺口均有记录并给出明确决策）。
+   - `artifacts/generated/capability-parity-report.json`：38 个 ARS 能力保持 operational；报告同时包含其他已注册能力，`below_*`、`output_missing`、`flow_retained` 全部为空。
+   - assessment：逐项记录所有 `gap / missing / converted_only / flow` 的语义判定。当前 116 个文本锚点中 107 preserved、2 converted_only、6 gap、1 flow；reviewer calibration 专用能力缺口保持显式，文本命中不证明语义保留。
    - 审阅工件中无旧 dotted capability ID。
 3. **Agent 语义审阅门（不能省略，不能只贴脚本输出）**：
    - 打开 `arsu-mode-capability-review.html`，逐 mode 抽检上游指令与转换节点：至少覆盖每个 Skill 1 个 mode，且所有本轮变更 mode 必须全部检查。
@@ -115,7 +115,7 @@ audits/arsu/<anchor>/
 
 1. 运行 `node scripts/arsu-maintenance.mjs records <anchor>`，自动生成/刷新 01–04 审计记录；已存在的 `05-semantic-review.md` 不会被覆盖：
    - `01-analysis.md`：上游库存、mode registry、影响映射
-   - `02-ingestion.md`：119 artifacts 全量清单与 hash
+   - `02-ingestion.md`：120 artifacts 全量清单与 hash
    - `03-conversion.md`：38 capability 全表 + graph profiles 节点表
    - `04-review.md`：parity 全表、per-mode 评估、per-package 覆盖率、工件 hash
 2. 运行 `node scripts/arsu-maintenance.mjs baseline <anchor>`：验证 `05-semantic-review.md` 已完成（含 `## 结论` 且无 `[NOT-COMPLETED]`），生成 `manifest.json`，并固化维护 Skill、01–05 记录与三份 HTML 工件的 SHA-256。

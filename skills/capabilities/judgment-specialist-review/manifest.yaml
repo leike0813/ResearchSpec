@@ -48,7 +48,7 @@ knowledge_refs:
     license: CC BY-NC 4.0
   - knowledge_id: sprint-contract
     path: knowledge/sprint-contract.md
-    content_hash: a032f0782146538d70ac81b997ee675c9bf643d2674b0d9a91c74128a02bb84d
+    content_hash: d11895a0a936c4c860c143915feb3f0df212700baa4fbb449cd240e70424ef14
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:

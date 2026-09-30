@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 来源对照（source mapping）:
     - vendor/ars/academic-pipeline/references/claim_verification_protocol.md（全文）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 全文逐字节保留。
     2. [标注-新增] **决策清单外新增**：integrity_verification_agent 多处声明本文件为权威（"the complete protocol definition"、E4/E5/E6 引用），属 CAP-M3-01 完整性所需。
     3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
@@ -220,7 +221,7 @@ event artifact is unavailable, replay fails closed. An empty finding set is
 therefore “none detected by the recorded review,” never a deterministic
 no-drift certificate.
 
-External motivation: DELEGATE-52 (arXiv:2604.15597) — round-trip editing corrupts content by subtle modification; the #390 patch confines exposure to touched blocks but does not check their epistemic interior. Baseline evidence that the drift is real on the current frontier model: `evals/heldout/revision_claim_drift/` (2026-07-22: 2/8 under hedge-drop / null-reframe pressure). Mechanism shape borrowed from Yila-AI/sci-ssci-skills (@MissOrangePeel).
+External motivation: DELEGATE-52 (arXiv:2604.15597) — round-trip editing corrupts content by subtle modification; the #390 patch confines exposure to touched blocks but does not check their epistemic interior. Baseline evidence that the drift is real on the frontier model of that date (`claude-fable-5`): `evals/heldout/revision_claim_drift/` (2026-07-22: 2/8 under hedge-drop / null-reframe pressure). Mechanism shape borrowed from Yila-AI/sci-ssci-skills (@MissOrangePeel).
 
 ## Claim-Standing Probe Offer (#655 — opt-in, advisory-only)
 

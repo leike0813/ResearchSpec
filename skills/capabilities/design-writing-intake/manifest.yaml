@@ -34,6 +34,10 @@ knowledge_refs:
     path: knowledge/preregistration-guide.md
     content_hash: de71e76d03767a1f6bbc33b0d294af3f8e0ffb8a60b33d53cf420b653b26ebf4
     license: CC BY-NC 4.0
+  - knowledge_id: output-language-pair
+    path: knowledge/output-language-pair.md
+    content_hash: 68dc409cbd3b806f81248f8f6ed90ecffa5f36a364bf78acab5f096a8749e809
+    license: CC BY-NC 4.0
 gate_policy: required
 provenance:
   origin: ars-derived
@@ -41,7 +45,8 @@ provenance:
     - CAP-M2-01
     - KP-M2-06
     - KP-M5-22
+    - KP-M2-09
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/01_writing_intake.md
-      sha256: 0e7bd02b8caa2b3ca5de12ca4bd1571b8dfbec07c2011233af126d6393b14311
+      sha256: b64f991fe5900264acd369e693702f53110bed1362d00b4a135c407bcda12e72
 license: CC BY-NC 4.0

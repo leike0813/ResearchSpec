@@ -45,5 +45,5 @@ provenance:
     - KP-M5-11
   upstream_sources:
     - path: authoring/ars/m5-side-branches/capabilities/07_compliance_check.md
-      sha256: f3c7b7d1e066a72d71efd31a26d46767e872be10cff596ec9c341b6218bd27c9
+      sha256: 5591165a4c945e27b928b826f1958bf9f5fe76405e7e82132aedcf2fdab00e32
 license: CC BY-NC 4.0

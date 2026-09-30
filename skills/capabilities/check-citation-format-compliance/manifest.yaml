@@ -27,7 +27,11 @@ validators:
 knowledge_refs:
   - knowledge_id: citation-format-standards
     path: knowledge/citation-format-standards.md
-    content_hash: eff271b73d6a7ce01be147ceefeed7a98671d082d365685c8357243814282cec
+    content_hash: a1e3d87e73793e43e7f9aac95c37680b47333782e8eb541dbf6120f1561b674b
+    license: CC BY-NC 4.0
+  - knowledge_id: apa7-chinese-citation-guide
+    path: knowledge/apa7-chinese-citation-guide.md
+    content_hash: e86426bff349c938350685a2aafb6077c2825273d6f66c279a85745362320f55
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -35,7 +39,8 @@ provenance:
   extraction_artifact_ids:
     - CAP-M2-06
     - KP-M2-05
+    - KP-M5-28
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/06_citation_format_compliance.md
-      sha256: c19d59c4a8120510dffa7abd30808750e6f03dd7e26dbc1d548a188145416f36
+      sha256: 1fe2957b96aa2f810c2c3a6ecba580cb194fdf6d699666d976431482386e7402
 license: CC BY-NC 4.0

@@ -12,6 +12,12 @@ inputs:
     schema_ref: manuscript-draft.v1
     required: true
     source_policy: node_output
+  - role: writing_configuration
+    schema_ref: writing-configuration.v1
+    required: false
+    source_policy:
+      - handoff
+      - node_output
 outputs:
   - role: abstract
     schema_ref: abstract.v1
@@ -21,13 +27,22 @@ validators:
     kind: policy
     inputs:
       - manuscript_draft
+      - writing_configuration
     outputs: []
     error_codes:
       - output_roles_invalid
 knowledge_refs:
   - knowledge_id: abstract-guide
     path: knowledge/abstract-guide.md
-    content_hash: e6ec1a069fcd11bcc3fcaee34ff6377093fedf787636f2fc204df401b3bc46aa
+    content_hash: 9c272be3ca7404225c45a2a92adf4954fea11d0c8a10bf66f494159b1109cd42
+    license: CC BY-NC 4.0
+  - knowledge_id: writing-quality
+    path: knowledge/writing-quality.md
+    content_hash: 806af317958b050604602f6f5e5298fd80bb20b5bc35b55539979ff96eaa5feb
+    license: CC BY-NC 4.0
+  - knowledge_id: output-language-pair
+    path: knowledge/output-language-pair.md
+    content_hash: 68dc409cbd3b806f81248f8f6ed90ecffa5f36a364bf78acab5f096a8749e809
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -35,7 +50,9 @@ provenance:
   extraction_artifact_ids:
     - CAP-M2-05
     - KP-M2-02
+    - KP-M2-07
+    - KP-M2-09
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/05_abstract_writing.md
-      sha256: 03ce976e44c335c83a86d9ff296954e389c2eef982f3f16fd288aae4212f1edc
+      sha256: cadd8aaa47fce069ca4e709a6a97fc33dea93dc6c5ef3acc603469bac63f7073
 license: CC BY-NC 4.0

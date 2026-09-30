@@ -7,8 +7,9 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
-    - vendor/ars/deep-research/agents/devils_advocate_agent.md §Concession Threshold Protocol (v3.0)（L144-184）
+    - vendor/ars/deep-research/agents/devils_advocate_agent.md §Concession Threshold Protocol (v3.0)（L160-199）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 原文逐字节保留。
     2. [标注] 决策清单 M3 知识包之一（让步阈值）；上游明示与 05b 是"同一 1-5 量表、不同动作标签"的平行协议（checkpoint 议题 vs 编号发现），两者都保留。
     3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
@@ -57,4 +58,3 @@ The `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` has a par
 Added after observing that DA agents concede attacks faster than they launch them — because the model's training rewards conversational harmony over intellectual rigor. This threshold ensures concessions require genuine argumentative merit, not just persistent pushback.
 
 ---
-

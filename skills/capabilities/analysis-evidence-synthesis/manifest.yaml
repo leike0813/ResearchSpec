@@ -28,7 +28,7 @@ validators:
 knowledge_refs:
   - knowledge_id: claim-intent-emission
     path: knowledge/claim-intent-emission.md
-    content_hash: c0686a8c6c8bfb9772f4ac4433c23ab0e1ce222ae7066c446a264b9383142f3c
+    content_hash: 63c12318e7f4fb5aca2ec9ca36c236c3d02fe88b41fef9fcbdc3761811ac707b
     license: CC BY-NC 4.0
   - knowledge_id: claim-intent-canonical
     path: knowledge/claim-intent-canonical.md
@@ -36,7 +36,7 @@ knowledge_refs:
     license: CC BY-NC 4.0
   - knowledge_id: three-layer-citation
     path: knowledge/three-layer-citation.md
-    content_hash: 3656dec6e9fa9e999b92a7f96da612c778ca14be79d9b919ce75a2cea1bce5ba
+    content_hash: f212348a2d3d2881876e5bac902962a224866f35a2ea24a26064d509818b0d62
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -48,5 +48,5 @@ provenance:
     - KP-M1-06
   upstream_sources:
     - path: authoring/ars/m1-research/capabilities/03_evidence_synthesis.md
-      sha256: 6aae4702e25ff40d103beb57b76635a550f2c5944b1a8811de797feb82c09403
+      sha256: 9032f977fc6a4aee5a1623b745b78affa3478dbf8f49b97b09090f2ccea7b52e
 license: CC BY-NC 4.0

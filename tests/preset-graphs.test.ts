@@ -65,6 +65,9 @@ void test("minimal, writing, reviewer, and pipeline presets retain their declare
   const writing = profile("academic-paper");
   assert.equal(writing.nodes.find((node) => node.node_id === "structure")?.input_bindings.some((binding) => binding.role === "annotated_bibliography" && binding.source === "handoff"), true);
   assert.equal(writing.nodes.find((node) => node.node_id === "draft")?.input_bindings.some((binding) => binding.role === "synthesis_report" && binding.source === "handoff"), true);
+  for (const nodeId of ["draft", "abstract"]) {
+    assert.equal(writing.nodes.find((node) => node.node_id === nodeId)?.input_bindings.some((binding) => binding.role === "writing_configuration" && binding.source === "node_output" && binding.from_node_id === "intake"), true);
+  }
 
   const reviewer = profile("academic-paper-reviewer");
   assert.deepEqual(reviewer.nodes.find((node) => node.node_id === "editorial")?.input_bindings, [

@@ -33,7 +33,7 @@ knowledge_refs:
     license: CC BY-NC 4.0
   - knowledge_id: submission-guide
     path: knowledge/submission-guide.md
-    content_hash: 0137d1516b30d06c4b2940f5e84b22ad59bfa50a2bf7fbf2cbf41ca738309eed
+    content_hash: 69ee133e86b0695f1973f418472a269905394b83f5e8c51ef27a99922f12d0a9
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -44,5 +44,5 @@ provenance:
     - KP-M4-05
   upstream_sources:
     - path: authoring/ars/m4-revision-finalize/capabilities/03_format_rendering.md
-      sha256: d9c687ffd07584886afa42565b68a109f2968a3f0e49ca935a7531fc8879af29
+      sha256: e270831e2437ee530a93b69785869adf932a87c3d25ca5898cbd6e78bbd55b78
 license: CC BY-NC 4.0

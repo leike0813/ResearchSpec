@@ -20,18 +20,18 @@ interface ExtractionIndex {
   }>;
 }
 
-void test("extraction index records all 119 verified artifacts", async () => {
+void test("extraction index records all 120 verified artifacts", async () => {
   const index = JSON.parse(await readFile("authoring/ars/extraction-index.json", "utf8")) as ExtractionIndex;
   assert.equal(index.schema_version, "1");
-  assert.equal(index.artifact_count, 119);
-  assert.deepEqual(index.verification_summary, { pass: 119 });
-  assert.equal(index.artifacts.length, 119);
+  assert.equal(index.artifact_count, 120);
+  assert.deepEqual(index.verification_summary, { pass: 120 });
+  assert.equal(index.artifacts.length, 120);
   assert.ok(index.artifacts.every((item) => item.verification.status === "pass"));
   assert.deepEqual(
     Object.entries(index.milestones).map(([name, value]) => [name, value.total, value.pass]),
     [
       ["m1-research", 16, 16],
-      ["m2-writing", 15, 15],
+      ["m2-writing", 16, 16],
       ["m3-integrity-review", 25, 25],
       ["m4-revision-finalize", 15, 15],
       ["m5-side-branches", 48, 48],

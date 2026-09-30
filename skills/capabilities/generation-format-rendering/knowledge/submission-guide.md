@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M4 修订与定稿段
 来源对照（source mapping）:
     - vendor/ars/academic-paper/references/journal_submission_guide.md（全文）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 全文逐字节保留。
     2. [标注-新增] **决策清单外新增**：formatter_agent 内嵌引用本包，属 CAP-M4-03 所需。
 说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
@@ -47,7 +48,7 @@ Used by `formatter_agent` and `intake_agent`.
 | Cover letter | ✓ | Addressed to Editor-in-Chief |
 | Title page | ✓ | Title, authors, affiliations, corresponding author |
 | Abstract | ✓ | Check word limit (often 150-250) |
-| Keywords | ✓ | Usually 4-7 |
+| Keywords | ✓ | Usually 5-7 |
 | Main text | ✓ | Following journal structure |
 | References | ✓ | In journal's required format |
 | Tables | Often | Separate files or embedded |

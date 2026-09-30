@@ -1,8 +1,52 @@
 {
   "schema_version": "researchspec.arsu.contract-anchors.v4",
   "upstream_source": "vendor/ars",
-  "audited_commit": "127ff85e4bbfcdd10b95040537b6c6bd7ad17aeb",
+  "audited_commit": "7de1c9dfb7af9c02a9b57750761323f35a743aa2",
   "anchors": [
+    {
+      "id": "STATE-011",
+      "name": "pipeline.orchestrator.checkpoint-steps",
+      "source_path": "academic-pipeline/agents/pipeline_orchestrator_agent.md",
+      "owner_skill": "academic-pipeline",
+      "contract_category": "material_passport_runtime_ssot",
+      "severity": "required",
+      "match_hints": {
+        "headings": ["Steps"],
+        "snippets": ["append `checkpoint_opened`", "append `checkpoint_closed`"]
+      },
+      "semantic_role": "graph_state_boundary",
+      "researchspec_targets": [
+        "researchspec/runs/<run-id>/nodes/<node-instance>.yaml",
+        "researchspec/runs/<run-id>/handoff.md"
+      ],
+      "replacement_shape": "protocol_block",
+      "replacement_scope": {
+        "start_snippet": "#### Steps",
+        "end_snippet": "it is inserted for the user's reflection, not the orchestrator's decision logic."
+      }
+    },
+    {
+      "id": "STATE-010",
+      "name": "pipeline.orchestrator.run-ledger-evidence",
+      "source_path": "academic-pipeline/agents/pipeline_orchestrator_agent.md",
+      "owner_skill": "academic-pipeline",
+      "contract_category": "material_passport_runtime_ssot",
+      "severity": "required",
+      "match_hints": {
+        "headings": ["Run ledger and handoff check (#887)"],
+        "snippets": ["scripts/run_ledger.py append", "The hashes detect accidental damage"]
+      },
+      "semantic_role": "graph_state_boundary",
+      "researchspec_targets": [
+        "researchspec/runs/<run-id>/nodes/<node-instance>.yaml",
+        "researchspec/runs/<run-id>/handoff.md"
+      ],
+      "replacement_shape": "protocol_block",
+      "replacement_scope": {
+        "start_snippet": "## Run ledger and handoff check (#887)",
+        "end_snippet": "The hashes detect accidental damage, not deliberate edits, a lost tail, or a restored older copy.*"
+      }
+    },
     {
       "id": "STATE-002",
       "name": "pipeline.skill.resume-from-passport",

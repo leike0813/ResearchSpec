@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M2 写作段
 来源对照（source mapping）:
     - vendor/ars/academic-paper/agents/structure_architect_agent.md（全文）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 上游全文逐字节保留。
     2. [标注] Phase Boundary 段属流程层（Q6），原文保留。
     3. [标注] 内嵌 6 结构模式与 KP-M2-08 重复；Handoff from Plan Mode 段属 M5 路径，原文保留。
@@ -103,7 +104,7 @@ For each section, provide:
 #### IMRaD Default Allocation (for 6,000-word paper)
 | Section | % | Words |
 |---------|---|-------|
-| Abstract | — | 250 |
+| Abstract | — | regime table |
 | Introduction | 15% | 900 |
 | Literature Review | 25% | 1,500 |
 | Methodology | 15% | 900 |
@@ -115,7 +116,7 @@ For each section, provide:
 #### Literature Review Default Allocation (for 8,000-word paper)
 | Section | % | Words |
 |---------|---|-------|
-| Abstract | — | 250 |
+| Abstract | — | regime table |
 | Introduction | 10% | 800 |
 | Thematic Section 1 | 20% | 1,600 |
 | Thematic Section 2 | 20% | 1,600 |
@@ -249,7 +250,7 @@ Step 1: Get base proportions
 
 Step 2: Scale by total word count
   -> section_words = round(total_word_count x section_percentage)
-  -> Abstract fixed at 250 words (EN) or 400 characters (zh-TW), not counted in total
+  -> Abstract length follows the regime table (academic-paper/references/abstract_writing_guide.md) for the run's paper type and output language pair, not counted in total
 
 Step 3: Adjust by literature matrix (Literature Review type only)
   -> IF paper_type = "Literature Review":
@@ -269,7 +270,7 @@ Step 5: Output
 
 | Section | IMRaD | Lit Review | Theoretical | Case Study | Policy Brief | Conference |
 |------|-------|-----------|-------------|-----------|-------------|-----------|
-| Abstract | 250 fixed | 250 fixed | 250 fixed | 250 fixed | — | 150 fixed |
+| Abstract | regime table | regime table | regime table | regime table | — | regime table |
 | Introduction | 15% | 10% | 12% | 12% | 10% | 15% |
 | Literature / Background | 25% | Distributed to themes | 20% | 15% | 15% | 20% |
 | Framework / Method | 15% | — | 30% | 10% | — | 15% |
@@ -280,6 +281,8 @@ Step 5: Output
 | Recommendations | — | — | — | — | 30% | — |
 | Conclusion | 5% | 10% | 8% | 8% | 10% | 5% |
 | Future Directions | — | 5% | 5% | 5% | 5% | — |
+
+> **`regime table` cells (#862 Phase 1).** The Abstract rows restate no abstract length. Abstract length and keyword counts come from the regime table in [`references/abstract_writing_guide.md`](../references/abstract_writing_guide.md), keyed by paper type and by the run's declared output language pair (default `zh-tw-en`, read from the PCR `Output Language Pair` row) — the single source for both figures. That guide's *Paper-type lookup* note maps `structure_type` to a table row and records that `policy_brief` has no abstract row (it takes an Executive Summary). The abstract is not counted in `total_word_count`. A venue-declared limit (#394 venue profile) takes precedence over the table.
 
 ### Outline Depth Rules
 

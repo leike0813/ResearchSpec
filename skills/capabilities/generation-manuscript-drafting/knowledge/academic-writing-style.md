@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M2 写作段
 来源对照（source mapping）:
     - vendor/ars/academic-paper/references/academic_writing_style.md（全文）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 全文逐字节保留。
     2. [标注] 决策清单 M2 知识包之一（写作风格）；被 drafting 两变体与摘要能力引用。
 说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
@@ -137,7 +138,7 @@ although, despite, while, granted that, notwithstanding
 
 ## Paragraph Construction
 
-### Standard Academic Paragraph (TEEL)
+### A Common Academic Paragraph Shape (TEEL, optional)
 1. **T**opic sentence — states the paragraph's main point
 2. **E**vidence — data, citations, examples that support the point
 3. **E**xplanation — interpret the evidence, connect to argument

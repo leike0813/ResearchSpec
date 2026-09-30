@@ -168,6 +168,7 @@ When `revision_roadmap` and a revised draft are supplied, run the verification-r
 3. Response checklist: verify each required revision has a corresponding response in `response_to_reviewers` when present; mark missing responses.
 4. New-issue detection: check whether revisions introduced new problems and reassess only affected criteria.
 5. Decision: `verified` when all required revisions and commitments are fulfilled; `verified_with_residual` when only minor or acknowledged-limitation items remain; `not_verified` when Critical/Major items remain unresolved.
+6. Advisory attachments: a supplied decision letter's acronym-check attachment is script output. It adds no verification criterion, new issue, or verdict, and never changes an item's status or the branch decision.
 
 Freeze each item's verification criterion before reading the response letter. First compare the revised manuscript against that criterion, then inspect the letter for an evidence-backed adjustment; every changed verdict needs a recorded rationale and evidence. A persuasive explanation alone does not count as manuscript repair. Pending author adjudication yields `user_review_required`, not a fabricated final decision.
 

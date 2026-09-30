@@ -37,5 +37,5 @@ provenance:
     - KP-M5-09
   upstream_sources:
     - path: authoring/ars/m5-side-branches/capabilities/06_claim_faithfulness_audit.md
-      sha256: 1b78325420b927095b54157385c38db5cc301501963b5a930e1d75821956b3be
+      sha256: ae72a7f464a372ed507e3e36f8bd4808dd9d7f1aa1e47e5313eaaea6f730df41
 license: CC BY-NC 4.0

@@ -65,7 +65,7 @@ IMRaD default allocation for a 6,000-word paper:
 
 | Section | % | Words |
 |---|---|---|
-| Abstract | — | 250 |
+| Abstract | — | regime table |
 | Introduction | 15% | 900 |
 | Literature Review | 25% | 1,500 |
 | Methodology | 15% | 900 |
@@ -128,7 +128,7 @@ claim.
 ### Word Count Allocation Algorithm
 
 1. Retrieve base proportions for the paper type.
-2. Scale by total word count: `section_words = round(total_word_count x section_percentage)`; abstract fixed at 250 words (EN) or 400 characters (zh-TW), not counted in the total.
+2. Scale by total word count: `section_words = round(total_word_count x section_percentage)`; abstract length follows the output-language regime table in the abstract-writing guide knowledge pack (`knowledge/abstract-guide.md`) for the run's paper type and output language pair, and is not counted in the total.
 3. For Literature Review, adjust thematic section counts by `theme source count / total source count` and an adjustment factor (>= 12 average quality -> 1.1; <= 8 -> 0.9).
 4. Validate: the sum of all section word counts must deviate <= +/-5% from `total_word_count`; if not, trim from the largest section or add to the smallest. No single section may be below 200 words (otherwise suggest merging).
 5. Output the Word Count Summary table.
@@ -137,7 +137,7 @@ claim.
 
 | Section | IMRaD | Lit Review | Theoretical | Case Study | Policy Brief | Conference |
 |---|---|---|---|---|---|---|
-| Abstract | 250 fixed | 250 fixed | 250 fixed | 250 fixed | — | 150 fixed |
+| Abstract | regime table | regime table | regime table | regime table | — | regime table |
 | Introduction | 15% | 10% | 12% | 12% | 10% | 15% |
 | Literature / Background | 25% | distributed to themes | 20% | 15% | 15% | 20% |
 | Framework / Method | 15% | — | 30% | 10% | — | 15% |
@@ -148,6 +148,8 @@ claim.
 | Recommendations | — | — | — | — | 30% | — |
 | Conclusion | 5% | 10% | 8% | 8% | 10% | 5% |
 | Future Directions | — | 5% | 5% | 5% | 5% | — |
+
+**`regime table` cells.** The Abstract rows restate no abstract length. Length and keyword counts come from the output-language regime table in the abstract-writing guide knowledge pack (`knowledge/abstract-guide.md`), keyed by paper type and by the run's declared output language pair (default `zh-tw-en`, read from the PCR `Output Language Pair` row). That guide's paper-type lookup note maps the structure type to a table row and records that `policy_brief` has no abstract row (it takes an Executive Summary). The abstract is not counted in `total_word_count`. A venue-declared limit takes precedence over the table.
 
 ### Outline Depth Rules
 

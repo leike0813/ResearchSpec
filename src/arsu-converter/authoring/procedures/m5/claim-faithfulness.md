@@ -49,7 +49,9 @@ The discriminator between `failed` and `audit_tool_failure` is permanence.
 
 ### Step 3 — Cache lookup
 
-After successful retrieval, compute the cache key from claim text hash, ref slug, anchor kind and value hash, retrieved excerpt hash, active constraints hash, judge model, and prompt version. Selection is scoped by `(scoped_manifest_id, claim_id)`, never bare claim_id. The prompt version is a content fingerprint; a declared-unknown version fails closed by disabling cross-run hits.
+After successful retrieval, compute the cache key from claim text hash, ref slug, anchor kind and value hash, retrieved excerpt hash, active constraints hash, judge identity, and prompt version. Selection is scoped by `(scoped_manifest_id, claim_id)`, never bare claim_id. The prompt version is a content fingerprint; a declared-unknown version fails closed by disabling cross-run hits.
+
+`judge_model` is the caller-supplied actual judge identity, effort included where it changes judgment — never a model this node picks and never proof of what a provider served. An omitted, null, blank, or `unknown` identity is recorded as `unknown` and binds the cache key to the current run rather than a model id, so no verdict is reused across runs while a repeated citation still dedups within the run; the judge callback resolves its own runtime and never sends `unknown` as a provider model id. After a provider fallback the identity is updated before any cache reuse.
 
 ### Step 4 — Passage location
 

@@ -35,7 +35,15 @@ validators:
 knowledge_refs:
   - knowledge_id: paper-structure-patterns
     path: knowledge/paper-structure-patterns.md
-    content_hash: 9e9555803c33d7048a7b6878d14766d63b118ccc0d4f7ecc353f7a2a46f0db48
+    content_hash: 6190bcc69859dbbb63fd8cf4a2df7cb54c0570ff19dbe87ae619abd73242eef6
+    license: CC BY-NC 4.0
+  - knowledge_id: abstract-guide
+    path: knowledge/abstract-guide.md
+    content_hash: 9c272be3ca7404225c45a2a92adf4954fea11d0c8a10bf66f494159b1109cd42
+    license: CC BY-NC 4.0
+  - knowledge_id: output-language-pair
+    path: knowledge/output-language-pair.md
+    content_hash: 68dc409cbd3b806f81248f8f6ed90ecffa5f36a364bf78acab5f096a8749e809
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -43,7 +51,9 @@ provenance:
   extraction_artifact_ids:
     - CAP-M2-02
     - KP-M2-08
+    - KP-M2-02
+    - KP-M2-09
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/02_manuscript_structure_design.md
-      sha256: c3f50d54b0f58b1fc065a8c2b6a955f86ffea6f37521c9f915c6ce19f7ef8a16
+      sha256: 6784fe3dcb606efad3ce5b4d37f1f3df0c4c2bcb8a5e5f1f8443fd05594c99c2
 license: CC BY-NC 4.0

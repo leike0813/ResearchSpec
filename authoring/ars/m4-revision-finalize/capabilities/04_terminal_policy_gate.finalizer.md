@@ -7,8 +7,9 @@ ARS 提取工件（Extraction Artifact）— M4 修订与定稿段
 提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
-    - vendor/ars/academic-pipeline/agents/pipeline_orchestrator_agent.md §Cite-Time Provenance Finalizer（v3.7.1 → v3.10 extension，L1008-1240）
+    - vendor/ars/academic-pipeline/agents/pipeline_orchestrator_agent.md §Cite-Time Provenance Finalizer（v3.7.1 → v3.10 extension，L1055-1286）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 原文逐字节保留（四代 finalizer：5-cell 矩阵、污染注解、三角测量层、终端策略层）。
     2. [标注] 上游声明"finalizer 是唯一策略评估者、formatter 只盖章"——本段是终端策略门的评估侧，与 formatter REFUSE 段（盖章侧）配对；分类学已将此逻辑从 orchestrator 拆出（orchestrator 其余职责吸收进图引擎）。
     3. [标注] 策略语义以 KP-M4-02（R-L3-2-* canonical）与 KP-M4-03（降级注册表）为准。
@@ -251,4 +252,3 @@ The per-pass resolution counts gain a `terminal_blocked[]` bucket recording each
 **Multiple terminal policies co-emit independently (C-V6(g)).** A single ref may carry independent `TERMINAL-BLOCK` tokens for contamination, citation existence, and retraction, alongside the shared advisory slot. Tokens are additive, but the ref is counted ONCE in any "total affected refs" aggregate: dedupe by ref slug across all policy buckets. The `policy_hash` slug encodes every non-advisory citation-time key in lexical order (for example `citation_existence.strict+retraction.strict`). The formatter's generic "refuse on any unresolved `severity=HIGH-BLOCK`" rule already handles N tokens without per-policy enumeration.
 
 ---
-

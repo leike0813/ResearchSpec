@@ -8,7 +8,7 @@ const ROOT = process.cwd();
 const ARS = path.join(ROOT, "vendor", "ars");
 const CAPABILITIES = path.join(ROOT, "skills", "capabilities");
 const PROFILE_ROOT = path.join(ROOT, "skills", "arsu", "profiles");
-const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.21.1-127ff85";
+const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.22.2-7de1c9d";
 const OUT = process.argv[2] ? path.resolve(process.argv[2]) : path.join(ROOT, "audits", "arsu", DEFAULT_ANCHOR, "artifacts", "arsu-mode-capability-review.html");
 
 const esc = (text) => String(text ?? "")

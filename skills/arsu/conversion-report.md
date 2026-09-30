@@ -2,9 +2,9 @@
 
 - Output kind: `final`
 - Source: `vendor/ars`
-- Source commit: `127ff85e4bbfcdd10b95040537b6c6bd7ad17aeb`
+- Source commit: `7de1c9dfb7af9c02a9b57750761323f35a743aa2`
 - Output: `skills/arsu`
-- Generated at: `2026-09-14T03:27:20Z`
+- Generated at: `2026-09-30T09:27:01Z`
 - Validation: pass
 
 ## Source Checkout
@@ -27,10 +27,10 @@
 - Profile: `researchspec-preflight-v11`
 - Full matrix injection: `false`
 - Anchor replacement profile: `researchspec-anchor-replacement-v4`
-- Anchor replacement coverage: 54/54 replaceable anchors
+- Anchor replacement coverage: 56/56 replaceable anchors
 - Diagnostic anchors matched: 2/2
 - Human replacement report: `anchor-replacement-report.md`
-- Runtime policy catalog: `ars-v3.21.1-agent-neutral-runtime`
+- Runtime policy catalog: `ars-v3.22.2-agent-neutral-runtime`
 - Runtime policy coverage: 41 classified sources
 - Runtime policy report: `runtime-policy-report.md`
 
@@ -55,7 +55,7 @@
 - `control_decision_record`: 2
 - `gate_policy`: 6
 - `generator_evaluator_contract`: 10
-- `graph_state_boundary`: 9
+- `graph_state_boundary`: 11
 - `handoff_projection`: 3
 - `review_handoff_tracking`: 4
 - `revision_patch_protocol`: 4
@@ -64,10 +64,10 @@
 
 ## File Summary
 
-- Output files: 712
-- Excluded source files: 1598
-- Unclassified source files: 656
-- Risk findings: 3226
+- Output files: 739
+- Excluded source files: 1659
+- Unclassified source files: 789
+- Risk findings: 3555
 
 ## Risk Findings
 
@@ -111,17 +111,17 @@
 - `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 409: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 31: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 31: platform_term `hook`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 54: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 123: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 124: history_term `legacy`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 124: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 125: history_term `legacy`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 125: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 131: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 135: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 144: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 194: issue_reference `issue_or_pr_reference`
-- ... 3176 more findings in `conversion-manifest.json`
+- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 85: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 154: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 155: history_term `legacy`
+- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 155: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 156: history_term `legacy`
+- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 156: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 162: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 166: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 175: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 225: issue_reference `issue_or_pr_reference`
+- ... 3505 more findings in `conversion-manifest.json`
 
 ## Validation
 

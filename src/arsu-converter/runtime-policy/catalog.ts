@@ -1,6 +1,6 @@
 import type { RuntimePolicyCatalog, RuntimePolicyCatalogEntry } from "./types.js";
 
-export const RUNTIME_POLICY_SOURCE_COMMIT = "127ff85e4bbfcdd10b95040537b6c6bd7ad17aeb";
+export const RUNTIME_POLICY_SOURCE_COMMIT = "7de1c9dfb7af9c02a9b57750761323f35a743aa2";
 
 const active = (source_path: string, rationale: string, adaptation: RuntimePolicyCatalogEntry["adaptation"] = "paragraphs"): RuntimePolicyCatalogEntry => ({
   source_path,
@@ -29,7 +29,7 @@ const unavailable = (
 
 export const ARSU_RUNTIME_POLICY_CATALOG = {
   schema_version: "researchspec.arsu.runtime-policy.v1",
-  catalog_id: "ars-v3.21.1-agent-neutral-runtime",
+  catalog_id: "ars-v3.22.2-agent-neutral-runtime",
   source_commit: RUNTIME_POLICY_SOURCE_COMMIT,
   excluded_non_runtime_paths: [
     "academic-pipeline/references/changelog.md",
@@ -86,6 +86,36 @@ export const ARSU_RUNTIME_POLICY_CATALOG = {
     retain("shared/templates/codex_audit_multifile_template.md", "Audit template field is output data, not runtime dispatch guidance."),
   ],
   unavailable_runtime_references: [
+    unavailable(
+      "academic-pipeline/references/pipeline_state_machine.md",
+      "**Run ledger (#887).**",
+      "Upstream checkpoint logging is replaced by the existing CLI-owned state and actual user decisions.",
+      "### ResearchSpec checkpoint evidence\n\nRecover current run and node state through status --json and exact instructions. Only an actual user decision recorded through its owning CLI confirmation can close a formal Gate or Decision. A session summary, delegated report or supplied upstream ledger cannot establish authorization. Missing decision evidence stays unresolved; missing deterministic execution stays not_checked. The upstream run-ledger helper is not shipped.",
+    ),
+    unavailable(
+      "academic-pipeline/references/pipeline_state_machine.md",
+      "`pending_decision` stays authoritative for the reset path",
+      "The upstream ledger cannot own ResearchSpec reset or resume decisions.",
+      "ResearchSpec resumes from its current CLI-visible run and node instances, not an upstream boundary hash or ledger. Resolve pending formal decisions through the owning instructions and actual user confirmation; absent evidence remains unresolved / not_checked.",
+    ),
+    unavailable(
+      "academic-paper/SKILL.md",
+      "Acronym report (#849):",
+      "The upstream acronym script is audit-only; prose review remains advisory and cannot claim deterministic execution.",
+      "### ResearchSpec acronym evidence boundary\n\nThe upstream acronym script is not shipped. Review first-use definitions separately in the body and each abstract as advisory prose findings; preserve scientific wording and exclusions from the writing-quality guide. Mark deterministic checking not_checked unless an explicitly supplied external report proves it ran. No acronym finding owns a Gate, editorial decision, revision roadmap, or re-review criterion.",
+    ),
+    unavailable(
+      "academic-paper/SKILL.md",
+      "**Acronym check (#849):**",
+      "The writing root shares the same unavailable acronym-runtime boundary across its nested procedures.",
+      "### ResearchSpec acronym review scope\n\nUse the advisory acronym evidence boundary above for drafting, revision and abstracts. A report supplied as task material records its own coverage; without execution evidence, report not_checked and never infer a deterministic pass from prose inspection.",
+    ),
+    unavailable(
+      "academic-paper-reviewer/SKILL.md",
+      "scripts/check_acronyms.py",
+      "The upstream acronym script is audit-only; the reviewer can attach supplied reports or disclose an unavailable check.",
+      "### ResearchSpec acronym attachment boundary\n\nThe upstream acronym script is not shipped. A user-supplied report can be attached unchanged as advisory working material after the editorial letter is complete; otherwise disclose not_checked. Acronym findings cannot affect the decision, immutable revision-roadmap core, reviewer criteria, or re-review.",
+    ),
     unavailable(
       "academic-pipeline/SKILL.md",
       "scripts/inquiry_branch_ledger.py",

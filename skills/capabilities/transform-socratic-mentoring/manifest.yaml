@@ -27,7 +27,7 @@ validators:
 knowledge_refs:
   - knowledge_id: socratic-protocol
     path: knowledge/socratic-protocol.md
-    content_hash: 5ada79e320fd040d75d51186872fe93cea6fe0883f2284d4651c7e6c62531474
+    content_hash: f1e8e0e2a1447e96740f59f47cf57639516196f0135008ef2f9036f33309cd52
     license: CC BY-NC 4.0
   - knowledge_id: socratic-framework
     path: knowledge/socratic-framework.md

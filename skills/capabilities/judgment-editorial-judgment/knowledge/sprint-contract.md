@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 来源对照（source mapping）:
     - vendor/ars/academic-paper-reviewer/references/sprint_contract_protocol.md（全文）
 变更台账（ledger）:
+  0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 全文逐字节保留。
     2. [标注-新增] **决策清单外新增**：5 个评审 agent 文件均内嵌"v3.6.2 Sprint Contract Protocol"段引用本协议（C-02），属 M3 评审能力族完整性所需。
     3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
@@ -265,6 +266,10 @@ the emission audit lines, and enforces the DA terminal gate. Consequences by exi
 
 Reviewer reports must satisfy the pinned output grammar in each reviewer
 agent's delivered Phase 2 section; the checker parses that grammar and nothing looser.
+
+The acronym-check attachment (#849) is appended to the letter only after exit
+0, and it never feeds back into the synthesis (`SKILL.md` § Acronym check
+attachment).
 
 ## 9. Recognised expression vocabulary
 

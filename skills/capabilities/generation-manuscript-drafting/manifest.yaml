@@ -19,6 +19,12 @@ inputs:
     source_policy:
       - handoff
       - node_output
+  - role: writing_configuration
+    schema_ref: writing-configuration.v1
+    required: false
+    source_policy:
+      - handoff
+      - node_output
 outputs:
   - role: manuscript_draft
     schema_ref: manuscript-draft.v1
@@ -29,13 +35,14 @@ validators:
     inputs:
       - argument_blueprint
       - synthesis_report
+      - writing_configuration
     outputs: []
     error_codes:
       - output_roles_invalid
 knowledge_refs:
   - knowledge_id: academic-writing-style
     path: knowledge/academic-writing-style.md
-    content_hash: a4da98798b00bc633bde627b7ca324dba9c9d5feeb4ebd55026a134ab7f63f7d
+    content_hash: 2d15b5182e3e07ec5ab834eaf1d3eca9c8ba6444fe5a360a11a56b85679ec488
     license: CC BY-NC 4.0
   - knowledge_id: anti-leakage
     path: knowledge/anti-leakage.md
@@ -43,7 +50,15 @@ knowledge_refs:
     license: CC BY-NC 4.0
   - knowledge_id: writing-quality
     path: knowledge/writing-quality.md
-    content_hash: edf12b9c3c8635d9c85e150d8d239da31a274d69dc326c74d8412aea6477ec7d
+    content_hash: 806af317958b050604602f6f5e5298fd80bb20b5bc35b55539979ff96eaa5feb
+    license: CC BY-NC 4.0
+  - knowledge_id: abstract-guide
+    path: knowledge/abstract-guide.md
+    content_hash: 9c272be3ca7404225c45a2a92adf4954fea11d0c8a10bf66f494159b1109cd42
+    license: CC BY-NC 4.0
+  - knowledge_id: output-language-pair
+    path: knowledge/output-language-pair.md
+    content_hash: 68dc409cbd3b806f81248f8f6ed90ecffa5f36a364bf78acab5f096a8749e809
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -53,7 +68,9 @@ provenance:
     - KP-M2-01
     - KP-M2-03
     - KP-M2-07
+    - KP-M2-02
+    - KP-M2-09
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/04_drafting.rr-variant.md
-      sha256: 1d86d6163df5cda7f45a686d16abcd81386560cf03dd8e0b20b992556d233cb7
+      sha256: 546fccee1fab315d9a43a528c50862a2d27a17db1275d2fc58e2e312733fcbfd
 license: CC BY-NC 4.0

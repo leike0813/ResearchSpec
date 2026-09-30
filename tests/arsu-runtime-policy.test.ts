@@ -12,7 +12,7 @@ import { ArsuConverterError } from "../src/arsu-converter/types.js";
 
 const COMMIT = RUNTIME_POLICY_SOURCE_COMMIT;
 
-void test("runtime-policy catalog completely classifies ARS v3.21.1", async () => {
+void test("runtime-policy catalog completely classifies the pinned ARS release", async () => {
   const sourceRoot = path.resolve("vendor/ars");
   const plan = await buildRuntimePolicyPlan(process.cwd(), sourceRoot, COMMIT);
   const anchors = await buildAnchorReplacementPlan(process.cwd(), sourceRoot, COMMIT);
@@ -36,13 +36,18 @@ void test("runtime-policy catalog completely classifies ARS v3.21.1", async () =
   assert.deepEqual(
     ARSU_RUNTIME_POLICY_CATALOG.unavailable_runtime_references.map((item) => `${item.source_path}:${item.reference}`).sort(),
     [
+      "academic-paper/SKILL.md:**Acronym check (#849):**",
+      "academic-paper/SKILL.md:Acronym report (#849):",
+      "academic-paper-reviewer/SKILL.md:scripts/check_acronyms.py",
       "academic-pipeline/SKILL.md:docs/design/2026-08-10-673-cross-run-adjudication-activity-spec.md",
       "academic-pipeline/SKILL.md:docs/design/2026-08-17-743-inquiry-branch-ledger-design.md",
       "academic-pipeline/SKILL.md:scripts/build_cross_document_consistency_advisory.py",
       "academic-pipeline/SKILL.md:scripts/check_re_review_synthesis.py",
       "academic-pipeline/SKILL.md:scripts/inquiry_branch_ledger.py",
+      "academic-pipeline/references/pipeline_state_machine.md:**Run ledger (#887).**",
+      "academic-pipeline/references/pipeline_state_machine.md:`pending_decision` stays authoritative for the reset path",
       "deep-research/SKILL.md:scripts/build_cross_document_consistency_advisory.py",
-    ],
+    ].sort(),
   );
   for (const item of ARSU_RUNTIME_POLICY_CATALOG.unavailable_runtime_references) {
     const rewriteId = `unavailable-${item.source_path.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase()}-${item.reference.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase()}`;
