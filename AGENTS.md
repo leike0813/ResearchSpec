@@ -475,26 +475,30 @@ never import or execute HistAgent code, install dependencies, read credentials,
 start browsers, contact services, or upload material.
 
 `vendor/education-agent-skills` is the maintainer-only pinned input for the
-`snapshot-32fce5c` audit at commit
-`32fce5c0d097ec675cf81c750a65a379e4d87e3c` and tree
-`3223d79299ae10391c22549debef7ffc9ef7a0e2`. Its immutable audit covers all
-238 tracked files and all 165 upstream Skills. The checked-in JSON is the audit
+`snapshot-6bbbce4` audit at commit
+`6bbbce418f82e11044009c9f3b7373a354de5bd0` and tree
+`b90188569a783ba7d20dcffe2db7a55816db7c0b`. Its immutable audit covers all
+241 tracked files and all 165 upstream Skills. The checked-in JSON is the audit
 SSOT; its Markdown report is derived deterministically and normal audit checking
 is offline. Upstream README, registry, domain, tag, evidence-strength, and
 relationship claims are observations only and never production authority.
 
-The pinned root has no tracked license text. README and plugin CC BY-SA 4.0
-claims, plus the subtree-scoped `mcp-server/LICENSE`, do not prove Skill-level
-redistribution rights or embedded framework provenance. All 165 Skills therefore
-remain excluded by the immutable audit even where their content fit would
-otherwise be a candidate or defer. The ResearchSpec-owned
-`evidence-map.json` is bound to immutable audit SHA-256
-`e9326c43078db4c6bce4387c5a41a5bef775ad4d1691095c2020ef9cb9926857`
-and maps all 872 declarations to 719 normalized works: 293 verified, 410
-unresolved, zero conflicting, and 16 not applicable. Twenty explicit
-multi-version declarations use composite mappings. Its
-`evidence-report.md` is derived deterministically, and
-`education-agent-skills:evidence:check` is offline and read-only.
+The pinned root adds a CC BY-SA 4.0 `LICENSE` notice naming Gareth Manning and
+his education content. It supplies origin authorization for the admitted Skills,
+does not establish rights for embedded frameworks or third-party authors, and
+never replaces the complete CC BY-SA 4.0 legal text and per-Skill notices that
+ResearchSpec distributes. README and plugin claims, plus the subtree-scoped
+`mcp-server/LICENSE`, still prove neither Skill-level redistribution rights nor
+embedded framework provenance. The ResearchSpec-owned `evidence-map.json` maps
+all 872 declarations to 719 normalized works: 293 verified, 410 unresolved,
+zero conflicting, and 16 not applicable. Twenty explicit multi-version
+declarations use composite mappings. Its `evidence-report.md` is derived
+deterministically, and `education-agent-skills:evidence:check` is offline and
+read-only. Production hashes are never cached here: the approved binding lives
+in `skills/plugins/vendor-manifests/education-agent-skills.json`, the exact
+aggregate approval in
+`src/vendor-converters/education-agent-skills/review-decision.json`, and each
+anchor's own hashes in `audits/education-agent-skills/<anchor>/manifest.json`.
 
 The supplementary Google Scholar discovery round targeted the 428 works that
 were initially unresolved. Scholar returned candidates for 18 works and no
@@ -523,14 +527,19 @@ catalog. Its approved production set admits 136 Gareth Manning Skills under
 CC BY-SA 4.0 and excludes 19 original-framework Skills plus ten Sean Hu Skills
 whose redistribution authority is not established. The generated trees preserve
 student-facing capabilities with reviewed safety boundaries and contributes
-only to `curriculum-and-pedagogy`, `education-systems`, and
-`specialist-studies-in-education`.
+only to `curriculum-and-pedagogy` (54 Skills), `education-systems` (9), and
+`specialist-studies-in-education` (73).
 
-The approved production tree is bound to aggregate SHA-256
-`c4fc2f93a7553a1c02538d15491ed108afd36ad4a4a291ca4db3bad39e74775d`
-and publishes the sixth vendor with 136 static Skill trees, empty hard
-dependencies, complete CC BY-SA 4.0 licenses and notices, and membership only in
-the three reviewed education domains. Production checking and idempotence must
+Production conversion requires the user to approve the exact aggregate of the
+conversion preview in
+`src/vendor-converters/education-agent-skills/review-decision.json`, whose
+approved binding is published in
+`skills/plugins/vendor-manifests/education-agent-skills.json`. The approved
+production tree publishes the sixth vendor with 136 static Skill trees, empty
+hard dependencies, complete CC BY-SA 4.0 licenses and notices, and membership
+only in the three reviewed education domains. The current production binding is
+`snapshot-6bbbce4`; its immutable audit, evidence map, production policy, license
+and approved aggregate are bound in the production manifest. Production checking and idempotence must
 fail on any source, audit, evidence, policy, license, generated-tree, domain, or
 registry drift. Education Agent Skills add no public CLI command or workflow
 authority.
@@ -542,15 +551,17 @@ deterministic generator: each package is a static `execution_type: llm` tree
 with `knowledge_refs: []`, the reviewed `SKILL.md` body and
 `researchspec-education-boundary` block preserved, and the shared
 `validate_education_brief.py` six-field evidence validator. Domain assignments
-mirror the three reviewed education domains.
+mirror the three reviewed education domains. Incremental regeneration rebuilds
+only the changed raw Skills and their packages; unchanged packages keep their
+reviewed source release and revision byte-for-byte.
 
 `audits/education-agent-skills/catalog.json` is the Education Agent Skills
 extension maintenance SSOT. `scripts/education-agent-skills-maintenance.mjs`
 and `.agents/skills/education-agent-skills-maintenance/SKILL.md` provide
 catalog-driven `artifacts / records / baseline / check / diff` anchors and the
 Agent semantic review gate; `artifacts` regenerates the 136 packages. The
-current anchor is `snapshot-32fce5c` under
-`audits/education-agent-skills/snapshot-32fce5c/`. Future updates must follow
+current anchor is `snapshot-6bbbce4` under
+`audits/education-agent-skills/snapshot-6bbbce4/`. Future updates must follow
 the maintenance Skill before regenerating any
 `plugin-education-agent-skills-*` package or profile.
 

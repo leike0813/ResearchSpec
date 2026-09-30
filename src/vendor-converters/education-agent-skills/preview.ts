@@ -90,8 +90,8 @@ function renderChineseReview(rendered: Awaited<ReturnType<typeof renderEducation
   const thirdParty = exclusions.filter((item) => item.reason_code === "third-party-author-authorization-required");
   const approved = rendered.policies.review.review_status === "approved";
   const domainState = approved
-    ? "这些成员关系已写入生产 domain catalog 和 registry。"
-    : "这些成员关系尚未写入生产 domain catalog 或 registry。";
+    ? "本次预览的成员关系与批准的生产 domain catalog 和 registry 一致。"
+    : "本次预览沿用既有三个教育域的成员关系；生产包保持上一次批准的版本。";
   const reviewState = approved
     ? `## 人工批准
 
@@ -103,7 +103,7 @@ function renderChineseReview(rendered: Awaited<ReturnType<typeof renderEducation
     : `## 人工门
 
 生产转换必须由人工明确批准聚合 SHA-256
-\`${rendered.treeSetSha256}\`。批准前不得注册第六 vendor、写入生产 registry、发布生成树或修改三个教育域的生产成员。`;
+\`${rendered.treeSetSha256}\`。批准前本次完整树及其绑定变更保持预览状态，不得切换生产包或生产 registry。`;
   return `# Education Agent Skills 正式 ingest 预览审阅
 
 ## 绑定

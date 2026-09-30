@@ -107,7 +107,7 @@ function normalizeFrontmatter(
     compatibility: "Static educational guidance using user-provided context and only tools explicitly chosen by the invoking Agent. ResearchSpec installs files only and does not contact services, handle credentials, collect learner data, or grant workflow authority.",
     metadata: {
       vendor: policies.policy.vendor_id,
-      "vendor-release": policies.policy.release,
+      "vendor-release": admission.source_release,
       "upstream-skill-id": admission.upstream_skill_id,
       "source-sha256": admission.source_sha256,
       "researchspec-role": "semantic-helper",

@@ -1,0 +1,186 @@
+{
+  "schema_version": "1",
+  "kind": "education-agent-skills-evidence-incremental-binding",
+  "vendor_id": "education-agent-skills",
+  "old_anchor": "snapshot-32fce5c",
+  "new_anchor": "snapshot-6bbbce4",
+  "old_revision": "32fce5c0d097ec675cf81c750a65a379e4d87e3c",
+  "new_revision": "6bbbce418f82e11044009c9f3b7373a354de5bd0",
+  "old_tree_hash": "3223d79299ae10391c22549debef7ffc9ef7a0e2",
+  "new_tree_hash": "b90188569a783ba7d20dcffe2db7a55816db7c0b",
+  "old_audit_sha256": "e9326c43078db4c6bce4387c5a41a5bef775ad4d1691095c2020ef9cb9926857",
+  "new_audit_sha256": "57b93c4668e6ca29fcb191e35cdea56e85ab0a7888b78256c6e64096422c6406",
+  "new_evidence_map_sha256": "5d970cbb765a08f33444f6c9fcabcf4095e469e3fe1dc05730843fd2e7506fd2",
+  "inherited": {
+    "declarations": 872,
+    "works": 719,
+    "existence_status_counts": {
+      "verified": 293,
+      "unresolved": 410,
+      "conflicting": 0,
+      "not-applicable": 16
+    },
+    "works_byte_identical": true,
+    "google_scholar_discovery_byte_identical": true,
+    "claim_support_reviewed": false
+  },
+  "rebound": {
+    "declarations": 10,
+    "source_sha256_changed": 10,
+    "citation_changed": 1,
+    "unaffected_declarations": 862,
+    "records": [
+      {
+        "evidence_id": "evidence-0768",
+        "skill_id": "student-learning/unassisted-evidence-checkpoint",
+        "source_path": "skills/student-learning/unassisted-evidence-checkpoint/SKILL.md",
+        "old_source_sha256": "24bd6d98caac7d50936e2b6fda961e792a401dcec85364d500394f240dca0302",
+        "new_source_sha256": "460a4d6d32b618859b5bc9de8fb148c97b5106d0b0139d6ecb6167536b808465",
+        "source_sha256_changed": true,
+        "citation_changed": true,
+        "old_citation": "Bastani et al. (2025) — Generative AI can harm learning (PNAS) — unguarded GPT-4 reduced unassisted performance by 17%",
+        "new_citation": "Bastani et al. (2025) — Generative AI without guardrails can harm learning (PNAS) — unguarded GPT-4 reduced subsequent unassisted exam performance by 17% relative to the control group",
+        "work_ids": [
+          "work-0317"
+        ],
+        "match_type": "title-variant"
+      },
+      {
+        "evidence_id": "evidence-0769",
+        "skill_id": "student-learning/unassisted-evidence-checkpoint",
+        "source_path": "skills/student-learning/unassisted-evidence-checkpoint/SKILL.md",
+        "old_source_sha256": "24bd6d98caac7d50936e2b6fda961e792a401dcec85364d500394f240dca0302",
+        "new_source_sha256": "460a4d6d32b618859b5bc9de8fb148c97b5106d0b0139d6ecb6167536b808465",
+        "source_sha256_changed": true,
+        "citation_changed": false,
+        "old_citation": null,
+        "new_citation": null,
+        "work_ids": [
+          "work-0017"
+        ],
+        "match_type": "exact"
+      },
+      {
+        "evidence_id": "evidence-0770",
+        "skill_id": "student-learning/unassisted-evidence-checkpoint",
+        "source_path": "skills/student-learning/unassisted-evidence-checkpoint/SKILL.md",
+        "old_source_sha256": "24bd6d98caac7d50936e2b6fda961e792a401dcec85364d500394f240dca0302",
+        "new_source_sha256": "460a4d6d32b618859b5bc9de8fb148c97b5106d0b0139d6ecb6167536b808465",
+        "source_sha256_changed": true,
+        "citation_changed": false,
+        "old_citation": null,
+        "new_citation": null,
+        "work_ids": [
+          "work-0485"
+        ],
+        "match_type": "ambiguous"
+      },
+      {
+        "evidence_id": "evidence-0771",
+        "skill_id": "student-learning/unassisted-evidence-checkpoint",
+        "source_path": "skills/student-learning/unassisted-evidence-checkpoint/SKILL.md",
+        "old_source_sha256": "24bd6d98caac7d50936e2b6fda961e792a401dcec85364d500394f240dca0302",
+        "new_source_sha256": "460a4d6d32b618859b5bc9de8fb148c97b5106d0b0139d6ecb6167536b808465",
+        "source_sha256_changed": true,
+        "citation_changed": false,
+        "old_citation": null,
+        "new_citation": null,
+        "work_ids": [
+          "work-0585"
+        ],
+        "match_type": "ambiguous"
+      },
+      {
+        "evidence_id": "evidence-0772",
+        "skill_id": "student-learning/unassisted-evidence-checkpoint",
+        "source_path": "skills/student-learning/unassisted-evidence-checkpoint/SKILL.md",
+        "old_source_sha256": "24bd6d98caac7d50936e2b6fda961e792a401dcec85364d500394f240dca0302",
+        "new_source_sha256": "460a4d6d32b618859b5bc9de8fb148c97b5106d0b0139d6ecb6167536b808465",
+        "source_sha256_changed": true,
+        "citation_changed": false,
+        "old_citation": null,
+        "new_citation": null,
+        "work_ids": [
+          "work-0135"
+        ],
+        "match_type": "exact"
+      },
+      {
+        "evidence_id": "evidence-0773",
+        "skill_id": "student-learning/weekly-agency-review",
+        "source_path": "skills/student-learning/weekly-agency-review/SKILL.md",
+        "old_source_sha256": "a9a42fec5e29bff3fe51961bbe825098645aa15efd750d51756fa194602e5895",
+        "new_source_sha256": "08082d91b2873907dbbce27c33fd5def5d928fa029c1425583aae03649b9cc65",
+        "source_sha256_changed": true,
+        "citation_changed": false,
+        "old_citation": null,
+        "new_citation": null,
+        "work_ids": [
+          "work-0698"
+        ],
+        "match_type": "ambiguous"
+      },
+      {
+        "evidence_id": "evidence-0774",
+        "skill_id": "student-learning/weekly-agency-review",
+        "source_path": "skills/student-learning/weekly-agency-review/SKILL.md",
+        "old_source_sha256": "a9a42fec5e29bff3fe51961bbe825098645aa15efd750d51756fa194602e5895",
+        "new_source_sha256": "08082d91b2873907dbbce27c33fd5def5d928fa029c1425583aae03649b9cc65",
+        "source_sha256_changed": true,
+        "citation_changed": false,
+        "old_citation": null,
+        "new_citation": null,
+        "work_ids": [
+          "work-0458"
+        ],
+        "match_type": "ambiguous"
+      },
+      {
+        "evidence_id": "evidence-0775",
+        "skill_id": "student-learning/weekly-agency-review",
+        "source_path": "skills/student-learning/weekly-agency-review/SKILL.md",
+        "old_source_sha256": "a9a42fec5e29bff3fe51961bbe825098645aa15efd750d51756fa194602e5895",
+        "new_source_sha256": "08082d91b2873907dbbce27c33fd5def5d928fa029c1425583aae03649b9cc65",
+        "source_sha256_changed": true,
+        "citation_changed": false,
+        "old_citation": null,
+        "new_citation": null,
+        "work_ids": [
+          "work-0622"
+        ],
+        "match_type": "ambiguous"
+      },
+      {
+        "evidence_id": "evidence-0776",
+        "skill_id": "student-learning/weekly-agency-review",
+        "source_path": "skills/student-learning/weekly-agency-review/SKILL.md",
+        "old_source_sha256": "a9a42fec5e29bff3fe51961bbe825098645aa15efd750d51756fa194602e5895",
+        "new_source_sha256": "08082d91b2873907dbbce27c33fd5def5d928fa029c1425583aae03649b9cc65",
+        "source_sha256_changed": true,
+        "citation_changed": false,
+        "old_citation": null,
+        "new_citation": null,
+        "work_ids": [
+          "work-0170"
+        ],
+        "match_type": "title-variant"
+      },
+      {
+        "evidence_id": "evidence-0777",
+        "skill_id": "student-learning/weekly-agency-review",
+        "source_path": "skills/student-learning/weekly-agency-review/SKILL.md",
+        "old_source_sha256": "a9a42fec5e29bff3fe51961bbe825098645aa15efd750d51756fa194602e5895",
+        "new_source_sha256": "08082d91b2873907dbbce27c33fd5def5d928fa029c1425583aae03649b9cc65",
+        "source_sha256_changed": true,
+        "citation_changed": false,
+        "old_citation": null,
+        "new_citation": null,
+        "work_ids": [
+          "work-0308"
+        ],
+        "match_type": "ambiguous"
+      }
+    ]
+  },
+  "rebind_rule": "Only declarations whose Skill bytes changed in this upstream revision are re-bound to the new audit source SHA-256 and citation; every other declaration, work, existence status, and Scholar discovery record is inherited unchanged."
+}

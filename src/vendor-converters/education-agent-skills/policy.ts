@@ -8,6 +8,7 @@ import { z } from "zod";
 import { sha256 } from "../../core/workspace/write-plan.js";
 import {
   EducationAgentSkillsAuditSchema,
+  EDUCATION_AGENT_SKILLS,
   type EducationAgentSkill,
   type EducationAgentSkillsAudit,
 } from "../../vendor-audits/education-agent-skills.js";
@@ -20,11 +21,11 @@ import {
 const execFileAsync = promisify(execFile);
 
 export const EDUCATION_VENDOR_ID = "education-agent-skills";
-export const EDUCATION_RELEASE = "snapshot-32fce5c";
-export const EDUCATION_REVISION = "32fce5c0d097ec675cf81c750a65a379e4d87e3c";
-export const EDUCATION_TREE = "3223d79299ae10391c22549debef7ffc9ef7a0e2";
-export const EDUCATION_AUDIT_SHA256 = "e9326c43078db4c6bce4387c5a41a5bef775ad4d1691095c2020ef9cb9926857";
-export const EDUCATION_EVIDENCE_SHA256 = "58e0768df288aad6d9e3c5222338879ef1703bc78f80e02739f6d4194cc6bd2b";
+export const EDUCATION_RELEASE = EDUCATION_AGENT_SKILLS.snapshotId;
+export const EDUCATION_REVISION = EDUCATION_AGENT_SKILLS.revision;
+export const EDUCATION_TREE = EDUCATION_AGENT_SKILLS.tree;
+export const EDUCATION_AUDIT_SHA256 = "57b93c4668e6ca29fcb191e35cdea56e85ab0a7888b78256c6e64096422c6406";
+export const EDUCATION_EVIDENCE_SHA256 = "5d970cbb765a08f33444f6c9fcabcf4095e469e3fe1dc05730843fd2e7506fd2";
 export const EDUCATION_LICENSE_SHA256 = "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f";
 
 const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
@@ -51,12 +52,12 @@ const ProductionPolicySchema = z.strictObject({
   tree_hash: z.literal(EDUCATION_TREE),
   converter_version: z.literal("1"),
   audit: z.strictObject({
-    path: z.literal("audits/education-agent-skills/snapshot-32fce5c/skill-audit.json"),
+    path: z.literal(EDUCATION_AGENT_SKILLS.auditPath),
     sha256: z.literal(EDUCATION_AUDIT_SHA256),
     expected_skills: z.literal(165),
   }),
   evidence: z.strictObject({
-    path: z.literal("audits/education-agent-skills/snapshot-32fce5c/evidence-map.json"),
+    path: z.literal(`audits/education-agent-skills/${EDUCATION_RELEASE}/evidence-map.json`),
     sha256: z.literal(EDUCATION_EVIDENCE_SHA256),
     expected_declarations: z.literal(872),
     marker_open: z.literal("⟦UNRESOLVED⟧"),
@@ -70,6 +71,7 @@ const ProductionPolicySchema = z.strictObject({
     text_path: z.literal("LICENSES/CC-BY-SA-4.0.txt"),
     text_sha256: z.literal(EDUCATION_LICENSE_SHA256),
     upstream_evidence: z.tuple([
+      z.literal("LICENSE"),
       z.literal("README.md"),
       z.literal(".claude-plugin/plugin.json"),
       z.literal(".codex-plugin/plugin.json"),
@@ -110,6 +112,10 @@ const ProductionPolicySchema = z.strictObject({
     boundaries: z.record(BoundaryKeySchema, z.string().trim().min(1)),
   }),
   generation: z.strictObject({
+    retained_sources: z.array(z.strictObject({
+      audit_path: z.string().regex(/^audits\/education-agent-skills\/snapshot-[a-f0-9]+\/skill-audit\.json$/),
+      audit_sha256: Sha256Schema,
+    })),
     generated_id_prefix: z.literal("education-agent-skills-"),
     source_root: z.literal("vendor/education-agent-skills"),
     copied_skill_files: z.tuple([z.literal("SKILL.md")]),
@@ -155,6 +161,8 @@ export interface EducationAdmissionDecision {
   generated_skill_id: string;
   source_path: string;
   source_sha256: string;
+  source_release: string;
+  source_revision: string;
   disposition: "admitted" | "excluded";
   reason_code: "approved-gareth-cc-by-sa" | "original-framework-origin-unproved" | "third-party-author-authorization-required";
   license: "CC-BY-SA-4.0" | null;
@@ -229,6 +237,22 @@ export async function loadEducationAgentSkillsPolicies(repoRoot: string): Promis
 
   await validatePinnedSource(repoRoot, policy, audit);
   const admission = buildAdmission(policy, audit);
+  for (const retained of policy.generation.retained_sources) {
+    const bytes = await readFile(path.join(repoRoot, retained.audit_path), "utf8");
+    if (sha256(bytes) !== retained.audit_sha256) throw new Error("Education retained source audit differs from policy.");
+    const previous = z.object({
+      snapshot: z.object({ snapshot_id: z.string().min(1), revision: z.string().regex(/^[a-f0-9]{40}$/) }),
+      skills: z.array(z.object({ skill_id: SkillIdSchema, source_sha256: Sha256Schema })),
+    }).parse(JSON.parse(bytes) as unknown);
+    const previousById = new Map(previous.skills.map((skill) => [skill.skill_id, skill.source_sha256]));
+    for (const decision of admission) {
+      if (decision.source_revision !== policy.revision || previousById.get(decision.upstream_skill_id) !== decision.source_sha256) continue;
+      const { stdout: source } = await execFileAsync("git", ["-C", path.join(repoRoot, policy.generation.source_root), "show", `${previous.snapshot.revision}:${decision.source_path}`]);
+      if (sha256(source) !== decision.source_sha256) throw new Error(`Education retained source identity differs: ${decision.upstream_skill_id}`);
+      decision.source_release = previous.snapshot.snapshot_id;
+      decision.source_revision = previous.snapshot.revision;
+    }
+  }
   const evidenceAdaptations = buildEvidenceAdaptations(policy, audit, evidenceMap, admission);
   const relationships = buildRelationships(policy, audit, admission);
   const safetyDomains = buildSafetyDomains(policy, audit, admission);
@@ -275,6 +299,8 @@ function buildAdmission(
       generated_skill_id: skill.generated_id,
       source_path: skill.source_path,
       source_sha256: skill.source_sha256,
+      source_release: policy.release,
+      source_revision: policy.revision,
       disposition: "admitted",
       reason_code: "approved-gareth-cc-by-sa",
       license: policy.license.expression,
@@ -401,6 +427,8 @@ function excluded(skill: EducationAgentSkill, reason: EducationAdmissionDecision
     generated_skill_id: skill.generated_id,
     source_path: skill.source_path,
     source_sha256: skill.source_sha256,
+    source_release: EDUCATION_RELEASE,
+    source_revision: EDUCATION_REVISION,
     disposition: "excluded",
     reason_code: reason,
     license: null,

@@ -23,7 +23,7 @@ export interface EducationAgentSkillsConversionManifest {
   schema_version: "1";
   converter_version: "1";
   vendor_id: "education-agent-skills";
-  release: "snapshot-32fce5c";
+  release: string;
   revision: string;
   audit_sha256: string;
   evidence_map_sha256: string;

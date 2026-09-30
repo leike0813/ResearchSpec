@@ -14,8 +14,11 @@ void test("Education Agent Skills maintenance catalog maps 136 reviewed Skills t
     revision: string;
     extensions: Array<{ capability_id: string; raw_skill_id: string; execution_type: string; required_brief_fields: string[] }>;
   };
+  const bundle = JSON.parse(await readFile(path.join(ROOT, "skills/plugins/vendor-bundles/education-agent-skills.json"), "utf8")) as {
+    vendor: { revision: string };
+  };
   assert.equal(catalog.vendor_id, "education-agent-skills");
-  assert.equal(catalog.revision, "32fce5c0d097ec675cf81c750a65a379e4d87e3c");
+  assert.equal(catalog.revision, bundle.vendor.revision);
   assert.equal(catalog.extensions.length, 136);
   assert.equal(catalog.extensions.filter((item) => item.execution_type === "llm").length, 136);
   assert.deepEqual(catalog.extensions.map((item) => item.raw_skill_id).slice(0, 1), ["education-agent-skills-academic-language-sentence-frame-generator"]);
@@ -31,10 +34,10 @@ void test("Education Agent Skills maintenance catalog maps 136 reviewed Skills t
 
 testVendorAnchor(ROOT, {
   "vendor": "education-agent-skills",
-  "anchor": "snapshot-32fce5c",
-  "revision": "32fce5c0d097ec675cf81c750a65a379e4d87e3c",
+  "anchor": "snapshot-6bbbce4",
+  "revision": "6bbbce418f82e11044009c9f3b7373a354de5bd0",
   "capabilities": 136,
-  "contentFiles": 238,
+  "contentFiles": 241,
   "extension": {
     "llm_count": 136,
     "mixed_count": 0

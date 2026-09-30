@@ -46,7 +46,7 @@ void test("Education Agent Skills audit pins the official clean untagged snapsho
 
 void test("repository inventory covers every tracked file and Skill exactly once with stable hashes and classifications", async () => {
   const audit = getBuiltAudit();
-  assert.equal(audit.repository_inventory.tracked_file_count, 238);
+  assert.equal(audit.repository_inventory.tracked_file_count, 241);
   assert.equal(audit.skills.length, 165);
   assert.deepEqual(Object.keys(audit.repository_inventory.classification_counts), [
     "skill-content", "license-provenance", "project-doc", "installer", "mcp-runtime", "maintenance", "test", "generated", "showcase",
@@ -100,7 +100,7 @@ void test("evidence, license, and relationship schemas preserve unresolved and c
 void test("all named evidence, relationships, provenance, overlaps, risks, and prospective domains carry explicit conclusions", async () => {
   const audit = await readAudit();
   assert.deepEqual(audit.summary, {
-    tracked_files: 238,
+    tracked_files: 241,
     skills: 165,
     upstream_domains: 20,
     prospective_domains: 3,
@@ -109,7 +109,7 @@ void test("all named evidence, relationships, provenance, overlaps, risks, and p
     evidence_strength_counts: { verified: 0, partial: 216, unverified: 656, conflicting: 0 },
     relationships: 813,
     unresolved_relationships: 17,
-    license_status_counts: { clear: 0, conditional: 0, unresolved: 165 },
+    license_status_counts: { clear: 0, conditional: 136, unresolved: 29 },
     recommendation_counts: { candidate: 0, defer: 0, exclude: 165 },
     risk_counts: { minors: 164, privacy: 24, "learning-analytics": 16, wellbeing: 70, diagnosis: 1, "original-framework": 19 },
     blocking_findings: 2,
@@ -121,7 +121,7 @@ void test("all named evidence, relationships, provenance, overlaps, risks, and p
   assert.ok(audit.relationships.every((entry) => entry.future_semantics === "advisory" && !entry.hard_dependency && entry.conclusion));
   assert.ok(audit.relationships.some((entry) => entry.resolution === "resolved" && entry.resolved_target_skill_id));
   assert.ok(audit.relationships.some((entry) => entry.resolution === "missing" && entry.resolved_target_skill_id === null));
-  assert.ok(audit.skills.every((skill) => skill.license.status === "unresolved" && skill.license.conclusion));
+  assert.ok(audit.skills.every((skill) => skill.license.conclusion && skill.license.evidence.length >= 1));
   assert.ok(audit.skills.every((skill) => skill.provenance.length >= 1 && skill.contributors.length >= 1));
   assert.ok(audit.skills.every((skill) => skill.overlaps.length === 6 && new Set(skill.overlaps.map((entry) => entry.target)).size === 6));
   assert.ok(audit.skills.every((skill) => skill.risks.length === 6 && new Set(skill.risks.map((entry) => entry.risk)).size === 6));
@@ -133,6 +133,20 @@ void test("all named evidence, relationships, provenance, overlaps, risks, and p
   assert.equal(student.length, 13);
   assert.ok(student.every((skill) => skill.risks.find((risk) => risk.risk === "minors")?.status === "present"));
   assert.ok(audit.skills.filter((skill) => skill.skill_id.startsWith("original-frameworks/")).every((skill) => skill.risks.find((risk) => risk.risk === "original-framework")?.status === "present"));
+});
+
+void test("the root CC BY-SA 4.0 notice licenses author content without expanding admission", async () => {
+  const audit = await readAudit();
+  const rootLicense = audit.repository_inventory.files.find((entry) => entry.path === "LICENSE");
+  assert.equal(rootLicense?.classification, "license-provenance");
+  assert.ok(audit.findings.some((finding) => finding.code === "LICENSE-SCOPE-UNRESOLVED" && finding.severity === "blocking"));
+  assert.ok(audit.skills.every((skill) => skill.license.evidence.includes("LICENSE")));
+  const unresolvedIds = audit.skills.filter((skill) => skill.license.status === "unresolved").map((skill) => skill.skill_id);
+  const originalFrameworkIds = audit.skills.filter((skill) => skill.risks.some((risk) => risk.risk === "original-framework" && risk.status === "present")).map((skill) => skill.skill_id);
+  const thirdPartyIds = audit.skills.filter((skill) => skill.contributors.some((item) => item.name === "Sean Hu")).map((skill) => skill.skill_id);
+  assert.deepEqual(unresolvedIds, [...new Set([...originalFrameworkIds, ...thirdPartyIds])].sort(compareText));
+  assert.ok(audit.skills.filter((skill) => skill.license.status === "conditional").every((skill) => skill.license.expression === "CC BY-SA 4.0"));
+  assert.ok(audit.skills.every((skill) => skill.recommendation.blockers.length >= 1));
 });
 
 void test("audit generation and the JSON-derived report are byte-identical and checked-in artifacts validate strictly", async () => {

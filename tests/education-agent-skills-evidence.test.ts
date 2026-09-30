@@ -153,6 +153,37 @@ void test("mapping semantics permit explicit composites and reject ordinary fan-
   assert.ok(value.declaration_mappings.every((mapping) => mapping.match_type === "composite" || mapping.work_ids.length === 1));
 });
 
+void test("incremental rebinding inherits the prior evidence map and re-binds only the changed Skills", async () => {
+  const values = await loadArtifacts();
+  const previous = JSON.parse(
+    await readFile(path.resolve("audits/education-agent-skills/snapshot-32fce5c/evidence-map.json"), "utf8"),
+  ) as EducationAgentSkillsEvidenceMap;
+  assert.deepEqual(values.evidenceMap.works, previous.works);
+  assert.deepEqual(values.evidenceMap.summary.existence_status_counts, previous.summary.existence_status_counts);
+  assert.deepEqual(values.evidenceMap.google_scholar_discovery, previous.google_scholar_discovery);
+  const previousById = new Map(previous.declaration_mappings.map((mapping) => [mapping.evidence_id, mapping]));
+  const changed = values.evidenceMap.declaration_mappings.filter((mapping) => previousById.get(mapping.evidence_id)?.source_sha256 !== mapping.source_sha256);
+  assert.deepEqual([...new Set(changed.map((mapping) => mapping.skill_id))].sort(compareText), [
+    "student-learning/unassisted-evidence-checkpoint",
+    "student-learning/weekly-agency-review",
+  ]);
+  for (const mapping of values.evidenceMap.declaration_mappings) {
+    if (changed.includes(mapping)) continue;
+    assert.deepEqual(mapping, previousById.get(mapping.evidence_id), mapping.evidence_id);
+  }
+  const citationChanged = values.evidenceMap.declaration_mappings.filter((mapping) => previousById.get(mapping.evidence_id)?.citation !== mapping.citation);
+  assert.deepEqual(citationChanged.map((mapping) => mapping.evidence_id), ["evidence-0768"]);
+  assert.deepEqual(citationChanged[0]?.work_ids, ["work-0317"]);
+  const binding = JSON.parse(
+    await readFile(path.resolve("audits/education-agent-skills/snapshot-6bbbce4/incremental-binding.json"), "utf8"),
+  ) as { new_audit_sha256: string; new_evidence_map_sha256: string; rebound: { declarations: number; citation_changed: number; unaffected_declarations: number } };
+  assert.equal(binding.rebound.declarations, 10);
+  assert.equal(binding.rebound.citation_changed, 1);
+  assert.equal(binding.rebound.unaffected_declarations, 862);
+  assert.equal(binding.new_audit_sha256, createHash("sha256").update(values.auditJson).digest("hex"));
+  assert.equal(binding.new_evidence_map_sha256, createHash("sha256").update(values.mapJson).digest("hex"));
+});
+
 void test("JSON and report are deterministic, JSON-derived, and checked read-only", async () => {
   const values = await loadArtifacts();
   assert.equal(renderEducationAgentSkillsEvidenceJson(values.evidenceMap), values.mapJson);

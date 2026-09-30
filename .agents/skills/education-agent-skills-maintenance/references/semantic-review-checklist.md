@@ -12,6 +12,8 @@
 - 转换后承载：指出 extension `SKILL.md`、`tools/`、`references/` 或 graph profile 中的具体章节/锚点。
 - 判定：`preserved` / `adapted` / `removed` / `gap`。
 - 证据：上游文件路径 + 原文片段；转换后文件路径 + 锚点。
+- 增量锚点只对变化 capability 重新判定；未变化 capability 通过来源哈希与正文恢复检查
+  继承既有审阅，并写明继承范围，不把机器比对写成重新完成全部人工语义审阅。
 
 ## 2. Knowledge single-sourcing
 

@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import path from "node:path";
 
 import {
   EDUCATION_AGENT_SKILLS,
@@ -14,8 +15,8 @@ import {
 } from "./schema.js";
 
 export const EDUCATION_AGENT_SKILLS_EVIDENCE = {
-  mapPath: "audits/education-agent-skills/snapshot-32fce5c/evidence-map.json",
-  reportPath: "audits/education-agent-skills/snapshot-32fce5c/evidence-report.md",
+  mapPath: `${path.posix.dirname(EDUCATION_AGENT_SKILLS.auditPath)}/evidence-map.json`,
+  reportPath: `${path.posix.dirname(EDUCATION_AGENT_SKILLS.auditPath)}/evidence-report.md`,
 } as const;
 
 export {

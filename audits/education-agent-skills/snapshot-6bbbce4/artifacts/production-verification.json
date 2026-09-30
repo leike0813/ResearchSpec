@@ -1,0 +1,85 @@
+{
+  "schema_version": "1",
+  "status": "complete",
+  "vendor_id": "education-agent-skills",
+  "anchor_id": "snapshot-6bbbce4",
+  "revision": "6bbbce418f82e11044009c9f3b7373a354de5bd0",
+  "approved_tree_set_sha256": "4d42fa3190d1e45f4bafce8c06a539d6e41bdc86d380b2cafb230eb6892ad633",
+  "approved_by": "user",
+  "approved_at": "2026-10-01T07:12:20+08:00",
+  "counts": {
+    "raw_skills": 136,
+    "changed_raw_skills": 2,
+    "unchanged_raw_skills": 134,
+    "changed_raw_files": 4,
+    "extensions": 136,
+    "changed_extensions": 2,
+    "unchanged_extensions": 134,
+    "changed_extension_files": 4,
+    "unchanged_profiles": 136,
+    "unchanged_validators": 136
+  },
+  "checks": {
+    "pnpm_build": "passed",
+    "pnpm_check": "passed",
+    "pnpm_lint": "passed",
+    "audit_check": "passed",
+    "evidence_check": "passed",
+    "generated_output_check": "passed",
+    "idempotence_check": "passed",
+    "anchor_check": "passed",
+    "approved_preview_byte_match": "passed",
+    "old_anchor_preservation": "passed",
+    "tests": {
+      "command": "UV_CACHE_DIR=/tmp/researchspec-uv-cache pnpm test",
+      "tests": 438,
+      "pass": 438,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "log_sha256": "abae7d5f776114cae7c687d99f21d98f34c9eb569012fa1cb356d8f0ff7b4b1c"
+    }
+  },
+  "production_manifest": {
+    "path": "skills/plugins/vendor-manifests/education-agent-skills.json",
+    "sha256": "405cb1b18a9f8dc4323515491445947317aad0896766f28c53816f43d905b810"
+  },
+  "record_bindings": [
+    {
+      "path": "01-analysis.md",
+      "sha256": "29e9fa42991c383cfb51baf981e39a28f1ea3971b8b378e351a2bffa82f35427"
+    },
+    {
+      "path": "02-ingestion.md",
+      "sha256": "69814b98c49c89ef6848a30274f037ee1891d3bfd9ed3f8cb5b579d3bb7e42de"
+    },
+    {
+      "path": "03-conversion.md",
+      "sha256": "9f4dbd83c571d34ce14987fed635a06235e40f2ec118a2c2cdd1e426bf046b6b"
+    },
+    {
+      "path": "04-review.md",
+      "sha256": "fb03ccab31aa018a6016745bbb5377560afe51d44636351c5f05b9ba779796c2"
+    },
+    {
+      "path": "05-semantic-review.md",
+      "sha256": "a04726729f932369facc8cb58f2cbb88d8020163ea592abf4c2ad853a6d0eaed"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "661e91ff8352b0f32a690fbc9ca2a5b573a8f9604672f4a2c0fdf3dfdd1f1bcf"
+    },
+    {
+      "path": "artifacts/production-diff.json",
+      "sha256": "01efbf3b0c7d80e3fb41e4c7554b80baeea05a019efab3a08adaa29b7da44ccb"
+    },
+    {
+      "path": "artifacts/anchor-diff.txt",
+      "sha256": "5c3ab89107741940a8788d51a4736771f5191afd6be01e02b655cc05a4007636"
+    },
+    {
+      "path": "artifacts/extension-review.json",
+      "sha256": "7bf5779531f0008979c9c735edc5632ab398189f404bc9ee052defe374e9d4ab"
+    }
+  ]
+}

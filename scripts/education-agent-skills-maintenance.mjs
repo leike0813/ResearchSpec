@@ -19,7 +19,7 @@ import {
 } from "./lib/vendor-maintenance.mjs";
 
 const ROOT = process.cwd();
-const ANCHOR_CREATED_AT = "2026-08-17T00:00:00+08:00";
+const ANCHOR_CREATED_AT = "2026-10-01T00:00:00+08:00";
 const CATALOG_PATH = path.join(ROOT, "audits", "education-agent-skills", "catalog.json");
 const AUDIT_README = path.join(ROOT, "audits", "education-agent-skills", "README.md");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "education-agent-skills-maintenance", "SKILL.md");
@@ -51,8 +51,8 @@ function upstreamState() {
   return {
     release: data.release,
     revision,
-    root_license_claim: "MIT",
-    tracked_entry_count: 238,
+    root_license_claim: existsSync(path.join(upstreamRoot, "LICENSE")) ? "CC-BY-SA-4.0" : null,
+    tracked_entry_count: json(auditFile).repository_inventory.tracked_file_count,
     content_file_count: inv.total,
     tree_sha256: inv.treeSha,
     inventory: { total: inv.total, treeSha: inv.treeSha, byTop: invByTop, byExt: invByExt },
@@ -320,6 +320,7 @@ function writeRecords(anchorId) {
   const state = currentState(anchorId);
   const upstreamInventory = upstreamState().inventory;
   const rows = state.extension.rows;
+  const productionReview = json(path.join(ROOT, "src/vendor-converters/education-agent-skills/review-decision.json"));
 
   const analysis = `# Education Agent Skills Extension Anchor Analysis — ${data.release}
 
@@ -402,9 +403,8 @@ ${rows.map((row) => `| \`${row.capability_id}\` | ${inlineCode(row.required_brie
 ## Verification
 
 - [x] 三个 reviewed education 领域按 source-neutral domain catalog 投影对应 extension。
-- [x] 每个 profile 通过 \`start -> instructions -> advance\` 全流程。
-- [x] 代表性 profile 覆盖 invalid-then-valid script validator 路径；全部 136 个 profile 通过 registry/维护检查。
-- [x] \`pnpm check\` / \`pnpm lint\` / 全量 \`pnpm test\` 通过。
+- profile 的 \`start -> instructions -> advance\` 与 validator 执行路径由相关测试验证，具体结果见本轮验证记录。
+- \`pnpm check\` / \`pnpm lint\` / \`pnpm test\` 的结果由执行维护的 Agent 记录，静态生成不宣称执行通过。
 `;
 
   const review = `# Education Agent Skills Extension Anchor Review — ${data.release}
@@ -431,8 +431,12 @@ ${rows.map((row) => `| \`${row.capability_id}\` | \`${row.package_tree_sha256}\`
 
 ## Human Confirmation
 
+- production review status: \`${productionReview.review_status}\`
+- approved aggregate SHA-256: \`${productionReview.approved_tree_set_sha256 ?? "pending"}\`
+- approved by: \`${productionReview.approved_by ?? "pending"}\` at \`${productionReview.approved_at ?? "pending"}\`
+
 - [x] 136 个上游语义义务均由 extension SKILL 或 graph profile 承接。
-- [x] extension SKILL 不含 next-node / next-phase / agent-team orchestration。
+- [x] extension 的 ResearchSpec 流程权威边界已声明；next-node / next-phase / agent-team 命中由 Agent 按上下文审阅。
 - [x] 命名、registry、审计记录、锚点 manifest 身份一致。
 - [x] Agent 语义审阅见 \`05-semantic-review.md\`。
 `;
@@ -472,7 +476,10 @@ ${rows.map((row) => `| \`${row.capability_id}\` | \`${row.package_tree_sha256}\`
     "03-conversion.md": conversion,
     "04-review.md": review,
   };
-  for (const [name, content] of Object.entries(records)) writeFileSync(path.join(dir, name), content, "utf8");
+  const incrementalEvidence = existsSync(path.join(artifactDir(anchorId), "incremental-audit.json"))
+    ? "\n## 增量审计依据\n\n上游差异见 `artifacts/upstream-analysis.md` 与 `artifacts/incremental-audit.json`；来源和证据继承见 `incremental-binding.json`，预览转换详情见 `artifacts/candidate-01-analysis.md` 至 `artifacts/candidate-04-review.md`。生产验证结果见 `artifacts/production-verification.json`，语义判定见 `05-semantic-review.md`。\n"
+    : "";
+  for (const [name, content] of Object.entries(records)) writeFileSync(path.join(dir, name), content + incrementalEvidence, "utf8");
   process.stdout.write(`wrote ${dir}/{${Object.keys(records).join(", ")}}${existsSync(semanticReviewPath) ? "; preserved 05-semantic-review.md" : ""}\n`);
 }
 

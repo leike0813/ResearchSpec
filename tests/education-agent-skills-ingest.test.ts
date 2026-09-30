@@ -6,6 +6,7 @@ import { test } from "node:test";
 
 import { parse } from "yaml";
 
+import { sha256 } from "../src/core/workspace/write-plan.js";
 import { recoverEducationSourceBody } from "../src/vendor-converters/education-agent-skills/adaptation.js";
 import { renderEducationCompleteTrees } from "../src/vendor-converters/education-agent-skills/complete-tree.js";
 import {
@@ -22,11 +23,11 @@ import { loadPluginRegistry } from "../src/plugins/registry.js";
 
 const REPO_ROOT = path.resolve(".");
 const SOURCE_ROOT = path.join(REPO_ROOT, "vendor/education-agent-skills");
-const EXPECTED_TREE_SET_SHA256 = "c4fc2f93a7553a1c02538d15491ed108afd36ad4a4a291ca4db3bad39e74775d";
+const EXPECTED_TREE_SET_SHA256 = "4d42fa3190d1e45f4bafce8c06a539d6e41bdc86d380b2cafb230eb6892ad633";
 
 void test("Education production policy expands every immutable decision exactly once", async () => {
   const policies = await loadEducationAgentSkillsPolicies(REPO_ROOT);
-  assert.equal(policies.policySha256, "fcb818163c79058ac084f944700c187c36b06b1698b1c9242454b973e259256f");
+  assert.equal(policies.policySha256, policies.review.production_policy_sha256);
   assert.equal(policies.admission.length, 165);
   assert.equal(policies.admission.filter((item) => item.disposition === "admitted").length, 136);
   assert.equal(policies.admission.filter((item) => item.reason_code === "original-framework-origin-unproved").length, 19);
@@ -41,8 +42,8 @@ void test("Education production policy expands every immutable decision exactly 
     "education-systems": 9,
     "specialist-studies-in-education": 73,
   });
-  assert.equal(policies.review.review_status, "approved");
   assert.equal(policies.review.candidate_tree_set_sha256, EXPECTED_TREE_SET_SHA256);
+  assert.equal(policies.review.review_status, "approved");
   assert.equal(policies.review.approved_tree_set_sha256, EXPECTED_TREE_SET_SHA256);
   assert.equal(policies.review.approved_by, "user");
 });
@@ -157,7 +158,7 @@ void test("verified-only Education declarations stay unmarked in frontmatter", a
   }
 });
 
-void test("Education approved preview is deterministic and production conversion is isolated and idempotent", async () => {
+void test("Education incremental preview preserves unchanged trees and enforces production approval", async () => {
   const first = await mkdtemp(path.join(tmpdir(), "researchspec-education-preview-a-"));
   const second = await mkdtemp(path.join(tmpdir(), "researchspec-education-preview-b-"));
   try {
@@ -168,16 +169,33 @@ void test("Education approved preview is deterministic and production conversion
     assert.equal(await readFile(path.join(first, "preview-manifest.json"), "utf8"), await readFile(path.join(second, "preview-manifest.json"), "utf8"));
     assert.equal(await readFile(path.join(first, "decision-catalogs.json"), "utf8"), await readFile(path.join(second, "decision-catalogs.json"), "utf8"));
     assert.equal(await readFile(path.join(first, "review-report.zh-CN.md"), "utf8"), await readFile(path.join(second, "review-report.zh-CN.md"), "utf8"));
+    const changed = [];
+    const previous = JSON.parse(await readFile(path.join(REPO_ROOT, "audits/education-agent-skills/snapshot-6bbbce4/artifacts/incremental-audit.json"), "utf8")) as {
+      production_baseline: { files: Array<{ path: string; sha256: string }> };
+    };
+    const previousFiles = new Map(previous.production_baseline.files.map((file) => [file.path, file.sha256]));
+    for (const tree of left.trees) {
+      let differs = false;
+      for (const file of tree.files) {
+        const previousHash = previousFiles.get(`skills/plugins/vendors/education-agent-skills/${tree.skillId}/${file.path}`);
+        assert.ok(previousHash);
+        if (previousHash !== sha256(file.content)) differs = true;
+      }
+      if (differs) changed.push(tree.skillId);
+    }
+    assert.deepEqual(changed, [
+      "education-agent-skills-unassisted-evidence-checkpoint",
+      "education-agent-skills-weekly-agency-review",
+    ]);
     const manifest = await convertEducationAgentSkills({ repoRoot: REPO_ROOT, dryRun: true });
     assert.equal(manifest.approved_tree_set_sha256, EXPECTED_TREE_SET_SHA256);
-    assert.equal(manifest.generated_skills.length, 136);
+    assert.deepEqual(await checkEducationAgentSkillsOutput(REPO_ROOT), { ok: true, errors: [], warnings: [] });
+    assert.deepEqual(await checkEducationAgentSkillsIdempotence(REPO_ROOT), { ok: true, drift_paths: [] });
     const registry = await loadPluginRegistry();
     assert.equal(registry.vendors.get("education-agent-skills")?.skills.length, 136);
     assert.equal(registry.domains.get("curriculum-and-pedagogy")?.skills.length, 54);
     assert.equal(registry.domains.get("education-systems")?.skills.length, 9);
     assert.equal(registry.domains.get("specialist-studies-in-education")?.skills.length, 73);
-    assert.deepEqual(await checkEducationAgentSkillsOutput(REPO_ROOT), { ok: true, errors: [], warnings: [] });
-    assert.deepEqual(await checkEducationAgentSkillsIdempotence(REPO_ROOT), { ok: true, drift_paths: [] });
   } finally {
     await rm(first, { recursive: true, force: true });
     await rm(second, { recursive: true, force: true });

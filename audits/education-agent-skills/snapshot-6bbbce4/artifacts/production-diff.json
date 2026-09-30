@@ -1,0 +1,95 @@
+{
+  "schema_version": "1",
+  "approved_tree_set_sha256": "4d42fa3190d1e45f4bafce8c06a539d6e41bdc86d380b2cafb230eb6892ad633",
+  "revision": "6bbbce418f82e11044009c9f3b7373a354de5bd0",
+  "old_anchor_files_preserved": 11,
+  "counts": {
+    "raw_skills": 136,
+    "changed_raw_skills": 2,
+    "unchanged_raw_skills": 134,
+    "changed_raw_files": 4,
+    "extensions": 136,
+    "changed_extensions": 2,
+    "unchanged_extensions": 134,
+    "changed_extension_files": 4,
+    "unchanged_profiles": 136,
+    "unchanged_validators": 136
+  },
+  "checks": {
+    "production_raw_matches_approved_preview": true,
+    "production_extensions_match_reviewed_preview": true,
+    "old_anchor_preserved": true
+  },
+  "changed_files": [
+    {
+      "path": "audits/education-agent-skills/catalog.json",
+      "old_sha256": "16cd8c5d83d6675dd8a9baf6423f2b08177fcb782418075ec9cecfcfb292c715",
+      "new_sha256": "0bd38600649e5345f002c666bc0be4b70685331c610b9e5822ac780aec66c7a3"
+    },
+    {
+      "path": "skills/plugins/conversion-reports/education-agent-skills.md",
+      "old_sha256": "677723b1225a31ea892dc745a6f087fc98d2c78d10a99c69cbf77d77a5fd9d6b",
+      "new_sha256": "02918da53caf403cf72d0ca17f4fed26354769bb03eced20fe83f049b8bcee69"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-unassisted-evidence-checkpoint/SKILL.md",
+      "old_sha256": "de05e3cfbb49f9a6bc153c1b03f13ba3a349603884f0454b049a11df64937d1e",
+      "new_sha256": "498553c7afd14ba01bf67df3737755e8cc939be5c2215a37d1bb0da79c5af18d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-unassisted-evidence-checkpoint/manifest.yaml",
+      "old_sha256": "651f1321731c04466a75b90a0639ead9e9cab3f2591e0805a2c9d50fffdb8a54",
+      "new_sha256": "baf7435751d93d480ad845c9dbe33dd2f32a741025448fcb93e271d6a2579199"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-weekly-agency-review/SKILL.md",
+      "old_sha256": "66fb7e7a8585481e64f2b256ed06c6bb4161f17f90945e2988ee28643a3a828f",
+      "new_sha256": "c000b8a070768abe26c3c8148e4095c2d436298a5d26c347b7c2b67a7fff20b3"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-weekly-agency-review/manifest.yaml",
+      "old_sha256": "f31765130dc3fe9eac94668bc39906f0be1e0b3f7a19b0993e1cb78c607308c6",
+      "new_sha256": "75b5dec5d3bb9fb98433163f56ce2ad31c032fc4546e2ed1da9a69794c81aca8"
+    },
+    {
+      "path": "skills/plugins/extensions/registry.json",
+      "old_sha256": "c430914d1bdc8b4fee5ccb86f242995df9b869c86e487835b501926326598df6",
+      "new_sha256": "1dc6634bfdc50d7b0698c6ca7eb7df0f52137c30fe04ea83599f15ea76784336"
+    },
+    {
+      "path": "skills/plugins/registry.json",
+      "old_sha256": "f3564e3a9f9a6a6204ea7ac892b2703ae43e3101a14e63416882e167e8e4d83a",
+      "new_sha256": "a0160c6aeb32f1dcc59d21890589b4b5b6917a48299ac5dd62d62d28155b61ae"
+    },
+    {
+      "path": "skills/plugins/vendor-bundles/education-agent-skills.json",
+      "old_sha256": "9814f29a8831f1cb25c34a87d257a6d5dcd87878c1678b9e3ccfe7babd71b538",
+      "new_sha256": "e0b443846586a9a9f28ad5afa61775147945c2737636201c6d1707e2130065d9"
+    },
+    {
+      "path": "skills/plugins/vendor-manifests/education-agent-skills.json",
+      "old_sha256": "5973b43953f6320570bf40a2088b82395fbd9ace6362ffe82d219b6ed5a2b0a1",
+      "new_sha256": "405cb1b18a9f8dc4323515491445947317aad0896766f28c53816f43d905b810"
+    },
+    {
+      "path": "skills/plugins/vendors/education-agent-skills/education-agent-skills-unassisted-evidence-checkpoint/NOTICE.md",
+      "old_sha256": "ab42b455de63d0d50780bb1fe81258d1150a13e07ad7ca8804bafe1dca6886b9",
+      "new_sha256": "b8bceb0a5462d27af281a652dcdec338d66b61601af2f547f98847c0b5a0059e"
+    },
+    {
+      "path": "skills/plugins/vendors/education-agent-skills/education-agent-skills-unassisted-evidence-checkpoint/SKILL.md",
+      "old_sha256": "3db6aa49b617f63522c257ee796db5dfa7b87a6e5aff9000bf7f65c982960872",
+      "new_sha256": "2b31f9d54221844a5cf8df4a9f9a8664c66e6a20ab4a7870244ded3fa5a155c5"
+    },
+    {
+      "path": "skills/plugins/vendors/education-agent-skills/education-agent-skills-weekly-agency-review/NOTICE.md",
+      "old_sha256": "229b76bcd52f443b4858347f9766d743e8f045a9a2f6cd0a9f2fc13e4435e95c",
+      "new_sha256": "a1e627e9f19c4fb1468ab68dddfa2823d4c553e4cbfc063249de34a930013ec6"
+    },
+    {
+      "path": "skills/plugins/vendors/education-agent-skills/education-agent-skills-weekly-agency-review/SKILL.md",
+      "old_sha256": "f8d194c0f69ec755f1e7ca72b3e17b06ee725f7419ee935169f26c571e0c4980",
+      "new_sha256": "5da7d1da192d78854ae4a495fa4b249fd716e9d920d98c201bb2a0e7edd8b95a"
+    }
+  ]
+}

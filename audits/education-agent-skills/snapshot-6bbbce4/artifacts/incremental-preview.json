@@ -1,0 +1,2218 @@
+{
+  "schema_version": "1",
+  "kind": "education-agent-skills-incremental-extension-preview",
+  "review_status": "pending-human-review",
+  "revision": "6bbbce418f82e11044009c9f3b7373a354de5bd0",
+  "aggregate_tree_sha256": "4d42fa3190d1e45f4bafce8c06a539d6e41bdc86d380b2cafb230eb6892ad633",
+  "counts": {
+    "capabilities": 136,
+    "unchanged_packages": 134,
+    "changed_packages": 2,
+    "unchanged_profiles": 136,
+    "knowledge_refs": 0
+  },
+  "changed": [
+    {
+      "capability_id": "plugin-education-agent-skills-unassisted-evidence-checkpoint",
+      "files": [
+        "SKILL.md",
+        "manifest.yaml"
+      ]
+    },
+    {
+      "capability_id": "plugin-education-agent-skills-weekly-agency-review",
+      "files": [
+        "SKILL.md",
+        "manifest.yaml"
+      ]
+    }
+  ],
+  "checks": {
+    "registry_valid": true,
+    "all_raw_source_bodies_recovered": true,
+    "all_extension_bodies_preserved": true,
+    "all_validators_unchanged": true,
+    "generator_second_pass_preserves_mtimes": true,
+    "production_written": false
+  },
+  "files": [
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-academic-language-sentence-frame-generator/SKILL.md",
+      "sha256": "8d7e8b31e741d2d930b50f1c8274c1c9c4aac75e6c1ad23bc16d6f90049b44fd"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-academic-language-sentence-frame-generator/manifest.yaml",
+      "sha256": "6188e5f46a425694041ff65b39542b5a390ad56d0dd987593f77fb70ea88f8db"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-academic-language-sentence-frame-generator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-adaptive-hint-sequence-designer/SKILL.md",
+      "sha256": "9cf2a9e5ad66fcff78cc5ea038e5c3e9120bb4312c1ffe5729a83cd5c60e4aa9"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-adaptive-hint-sequence-designer/manifest.yaml",
+      "sha256": "54e6519ca1155779eefb293838747d4f4e2896a713e84a72cd8ea341f4819ab0"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-adaptive-hint-sequence-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-agency-circles-for-systems-action/SKILL.md",
+      "sha256": "e5c21aedacc00587cf5a6a8d4b7b845718256a06d31f2146b7f5a1eb318d0f94"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-agency-circles-for-systems-action/manifest.yaml",
+      "sha256": "7e28cbef2620b9f9d7a6b811965b4435362bc897e3ffd847b4405033a0413673"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-agency-circles-for-systems-action/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-agency-scaffold-generator/SKILL.md",
+      "sha256": "bfb731dc9843f29eb8b93269ab8d9867b76de50eb8f8eda11065154e34b68c51"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-agency-scaffold-generator/manifest.yaml",
+      "sha256": "0cdd782ef5c0bed138d3344a0fd571cfc7dbd18105d650b66c26439ee47e3e7b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-agency-scaffold-generator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-claim-checker/SKILL.md",
+      "sha256": "356601898604bc5a698dc1be6a20de80705e344ddc26638afd08cdb2a3c86b40"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-claim-checker/manifest.yaml",
+      "sha256": "0d30dd6ddff202fb1e4eed4d61c99c1a4c314c2ab0b520b690f9b28bf124811d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-claim-checker/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-expertise-interrogation-designer/SKILL.md",
+      "sha256": "45ee6bd03c8fe04ac7ef531c409b4c549ebfdf940e0c159b0580c167058c3440"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-expertise-interrogation-designer/manifest.yaml",
+      "sha256": "e12323a4cef18d8592a904534fe94b96c13fc12e5a46818302aa34f3b04d44af"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-expertise-interrogation-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-facilitated-collaborative-learning-designer/SKILL.md",
+      "sha256": "702979a1e1099df05360dcf0f2e08474d0825f4bcbafda703378fc9e1ed993ab"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-facilitated-collaborative-learning-designer/manifest.yaml",
+      "sha256": "fad00063ddb029f1578084299cf5983ecce4ac57edb4e2869f13165f256509d2"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-facilitated-collaborative-learning-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-feedback-design-principles/SKILL.md",
+      "sha256": "3cf6eedd8e77ff8bb5101db7faa45c74beda03893a35672e7f82f95523ab45ae"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-feedback-design-principles/manifest.yaml",
+      "sha256": "44aab042888ad509bca7bb8d41c261e40be0467a8de831f8f4fbb88e5bf524c2"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-feedback-design-principles/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-hallucination-fact-check-protocol/SKILL.md",
+      "sha256": "199284b2f5d38773b2cb9f79c983610d8493823bd50201194bff5ce3d436ded9"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-hallucination-fact-check-protocol/manifest.yaml",
+      "sha256": "51e68c45af06634439a5cae7a83f25589ca7914b5297d455a4c987b598ec300f"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-hallucination-fact-check-protocol/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-learning-boundary-mapper/SKILL.md",
+      "sha256": "1defae89bcad5810719faac6069b4b83e6e948a228f62c5b11289df36f4da62f"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-learning-boundary-mapper/manifest.yaml",
+      "sha256": "deddf0930bd2263a22d8b8098e1c842c77876fb8895cea312334b4ec9b584f01"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-learning-boundary-mapper/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-output-critical-audit-designer/SKILL.md",
+      "sha256": "080fef2ab6727d8c6b898f15d394019085c7595fb4ca7a3ed8da66a4fd8f0eed"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-output-critical-audit-designer/manifest.yaml",
+      "sha256": "3ffeefd64851ac46186f52fb1125e2986716c0e8752ba122e7d581a1ae357560"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-output-critical-audit-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-socratic-dialogue-designer/SKILL.md",
+      "sha256": "33e2f3c043233aa7ce5a4d0ac2147e56484123e4cd8cedd64449b5ec70d8e162"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-socratic-dialogue-designer/manifest.yaml",
+      "sha256": "fecd3eb4d45734d646d95e3f2c2c4819c4071be4217c63b10943dc0d5104c677"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ai-socratic-dialogue-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-argument-structure-scaffold-generator/SKILL.md",
+      "sha256": "afadf7196f0e4ef781bd0f8b5dfed6a64783f09daa19bac6fdcbe4cdd3248182"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-argument-structure-scaffold-generator/manifest.yaml",
+      "sha256": "8294565de8f6b3e7e6a1ab5a7289ead0ff341b2fb2119f76308986dc8bb298a6"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-argument-structure-scaffold-generator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-aspirational-systems-iceberg/SKILL.md",
+      "sha256": "875ccb55cf185d6403d2ffdb985b4c49c7403c5cacebb9118bb106397a49e9d3"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-aspirational-systems-iceberg/manifest.yaml",
+      "sha256": "c7431f1ec229c6da93949455fc125d507a0798e02aa8d4bd40048b01f95a1ea8"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-aspirational-systems-iceberg/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-assessment-validity-checker/SKILL.md",
+      "sha256": "eeea95998025736d7da8f79719ee06a0d503d770f909f86aee73f4688a86ca0d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-assessment-validity-checker/manifest.yaml",
+      "sha256": "b4127f9f8e1b62bfce522efe062efffe7a6b8b8d4c5269861037312a7a79f0ff"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-assessment-validity-checker/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-awe-wonder-experience-designer/SKILL.md",
+      "sha256": "a17dff11fb062ad7d2f91acca56ba484983c5ce1da4fe15ce8f4c8b7122a273e"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-awe-wonder-experience-designer/manifest.yaml",
+      "sha256": "e0b376e0d69f068c4c04a3440bf1273a04208eac03bc4ac4ab6cb14a26f10494"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-awe-wonder-experience-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-backwards-design-unit-planner/SKILL.md",
+      "sha256": "f33bdb22c867bef55d44be0c6893ae13297b4b0b0ebdebb0f0eb73e635b58fcb"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-backwards-design-unit-planner/manifest.yaml",
+      "sha256": "1aa9c5205f12e1818be7591b87c17f630ef4620d900e4fdb0445bc86daf88696"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-backwards-design-unit-planner/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-belonging-classroom-culture-designer/SKILL.md",
+      "sha256": "3a230b290d13899e61e4f646b46a6ef990f17ca40fac21dc0ce15c15ee4c0062"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-belonging-classroom-culture-designer/manifest.yaml",
+      "sha256": "24425c7a26f64fff91ac4705f502115e4f313985aaff0ee055206047d56e5f56"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-belonging-classroom-culture-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-biophilic-learning-environment-designer/SKILL.md",
+      "sha256": "38079c4cfde75122e86f370c2c66b897cac28c7f6a2f1391bcc0625bbb3e9f92"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-biophilic-learning-environment-designer/manifest.yaml",
+      "sha256": "16233954b6d61b4591fc365af370a01db1444926226e62478f260130f9551c65"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-biophilic-learning-environment-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-checking-for-understanding-protocol-designer/SKILL.md",
+      "sha256": "a6edd6346e081cfd8f132e141d1169f85f741966097c844c53537e6c79a0956b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-checking-for-understanding-protocol-designer/manifest.yaml",
+      "sha256": "fab4b24725668d5b71f097787a222729125e1d66da3cf08720e7dfd9d92d0468"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-checking-for-understanding-protocol-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-cognitive-load-analyser/SKILL.md",
+      "sha256": "1f50cdc749e2da7647a3aec052456c23654dac4bd79d7c38d206a9af4799d7f1"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-cognitive-load-analyser/manifest.yaml",
+      "sha256": "12446737452fc4f9beb5947cfb6236a4eed9d0236c60eb85866fdc3586d2824d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-cognitive-load-analyser/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-cognitive-tutoring-architecture-designer/SKILL.md",
+      "sha256": "e12cf8c671abca1bb9bd2a34dc6df65845c5a76b024b6e7a60b58da50e64a505"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-cognitive-tutoring-architecture-designer/manifest.yaml",
+      "sha256": "09aed79e22354c06521572b3ce71617fb60f43e3615bce57f717e96a523bea67"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-cognitive-tutoring-architecture-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-competency-unpacker/SKILL.md",
+      "sha256": "238b660525633f62c501f38e6027b617a1b81f0edae6613db263b0a43fb8da9f"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-competency-unpacker/manifest.yaml",
+      "sha256": "47749a6e7542d9b9047ec75807d7d7afcb1c09d4cf1954c6b37755b916badd82"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-competency-unpacker/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-confidence-calibration-check/SKILL.md",
+      "sha256": "37b4628c030c9e2286ce89a1c461040dcc790d765d73ac36f8c3f2d716e90a72"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-confidence-calibration-check/manifest.yaml",
+      "sha256": "c77f346e1a24ad323564ac7139a1228b2ba0a4f27180f8ecc14f5d4f37043bc5"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-confidence-calibration-check/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-coverage-audit/SKILL.md",
+      "sha256": "cd334edcccaecc69c7c6367149fc209c1d9662036f2a5530823778f3b72b39bb"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-coverage-audit/manifest.yaml",
+      "sha256": "3b36a155caf05091394df3808ba2d7c9c5336cbfb94b24d18c6fcbdd48b892d1"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-coverage-audit/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-cpa-sequence-designer/SKILL.md",
+      "sha256": "50e7c81402fe73af3cc1bd13ff80ae8480f2d00a12f93604f7f515829bd40aa4"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-cpa-sequence-designer/manifest.yaml",
+      "sha256": "e6a98ea6fbf269385eacd3f0886ac042555baab6f8ecc294fbd9c7e9b6387a19"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-cpa-sequence-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-criterion-referenced-rubric-generator/SKILL.md",
+      "sha256": "959a63ff5f9c894b9909d1a59e0791d0b61e0e1a09a470f09513bbf472d92c6d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-criterion-referenced-rubric-generator/manifest.yaml",
+      "sha256": "70514b268c6096df2de4c35e4b7a21405a386e199939734cdb58fe6c61750d89"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-criterion-referenced-rubric-generator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-critical-thinking-task-designer/SKILL.md",
+      "sha256": "09b140abc2cf7077d6c8b9c5c8f4d155fe827b38e60aa4ccac94600db4c88dea"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-critical-thinking-task-designer/manifest.yaml",
+      "sha256": "9b1c95edb413a8e0fdd18b603072989d96648547a1be0811d7fafc5dd2fa727e"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-critical-thinking-task-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-cross-cultural-task-validity-checker/SKILL.md",
+      "sha256": "2e0bf8b1d26b558687fba8c465a7247e676d3575c62a46f4c60e08e1a70c0aa7"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-cross-cultural-task-validity-checker/manifest.yaml",
+      "sha256": "7653a322fc8f37b29a6a093ed297d8701fc562e419797b667bc9d09393e5035b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-cross-cultural-task-validity-checker/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-culturally-responsive-teaching-designer/SKILL.md",
+      "sha256": "4f027b9980aa11867460fe3abfb555883fee5590f0fa7abd4c0a12de5ca85b8c"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-culturally-responsive-teaching-designer/manifest.yaml",
+      "sha256": "4777cc1329f81cc93b73d3a3d494d85195d7f55bca74626d937f429f5c22bbd8"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-culturally-responsive-teaching-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-curriculum-crosswalk/SKILL.md",
+      "sha256": "c2230f185d4d272840f638d88193ad34aa11e005ede7b3fe0a267ee651718867"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-curriculum-crosswalk/manifest.yaml",
+      "sha256": "29b9ac3f81a47466ec7277464b6db7a3827eba459f3420c6866e3f8cc2bab439"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-curriculum-crosswalk/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-curriculum-knowledge-architecture-designer/SKILL.md",
+      "sha256": "d5f62f8f81d9d39730efbe9e26a4dc59de96ebfe3332922d02d293c83e1e9f8b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-curriculum-knowledge-architecture-designer/manifest.yaml",
+      "sha256": "1bd17b04e188c3b0905066ded6051b4771f892a5614d9afe40ad90bfc0c8835e"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-curriculum-knowledge-architecture-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-dialogic-teaching-move-generator/SKILL.md",
+      "sha256": "4994a3e13861bb1da68b16eb83b1324d2b5de8c52526d4884d63e88b0d50fed6"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-dialogic-teaching-move-generator/manifest.yaml",
+      "sha256": "5e386691f537c3e5a63df71d1ba1b152ec2c63c89635e6a83cdbb4a4fe7c8061"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-dialogic-teaching-move-generator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-differentiation-adapter/SKILL.md",
+      "sha256": "54d937d50302200ad9247eec1b21ad32b56f2950b55ac82a0a6304af9b7240c0"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-differentiation-adapter/manifest.yaml",
+      "sha256": "2199604033609c89d56fbe08ae9b214672fdbb557892519f45fad154e4eb66d5"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-differentiation-adapter/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-digital-worked-example-sequence/SKILL.md",
+      "sha256": "94ccbf9b09cfa1fc1d88582abafb55ff85a606edbfce35e84eef486bfe1158cb"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-digital-worked-example-sequence/manifest.yaml",
+      "sha256": "4787c73f20876bb37df2ad4589e2f8c278a873dae974c86b41e8a94ba98f3030"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-digital-worked-example-sequence/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-disciplinary-ai-literacy-sequence-designer/SKILL.md",
+      "sha256": "de51ce97c527278250cdb61c8b7ec53628e38402ee1fb6b676abf268bd9630dc"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-disciplinary-ai-literacy-sequence-designer/manifest.yaml",
+      "sha256": "433f40ebd2ca9a89dee696cb2311f3eff9dafaa83d58c5784623060bc7db1b4c"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-disciplinary-ai-literacy-sequence-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-disciplinary-writing-scaffold/SKILL.md",
+      "sha256": "eb1a9c456dd78ccdac6f3c6db3eb2a2702a309443ce5a019e6d4224973a3124c"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-disciplinary-writing-scaffold/manifest.yaml",
+      "sha256": "5d780c1912b98917158ac3450b009ea412de35e42826efbb621d405bbc64a394"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-disciplinary-writing-scaffold/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-discipline-specific-critical-thinking-task-designer/SKILL.md",
+      "sha256": "866a5efff7f60d1612c2580e082251d2e191e136104817846bd9fb690afc946d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-discipline-specific-critical-thinking-task-designer/manifest.yaml",
+      "sha256": "908773fe998e3a5c67aa2014ee606137a21371de5e6cf1d0ec0cd73a036ca9da"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-discipline-specific-critical-thinking-task-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-discussion-protocol-selector/SKILL.md",
+      "sha256": "8abe54efc36b368a830f712cdc12e5ca29f3fa23bda3af135abf3cb103461618"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-discussion-protocol-selector/manifest.yaml",
+      "sha256": "0726f193d599c15c6cbacf8349409feac707db0025670ecbbaab53556004dd32"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-discussion-protocol-selector/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-dual-coding-designer/SKILL.md",
+      "sha256": "fc9f46c1e0279513c65099a346d47f041066a92182150507437a47034bf7ac4b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-dual-coding-designer/manifest.yaml",
+      "sha256": "305dbf5396b6769f7d2516f9a9ac294fd83d693bef565bec99f2a32c8704fc0a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-dual-coding-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ecological-inquiry-anchor-designer/SKILL.md",
+      "sha256": "4ff53b3902fbd6dd77b047bb248bd386ce860af93b4010dce7b569861e56de14"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ecological-inquiry-anchor-designer/manifest.yaml",
+      "sha256": "9c84cbb0aae3bccde0ccf956a93e067a7a032278a54c2f51c799ab15963eb3f4"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ecological-inquiry-anchor-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-elaborative-interrogation-generator/SKILL.md",
+      "sha256": "1f97479b901a9d9bc66f36b9bfbbbd02efe61d4332fa67876917e74ab77b1882"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-elaborative-interrogation-generator/manifest.yaml",
+      "sha256": "b937cee68a932e78fcb521bc889d454005d21fd8de9b1ab857ce748a5fd77f82"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-elaborative-interrogation-generator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-emergent-project-design-scaffold/SKILL.md",
+      "sha256": "7718382f36fac320097937bd56db2862b595c74fff5b739e873a99393d0ed08d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-emergent-project-design-scaffold/manifest.yaml",
+      "sha256": "0ff961c1763138c7c0a240856fcf2be318a0b3e784857f74bf57d22e89e9c386"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-emergent-project-design-scaffold/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-erroneous-example-designer/SKILL.md",
+      "sha256": "9d8f68447da5fbe65d7b80cb6101ee5b807680bd4003c23e1dd71af83911692b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-erroneous-example-designer/manifest.yaml",
+      "sha256": "9188db331c6c3ccd4dd96add0d1d8c7db20131c6c67f3c9b8f27c4a62133919d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-erroneous-example-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-error-analysis-protocol/SKILL.md",
+      "sha256": "b02df39d0e31b88adaa7ac020c801cfe9968dda60b13112eb5b681b4ecb84fae"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-error-analysis-protocol/manifest.yaml",
+      "sha256": "01a67e9b660144727851024b57c5f66bbb6f739783731b96874e3b4b5aba4c2c"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-error-analysis-protocol/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-experiential-learning-cycle-designer/SKILL.md",
+      "sha256": "df9aec83ddad3125711a31f049cac36cb54a2c7554f9fe161389b7204f00d39a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-experiential-learning-cycle-designer/manifest.yaml",
+      "sha256": "7fe2317b13456ce0e5d1acddd526b987fa690d556852c5b45f2ec08abfd1d5ba"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-experiential-learning-cycle-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-explain-first-interrogator/SKILL.md",
+      "sha256": "3eb215ee436982809114977dc8d411bb47d468d6353e798fcd296592e65c5a44"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-explain-first-interrogator/manifest.yaml",
+      "sha256": "f850d416fc6a7772b336518a1f450b07e33481e3933560889af485113af98643"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-explain-first-interrogator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-explicit-instruction-sequence-builder/SKILL.md",
+      "sha256": "9a6721abada51bfcb6308fd1c61b1be505068b16c67c19e81e18673caee06a10"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-explicit-instruction-sequence-builder/manifest.yaml",
+      "sha256": "fab26431ad05e3a66907e413bff135fcb7efbd89cab9635271077e0d60551d96"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-explicit-instruction-sequence-builder/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-fading-manager/SKILL.md",
+      "sha256": "a45d37a570b18ba00c0d33def76946ff7000854bbeac210e53d8918875ffa773"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-fading-manager/manifest.yaml",
+      "sha256": "bf11bdca9ec7459e815e8400550d55bad2597e2dd337d434dd34ccf7bc7ea673"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-fading-manager/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-feedback-quality-analyser/SKILL.md",
+      "sha256": "83b57c0cb7107ad8b6cdee3843e3e8646df0336f1c2ebc376b76910f9e903208"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-feedback-quality-analyser/manifest.yaml",
+      "sha256": "b7dbe560a8faf0cd4593b6b9df9b045f581277fea5c699f6043f24a4d26938fe"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-feedback-quality-analyser/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-flow-state-condition-designer/SKILL.md",
+      "sha256": "69694372c0f58c43136706da8c6f032ca78dfc6a3e268230330865fdcaeacc65"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-flow-state-condition-designer/manifest.yaml",
+      "sha256": "5f322a0257e7770bb7b7adab34f863af7e1a0c0d2cbd23572ca1c1d1a3fa0105"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-flow-state-condition-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-formative-assessment-loop-designer/SKILL.md",
+      "sha256": "c7a6508034ef61cf9f7e7f19fbef6e1d359495dc40b12e517704df57a1f54dbd"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-formative-assessment-loop-designer/manifest.yaml",
+      "sha256": "759fe37b6fe595e205f2792cb7ad9585d4ed98e4e04823e659ee1809bbdf51ce"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-formative-assessment-loop-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-formative-assessment-technique-selector/SKILL.md",
+      "sha256": "a0fa8b388f7fc6fe387cb8a27e2f8c9e6af582fad9a25e99e8cd8452a7642f4d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-formative-assessment-technique-selector/manifest.yaml",
+      "sha256": "07c441d1d90877325b23a15b797a0014cb4d3fb2d8990f651191991b449c4c0c"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-formative-assessment-technique-selector/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-gap-analysis-from-student-work/SKILL.md",
+      "sha256": "4263580f0b915489569651eb8b09d3f34eeb061f3ccc6dde30d36c4e0b0388d3"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-gap-analysis-from-student-work/manifest.yaml",
+      "sha256": "85cd0f5e40eba44eeb1e3ab683ea0900e089dbf8ef30e9a38afb6d8e5710c65b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-gap-analysis-from-student-work/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-goal-setting-protocol-designer/SKILL.md",
+      "sha256": "37d17e89307d827f8f4a84f76d690334c1a37cedd77bf4fd2188f82fb257629a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-goal-setting-protocol-designer/manifest.yaml",
+      "sha256": "975bf09238bd2a69bb90fdb9c0a7b67a64e56dcfa3a6908f032c599e54f5a240"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-goal-setting-protocol-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-hexagon-complexity-mapper/SKILL.md",
+      "sha256": "fa38cb98b7039072fcaa21a994a061ea392b308f9abb443345d4010d5e84c010"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-hexagon-complexity-mapper/manifest.yaml",
+      "sha256": "9ed0f303f70e821f7210aff4332e98311849d4728fa473fd6ed06018eb989d55"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-hexagon-complexity-mapper/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-hinge-question-designer/SKILL.md",
+      "sha256": "db5a8cfef5be84550b693d6ae95a163535137e41ceb3cd8bc353c14d150972bc"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-hinge-question-designer/manifest.yaml",
+      "sha256": "137639eaa491526b1666c36f755b481d9e4d1c1330afafe7d710af0a70176810"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-hinge-question-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-implementation-intention-designer/SKILL.md",
+      "sha256": "18f4fde72e2b9107991a5b58b5356fc2ee01f4f5975677b1f6f22429c09eaff2"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-implementation-intention-designer/manifest.yaml",
+      "sha256": "c630c3ec49e04187e36391096c5e0efa4f946b4f188357a34c8408eeef67cf9a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-implementation-intention-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-individual-spacing-algorithm-explainer/SKILL.md",
+      "sha256": "6e79b3a755a95f7e5e1b9dace73a235197c4c4edf77ef11961dc65a85a1ac46d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-individual-spacing-algorithm-explainer/manifest.yaml",
+      "sha256": "51768517ea5b6c96c1cfd91b5617f08bddaa94d1539b07b3cfaf437fe9592d18"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-individual-spacing-algorithm-explainer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-instructional-coaching-conversation-guide/SKILL.md",
+      "sha256": "2d784e72b08493486c03614e5ac8f4f9846bd643f6aefa14a0b2f54ceab9b79a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-instructional-coaching-conversation-guide/manifest.yaml",
+      "sha256": "37877021020abd9fec993984e9a08f89fd9709c5e0f13c16fa68951b0a447fe7"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-instructional-coaching-conversation-guide/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-intelligent-tutoring-dialogue-designer/SKILL.md",
+      "sha256": "e3c79d8d73e7c27fb28c429b968dd163eb15b7d05d87a34921699120b355811a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-intelligent-tutoring-dialogue-designer/manifest.yaml",
+      "sha256": "0c6c4641515be9a4a17e23bf117c4b9fbc21f466b237fb90c281894ea00de144"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-intelligent-tutoring-dialogue-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-interdisciplinary-real-world-connection-mapper/SKILL.md",
+      "sha256": "665146d10a37454754e03f159889fadd59d3d90385eb38398d7eb1eee90c49c9"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-interdisciplinary-real-world-connection-mapper/manifest.yaml",
+      "sha256": "fc5fdbeb504507054b216fdcfed22a1b5067a620019f8400c4e9b8c321d6ade8"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-interdisciplinary-real-world-connection-mapper/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-interleaving-unit-planner/SKILL.md",
+      "sha256": "90c6a189fb5af3e014d45cf2238f58f05190c8daefbbcc1a60509048ac4f425c"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-interleaving-unit-planner/manifest.yaml",
+      "sha256": "99dbc46877f194fae01ba65f57f70948834e07d6cdb816e84c6c87baa09f47a4"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-interleaving-unit-planner/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-kud-chart-author/SKILL.md",
+      "sha256": "2eed7c0bb6a98fa15454a71c29c33693f0fdcf811b407392b4aca71abbf68e70"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-kud-chart-author/manifest.yaml",
+      "sha256": "8fb3ff10365d3ea2d7248ff1bf0d33af1bb2bd0bbd6a93ff01cb84ff1ab95a95"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-kud-chart-author/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-kud-knowledge-type-mapper/SKILL.md",
+      "sha256": "1ce07d685217f2f1d851a642b7db2fddf198df4976ea2cb24cc67bf6207d5c77"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-kud-knowledge-type-mapper/manifest.yaml",
+      "sha256": "ea70a282f9bef2b2de47f419250e1f0f28cb35b89b470a8863b891177a2f5f61"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-kud-knowledge-type-mapper/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ladder-of-inference-reflection/SKILL.md",
+      "sha256": "a42ac3798b662d8e4947050048249962fb54d29fe3f0bc74f6e478df6aff34b6"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ladder-of-inference-reflection/manifest.yaml",
+      "sha256": "139377e843432f1ebd0148d2c592f930fff9ae441391be4e2169834fb626777b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ladder-of-inference-reflection/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-language-demand-analyser/SKILL.md",
+      "sha256": "2471ed2f110a7017348f5319aae24cdbd0615daa34301dd426c4d7a7dec9e4de"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-language-demand-analyser/manifest.yaml",
+      "sha256": "d28ac73c25e7f2165aa44c8275f0daac5e8fe307c4457f8a5735d32295cdee65"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-language-demand-analyser/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-learning-analytics-interpretation-guide/SKILL.md",
+      "sha256": "d7df219df078abf418e53832c1e96ce41ed5e8f82facc7549ff802a827818d0d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-learning-analytics-interpretation-guide/manifest.yaml",
+      "sha256": "9f1d29c188ef7a46889e3e9e8e18b7b7929372a1b9889da3313265f7eae5b348"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-learning-analytics-interpretation-guide/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-learning-progression-builder/SKILL.md",
+      "sha256": "76cf7e735609f18cf4d249c9ac9bf754d19dbbb9c0d5a5ab735db330adf16c28"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-learning-progression-builder/manifest.yaml",
+      "sha256": "185c473cf93a9117ed851222592a72e6e0f7acc0346067b5049abd515fc718a7"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-learning-progression-builder/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-lesson-observation-protocol-designer/SKILL.md",
+      "sha256": "0f09831f5e0021ca42745969d74d6de488aec0e9237f0d0f0540fc5d1206b768"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-lesson-observation-protocol-designer/manifest.yaml",
+      "sha256": "24cf244e07359a8a5c1942d4caabf7873464281e278f1a120452fdb01c71ed2e"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-lesson-observation-protocol-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-lesson-opening-designer/SKILL.md",
+      "sha256": "154bbff9ef63a22e9b67c97d422d3cb6d87533f02d9adaa55d96b45fa9941d1a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-lesson-opening-designer/manifest.yaml",
+      "sha256": "f987b1583b8a624316ed85151253a7fd6b7e565529ed9deb997f859055e1f20a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-lesson-opening-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-lesson-study-cycle-designer/SKILL.md",
+      "sha256": "bc7069bb1e6f294713341119b70112a55f77dabebf2ffc6a494b2071f7fbd236"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-lesson-study-cycle-designer/manifest.yaml",
+      "sha256": "b3400b5f5a8105d122f77137c33c2a89a7924b7d7507c207551d8a4633b0dfa6"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-lesson-study-cycle-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-leverage-and-response-design/SKILL.md",
+      "sha256": "7b7547255e262d126efc055ce7e2f94596537a8c325c3f3396ad643809bb4b7a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-leverage-and-response-design/manifest.yaml",
+      "sha256": "9994c558f2c930183939aa10c3b7abf690086a6667ba8f93e6e0dbdd8a21171e"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-leverage-and-response-design/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-media-literacy-deconstruction-protocol/SKILL.md",
+      "sha256": "012831a33bf025b6b773ac50475402d2f4b2d62f45d9ea42f066294bc3854ef2"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-media-literacy-deconstruction-protocol/manifest.yaml",
+      "sha256": "eab6d083069b29fae4a51e054861c6597675c9e345cbc53e2a96062342693da0"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-media-literacy-deconstruction-protocol/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-mental-model-mapper/SKILL.md",
+      "sha256": "e875955f21034b3d06c64a3ade72a3313391aaa32098fde1e89186ba46d36a3c"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-mental-model-mapper/manifest.yaml",
+      "sha256": "d878a7c3cf59bf60df572dc3b375f0ef07d6b17549c120502516d1d371178ff6"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-mental-model-mapper/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-metacognitive-monitoring-ai-contexts/SKILL.md",
+      "sha256": "3a8c1da580fb9c6cbac2ca2e13867be5dbff76df7f0d72cb7adf403c6dd6bf7b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-metacognitive-monitoring-ai-contexts/manifest.yaml",
+      "sha256": "93a7a64dd33e04738e1dd9c2ddffaa195a7f76f4330df9ac91671b17525d0cbf"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-metacognitive-monitoring-ai-contexts/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-metacognitive-prompt-library/SKILL.md",
+      "sha256": "87c9cf7f32b9b1bff52460f4e2bbbed3487b12306b9932e461c2395fb3102acc"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-metacognitive-prompt-library/manifest.yaml",
+      "sha256": "d3436c125933142b5c2d3cd49312e024cabebe0c449819c63e756dad80ca5d94"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-metacognitive-prompt-library/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-mixed-age-learning-task-designer/SKILL.md",
+      "sha256": "f60dfb4d76e502cc14d42f08b00247dccf623349cfe0dba98f15171436d185a7"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-mixed-age-learning-task-designer/manifest.yaml",
+      "sha256": "5e9998af7bd07c3bf1915bdb891a31a8ddf7ec3f18fb04f66d88038b757c0686"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-mixed-age-learning-task-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-motivation-diagnostic-task-redesign/SKILL.md",
+      "sha256": "f56be3fe0c2cddb079d63631913f7e26b499413a8d40f42788456bf55f91a4f2"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-motivation-diagnostic-task-redesign/manifest.yaml",
+      "sha256": "d0aad6a238f319833912ea4f49b99036d3c3937eb11fa81fa644599371142272"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-motivation-diagnostic-task-redesign/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-outdoor-learning-sequence-designer/SKILL.md",
+      "sha256": "221f86c89f3d30ec7d4014cf627a5485af5b07db6161ca67b2e2e5e577987cfd"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-outdoor-learning-sequence-designer/manifest.yaml",
+      "sha256": "645ce8694a421fa9ccbfd3a0122b23fbbc762d1b18a82c8b71a280939ac7a149"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-outdoor-learning-sequence-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-panel-review/SKILL.md",
+      "sha256": "0dbf29cc5bde306ba00e6420e3af7b5796c452f35ac1a2cbbbe4048d88d5e42a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-panel-review/manifest.yaml",
+      "sha256": "fd125d642a3294a0f6ec408d63eb7b6ef981c207bc459c76245b0f413d50dc5a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-panel-review/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-pedagogical-content-knowledge-developer/SKILL.md",
+      "sha256": "53fdee1d5b5163f317a23b5ac81539375a63e37fddac25ee461692eef50ead45"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-pedagogical-content-knowledge-developer/manifest.yaml",
+      "sha256": "b67c75fb8d0d21d1223125ecca8036a80faf110f40b14e4e7dcfcdf16cc55797"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-pedagogical-content-knowledge-developer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-perma-based-lesson-designer/SKILL.md",
+      "sha256": "0d942d955a72bc28efc8d7f6662332a7b49b8f7d22329a389deb6b9018a4e4b4"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-perma-based-lesson-designer/manifest.yaml",
+      "sha256": "575e0b416a3106fd923626eb208589ba05396f0da27f65c375f85ad01c0c6313"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-perma-based-lesson-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-perspective-taking-designer/SKILL.md",
+      "sha256": "7ec6ea2d356937176c5156bac57f6a2f4b0b0ad1cc74039134a9a3c32e1d0856"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-perspective-taking-designer/manifest.yaml",
+      "sha256": "045f5738df2e02304254e36a5fe997b24898f1696a87f1f4fe1795b0f5a76705"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-perspective-taking-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-phenomenon-based-unit-anchor/SKILL.md",
+      "sha256": "d80bab0a3c407339eb9ee3752b46f137ffe315d88825f5c2ec60c77a3880c218"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-phenomenon-based-unit-anchor/manifest.yaml",
+      "sha256": "a542ff4af27a909ee3bb2a07d3d8670acfb6e1fe3f3f7fe89cc4a5dd689a2847"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-phenomenon-based-unit-anchor/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-place-based-inquiry-anchor/SKILL.md",
+      "sha256": "df9a33f3f630105f140300ceb97a92b702f80518a7127b39c293b0354ca131a7"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-place-based-inquiry-anchor/manifest.yaml",
+      "sha256": "5c7c38bd936e088f14f694263212b9459160cb815972ae33a6e91eb8d3cee05e"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-place-based-inquiry-anchor/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-practice-problem-sequence-designer/SKILL.md",
+      "sha256": "63d25b7e32713f5e151d754af02ab69bb2c73270a440ebe4831090eaa2c6711b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-practice-problem-sequence-designer/manifest.yaml",
+      "sha256": "4ff0a9dd43782eb01f200400bc669a61cd519fc29a47be8273d8a9431703478b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-practice-problem-sequence-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-prepared-environment-designer/SKILL.md",
+      "sha256": "eec5cb1ad52bf4d5675900738bfb23a3ffefae0cbf5dc625afe2f42529f04fc0"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-prepared-environment-designer/manifest.yaml",
+      "sha256": "238da3abb8e2a4ea86a3a7227cb4de9e36aafd82ac50a815cad6ef8ffd858e65"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-prepared-environment-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-productive-failure-desirable-difficulty-designer/SKILL.md",
+      "sha256": "5490d5cec446643064fc1a362eabe40c4f5893f2235dcf7107b7bc4a2ff4d2aa"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-productive-failure-desirable-difficulty-designer/manifest.yaml",
+      "sha256": "9930721949681fab27a3cefa7a73f4d9af3b12344dc454b2552d7bffac73cef7"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-productive-failure-desirable-difficulty-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-productive-failure-protocol/SKILL.md",
+      "sha256": "eb6b04b6f4f8c2504a3ebaee3e8a4f43663dfcade155dc7633d5a2a5443a251e"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-productive-failure-protocol/manifest.yaml",
+      "sha256": "d36617e68108e0c68d6e096fe3f19cf4c52bf6c9b67f3bbab3c7a9b4373a4d72"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-productive-failure-protocol/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-professional-development-session-designer/SKILL.md",
+      "sha256": "8efdf92bcf3b0f503c489f3149a8fb9a28bf907a1b16ac06ca3a14ee2607985c"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-professional-development-session-designer/manifest.yaml",
+      "sha256": "1cc1d99631373037bbb68d5cf0c7adf2381759cc7e45fc113a6b76e19b5a30d3"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-professional-development-session-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-progressive-hint-ladder/SKILL.md",
+      "sha256": "226c05837685e32523e3229bf1bdf64b706e2095a2f2b90ce42fdd93017580ae"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-progressive-hint-ladder/manifest.yaml",
+      "sha256": "9f88244620e3172c9ba9094a237afa530a83a2addd7754697b51db8dea286fba"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-progressive-hint-ladder/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-project-brief-designer/SKILL.md",
+      "sha256": "29c22e4b25e4aa0b4be0ec50bfa4b86768caee2008aa0700e01fc0c522be2de8"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-project-brief-designer/manifest.yaml",
+      "sha256": "799375b125c27207e712f48ab25d5dafa8b603225e361759c3b19e6a0347aaa5"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-project-brief-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-prompt-literacy-sequence-designer/SKILL.md",
+      "sha256": "48be3e5f1e8fc9e54593aa4ba5aaa8466692833a7462b4fae59b8c4906b8bf01"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-prompt-literacy-sequence-designer/manifest.yaml",
+      "sha256": "d8056e2fc24a34ff9bb8e3b408762d5bbef9a6fa2895a61eab705b1a5a3095af"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-prompt-literacy-sequence-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-reading-comprehension-strategy-selector/SKILL.md",
+      "sha256": "e382fcca9910a024b2354433118ecab0c305d9e62539b3d50657e35e4fe71bcf"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-reading-comprehension-strategy-selector/manifest.yaml",
+      "sha256": "a1d03e6b37845db16ee874a3a6849282a86e4b802d7ab3207c0472fb92a018bf"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-reading-comprehension-strategy-selector/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-reflective-practice-prompt-generator/SKILL.md",
+      "sha256": "b8adea66e54953ffe607d30988c45fb47b99a499208b2370d09f87e800228956"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-reflective-practice-prompt-generator/manifest.yaml",
+      "sha256": "611d8817997010e702f7dc3132d187b3cf99ae979f74c1cafa792cc0d45e2030"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-reflective-practice-prompt-generator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-reggio-documentation-protocol/SKILL.md",
+      "sha256": "98a6cd6514f7b6d2e7143f8852e022803a6bad63d046b051960991cfe692a5f5"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-reggio-documentation-protocol/manifest.yaml",
+      "sha256": "3c93b9ec563d3d9bbeab067122fff79424661a6b92709e1b07ae98fea3817ad6"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-reggio-documentation-protocol/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-restorative-practice-protocol-designer/SKILL.md",
+      "sha256": "cc8d7252673f4456967556ad2d9cd6ff175c8a0dc71f17ef5c5c55435dbd0e63"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-restorative-practice-protocol-designer/manifest.yaml",
+      "sha256": "29d5141e95eb0d29a9c71537668370c2df0f1256473a6b0878c918bcd97f4c65"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-restorative-practice-protocol-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-retrieval-practice-generator/SKILL.md",
+      "sha256": "5970b8e9961d1188cbd4d428e8d75b0d5ad0b47c8328e56f82f315f07c7fc35c"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-retrieval-practice-generator/manifest.yaml",
+      "sha256": "7701357dc1ef518620569e68da64574f6ccdaa156664ba8d7c66aea0e58db776"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-retrieval-practice-generator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-retrieve-first-gate/SKILL.md",
+      "sha256": "a37d513f4923d9fee9b8323c6b128c24b5315b17c576dbfc609a35d41601ce73"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-retrieve-first-gate/manifest.yaml",
+      "sha256": "7d99072546d2731724e659bbfb32d099244378314353ed8d3714dda0b3dcd709"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-retrieve-first-gate/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ruler-emotional-literacy-sequence/SKILL.md",
+      "sha256": "4fe7ea1f280a100abd51a56d0d232d13bdd17d5ecbf61e3d53067d81d8b9fa21"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ruler-emotional-literacy-sequence/manifest.yaml",
+      "sha256": "faef2ea496436d7677ea290411dc7ad1e6c1665737da791544950572b097c025"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ruler-emotional-literacy-sequence/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-scaffolded-task-modifier/SKILL.md",
+      "sha256": "68c7c74d4935402f745f3c13396579243b6e68c53b6ab7d315134a51ff97dd14"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-scaffolded-task-modifier/manifest.yaml",
+      "sha256": "e980641604f277743dc7b3288cf2d6614c583df1c332393ca448ec7a13f23755"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-scaffolded-task-modifier/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-scope-and-sequence-designer/SKILL.md",
+      "sha256": "53b609eeca5cd618defef7436b25b3061f278c8909327a0bb9164cefdc9d3b8e"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-scope-and-sequence-designer/manifest.yaml",
+      "sha256": "9ce56cda69796baafb9d5d1c83a6fa8687b0c0a791f057bd06a5ade3684da68c"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-scope-and-sequence-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-self-efficacy-builder-sequence/SKILL.md",
+      "sha256": "f9e08ead188bf7953429675ef769cf177a7e94cb3fbebac87de71fcbf2b9cbff"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-self-efficacy-builder-sequence/manifest.yaml",
+      "sha256": "895373158242c7874e3b1de33b2cccad2bccdbc3b38c14cf634aa46faf8407cd"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-self-efficacy-builder-sequence/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-self-explanation-prompt-designer/SKILL.md",
+      "sha256": "01a759a9bf7fbe26addf995823bb388274bbd95514521f82ce148c0932e35bfa"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-self-explanation-prompt-designer/manifest.yaml",
+      "sha256": "356ab6ba3439af033d33cc8ac73ef7a7c0d7588a9e5823b2238d7a31132c960f"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-self-explanation-prompt-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-self-regulation-scaffold-generator/SKILL.md",
+      "sha256": "9af90019c43fff5f78c9b3ef7de4b45e85a8d060f2061148599b252404bd2628"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-self-regulation-scaffold-generator/manifest.yaml",
+      "sha256": "45ee6b5696d2ced70e36d826f0cbd068e19acc39fea6ebf76ded399208f4d8e8"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-self-regulation-scaffold-generator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-service-learning-project-designer/SKILL.md",
+      "sha256": "c537793b8c88079d115dc7dd2cd3adb6c4af2bad044c2634f26db6afa1c045b2"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-service-learning-project-designer/manifest.yaml",
+      "sha256": "bef349f9c5e1fbc935b59356431a286f756769fefdf3305e944dae120ae04206"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-service-learning-project-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-sheltered-instruction-lesson-modifier/SKILL.md",
+      "sha256": "45fc3552e4e244f36af2a49dfad55a2e668f79dfc31eaa59931553ce72a63c61"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-sheltered-instruction-lesson-modifier/manifest.yaml",
+      "sha256": "af87dd92e9ec82da553cce642681d72fee9dd85105e253e15f41d27014ed9690"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-sheltered-instruction-lesson-modifier/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-socratic-questioning-sequence-generator/SKILL.md",
+      "sha256": "75d600ec7b1e766df2afb43541930119455e698e30be5038cbaa31ea58f381f2"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-socratic-questioning-sequence-generator/manifest.yaml",
+      "sha256": "55701479eed02e93138e616f4c794fa0f0aafe5bdacc5a490a0f3493107e7c9b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-socratic-questioning-sequence-generator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-source-credibility-evaluation-protocol/SKILL.md",
+      "sha256": "c18af59996f4f1a643f7c8eb530520611dea360adb495a4a5dae290437df753b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-source-credibility-evaluation-protocol/manifest.yaml",
+      "sha256": "8b7562d12a246786178857409d611bed1e8014443ed71306e05ccfa474ae11a0"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-source-credibility-evaluation-protocol/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-spaced-practice-scheduler/SKILL.md",
+      "sha256": "b5a92f1568d97f416ff2f9ffd27d15261e76e4c4177fa5f1363106ddd4a270e2"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-spaced-practice-scheduler/manifest.yaml",
+      "sha256": "081758ef9399d25d18e5376e95f49cbf70bce19b2faadcd9f85a39e743e4e9c3"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-spaced-practice-scheduler/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-srl-session-wrapper/SKILL.md",
+      "sha256": "21ab2eb6ba61fcf52e9f041ed81af7367fc852c7d0c3ec30e9fcfb567fdda421"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-srl-session-wrapper/manifest.yaml",
+      "sha256": "c6c669bcdc9ffe3f71115cb6b00a7429dcb072cc1138cf323e6e1c833281a14d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-srl-session-wrapper/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-stuck-and-error-diagnosis-coach/SKILL.md",
+      "sha256": "d464607fbe5bca6eca23b26b14ecf2fb5cf21785a652fa60071e000a0db91874"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-stuck-and-error-diagnosis-coach/manifest.yaml",
+      "sha256": "1f2285d5a3623a668a47e45b5bbd472e3de196ba66e28f8ca420611ddc1e5adb"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-stuck-and-error-diagnosis-coach/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-study-strategy-selector/SKILL.md",
+      "sha256": "f4731915c1e4770025878a903f6b5f653b78d22f74df55ac03c7458ae62aa3df"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-study-strategy-selector/manifest.yaml",
+      "sha256": "abc70f68f1eb989cd90939d96c4e20e0147ae4512613c751d2ba7ceb3c6165b9"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-study-strategy-selector/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-systems-awareness-iceberg/SKILL.md",
+      "sha256": "05a9772386f6b0256fa14a4e1a14a69de8ca4b5d7e8d1a08e0a5f18842b5391e"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-systems-awareness-iceberg/manifest.yaml",
+      "sha256": "4bdcd7659e98d890a3d1154e37acf7807db74c5e4f12dbf6cbe93c1835c3cee8"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-systems-awareness-iceberg/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-systems-wellbeing-impact-mapper/SKILL.md",
+      "sha256": "0fb30848a6f9e7ccafd4fe8292648f7478b01d4e8b0fba48e6553cd8c0c41558"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-systems-wellbeing-impact-mapper/manifest.yaml",
+      "sha256": "9ee8281d98bb185f573f548833ab492e7bf9763cd44682a5eb531c4f3813353a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-systems-wellbeing-impact-mapper/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-teach-back-evaluator/SKILL.md",
+      "sha256": "54059149dc3fe36437595def5a7788d68eb24e7e04bc4681ac14cf9be5bb3d66"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-teach-back-evaluator/manifest.yaml",
+      "sha256": "b5bbe0c8b3eed33e4f39f4580cf58d52c2a8c7988d989d364c1a9c6cfaa31c60"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-teach-back-evaluator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-teacher-inquiry-cycle-designer/SKILL.md",
+      "sha256": "d1a1253dd83a6bd17fdb4f998de6fb8d65598dec62062e48cf9f1764c2737424"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-teacher-inquiry-cycle-designer/manifest.yaml",
+      "sha256": "696f0c1ee4db845717da14b87a3b11a2dc6b1631edc275a131b5cf45cad20cd3"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-teacher-inquiry-cycle-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-technological-pedagogical-content-knowledge-developer/SKILL.md",
+      "sha256": "94bb741e87b5eb9319bae68054f3a26808a9706f648181e6027dcad494fbba48"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-technological-pedagogical-content-knowledge-developer/manifest.yaml",
+      "sha256": "2aeec0d780781775b5c2e44176388baa7e9090d6e4aea803ad57e04a7d12ad2d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-technological-pedagogical-content-knowledge-developer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-text-complexity-analyser/SKILL.md",
+      "sha256": "9f3ab8c800ed5c21b539247a77f7ac8178186a617106c1153428bc48367ab84b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-text-complexity-analyser/manifest.yaml",
+      "sha256": "19adedf74707f2e854b984944f4bf9f9b3c75a4fd9769cee17dfe47237cdc96d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-text-complexity-analyser/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-think-aloud-script-generator/SKILL.md",
+      "sha256": "35a77a7710e68e5d7461c467dccfed58ebe5df2e0f2054879e332d8eebd2f96e"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-think-aloud-script-generator/manifest.yaml",
+      "sha256": "ea47d8af9b9c177b46634b16c64532165be329e0f83e131151020932aefdbeae"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-think-aloud-script-generator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-three-part-lesson-designer/SKILL.md",
+      "sha256": "c11e335f043cab41d9514b8ec7e9b38255cf2d77b707a8a34ff3be96388a6033"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-three-part-lesson-designer/manifest.yaml",
+      "sha256": "b29607f71200a6fca13b44e9ac3b4745a9af168c299ce3f87b6ebe17837a0fb3"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-three-part-lesson-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-transfer-bridge/SKILL.md",
+      "sha256": "76616baab832efd2254f2ced8920c3de4a4b968d8b554165644095885652de80"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-transfer-bridge/manifest.yaml",
+      "sha256": "1aba6805b67d5469e17b84d2ed87a03a6222b7da803696724d5302ca639ce59b"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-transfer-bridge/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-trauma-informed-practice-designer/SKILL.md",
+      "sha256": "0aa49d9369a8e38fb7a59ebd6622709a6354c0137054f79ce6443d7dcbb2d8d5"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-trauma-informed-practice-designer/manifest.yaml",
+      "sha256": "264e622859aac4c310ec2c00a58f20f50625b31f486843e4906ab46eec4296b6"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-trauma-informed-practice-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ubuntu-collective-knowledge-task-designer/SKILL.md",
+      "sha256": "f5fb6090a9e635bb167e8ab642d85ca5da645f76d1d1bbcf819b6edd20d667b5"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ubuntu-collective-knowledge-task-designer/manifest.yaml",
+      "sha256": "ff11d0a6f94d9789e97389c986b9ec826826c7968b95379ad6eab5d18fae4a21"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-ubuntu-collective-knowledge-task-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-udl-barrier-anticipator/SKILL.md",
+      "sha256": "72dc83d80feab01049b6f81fb324715b211abb641eb092aa0f16a40e0a84236a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-udl-barrier-anticipator/manifest.yaml",
+      "sha256": "33bcbe9150b53dd730a06272ec5ac59b90ddec7b6e4e7fbfe4e5bb9c8beae9a4"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-udl-barrier-anticipator/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-udl-lesson-auditor/SKILL.md",
+      "sha256": "0dd626cceb3ad2027770d8bc90400ae434dc4131227bec069df5b107602eafd3"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-udl-lesson-auditor/manifest.yaml",
+      "sha256": "9984786562c3d6278f2c05b4270dfe5736ceeec1159db05cad5f6011fba3e0be"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-udl-lesson-auditor/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-udl-options-designer/SKILL.md",
+      "sha256": "55c489f120b7ff245e5f8ed061b8c395bfca5647ef139da1a85211ab44ab7cfc"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-udl-options-designer/manifest.yaml",
+      "sha256": "ff14a8c5da74116f7df6c17a9d605cd0f221b21b1adea7449b0a3f5e5ca09618"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-udl-options-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-unassisted-evidence-checkpoint/SKILL.md",
+      "sha256": "498553c7afd14ba01bf67df3737755e8cc939be5c2215a37d1bb0da79c5af18d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-unassisted-evidence-checkpoint/manifest.yaml",
+      "sha256": "baf7435751d93d480ad845c9dbe33dd2f32a741025448fcb93e271d6a2579199"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-unassisted-evidence-checkpoint/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-uninterrupted-work-cycle-designer/SKILL.md",
+      "sha256": "538cf15c27c8ac1437575ee45f7e40b3c73ecc8b12c5c060b791dc49f04fbc5f"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-uninterrupted-work-cycle-designer/manifest.yaml",
+      "sha256": "14c5f4802ccb6d4a5eedbaf75d7ffa1fef985c0979fed384b4499b8d538e2753"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-uninterrupted-work-cycle-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-variation-theory-task-designer/SKILL.md",
+      "sha256": "3421a64eeebb472e45f23e020c64e9b33c10d16111dcef9dfc478b181b40157a"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-variation-theory-task-designer/manifest.yaml",
+      "sha256": "367970f5e353ddea306dd53ac41c4bf005286994f4753bd36d9614d18b4e3ef4"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-variation-theory-task-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-vocabulary-tiering-tool/SKILL.md",
+      "sha256": "7708cf4bb7cd259c2a7aba87afe3d97ef8d2540b0146d972b6528a8113ef8f07"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-vocabulary-tiering-tool/manifest.yaml",
+      "sha256": "1e6bebce3ef04613315f614c3d4d1ea1f1d505eef78f7793c0709c41d3c9d918"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-vocabulary-tiering-tool/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-weekly-agency-review/SKILL.md",
+      "sha256": "c000b8a070768abe26c3c8148e4095c2d436298a5d26c347b7c2b67a7fff20b3"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-weekly-agency-review/manifest.yaml",
+      "sha256": "75b5dec5d3bb9fb98433163f56ce2ad31c032fc4546e2ed1da9a69794c81aca8"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-weekly-agency-review/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-wellbeing-learning-connection-mapper/SKILL.md",
+      "sha256": "40a88a25a82c5317c91b18f3f608eb098a49943e1c5cc2c8f6f5a18f8f21935d"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-wellbeing-learning-connection-mapper/manifest.yaml",
+      "sha256": "6390a27c1ae74b380aed4b8ec5fc7568779705b1b1cdcfd514be839e69b18075"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-wellbeing-learning-connection-mapper/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-worked-example-fading-designer/SKILL.md",
+      "sha256": "3617c1c0eac4a19b93c9293f38efadc406fd121b94a7223649505b44150c4ef3"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-worked-example-fading-designer/manifest.yaml",
+      "sha256": "af5c51df6de00b3a03e81852634e80f9362bc2e694f8c8ff6ebbc3d45132ec43"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-worked-example-fading-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-worked-example-to-problem-solving-transition-designer/SKILL.md",
+      "sha256": "a2825c506c05e43146926ef088698807019bbca43818a2e6febe97431f0f968c"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-worked-example-to-problem-solving-transition-designer/manifest.yaml",
+      "sha256": "94859c8ff4747702fe11145a71ecbe2c76c398200537ae25fb940836ff4adf32"
+    },
+    {
+      "path": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-worked-example-to-problem-solving-transition-designer/validators/validate_education_brief.py",
+      "sha256": "aefe41bd3896d4d401d1a6dc56d13f4a9790252b9b4eb19756f82f45d0dd0978"
+    }
+  ],
+  "profiles": [
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-academic-language-sentence-frame-generator.yaml",
+      "sha256": "4a2273c56fcd9d466eea52ad8fd2f4431c708592b4b45ee9b522e4ee6b1ce25c"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-adaptive-hint-sequence-designer.yaml",
+      "sha256": "a93feca2e1e53f6fd68d3518c170599d133b0c6d9a3ec520a4ef339715fbc65a"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-agency-circles-for-systems-action.yaml",
+      "sha256": "46c11ff29dc6ba22b73b12c925a44ed231813b70506d34cd2c60826538defdd1"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-agency-scaffold-generator.yaml",
+      "sha256": "572864532c129dc8b9518bb312b7e7268e7f2a70601afd816723e5446b679678"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-ai-claim-checker.yaml",
+      "sha256": "8d2034401f7d802a2dfba6ce8d78c8535839af02d6da6048af2877a1b8e46719"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-ai-expertise-interrogation-designer.yaml",
+      "sha256": "fcaf7afaa7d6568c7eb9227b82609be0555046a3337a40e1b3a984fb4c35cdf2"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-ai-facilitated-collaborative-learning-designer.yaml",
+      "sha256": "39a5e403582fd838dffd55bc510c5eb39249a089f9753be087967a6de5bf8b10"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-ai-feedback-design-principles.yaml",
+      "sha256": "108c4c9e90a04d47236c384e1ac36824b62e8e7a75645a5ff98f9a807255dc39"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-ai-hallucination-fact-check-protocol.yaml",
+      "sha256": "dcf23ad9b6e71bacc2f485a74bd9c4ae2d3ae40ddf2f675b0ca6add154555720"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-ai-learning-boundary-mapper.yaml",
+      "sha256": "4bc479f451c91f1cc0fd5c0827274fb1d8e8f421b1c2b323f4a826745c534ca0"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-ai-output-critical-audit-designer.yaml",
+      "sha256": "c479b4f7b73f12c0f56cd1e3dc1d2b499689db9b30bf84781623879d4e3ba162"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-ai-socratic-dialogue-designer.yaml",
+      "sha256": "87596135c134939e3c5dd11af6ad39a303c9db47dbe078a759a0464fd832bb78"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-argument-structure-scaffold-generator.yaml",
+      "sha256": "b6b9738931c9a8b417c9dd20ab401133089d4b2b0ba95c00f9a4beaeb086a57f"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-aspirational-systems-iceberg.yaml",
+      "sha256": "b5671e16d0b41ebe31c441136376214ecfa2cd7218c098644f1d33c98411e9eb"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-assessment-validity-checker.yaml",
+      "sha256": "5692c4ed720b70cdaf861e67bd6a5a9bc3630b2c9a3c08311e7b0c16a4b51fc5"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-awe-wonder-experience-designer.yaml",
+      "sha256": "8dadfea5bf54f2aef1d63fc46854bcc02fc4535920e7b18207f42ad7197b0617"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-backwards-design-unit-planner.yaml",
+      "sha256": "7eb9597dab22c57fe58c8711022682046786c0ad65f5640a28d204dfc93f5b4c"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-belonging-classroom-culture-designer.yaml",
+      "sha256": "736766a70925348faa4d3b98be1d281707201a5c50bd72be4d7b8d3b6bb0a84c"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-biophilic-learning-environment-designer.yaml",
+      "sha256": "f00d3302ef4335695e2d1ceb8feba8818f7705fb779734b652d7f6dab5d24d20"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-checking-for-understanding-protocol-designer.yaml",
+      "sha256": "6c80a8b7746af756f05068dc37cd26e474dff85caf19a860080592c9c1fedc13"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-cognitive-load-analyser.yaml",
+      "sha256": "ba31e0f19556d018b99343329d98b933827ad0dba7d3567ae9d2876347b4b72e"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-cognitive-tutoring-architecture-designer.yaml",
+      "sha256": "9db6201c76e7abd7a039125baba18c3ba979565b6b6a1f4bddb4e9b196bc9076"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-competency-unpacker.yaml",
+      "sha256": "f534ec9ae3a994e646f5f1d5ce0cf759437444ce0cae0c089d6da7ed31c15c75"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-confidence-calibration-check.yaml",
+      "sha256": "1db11bdf9c71a743f5f499f85b10fcf2fdfce7a573f9b8987d2042b1958d304c"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-coverage-audit.yaml",
+      "sha256": "f126f37b674883aa23e1ff2be2fd340af385fc15bc8c771e3c921c42b543e0fa"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-cpa-sequence-designer.yaml",
+      "sha256": "d990092c7280d8ba73928dda1d0b5b08b1d22503e70e4872c6947116a263b5cd"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-criterion-referenced-rubric-generator.yaml",
+      "sha256": "08489e87a7c4149e2de7c35bfc0750137089855e9f1ea7feff662ec1aa32d78f"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-critical-thinking-task-designer.yaml",
+      "sha256": "1a92327c7027300f3677eb5048bf4119caf1e1dabd7a100ea568062d45a73c68"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-cross-cultural-task-validity-checker.yaml",
+      "sha256": "bdee451c2cf3ca325d67d0d878ee56f297bb347ac320e77ad44a2ab217b60448"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-culturally-responsive-teaching-designer.yaml",
+      "sha256": "86dc5333c0ad74ec52d2ff6d11676f66ffbf041c0ed864349426d13b4dca901c"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-curriculum-crosswalk.yaml",
+      "sha256": "63c5bd2974ad374756a23b3bf6febe25c1898f9f08e95d33ab06b5cbe0436bd4"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-curriculum-knowledge-architecture-designer.yaml",
+      "sha256": "d71b62ed4d2fcf49d3b3901858804480c7b89a13d1b6c2f09a52d9338e2a207b"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-dialogic-teaching-move-generator.yaml",
+      "sha256": "b2a80b3177693afc6ef645185209ca4012794b0f512b890979256d679c504cd6"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-differentiation-adapter.yaml",
+      "sha256": "dde09101bc59144aebbe26d71f1ce6ae796e2700998c5e97d3caa67f53a40101"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-digital-worked-example-sequence.yaml",
+      "sha256": "f7747f1a2b826d6e5a7c25fccf1adf83c939e93477d95f0f1ce4442033a9192a"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-disciplinary-ai-literacy-sequence-designer.yaml",
+      "sha256": "ff0cc4edf71914f17a189c381c274d6894a799f518cf810b7bd9d2af2617293e"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-disciplinary-writing-scaffold.yaml",
+      "sha256": "6182b358dd680c573352af99b5591254b93a26ef3742ec80d903d630966d29da"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-discipline-specific-critical-thinking-task-designer.yaml",
+      "sha256": "bd65e5f83161218c55643dd4534c8082cf255765790f1ea737f5f4a7f16196ab"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-discussion-protocol-selector.yaml",
+      "sha256": "53c3a326c8427cde565941d39ae84efbb4978ffbb838850a3030586256911567"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-dual-coding-designer.yaml",
+      "sha256": "a6763096c3fdfff68d0395d43e618be3dfed88dd964c90112989bb6c0bf9488d"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-ecological-inquiry-anchor-designer.yaml",
+      "sha256": "7c70522d80553a15371617b86a6eb91ccded0fa27075a3a09f727272f27744aa"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-elaborative-interrogation-generator.yaml",
+      "sha256": "0844c3576eddb012900a25aed4f3f1a826d70c3010606ce2ee47265ad7679844"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-emergent-project-design-scaffold.yaml",
+      "sha256": "27a90ce89781e18736db07afe6f94dad03a08c6fb26cb4ca5c1a501c9bdee1cb"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-erroneous-example-designer.yaml",
+      "sha256": "f11abb16206f25ce67d857cd1de4c57665d4bd0348cecdd3dee9a67912913fe4"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-error-analysis-protocol.yaml",
+      "sha256": "122eccd2e9ef31ecfd4aec80a87e37b4feeccb84447e2d42e04a268e272e8fa6"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-experiential-learning-cycle-designer.yaml",
+      "sha256": "5d6cbd065c10c92763670bc823041e426e67ebe29e8c71abd0a76dbe8b5189fe"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-explain-first-interrogator.yaml",
+      "sha256": "b4390377fe486821de32b1068da632470d2b8bb06c823fdff4ee16564519a5fd"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-explicit-instruction-sequence-builder.yaml",
+      "sha256": "a6ac4c3d8a605eb7b4bf9e5f1979a978e7b9343dbb43761482e35492580c7ca6"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-fading-manager.yaml",
+      "sha256": "484ced876af3577bf79d58721c20ccf7265ef31da6f9b90effc449bb1a86cab1"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-feedback-quality-analyser.yaml",
+      "sha256": "a3c098ab1153c1cecb6dddbeefd18ce22d8185fbd2b8c682acc19d65af56f4ce"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-flow-state-condition-designer.yaml",
+      "sha256": "1fc0d8cc632a3adc622bcc28a6afaf00a73dcc6ed4ca9e9e5d8472b933fc187d"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-formative-assessment-loop-designer.yaml",
+      "sha256": "6497bd1a5223332670480fba1fa8344a9353921babe6cce6c7aa1446a16164b4"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-formative-assessment-technique-selector.yaml",
+      "sha256": "2c2c20341f262ca2ca3e4c30f31b3af32fafd9ad62b4906b2f56210a741dc40c"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-gap-analysis-from-student-work.yaml",
+      "sha256": "6022a656cf6b58ae2d8d2070991442d6f58bdf8772faded8fb92f70b1a919f9f"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-goal-setting-protocol-designer.yaml",
+      "sha256": "4e39d86e52ded5cd04fbe48c1ffff05baf6901f1f02095790d0f31dada3ed64c"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-hexagon-complexity-mapper.yaml",
+      "sha256": "7599b6628ee363d5e8afca9ab7613b75ff16dfa15c8a629e279b94a6f0eab20f"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-hinge-question-designer.yaml",
+      "sha256": "50024aa5fa60cc706c4041bbef2f9f303b3a9adc24d41509c7686e892622d384"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-implementation-intention-designer.yaml",
+      "sha256": "0a6643ab4fd1c681a24a1334ebca1bea2d2c4d6b3d1665051eca8cfa691a7e3d"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-individual-spacing-algorithm-explainer.yaml",
+      "sha256": "b7ac51f4ecac3d71dff202a5fb910ed0dad770cdee3cd313db31bf6f34661ea7"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-instructional-coaching-conversation-guide.yaml",
+      "sha256": "4ded094c8318b076604bb03703830b04eef85331221344e48f743a82417bad52"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-intelligent-tutoring-dialogue-designer.yaml",
+      "sha256": "f16d274e1ea9e0ea03489f50a67db5d78ba72f0b7c8d9c92bf29b19769908ecc"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-interdisciplinary-real-world-connection-mapper.yaml",
+      "sha256": "1208e1f681600a3f502621f65bccf14098030b66651707c209790b0390f65ff9"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-interleaving-unit-planner.yaml",
+      "sha256": "6d326022e11f7fe9f67e3def040a3af0ade1226ee2f3e3d32c81c8bfd020fa54"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-kud-chart-author.yaml",
+      "sha256": "da9f9005135326fae612b1608b2c23861d3e83c878010d7c0f3a2d0d3f19f6d3"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-kud-knowledge-type-mapper.yaml",
+      "sha256": "48657433a81ea066984ffeeb425f9d765853eb4e096b1401fb5e6a1df4b46c8b"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-ladder-of-inference-reflection.yaml",
+      "sha256": "2f06ee17e539b038033ee9ddc2ee13d344c06392af04d5f5e5a12c30d8c50999"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-language-demand-analyser.yaml",
+      "sha256": "163ae447eab233846b0dd8a43803e8f8318d91b4c88a261c5683f6b621563d41"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-learning-analytics-interpretation-guide.yaml",
+      "sha256": "a7185020553e598771bf9887a2b4a21beec02f1cdebf227d8cf148600b0bdd4e"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-learning-progression-builder.yaml",
+      "sha256": "833e54b04b88c231131ba0c1742bed60e5b74c52f48de26d9d758cdb657cbce7"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-lesson-observation-protocol-designer.yaml",
+      "sha256": "28f296463c577cb49524a9d21e94957c87e27cb589fd482589ae084a277f08a8"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-lesson-opening-designer.yaml",
+      "sha256": "d1b99fa2c811eac4835c3c342538b7bd7df8bcd1bddf7a9042a86e4c53856907"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-lesson-study-cycle-designer.yaml",
+      "sha256": "589f668cd8887bf4919ff3fd37b3d9142e0ac6b5e29d78e4598081a9931307e0"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-leverage-and-response-design.yaml",
+      "sha256": "ce717d042db1cd8183292bbecd4e06b0c7b8813cc3b07b5be0aa19d1b71b0ee6"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-media-literacy-deconstruction-protocol.yaml",
+      "sha256": "b4b32491f222c8602f676a937d4d5051461ce000681eaf9ac70b28540d2eea1a"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-mental-model-mapper.yaml",
+      "sha256": "ff6199882086767fabc38dd4adb859e9cad36bc1283b28d1c5e356b72aba445a"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-metacognitive-monitoring-ai-contexts.yaml",
+      "sha256": "b991be80c18d28d9500166df00abd89ee0638449cda89cae5a1455df9182e6fa"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-metacognitive-prompt-library.yaml",
+      "sha256": "31b1e484c6c8b610e7c08b5400aa7533bf608ebe5860dce1d7786acc2053f49c"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-mixed-age-learning-task-designer.yaml",
+      "sha256": "77ae8a9ed74b56aa2476de87984c9077ded4bc5d62e90795b328c0454a091126"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-motivation-diagnostic-task-redesign.yaml",
+      "sha256": "797fb8a9ada03491a6c13f68cc1923835c4d76d509abed987cb3d8f25cffaaf3"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-outdoor-learning-sequence-designer.yaml",
+      "sha256": "7e59cd99680ab35fb75c75c90514ac3057adda3179a42d51f77e08fa9e4e6811"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-panel-review.yaml",
+      "sha256": "f78c38d4385fd404c5fa9b7d4638d44ebac09d284fe31c2e772d1ef109bcdcc8"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-pedagogical-content-knowledge-developer.yaml",
+      "sha256": "087e96799fc4f84cf54fd31206a114ce8dbb70f34b4653ca3be7567a003064b9"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-perma-based-lesson-designer.yaml",
+      "sha256": "97abdd0467c1e77f7aa2062e69ab2720e18a4a0d83c4b9bd89834461f7070c4a"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-perspective-taking-designer.yaml",
+      "sha256": "e3a4d7d9e56ce50fe3900343b9784833b1f43a720dbee0c33c5d1c158b8c7543"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-phenomenon-based-unit-anchor.yaml",
+      "sha256": "e4408df15be10c63ae01d655419257676b30339050c4c91d6a9f7c81579e30c1"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-place-based-inquiry-anchor.yaml",
+      "sha256": "3bd9367e98f6b5b60f81ff9d918e8739fa6c7a6ee93ffa413e12bae1fa58fbb8"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-practice-problem-sequence-designer.yaml",
+      "sha256": "12800623ce58778f6d53251f1a1f0e29416b08d67564391f84bf5b5091d4325f"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-prepared-environment-designer.yaml",
+      "sha256": "8cd8418710f37f84e2130304b39c91f0e7b55456d8ee66c5e3bf6ada1d4f1d6d"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-productive-failure-desirable-difficulty-designer.yaml",
+      "sha256": "6b972f2571e18f779e49c8c30b05b187532a1202740af8331302296829e7ddfb"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-productive-failure-protocol.yaml",
+      "sha256": "bd6f63f09cc7f7bc4e6e727147dff4a004754792a03def2c2676af83e711ea46"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-professional-development-session-designer.yaml",
+      "sha256": "4b4a016956ece856038c2a3a001f1e8a52d21614117980d1ed3ebe14fefa9dbf"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-progressive-hint-ladder.yaml",
+      "sha256": "494ead86e6722cf4ee09e7806d869144fc6287eb90062e140041404d7477879e"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-project-brief-designer.yaml",
+      "sha256": "ca00f57366e6c3cd592d56ab4733be85d5fc8a9ef758698b7d9fb81c3e30d1d7"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-prompt-literacy-sequence-designer.yaml",
+      "sha256": "b17f78b34c0b39e4f71ebe27f4cc93316b593f5f98b08e9353966003fd4b36b1"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-reading-comprehension-strategy-selector.yaml",
+      "sha256": "add0b7eabba52684917888d294dd01184b2a01367349f5a3efb7b17890e04255"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-reflective-practice-prompt-generator.yaml",
+      "sha256": "e5638e2b6ca03c45440f0a980e87339c4dafd745c3f59b05b1f17db168779d1d"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-reggio-documentation-protocol.yaml",
+      "sha256": "adae98da37d64ac99182d030eb13e6367da5936e6ea0b8b41a0ef2a67cfb8ee5"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-restorative-practice-protocol-designer.yaml",
+      "sha256": "1b435296752666a00297314abaa7f149be4bd1aa84d50490d403e3eadc798900"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-retrieval-practice-generator.yaml",
+      "sha256": "d32193a43b81d5be344021ec65afdb1539550937b171faaafb0bdb3af885ab3d"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-retrieve-first-gate.yaml",
+      "sha256": "93662ba8cc0021796460f4ab65c851b4fee4e7492fad791f1d132faf4de633d8"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-ruler-emotional-literacy-sequence.yaml",
+      "sha256": "ad58a406e3ef3608750d23de9c7d339419eb3075d41ec718d54ffd532583900e"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-scaffolded-task-modifier.yaml",
+      "sha256": "52d012d2ea0390bc2a25add5612bf1a43edc26540e36bc6f17698b5f34111eaa"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-scope-and-sequence-designer.yaml",
+      "sha256": "c6f6a70e2973e949d9919ae384702558da2a92a6b2369b98f3e3bef89b3d321f"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-self-efficacy-builder-sequence.yaml",
+      "sha256": "cdd38da2ca535c0ca9806add3d91c62eac06ae8bc0fcd410c231d62e6be29f79"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-self-explanation-prompt-designer.yaml",
+      "sha256": "aff726b767e8c53be4e8a62fd877dcb02aa1f8f2b0bc87dab42c246195f6d39b"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-self-regulation-scaffold-generator.yaml",
+      "sha256": "89d2539b3d6df98b385a929e984058d7ebb704e3da7ea37d4ebb95ded7a9083a"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-service-learning-project-designer.yaml",
+      "sha256": "06884b3be35d7fbd4f5e642d0adf94a36783d7b489330ba4f2862bd5b0b342cc"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-sheltered-instruction-lesson-modifier.yaml",
+      "sha256": "857f8e274b62f235af5e9e3bc5902264353b2ee1fa9d7f5fc5d3aa1d69b33740"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-socratic-questioning-sequence-generator.yaml",
+      "sha256": "24dfb2d443359536f075342772b94bd47ae547ac127d833b3376488ef1c068f8"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-source-credibility-evaluation-protocol.yaml",
+      "sha256": "960e228f838d5dd89259fd8fceaa99ced89c2c82031d2ac8383737c1031e00dd"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-spaced-practice-scheduler.yaml",
+      "sha256": "d28c6df8e987862d1c26d890df83acde39605e1f92a11834e9d7e2ba6869b285"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-srl-session-wrapper.yaml",
+      "sha256": "c357c9bd37ba1295b0e49c95a7bc4ddac612502b7cbb9bf4bd08b0875b25b988"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-stuck-and-error-diagnosis-coach.yaml",
+      "sha256": "fc921575577f4dbb0ecaffab8bdf4683c8f86a849d0b988777a666074aaac121"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-study-strategy-selector.yaml",
+      "sha256": "1a8e3a008327b3934790b2d9343f061778d5c94e24443645b44e4ff17be4bf9d"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-systems-awareness-iceberg.yaml",
+      "sha256": "1587e2577299af2a3a19b87076246498ca85719efa1d517081babfffe0b65646"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-systems-wellbeing-impact-mapper.yaml",
+      "sha256": "f1bcc99d1df372480e01a6492cb4d756ea673379a9e0efdd09820374d849ed8b"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-teach-back-evaluator.yaml",
+      "sha256": "9641f6ae84fd8170e30cb5e5692ee9fa5b4e52828220b4c9842cc4d1155fcb2f"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-teacher-inquiry-cycle-designer.yaml",
+      "sha256": "5940b17ebdf0afda075f6cea2a91213fab34a42c5bef51911642c5898a66f1ab"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-technological-pedagogical-content-knowledge-developer.yaml",
+      "sha256": "7a250728d9901a9aa386b37df61c4816193c46939dcd017c883b92600aa5c9cb"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-text-complexity-analyser.yaml",
+      "sha256": "1c52e413c987542c7b7d53b88c12d281d44a96b3d3280786e738debbe442ddcc"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-think-aloud-script-generator.yaml",
+      "sha256": "774f44af737838248bf06448d00558732d9c05fe391fdbfdb3a9ea113a49b7a9"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-three-part-lesson-designer.yaml",
+      "sha256": "75470e918f792709450697847c16a12beb3fc5dacaea896bbb3a5c14b569730f"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-transfer-bridge.yaml",
+      "sha256": "f944a4eb428bbf4065bc5f8dbf1b7653cb0d0789693727818d94974b83cf39e2"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-trauma-informed-practice-designer.yaml",
+      "sha256": "ad03816117c51b18d78182e5401c45eb8be7ab75fcbc528aa8d116feff90997d"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-ubuntu-collective-knowledge-task-designer.yaml",
+      "sha256": "a92457310a8c8d9acf13b4bfcbe06f479e54806bb2db48ed9021f75e1c03b9fe"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-udl-barrier-anticipator.yaml",
+      "sha256": "ddc1d97728d9a06a49b97c1cb2e212822e15712fe2abfc0f46dfcdb5cd610126"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-udl-lesson-auditor.yaml",
+      "sha256": "2fe5938cd6b30868bf5f7a17629d8c1df770a69901ab848bb7b7d75ee7f5683b"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-udl-options-designer.yaml",
+      "sha256": "fa2c777fccd35b7bd0ee0d4a4e8f5ad58a10560048a81e52528ad01c95095371"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-unassisted-evidence-checkpoint.yaml",
+      "sha256": "838e95c8016c518c1ae3c05bd2e6d3bb5c8e70b40864c91d92f99ccd5c521ef4"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-uninterrupted-work-cycle-designer.yaml",
+      "sha256": "9a1c95a7699f707d5dc725f6e935a666561f017eaa52ab80efba224a369f5e9e"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-variation-theory-task-designer.yaml",
+      "sha256": "9f6d1867eef6306ce28f2bd3274bb91500cc39376e0f987b81e378c18c353ce1"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-vocabulary-tiering-tool.yaml",
+      "sha256": "10ed485c181161b6d394c8366ae07bb5cd8d2c284f96d5c88ddadd76e6ee00d1"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-weekly-agency-review.yaml",
+      "sha256": "8d83df2125dbf7c9c1f117381e2bc062b647b73df0207eee5583f983a9bedca1"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-wellbeing-learning-connection-mapper.yaml",
+      "sha256": "570a10b531cce81ae8e94525f9ee3a604d5db00f5ca3d06db974eb922b72e782"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-worked-example-fading-designer.yaml",
+      "sha256": "88a219c8823d6b588e97b3b5a49e3035015781318434d795f67a0d199b00e578"
+    },
+    {
+      "path": "skills/plugins/extensions/profiles/plugin-education-agent-skills-worked-example-to-problem-solving-transition-designer.yaml",
+      "sha256": "bee0ae3c2757329b05ed19ad0791fdb85f5bd99149011e9fbf26073200e241fd"
+    }
+  ]
+}

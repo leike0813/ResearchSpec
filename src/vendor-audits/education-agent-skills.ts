@@ -12,12 +12,12 @@ export const EDUCATION_AGENT_SKILLS = {
   vendorId: "education-agent-skills",
   name: "Education Agent Skills",
   repositoryUrl: "https://github.com/GarethManning/education-agent-skills",
-  snapshotId: "snapshot-32fce5c",
-  revision: "32fce5c0d097ec675cf81c750a65a379e4d87e3c",
-  tree: "3223d79299ae10391c22549debef7ffc9ef7a0e2",
+  snapshotId: "snapshot-6bbbce4",
+  revision: "6bbbce418f82e11044009c9f3b7373a354de5bd0",
+  tree: "b90188569a783ba7d20dcffe2db7a55816db7c0b",
   sourcePath: "vendor/education-agent-skills",
-  auditPath: "audits/education-agent-skills/snapshot-32fce5c/skill-audit.json",
-  reportPath: "audits/education-agent-skills/snapshot-32fce5c/report.md",
+  auditPath: "audits/education-agent-skills/snapshot-6bbbce4/skill-audit.json",
+  reportPath: "audits/education-agent-skills/snapshot-6bbbce4/report.md",
 } as const;
 
 const EDUCATION_DOMAIN_REVIEWS = {
@@ -217,11 +217,11 @@ export const EducationAgentSkillsAuditSchema = z.strictObject({
     contributors: z.array(z.string().min(1)).min(1),
   }),
   snapshot: z.strictObject({
-    snapshot_id: z.literal("snapshot-32fce5c"),
+    snapshot_id: z.literal(EDUCATION_AGENT_SKILLS.snapshotId),
     release_tag: z.null(),
-    revision: z.literal("32fce5c0d097ec675cf81c750a65a379e4d87e3c"),
-    tree_hash: z.literal("3223d79299ae10391c22549debef7ffc9ef7a0e2"),
-    checkout_path: z.literal("vendor/education-agent-skills"),
+    revision: z.literal(EDUCATION_AGENT_SKILLS.revision),
+    tree_hash: z.literal(EDUCATION_AGENT_SKILLS.tree),
+    checkout_path: z.literal(EDUCATION_AGENT_SKILLS.sourcePath),
     clean: z.literal(true),
     tracked_entry_set_sha256: z.string().regex(/^[a-f0-9]{64}$/),
   }),
@@ -302,6 +302,7 @@ export function buildEducationAgentSkillsAudit(repoRoot: string): EducationAgent
   const filesByPath = new Map(files.map((entry) => [entry.path, entry]));
   const skillPaths = files.map((entry) => entry.path).filter((filePath) => /^skills\/[^/]+\/[^/]+\/SKILL\.md$/.test(filePath));
   const canonicalEvidence = readFileSync(path.join(sourceRoot, "docs/EVIDENCE.md"), "utf8").toLowerCase();
+  assertReviewedRootLicense(sourceRoot, filesByPath.has("LICENSE"));
   const parsedSkills = skillPaths.map((sourcePath) => parseSkill(sourceRoot, sourcePath, filesByPath.get(sourcePath), canonicalEvidence));
   const targetIndex = buildTargetIndex(parsedSkills.map((entry) => entry.skill));
   const evidence: EducationEvidence[] = [];
@@ -394,14 +395,14 @@ export function renderEducationAgentSkillsReport(audit: EducationAgentSkillsAudi
   const riskRows = Object.entries(value.summary.risk_counts).map(([risk, count]) => `| ${riskLabels[risk as keyof typeof riskLabels]} | ${String(count)} |`).join("\n");
   const prospectiveDomains = [...new Set(value.skills.flatMap((skill) => skill.prospective_domains.map((domain) => `${domain.group_code} ${domain.domain_id}`)))].sort(compareText);
   const findingRows = [
-    `- **阻止 根许可证缺失：** 固定的仓库没有根许可证文本；README/插件的 CC BY-SA 4.0 声明和 MCP 子树许可证无法建立 Skill 级的再分发权限。`,
+    `- **阻止 许可证范围未确立：** 根目录新增署名 Gareth Manning 的 CC BY-SA 4.0 通知，为作者自有的 Skill 内容提供许可依据；该通知不覆盖嵌入的原创框架主张或单独署名的第三方内容，署名、相同方式共享和修改披露义务也尚未被审阅吸纳决定接受。`,
     `- **阻止 证据未独立验证：** 所有 ${String(value.summary.evidence_declarations)} 个证据声明都保留了明确的身份和支持阻止项，因为固定的检出未提供独立的书目标识符或已审查的来源摘录。`,
     `- **审查 上游审计漂移：** 上游兼容性审计报告了 131 个 Skills，而固定的 Git 清单包含 ${String(value.summary.skills)} 个；其抽样结论是过时的观察，不是审计输入。`,
     `- **审查 关系目标漂移：** ${String(value.summary.unresolved_relationships)} 个 chains_well_with 声明缺失、模糊或重复，并保持可见但不成为依赖。`,
     `- **审查 上游证据枚举异常：** ${String(value.findings.find((finding) => finding.code === "UPSTREAM-EVIDENCE-ENUM-ANOMALIES")?.evidence.length ?? 0)} 个 Skills 使用上游证据标签，超出文档化的枚举范围；任何上游标签都不被视为 ResearchSpec 结论。`,
     `- **审查 学生对话模式差异：** ${String(value.findings.find((finding) => finding.code === "STUDENT-DIALOGUE-SCHEMA-DIFFERENCE")?.evidence.length ?? 0)} 个面向学习者的 Skills 省略了 output_schema，而是定义了需要单独敏感内容审查的对话/证据捕获行为。`,
   ].join("\n");
-  return `# Education Agent Skills 审计 — ${value.snapshot.snapshot_id}\n\n## 来源绑定\n\n- 官方远程仓库：\`${value.vendor.repository_url}\`\n- 未标记提交：\`${value.snapshot.revision}\`\n- Git 树：\`${value.snapshot.tree_hash}\`\n- 已跟踪条目集 SHA-256：\`${value.snapshot.tracked_entry_set_sha256}\`\n- 已跟踪文件：${String(value.summary.tracked_files)}\n- 来源字节数：${String(value.repository_inventory.total_bytes)}\n- Skills：${String(value.summary.skills)} 个，分布在 ${String(value.summary.upstream_domains)} 个上游域\n\n本审计仅限维护者使用，不构成生产准入。未执行上游代码、安装依赖、配置凭据、启动 MCP 服务器或联系上游服务。过时的上游 \`AUDIT.md\` 和 README 统计数据仅为观察结果；以下所有总计均派生自 \`skill-audit.json\`。\n\n## 仓库清单\n\n| 分类 | 文件数 |\n|---|---:|\n${classificationRows}\n\n## 证据审查\n\n固定的 Skills 声明了 ${String(value.summary.evidence_declarations)} 个命名证据出现（${String(value.summary.distinct_evidence_strings)} 个不同的引用字符串）。每个出现都有明确的存证、作者/年份/标题、支持范围和误归因结论。固定的仓库未提供独立的书目标识符或来源包来验证这些声明，因此未解决的声明仍是阻止项，上游评级不会被提升为 ResearchSpec 结论。常规审计检查处于离线状态。\n\n| ResearchSpec 证据强度 | 声明数 |\n|---|---:|\n${evidenceRows}\n\n## 许可证与来源\n\n仓库在 README 和插件元数据中声称 CC BY-SA 4.0，但固定的根目录不包含许可证文本。唯一已跟踪的 \`LICENSE\` 仅作用于 \`mcp-server/\`。因此，根声明无法为任何 Skill 或嵌入的命名框架清除再分发权限。Git 历史和声明的贡献者按 Skill 保留，但每个 Skill 级的许可证结论仍保持明确。\n\n| 许可证状态 | Skills 数 |\n|---|---:|\n${licenseRows}\n\n## 关系与重叠\n\n所有 ${String(value.summary.relationships)} 个 \`chains_well_with\` 声明均被保留。${String(value.summary.unresolved_relationships)} 个缺失、模糊或重复。已解析的关系仅为前瞻性建议链接；不创建硬依赖。每个 Skill 都包含对 ARSU 和五个现有供应商的明确重叠结论。\n\n## 敏感内容审查\n\n| 风险 | 存在风险的 Skills 数 |\n|---|---:|\n${riskRows}\n\n面向学生的实时辅导、学习者分析、福祉或动机诊断以及原创框架内容仍被阻止，以待后续人工审查。面向教师的内容仍可能间接影响未成年人，因此审计记录该暴露，而非假设仅限成人使用。\n\n## 前瞻性 ANZSRC Group 证据\n\n审计记录了 ${String(value.summary.prospective_domains)} 个手动推理的前瞻性 Groups：${prospectiveDomains.map((item) => `\`${item}\``).join("、")}。这些仅为审计证据，不创建域成员资格。上游域、标签或 Fields 不是自动分类权威。\n\n## 非生产引入建议\n\n| 处置 | Skills 数 |\n|---|---:|\n${recommendationRows}\n\n缺失的根许可证文本阻止了整个固定快照的生产许可，因此已完成的审计可以合理地不包含任何候选。内容适配分析仍按 Skill 保留：面向教师的学习科学、课程与评估、读写与批判性思维、课程对齐和专业学习是未来的候选重点，而学生辅导、分析、福祉/诊断、原创框架和不完整证据在应用许可证阻止项之前默认推迟。\n\n## 未来引入边界\n\n单独的 \`ingest-education-agent-skills\` 变更必须消费此不可变审计。它可以生成 \`education-agent-skills-<upstream-name>\` ID，合并两个前置元数据部分，并默认保留已批准的内容。每个已准出的输出都需要已审查的 CC BY-SA 4.0 许可证文本、Skill 本地的 \`NOTICE.md\` 和来源绑定。MCP 运行时、安装程序、编排器、测试、展示和维护表面被排除。任何内容适配和每个 ANZSRC Group 成员资格都需要单独的来源哈希绑定批准。\n\n## 发现\n\n${findingRows}\n\n阻止性发现：${String(value.summary.blocking_findings)} 个。即使所有前瞻性内容都被阻止，审计完成仍然有效；它不注册供应商、生成包、修改生产域或添加公共 CLI 命令。\n`;
+  return `# Education Agent Skills 审计 — ${value.snapshot.snapshot_id}\n\n## 来源绑定\n\n- 官方远程仓库：\`${value.vendor.repository_url}\`\n- 未标记提交：\`${value.snapshot.revision}\`\n- Git 树：\`${value.snapshot.tree_hash}\`\n- 已跟踪条目集 SHA-256：\`${value.snapshot.tracked_entry_set_sha256}\`\n- 已跟踪文件：${String(value.summary.tracked_files)}\n- 来源字节数：${String(value.repository_inventory.total_bytes)}\n- Skills：${String(value.summary.skills)} 个，分布在 ${String(value.summary.upstream_domains)} 个上游域\n\n本审计仅限维护者使用，不构成生产准入。未执行上游代码、安装依赖、配置凭据、启动 MCP 服务器或联系上游服务。过时的上游 \`AUDIT.md\` 和 README 统计数据仅为观察结果；以下所有总计均派生自 \`skill-audit.json\`。\n\n## 仓库清单\n\n| 分类 | 文件数 |\n|---|---:|\n${classificationRows}\n\n## 证据审查\n\n固定的 Skills 声明了 ${String(value.summary.evidence_declarations)} 个命名证据出现（${String(value.summary.distinct_evidence_strings)} 个不同的引用字符串）。每个出现都有明确的存证、作者/年份/标题、支持范围和误归因结论。固定的仓库未提供独立的书目标识符或来源包来验证这些声明，因此未解决的声明仍是阻止项，上游评级不会被提升为 ResearchSpec 结论。常规审计检查处于离线状态。\n\n| ResearchSpec 证据强度 | 声明数 |\n|---|---:|\n${evidenceRows}\n\n## 许可证与来源\n\n根目录新增了署名 Gareth Manning 的 CC BY-SA 4.0 通知，作者自有的 Skill 内容由此获得许可补强；通知未覆盖嵌入的原创框架主张与单独署名的第三方贡献，其再分发授权仍未确立。树内 \`mcp-server/LICENSE\` 只作用于该子树。Git 历史和声明的贡献者按 Skill 保留，每个 Skill 级的许可证结论区分根通知覆盖的作者自有内容与范围未确立的其余内容。分发还须满足署名、相同方式共享和修改披露义务，并由单独的审阅吸纳决定接受。\n\n| 许可证状态 | Skills 数 |\n|---|---:|\n${licenseRows}\n\n## 关系与重叠\n\n所有 ${String(value.summary.relationships)} 个 \`chains_well_with\` 声明均被保留。${String(value.summary.unresolved_relationships)} 个缺失、模糊或重复。已解析的关系仅为前瞻性建议链接；不创建硬依赖。每个 Skill 都包含对 ARSU 和五个现有供应商的明确重叠结论。\n\n## 敏感内容审查\n\n| 风险 | 存在风险的 Skills 数 |\n|---|---:|\n${riskRows}\n\n面向学生的实时辅导、学习者分析、福祉或动机诊断以及原创框架内容仍被阻止，以待后续人工审查。面向教师的内容仍可能间接影响未成年人，因此审计记录该暴露，而非假设仅限成人使用。\n\n## 前瞻性 ANZSRC Group 证据\n\n审计记录了 ${String(value.summary.prospective_domains)} 个手动推理的前瞻性 Groups：${prospectiveDomains.map((item) => `\`${item}\``).join("、")}。这些仅为审计证据，不创建域成员资格。上游域、标签或 Fields 不是自动分类权威。\n\n## 非生产引入建议\n\n| 处置 | Skills 数 |\n|---|---:|\n${recommendationRows}\n\n根许可证通知只覆盖作者自有的 Skill 内容，原创框架主张与第三方署名内容的再分发授权仍未确立，署名、相同方式共享和修改披露义务也尚未被审阅吸纳决定接受，因此已完成的审计不包含任何候选。内容适配分析仍按 Skill 保留：面向教师的学习科学、课程与评估、读写与批判性思维、课程对齐和专业学习是未来的候选重点，而学生辅导、分析、福祉/诊断、原创框架和不完整证据在应用许可证阻止项之前默认推迟。\n\n## 未来引入边界\n\n单独的 \`ingest-education-agent-skills\` 变更必须消费此不可变审计。它可以生成 \`education-agent-skills-<upstream-name>\` ID，合并两个前置元数据部分，并默认保留已批准的内容。每个已准出的输出都需要已审查的 CC BY-SA 4.0 许可证文本、Skill 本地的 \`NOTICE.md\` 和来源绑定。MCP 运行时、安装程序、编排器、测试、展示和维护表面被排除。任何内容适配和每个 ANZSRC Group 成员资格都需要单独的来源哈希绑定批准。\n\n## 发现\n\n${findingRows}\n\n阻止性发现：${String(value.summary.blocking_findings)} 个。即使所有前瞻性内容都被阻止，审计完成仍然有效；它不注册供应商、生成包、修改生产域或添加公共 CLI 命令。\n`;
 }
 
 export function checkEducationAgentSkillsAuditArtifacts(actualJson: string | null, actualReport: string | null, expectedJson: string, expectedReport: string): string[] {
@@ -441,7 +442,7 @@ function parseSkill(sourceRoot: string, sourcePath: string, inventory: Inventory
   const evidenceSources = requireStringArray(metadata, "evidence_sources");
   const declaredRelationships = requireStringArray(metadata, "chains_well_with");
   const audience = audienceReview(domain, metadata, content, sourcePath);
-  const license = licenseReview(sourcePath, inventory.sha256);
+  const license = licenseReview(domain, metadata, content, sourcePath, inventory.sha256);
   const contentFit = contentFitReview(domain, metadata, content);
   const skill: EducationAgentSkill = {
     skill_id: skillId,
@@ -473,8 +474,12 @@ function parseSkill(sourceRoot: string, sourcePath: string, inventory: Inventory
     recommendation: {
       disposition: "exclude",
       content_fit_without_license_blocker: contentFit,
-      rationale: `Content fit would be ${contentFit}, but the pinned root has no CC BY-SA 4.0 license text and therefore cannot support production redistribution.`,
-      blockers: ["No tracked root license text proves the README/plugin CC BY-SA 4.0 claim or its scope over this Skill and embedded attributed frameworks."],
+      rationale: license.status === "conditional"
+        ? `Content fit would be ${contentFit}, and the root CC BY-SA 4.0 notice covers this Gareth-authored Skill, but distribution still depends on those obligations and this content-fit review being accepted by a separate reviewed ingest decision.`
+        : `Content fit would be ${contentFit}, but the root CC BY-SA 4.0 notice is authored by Gareth Manning and does not establish rights over this Skill's embedded original-framework claims or separately attributed third-party content.`,
+      blockers: license.status === "conditional"
+        ? ["The root CC BY-SA 4.0 attribution, share-alike, and derivative-disclosure obligations are not yet accepted by a reviewed ingest decision."]
+        : ["The root CC BY-SA 4.0 notice does not establish redistribution rights for embedded original-framework claims or separately attributed third-party content."],
     },
   };
   void canonicalEvidence;
@@ -525,7 +530,7 @@ export function validateEducationAgentSkillsSnapshotIdentity(identity: { revisio
   if (identity.tree !== EDUCATION_AGENT_SKILLS.tree) throw new Error(`Education Agent Skills tree drift: expected ${EDUCATION_AGENT_SKILLS.tree}, received ${identity.tree}`);
   if (identity.remote.replace(/\.git$/, "") !== EDUCATION_AGENT_SKILLS.repositoryUrl) throw new Error(`Education Agent Skills remote drift: expected ${EDUCATION_AGENT_SKILLS.repositoryUrl}, received ${identity.remote}`);
   if (identity.status) throw new Error("Education Agent Skills checkout must be clean before audit generation or checking.");
-  if (identity.tags) throw new Error(`snapshot-32fce5c must remain an untagged snapshot; found tags: ${identity.tags}`);
+  if (identity.tags) throw new Error(`${EDUCATION_AGENT_SKILLS.snapshotId} must remain an untagged snapshot; found tags: ${identity.tags}`);
 }
 
 function readInventory(sourceRoot: string): InventoryFile[] {
@@ -579,14 +584,38 @@ function resourceReview(metadata: Record<string, JsonValue>, content: string, so
   return resources;
 }
 
-function licenseReview(sourcePath: string, sourceSha256: string): EducationAgentSkill["license"] {
-  return {
-    status: "unresolved",
-    expression: "CC BY-SA 4.0 (README and plugin metadata claim only)",
-    evidence: ["README.md", ".codex-plugin/plugin.json", "mcp-server/LICENSE", sourcePath],
-    source_sha256: sourceSha256,
-    conclusion: "The pinned root has no tracked license text. mcp-server/LICENSE is subtree-scoped and cannot prove redistribution rights for Skill content or embedded frameworks.",
-  };
+function licenseReview(domain: string, metadata: Record<string, JsonValue>, content: string, sourcePath: string, sourceSha256: string): EducationAgentSkill["license"] {
+  const authorLicensed = !hasOriginalFrameworkClaim(domain, metadata, content) && !hasIndependentContribution(metadata);
+  return authorLicensed
+    ? {
+      status: "conditional",
+      expression: "CC BY-SA 4.0",
+      evidence: ["LICENSE", sourcePath],
+      source_sha256: sourceSha256,
+      conclusion: "The root CC BY-SA 4.0 notice authored by Gareth Manning covers this Gareth-authored Skill; distribution still requires attribution, share-alike, and derivative disclosure.",
+    }
+    : {
+      status: "unresolved",
+      expression: "CC BY-SA 4.0 (root notice scope not established for this Skill)",
+      evidence: ["LICENSE", sourcePath],
+      source_sha256: sourceSha256,
+      conclusion: "The root CC BY-SA 4.0 notice is authored by Gareth Manning and does not establish redistribution rights over this Skill's embedded original-framework claims or separately attributed third-party content.",
+    };
+}
+
+function assertReviewedRootLicense(sourceRoot: string, tracked: boolean): void {
+  const text = tracked ? readFileSync(path.join(sourceRoot, "LICENSE"), "utf8") : "";
+  if (!/Creative Commons\s+Attribution-ShareAlike 4\.0/i.test(text) || !text.includes("Gareth Manning")) {
+    throw new Error("Education Agent Skills root LICENSE must carry the reviewed CC BY-SA 4.0 notice by Gareth Manning.");
+  }
+}
+
+function hasOriginalFrameworkClaim(domain: string, metadata: Record<string, JsonValue>, content: string): boolean {
+  return domain === "original-frameworks" || /\boriginal (?:framework|methodology)\b/i.test(`${JSON.stringify(metadata)}\n${content}`);
+}
+
+function hasIndependentContribution(metadata: Record<string, JsonValue>): boolean {
+  return typeof metadata.contributor === "string" && metadata.contributor !== "Gareth Manning";
 }
 
 function fileContributors(sourceRoot: string, sourcePath: string, metadata: Record<string, JsonValue>): EducationAgentSkill["contributors"] {
@@ -624,7 +653,7 @@ function riskReview(domain: string, metadata: Record<string, JsonValue>, content
     "learning-analytics": /\b(?:learning analytics|student profile|performance data|assessment data|engagement metric|dashboard)\b/i.test(haystack),
     wellbeing: domain === "wellbeing-motivation-agency" || /\b(?:wellbeing|well-being|trauma|emotion|belonging|motivation|mental health|PERMA|RULER)\b/i.test(haystack),
     diagnosis: /\b(?:diagnos|screening|classification of student|root cause of student|motivation profile)\b/i.test(haystack),
-    "original-framework": domain === "original-frameworks" || /\boriginal (?:framework|methodology)\b/i.test(haystack),
+    "original-framework": hasOriginalFrameworkClaim(domain, metadata, content),
   };
   return (Object.keys(conditions) as Array<keyof typeof conditions>).map((risk) => ({
     risk,
@@ -651,7 +680,7 @@ function buildFindings(skills: EducationAgentSkill[], evidence: EducationEvidenc
   const nonstandardEvidence = skills.filter((skill) => !["strong", "moderate", "emerging", "original", "practitioner"].includes(skill.frontmatter.upstream_evidence_strength));
   const missingOutputs = skills.filter((skill) => skill.outputs.schema === null);
   return [
-    { code: "ROOT-LICENSE-MISSING", severity: "blocking", evidence: ["README.md", ".codex-plugin/plugin.json", "mcp-server/LICENSE"], conclusion: "The pinned repository has no root license text; README/plugin CC BY-SA 4.0 claims and the MCP subtree license cannot establish Skill-level redistribution rights." },
+    { code: "LICENSE-SCOPE-UNRESOLVED", severity: "blocking", evidence: ["LICENSE", "README.md", ".codex-plugin/plugin.json"], conclusion: "The root CC BY-SA 4.0 notice by Gareth Manning licenses the author's own Skill content under attribution and share-alike obligations; it does not establish rights over embedded original-framework claims or separately attributed third-party content, and no reviewed ingest decision has accepted those obligations." },
     { code: "EVIDENCE-NOT-INDEPENDENTLY-VERIFIED", severity: "blocking", evidence: ["docs/EVIDENCE.md"], conclusion: `All ${String(evidence.length)} evidence declarations retain explicit identity and support blockers because the pinned checkout does not supply independent bibliographic identifiers or reviewed source excerpts.` },
     { code: "UPSTREAM-AUDIT-DRIFT", severity: "review", evidence: ["AUDIT.md"], conclusion: `The upstream compatibility audit reports 131 Skills while the pinned Git inventory contains ${String(skills.length)}; its sampled conclusions are stale observations, not an audit input.` },
     { code: "RELATIONSHIP-TARGET-DRIFT", severity: unresolvedRelationships.length ? "review" : "advisory", evidence: [...new Set(unresolvedRelationships.map((entry) => entry.source_path))].slice(0, 20).concat(unresolvedRelationships.length ? [] : ["registry.json"]), conclusion: `${String(unresolvedRelationships.length)} chains_well_with declarations are missing, ambiguous, or duplicated and remain visible without becoming dependencies.` },

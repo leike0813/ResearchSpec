@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { EDUCATION_AGENT_SKILLS } from "../../vendor-audits/education-agent-skills.js";
+
 export const EvidenceWorkTypeSchema = z.enum([
   "paper",
   "book",
@@ -253,11 +255,11 @@ export const EducationAgentSkillsEvidenceMapSchema = z.strictObject({
   schema_version: z.literal("1"),
   vendor_id: z.literal("education-agent-skills"),
   audit_binding: z.strictObject({
-    audit_path: z.literal("audits/education-agent-skills/snapshot-32fce5c/skill-audit.json"),
+    audit_path: z.literal(EDUCATION_AGENT_SKILLS.auditPath),
     audit_sha256: z.string().regex(/^[a-f0-9]{64}$/),
-    snapshot_id: z.literal("snapshot-32fce5c"),
-    revision: z.literal("32fce5c0d097ec675cf81c750a65a379e4d87e3c"),
-    tree_hash: z.literal("3223d79299ae10391c22549debef7ffc9ef7a0e2"),
+    snapshot_id: z.literal(EDUCATION_AGENT_SKILLS.snapshotId),
+    revision: z.literal(EDUCATION_AGENT_SKILLS.revision),
+    tree_hash: z.literal(EDUCATION_AGENT_SKILLS.tree),
   }),
   review_scope: z.strictObject({
     existence_only: z.literal(true),

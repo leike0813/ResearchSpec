@@ -17,8 +17,8 @@ description: Maintain the Education Agent Skills plugin extension absorption pat
 
 ## 输入与前置条件
 
-- 已 pin 的 `vendor/education-agent-skills` 子模块（当前锚点：`snapshot-32fce5c` @
-  `32fce5c0d097ec675cf81c750a65a379e4d87e3c`）。
+- 已 pin 的 `vendor/education-agent-skills` 子模块；其 release、revision 与当前 anchor
+  以 `audits/education-agent-skills/catalog.json` 为准，本文件不缓存这些值。
 - 项目依赖安装完成（`pnpm install`）。
 - 子模块必须处于预期 commit 且无脏文件。
 - 生成链路可用：`pnpm check`、`pnpm lint`、`pnpm test`。
@@ -34,7 +34,7 @@ description: Maintain the Education Agent Skills plugin extension absorption pat
 
 ## 锚点命名
 
-`<release>-<short_revision>`，例如 `snapshot-32fce5c`。目录：
+`<release>-<short_revision>`，例如 `snapshot-6bbbce4`。目录：
 
 ```
 audits/education-agent-skills/<anchor>/
@@ -54,7 +54,7 @@ audits/education-agent-skills/<anchor>/
    - `git -C vendor/education-agent-skills describe --tags --always`
    - `git -C vendor/education-agent-skills rev-parse HEAD`
 2. 确定分析范围：
-   - 首锚点：全部 238 个 tracked files、165 个上游 Skills、136 个 admitted Gareth Manning Skills、872 项 evidence declarations 与 `skill-audit.json` / `evidence-map.json`。
+   - 首锚点：全部 tracked files、165 个上游 Skills、136 个 admitted Gareth Manning Skills、872 项 evidence declarations 与 `skill-audit.json` / `evidence-map.json`；文件数与哈希以 immutable audit 为准，不在本文件缓存。
    - 增量：`git -C vendor/education-agent-skills diff <old>..<new> --stat`，单独检查 136 个 vendor-bundle `SKILL.md`（无脚本/references）与审计事实。
 3. 分类影响：
    - raw Skill 程序变化 -> 对应 extension `SKILL.md` 与 required brief fields。
@@ -86,7 +86,7 @@ audits/education-agent-skills/<anchor>/
    - `audits/education-agent-skills/catalog.json`
 2. 硬性不变量：
    - capability/profile ID kebab-case；`capability_id == profile_id == source_path == SKILL.md name == 目录名`。
-   - capability `SKILL.md` 不得包含 next-node / next-phase / 上游 agent-team orchestration。
+   - capability `SKILL.md` 不得指示 ResearchSpec next-node / next-phase 或上游 agent-team orchestration；教学活动中的阶段建议按上下文审阅。
    - 上游脚本与资源不得获得 ResearchSpec workflow authority；ResearchSpec 不执行任何 packaged resource。
    - ResearchSpec 静态命令不执行 extension 工具或 validator；只有 `advance` 执行声明的 validator。
 3. 生成与验证：
@@ -103,8 +103,9 @@ audits/education-agent-skills/<anchor>/
    - 136 个 raw Skills -> 136 个 extension capability；全部为静态 llm package，统一 evidence-bound script validator，无 knowledge refs。
    - registry subset、packages tree、profiles tree 均绑定 SHA-256。
    - 全部 knowledge 文件 byte-identical，required brief fields 全部绑定。
-   - 三个 reviewed education 领域按 source-neutral domain catalog 镜像投影。
-     `heritage-archive-and-museum-studies` 投影两 capability + 两 profile。
+   - 三个 reviewed education 领域按 source-neutral domain catalog 镜像投影：
+     `curriculum-and-pedagogy` 54、`education-systems` 9、
+     `specialist-studies-in-education` 73 个 capability，共 136。
 3. **Agent 语义审阅门（不能省略，不能只贴脚本输出）**：
    - 逐 capability 抽检上游 vendor-bundle `SKILL.md` 与 extension `SKILL.md`：至少覆盖每个
      raw Skill 的 2–5 个不可丢失语义点。
@@ -131,7 +132,12 @@ audits/education-agent-skills/<anchor>/
 ## 增量维护规则
 
 - 子模块必须可描述（tag/commit），脏子模块禁止生成锚点。
-- 先 `diff` 后改文件；未变化的 extension artifact 不得重写。
+- 先 `diff` 后改文件；未变化的 raw Skill 与 extension artifact 必须逐字节保真，
+  增量只重建变化项。
+- 逐 Skill 的来源 release/revision 继承其上一次受审身份，不因全局 pin 变化而重写。
+- 生产转换必须先完整 preview，再由用户批准该次 preview 的精确 aggregate SHA-256
+  （`src/vendor-converters/education-agent-skills/review-decision.json`）；增量更新不得
+  沿用旧批准，也不得代替用户批准。
 - capability 重命名或删除属于破坏性变更，必须同步 profiles、registry、tests、docs、
   审阅工件与 OpenSpec change。
 - 上游脚本、模型、数据与服务只做审计或参考；转换、检查、安装、更新与 status 不执行

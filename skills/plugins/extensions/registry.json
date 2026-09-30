@@ -650,7 +650,7 @@
     {
       "capability_id": "plugin-education-agent-skills-unassisted-evidence-checkpoint",
       "source_path": "capabilities/plugin-education-agent-skills-unassisted-evidence-checkpoint",
-      "manifest_sha256": "651f1321731c04466a75b90a0639ead9e9cab3f2591e0805a2c9d50fffdb8a54"
+      "manifest_sha256": "baf7435751d93d480ad845c9dbe33dd2f32a741025448fcb93e271d6a2579199"
     },
     {
       "capability_id": "plugin-education-agent-skills-uninterrupted-work-cycle-designer",
@@ -670,7 +670,7 @@
     {
       "capability_id": "plugin-education-agent-skills-weekly-agency-review",
       "source_path": "capabilities/plugin-education-agent-skills-weekly-agency-review",
-      "manifest_sha256": "f31765130dc3fe9eac94668bc39906f0be1e0b3f7a19b0993e1cb78c607308c6"
+      "manifest_sha256": "75b5dec5d3bb9fb98433163f56ce2ad31c032fc4546e2ed1da9a69794c81aca8"
     },
     {
       "capability_id": "plugin-education-agent-skills-wellbeing-learning-connection-mapper",

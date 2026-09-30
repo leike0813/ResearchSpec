@@ -1,0 +1,75 @@
+{
+  "schema_version": "1",
+  "status": "candidate-verified-awaiting-user-approval",
+  "aggregate_tree_sha256": "4d42fa3190d1e45f4bafce8c06a539d6e41bdc86d380b2cafb230eb6892ad633",
+  "checks": {
+    "pnpm_check": "passed",
+    "pnpm_build": "passed",
+    "pnpm_lint": "passed",
+    "audit_check": "passed",
+    "evidence_check": "passed",
+    "tests": {
+      "command": "UV_CACHE_DIR=/tmp/researchspec-uv-cache pnpm test",
+      "pass": 438,
+      "fail": 0,
+      "log_sha256": "704f44034fdead1113cb35157198011ee70e83cfc882d52a0acd778527ca6e08"
+    },
+    "production_and_old_anchor_files_preserved": 969
+  },
+  "record_bindings": [
+    {
+      "path": "artifacts/candidate-01-analysis.md",
+      "sha256": "a8b36e813cb2a14cc4e757ec847b4ca3a155c1a90ad24231ebf13e332a6808b5"
+    },
+    {
+      "path": "artifacts/candidate-02-ingestion.md",
+      "sha256": "1512332fe7fc242048b235fd76749eba47d35ff3e7e083acd4c23bcdbe5d654d"
+    },
+    {
+      "path": "artifacts/candidate-03-conversion.md",
+      "sha256": "85e470bfa472c420aeb7bad30639de70f37ad5e8bacacf3425505f93efdb1423"
+    },
+    {
+      "path": "artifacts/candidate-04-review.md",
+      "sha256": "1646dfd23d9c20b777aa3ca15b7b61e96b2b3ba23aa21474da2a85a50a2308a1"
+    },
+    {
+      "path": "artifacts/candidate-05-semantic-review.md",
+      "sha256": "7f64194fb39639903bb0cf12be6a886d5f6a042d8c6ef9a2a8c7637ca6b5b00e"
+    },
+    {
+      "path": "skill-audit.json",
+      "sha256": "57b93c4668e6ca29fcb191e35cdea56e85ab0a7888b78256c6e64096422c6406"
+    },
+    {
+      "path": "evidence-map.json",
+      "sha256": "5d970cbb765a08f33444f6c9fcabcf4095e469e3fe1dc05730843fd2e7506fd2"
+    },
+    {
+      "path": "incremental-binding.json",
+      "sha256": "7f53812604941882e515fd76798cc1c28c4746671d257f7f5c8d4dbed8d42919"
+    },
+    {
+      "path": "artifacts/preview-manifest.json",
+      "sha256": "627e4607e120ad4164cdc9722a57b1f53c77ef742436ff07a0f923f5682c85e9"
+    },
+    {
+      "path": "artifacts/incremental-preview.json",
+      "sha256": "01de120e4ac046a41bcfeecc6d2d49e6a85e814192461930d1110359aadcc0e2"
+    },
+    {
+      "path": "artifacts/preview-review.zh-CN.md",
+      "sha256": "3cf69f282e4e72715ae72d336b8fbe6b28bf912c10c0cb6effbd40dbcb5860fe"
+    },
+    {
+      "path": "artifacts/upstream-analysis.md",
+      "sha256": "72e4397df710917069886250be7e0241cc19d074d04e6385ca3fdbe3cdeadb62"
+    },
+    {
+      "path": "artifacts/upstream-semantic-review.md",
+      "sha256": "ba103c7ee6f70357607ac39b2806ab92f8de2673f89781e5837220a0d853c397"
+    }
+  ],
+  "production_baseline": "not-created",
+  "approval_status": "pending-human-review"
+}

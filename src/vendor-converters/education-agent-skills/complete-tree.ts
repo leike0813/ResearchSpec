@@ -101,8 +101,8 @@ function renderNotice(
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: ${policies.policy.release}
-- Revision: ${policies.policy.revision}
+- Snapshot: ${admission.source_release}
+- Revision: ${admission.source_revision}
 - Upstream Skill: \`${admission.upstream_skill_id}\`
 - Source path: \`${admission.source_path}\`
 - Source SHA-256: \`${admission.source_sha256}\`

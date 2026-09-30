@@ -6,28 +6,33 @@ ResearchSpec distributes 136 reviewed static Skills adapted from Education
 Agent Skills. The maintainer input is pinned at:
 
 - repository: `https://github.com/GarethManning/education-agent-skills`;
-- release: `snapshot-32fce5c`;
-- revision: `32fce5c0d097ec675cf81c750a65a379e4d87e3c`;
-- Git tree: `3223d79299ae10391c22549debef7ffc9ef7a0e2`.
+- release: `snapshot-6bbbce4`;
+- revision: `6bbbce418f82e11044009c9f3b7373a354de5bd0`;
+- Git tree: `b90188569a783ba7d20dcffe2db7a55816db7c0b`.
 
 The immutable audit covers all 165 upstream Skills. Production admission accepts
 136 Gareth Manning Skills and excludes 19 original-framework Skills plus ten
-Sean Hu Skills whose redistribution authority is not established. The approved
-complete-tree aggregate SHA-256 is
-`c4fc2f93a7553a1c02538d15491ed108afd36ad4a4a291ca4db3bad39e74775d`.
+Sean Hu Skills whose redistribution authority is not established.
+
+The production snapshot is `snapshot-6bbbce4`. Its complete conversion preview
+has user approval recorded in `review-decision.json`; production bytes must
+match that exact aggregate. Audit, evidence-map, policy, license, and aggregate
+hashes live in the binding files named below.
 
 ## Production contracts
 
-The converter validates these bound inputs before generating output:
+The converter validates these inputs against the production policy and review
+decision before generating output:
 
-- audit SHA-256:
-  `e9326c43078db4c6bce4387c5a41a5bef775ad4d1691095c2020ef9cb9926857`;
-- evidence-map SHA-256:
-  `58e0768df288aad6d9e3c5222338879ef1703bc78f80e02739f6d4194cc6bd2b`;
-- production-policy SHA-256:
-  `fcb818163c79058ac084f944700c187c36b06b1698b1c9242454b973e259256f`;
-- CC BY-SA 4.0 license-text SHA-256:
-  `f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f`.
+- the immutable audit `audits/education-agent-skills/<anchor>/skill-audit.json`;
+- the evidence map `audits/education-agent-skills/<anchor>/evidence-map.json`;
+- the production policy
+  `src/vendor-converters/education-agent-skills/production-policy.json`;
+- the CC BY-SA 4.0 license text `LICENSES/CC-BY-SA-4.0.txt`.
+
+`skills/plugins/vendor-manifests/education-agent-skills.json` publishes the
+bound hashes and the approved complete-tree aggregate; the human approval lives
+in `src/vendor-converters/education-agent-skills/review-decision.json`.
 
 The production catalogs resolve exactly 165 admission decisions, 872 evidence
 declarations, 813 advisory relationships, and 136 safety/domain decisions.
@@ -48,6 +53,13 @@ input/output schemas. It normalizes the global identifier and frontmatter
 envelope, then adds evidence-status and authority boundaries. It does not
 distribute the upstream installer, MCP server, tests, scripts, project
 documentation, registries, or generated caches.
+
+The upstream root now carries a CC BY-SA 4.0 `LICENSE` notice naming Gareth
+Manning and his education content. It supplies origin authorization for the
+admitted Skills, does not establish rights for embedded frameworks or
+third-party authors, and never replaces the complete legal text and per-Skill
+notices ResearchSpec distributes. The 19 original-framework and ten Sean Hu
+Skills stay excluded.
 
 ## Evidence boundary
 
@@ -138,6 +150,9 @@ from the reviewed vendor bundle and the source-neutral domain catalog.
 - Domain assignments mirror the three reviewed domains:
   `curriculum-and-pedagogy`, `education-systems`, and
   `specialist-studies-in-education`.
+- Incremental regeneration rebuilds only the changed raw Skills and their
+  packages; unchanged packages keep their reviewed source release and revision
+  byte-for-byte.
 
 Install, update, status, and check read manifests and hashes only. Only
 `advance` executes the declared `python3` validator.
@@ -151,9 +166,13 @@ pnpm education-agent-skills-maintenance:baseline
 pnpm education-agent-skills-maintenance:check
 ```
 
-The suite anchors at `audits/education-agent-skills/snapshot-32fce5c`, binds
-the immutable skill audit, evidence map, vendor bundle, extension registry
-subset, package/profile trees, the maintenance Skill, the maintenance catalog,
-and records 01–05 in `manifest.json`. `artifacts` regenerates the 136 packages.
-The Agent semantic review is mandatory and `baseline` refuses an anchor whose
-`05-semantic-review.md` is not completed.
+The suite anchors at `audits/education-agent-skills/<anchor>`, binds the
+immutable skill audit, evidence map, vendor bundle, extension registry subset,
+package/profile trees, the maintenance Skill, the maintenance catalog, and
+records 01–05 in `manifest.json`. `artifacts` regenerates the 136 packages. The
+Agent semantic review is mandatory and `baseline` refuses an anchor whose
+`05-semantic-review.md` is not completed. The current production anchor is
+`snapshot-6bbbce4`; `snapshot-32fce5c` remains immutable historical evidence.
+The incremental update changes two raw Skills and their extension packages;
+the other 134 trees, all 136 profiles and validators, and domain assignments
+retain their reviewed bytes. `check` verifies the current production anchor.
