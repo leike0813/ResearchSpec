@@ -1,0 +1,42 @@
+# .understandignore — 排除内容产物目录，聚焦产品代码与文档
+# 语法同 .gitignore
+#
+# 范围决策（2026-10-02，与用户确认）：只分析 src/、tests/、scripts/、
+# harness/、docs/、website/、review-workspace/ 与根配置。
+# 下列目录是已发布内容产物或上游快照，不是产品实现，纳入会让图谱失焦。
+#
+# 注意：所有模式都带前导 `/`，锚定到仓库根，避免误伤 src/ 下的同名子目录
+# （如 src/arsu-converter/authoring/、src/literature-adapters/ 是实现代码）。
+
+# --- 已发布 Skill / 能力包（内容产物）---
+/skills/
+
+# --- dogfooding 与 owner walkthrough 记录 ---
+/playbooks/
+
+# --- spec-driven 变更历史 ---
+/openspec/
+
+# --- 上游审计快照与生成产物 ---
+/audits/
+/artifacts/
+/authoring/
+
+# --- 上游 vendor 检出（submodule）---
+/vendor/
+
+# --- Zotero Adapter 投影内容（根级；src/literature-adapters/ 保留）---
+/literature-adapters/
+
+# --- 外部参考快照 ---
+/references/
+
+# --- 工具与本地运行时目录 ---
+/.codegraph/
+/.dogfood/
+/.ar/
+/.agents/
+/.ua/
+/.kilocode/
+/.opencode/
+/.history/

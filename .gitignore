@@ -51,6 +51,8 @@ __pycache__/
 references/OpenSpec/
 references/ppt-master/
 
+.ua/.trash-1790911095/
+
 node_modules/
 dist/
 .test-dist/

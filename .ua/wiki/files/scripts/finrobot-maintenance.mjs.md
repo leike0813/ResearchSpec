@@ -1,0 +1,47 @@
+
+# scripts/finrobot-maintenance.mjs
+所属分层：[维护工具链与工程基础设施](../../layers/tooling.md)  
+所属目录：[scripts](../../modules/scripts.md)
+<!-- node: file:scripts/finrobot-maintenance.mjs -->
+
+FinRobot 扩展维护 CLI：锁定 snapshot-2717499 修订，核对 1048 个跟踪条目之上的六个 financial-research extension、四个 mixed 能力复制的入口脚本与证据验证器。
+源码：[scripts/finrobot-maintenance.mjs](../../../../scripts/finrobot-maintenance.mjs)
+
+## 符号（11）
+<!-- node: function:scripts/finrobot-maintenance.mjs:anchorCreatedAt -->
+<!-- node: function:scripts/finrobot-maintenance.mjs:currentState -->
+<!-- node: function:scripts/finrobot-maintenance.mjs:extensionPackageTreeSha -->
+<!-- node: function:scripts/finrobot-maintenance.mjs:extensionProfileTreeSha -->
+<!-- node: function:scripts/finrobot-maintenance.mjs:extensionRegistrySubsetSha -->
+<!-- node: function:scripts/finrobot-maintenance.mjs:extensionRows -->
+<!-- node: function:scripts/finrobot-maintenance.mjs:upstreamState -->
+<!-- node: function:scripts/finrobot-maintenance.mjs:validatorRequiredFields -->
+<!-- node: function:scripts/finrobot-maintenance.mjs:vendorBundleState -->
+<!-- node: function:scripts/finrobot-maintenance.mjs:verificationBlock -->
+<!-- node: function:scripts/finrobot-maintenance.mjs:writeRecords -->
+
+| 符号 | 类型 | 行 | 复杂度 | 标签 | 入边数 | 摘要 |
+| --- | --- | --- | --- | --- | --- | --- |
+| anchorCreatedAt | 函数 | 35–48 | 简单 | audit-record、metadata、finrobot | 0 | 从锚点 ID 与维护记录中解析该 FinRobot 锚点的创建时间。 |
+| [currentState](../../symbols/scripts/finrobot-maintenance.mjs/currentState.md) | 函数 | 261–325 | 复杂 | integrity、hash、finrobot | 1 | 汇总上游、vendor bundle、extension registry、审阅工件与维护文件指纹，构成锚点 manifest 的完整状态快照。 |
+| extensionPackageTreeSha | 函数 | 235–251 | 中等 | integrity、hash、finrobot | 0 | 汇总所有 extension package 文件并按相对路径求聚合树哈希。 |
+| extensionProfileTreeSha | 函数 | 253–259 | 中等 | integrity、hash、finrobot | 0 | 对各 capability 的 profile YAML 求聚合哈希。 |
+| extensionRegistrySubsetSha | 函数 | 221–233 | 中等 | integrity、hash、finrobot | 0 | 抽取 registry 中属于本厂商的 capability、profile 与 domain 子集并求稳定哈希。 |
+| [extensionRows](../../symbols/scripts/finrobot-maintenance.mjs/extensionRows.md) | 函数 | 112–209 | 复杂 | integrity、hash、finrobot | 1 | 逐条核对 extension package：registry 清单哈希、执行类型、文件树、脚本验证器存在性与 {outputs_json} 传参、必需 brief 字段绑定、工具文件字节一致，并校验领域 capability/profile 分配未漂移。 |
+| upstreamState | 函数 | 53–78 | 中等 | integrity、hash、finrobot | 1 | 校验上游 checkout 处于目录指定 revision 且工作区干净，盘点内容文件并记录审计文件哈希。 |
+| validatorRequiredFields | 函数 | 211–219 | 中等 | integrity、hash、finrobot | 0 | 从验证器 args_template 的 --required 参数解析实际要求的证据字段列表。 |
+| vendorBundleState | 函数 | 80–104 | 中等 | integrity、hash、finrobot | 1 | 盘点生成根下的 vendor bundle，逐 Skill 记录 SKILL.md 哈希与树哈希，并断言数量符合目录声明。 |
+| verificationBlock | 函数 | 327–344 | 中等 | reporting、verification、finrobot | 0 | 生成 FinRobot 锚点记录中的验证结论块，声明重分发、许可与来源边界判定。 |
+| [writeRecords](../../symbols/scripts/finrobot-maintenance.mjs/writeRecords.md) | 函数 | 346–516 | 复杂 | reporting、audit-record、finrobot | 1 | 渲染 01-analysis/02-ingestion/03-conversion/04-review 四份锚点记录，并在缺失时生成标记 NOT-COMPLETED 的语义审阅模板。 |
+
+## 导入
+
+| 节点 | 路径 | 摘要 |
+| --- | --- | --- |
+| [vendor-maintenance.mjs](lib/vendor-maintenance.mjs.md) | scripts/lib/vendor-maintenance.mjs | 厂商维护脚本的共享库：确定性文件清单与树哈希、git 跟踪文件盘点、锚点记录哈希、值比较、工��文件同步与审阅工件写出，并按厂商提供的状态/记录函数组装统一的 artifacts/records/baseline/check/diff 命令生命周期。 |
+
+## 依赖
+
+| 节点 | 路径 | 摘要 |
+| --- | --- | --- |
+| [createMaintenanceCommands](../../symbols/scripts/lib/vendor-maintenance.mjs/createMaintenanceCommands.md) | scripts/lib/vendor-maintenance.mjs | 为单个厂商组装 artifacts/records/baseline/check/diff 命令：baseline 强制语义审阅完成，check 逐字段比对锚点 manifest 与实时状态，diff 输出关键指纹变化。 |

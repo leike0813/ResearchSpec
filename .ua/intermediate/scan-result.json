@@ -1,0 +1,5763 @@
+{
+  "name": "researchspec",
+  "description": "ResearchSpec 是一个 Agent 中立的、spec 驱动的学术研究工作流框架层：用户用自然语言描述研究目标，Agent 通过能力（Procedure）发现与执行来交付成果，CLI 作为工作流状态的唯一写入入口。正式的 graph run 提供 Gates、Decisions、并行执行、修订轮次与可审计状态。",
+  "languages": [
+    "css",
+    "html",
+    "javascript",
+    "json",
+    "markdown",
+    "python",
+    "typescript",
+    "yaml"
+  ],
+  "frameworks": [
+    "TypeScript",
+    "Node.js",
+    "ESLint",
+    "pnpm",
+    "GitHub Actions"
+  ],
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "sizeLines": 73,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/docs.yml",
+      "language": "yaml",
+      "sizeLines": 68,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".gitmodules",
+      "language": "unknown",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "AGENTS.md",
+      "language": "markdown",
+      "sizeLines": 918,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "language": "markdown",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "LICENSES/AGPL-3.0.txt",
+      "language": "txt",
+      "sizeLines": 661,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "LICENSES/Apache-2.0.txt",
+      "language": "txt",
+      "sizeLines": 202,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "LICENSES/CC-BY-NC-4.0.txt",
+      "language": "txt",
+      "sizeLines": 14,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "LICENSES/CC-BY-SA-4.0.txt",
+      "language": "txt",
+      "sizeLines": 28,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "LICENSES/MIT.txt",
+      "language": "txt",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "NOTICE",
+      "language": "unknown",
+      "sizeLines": 124,
+      "fileCategory": "code"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 212,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "SECURITY.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/README.md",
+      "language": "markdown",
+      "sizeLines": 14,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/README.md",
+      "language": "markdown",
+      "sizeLines": 11,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/architecture.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/cli-interface.md",
+      "language": "markdown",
+      "sizeLines": 75,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/domain-plugins.md",
+      "language": "markdown",
+      "sizeLines": 254,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/domain-taxonomy.md",
+      "language": "markdown",
+      "sizeLines": 341,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/manuscript-annotations.md",
+      "language": "markdown",
+      "sizeLines": 79,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/runtime/README.md",
+      "language": "markdown",
+      "sizeLines": 23,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/runtime/academic_paper_reviewer_workflow.md",
+      "language": "markdown",
+      "sizeLines": 13,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/runtime/academic_paper_workflow.md",
+      "language": "markdown",
+      "sizeLines": 20,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/runtime/academic_pipeline_workflow.md",
+      "language": "markdown",
+      "sizeLines": 57,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/runtime/core_runtime_model.md",
+      "language": "markdown",
+      "sizeLines": 29,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/runtime/deep_research_workflow.md",
+      "language": "markdown",
+      "sizeLines": 13,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/developer/runtime/diagrams/src/academic-paper-reviewer-workflow.puml",
+      "language": "puml",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/developer/runtime/diagrams/src/academic-paper-workflow.puml",
+      "language": "puml",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/developer/runtime/diagrams/src/academic-pipeline-mid-entry.puml",
+      "language": "puml",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/developer/runtime/diagrams/src/academic-pipeline-workflow.puml",
+      "language": "puml",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/developer/runtime/diagrams/src/contract-change-lifecycle.puml",
+      "language": "puml",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/developer/runtime/diagrams/src/deep-research-workflow.puml",
+      "language": "puml",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/developer/runtime/diagrams/src/frontier-evaluation.dot",
+      "language": "dot",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/developer/runtime/diagrams/src/revision-round.puml",
+      "language": "puml",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/developer/runtime/diagrams/src/runtime-control-loop.puml",
+      "language": "puml",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/developer/runtime/diagrams/src/system-architecture.puml",
+      "language": "puml",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/developer/runtime/diagrams/src/two-level-openspec-model.puml",
+      "language": "puml",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/developer/runtime/runtime_protocols.md",
+      "language": "markdown",
+      "sizeLines": 52,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/maintainer/README.md",
+      "language": "markdown",
+      "sizeLines": 11,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/maintainer/arsu-capability-taxonomy.md",
+      "language": "markdown",
+      "sizeLines": 424,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/maintainer/arsu-contract-anchor.md",
+      "language": "markdown",
+      "sizeLines": 40,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/maintainer/non-native-vendor-skill-standard.md",
+      "language": "markdown",
+      "sizeLines": 176,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/maintainer/release-process.md",
+      "language": "markdown",
+      "sizeLines": 87,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/maintainer/vendors/README.md",
+      "language": "markdown",
+      "sizeLines": 12,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/maintainer/vendors/education-agent-skills.md",
+      "language": "markdown",
+      "sizeLines": 178,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/maintainer/vendors/finrobot.md",
+      "language": "markdown",
+      "sizeLines": 149,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/maintainer/vendors/histagent.md",
+      "language": "markdown",
+      "sizeLines": 107,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/maintainer/vendors/materials-science-skills.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/maintainer/vendors/scientific-agent-skills.md",
+      "language": "markdown",
+      "sizeLines": 89,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/maintainer/vendors/tooluniverse.md",
+      "language": "markdown",
+      "sizeLines": 79,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/user/README.md",
+      "language": "markdown",
+      "sizeLines": 13,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/user/agent-entry-matrix.md",
+      "language": "markdown",
+      "sizeLines": 42,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/user/cli-handbook.md",
+      "language": "markdown",
+      "sizeLines": 528,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/user/deterministic-checkers.md",
+      "language": "markdown",
+      "sizeLines": 23,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/user/literature-adapters.md",
+      "language": "markdown",
+      "sizeLines": 58,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/user/review-workspace.md",
+      "language": "markdown",
+      "sizeLines": 80,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/user/usage-model.md",
+      "language": "markdown",
+      "sizeLines": 311,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "eslint.config.js",
+      "language": "javascript",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "harness/README.md",
+      "language": "markdown",
+      "sizeLines": 31,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "harness/catalog.ts",
+      "language": "typescript",
+      "sizeLines": 481,
+      "fileCategory": "code"
+    },
+    {
+      "path": "harness/dogfood/public/app.js",
+      "language": "javascript",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "harness/dogfood/public/index.html",
+      "language": "html",
+      "sizeLines": 41,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "harness/dogfood/public/matrix.css",
+      "language": "css",
+      "sizeLines": 9,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "harness/dogfood/public/styles.css",
+      "language": "css",
+      "sizeLines": 2,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "harness/fixtures/article.pandoc.json",
+      "language": "json",
+      "sizeLines": 1,
+      "fileCategory": "config"
+    },
+    {
+      "path": "harness/fixtures/base.pandoc.json",
+      "language": "json",
+      "sizeLines": 1,
+      "fileCategory": "config"
+    },
+    {
+      "path": "harness/fixtures/candidate.pandoc.json",
+      "language": "json",
+      "sizeLines": 1,
+      "fileCategory": "config"
+    },
+    {
+      "path": "harness/public/app.js",
+      "language": "javascript",
+      "sizeLines": 374,
+      "fileCategory": "code"
+    },
+    {
+      "path": "harness/public/index.html",
+      "language": "html",
+      "sizeLines": 37,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "harness/public/styles.css",
+      "language": "css",
+      "sizeLines": 113,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "harness/review-workspace-preview.ts",
+      "language": "typescript",
+      "sizeLines": 247,
+      "fileCategory": "code"
+    },
+    {
+      "path": "harness/revision-master-preview-data.ts",
+      "language": "typescript",
+      "sizeLines": 440,
+      "fileCategory": "code"
+    },
+    {
+      "path": "harness/revision-master-preview.ts",
+      "language": "typescript",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "path": "harness/server.ts",
+      "language": "typescript",
+      "sizeLines": 222,
+      "fileCategory": "code"
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "sizeLines": 163,
+      "fileCategory": "config"
+    },
+    {
+      "path": "review-workspace/index.check.mjs",
+      "language": "javascript",
+      "sizeLines": 267,
+      "fileCategory": "code"
+    },
+    {
+      "path": "review-workspace/index.html",
+      "language": "html",
+      "sizeLines": 1448,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "review-workspace/prototype-annotation-interaction.html",
+      "language": "html",
+      "sizeLines": 95,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "review-workspace/prototype-review-workbench.check.mjs",
+      "language": "javascript",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "review-workspace/prototype-review-workbench.html",
+      "language": "html",
+      "sizeLines": 371,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "review-workspace/prototype-revision-master.html",
+      "language": "html",
+      "sizeLines": 246,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "review-workspace/revision-master.html",
+      "language": "html",
+      "sizeLines": 502,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "review-workspace/v1.html",
+      "language": "html",
+      "sizeLines": 116,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "scripts/arsu-maintenance.mjs",
+      "language": "javascript",
+      "sizeLines": 529,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/audit-capability-parity.mjs",
+      "language": "javascript",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/authored-whitespace-exemptions.json",
+      "language": "json",
+      "sizeLines": 75,
+      "fileCategory": "config"
+    },
+    {
+      "path": "scripts/check-authored-whitespace.mjs",
+      "language": "javascript",
+      "sizeLines": 165,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/clean-output.mjs",
+      "language": "javascript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/dogfood.mjs",
+      "language": "javascript",
+      "sizeLines": 327,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/dogfood/assessment-worker.mjs",
+      "language": "javascript",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/dogfood/assessment.mjs",
+      "language": "javascript",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/dogfood/hosts.mjs",
+      "language": "javascript",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/dogfood/lib.mjs",
+      "language": "javascript",
+      "sizeLines": 168,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/dogfood/matrix-worker.mjs",
+      "language": "javascript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/dogfood/review.mjs",
+      "language": "javascript",
+      "sizeLines": 233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/dogfood/server.mjs",
+      "language": "javascript",
+      "sizeLines": 174,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/dogfood/worker.mjs",
+      "language": "javascript",
+      "sizeLines": 232,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/education-agent-skills-maintenance.mjs",
+      "language": "javascript",
+      "sizeLines": 509,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/education-agent-skills-validator-template.py",
+      "language": "python",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/finrobot-maintenance.mjs",
+      "language": "javascript",
+      "sizeLines": 536,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate-arsu-capability-review-html.mjs",
+      "language": "javascript",
+      "sizeLines": 835,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate-arsu-gap-semantic-review-html.mjs",
+      "language": "javascript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate-arsu-graph-match-assessment-html.mjs",
+      "language": "javascript",
+      "sizeLines": 496,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate-cli-handbook.mjs",
+      "language": "javascript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate-docs.mjs",
+      "language": "javascript",
+      "sizeLines": 103,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate-education-agent-skills-extensions.mjs",
+      "language": "javascript",
+      "sizeLines": 364,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate-extraction-index.mjs",
+      "language": "javascript",
+      "sizeLines": 198,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate-scientific-agent-skills-extensions.mjs",
+      "language": "javascript",
+      "sizeLines": 381,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate-tooluniverse-extensions.mjs",
+      "language": "javascript",
+      "sizeLines": 358,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/histagent-maintenance.mjs",
+      "language": "javascript",
+      "sizeLines": 488,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/install-stable.mjs",
+      "language": "javascript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/lib/vendor-maintenance.mjs",
+      "language": "javascript",
+      "sizeLines": 265,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/mark-cli-executable.mjs",
+      "language": "javascript",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/materials-science-skills-for-llm-maintenance.mjs",
+      "language": "javascript",
+      "sizeLines": 491,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/own-vendor-maintenance.mjs",
+      "language": "javascript",
+      "sizeLines": 520,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/run-skill-harness.mjs",
+      "language": "javascript",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/run-tests.mjs",
+      "language": "javascript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/scientific-agent-skills-maintenance.mjs",
+      "language": "javascript",
+      "sizeLines": 512,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/scientific-agent-skills-validator-template.py",
+      "language": "python",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/tooluniverse-maintenance.mjs",
+      "language": "javascript",
+      "sizeLines": 493,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/tooluniverse-validator-template.py",
+      "language": "python",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/verify-arsu-checkers.mjs",
+      "language": "javascript",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/verify-package.mjs",
+      "language": "javascript",
+      "sizeLines": 865,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/agent-profiles.ts",
+      "language": "typescript",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/command-renderer.ts",
+      "language": "typescript",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/companion/index.ts",
+      "language": "typescript",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/companion/manifest.ts",
+      "language": "typescript",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/companion/render.ts",
+      "language": "typescript",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/companion/shared-guidance.ts",
+      "language": "typescript",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/companion/types.ts",
+      "language": "typescript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/companion/workflows/decide.ts",
+      "language": "typescript",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/companion/workflows/navigate.ts",
+      "language": "typescript",
+      "sizeLines": 246,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/companion/workflows/propose.ts",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/companion/workflows/verify.ts",
+      "language": "typescript",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/delivery.ts",
+      "language": "typescript",
+      "sizeLines": 152,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/installations.ts",
+      "language": "typescript",
+      "sizeLines": 331,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/legacy-reconciliation.ts",
+      "language": "typescript",
+      "sizeLines": 210,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/managed-target.ts",
+      "language": "typescript",
+      "sizeLines": 272,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/project-entry-matrix.ts",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/project-entry.ts",
+      "language": "typescript",
+      "sizeLines": 249,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/tools.ts",
+      "language": "typescript",
+      "sizeLines": 246,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/adapters/workspace-delivery.ts",
+      "language": "typescript",
+      "sizeLines": 163,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/annotation-intake.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/annotation-intake/contracts.ts",
+      "language": "typescript",
+      "sizeLines": 139,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/annotation-intake/index.ts",
+      "language": "typescript",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/annotation-intake/interpretation.ts",
+      "language": "typescript",
+      "sizeLines": 146,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/annotation-intake/paths.ts",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/annotation-intake/review-copy.ts",
+      "language": "typescript",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/annotation-intake/review-delta.ts",
+      "language": "typescript",
+      "sizeLines": 125,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/annotation-intake/session.ts",
+      "language": "typescript",
+      "sizeLines": 234,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/annotation-intake/sources.ts",
+      "language": "typescript",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/anchors/check.ts",
+      "language": "typescript",
+      "sizeLines": 336,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/anchors/contract-anchors.json",
+      "language": "json",
+      "sizeLines": 1711,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/arsu-converter/anchors/coverage.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/anchors/generate.ts",
+      "language": "typescript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/anchors/io.ts",
+      "language": "typescript",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/anchors/manifest.ts",
+      "language": "typescript",
+      "sizeLines": 174,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/anchors/markers.ts",
+      "language": "typescript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/anchors/match.ts",
+      "language": "typescript",
+      "sizeLines": 335,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replace.ts",
+      "language": "typescript",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/ARTIFACT-001.md",
+      "language": "markdown",
+      "sizeLines": 15,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/ARTIFACT-002.md",
+      "language": "markdown",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/CLAIM-001.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/CLAIM-002.md",
+      "language": "markdown",
+      "sizeLines": 22,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/CLAIM-003.md",
+      "language": "markdown",
+      "sizeLines": 22,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/DECISION-001.md",
+      "language": "markdown",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/DECISION-002.md",
+      "language": "markdown",
+      "sizeLines": 18,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/GATE-001.md",
+      "language": "markdown",
+      "sizeLines": 18,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/GATE-002.md",
+      "language": "markdown",
+      "sizeLines": 48,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/GATE-003.md",
+      "language": "markdown",
+      "sizeLines": 18,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/GATE-004.md",
+      "language": "markdown",
+      "sizeLines": 15,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/GATE-005.md",
+      "language": "markdown",
+      "sizeLines": 14,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/GATE-006.md",
+      "language": "markdown",
+      "sizeLines": 40,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/HANDOFF-001.md",
+      "language": "markdown",
+      "sizeLines": 31,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/HANDOFF-002.md",
+      "language": "markdown",
+      "sizeLines": 10,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/HANDOFF-003.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/IO-001.md",
+      "language": "markdown",
+      "sizeLines": 36,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/IO-002.md",
+      "language": "markdown",
+      "sizeLines": 29,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/IO-003.md",
+      "language": "markdown",
+      "sizeLines": 38,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/IO-004.md",
+      "language": "markdown",
+      "sizeLines": 23,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/IO-005.md",
+      "language": "markdown",
+      "sizeLines": 26,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/IO-006.md",
+      "language": "markdown",
+      "sizeLines": 24,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/PATCH-001.md",
+      "language": "markdown",
+      "sizeLines": 56,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/PATCH-002.md",
+      "language": "markdown",
+      "sizeLines": 39,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/PATCH-003.md",
+      "language": "markdown",
+      "sizeLines": 53,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/PATCH-004.md",
+      "language": "markdown",
+      "sizeLines": 41,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-001.md",
+      "language": "markdown",
+      "sizeLines": 31,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-002.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-003.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-004.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-005.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-006.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-007.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-008.md",
+      "language": "markdown",
+      "sizeLines": 31,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-009.md",
+      "language": "markdown",
+      "sizeLines": 41,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-010.md",
+      "language": "markdown",
+      "sizeLines": 20,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-011.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-012.md",
+      "language": "markdown",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-013.md",
+      "language": "markdown",
+      "sizeLines": 20,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-014.md",
+      "language": "markdown",
+      "sizeLines": 30,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-015.md",
+      "language": "markdown",
+      "sizeLines": 17,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/REVIEW-016.md",
+      "language": "markdown",
+      "sizeLines": 45,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/SOURCE-001.md",
+      "language": "markdown",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/SOURCE-002.md",
+      "language": "markdown",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/SOURCE-003.md",
+      "language": "markdown",
+      "sizeLines": 41,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/STATE-001.md",
+      "language": "markdown",
+      "sizeLines": 15,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/STATE-002.md",
+      "language": "markdown",
+      "sizeLines": 16,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/STATE-003.md",
+      "language": "markdown",
+      "sizeLines": 12,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/STATE-004.md",
+      "language": "markdown",
+      "sizeLines": 10,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/STATE-005.md",
+      "language": "markdown",
+      "sizeLines": 20,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/STATE-006.md",
+      "language": "markdown",
+      "sizeLines": 28,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/STATE-007.md",
+      "language": "markdown",
+      "sizeLines": 11,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/STATE-008.md",
+      "language": "markdown",
+      "sizeLines": 16,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/STATE-009.md",
+      "language": "markdown",
+      "sizeLines": 13,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/STATE-010.md",
+      "language": "markdown",
+      "sizeLines": 17,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/replacements/STATE-011.md",
+      "language": "markdown",
+      "sizeLines": 15,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/anchors/types.ts",
+      "language": "typescript",
+      "sizeLines": 131,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/anchors/upstream-manifest.json",
+      "language": "json",
+      "sizeLines": 24820,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/arsu-converter/authoring/author.ts",
+      "language": "typescript",
+      "sizeLines": 310,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/checker-source.ts",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/checkers/citations.py",
+      "language": "python",
+      "sizeLines": 567,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/checkers/documents.py",
+      "language": "python",
+      "sizeLines": 106,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/checkers/pdf.py",
+      "language": "python",
+      "sizeLines": 191,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/checkers/runner.py",
+      "language": "python",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/checkers/temporal.py",
+      "language": "python",
+      "sizeLines": 629,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/cli.ts",
+      "language": "typescript",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/m1-sources.ts",
+      "language": "typescript",
+      "sizeLines": 122,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/m2-sources.ts",
+      "language": "typescript",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/m3-sources.ts",
+      "language": "typescript",
+      "sizeLines": 127,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/m4-sources.ts",
+      "language": "typescript",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/m5-sources.ts",
+      "language": "typescript",
+      "sizeLines": 226,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/paper-humanizer-cli.ts",
+      "language": "typescript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/paper-humanizer-sources.ts",
+      "language": "typescript",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m1/evidence-synthesis.md",
+      "language": "markdown",
+      "sizeLines": 197,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m1/literature-search-screening.md",
+      "language": "markdown",
+      "sizeLines": 256,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m1/methodology-design.md",
+      "language": "markdown",
+      "sizeLines": 172,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m1/report-compilation.md",
+      "language": "markdown",
+      "sizeLines": 213,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m1/research-question-formulation.md",
+      "language": "markdown",
+      "sizeLines": 127,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m1/source-quality-grading.md",
+      "language": "markdown",
+      "sizeLines": 149,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m2/abstract-writing.md",
+      "language": "markdown",
+      "sizeLines": 153,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m2/argument-blueprint.md",
+      "language": "markdown",
+      "sizeLines": 222,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m2/citation-format-compliance.md",
+      "language": "markdown",
+      "sizeLines": 272,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m2/manuscript-drafting.md",
+      "language": "markdown",
+      "sizeLines": 220,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m2/manuscript-structure-design.md",
+      "language": "markdown",
+      "sizeLines": 261,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m2/writing-intake.md",
+      "language": "markdown",
+      "sizeLines": 260,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m3/devils-advocate.md",
+      "language": "markdown",
+      "sizeLines": 185,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m3/editorial-judgment.md",
+      "language": "markdown",
+      "sizeLines": 145,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m3/pre-submission-self-check.md",
+      "language": "markdown",
+      "sizeLines": 209,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m3/reference-integrity.md",
+      "language": "markdown",
+      "sizeLines": 282,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m3/review-panel-config.md",
+      "language": "markdown",
+      "sizeLines": 147,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m3/review-synthesis.md",
+      "language": "markdown",
+      "sizeLines": 201,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m3/specialist-review.md",
+      "language": "markdown",
+      "sizeLines": 174,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m4/format-rendering.md",
+      "language": "markdown",
+      "sizeLines": 308,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m4/revision-patching.md",
+      "language": "markdown",
+      "sizeLines": 46,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m4/revision-roadmap-parsing.md",
+      "language": "markdown",
+      "sizeLines": 242,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m4/temporal-integrity.md",
+      "language": "markdown",
+      "sizeLines": 25,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m4/terminal-policy-gate.md",
+      "language": "markdown",
+      "sizeLines": 49,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/citation-existence.md",
+      "language": "markdown",
+      "sizeLines": 30,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/citation-verification-summary.md",
+      "language": "markdown",
+      "sizeLines": 18,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/claim-faithfulness.md",
+      "language": "markdown",
+      "sizeLines": 179,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/collaboration-depth.md",
+      "language": "markdown",
+      "sizeLines": 111,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/compliance-check.md",
+      "language": "markdown",
+      "sizeLines": 183,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/contamination-signals.md",
+      "language": "markdown",
+      "sizeLines": 26,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/figure-generation.md",
+      "language": "markdown",
+      "sizeLines": 175,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/literature-monitoring.md",
+      "language": "markdown",
+      "sizeLines": 173,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/meta-analysis.md",
+      "language": "markdown",
+      "sizeLines": 173,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/passport-verifier.md",
+      "language": "markdown",
+      "sizeLines": 29,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/pdf-read-preflight.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/risk-of-bias.md",
+      "language": "markdown",
+      "sizeLines": 168,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/socratic-mentoring.md",
+      "language": "markdown",
+      "sizeLines": 244,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/m5/submission-package-verifier.md",
+      "language": "markdown",
+      "sizeLines": 21,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/paper-humanizer/reference.md",
+      "language": "markdown",
+      "sizeLines": 162,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/paper-humanizer/review.md",
+      "language": "markdown",
+      "sizeLines": 82,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/paper-humanizer/revision.md",
+      "language": "markdown",
+      "sizeLines": 47,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/paper-humanizer/verification.md",
+      "language": "markdown",
+      "sizeLines": 76,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/review-response/comment-atomization.md",
+      "language": "markdown",
+      "sizeLines": 38,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/review-response/intake.md",
+      "language": "markdown",
+      "sizeLines": 38,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/review-response/manuscript-analysis.md",
+      "language": "markdown",
+      "sizeLines": 41,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/review-response/round.md",
+      "language": "markdown",
+      "sizeLines": 53,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/procedures/review-response/workboard-planning.md",
+      "language": "markdown",
+      "sizeLines": 35,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/authoring/revision-master-cli.ts",
+      "language": "typescript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/authoring/revision-master-sources.ts",
+      "language": "typescript",
+      "sizeLines": 186,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/classify.ts",
+      "language": "typescript",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/cli.ts",
+      "language": "typescript",
+      "sizeLines": 124,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/config.ts",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/contracts.ts",
+      "language": "typescript",
+      "sizeLines": 233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/converter.ts",
+      "language": "typescript",
+      "sizeLines": 180,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/emit.ts",
+      "language": "typescript",
+      "sizeLines": 366,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/fs-utils.ts",
+      "language": "typescript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/git.ts",
+      "language": "typescript",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/idempotence.ts",
+      "language": "typescript",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/ingest.ts",
+      "language": "typescript",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/licensing.ts",
+      "language": "typescript",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/manifest.ts",
+      "language": "typescript",
+      "sizeLines": 429,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/quarto/delivery.ts",
+      "language": "typescript",
+      "sizeLines": 236,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/quarto/index.ts",
+      "language": "typescript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/quarto/render-quarto.mjs",
+      "language": "javascript",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/revision/apply-revision-patch.mjs",
+      "language": "javascript",
+      "sizeLines": 356,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/revision/apply.ts",
+      "language": "typescript",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/revision/contract.ts",
+      "language": "typescript",
+      "sizeLines": 237,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/revision/markdown-blocks.ts",
+      "language": "typescript",
+      "sizeLines": 110,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/routing/catalog.ts",
+      "language": "typescript",
+      "sizeLines": 169,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/routing/contracts.ts",
+      "language": "typescript",
+      "sizeLines": 210,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/routing/navigation-projection.ts",
+      "language": "typescript",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/routing/owners.ts",
+      "language": "typescript",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/routing/projection.ts",
+      "language": "typescript",
+      "sizeLines": 80,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/runtime-policy/assets/cross-model-verification.md",
+      "language": "markdown",
+      "sizeLines": 27,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/runtime-policy/assets/host-native-delegation.md",
+      "language": "markdown",
+      "sizeLines": 16,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/runtime-policy/assets/model-tiering.md",
+      "language": "markdown",
+      "sizeLines": 16,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/arsu-converter/runtime-policy/catalog.ts",
+      "language": "typescript",
+      "sizeLines": 195,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/runtime-policy/check.ts",
+      "language": "typescript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/runtime-policy/planner.ts",
+      "language": "typescript",
+      "sizeLines": 443,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/runtime-policy/types.ts",
+      "language": "typescript",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/source-rewrite.ts",
+      "language": "typescript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/transform.ts",
+      "language": "typescript",
+      "sizeLines": 219,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/types.ts",
+      "language": "typescript",
+      "sizeLines": 214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/upstream.ts",
+      "language": "typescript",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/validate.ts",
+      "language": "typescript",
+      "sizeLines": 638,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/workflow/boundary-deliverables.ts",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/workflow/catalog.ts",
+      "language": "typescript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/workflow/generate.ts",
+      "language": "typescript",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/workflow/graph-profiles/academic-paper-reviewer.ts",
+      "language": "typescript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/workflow/graph-profiles/academic-paper.ts",
+      "language": "typescript",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/workflow/graph-profiles/academic-pipeline.ts",
+      "language": "typescript",
+      "sizeLines": 265,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/workflow/graph-profiles/index.ts",
+      "language": "typescript",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/workflow/graph-profiles/minimal.ts",
+      "language": "typescript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/workflow/graph-profiles/paper-humanizer.ts",
+      "language": "typescript",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/workflow/graph-profiles/research-main.ts",
+      "language": "typescript",
+      "sizeLines": 110,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/arsu-converter/workflow/graph-profiles/review-response.ts",
+      "language": "typescript",
+      "sizeLines": 180,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/capabilities/registry.ts",
+      "language": "typescript",
+      "sizeLines": 293,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/capabilities/validators.ts",
+      "language": "typescript",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/cli/bin.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/cli/command-catalog.ts",
+      "language": "typescript",
+      "sizeLines": 249,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/cli/handbook.ts",
+      "language": "typescript",
+      "sizeLines": 218,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/cli/handlers/graph-bootstrap.ts",
+      "language": "typescript",
+      "sizeLines": 230,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/cli/handlers/graph-context.ts",
+      "language": "typescript",
+      "sizeLines": 255,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/cli/handlers/graph-plugins.ts",
+      "language": "typescript",
+      "sizeLines": 174,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/cli/handlers/graph.ts",
+      "language": "typescript",
+      "sizeLines": 553,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/cli/main.ts",
+      "language": "typescript",
+      "sizeLines": 211,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/cli/payload-catalog.ts",
+      "language": "typescript",
+      "sizeLines": 154,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/cli/presenter.ts",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/cli/prompts/searchable-multi-select.ts",
+      "language": "typescript",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/cli/types.ts",
+      "language": "typescript",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core-skills/catalog.ts",
+      "language": "typescript",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core-skills/paper-humanizer/reference-mode.ts",
+      "language": "typescript",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/contracts/annotation.ts",
+      "language": "typescript",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/contracts/capability-graph.ts",
+      "language": "typescript",
+      "sizeLines": 331,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/contracts/capability-manifest.ts",
+      "language": "typescript",
+      "sizeLines": 201,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/contracts/control-selector.ts",
+      "language": "typescript",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/contracts/graph-workspace.ts",
+      "language": "typescript",
+      "sizeLines": 334,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/contracts/project-change.ts",
+      "language": "typescript",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/contracts/project-path.ts",
+      "language": "typescript",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/contracts/stable-specs.ts",
+      "language": "typescript",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/contracts/workspace-format.ts",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/runtime/annotation-provenance.ts",
+      "language": "typescript",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/runtime/annotation-target.ts",
+      "language": "typescript",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/runtime/boundary-path.ts",
+      "language": "typescript",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/runtime/graph-run.ts",
+      "language": "typescript",
+      "sizeLines": 1371,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/runtime/graph-workspace-index.ts",
+      "language": "typescript",
+      "sizeLines": 556,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/validation/parse.ts",
+      "language": "typescript",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/validation/types.ts",
+      "language": "typescript",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/workspace/discover.ts",
+      "language": "typescript",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/workspace/graph-discover.ts",
+      "language": "typescript",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/workspace/layout.ts",
+      "language": "typescript",
+      "sizeLines": 109,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/workspace/path-boundary.ts",
+      "language": "typescript",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/workspace/templates.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/workspace/write-plan.ts",
+      "language": "typescript",
+      "sizeLines": 335,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/graph-profiles/registry.ts",
+      "language": "typescript",
+      "sizeLines": 187,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/licensing.ts",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/literature-adapters/assets.ts",
+      "language": "typescript",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/literature-adapters/catalog.ts",
+      "language": "typescript",
+      "sizeLines": 161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/literature-adapters/contracts.ts",
+      "language": "typescript",
+      "sizeLines": 138,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/literature-adapters/delivery.ts",
+      "language": "typescript",
+      "sizeLines": 305,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/literature-adapters/index.ts",
+      "language": "typescript",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/literature-adapters/platform.ts",
+      "language": "typescript",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/literature-adapters/provider-contracts.ts",
+      "language": "typescript",
+      "sizeLines": 176,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/literature-adapters/provider-policy.ts",
+      "language": "typescript",
+      "sizeLines": 203,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugins/assembler.ts",
+      "language": "typescript",
+      "sizeLines": 103,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugins/domain-catalog.json",
+      "language": "json",
+      "sizeLines": 2487,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/plugins/extensions.ts",
+      "language": "typescript",
+      "sizeLines": 302,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugins/graph-check.ts",
+      "language": "typescript",
+      "sizeLines": 221,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugins/graph-delivery.ts",
+      "language": "typescript",
+      "sizeLines": 438,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugins/graph-status.ts",
+      "language": "typescript",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugins/registry.ts",
+      "language": "typescript",
+      "sizeLines": 388,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugins/runtime-capabilities.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugins/status.ts",
+      "language": "typescript",
+      "sizeLines": 138,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugins/taxonomy.ts",
+      "language": "typescript",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/plugins/taxonomy/anzsrc-for-2020.json",
+      "language": "json",
+      "sizeLines": 11009,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/procedures/catalog.ts",
+      "language": "typescript",
+      "sizeLines": 198,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/procedures/packet.ts",
+      "language": "typescript",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/review-workspace.ts",
+      "language": "typescript",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/review-workspace/adapters.ts",
+      "language": "typescript",
+      "sizeLines": 292,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/review-workspace/contracts.ts",
+      "language": "typescript",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/review-workspace/handoff.ts",
+      "language": "typescript",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/review-workspace/host.ts",
+      "language": "typescript",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/review-workspace/index.ts",
+      "language": "typescript",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/review-workspace/instructions.ts",
+      "language": "typescript",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/review-workspace/prepare.ts",
+      "language": "typescript",
+      "sizeLines": 157,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/review-workspace/render.ts",
+      "language": "typescript",
+      "sizeLines": 160,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/review-workspace/revision-master-prepare.ts",
+      "language": "typescript",
+      "sizeLines": 135,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/review-workspace/revision-master.ts",
+      "language": "typescript",
+      "sizeLines": 253,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/review-workspace/v2.ts",
+      "language": "typescript",
+      "sizeLines": 216,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/utils/fs.ts",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/utils/json.ts",
+      "language": "typescript",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-audits/contracts.ts",
+      "language": "typescript",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-audits/education-agent-skills-cli.ts",
+      "language": "typescript",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-audits/education-agent-skills.ts",
+      "language": "typescript",
+      "sizeLines": 758,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-audits/finrobot.ts",
+      "language": "typescript",
+      "sizeLines": 224,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-audits/histagent.ts",
+      "language": "typescript",
+      "sizeLines": 310,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-audits/materials-science-skills-for-llm.ts",
+      "language": "typescript",
+      "sizeLines": 123,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-audits/scientific-agent-skills.ts",
+      "language": "typescript",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-audits/zotero-library-agent-bundle.ts",
+      "language": "typescript",
+      "sizeLines": 287,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/education-agent-skills/adaptation.ts",
+      "language": "typescript",
+      "sizeLines": 318,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/education-agent-skills/cli.ts",
+      "language": "typescript",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/education-agent-skills/complete-tree.ts",
+      "language": "typescript",
+      "sizeLines": 137,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/education-agent-skills/converter.ts",
+      "language": "typescript",
+      "sizeLines": 219,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/education-agent-skills/policy.ts",
+      "language": "typescript",
+      "sizeLines": 453,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/education-agent-skills/preview.ts",
+      "language": "typescript",
+      "sizeLines": 170,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/education-agent-skills/production-policy.json",
+      "language": "json",
+      "sizeLines": 128,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/education-agent-skills/review-decision.json",
+      "language": "json",
+      "sizeLines": 16,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/admission-decisions.json",
+      "language": "json",
+      "sizeLines": 171,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/cli.ts",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/complete-tree.ts",
+      "language": "typescript",
+      "sizeLines": 161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/converter.ts",
+      "language": "typescript",
+      "sizeLines": 289,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/lib/financial_support.py",
+      "language": "python",
+      "sizeLines": 176,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/license-decisions.json",
+      "language": "json",
+      "sizeLines": 58,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/origin-decisions.json",
+      "language": "json",
+      "sizeLines": 65,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/policy.ts",
+      "language": "typescript",
+      "sizeLines": 370,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/preview.ts",
+      "language": "typescript",
+      "sizeLines": 139,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/relationship-decisions.json",
+      "language": "json",
+      "sizeLines": 51,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/resource-decisions.json",
+      "language": "json",
+      "sizeLines": 116,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/review-decision.json",
+      "language": "json",
+      "sizeLines": 15,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/skill-definitions.ts",
+      "language": "typescript",
+      "sizeLines": 227,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/skills/financial-research-company-fundamentals/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 163,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/skills/financial-research-company-fundamentals/scripts/fundamentals.py",
+      "language": "python",
+      "sizeLines": 112,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/skills/financial-research-competitive-position/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 120,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/skills/financial-research-corporate-risk/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 106,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/skills/financial-research-event-evidence/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 133,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/skills/financial-research-event-evidence/scripts/event_evidence.py",
+      "language": "python",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/skills/financial-research-relative-valuation/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 226,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/skills/financial-research-relative-valuation/scripts/valuation.py",
+      "language": "python",
+      "sizeLines": 272,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/skills/financial-research-statement-analysis/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 218,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/skills/financial-research-statement-analysis/scripts/statements.py",
+      "language": "python",
+      "sizeLines": 665,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/source-entry-decisions.json",
+      "language": "json",
+      "sizeLines": 28578,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/finrobot/surface-decisions.json",
+      "language": "json",
+      "sizeLines": 1506,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/histagent/cli.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/histagent/complete-tree.ts",
+      "language": "typescript",
+      "sizeLines": 122,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/histagent/converter.ts",
+      "language": "typescript",
+      "sizeLines": 265,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/histagent/lib/historical_support.py",
+      "language": "python",
+      "sizeLines": 214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/histagent/policy.ts",
+      "language": "typescript",
+      "sizeLines": 168,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/histagent/preview.ts",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/histagent/production-policy.json",
+      "language": "json",
+      "sizeLines": 1348,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/histagent/review-decision.json",
+      "language": "json",
+      "sizeLines": 11,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skill-definitions.ts",
+      "language": "typescript",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skills/histagent-historical-research/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 125,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skills/histagent-historical-research/references/evidence-and-conflict-cases.md",
+      "language": "markdown",
+      "sizeLines": 67,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skills/histagent-historical-research/references/stage-records.md",
+      "language": "markdown",
+      "sizeLines": 73,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skills/histagent-historical-research/scripts/research_runtime.py",
+      "language": "python",
+      "sizeLines": 348,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skills/histagent-historical-source-analysis/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 119,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skills/histagent-historical-source-analysis/references/adapters-and-formats.md",
+      "language": "markdown",
+      "sizeLines": 45,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skills/histagent-historical-source-analysis/references/layer-and-collation-cases.md",
+      "language": "markdown",
+      "sizeLines": 62,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skills/histagent-historical-source-analysis/scripts/analyze_source.py",
+      "language": "python",
+      "sizeLines": 274,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skills/histagent-historical-source-identification/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 107,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skills/histagent-historical-source-identification/references/candidate-verification-cases.md",
+      "language": "markdown",
+      "sizeLines": 47,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skills/histagent-historical-source-identification/references/provider-adapters.md",
+      "language": "markdown",
+      "sizeLines": 48,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/histagent/skills/histagent-historical-source-identification/scripts/identify_sources.py",
+      "language": "python",
+      "sizeLines": 245,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/histagent/source-evidence.json",
+      "language": "json",
+      "sizeLines": 62,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/admission-decisions.json",
+      "language": "json",
+      "sizeLines": 427,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/cli.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/complete-tree.ts",
+      "language": "typescript",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/converter.ts",
+      "language": "typescript",
+      "sizeLines": 197,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/external-resource-decisions.json",
+      "language": "json",
+      "sizeLines": 19,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/file-decisions.json",
+      "language": "json",
+      "sizeLines": 35,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/policy.ts",
+      "language": "typescript",
+      "sizeLines": 245,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/relationship-decisions.json",
+      "language": "json",
+      "sizeLines": 12,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/review-decision.json",
+      "language": "json",
+      "sizeLines": 15,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skill-definitions.ts",
+      "language": "typescript",
+      "sizeLines": 214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-apex-alloy-workflows/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 102,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-apex-alloy-workflows/references/property-parameters.md",
+      "language": "markdown",
+      "sizeLines": 43,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-atomsk-cli/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 95,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-deeptb-helper/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 98,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-deeptb-helper/references/dataset-and-configuration.md",
+      "language": "markdown",
+      "sizeLines": 55,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-dpgen-workflow/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 99,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-dpgen-workflow/references/parameter-and-machine-files.md",
+      "language": "markdown",
+      "sizeLines": 49,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-gpumd-workflow/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 91,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-gpumd-workflow/references/md-nep-and-output-playbook.md",
+      "language": "markdown",
+      "sizeLines": 63,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-phonopy-workflows/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 93,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-phonopy-workflows/references/configuration-and-force-files.md",
+      "language": "markdown",
+      "sizeLines": 56,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-unimol-ops/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 90,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-unimol-ops/references/local-workflow-modes.md",
+      "language": "markdown",
+      "sizeLines": 58,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/scientific-agent-skills/admission-decisions.json",
+      "language": "json",
+      "sizeLines": 6293,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/scientific-agent-skills/cli.ts",
+      "language": "typescript",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/scientific-agent-skills/converter.ts",
+      "language": "typescript",
+      "sizeLines": 317,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/scientific-agent-skills/dependency-decisions.json",
+      "language": "json",
+      "sizeLines": 313,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/scientific-agent-skills/policy.ts",
+      "language": "typescript",
+      "sizeLines": 187,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/scientific-agent-skills/resource-decisions.json",
+      "language": "json",
+      "sizeLines": 139,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/scientific-agent-skills/security-review-decisions.json",
+      "language": "json",
+      "sizeLines": 5759,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/scientific-agent-skills/security-review.ts",
+      "language": "typescript",
+      "sizeLines": 259,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/shared/non-native-skill-standard/index.ts",
+      "language": "typescript",
+      "sizeLines": 498,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/shared/non-native-skill-standard/templates/baseline.SKILL.md",
+      "language": "markdown",
+      "sizeLines": 116,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/shared/non-native-skill-standard/templates/extensions/resource-backed.md",
+      "language": "markdown",
+      "sizeLines": 24,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/shared/non-native-skill-standard/templates/extensions/script-assisted.md",
+      "language": "markdown",
+      "sizeLines": 39,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/shared/non-native-skill-standard/templates/extensions/stateful.md",
+      "language": "markdown",
+      "sizeLines": 38,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/vendor-converters/shared/production-vendors.ts",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/shared/staging.ts",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/tooluniverse/cli.ts",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/tooluniverse/converter.ts",
+      "language": "typescript",
+      "sizeLines": 267,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/tooluniverse/dependency-decisions.json",
+      "language": "json",
+      "sizeLines": 2959,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/vendor-converters/tooluniverse/semantic-adaptations.ts",
+      "language": "typescript",
+      "sizeLines": 428,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/zotero-library-agent-bundle/cli.ts",
+      "language": "typescript",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-converters/zotero-library-agent-bundle/converter.ts",
+      "language": "typescript",
+      "sizeLines": 253,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-evidence/education-agent-skills/cli.ts",
+      "language": "typescript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-evidence/education-agent-skills/index.ts",
+      "language": "typescript",
+      "sizeLines": 215,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vendor-evidence/education-agent-skills/schema.ts",
+      "language": "typescript",
+      "sizeLines": 417,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/adapters.test.ts",
+      "language": "typescript",
+      "sizeLines": 175,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/agent-profiles.test.ts",
+      "language": "typescript",
+      "sizeLines": 206,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/arsu-anchors.test.ts",
+      "language": "typescript",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/arsu-checkers.test.ts",
+      "language": "typescript",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/arsu-converter.test.ts",
+      "language": "typescript",
+      "sizeLines": 576,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/arsu-maintenance.test.ts",
+      "language": "typescript",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/arsu-routing-catalog.test.ts",
+      "language": "typescript",
+      "sizeLines": 139,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/arsu-runtime-policy.test.ts",
+      "language": "typescript",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/authored-whitespace.test.ts",
+      "language": "typescript",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/authoring-converter.test.ts",
+      "language": "typescript",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/capability-graph.test.ts",
+      "language": "typescript",
+      "sizeLines": 175,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/capability-manifest.test.ts",
+      "language": "typescript",
+      "sizeLines": 120,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/capability-parity.test.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/capability-registry.test.ts",
+      "language": "typescript",
+      "sizeLines": 422,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/capability-validators.test.ts",
+      "language": "typescript",
+      "sizeLines": 175,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/dogfood-harness.test.mjs",
+      "language": "javascript",
+      "sizeLines": 182,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/dogfooding-playbook.test.ts",
+      "language": "typescript",
+      "sizeLines": 172,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/domain-taxonomy.test.ts",
+      "language": "typescript",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/education-agent-skills-audit.test.ts",
+      "language": "typescript",
+      "sizeLines": 209,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/education-agent-skills-evidence.test.ts",
+      "language": "typescript",
+      "sizeLines": 250,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/education-agent-skills-extensions.test.ts",
+      "language": "typescript",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/education-agent-skills-ingest.test.ts",
+      "language": "typescript",
+      "sizeLines": 230,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/education-agent-skills-maintenance.test.ts",
+      "language": "typescript",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/extraction-index.test.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/finrobot-audit.test.ts",
+      "language": "typescript",
+      "sizeLines": 250,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/finrobot-converter.test.ts",
+      "language": "typescript",
+      "sizeLines": 243,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/finrobot-ingest-draft.test.ts",
+      "language": "typescript",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/finrobot-maintenance.test.ts",
+      "language": "typescript",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/finrobot-preview.test.ts",
+      "language": "typescript",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/finrobot-statements.test.ts",
+      "language": "typescript",
+      "sizeLines": 339,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/finrobot-valuation.test.ts",
+      "language": "typescript",
+      "sizeLines": 182,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/fixtures/domain-skill-plugins/registry.json",
+      "language": "json",
+      "sizeLines": 71,
+      "fileCategory": "config"
+    },
+    {
+      "path": "tests/fixtures/domain-skill-plugins/vendors/domain-source/rock-mechanics/NOTICE.md",
+      "language": "markdown",
+      "sizeLines": 3,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "tests/fixtures/domain-skill-plugins/vendors/domain-source/rock-mechanics/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 14,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "tests/fixtures/domain-skill-plugins/vendors/domain-source/rock-mechanics/references/criteria.md",
+      "language": "markdown",
+      "sizeLines": 3,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "tests/fixtures/domain-skill-plugins/vendors/domain-source/rock-mechanics/scripts/calculate.py",
+      "language": "python",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/fixtures/domain-skill-plugins/vendors/method-source/research-tables/NOTICE.md",
+      "language": "markdown",
+      "sizeLines": 3,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "tests/fixtures/domain-skill-plugins/vendors/method-source/research-tables/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "tests/fixtures/domain-skill-plugins/vendors/method-source/research-tables/assets/table-template.csv",
+      "language": "csv",
+      "sizeLines": 1,
+      "fileCategory": "data"
+    },
+    {
+      "path": "tests/fixtures/material-passport/schema9.yaml",
+      "language": "yaml",
+      "sizeLines": 41,
+      "fileCategory": "config"
+    },
+    {
+      "path": "tests/graph-cli-main.test.ts",
+      "language": "typescript",
+      "sizeLines": 370,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/graph-cli-static.test.ts",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/graph-cli.test.ts",
+      "language": "typescript",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/graph-context-cli.test.ts",
+      "language": "typescript",
+      "sizeLines": 459,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/graph-run-advanced.test.ts",
+      "language": "typescript",
+      "sizeLines": 517,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/graph-run-conflict.test.ts",
+      "language": "typescript",
+      "sizeLines": 257,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/graph-run.test.ts",
+      "language": "typescript",
+      "sizeLines": 394,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/graph-security.test.ts",
+      "language": "typescript",
+      "sizeLines": 134,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/graph-workspace.test.ts",
+      "language": "typescript",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/helpers/cli.ts",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/helpers/graph-workspace.ts",
+      "language": "typescript",
+      "sizeLines": 172,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/helpers/revision-master.ts",
+      "language": "typescript",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/helpers/vendor-audit.ts",
+      "language": "typescript",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/helpers/vendor-maintenance.ts",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/histagent-audit.test.ts",
+      "language": "typescript",
+      "sizeLines": 249,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/histagent-converter.test.ts",
+      "language": "typescript",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/histagent-ingest-draft.test.ts",
+      "language": "typescript",
+      "sizeLines": 274,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/histagent-maintenance.test.ts",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/literature-adapters.test.ts",
+      "language": "typescript",
+      "sizeLines": 280,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/literature-provider-contracts.test.ts",
+      "language": "typescript",
+      "sizeLines": 218,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/managed-installation-paths.test.ts",
+      "language": "typescript",
+      "sizeLines": 432,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/manuscript-annotation-intake-adapters.test.ts",
+      "language": "typescript",
+      "sizeLines": 182,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/manuscript-annotation.test.ts",
+      "language": "typescript",
+      "sizeLines": 279,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/materials-science-maintenance.test.ts",
+      "language": "typescript",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/materials-science-skills-converter.test.ts",
+      "language": "typescript",
+      "sizeLines": 159,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/materials-science-skills-for-llm-audit.test.ts",
+      "language": "typescript",
+      "sizeLines": 206,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/non-native-vendor-skill-standard.test.ts",
+      "language": "typescript",
+      "sizeLines": 300,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/own-vendor-maintenance.test.ts",
+      "language": "typescript",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/paper-humanizer.test.ts",
+      "language": "typescript",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/plugin-extensions.test.ts",
+      "language": "typescript",
+      "sizeLines": 613,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/preset-graphs.test.ts",
+      "language": "typescript",
+      "sizeLines": 159,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/procedures.test.ts",
+      "language": "typescript",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/quarto-delivery.test.ts",
+      "language": "typescript",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/review-response.test.ts",
+      "language": "typescript",
+      "sizeLines": 220,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/review-workspace-v2.test.ts",
+      "language": "typescript",
+      "sizeLines": 199,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/review-workspace.test.ts",
+      "language": "typescript",
+      "sizeLines": 177,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/revision-master-audit.test.ts",
+      "language": "typescript",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/revision-master-runtime.test.ts",
+      "language": "typescript",
+      "sizeLines": 1099,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/revision-master-workspace.test.ts",
+      "language": "typescript",
+      "sizeLines": 234,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/scientific-agent-skills-audit.test.ts",
+      "language": "typescript",
+      "sizeLines": 202,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/scientific-agent-skills-converter.test.ts",
+      "language": "typescript",
+      "sizeLines": 144,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/scientific-agent-skills-extensions.test.ts",
+      "language": "typescript",
+      "sizeLines": 129,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/scientific-agent-skills-maintenance.test.ts",
+      "language": "typescript",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/scientific-agent-skills-security-review.test.ts",
+      "language": "typescript",
+      "sizeLines": 130,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/skill-harness.test.ts",
+      "language": "typescript",
+      "sizeLines": 146,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/tooluniverse-adaptations.test.ts",
+      "language": "typescript",
+      "sizeLines": 131,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/tooluniverse-audit.test.ts",
+      "language": "typescript",
+      "sizeLines": 172,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/tooluniverse-converter.test.ts",
+      "language": "typescript",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/tooluniverse-extensions.test.ts",
+      "language": "typescript",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/tooluniverse-maintenance.test.ts",
+      "language": "typescript",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/vendor-maintenance.test.ts",
+      "language": "typescript",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/vendor-staging.test.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/write-plan.test.ts",
+      "language": "typescript",
+      "sizeLines": 264,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/zotero-adapter-converter.test.ts",
+      "language": "typescript",
+      "sizeLines": 93,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tsconfig.build.json",
+      "language": "json",
+      "sizeLines": 12,
+      "fileCategory": "config"
+    },
+    {
+      "path": "tsconfig.harness.json",
+      "language": "json",
+      "sizeLines": 12,
+      "fileCategory": "config"
+    },
+    {
+      "path": "tsconfig.json",
+      "language": "json",
+      "sizeLines": 15,
+      "fileCategory": "config"
+    },
+    {
+      "path": "tsconfig.test.json",
+      "language": "json",
+      "sizeLines": 11,
+      "fileCategory": "config"
+    },
+    {
+      "path": "website/docs/cli/advance.mdx",
+      "language": "markdown",
+      "sizeLines": 32,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/archive.mdx",
+      "language": "markdown",
+      "sizeLines": 24,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/check.mdx",
+      "language": "markdown",
+      "sizeLines": 29,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/decide.mdx",
+      "language": "markdown",
+      "sizeLines": 42,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/doctor.mdx",
+      "language": "markdown",
+      "sizeLines": 20,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/handoff.mdx",
+      "language": "markdown",
+      "sizeLines": 47,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/index.mdx",
+      "language": "markdown",
+      "sizeLines": 16,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/init.mdx",
+      "language": "markdown",
+      "sizeLines": 33,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/instructions.mdx",
+      "language": "markdown",
+      "sizeLines": 24,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/list.mdx",
+      "language": "markdown",
+      "sizeLines": 33,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/pack.mdx",
+      "language": "markdown",
+      "sizeLines": 30,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/plugin-install.mdx",
+      "language": "markdown",
+      "sizeLines": 33,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/plugin-list.mdx",
+      "language": "markdown",
+      "sizeLines": 30,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/plugin-show.mdx",
+      "language": "markdown",
+      "sizeLines": 29,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/plugin-uninstall.mdx",
+      "language": "markdown",
+      "sizeLines": 24,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/plugin-update.mdx",
+      "language": "markdown",
+      "sizeLines": 24,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/plugin.mdx",
+      "language": "markdown",
+      "sizeLines": 20,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/propose.mdx",
+      "language": "markdown",
+      "sizeLines": 31,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/show.mdx",
+      "language": "markdown",
+      "sizeLines": 24,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/start.mdx",
+      "language": "markdown",
+      "sizeLines": 59,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/status.mdx",
+      "language": "markdown",
+      "sizeLines": 20,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/cli/update.mdx",
+      "language": "markdown",
+      "sizeLines": 33,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/faq.md",
+      "language": "markdown",
+      "sizeLines": 38,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/guides/literature.md",
+      "language": "markdown",
+      "sizeLines": 75,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/guides/plugins.md",
+      "language": "markdown",
+      "sizeLines": 118,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/guides/selector-protocol.md",
+      "language": "markdown",
+      "sizeLines": 23,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/guides/skills.md",
+      "language": "markdown",
+      "sizeLines": 87,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/guides/workflow.md",
+      "language": "markdown",
+      "sizeLines": 28,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/index.md",
+      "language": "markdown",
+      "sizeLines": 47,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/installation.md",
+      "language": "markdown",
+      "sizeLines": 108,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/quick-start.md",
+      "language": "markdown",
+      "sizeLines": 39,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/reference/glossary.md",
+      "language": "markdown",
+      "sizeLines": 27,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docs/reference/user-model.md",
+      "language": "markdown",
+      "sizeLines": 39,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/docusaurus.config.ts",
+      "language": "typescript",
+      "sizeLines": 102,
+      "fileCategory": "code"
+    },
+    {
+      "path": "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/faq.md",
+      "language": "markdown",
+      "sizeLines": 53,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/guides/selector-protocol.md",
+      "language": "markdown",
+      "sizeLines": 22,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/guides/skills.md",
+      "language": "markdown",
+      "sizeLines": 51,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/guides/workflow.md",
+      "language": "markdown",
+      "sizeLines": 24,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/index.md",
+      "language": "markdown",
+      "sizeLines": 42,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/installation.md",
+      "language": "markdown",
+      "sizeLines": 72,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/quick-start.md",
+      "language": "markdown",
+      "sizeLines": 31,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "website/package.json",
+      "language": "json",
+      "sizeLines": 47,
+      "fileCategory": "config"
+    },
+    {
+      "path": "website/sidebars.cli.ts",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "website/sidebars.ts",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "website/src/css/custom.css",
+      "language": "css",
+      "sizeLines": 26,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "website/static/.nojekyll",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "website/tsconfig.json",
+      "language": "json",
+      "sizeLines": 6,
+      "fileCategory": "config"
+    }
+  ],
+  "totalFiles": 659,
+  "filteredByIgnore": 8543,
+  "estimatedComplexity": "very-large",
+  "importMap": {
+    ".github/workflows/ci.yml": [],
+    ".github/workflows/docs.yml": [],
+    ".gitmodules": [],
+    "AGENTS.md": [],
+    "CHANGELOG.md": [],
+    "LICENSES/AGPL-3.0.txt": [],
+    "LICENSES/Apache-2.0.txt": [],
+    "LICENSES/CC-BY-NC-4.0.txt": [],
+    "LICENSES/CC-BY-SA-4.0.txt": [],
+    "LICENSES/MIT.txt": [],
+    "NOTICE": [],
+    "README.md": [],
+    "SECURITY.md": [],
+    "docs/README.md": [],
+    "docs/developer/README.md": [],
+    "docs/developer/architecture.md": [],
+    "docs/developer/cli-interface.md": [],
+    "docs/developer/domain-plugins.md": [],
+    "docs/developer/domain-taxonomy.md": [],
+    "docs/developer/manuscript-annotations.md": [],
+    "docs/developer/runtime/README.md": [],
+    "docs/developer/runtime/academic_paper_reviewer_workflow.md": [],
+    "docs/developer/runtime/academic_paper_workflow.md": [],
+    "docs/developer/runtime/academic_pipeline_workflow.md": [],
+    "docs/developer/runtime/core_runtime_model.md": [],
+    "docs/developer/runtime/deep_research_workflow.md": [],
+    "docs/developer/runtime/diagrams/src/academic-paper-reviewer-workflow.puml": [],
+    "docs/developer/runtime/diagrams/src/academic-paper-workflow.puml": [],
+    "docs/developer/runtime/diagrams/src/academic-pipeline-mid-entry.puml": [],
+    "docs/developer/runtime/diagrams/src/academic-pipeline-workflow.puml": [],
+    "docs/developer/runtime/diagrams/src/contract-change-lifecycle.puml": [],
+    "docs/developer/runtime/diagrams/src/deep-research-workflow.puml": [],
+    "docs/developer/runtime/diagrams/src/frontier-evaluation.dot": [],
+    "docs/developer/runtime/diagrams/src/revision-round.puml": [],
+    "docs/developer/runtime/diagrams/src/runtime-control-loop.puml": [],
+    "docs/developer/runtime/diagrams/src/system-architecture.puml": [],
+    "docs/developer/runtime/diagrams/src/two-level-openspec-model.puml": [],
+    "docs/developer/runtime/runtime_protocols.md": [],
+    "docs/maintainer/README.md": [],
+    "docs/maintainer/arsu-capability-taxonomy.md": [],
+    "docs/maintainer/arsu-contract-anchor.md": [],
+    "docs/maintainer/non-native-vendor-skill-standard.md": [],
+    "docs/maintainer/release-process.md": [],
+    "docs/maintainer/vendors/README.md": [],
+    "docs/maintainer/vendors/education-agent-skills.md": [],
+    "docs/maintainer/vendors/finrobot.md": [],
+    "docs/maintainer/vendors/histagent.md": [],
+    "docs/maintainer/vendors/materials-science-skills.md": [],
+    "docs/maintainer/vendors/scientific-agent-skills.md": [],
+    "docs/maintainer/vendors/tooluniverse.md": [],
+    "docs/user/README.md": [],
+    "docs/user/agent-entry-matrix.md": [],
+    "docs/user/cli-handbook.md": [],
+    "docs/user/deterministic-checkers.md": [],
+    "docs/user/literature-adapters.md": [],
+    "docs/user/review-workspace.md": [],
+    "docs/user/usage-model.md": [],
+    "eslint.config.js": [],
+    "harness/README.md": [],
+    "harness/catalog.ts": [
+      "src/adapters/companion/index.ts",
+      "src/arsu-converter/converter.ts",
+      "src/licensing.ts",
+      "src/literature-adapters/catalog.ts",
+      "src/plugins/assembler.ts",
+      "src/plugins/registry.ts",
+      "src/procedures/catalog.ts"
+    ],
+    "harness/dogfood/public/app.js": [],
+    "harness/dogfood/public/index.html": [],
+    "harness/dogfood/public/matrix.css": [],
+    "harness/dogfood/public/styles.css": [],
+    "harness/fixtures/article.pandoc.json": [],
+    "harness/fixtures/base.pandoc.json": [],
+    "harness/fixtures/candidate.pandoc.json": [],
+    "harness/public/app.js": [],
+    "harness/public/index.html": [],
+    "harness/public/styles.css": [],
+    "harness/review-workspace-preview.ts": [
+      "harness/revision-master-preview.ts",
+      "src/core/workspace/write-plan.ts",
+      "src/review-workspace.ts"
+    ],
+    "harness/revision-master-preview-data.ts": [
+      "src/review-workspace.ts"
+    ],
+    "harness/revision-master-preview.ts": [
+      "harness/revision-master-preview-data.ts",
+      "src/review-workspace.ts"
+    ],
+    "harness/server.ts": [
+      "harness/catalog.ts"
+    ],
+    "package.json": [],
+    "review-workspace/index.check.mjs": [],
+    "review-workspace/index.html": [],
+    "review-workspace/prototype-annotation-interaction.html": [],
+    "review-workspace/prototype-review-workbench.check.mjs": [],
+    "review-workspace/prototype-review-workbench.html": [],
+    "review-workspace/prototype-revision-master.html": [],
+    "review-workspace/revision-master.html": [],
+    "review-workspace/v1.html": [],
+    "scripts/arsu-maintenance.mjs": [
+      "scripts/lib/vendor-maintenance.mjs"
+    ],
+    "scripts/audit-capability-parity.mjs": [],
+    "scripts/authored-whitespace-exemptions.json": [],
+    "scripts/check-authored-whitespace.mjs": [],
+    "scripts/clean-output.mjs": [],
+    "scripts/dogfood.mjs": [
+      "scripts/dogfood/assessment.mjs",
+      "scripts/dogfood/hosts.mjs",
+      "scripts/dogfood/lib.mjs",
+      "scripts/dogfood/review.mjs",
+      "scripts/dogfood/server.mjs"
+    ],
+    "scripts/dogfood/assessment-worker.mjs": [
+      "scripts/dogfood/assessment.mjs",
+      "scripts/dogfood/hosts.mjs",
+      "scripts/dogfood/lib.mjs"
+    ],
+    "scripts/dogfood/assessment.mjs": [
+      "scripts/dogfood/lib.mjs"
+    ],
+    "scripts/dogfood/hosts.mjs": [
+      "scripts/dogfood/lib.mjs"
+    ],
+    "scripts/dogfood/lib.mjs": [],
+    "scripts/dogfood/matrix-worker.mjs": [
+      "scripts/dogfood/lib.mjs"
+    ],
+    "scripts/dogfood/review.mjs": [
+      "scripts/dogfood/lib.mjs"
+    ],
+    "scripts/dogfood/server.mjs": [
+      "scripts/dogfood/assessment.mjs",
+      "scripts/dogfood/hosts.mjs",
+      "scripts/dogfood/lib.mjs",
+      "scripts/dogfood/review.mjs"
+    ],
+    "scripts/dogfood/worker.mjs": [
+      "scripts/dogfood/hosts.mjs",
+      "scripts/dogfood/lib.mjs"
+    ],
+    "scripts/education-agent-skills-maintenance.mjs": [
+      "scripts/lib/vendor-maintenance.mjs"
+    ],
+    "scripts/education-agent-skills-validator-template.py": [],
+    "scripts/finrobot-maintenance.mjs": [
+      "scripts/lib/vendor-maintenance.mjs"
+    ],
+    "scripts/generate-arsu-capability-review-html.mjs": [],
+    "scripts/generate-arsu-gap-semantic-review-html.mjs": [],
+    "scripts/generate-arsu-graph-match-assessment-html.mjs": [],
+    "scripts/generate-cli-handbook.mjs": [],
+    "scripts/generate-docs.mjs": [],
+    "scripts/generate-education-agent-skills-extensions.mjs": [],
+    "scripts/generate-extraction-index.mjs": [],
+    "scripts/generate-scientific-agent-skills-extensions.mjs": [],
+    "scripts/generate-tooluniverse-extensions.mjs": [],
+    "scripts/histagent-maintenance.mjs": [
+      "scripts/lib/vendor-maintenance.mjs"
+    ],
+    "scripts/install-stable.mjs": [],
+    "scripts/lib/vendor-maintenance.mjs": [],
+    "scripts/mark-cli-executable.mjs": [],
+    "scripts/materials-science-skills-for-llm-maintenance.mjs": [
+      "scripts/lib/vendor-maintenance.mjs"
+    ],
+    "scripts/own-vendor-maintenance.mjs": [],
+    "scripts/run-skill-harness.mjs": [],
+    "scripts/run-tests.mjs": [],
+    "scripts/scientific-agent-skills-maintenance.mjs": [
+      "scripts/lib/vendor-maintenance.mjs"
+    ],
+    "scripts/scientific-agent-skills-validator-template.py": [],
+    "scripts/tooluniverse-maintenance.mjs": [
+      "scripts/lib/vendor-maintenance.mjs"
+    ],
+    "scripts/tooluniverse-validator-template.py": [],
+    "scripts/verify-arsu-checkers.mjs": [],
+    "scripts/verify-package.mjs": [],
+    "src/adapters/agent-profiles.ts": [
+      "src/adapters/tools.ts"
+    ],
+    "src/adapters/command-renderer.ts": [
+      "src/adapters/companion/shared-guidance.ts",
+      "src/adapters/companion/workflows/navigate.ts",
+      "src/adapters/tools.ts",
+      "src/cli/command-catalog.ts"
+    ],
+    "src/adapters/companion/index.ts": [],
+    "src/adapters/companion/manifest.ts": [
+      "src/adapters/companion/types.ts",
+      "src/adapters/companion/workflows/decide.ts",
+      "src/adapters/companion/workflows/navigate.ts",
+      "src/adapters/companion/workflows/propose.ts",
+      "src/adapters/companion/workflows/verify.ts"
+    ],
+    "src/adapters/companion/render.ts": [
+      "src/adapters/companion/shared-guidance.ts",
+      "src/adapters/companion/types.ts",
+      "src/arsu-converter/routing/navigation-projection.ts",
+      "src/cli/handbook.ts",
+      "src/licensing.ts"
+    ],
+    "src/adapters/companion/shared-guidance.ts": [],
+    "src/adapters/companion/types.ts": [],
+    "src/adapters/companion/workflows/decide.ts": [
+      "src/adapters/companion/types.ts"
+    ],
+    "src/adapters/companion/workflows/navigate.ts": [
+      "src/adapters/companion/types.ts",
+      "src/literature-adapters/provider-policy.ts"
+    ],
+    "src/adapters/companion/workflows/propose.ts": [
+      "src/adapters/companion/types.ts"
+    ],
+    "src/adapters/companion/workflows/verify.ts": [
+      "src/adapters/companion/types.ts"
+    ],
+    "src/adapters/delivery.ts": [
+      "src/adapters/agent-profiles.ts",
+      "src/adapters/command-renderer.ts",
+      "src/adapters/companion/index.ts",
+      "src/adapters/installations.ts",
+      "src/adapters/managed-target.ts",
+      "src/adapters/project-entry.ts",
+      "src/adapters/tools.ts",
+      "src/core/validation/types.ts",
+      "src/core/workspace/write-plan.ts",
+      "src/plugins/registry.ts"
+    ],
+    "src/adapters/installations.ts": [
+      "src/adapters/managed-target.ts",
+      "src/adapters/project-entry.ts",
+      "src/core/contracts/project-path.ts",
+      "src/core/validation/types.ts",
+      "src/core/workspace/write-plan.ts"
+    ],
+    "src/adapters/legacy-reconciliation.ts": [
+      "src/adapters/command-renderer.ts",
+      "src/adapters/installations.ts",
+      "src/adapters/managed-target.ts",
+      "src/adapters/tools.ts",
+      "src/core/validation/types.ts",
+      "src/core/workspace/path-boundary.ts",
+      "src/core/workspace/write-plan.ts"
+    ],
+    "src/adapters/managed-target.ts": [
+      "src/adapters/agent-profiles.ts",
+      "src/adapters/command-renderer.ts",
+      "src/adapters/installations.ts",
+      "src/adapters/tools.ts",
+      "src/core/contracts/project-path.ts",
+      "src/core/validation/types.ts",
+      "src/core/workspace/path-boundary.ts",
+      "src/literature-adapters/catalog.ts"
+    ],
+    "src/adapters/project-entry-matrix.ts": [
+      "src/adapters/tools.ts"
+    ],
+    "src/adapters/project-entry.ts": [
+      "src/adapters/installations.ts",
+      "src/adapters/managed-target.ts",
+      "src/adapters/tools.ts",
+      "src/core/validation/types.ts",
+      "src/core/workspace/path-boundary.ts",
+      "src/core/workspace/write-plan.ts"
+    ],
+    "src/adapters/tools.ts": [
+      "src/utils/fs.ts"
+    ],
+    "src/adapters/workspace-delivery.ts": [
+      "src/adapters/delivery.ts",
+      "src/adapters/installations.ts",
+      "src/adapters/legacy-reconciliation.ts",
+      "src/adapters/managed-target.ts",
+      "src/adapters/tools.ts",
+      "src/core/validation/types.ts",
+      "src/core/workspace/write-plan.ts",
+      "src/graph-profiles/registry.ts",
+      "src/literature-adapters/index.ts",
+      "src/plugins/graph-delivery.ts",
+      "src/plugins/registry.ts"
+    ],
+    "src/annotation-intake.ts": [],
+    "src/annotation-intake/contracts.ts": [
+      "src/core/contracts/annotation.ts"
+    ],
+    "src/annotation-intake/index.ts": [],
+    "src/annotation-intake/interpretation.ts": [
+      "src/annotation-intake/contracts.ts",
+      "src/core/contracts/annotation.ts",
+      "src/core/runtime/annotation-target.ts"
+    ],
+    "src/annotation-intake/paths.ts": [
+      "src/annotation-intake/contracts.ts"
+    ],
+    "src/annotation-intake/review-copy.ts": [
+      "src/annotation-intake/contracts.ts",
+      "src/arsu-converter/revision/markdown-blocks.ts"
+    ],
+    "src/annotation-intake/review-delta.ts": [
+      "src/annotation-intake/contracts.ts",
+      "src/arsu-converter/revision/markdown-blocks.ts"
+    ],
+    "src/annotation-intake/session.ts": [
+      "src/annotation-intake/contracts.ts",
+      "src/annotation-intake/paths.ts",
+      "src/annotation-intake/review-copy.ts",
+      "src/annotation-intake/sources.ts"
+    ],
+    "src/annotation-intake/sources.ts": [
+      "src/annotation-intake/contracts.ts",
+      "src/core/contracts/annotation.ts"
+    ],
+    "src/arsu-converter/anchors/check.ts": [
+      "src/arsu-converter/anchors/coverage.ts",
+      "src/arsu-converter/anchors/io.ts",
+      "src/arsu-converter/anchors/manifest.ts",
+      "src/arsu-converter/anchors/markers.ts",
+      "src/arsu-converter/anchors/types.ts",
+      "src/arsu-converter/fs-utils.ts"
+    ],
+    "src/arsu-converter/anchors/contract-anchors.json": [],
+    "src/arsu-converter/anchors/coverage.ts": [
+      "src/arsu-converter/anchors/types.ts"
+    ],
+    "src/arsu-converter/anchors/generate.ts": [
+      "src/arsu-converter/anchors/manifest.ts",
+      "src/arsu-converter/fs-utils.ts"
+    ],
+    "src/arsu-converter/anchors/io.ts": [
+      "src/arsu-converter/anchors/manifest.ts",
+      "src/arsu-converter/anchors/types.ts"
+    ],
+    "src/arsu-converter/anchors/manifest.ts": [
+      "src/arsu-converter/config.ts",
+      "src/arsu-converter/fs-utils.ts",
+      "src/arsu-converter/git.ts"
+    ],
+    "src/arsu-converter/anchors/markers.ts": [
+      "src/arsu-converter/anchors/types.ts"
+    ],
+    "src/arsu-converter/anchors/match.ts": [
+      "src/arsu-converter/anchors/io.ts",
+      "src/arsu-converter/anchors/types.ts",
+      "src/arsu-converter/types.ts"
+    ],
+    "src/arsu-converter/anchors/replace.ts": [
+      "src/arsu-converter/anchors/markers.ts",
+      "src/arsu-converter/anchors/types.ts",
+      "src/arsu-converter/runtime-policy/planner.ts",
+      "src/arsu-converter/runtime-policy/types.ts"
+    ],
+    "src/arsu-converter/anchors/replacements/ARTIFACT-001.md": [],
+    "src/arsu-converter/anchors/replacements/ARTIFACT-002.md": [],
+    "src/arsu-converter/anchors/replacements/CLAIM-001.md": [],
+    "src/arsu-converter/anchors/replacements/CLAIM-002.md": [],
+    "src/arsu-converter/anchors/replacements/CLAIM-003.md": [],
+    "src/arsu-converter/anchors/replacements/DECISION-001.md": [],
+    "src/arsu-converter/anchors/replacements/DECISION-002.md": [],
+    "src/arsu-converter/anchors/replacements/GATE-001.md": [],
+    "src/arsu-converter/anchors/replacements/GATE-002.md": [],
+    "src/arsu-converter/anchors/replacements/GATE-003.md": [],
+    "src/arsu-converter/anchors/replacements/GATE-004.md": [],
+    "src/arsu-converter/anchors/replacements/GATE-005.md": [],
+    "src/arsu-converter/anchors/replacements/GATE-006.md": [],
+    "src/arsu-converter/anchors/replacements/HANDOFF-001.md": [],
+    "src/arsu-converter/anchors/replacements/HANDOFF-002.md": [],
+    "src/arsu-converter/anchors/replacements/HANDOFF-003.md": [],
+    "src/arsu-converter/anchors/replacements/IO-001.md": [],
+    "src/arsu-converter/anchors/replacements/IO-002.md": [],
+    "src/arsu-converter/anchors/replacements/IO-003.md": [],
+    "src/arsu-converter/anchors/replacements/IO-004.md": [],
+    "src/arsu-converter/anchors/replacements/IO-005.md": [],
+    "src/arsu-converter/anchors/replacements/IO-006.md": [],
+    "src/arsu-converter/anchors/replacements/PATCH-001.md": [],
+    "src/arsu-converter/anchors/replacements/PATCH-002.md": [],
+    "src/arsu-converter/anchors/replacements/PATCH-003.md": [],
+    "src/arsu-converter/anchors/replacements/PATCH-004.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-001.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-002.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-003.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-004.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-005.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-006.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-007.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-008.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-009.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-010.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-011.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-012.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-013.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-014.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-015.md": [],
+    "src/arsu-converter/anchors/replacements/REVIEW-016.md": [],
+    "src/arsu-converter/anchors/replacements/SOURCE-001.md": [],
+    "src/arsu-converter/anchors/replacements/SOURCE-002.md": [],
+    "src/arsu-converter/anchors/replacements/SOURCE-003.md": [],
+    "src/arsu-converter/anchors/replacements/STATE-001.md": [],
+    "src/arsu-converter/anchors/replacements/STATE-002.md": [],
+    "src/arsu-converter/anchors/replacements/STATE-003.md": [],
+    "src/arsu-converter/anchors/replacements/STATE-004.md": [],
+    "src/arsu-converter/anchors/replacements/STATE-005.md": [],
+    "src/arsu-converter/anchors/replacements/STATE-006.md": [],
+    "src/arsu-converter/anchors/replacements/STATE-007.md": [],
+    "src/arsu-converter/anchors/replacements/STATE-008.md": [],
+    "src/arsu-converter/anchors/replacements/STATE-009.md": [],
+    "src/arsu-converter/anchors/replacements/STATE-010.md": [],
+    "src/arsu-converter/anchors/replacements/STATE-011.md": [],
+    "src/arsu-converter/anchors/types.ts": [],
+    "src/arsu-converter/anchors/upstream-manifest.json": [],
+    "src/arsu-converter/authoring/author.ts": [
+      "src/capabilities/registry.ts",
+      "src/core/contracts/capability-manifest.ts"
+    ],
+    "src/arsu-converter/authoring/checker-source.ts": [
+      "src/arsu-converter/authoring/author.ts"
+    ],
+    "src/arsu-converter/authoring/checkers/citations.py": [],
+    "src/arsu-converter/authoring/checkers/documents.py": [],
+    "src/arsu-converter/authoring/checkers/pdf.py": [],
+    "src/arsu-converter/authoring/checkers/runner.py": [],
+    "src/arsu-converter/authoring/checkers/temporal.py": [],
+    "src/arsu-converter/authoring/cli.ts": [
+      "src/arsu-converter/authoring/author.ts",
+      "src/arsu-converter/authoring/m1-sources.ts",
+      "src/arsu-converter/authoring/m2-sources.ts",
+      "src/arsu-converter/authoring/m3-sources.ts",
+      "src/arsu-converter/authoring/m4-sources.ts",
+      "src/arsu-converter/authoring/m5-sources.ts"
+    ],
+    "src/arsu-converter/authoring/m1-sources.ts": [
+      "src/arsu-converter/authoring/author.ts"
+    ],
+    "src/arsu-converter/authoring/m2-sources.ts": [
+      "src/arsu-converter/authoring/author.ts"
+    ],
+    "src/arsu-converter/authoring/m3-sources.ts": [
+      "src/arsu-converter/authoring/author.ts"
+    ],
+    "src/arsu-converter/authoring/m4-sources.ts": [
+      "src/arsu-converter/authoring/author.ts",
+      "src/arsu-converter/authoring/checker-source.ts"
+    ],
+    "src/arsu-converter/authoring/m5-sources.ts": [
+      "src/arsu-converter/authoring/author.ts",
+      "src/arsu-converter/authoring/checker-source.ts"
+    ],
+    "src/arsu-converter/authoring/paper-humanizer-cli.ts": [
+      "src/arsu-converter/authoring/author.ts",
+      "src/arsu-converter/authoring/paper-humanizer-sources.ts"
+    ],
+    "src/arsu-converter/authoring/paper-humanizer-sources.ts": [
+      "src/arsu-converter/authoring/author.ts"
+    ],
+    "src/arsu-converter/authoring/procedures/m1/evidence-synthesis.md": [],
+    "src/arsu-converter/authoring/procedures/m1/literature-search-screening.md": [],
+    "src/arsu-converter/authoring/procedures/m1/methodology-design.md": [],
+    "src/arsu-converter/authoring/procedures/m1/report-compilation.md": [],
+    "src/arsu-converter/authoring/procedures/m1/research-question-formulation.md": [],
+    "src/arsu-converter/authoring/procedures/m1/source-quality-grading.md": [],
+    "src/arsu-converter/authoring/procedures/m2/abstract-writing.md": [],
+    "src/arsu-converter/authoring/procedures/m2/argument-blueprint.md": [],
+    "src/arsu-converter/authoring/procedures/m2/citation-format-compliance.md": [],
+    "src/arsu-converter/authoring/procedures/m2/manuscript-drafting.md": [],
+    "src/arsu-converter/authoring/procedures/m2/manuscript-structure-design.md": [],
+    "src/arsu-converter/authoring/procedures/m2/writing-intake.md": [],
+    "src/arsu-converter/authoring/procedures/m3/devils-advocate.md": [],
+    "src/arsu-converter/authoring/procedures/m3/editorial-judgment.md": [],
+    "src/arsu-converter/authoring/procedures/m3/pre-submission-self-check.md": [],
+    "src/arsu-converter/authoring/procedures/m3/reference-integrity.md": [],
+    "src/arsu-converter/authoring/procedures/m3/review-panel-config.md": [],
+    "src/arsu-converter/authoring/procedures/m3/review-synthesis.md": [],
+    "src/arsu-converter/authoring/procedures/m3/specialist-review.md": [],
+    "src/arsu-converter/authoring/procedures/m4/format-rendering.md": [],
+    "src/arsu-converter/authoring/procedures/m4/revision-patching.md": [],
+    "src/arsu-converter/authoring/procedures/m4/revision-roadmap-parsing.md": [],
+    "src/arsu-converter/authoring/procedures/m4/temporal-integrity.md": [],
+    "src/arsu-converter/authoring/procedures/m4/terminal-policy-gate.md": [],
+    "src/arsu-converter/authoring/procedures/m5/citation-existence.md": [],
+    "src/arsu-converter/authoring/procedures/m5/citation-verification-summary.md": [],
+    "src/arsu-converter/authoring/procedures/m5/claim-faithfulness.md": [],
+    "src/arsu-converter/authoring/procedures/m5/collaboration-depth.md": [],
+    "src/arsu-converter/authoring/procedures/m5/compliance-check.md": [],
+    "src/arsu-converter/authoring/procedures/m5/contamination-signals.md": [],
+    "src/arsu-converter/authoring/procedures/m5/figure-generation.md": [],
+    "src/arsu-converter/authoring/procedures/m5/literature-monitoring.md": [],
+    "src/arsu-converter/authoring/procedures/m5/meta-analysis.md": [],
+    "src/arsu-converter/authoring/procedures/m5/passport-verifier.md": [],
+    "src/arsu-converter/authoring/procedures/m5/pdf-read-preflight.md": [],
+    "src/arsu-converter/authoring/procedures/m5/risk-of-bias.md": [],
+    "src/arsu-converter/authoring/procedures/m5/socratic-mentoring.md": [],
+    "src/arsu-converter/authoring/procedures/m5/submission-package-verifier.md": [],
+    "src/arsu-converter/authoring/procedures/paper-humanizer/reference.md": [],
+    "src/arsu-converter/authoring/procedures/paper-humanizer/review.md": [],
+    "src/arsu-converter/authoring/procedures/paper-humanizer/revision.md": [],
+    "src/arsu-converter/authoring/procedures/paper-humanizer/verification.md": [],
+    "src/arsu-converter/authoring/procedures/review-response/comment-atomization.md": [],
+    "src/arsu-converter/authoring/procedures/review-response/intake.md": [],
+    "src/arsu-converter/authoring/procedures/review-response/manuscript-analysis.md": [],
+    "src/arsu-converter/authoring/procedures/review-response/round.md": [],
+    "src/arsu-converter/authoring/procedures/review-response/workboard-planning.md": [],
+    "src/arsu-converter/authoring/revision-master-cli.ts": [
+      "src/arsu-converter/authoring/author.ts",
+      "src/arsu-converter/authoring/revision-master-sources.ts"
+    ],
+    "src/arsu-converter/authoring/revision-master-sources.ts": [
+      "src/arsu-converter/authoring/author.ts"
+    ],
+    "src/arsu-converter/classify.ts": [
+      "src/arsu-converter/config.ts"
+    ],
+    "src/arsu-converter/cli.ts": [
+      "src/arsu-converter/converter.ts",
+      "src/arsu-converter/types.ts",
+      "src/arsu-converter/upstream.ts"
+    ],
+    "src/arsu-converter/config.ts": [
+      "src/arsu-converter/routing/contracts.ts"
+    ],
+    "src/arsu-converter/contracts.ts": [
+      "src/arsu-converter/config.ts",
+      "src/arsu-converter/types.ts",
+      "src/core-skills/paper-humanizer/reference-mode.ts",
+      "src/literature-adapters/provider-policy.ts"
+    ],
+    "src/arsu-converter/converter.ts": [
+      "src/arsu-converter/anchors/match.ts",
+      "src/arsu-converter/config.ts",
+      "src/arsu-converter/contracts.ts",
+      "src/arsu-converter/emit.ts",
+      "src/arsu-converter/fs-utils.ts",
+      "src/arsu-converter/git.ts",
+      "src/arsu-converter/idempotence.ts",
+      "src/arsu-converter/ingest.ts",
+      "src/arsu-converter/manifest.ts",
+      "src/arsu-converter/routing/catalog.ts",
+      "src/arsu-converter/runtime-policy/catalog.ts",
+      "src/arsu-converter/runtime-policy/planner.ts",
+      "src/arsu-converter/runtime-policy/types.ts",
+      "src/arsu-converter/source-rewrite.ts",
+      "src/arsu-converter/types.ts",
+      "src/arsu-converter/upstream.ts",
+      "src/arsu-converter/validate.ts",
+      "src/arsu-converter/workflow/catalog.ts",
+      "src/arsu-converter/workflow/generate.ts"
+    ],
+    "src/arsu-converter/emit.ts": [
+      "src/arsu-converter/anchors/replace.ts",
+      "src/arsu-converter/anchors/types.ts",
+      "src/arsu-converter/config.ts",
+      "src/arsu-converter/contracts.ts",
+      "src/arsu-converter/fs-utils.ts",
+      "src/arsu-converter/licensing.ts",
+      "src/arsu-converter/revision/contract.ts",
+      "src/arsu-converter/routing/contracts.ts",
+      "src/arsu-converter/routing/projection.ts",
+      "src/arsu-converter/runtime-policy/types.ts",
+      "src/arsu-converter/transform.ts",
+      "src/arsu-converter/types.ts"
+    ],
+    "src/arsu-converter/fs-utils.ts": [],
+    "src/arsu-converter/git.ts": [],
+    "src/arsu-converter/idempotence.ts": [
+      "src/arsu-converter/fs-utils.ts",
+      "src/arsu-converter/manifest.ts",
+      "src/arsu-converter/types.ts",
+      "src/arsu-converter/validate.ts"
+    ],
+    "src/arsu-converter/ingest.ts": [
+      "src/arsu-converter/classify.ts",
+      "src/arsu-converter/config.ts",
+      "src/arsu-converter/fs-utils.ts",
+      "src/arsu-converter/types.ts"
+    ],
+    "src/arsu-converter/licensing.ts": [
+      "src/arsu-converter/fs-utils.ts",
+      "src/arsu-converter/types.ts"
+    ],
+    "src/arsu-converter/manifest.ts": [
+      "src/arsu-converter/anchors/replace.ts",
+      "src/arsu-converter/anchors/types.ts",
+      "src/arsu-converter/config.ts",
+      "src/arsu-converter/runtime-policy/planner.ts",
+      "src/arsu-converter/types.ts"
+    ],
+    "src/arsu-converter/quarto/delivery.ts": [
+      "src/core/contracts/stable-specs.ts"
+    ],
+    "src/arsu-converter/quarto/index.ts": [],
+    "src/arsu-converter/quarto/render-quarto.mjs": [],
+    "src/arsu-converter/revision/apply-revision-patch.mjs": [],
+    "src/arsu-converter/revision/apply.ts": [
+      "src/arsu-converter/revision/contract.ts",
+      "src/arsu-converter/revision/markdown-blocks.ts"
+    ],
+    "src/arsu-converter/revision/contract.ts": [
+      "src/core/contracts/stable-specs.ts"
+    ],
+    "src/arsu-converter/revision/markdown-blocks.ts": [],
+    "src/arsu-converter/routing/catalog.ts": [
+      "src/arsu-converter/routing/contracts.ts",
+      "src/arsu-converter/workflow/boundary-deliverables.ts"
+    ],
+    "src/arsu-converter/routing/contracts.ts": [],
+    "src/arsu-converter/routing/navigation-projection.ts": [
+      "src/arsu-converter/routing/catalog.ts",
+      "src/arsu-converter/routing/contracts.ts",
+      "src/arsu-converter/routing/projection.ts"
+    ],
+    "src/arsu-converter/routing/owners.ts": [],
+    "src/arsu-converter/routing/projection.ts": [
+      "src/arsu-converter/routing/catalog.ts",
+      "src/arsu-converter/routing/contracts.ts"
+    ],
+    "src/arsu-converter/runtime-policy/assets/cross-model-verification.md": [],
+    "src/arsu-converter/runtime-policy/assets/host-native-delegation.md": [],
+    "src/arsu-converter/runtime-policy/assets/model-tiering.md": [],
+    "src/arsu-converter/runtime-policy/catalog.ts": [
+      "src/arsu-converter/runtime-policy/types.ts"
+    ],
+    "src/arsu-converter/runtime-policy/check.ts": [
+      "src/arsu-converter/config.ts",
+      "src/arsu-converter/runtime-policy/planner.ts",
+      "src/arsu-converter/upstream.ts"
+    ],
+    "src/arsu-converter/runtime-policy/planner.ts": [
+      "src/arsu-converter/fs-utils.ts",
+      "src/arsu-converter/runtime-policy/catalog.ts",
+      "src/arsu-converter/runtime-policy/types.ts",
+      "src/arsu-converter/types.ts"
+    ],
+    "src/arsu-converter/runtime-policy/types.ts": [],
+    "src/arsu-converter/source-rewrite.ts": [
+      "src/arsu-converter/anchors/types.ts",
+      "src/arsu-converter/runtime-policy/types.ts"
+    ],
+    "src/arsu-converter/transform.ts": [
+      "src/arsu-converter/config.ts",
+      "src/arsu-converter/types.ts"
+    ],
+    "src/arsu-converter/types.ts": [
+      "src/arsu-converter/routing/contracts.ts",
+      "src/arsu-converter/routing/projection.ts",
+      "src/graph-profiles/registry.ts"
+    ],
+    "src/arsu-converter/upstream.ts": [
+      "src/arsu-converter/config.ts",
+      "src/arsu-converter/fs-utils.ts",
+      "src/arsu-converter/git.ts",
+      "src/arsu-converter/types.ts"
+    ],
+    "src/arsu-converter/validate.ts": [
+      "src/arsu-converter/anchors/markers.ts",
+      "src/arsu-converter/config.ts",
+      "src/arsu-converter/contracts.ts",
+      "src/arsu-converter/fs-utils.ts",
+      "src/arsu-converter/licensing.ts",
+      "src/arsu-converter/revision/contract.ts",
+      "src/arsu-converter/routing/catalog.ts",
+      "src/arsu-converter/routing/contracts.ts",
+      "src/arsu-converter/routing/projection.ts",
+      "src/arsu-converter/runtime-policy/catalog.ts",
+      "src/arsu-converter/runtime-policy/types.ts",
+      "src/arsu-converter/transform.ts",
+      "src/arsu-converter/types.ts",
+      "src/graph-profiles/registry.ts"
+    ],
+    "src/arsu-converter/workflow/boundary-deliverables.ts": [
+      "src/arsu-converter/routing/contracts.ts"
+    ],
+    "src/arsu-converter/workflow/catalog.ts": [
+      "src/arsu-converter/routing/catalog.ts",
+      "src/arsu-converter/routing/contracts.ts"
+    ],
+    "src/arsu-converter/workflow/generate.ts": [
+      "src/arsu-converter/fs-utils.ts",
+      "src/arsu-converter/workflow/graph-profiles/index.ts",
+      "src/graph-profiles/registry.ts"
+    ],
+    "src/arsu-converter/workflow/graph-profiles/academic-paper-reviewer.ts": [
+      "src/core/contracts/capability-graph.ts"
+    ],
+    "src/arsu-converter/workflow/graph-profiles/academic-paper.ts": [
+      "src/core/contracts/capability-graph.ts"
+    ],
+    "src/arsu-converter/workflow/graph-profiles/academic-pipeline.ts": [
+      "src/core/contracts/capability-graph.ts"
+    ],
+    "src/arsu-converter/workflow/graph-profiles/index.ts": [
+      "src/arsu-converter/workflow/graph-profiles/academic-paper-reviewer.ts",
+      "src/arsu-converter/workflow/graph-profiles/academic-paper.ts",
+      "src/arsu-converter/workflow/graph-profiles/academic-pipeline.ts",
+      "src/arsu-converter/workflow/graph-profiles/minimal.ts",
+      "src/arsu-converter/workflow/graph-profiles/paper-humanizer.ts",
+      "src/arsu-converter/workflow/graph-profiles/research-main.ts",
+      "src/arsu-converter/workflow/graph-profiles/review-response.ts",
+      "src/core/contracts/capability-graph.ts"
+    ],
+    "src/arsu-converter/workflow/graph-profiles/minimal.ts": [
+      "src/arsu-converter/workflow/graph-profiles/research-main.ts",
+      "src/core/contracts/capability-graph.ts"
+    ],
+    "src/arsu-converter/workflow/graph-profiles/paper-humanizer.ts": [
+      "src/core/contracts/capability-graph.ts"
+    ],
+    "src/arsu-converter/workflow/graph-profiles/research-main.ts": [
+      "src/core/contracts/capability-graph.ts"
+    ],
+    "src/arsu-converter/workflow/graph-profiles/review-response.ts": [
+      "src/core/contracts/capability-graph.ts"
+    ],
+    "src/capabilities/registry.ts": [
+      "src/core/contracts/capability-graph.ts",
+      "src/core/contracts/capability-manifest.ts",
+      "src/core/validation/types.ts"
+    ],
+    "src/capabilities/validators.ts": [
+      "src/core/contracts/capability-graph.ts",
+      "src/core/contracts/capability-manifest.ts"
+    ],
+    "src/cli/bin.ts": [
+      "src/cli/main.ts"
+    ],
+    "src/cli/command-catalog.ts": [
+      "src/cli/payload-catalog.ts"
+    ],
+    "src/cli/handbook.ts": [
+      "src/cli/command-catalog.ts",
+      "src/core/contracts/control-selector.ts"
+    ],
+    "src/cli/handlers/graph-bootstrap.ts": [
+      "src/adapters/installations.ts",
+      "src/adapters/tools.ts",
+      "src/adapters/workspace-delivery.ts",
+      "src/cli/prompts/searchable-multi-select.ts",
+      "src/cli/types.ts",
+      "src/core/contracts/graph-workspace.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/core/workspace/layout.ts",
+      "src/core/workspace/write-plan.ts",
+      "src/literature-adapters/index.ts",
+      "src/plugins/registry.ts",
+      "src/utils/fs.ts"
+    ],
+    "src/cli/handlers/graph-context.ts": [
+      "src/adapters/tools.ts",
+      "src/cli/types.ts",
+      "src/core/contracts/graph-workspace.ts",
+      "src/core/runtime/graph-run.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/core/workspace/graph-discover.ts",
+      "src/core/workspace/write-plan.ts",
+      "src/procedures/catalog.ts"
+    ],
+    "src/cli/handlers/graph-plugins.ts": [
+      "src/cli/types.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/core/workspace/graph-discover.ts",
+      "src/plugins/extensions.ts",
+      "src/plugins/graph-delivery.ts",
+      "src/plugins/registry.ts"
+    ],
+    "src/cli/handlers/graph.ts": [
+      "src/adapters/project-entry.ts",
+      "src/arsu-converter/routing/catalog.ts",
+      "src/arsu-converter/routing/contracts.ts",
+      "src/arsu-converter/routing/projection.ts",
+      "src/capabilities/registry.ts",
+      "src/cli/types.ts",
+      "src/core/contracts/capability-manifest.ts",
+      "src/core/runtime/graph-run.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/core/validation/types.ts",
+      "src/core/workspace/graph-discover.ts",
+      "src/plugins/graph-check.ts",
+      "src/plugins/graph-status.ts",
+      "src/plugins/registry.ts",
+      "src/plugins/runtime-capabilities.ts",
+      "src/procedures/catalog.ts",
+      "src/procedures/packet.ts",
+      "src/review-workspace/instructions.ts"
+    ],
+    "src/cli/main.ts": [
+      "src/cli/command-catalog.ts",
+      "src/cli/handlers/graph-bootstrap.ts",
+      "src/cli/handlers/graph-context.ts",
+      "src/cli/handlers/graph-plugins.ts",
+      "src/cli/handlers/graph.ts",
+      "src/cli/presenter.ts",
+      "src/cli/types.ts",
+      "src/core/validation/types.ts"
+    ],
+    "src/cli/payload-catalog.ts": [],
+    "src/cli/presenter.ts": [
+      "src/cli/types.ts"
+    ],
+    "src/cli/prompts/searchable-multi-select.ts": [],
+    "src/cli/types.ts": [
+      "src/core/validation/types.ts"
+    ],
+    "src/core-skills/catalog.ts": [],
+    "src/core-skills/paper-humanizer/reference-mode.ts": [],
+    "src/core/contracts/annotation.ts": [],
+    "src/core/contracts/capability-graph.ts": [
+      "src/core/contracts/stable-specs.ts"
+    ],
+    "src/core/contracts/capability-manifest.ts": [
+      "src/core/contracts/stable-specs.ts"
+    ],
+    "src/core/contracts/control-selector.ts": [
+      "src/core/contracts/stable-specs.ts"
+    ],
+    "src/core/contracts/graph-workspace.ts": [
+      "src/core/contracts/capability-graph.ts",
+      "src/core/contracts/project-path.ts",
+      "src/core/contracts/stable-specs.ts"
+    ],
+    "src/core/contracts/project-change.ts": [
+      "src/core/contracts/stable-specs.ts",
+      "src/core/contracts/workspace-format.ts"
+    ],
+    "src/core/contracts/project-path.ts": [],
+    "src/core/contracts/stable-specs.ts": [
+      "src/core/contracts/workspace-format.ts"
+    ],
+    "src/core/contracts/workspace-format.ts": [],
+    "src/core/runtime/annotation-provenance.ts": [
+      "src/core/contracts/annotation.ts",
+      "src/core/runtime/boundary-path.ts",
+      "src/core/workspace/write-plan.ts"
+    ],
+    "src/core/runtime/annotation-target.ts": [
+      "src/arsu-converter/revision/markdown-blocks.ts",
+      "src/core/contracts/annotation.ts"
+    ],
+    "src/core/runtime/boundary-path.ts": [
+      "src/core/contracts/project-path.ts"
+    ],
+    "src/core/runtime/graph-run.ts": [
+      "src/capabilities/registry.ts",
+      "src/capabilities/validators.ts",
+      "src/core/contracts/capability-graph.ts",
+      "src/core/contracts/capability-manifest.ts",
+      "src/core/contracts/graph-workspace.ts",
+      "src/core/runtime/boundary-path.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/core/workspace/write-plan.ts"
+    ],
+    "src/core/runtime/graph-workspace-index.ts": [
+      "src/adapters/installations.ts",
+      "src/adapters/managed-target.ts",
+      "src/core/contracts/capability-graph.ts",
+      "src/core/contracts/graph-workspace.ts",
+      "src/core/validation/types.ts",
+      "src/core/workspace/path-boundary.ts",
+      "src/core/workspace/write-plan.ts"
+    ],
+    "src/core/validation/parse.ts": [
+      "src/core/validation/types.ts"
+    ],
+    "src/core/validation/types.ts": [],
+    "src/core/workspace/discover.ts": [
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/utils/fs.ts"
+    ],
+    "src/core/workspace/graph-discover.ts": [
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/utils/fs.ts"
+    ],
+    "src/core/workspace/layout.ts": [],
+    "src/core/workspace/path-boundary.ts": [],
+    "src/core/workspace/templates.ts": [],
+    "src/core/workspace/write-plan.ts": [
+      "src/core/workspace/path-boundary.ts"
+    ],
+    "src/graph-profiles/registry.ts": [
+      "src/capabilities/registry.ts",
+      "src/core/contracts/capability-graph.ts",
+      "src/core/contracts/stable-specs.ts",
+      "src/core/validation/types.ts"
+    ],
+    "src/licensing.ts": [],
+    "src/literature-adapters/assets.ts": [
+      "src/literature-adapters/contracts.ts"
+    ],
+    "src/literature-adapters/catalog.ts": [
+      "src/literature-adapters/contracts.ts"
+    ],
+    "src/literature-adapters/contracts.ts": [],
+    "src/literature-adapters/delivery.ts": [
+      "src/adapters/installations.ts",
+      "src/adapters/managed-target.ts",
+      "src/adapters/tools.ts",
+      "src/core/validation/types.ts",
+      "src/core/workspace/write-plan.ts",
+      "src/literature-adapters/assets.ts",
+      "src/literature-adapters/catalog.ts",
+      "src/literature-adapters/platform.ts"
+    ],
+    "src/literature-adapters/index.ts": [],
+    "src/literature-adapters/platform.ts": [
+      "src/literature-adapters/contracts.ts"
+    ],
+    "src/literature-adapters/provider-contracts.ts": [],
+    "src/literature-adapters/provider-policy.ts": [
+      "src/literature-adapters/catalog.ts",
+      "src/literature-adapters/contracts.ts",
+      "src/literature-adapters/provider-contracts.ts"
+    ],
+    "src/plugins/assembler.ts": [
+      "src/plugins/registry.ts",
+      "src/plugins/taxonomy.ts"
+    ],
+    "src/plugins/domain-catalog.json": [],
+    "src/plugins/extensions.ts": [
+      "src/capabilities/registry.ts",
+      "src/core/contracts/capability-graph.ts",
+      "src/core/contracts/capability-manifest.ts",
+      "src/core/validation/types.ts"
+    ],
+    "src/plugins/graph-check.ts": [
+      "src/capabilities/registry.ts",
+      "src/core/contracts/capability-manifest.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/core/validation/types.ts",
+      "src/core/workspace/write-plan.ts",
+      "src/plugins/extensions.ts",
+      "src/plugins/registry.ts"
+    ],
+    "src/plugins/graph-delivery.ts": [
+      "src/adapters/installations.ts",
+      "src/adapters/managed-target.ts",
+      "src/adapters/tools.ts",
+      "src/core/contracts/graph-workspace.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/core/validation/types.ts",
+      "src/core/workspace/path-boundary.ts",
+      "src/core/workspace/write-plan.ts",
+      "src/plugins/extensions.ts",
+      "src/plugins/registry.ts"
+    ],
+    "src/plugins/graph-status.ts": [
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/plugins/extensions.ts",
+      "src/plugins/registry.ts",
+      "src/plugins/status.ts"
+    ],
+    "src/plugins/registry.ts": [
+      "src/adapters/companion/index.ts",
+      "src/arsu-converter/routing/contracts.ts",
+      "src/core-skills/catalog.ts",
+      "src/core/validation/types.ts",
+      "src/literature-adapters/catalog.ts"
+    ],
+    "src/plugins/runtime-capabilities.ts": [
+      "src/capabilities/registry.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/plugins/extensions.ts"
+    ],
+    "src/plugins/status.ts": [
+      "src/adapters/installations.ts",
+      "src/plugins/registry.ts"
+    ],
+    "src/plugins/taxonomy.ts": [],
+    "src/plugins/taxonomy/anzsrc-for-2020.json": [],
+    "src/procedures/catalog.ts": [
+      "src/adapters/companion/index.ts",
+      "src/arsu-converter/routing/catalog.ts",
+      "src/capabilities/registry.ts",
+      "src/core/contracts/capability-manifest.ts",
+      "src/graph-profiles/registry.ts",
+      "src/plugins/extensions.ts"
+    ],
+    "src/procedures/packet.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/procedures/catalog.ts",
+      "src/review-workspace/instructions.ts"
+    ],
+    "src/review-workspace.ts": [],
+    "src/review-workspace/adapters.ts": [
+      "src/core/contracts/annotation.ts",
+      "src/core/workspace/write-plan.ts",
+      "src/review-workspace/contracts.ts",
+      "src/review-workspace/prepare.ts",
+      "src/review-workspace/v2.ts"
+    ],
+    "src/review-workspace/contracts.ts": [],
+    "src/review-workspace/handoff.ts": [
+      "src/review-workspace/prepare.ts",
+      "src/review-workspace/v2.ts"
+    ],
+    "src/review-workspace/host.ts": [
+      "src/review-workspace/render.ts"
+    ],
+    "src/review-workspace/index.ts": [],
+    "src/review-workspace/instructions.ts": [
+      "src/review-workspace/contracts.ts",
+      "src/review-workspace/revision-master.ts"
+    ],
+    "src/review-workspace/prepare.ts": [
+      "src/review-workspace/v2.ts"
+    ],
+    "src/review-workspace/render.ts": [
+      "src/review-workspace/v2.ts"
+    ],
+    "src/review-workspace/revision-master-prepare.ts": [
+      "src/review-workspace/prepare.ts",
+      "src/review-workspace/render.ts",
+      "src/review-workspace/revision-master.ts",
+      "src/review-workspace/v2.ts"
+    ],
+    "src/review-workspace/revision-master.ts": [
+      "src/review-workspace/v2.ts"
+    ],
+    "src/review-workspace/v2.ts": [
+      "src/review-workspace/contracts.ts"
+    ],
+    "src/utils/fs.ts": [],
+    "src/utils/json.ts": [],
+    "src/vendor-audits/contracts.ts": [],
+    "src/vendor-audits/education-agent-skills-cli.ts": [
+      "src/vendor-audits/education-agent-skills.ts"
+    ],
+    "src/vendor-audits/education-agent-skills.ts": [
+      "src/vendor-audits/contracts.ts"
+    ],
+    "src/vendor-audits/finrobot.ts": [
+      "src/vendor-audits/contracts.ts"
+    ],
+    "src/vendor-audits/histagent.ts": [
+      "src/vendor-audits/contracts.ts"
+    ],
+    "src/vendor-audits/materials-science-skills-for-llm.ts": [
+      "src/vendor-audits/contracts.ts"
+    ],
+    "src/vendor-audits/scientific-agent-skills.ts": [
+      "src/vendor-audits/contracts.ts"
+    ],
+    "src/vendor-audits/zotero-library-agent-bundle.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/literature-adapters/contracts.ts"
+    ],
+    "src/vendor-converters/education-agent-skills/adaptation.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/vendor-audits/education-agent-skills.ts",
+      "src/vendor-converters/education-agent-skills/policy.ts"
+    ],
+    "src/vendor-converters/education-agent-skills/cli.ts": [
+      "src/vendor-converters/education-agent-skills/converter.ts",
+      "src/vendor-converters/education-agent-skills/preview.ts"
+    ],
+    "src/vendor-converters/education-agent-skills/complete-tree.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/vendor-converters/education-agent-skills/adaptation.ts",
+      "src/vendor-converters/education-agent-skills/policy.ts"
+    ],
+    "src/vendor-converters/education-agent-skills/converter.ts": [
+      "src/plugins/assembler.ts",
+      "src/plugins/registry.ts",
+      "src/vendor-converters/education-agent-skills/complete-tree.ts",
+      "src/vendor-converters/education-agent-skills/policy.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "src/vendor-converters/shared/staging.ts"
+    ],
+    "src/vendor-converters/education-agent-skills/policy.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/vendor-audits/education-agent-skills.ts",
+      "src/vendor-evidence/education-agent-skills/index.ts"
+    ],
+    "src/vendor-converters/education-agent-skills/preview.ts": [
+      "src/vendor-converters/education-agent-skills/complete-tree.ts"
+    ],
+    "src/vendor-converters/education-agent-skills/production-policy.json": [],
+    "src/vendor-converters/education-agent-skills/review-decision.json": [],
+    "src/vendor-converters/finrobot/admission-decisions.json": [],
+    "src/vendor-converters/finrobot/cli.ts": [
+      "src/vendor-converters/finrobot/converter.ts",
+      "src/vendor-converters/finrobot/preview.ts"
+    ],
+    "src/vendor-converters/finrobot/complete-tree.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/vendor-converters/finrobot/policy.ts",
+      "src/vendor-converters/finrobot/skill-definitions.ts",
+      "src/vendor-converters/shared/non-native-skill-standard/index.ts",
+      "src/vendor-converters/shared/staging.ts"
+    ],
+    "src/vendor-converters/finrobot/converter.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/plugins/assembler.ts",
+      "src/plugins/registry.ts",
+      "src/vendor-converters/finrobot/complete-tree.ts",
+      "src/vendor-converters/finrobot/policy.ts",
+      "src/vendor-converters/finrobot/skill-definitions.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "src/vendor-converters/shared/staging.ts"
+    ],
+    "src/vendor-converters/finrobot/lib/financial_support.py": [],
+    "src/vendor-converters/finrobot/license-decisions.json": [],
+    "src/vendor-converters/finrobot/origin-decisions.json": [],
+    "src/vendor-converters/finrobot/policy.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/vendor-audits/finrobot.ts",
+      "src/vendor-converters/finrobot/skill-definitions.ts"
+    ],
+    "src/vendor-converters/finrobot/preview.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/plugins/extensions.ts",
+      "src/vendor-converters/finrobot/complete-tree.ts",
+      "src/vendor-converters/finrobot/skill-definitions.ts",
+      "src/vendor-converters/shared/staging.ts"
+    ],
+    "src/vendor-converters/finrobot/relationship-decisions.json": [],
+    "src/vendor-converters/finrobot/resource-decisions.json": [],
+    "src/vendor-converters/finrobot/review-decision.json": [],
+    "src/vendor-converters/finrobot/skill-definitions.ts": [
+      "src/vendor-converters/shared/non-native-skill-standard/index.ts"
+    ],
+    "src/vendor-converters/finrobot/skills/financial-research-company-fundamentals/SKILL.md": [],
+    "src/vendor-converters/finrobot/skills/financial-research-company-fundamentals/scripts/fundamentals.py": [],
+    "src/vendor-converters/finrobot/skills/financial-research-competitive-position/SKILL.md": [],
+    "src/vendor-converters/finrobot/skills/financial-research-corporate-risk/SKILL.md": [],
+    "src/vendor-converters/finrobot/skills/financial-research-event-evidence/SKILL.md": [],
+    "src/vendor-converters/finrobot/skills/financial-research-event-evidence/scripts/event_evidence.py": [],
+    "src/vendor-converters/finrobot/skills/financial-research-relative-valuation/SKILL.md": [],
+    "src/vendor-converters/finrobot/skills/financial-research-relative-valuation/scripts/valuation.py": [],
+    "src/vendor-converters/finrobot/skills/financial-research-statement-analysis/SKILL.md": [],
+    "src/vendor-converters/finrobot/skills/financial-research-statement-analysis/scripts/statements.py": [],
+    "src/vendor-converters/finrobot/source-entry-decisions.json": [],
+    "src/vendor-converters/finrobot/surface-decisions.json": [],
+    "src/vendor-converters/histagent/cli.ts": [
+      "src/vendor-converters/histagent/converter.ts"
+    ],
+    "src/vendor-converters/histagent/complete-tree.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/vendor-converters/histagent/policy.ts",
+      "src/vendor-converters/histagent/skill-definitions.ts",
+      "src/vendor-converters/shared/non-native-skill-standard/index.ts",
+      "src/vendor-converters/shared/staging.ts"
+    ],
+    "src/vendor-converters/histagent/converter.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/plugins/assembler.ts",
+      "src/plugins/registry.ts",
+      "src/vendor-converters/histagent/complete-tree.ts",
+      "src/vendor-converters/histagent/policy.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "src/vendor-converters/shared/staging.ts"
+    ],
+    "src/vendor-converters/histagent/lib/historical_support.py": [],
+    "src/vendor-converters/histagent/policy.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/vendor-audits/histagent.ts"
+    ],
+    "src/vendor-converters/histagent/preview.ts": [
+      "src/vendor-converters/histagent/complete-tree.ts"
+    ],
+    "src/vendor-converters/histagent/production-policy.json": [],
+    "src/vendor-converters/histagent/review-decision.json": [],
+    "src/vendor-converters/histagent/skill-definitions.ts": [
+      "src/vendor-converters/shared/non-native-skill-standard/index.ts"
+    ],
+    "src/vendor-converters/histagent/skills/histagent-historical-research/SKILL.md": [],
+    "src/vendor-converters/histagent/skills/histagent-historical-research/references/evidence-and-conflict-cases.md": [],
+    "src/vendor-converters/histagent/skills/histagent-historical-research/references/stage-records.md": [],
+    "src/vendor-converters/histagent/skills/histagent-historical-research/scripts/research_runtime.py": [],
+    "src/vendor-converters/histagent/skills/histagent-historical-source-analysis/SKILL.md": [],
+    "src/vendor-converters/histagent/skills/histagent-historical-source-analysis/references/adapters-and-formats.md": [],
+    "src/vendor-converters/histagent/skills/histagent-historical-source-analysis/references/layer-and-collation-cases.md": [],
+    "src/vendor-converters/histagent/skills/histagent-historical-source-analysis/scripts/analyze_source.py": [],
+    "src/vendor-converters/histagent/skills/histagent-historical-source-identification/SKILL.md": [],
+    "src/vendor-converters/histagent/skills/histagent-historical-source-identification/references/candidate-verification-cases.md": [],
+    "src/vendor-converters/histagent/skills/histagent-historical-source-identification/references/provider-adapters.md": [],
+    "src/vendor-converters/histagent/skills/histagent-historical-source-identification/scripts/identify_sources.py": [],
+    "src/vendor-converters/histagent/source-evidence.json": [],
+    "src/vendor-converters/materials-science-skills-for-llm/admission-decisions.json": [],
+    "src/vendor-converters/materials-science-skills-for-llm/cli.ts": [
+      "src/vendor-converters/materials-science-skills-for-llm/converter.ts"
+    ],
+    "src/vendor-converters/materials-science-skills-for-llm/complete-tree.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/vendor-converters/materials-science-skills-for-llm/policy.ts",
+      "src/vendor-converters/materials-science-skills-for-llm/skill-definitions.ts",
+      "src/vendor-converters/shared/non-native-skill-standard/index.ts",
+      "src/vendor-converters/shared/staging.ts"
+    ],
+    "src/vendor-converters/materials-science-skills-for-llm/converter.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/plugins/assembler.ts",
+      "src/plugins/registry.ts",
+      "src/vendor-converters/materials-science-skills-for-llm/complete-tree.ts",
+      "src/vendor-converters/materials-science-skills-for-llm/policy.ts",
+      "src/vendor-converters/materials-science-skills-for-llm/skill-definitions.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "src/vendor-converters/shared/staging.ts"
+    ],
+    "src/vendor-converters/materials-science-skills-for-llm/external-resource-decisions.json": [],
+    "src/vendor-converters/materials-science-skills-for-llm/file-decisions.json": [],
+    "src/vendor-converters/materials-science-skills-for-llm/policy.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/vendor-audits/contracts.ts",
+      "src/vendor-audits/materials-science-skills-for-llm.ts",
+      "src/vendor-converters/materials-science-skills-for-llm/skill-definitions.ts",
+      "src/vendor-converters/shared/staging.ts"
+    ],
+    "src/vendor-converters/materials-science-skills-for-llm/relationship-decisions.json": [],
+    "src/vendor-converters/materials-science-skills-for-llm/review-decision.json": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skill-definitions.ts": [
+      "src/vendor-converters/shared/non-native-skill-standard/index.ts"
+    ],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-apex-alloy-workflows/SKILL.md": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-apex-alloy-workflows/references/property-parameters.md": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-atomsk-cli/SKILL.md": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-deeptb-helper/SKILL.md": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-deeptb-helper/references/dataset-and-configuration.md": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-dpgen-workflow/SKILL.md": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-dpgen-workflow/references/parameter-and-machine-files.md": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-gpumd-workflow/SKILL.md": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-gpumd-workflow/references/md-nep-and-output-playbook.md": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-phonopy-workflows/SKILL.md": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-phonopy-workflows/references/configuration-and-force-files.md": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-unimol-ops/SKILL.md": [],
+    "src/vendor-converters/materials-science-skills-for-llm/skills/materials-science-skills-unimol-ops/references/local-workflow-modes.md": [],
+    "src/vendor-converters/scientific-agent-skills/admission-decisions.json": [],
+    "src/vendor-converters/scientific-agent-skills/cli.ts": [
+      "src/vendor-converters/scientific-agent-skills/converter.ts"
+    ],
+    "src/vendor-converters/scientific-agent-skills/converter.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/plugins/assembler.ts",
+      "src/plugins/registry.ts",
+      "src/vendor-converters/scientific-agent-skills/policy.ts",
+      "src/vendor-converters/scientific-agent-skills/security-review.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "src/vendor-converters/shared/staging.ts"
+    ],
+    "src/vendor-converters/scientific-agent-skills/dependency-decisions.json": [],
+    "src/vendor-converters/scientific-agent-skills/policy.ts": [
+      "src/vendor-audits/contracts.ts",
+      "src/vendor-audits/scientific-agent-skills.ts",
+      "src/vendor-converters/scientific-agent-skills/security-review.ts"
+    ],
+    "src/vendor-converters/scientific-agent-skills/resource-decisions.json": [],
+    "src/vendor-converters/scientific-agent-skills/security-review-decisions.json": [],
+    "src/vendor-converters/scientific-agent-skills/security-review.ts": [
+      "src/vendor-audits/contracts.ts",
+      "src/vendor-audits/scientific-agent-skills.ts"
+    ],
+    "src/vendor-converters/shared/non-native-skill-standard/index.ts": [],
+    "src/vendor-converters/shared/non-native-skill-standard/templates/baseline.SKILL.md": [],
+    "src/vendor-converters/shared/non-native-skill-standard/templates/extensions/resource-backed.md": [],
+    "src/vendor-converters/shared/non-native-skill-standard/templates/extensions/script-assisted.md": [],
+    "src/vendor-converters/shared/non-native-skill-standard/templates/extensions/stateful.md": [],
+    "src/vendor-converters/shared/production-vendors.ts": [],
+    "src/vendor-converters/shared/staging.ts": [
+      "src/core/workspace/write-plan.ts"
+    ],
+    "src/vendor-converters/tooluniverse/cli.ts": [
+      "src/vendor-converters/tooluniverse/converter.ts"
+    ],
+    "src/vendor-converters/tooluniverse/converter.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/plugins/assembler.ts",
+      "src/plugins/registry.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "src/vendor-converters/shared/staging.ts",
+      "src/vendor-converters/tooluniverse/semantic-adaptations.ts"
+    ],
+    "src/vendor-converters/tooluniverse/dependency-decisions.json": [],
+    "src/vendor-converters/tooluniverse/semantic-adaptations.ts": [],
+    "src/vendor-converters/zotero-library-agent-bundle/cli.ts": [
+      "src/vendor-audits/zotero-library-agent-bundle.ts",
+      "src/vendor-converters/zotero-library-agent-bundle/converter.ts"
+    ],
+    "src/vendor-converters/zotero-library-agent-bundle/converter.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/vendor-audits/zotero-library-agent-bundle.ts"
+    ],
+    "src/vendor-evidence/education-agent-skills/cli.ts": [
+      "src/vendor-audits/education-agent-skills.ts",
+      "src/vendor-evidence/education-agent-skills/index.ts"
+    ],
+    "src/vendor-evidence/education-agent-skills/index.ts": [
+      "src/vendor-audits/education-agent-skills.ts",
+      "src/vendor-evidence/education-agent-skills/schema.ts"
+    ],
+    "src/vendor-evidence/education-agent-skills/schema.ts": [
+      "src/vendor-audits/education-agent-skills.ts"
+    ],
+    "tests/adapters.test.ts": [
+      "src/adapters/command-renderer.ts",
+      "src/adapters/companion/index.ts",
+      "src/adapters/tools.ts",
+      "src/adapters/workspace-delivery.ts",
+      "src/arsu-converter/routing/navigation-projection.ts",
+      "src/cli/command-catalog.ts",
+      "src/cli/handbook.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/agent-profiles.test.ts": [
+      "src/adapters/agent-profiles.ts",
+      "src/adapters/tools.ts"
+    ],
+    "tests/arsu-anchors.test.ts": [
+      "src/arsu-converter/anchors/check.ts",
+      "src/arsu-converter/anchors/coverage.ts",
+      "src/arsu-converter/anchors/manifest.ts",
+      "src/arsu-converter/anchors/match.ts",
+      "src/arsu-converter/anchors/types.ts"
+    ],
+    "tests/arsu-checkers.test.ts": [],
+    "tests/arsu-converter.test.ts": [
+      "src/arsu-converter/contracts.ts",
+      "src/arsu-converter/converter.ts",
+      "src/arsu-converter/idempotence.ts",
+      "src/arsu-converter/manifest.ts",
+      "src/arsu-converter/routing/catalog.ts",
+      "src/arsu-converter/routing/projection.ts",
+      "src/arsu-converter/runtime-policy/types.ts",
+      "src/arsu-converter/types.ts",
+      "src/arsu-converter/validate.ts",
+      "src/core-skills/paper-humanizer/reference-mode.ts"
+    ],
+    "tests/arsu-maintenance.test.ts": [],
+    "tests/arsu-routing-catalog.test.ts": [
+      "src/arsu-converter/routing/catalog.ts",
+      "src/arsu-converter/routing/contracts.ts",
+      "src/arsu-converter/routing/projection.ts"
+    ],
+    "tests/arsu-runtime-policy.test.ts": [
+      "src/arsu-converter/anchors/match.ts",
+      "src/arsu-converter/runtime-policy/catalog.ts",
+      "src/arsu-converter/runtime-policy/planner.ts",
+      "src/arsu-converter/source-rewrite.ts",
+      "src/arsu-converter/types.ts"
+    ],
+    "tests/authored-whitespace.test.ts": [],
+    "tests/authoring-converter.test.ts": [
+      "src/arsu-converter/authoring/author.ts",
+      "src/arsu-converter/authoring/m1-sources.ts",
+      "src/capabilities/registry.ts"
+    ],
+    "tests/capability-graph.test.ts": [
+      "src/core/contracts/capability-graph.ts"
+    ],
+    "tests/capability-manifest.test.ts": [
+      "src/core/contracts/capability-manifest.ts"
+    ],
+    "tests/capability-parity.test.ts": [],
+    "tests/capability-registry.test.ts": [
+      "src/capabilities/registry.ts",
+      "src/core/contracts/capability-graph.ts"
+    ],
+    "tests/capability-validators.test.ts": [
+      "src/capabilities/registry.ts",
+      "src/capabilities/validators.ts",
+      "src/core/contracts/capability-manifest.ts",
+      "src/core/runtime/graph-run.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "tests/helpers/graph-workspace.ts"
+    ],
+    "tests/dogfood-harness.test.mjs": [
+      "scripts/dogfood/assessment.mjs",
+      "scripts/dogfood/hosts.mjs",
+      "scripts/dogfood/lib.mjs",
+      "scripts/dogfood/review.mjs",
+      "scripts/dogfood/server.mjs"
+    ],
+    "tests/dogfooding-playbook.test.ts": [
+      "src/adapters/tools.ts",
+      "src/procedures/catalog.ts"
+    ],
+    "tests/domain-taxonomy.test.ts": [
+      "src/plugins/registry.ts",
+      "src/plugins/taxonomy.ts"
+    ],
+    "tests/education-agent-skills-audit.test.ts": [
+      "src/cli/command-catalog.ts",
+      "src/vendor-audits/education-agent-skills.ts",
+      "tests/helpers/cli.ts",
+      "tests/helpers/vendor-audit.ts"
+    ],
+    "tests/education-agent-skills-evidence.test.ts": [
+      "src/vendor-audits/education-agent-skills.ts",
+      "src/vendor-evidence/education-agent-skills/index.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/education-agent-skills-extensions.test.ts": [
+      "src/plugins/extensions.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/education-agent-skills-ingest.test.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/plugins/registry.ts",
+      "src/vendor-converters/education-agent-skills/adaptation.ts",
+      "src/vendor-converters/education-agent-skills/complete-tree.ts",
+      "src/vendor-converters/education-agent-skills/converter.ts",
+      "src/vendor-converters/education-agent-skills/policy.ts",
+      "src/vendor-converters/education-agent-skills/preview.ts"
+    ],
+    "tests/education-agent-skills-maintenance.test.ts": [
+      "tests/helpers/vendor-maintenance.ts"
+    ],
+    "tests/extraction-index.test.ts": [],
+    "tests/finrobot-audit.test.ts": [
+      "src/plugins/registry.ts",
+      "src/plugins/taxonomy.ts",
+      "src/vendor-audits/contracts.ts",
+      "src/vendor-audits/finrobot.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "tests/helpers/vendor-audit.ts"
+    ],
+    "tests/finrobot-converter.test.ts": [
+      "src/plugins/registry.ts",
+      "src/vendor-converters/finrobot/complete-tree.ts",
+      "src/vendor-converters/finrobot/converter.ts",
+      "src/vendor-converters/finrobot/policy.ts",
+      "src/vendor-converters/shared/production-vendors.ts"
+    ],
+    "tests/finrobot-ingest-draft.test.ts": [
+      "src/vendor-converters/finrobot/complete-tree.ts",
+      "src/vendor-converters/finrobot/policy.ts",
+      "src/vendor-converters/finrobot/skill-definitions.ts"
+    ],
+    "tests/finrobot-maintenance.test.ts": [
+      "tests/helpers/vendor-maintenance.ts"
+    ],
+    "tests/finrobot-preview.test.ts": [
+      "src/plugins/extensions.ts",
+      "src/vendor-audits/finrobot.ts",
+      "src/vendor-converters/finrobot/complete-tree.ts",
+      "src/vendor-converters/finrobot/policy.ts",
+      "src/vendor-converters/finrobot/preview.ts"
+    ],
+    "tests/finrobot-statements.test.ts": [],
+    "tests/finrobot-valuation.test.ts": [],
+    "tests/fixtures/domain-skill-plugins/registry.json": [],
+    "tests/fixtures/domain-skill-plugins/vendors/domain-source/rock-mechanics/NOTICE.md": [],
+    "tests/fixtures/domain-skill-plugins/vendors/domain-source/rock-mechanics/SKILL.md": [],
+    "tests/fixtures/domain-skill-plugins/vendors/domain-source/rock-mechanics/references/criteria.md": [],
+    "tests/fixtures/domain-skill-plugins/vendors/domain-source/rock-mechanics/scripts/calculate.py": [],
+    "tests/fixtures/domain-skill-plugins/vendors/method-source/research-tables/NOTICE.md": [],
+    "tests/fixtures/domain-skill-plugins/vendors/method-source/research-tables/SKILL.md": [],
+    "tests/fixtures/domain-skill-plugins/vendors/method-source/research-tables/assets/table-template.csv": [],
+    "tests/fixtures/material-passport/schema9.yaml": [],
+    "tests/graph-cli-main.test.ts": [
+      "src/cli/handlers/graph-bootstrap.ts",
+      "src/cli/types.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/graph-cli-static.test.ts": [
+      "src/cli/command-catalog.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/graph-cli.test.ts": [
+      "src/arsu-converter/workflow/graph-profiles/minimal.ts",
+      "src/cli/handlers/graph.ts",
+      "src/cli/types.ts",
+      "tests/helpers/graph-workspace.ts"
+    ],
+    "tests/graph-context-cli.test.ts": [
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/core/workspace/write-plan.ts",
+      "src/plugins/extensions.ts",
+      "src/plugins/graph-delivery.ts",
+      "src/plugins/registry.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/graph-run-advanced.test.ts": [
+      "src/arsu-converter/workflow/graph-profiles/academic-pipeline.ts",
+      "src/arsu-converter/workflow/graph-profiles/research-main.ts",
+      "src/core/contracts/capability-graph.ts",
+      "src/core/runtime/graph-run.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "tests/helpers/graph-workspace.ts"
+    ],
+    "tests/graph-run-conflict.test.ts": [
+      "src/core/runtime/graph-run.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "tests/helpers/graph-workspace.ts"
+    ],
+    "tests/graph-run.test.ts": [
+      "src/core/runtime/graph-run.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "tests/helpers/graph-workspace.ts"
+    ],
+    "tests/graph-security.test.ts": [
+      "src/adapters/installations.ts",
+      "src/core/contracts/graph-workspace.ts",
+      "src/core/contracts/project-path.ts",
+      "src/core/runtime/boundary-path.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "src/core/workspace/write-plan.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/graph-workspace.test.ts": [
+      "src/core/runtime/graph-workspace-index.ts",
+      "tests/helpers/graph-workspace.ts"
+    ],
+    "tests/helpers/cli.ts": [],
+    "tests/helpers/graph-workspace.ts": [
+      "src/capabilities/registry.ts",
+      "src/core/contracts/capability-graph.ts",
+      "src/core/runtime/graph-workspace-index.ts"
+    ],
+    "tests/helpers/revision-master.ts": [
+      "src/review-workspace/render.ts",
+      "src/review-workspace/revision-master.ts"
+    ],
+    "tests/helpers/vendor-audit.ts": [
+      "src/vendor-audits/contracts.ts"
+    ],
+    "tests/helpers/vendor-maintenance.ts": [],
+    "tests/histagent-audit.test.ts": [
+      "src/plugins/registry.ts",
+      "src/plugins/taxonomy.ts",
+      "src/vendor-audits/histagent.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "tests/helpers/vendor-audit.ts"
+    ],
+    "tests/histagent-converter.test.ts": [
+      "src/plugins/registry.ts",
+      "src/vendor-converters/histagent/complete-tree.ts",
+      "src/vendor-converters/histagent/converter.ts",
+      "src/vendor-converters/histagent/policy.ts",
+      "src/vendor-converters/shared/production-vendors.ts"
+    ],
+    "tests/histagent-ingest-draft.test.ts": [
+      "src/vendor-converters/histagent/complete-tree.ts",
+      "src/vendor-converters/histagent/policy.ts",
+      "src/vendor-converters/histagent/skill-definitions.ts",
+      "src/vendor-converters/shared/non-native-skill-standard/index.ts"
+    ],
+    "tests/histagent-maintenance.test.ts": [
+      "tests/helpers/vendor-maintenance.ts"
+    ],
+    "tests/literature-adapters.test.ts": [
+      "src/adapters/workspace-delivery.ts",
+      "src/core/workspace/write-plan.ts",
+      "src/literature-adapters/index.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/literature-provider-contracts.test.ts": [
+      "src/literature-adapters/index.ts"
+    ],
+    "tests/managed-installation-paths.test.ts": [
+      "src/adapters/delivery.ts",
+      "src/adapters/installations.ts",
+      "src/adapters/managed-target.ts",
+      "src/adapters/project-entry.ts",
+      "src/adapters/tools.ts",
+      "src/core/workspace/write-plan.ts",
+      "src/literature-adapters/delivery.ts",
+      "src/plugins/extensions.ts",
+      "src/plugins/graph-delivery.ts",
+      "src/plugins/registry.ts"
+    ],
+    "tests/manuscript-annotation-intake-adapters.test.ts": [
+      "src/annotation-intake.ts",
+      "src/arsu-converter/revision/markdown-blocks.ts"
+    ],
+    "tests/manuscript-annotation.test.ts": [
+      "src/annotation-intake.ts",
+      "src/arsu-converter/revision/apply.ts",
+      "src/arsu-converter/revision/contract.ts",
+      "src/arsu-converter/revision/markdown-blocks.ts",
+      "src/core/contracts/annotation.ts",
+      "src/core/runtime/annotation-provenance.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/materials-science-maintenance.test.ts": [
+      "tests/helpers/vendor-maintenance.ts"
+    ],
+    "tests/materials-science-skills-converter.test.ts": [
+      "src/plugins/registry.ts",
+      "src/vendor-converters/materials-science-skills-for-llm/complete-tree.ts",
+      "src/vendor-converters/materials-science-skills-for-llm/converter.ts",
+      "src/vendor-converters/materials-science-skills-for-llm/policy.ts",
+      "src/vendor-converters/materials-science-skills-for-llm/skill-definitions.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "src/vendor-converters/shared/staging.ts"
+    ],
+    "tests/materials-science-skills-for-llm-audit.test.ts": [
+      "src/plugins/registry.ts",
+      "src/plugins/taxonomy.ts",
+      "src/vendor-audits/contracts.ts",
+      "src/vendor-audits/materials-science-skills-for-llm.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "tests/helpers/vendor-audit.ts"
+    ],
+    "tests/non-native-vendor-skill-standard.test.ts": [
+      "src/vendor-converters/shared/non-native-skill-standard/index.ts"
+    ],
+    "tests/own-vendor-maintenance.test.ts": [],
+    "tests/paper-humanizer.test.ts": [
+      "src/arsu-converter/authoring/author.ts",
+      "src/arsu-converter/authoring/paper-humanizer-sources.ts",
+      "src/arsu-converter/workflow/graph-profiles/paper-humanizer.ts",
+      "src/capabilities/registry.ts",
+      "src/core-skills/paper-humanizer/reference-mode.ts",
+      "src/core/contracts/capability-graph.ts"
+    ],
+    "tests/plugin-extensions.test.ts": [
+      "src/plugins/extensions.ts",
+      "src/plugins/registry.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/preset-graphs.test.ts": [
+      "src/arsu-converter/workflow/generate.ts",
+      "src/arsu-converter/workflow/graph-profiles/index.ts",
+      "src/capabilities/registry.ts",
+      "src/core/contracts/capability-graph.ts",
+      "src/graph-profiles/registry.ts"
+    ],
+    "tests/procedures.test.ts": [
+      "src/adapters/companion/index.ts",
+      "src/arsu-converter/routing/contracts.ts",
+      "src/capabilities/registry.ts",
+      "src/plugins/extensions.ts",
+      "src/procedures/catalog.ts",
+      "src/procedures/packet.ts"
+    ],
+    "tests/quarto-delivery.test.ts": [
+      "src/arsu-converter/quarto/index.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/review-response.test.ts": [
+      "src/arsu-converter/authoring/author.ts",
+      "src/arsu-converter/authoring/revision-master-sources.ts",
+      "src/arsu-converter/workflow/graph-profiles/review-response.ts",
+      "src/capabilities/registry.ts",
+      "src/core/contracts/capability-graph.ts",
+      "src/core/runtime/graph-run.ts",
+      "src/core/runtime/graph-workspace-index.ts",
+      "tests/helpers/graph-workspace.ts"
+    ],
+    "tests/review-workspace-v2.test.ts": [
+      "src/review-workspace.ts"
+    ],
+    "tests/review-workspace.test.ts": [
+      "harness/review-workspace-preview.ts",
+      "src/annotation-intake.ts",
+      "src/arsu-converter/revision/markdown-blocks.ts",
+      "src/review-workspace.ts"
+    ],
+    "tests/revision-master-audit.test.ts": [],
+    "tests/revision-master-runtime.test.ts": [
+      "src/arsu-converter/authoring/author.ts",
+      "src/arsu-converter/authoring/revision-master-sources.ts",
+      "src/capabilities/registry.ts",
+      "src/review-workspace/revision-master.ts",
+      "tests/helpers/revision-master.ts"
+    ],
+    "tests/revision-master-workspace.test.ts": [
+      "src/review-workspace.ts",
+      "tests/helpers/revision-master.ts"
+    ],
+    "tests/scientific-agent-skills-audit.test.ts": [
+      "src/plugins/registry.ts",
+      "src/plugins/taxonomy.ts",
+      "src/vendor-audits/scientific-agent-skills.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "tests/helpers/vendor-audit.ts"
+    ],
+    "tests/scientific-agent-skills-converter.test.ts": [
+      "src/plugins/registry.ts",
+      "src/vendor-converters/scientific-agent-skills/converter.ts",
+      "src/vendor-converters/scientific-agent-skills/policy.ts",
+      "src/vendor-converters/shared/production-vendors.ts"
+    ],
+    "tests/scientific-agent-skills-extensions.test.ts": [
+      "src/plugins/extensions.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/scientific-agent-skills-maintenance.test.ts": [
+      "tests/helpers/vendor-maintenance.ts"
+    ],
+    "tests/scientific-agent-skills-security-review.test.ts": [
+      "src/vendor-converters/scientific-agent-skills/security-review.ts"
+    ],
+    "tests/skill-harness.test.ts": [
+      "harness/catalog.ts",
+      "harness/server.ts",
+      "src/adapters/companion/index.ts",
+      "src/literature-adapters/catalog.ts",
+      "src/plugins/extensions.ts",
+      "src/procedures/catalog.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/tooluniverse-adaptations.test.ts": [
+      "src/vendor-converters/tooluniverse/semantic-adaptations.ts"
+    ],
+    "tests/tooluniverse-audit.test.ts": [
+      "src/plugins/registry.ts",
+      "src/plugins/taxonomy.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "tests/helpers/vendor-audit.ts"
+    ],
+    "tests/tooluniverse-converter.test.ts": [
+      "src/vendor-converters/tooluniverse/converter.ts"
+    ],
+    "tests/tooluniverse-extensions.test.ts": [
+      "src/plugins/extensions.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/tooluniverse-maintenance.test.ts": [
+      "tests/helpers/vendor-maintenance.ts"
+    ],
+    "tests/vendor-maintenance.test.ts": [],
+    "tests/vendor-staging.test.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/vendor-converters/shared/production-vendors.ts",
+      "src/vendor-converters/shared/staging.ts"
+    ],
+    "tests/write-plan.test.ts": [
+      "src/core/workspace/write-plan.ts",
+      "tests/helpers/cli.ts"
+    ],
+    "tests/zotero-adapter-converter.test.ts": [
+      "src/core/workspace/write-plan.ts",
+      "src/vendor-audits/zotero-library-agent-bundle.ts",
+      "src/vendor-converters/zotero-library-agent-bundle/converter.ts"
+    ],
+    "tsconfig.build.json": [],
+    "tsconfig.harness.json": [],
+    "tsconfig.json": [],
+    "tsconfig.test.json": [],
+    "website/docs/cli/advance.mdx": [],
+    "website/docs/cli/archive.mdx": [],
+    "website/docs/cli/check.mdx": [],
+    "website/docs/cli/decide.mdx": [],
+    "website/docs/cli/doctor.mdx": [],
+    "website/docs/cli/handoff.mdx": [],
+    "website/docs/cli/index.mdx": [],
+    "website/docs/cli/init.mdx": [],
+    "website/docs/cli/instructions.mdx": [],
+    "website/docs/cli/list.mdx": [],
+    "website/docs/cli/pack.mdx": [],
+    "website/docs/cli/plugin-install.mdx": [],
+    "website/docs/cli/plugin-list.mdx": [],
+    "website/docs/cli/plugin-show.mdx": [],
+    "website/docs/cli/plugin-uninstall.mdx": [],
+    "website/docs/cli/plugin-update.mdx": [],
+    "website/docs/cli/plugin.mdx": [],
+    "website/docs/cli/propose.mdx": [],
+    "website/docs/cli/show.mdx": [],
+    "website/docs/cli/start.mdx": [],
+    "website/docs/cli/status.mdx": [],
+    "website/docs/cli/update.mdx": [],
+    "website/docs/faq.md": [],
+    "website/docs/guides/literature.md": [],
+    "website/docs/guides/plugins.md": [],
+    "website/docs/guides/selector-protocol.md": [],
+    "website/docs/guides/skills.md": [],
+    "website/docs/guides/workflow.md": [],
+    "website/docs/index.md": [],
+    "website/docs/installation.md": [],
+    "website/docs/quick-start.md": [],
+    "website/docs/reference/glossary.md": [],
+    "website/docs/reference/user-model.md": [],
+    "website/docusaurus.config.ts": [
+      "website/sidebars.cli.ts"
+    ],
+    "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/faq.md": [],
+    "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/guides/selector-protocol.md": [],
+    "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/guides/skills.md": [],
+    "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/guides/workflow.md": [],
+    "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/index.md": [],
+    "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/installation.md": [],
+    "website/i18n/zh-Hans/docusaurus-plugin-content-docs/current/quick-start.md": [],
+    "website/package.json": [],
+    "website/sidebars.cli.ts": [],
+    "website/sidebars.ts": [
+      "website/sidebars.cli.ts"
+    ],
+    "website/src/css/custom.css": [],
+    "website/static/.nojekyll": [],
+    "website/tsconfig.json": []
+  }
+}
