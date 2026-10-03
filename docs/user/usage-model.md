@@ -83,6 +83,9 @@ list procedures --query <意图> --json
 `list` 只返回紧凑卡片，`show` 返回单项元数据，`instructions` 才加载完整 Procedure、资源引用和
 激活包。发现可以在 workspace 外只读执行；激活要求当前 schema 2 workspace。
 
+卡片同时说明当前工作区是否满足静态选择条件、是否需要选择插件域，或选中域是否不可用。
+这些信息辅助选择，不代表安装 consent 或完整执行许可；激活时仍核对当前契约。
+
 Navigate 首次检索直接提交用户原始请求，保留中文、英文或混合语言，并按用途及声明的输入输出角色
 判断候选。没有合适候选时，最多改写一次。离线检索使用 Unicode 分词、内置中英概念词表和字段
 加权 BM25；hybrid 再融合本地多语言向量排序。精确 ID 优先。结果说明匹配依据、请求和实际检索
@@ -92,8 +95,20 @@ Navigate 首次检索直接提交用户原始请求，保留中文、英文或�
 
 不需要正式流程控制的普通任务使用 standalone 模式，持续工作也可留在此模式：Procedure 只能写
 `researchspec/` 外的普通项目文件，完成时把路径返回调用者，不创建或修改 run、node、handoff、
-Gate 或 Decision。恢复普通工作不需要 graph。需要 formal Gate/Decision、parallel/join、重复
-轮次或可审计工作流状态时进入 graph 模式：
+Gate 或 Decision。恢复普通工作不需要 graph。
+
+普通任务遇到材料不明、文件交接或恢复时，可以按需调用只读材料检查：
+`instructions procedure:<id> --input <材料.yaml>` 携带显式输入和计划输出，
+`check procedure:<id> --input <材料.yaml>` 核对实际交付。材料包含可选 `inputs`、`outputs` 数组；
+输入可以是 `role` 与普通项目文件 `path`，或 `role` 与内联 `value`，输出是 `role` 与 `path`。
+省略数组表示未检查，空数组表示检查声明的缺项。检查只报告角色与文件事实，不判断学术充分性，
+不运行包内脚本、不生成工作流状态，也不是执行前必须取得的凭证。
+
+缺材料时只暂停依赖它的工作，说明影响并询问具体缺项；独立部分可以继续，部分成果应明确限制。
+普通 Procedure 之间可以显式传递材料。没有现成角色衔接时，Agent 核对内容、解释用途与证据限制，
+可用原生能力转换或继续；不能把未满足的 Procedure 契约描述为已经满足。
+
+需要 formal Gate/Decision、parallel/join、重复轮次或可审计工作流状态时进入 graph 模式：
 
 ```text
 status --json
@@ -287,6 +302,9 @@ graph。恢复前应核对笔记记录的材料与产出，不按笔记修改时
 差异应告知用户并继续。若存在相关的未完成正式 run，应改从 `status --json` 和精确的 `run:`、`node:`、`gate:`
 或 `decision:` instructions 恢复，不能用笔记替代 run 状态。已完成的历史 run 不阻止新任务
 作为普通工作继续。多个候选由用户选择，Agent 不能猜“最近一个”。
+
+`status` 的未完成 run 摘要与 `instructions run:<id>` 从当前图和记录推导入口、交付目标、可执行
+selectors、待确认控制与阻塞材料。摘要辅助定位，不选择任务、不探测外部文件，也不保存额外状态。
 
 运行 selectors 是：
 

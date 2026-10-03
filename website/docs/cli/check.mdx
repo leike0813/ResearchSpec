@@ -18,12 +18,14 @@ Check schema 2 workspace contracts
 | Option | Required | Description |
 | --- | --- | --- |
 | `--strict` | no | treat warnings as failures |
+| `--input <materials.yaml|json>` | no | explicit input and delivered output bindings for procedure:<id> |
 
 #### Input shape
 
-An optional validation target and strictness flag.
+An optional workspace validation target, or explicit advisory Procedure material inspection.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `target` | `all \| specs \| profiles \| runs \| changes \| handoffs \| tools \| plugins \| literature-adapters` | no | Validation scope; defaults to all. |
+| `target` | `all \| specs \| profiles \| runs \| changes \| handoffs \| tools \| plugins \| literature-adapters \| procedure:<id>` | no | Validation scope; defaults to all. |
 | `--strict` | `boolean` | no | Treat warnings as failures. |
+| `--input` | `YAML/JSON material bindings` | no | Required only for procedure:<id>; inputs[{role,path}\|{role,value}], outputs[{role,path}]. |

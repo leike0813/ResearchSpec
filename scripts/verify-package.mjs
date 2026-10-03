@@ -116,6 +116,15 @@ try {
   const discovery = JSON.parse(run(bin, ["list", "procedures", "--query", "系统检索文献并找出研究空白", "--json"], projectDirectory, environment).stdout);
   assert(discovery.ok && discovery.data.retrieval.effective_mode === "offline", "Installed bilingual discovery failed.");
   assert(discovery.data.items.length > 0 && discovery.data.items.every((item) => Array.isArray(item.inputs) && Array.isArray(item.outputs) && item.match), "Installed discovery lost declared roles or match evidence.");
+  assert(discovery.data.items.every((item) => item.eligibility?.state), "Installed discovery lost static eligibility facts.");
+  const materialsPath = path.join(projectDirectory, "materials.json");
+  await writeFile(materialsPath, JSON.stringify({ inputs: [{ role: "manuscript_source", value: "Dialogue draft" }], outputs: [{ role: "intake_report", path: "intake.md" }] }), "utf8");
+  const materialSelector = "procedure:design-review-response-intake";
+  const materialPacket = JSON.parse(run(bin, ["instructions", materialSelector, "--input", materialsPath, "--json"], projectDirectory, environment).stdout);
+  assert(materialPacket.ok && materialPacket.data.packet.material_inspection.outputs[0].status === "planned", "Installed optional planned material binding failed.");
+  const materialCheck = JSON.parse(run(bin, ["check", materialSelector, "--input", materialsPath, "--json"], projectDirectory, environment).stdout);
+  assert(materialCheck.ok && materialCheck.data.material_inspection.outputs[0].status === "unavailable", "Installed advisory delivered-output inspection failed.");
+  assert(!await pathExists(path.join(projectDirectory, "intake.md")), "Material inspection created a planned output.");
   const beforeSearchPreview = await readFile(path.join(currentWorkspace, "config.yaml"), "utf8");
   const preview = JSON.parse(run(bin, ["update", "--procedure-search", "hybrid", "--dry-run", "--json"], projectDirectory, environment).stdout);
   assert(preview.data?.procedure_search?.preparation === "planned", "Packaged semantic preparation preview is missing.");

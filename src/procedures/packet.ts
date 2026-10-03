@@ -1,6 +1,7 @@
 import { sha256 } from "../core/workspace/write-plan.js";
 import { reviewWorkspaceInstruction } from "../review-workspace/instructions.js";
 import { readProcedureContent, type ProcedureDefinition, type ProcedureMode } from "./catalog.js";
+import type { ProcedureMaterialBindings, ProcedureMaterialInspection } from "./materials.js";
 
 export type ProcedureDelegation =
   | { recommended_agent: "researchspec-executor"; reason: "llm-producer" }
@@ -14,6 +15,7 @@ export interface ProcedurePacketOptions {
   outputs?: unknown;
   authority?: Record<string, unknown>;
   completion?: Record<string, unknown>;
+  materials?: { bindings: ProcedureMaterialBindings; inspection: ProcedureMaterialInspection };
 }
 
 export async function buildProcedurePacket(procedure: ProcedureDefinition, options: ProcedurePacketOptions) {
@@ -39,6 +41,10 @@ export async function buildProcedurePacket(procedure: ProcedureDefinition, optio
     delegation: procedureDelegation(procedure),
     inputs: options.inputs ?? procedure.manifest?.inputs ?? [],
     outputs: options.outputs ?? procedure.manifest?.outputs ?? [],
+    ...(options.materials === undefined ? {} : {
+      material_bindings: options.materials.bindings,
+      material_inspection: options.materials.inspection,
+    }),
     authority: options.authority ?? {
       workflow_state: "forbidden",
       ordinary_project_files: "read-write",

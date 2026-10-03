@@ -12,6 +12,35 @@ researchspec instructions procedure:<返回的ID> --json
 任务。相似度只辅助排序，不能证明适用或授权执行。完整执行契约来自最后一步的 activation packet。
 相关未完成 run 仍优先于新的 standalone 检索。
 
+卡片的静态 eligibility 说明是否需要工作区、选择域，或选中域是否不可用。它不授权插件安装，也不
+保证当前材料适合执行。选择上下文变化后重新分页，不能继续使用旧 cursor。
+
+普通工作在材料不明、交接或恢复时可按需检查，不需要每次都运行检查：
+
+```sh
+researchspec instructions procedure:<id> --input materials.yaml --json
+researchspec check procedure:<id> --input delivered.yaml --json
+```
+
+```yaml
+inputs:
+  - role: manuscript_source
+    path: work/article.md
+  - role: user_notes
+    value: 请保留结论的证据限制。
+outputs:
+  - role: intake_report
+    path: work/intake.md
+```
+
+`instructions` 中的输出是计划位置，文件可以尚未生成；`check` 核对实际交付文件。省略一个数组
+表示未检查，显式空数组会检查声明缺项。未知、重复或缺少角色默认产生非阻塞观察；显式
+`--strict` 可以让本次 check 因警告失败。检查不执行 validator 脚本、不证明学术充分性，也不
+产生执行或完成凭证。没有 manifest 的 Procedure 会说明声明范围未知。
+
+缺材料只暂停依赖它的工作。普通任务可以交付有明确限制的部分成果；没有现成角色衔接时，Agent
+可以核对内容并用原生能力转换或继续，同时说明未满足的 Procedure 契约。
+
 省略 `--query` 会分页浏览。显式空白、标点或仅停用词的查询返回 `procedure_query_empty`；
 正常离线查询无匹配返回空列表。中文、英文及混合语言是内置词表的优先范围；其他文字仍保留，
 跨语言近义表达可由可选本地模型补充。分页 cursor 绑定查询、目录、实际后端和排序；这些变化后

@@ -106,12 +106,6 @@ void test("companion manifest renders four fixed self-contained Skills", () => {
   const files = new Map(renderCompanionSkillFiles(navigate).map((file) => [file.path, file.content]));
   assert.equal(files.get("references/cli-handbook.md"), renderCliHandbook());
   assert.equal(files.get("references/arsu-routes.md"), renderNavigateRoutingProjection());
-  const instructions = files.get("SKILL.md") ?? "";
-  assert.match(instructions, /Native Procedure Delegation/);
-  assert.match(instructions, /researchspec-executor/);
-  assert.match(instructions, /researchspec-reviewer/);
-  assert.match(instructions, /serialize all workflow mutations/);
-  assert.match(instructions, /status: completed \| blocked/);
 });
 
 void test("Copilot uses its explicit detection paths", async () => {

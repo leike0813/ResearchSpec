@@ -87,7 +87,9 @@ const definitions: readonly CliCommandDefinition[] = [
     option("procedureSearch", "--procedure-search <mode>", "offline or hybrid; explicit hybrid prepares or refreshes optional local search resources"),
   ], ["init", "status", "doctor"]),
   command("status", ["status"], "status", "control-plane", "Show derived schema 2 run/node status", "required", "read", [], ["instructions", "show", "list"]),
-  command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show procedure, profile, run, node, Gate, Decision, or change instructions", "required", "read", [], ["status", "start", "advance", "decide"]),
+  command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show procedure, profile, run, node, Gate, Decision, or change instructions", "required", "read", [
+    option("input", "--input <materials.yaml|json>", "optional standalone Procedure input and planned output bindings"),
+  ], ["status", "start", "advance", "decide"]),
   command("start", ["start"], "start <profile-id|node-selector>", "control-plane", "Start a confirmed root run or one graph-authorized child run", "required", "write", [
     option("input", "--input <start.yaml|json>", "schema 2 root Start input"),
     option("confirmedBy", "--confirmed-by <name>", "human who confirmed this exact root run"),
@@ -99,6 +101,7 @@ const definitions: readonly CliCommandDefinition[] = [
   ], ["status", "instructions"]),
   command("check", ["check"], "check [target]", "inspection", "Check schema 2 workspace contracts", "required", "read", [
     option("strict", "--strict", "treat warnings as failures"),
+    option("input", "--input <materials.yaml|json>", "explicit input and delivered output bindings for procedure:<id>"),
   ], ["status", "doctor", "show"]),
   command("doctor", ["doctor"], "doctor", "recovery", "Diagnose current workspace contracts without modifying them", "required", "read", [], ["check", "status"]),
   command("list", ["list"], "list [type]", "inspection", "List procedures, tools, profiles, runs, nodes, changes, or diagnostics", "optional", "read", [

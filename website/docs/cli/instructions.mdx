@@ -15,6 +15,10 @@ Show procedure, profile, run, node, Gate, Decision, or change instructions
 - **Effect**: `read`
 - **Related**: [`status`](./status), [`start`](./start), [`advance`](./advance), [`decide`](./decide)
 
+| Option | Required | Description |
+| --- | --- | --- |
+| `--input <materials.yaml|json>` | no | optional standalone Procedure input and planned output bindings |
+
 #### Input shape
 
 One exact procedure or graph control/inspection selector.
@@ -22,3 +26,4 @@ One exact procedure or graph control/inspection selector.
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
 | `selector` | `procedure:... \| profile:... \| run:... \| node:<run>/<node>[@round] \| gate:... \| decision:... \| change:...` | yes | Procedure or current graph item whose action contract is needed. |
+| `--input` | `YAML/JSON material bindings` | no | Standalone Procedure context only: inputs[{role,path}\|{role,value}], planned outputs[{role,path}]. Omitted arrays are uninspected; empty arrays inspect declared omissions. |

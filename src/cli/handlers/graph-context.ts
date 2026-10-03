@@ -3,13 +3,14 @@ import path from "node:path";
 import { parse as parseYaml, stringify } from "yaml";
 import { strToU8, zipSync, type Zippable } from "fflate";
 
-import { GraphWorkspaceConfigSchema, renderRunHandoff, RunHandoffSchema } from "../../core/contracts/graph-workspace.js";
+import { renderRunHandoff, RunHandoffSchema } from "../../core/contracts/graph-workspace.js";
 import { loadGraphWorkspaceIndex, type GraphWorkspaceFile } from "../../core/runtime/graph-workspace-index.js";
 import { GraphRunError, writeGraphHandoff } from "../../core/runtime/graph-run.js";
-import { requireGraphWorkspace, resolveGraphWorkspace } from "../../core/workspace/graph-discover.js";
+import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
 import { sha256 } from "../../core/workspace/write-plan.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 import { loadProcedureCatalog, procedureCard } from "../../procedures/catalog.js";
+import { loadProcedureEligibilityContext, procedureEligibilityContextKey } from "../../procedures/eligibility.js";
 import { ProcedureQueryError, searchProcedures, type ProcedureSearchResult } from "../../procedures/search.js";
 import type { ProcedureSearchMode } from "../../procedures/search-contracts.js";
 import { TOOLS } from "../../adapters/tools.js";
@@ -31,22 +32,20 @@ export async function handleGraphList(type: string | undefined, options: GraphLi
   const resolved = type ?? "runs";
   let items: Array<Record<string, unknown>> = [];
   let retrieval: ProcedureSearchResult["retrieval"] | undefined;
+  let selection: string | undefined;
   if (resolved === "procedures") {
+    const eligibility = await loadProcedureEligibilityContext(context.cwd, context.workspace);
+    selection = procedureEligibilityContextKey(eligibility);
     let mode: ProcedureSearchMode = "offline";
     if (options.query !== undefined) {
-      const resolution = await resolveGraphWorkspace(context.cwd, context.workspace);
-      if (resolution.status === "found") {
-        const config = GraphWorkspaceConfigSchema.parse(parseYaml(await readFile(path.join(resolution.workspace, "config.yaml"), "utf8")));
-        mode = config.procedure_search?.mode ?? "offline";
-      } else if (resolution.status !== "missing") {
-        throw new CliError("workspace_unsupported", "Procedure search requires a current schema 2 configuration when a workspace is present.", 1);
-      }
+      if (eligibility.status === "unsupported_configuration") throw new CliError("workspace_unsupported", "Procedure search requires a current schema 2 configuration when a workspace is present.", 1, eligibility.reason);
+      if (eligibility.status === "workspace") mode = eligibility.procedureSearchMode;
     }
     try {
       const result = await searchProcedures(await loadProcedureCatalog(), options.query, { mode: context.dryRun ? "offline" : mode });
       retrieval = result.retrieval;
       if (context.dryRun && mode === "hybrid") retrieval = { ...retrieval, requested_mode: mode, fallback_reason: "dry_run" };
-      items = result.items.map(({ procedure, match }) => ({ ...procedureCard(procedure), ...(options.query === undefined ? {} : { match }) }));
+      items = result.items.map(({ procedure, match }) => ({ ...procedureCard(procedure, eligibility), ...(options.query === undefined ? {} : { match }) }));
     } catch (error) {
       if (error instanceof ProcedureQueryError) throw new CliError(error.code, error.message, 2);
       throw error;
@@ -73,7 +72,7 @@ export async function handleGraphList(type: string | undefined, options: GraphLi
   }
   const limit = options.limit === undefined ? (resolved === "procedures" ? 10 : 20) : Number(options.limit);
   if (!Number.isInteger(limit) || limit < 1 || limit > 50) throw new CliError("list_limit_invalid", "List limit must be an integer from 1 to 50.", 2);
-  const fingerprint = sha256(JSON.stringify(retrieval ? { query: options.query, catalog_id: retrieval.catalog_id, backend: retrieval.effective_mode, ids: items.map((item) => item.selector) } : items));
+  const fingerprint = sha256(JSON.stringify(retrieval ? { query: options.query, catalog_id: retrieval.catalog_id, backend: retrieval.effective_mode, selection, ids: items.map((item) => item.selector) } : items));
   const offset = options.cursor === undefined ? 0 : decodeListCursor(options.cursor, resolved, fingerprint);
   if (offset > items.length) throw new CliError("list_cursor_stale", "List cursor no longer matches the current collection.", 2);
   const page = items.slice(offset, offset + limit);
@@ -94,7 +93,7 @@ export async function handleGraphShow(selector: string, context: CommandContext)
   if (selector.startsWith("procedure:")) {
     const procedure = (await loadProcedureCatalog()).get(selector.slice("procedure:".length));
     if (!procedure) throw new CliError("item_not_found", `Procedure not found: ${selector}`, 1);
-    const card = procedureCard(procedure);
+    const card = procedureCard(procedure, await loadProcedureEligibilityContext(context.cwd, context.workspace));
     return success("show", card, { stdout: `${JSON.stringify(card, null, 2)}\n` });
   }
   const workspace = await graphWorkspace(context);

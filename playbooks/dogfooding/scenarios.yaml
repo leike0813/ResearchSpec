@@ -171,6 +171,7 @@ scenarios:
       - Navigate 自主发现并执行适合的独立 Procedure，不要求用户提供内部名称。
       - 交付物是 researchspec 外的普通项目文件；没有创建 run、node、Gate、Decision 或 handoff。
       - 结果说明产物路径、证据及限制、未解决事项和下一步，不宣称图动作完成。
+      - 材料检查按需使用，不要求获得执行凭证；交付报告对应实际存在的文件。
     required_evidence: [manifest, prompts, transcript, procedure-discovery, instructions, before-after-status, external-files, final-check]
     soft_rubric: default
     cleanup: [保留普通交付物供核对，并把证据复制到 workspace 外。]
@@ -190,6 +191,7 @@ scenarios:
     checkpoints:
       - 完全退出旧 Agent 会话，再从相同项目启动无聊天记忆的新会话。
       - 比较退出前后的 run/node IDs、authority 文件、handoff 和 frontier。
+      - 用 run_summaries 的交付目的、阻塞角色和精确轮次 selector 核对相关未完成 run，再读取其 instructions；完成的历史 run 不接管新任务。
     prohibited_actions: [粘贴旧聊天摘要, 根据目录名猜实例, 重建同一 active run]
     hard_assertions:
       - 恢复结论区分文件事实、推断和未知。
@@ -406,7 +408,7 @@ scenarios:
     prohibited_actions: [凭空重建来源, 用无关文件替代, 声称笔记证明核查完成]
     hard_assertions:
       - Agent 报告必需来源缺失以及对输入和下一步的影响，只问一个针对该材料的问题。
-      - 在材料未澄清前不继续核查，也不创建或修改图状态。
+      - 在材料未澄清前不继续依赖该来源的核查，也不创建或修改图状态；独立部分可以继续并明确限制。
     required_evidence: [manifest, prompts, transcript, task-note, material-diff, final-status]
     soft_rubric: default
     cleanup: [保存差异和问题后清理隔离项目。]
@@ -525,11 +527,11 @@ scenarios:
         manuscript_draft: benchmark/partial-manuscript.md
     prompts: [请先把现有审稿意见整理成修订路线图，再结合现有部分稿件和这份路线图做预提交自检。分别保存两步结果；我还没决定的修改取舍请保留为待定，不要直接改稿。]
     checkpoints: [保存两份 Procedure 的输入输出声明、两次指引、传递的相对路径和两个交付物。]
-    prohibited_actions: [推断未声明的输入输出连接, 创建运行或 handoff 作为临时链状态, 传递绝对或受管路径]
+    prohibited_actions: [声称未满足的 Procedure 契约已经满足, 创建运行或 handoff 作为临时链状态, 传递绝对或受管路径]
     hard_assertions:
       - 预提交自检以修订路线图的 revision_roadmap 输出路径作为同名声明输入，同时读取现有稿件，并使用普通项目相对路径。
       - 两步产物均在 researchspec 外；没有 run、handoff 或隐藏激活状态。
-      - 若实际选用的候选没有声明连接，Agent 应报告缺口；作者尚未决定的修改取舍不得当作已确认。
+      - 若实际选用的候选没有声明连接，Agent 核对实际材料并说明用途，可以用原生能力补足衔接，同时报告未满足的契约；作者尚未决定的修改取舍不得当作已确认。
     required_evidence: [manifest, prompts, transcript, procedure-packets, path-handoff, external-files, before-after-status]
     soft_rubric: default
     cleanup: [保存声明和路径证据后清理隔离项目。]
@@ -549,6 +551,7 @@ scenarios:
     hard_assertions:
       - Agent 发现必需的审稿意见缺失，只问一个明确指出该材料的问题。
       - 未编造回复，也未创建 run、node、Gate、Decision 或 handoff。
+      - 只暂停依赖审稿意见的工作，独立部分可继续并说明限制；检查结果不作为整个任务的执行许可。
     required_evidence: [manifest, prompts, transcript, file-inventory, input-contract, final-status]
     soft_rubric: default
     cleanup: [保存问题和文件清单后清理隔离项目。]

@@ -182,6 +182,7 @@ Activate only for one ResearchSpec activation packet whose \`delegation.recommen
 - Do not run shell commands, package managers, build tools, or scripts.
 - Do not run ResearchSpec mutation commands, make a Gate, Decision, consent, plugin, model, or cost choice, or edit \`researchspec/\` workflow state.
 - Read declared inputs and package resources. Use host web retrieval only when the Procedure and source policy allow it.
+- For standalone packets, read explicit \`material_bindings\` when present. \`material_inspection\` reports file facts and planned locations; assess substantive adequacy yourself and return missing dependent material to the parent. Planned output files need not already exist.
 - Write only ordinary project files required by the declared output roles. Report any needed change outside them as a blocker.
 - Stay on the active model. A different effective model requires the coordinating Agent's prior run/node-bound model, content-category, and cost consent.
 - Do not claim node or run completion. The parent validates outputs and owns every CLI mutation.

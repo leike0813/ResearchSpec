@@ -66,9 +66,39 @@ export interface GraphFrontierNode {
 
 export interface GraphFrontierBlock {
   node_id: string;
+  round?: number;
+  selector?: string;
   code: string;
   message: string;
   refs: string[];
+  role?: string;
+  path?: string;
+  details?: unknown;
+}
+
+function graphRecordSelector(kind: "node" | "gate" | "decision", runId: string, id: string, round?: number): string {
+  return round === undefined ? `${kind}:${runId}/${id}` : `${kind}:${runId}/${id}@${String(round)}`;
+}
+
+function graphBlockRound(runId: string, nodeId: string, round: number | undefined): { round?: number; selector?: string } {
+  return { ...(round === undefined ? {} : { round }), selector: graphRecordSelector("node", runId, nodeId, round) };
+}
+
+function graphErrorMaterialDetail(details: unknown): { role?: string; path?: string } {
+  if (typeof details !== "object" || details === null) return {};
+  const candidate = details as { role?: unknown; path?: unknown };
+  return {
+    ...(typeof candidate.role === "string" ? { role: candidate.role } : {}),
+    ...(typeof candidate.path === "string" ? { path: candidate.path } : {}),
+  };
+}
+
+function unresolvedGraphInputError(message: string, binding: { role: string; source: string; from_node_id?: string }): GraphRunError {
+  return new GraphRunError("node_input_unresolved", message, "conflict", {
+    role: binding.role,
+    source: binding.source,
+    ...(binding.from_node_id === undefined ? {} : { from_node_id: binding.from_node_id }),
+  });
 }
 
 export interface GraphFrontier {
@@ -333,7 +363,10 @@ export function evaluateGraphFrontier(
   if (inputDiagnostics.length > 0) {
     return {
       eligible_node_ids: [], eligible_nodes: [], pending_subgraph_starts: [], pending_gates: [], pending_decisions: [], completion_ready: false,
-      blockers: inputDiagnostics.map((diagnostic) => ({ node_id: diagnostic.node_id ?? entryNodeId, code: diagnostic.code ?? "profile_capability_invalid", message: diagnostic.message, refs: [diagnostic.path] })),
+      blockers: inputDiagnostics.map((diagnostic) => {
+        const nodeId = diagnostic.node_id ?? entryNodeId;
+        return { node_id: nodeId, ...graphBlockRound(run.run_id, nodeId, undefined), code: diagnostic.code ?? "profile_capability_invalid", message: diagnostic.message, refs: [diagnostic.path], details: diagnostic };
+      }),
     };
   }
 
@@ -344,7 +377,7 @@ export function evaluateGraphFrontier(
       pending_subgraph_starts: [],
       pending_gates: [],
       pending_decisions: [],
-      blockers: [{ node_id: entryNodeId, code: "run_not_active", message: `Run ${run.run_id} is ${run.status}.`, refs: [`run:${run.run_id}`] }],
+      blockers: [{ node_id: entryNodeId, selector: `run:${run.run_id}`, code: "run_not_active", message: `Run ${run.run_id} is ${run.status}.`, refs: [`run:${run.run_id}`] }],
       completion_ready: run.status === "complete",
     };
   }
@@ -361,21 +394,22 @@ export function evaluateGraphFrontier(
         && boundChildren(childRuns, run.run_id, node.node_id, round).length === 0
         && run.manuscript_delivery?.delivery.working_format === "qmd"
         && run.manuscript_delivery.quarto_probe?.status !== "available") {
-        blockers.push({ node_id: node.node_id, code: "quarto_unavailable", message: `Subgraph node ${node.node_id} requires an available Quarto probe.`, refs: [`node:${run.run_id}/${node.node_id}`] });
+        blockers.push({ node_id: node.node_id, ...graphBlockRound(run.run_id, node.node_id, round), code: "quarto_unavailable", message: `Subgraph node ${node.node_id} requires an available Quarto probe.`, refs: [`node:${run.run_id}/${node.node_id}`] });
         continue;
       }
 
       const failedGates = requiredGates(graph, node.required_gate_ids)
-        .filter((gate) => {
+        .flatMap((gate) => {
           const gateRound = controlRound(graph, gate.owner_node_id, round);
-          return latestGateVerdict(projectedNodes, gate, gateRound) === "fail" && !hasGateOverride(projectedNodes, gate, gateRound);
+          return latestGateVerdict(projectedNodes, gate, gateRound) === "fail" && !hasGateOverride(projectedNodes, gate, gateRound) ? [{ gate, round: gateRound }] : [];
         });
       if (failedGates.length > 0) {
         blockers.push({
           node_id: node.node_id,
+          ...graphBlockRound(run.run_id, node.node_id, round),
           code: "gate_failed",
           message: `Node ${node.node_id} has failed required Gates.`,
-          refs: failedGates.map((gate) => `gate:${run.run_id}/${gate.gate_id}`),
+          refs: failedGates.map((item) => graphRecordSelector("gate", run.run_id, item.gate.gate_id, item.round)),
         });
         continue;
       }
@@ -392,13 +426,13 @@ export function evaluateGraphFrontier(
 
       if (node.kind === "gate") {
         for (const gate of graph.gates.filter((item) => item.owner_node_id === node.node_id)) {
-          if (!gateAccepted(projectedNodes, gate, round)) pendingGates.push(round === undefined ? `gate:${run.run_id}/${gate.gate_id}` : `gate:${run.run_id}/${gate.gate_id}@${String(round)}`);
+          if (!gateAccepted(projectedNodes, gate, round)) pendingGates.push(graphRecordSelector("gate", run.run_id, gate.gate_id, round));
         }
         continue;
       }
       if (node.kind === "decision") {
         for (const decision of graph.decisions.filter((item) => item.owner_node_id === node.node_id)) {
-          if (!decisionRecordedForRound(projectedNodes, decision, round)) pendingDecisions.push(round === undefined ? `decision:${run.run_id}/${decision.decision_id}` : `decision:${run.run_id}/${decision.decision_id}@${String(round)}`);
+          if (!decisionRecordedForRound(projectedNodes, decision, round)) pendingDecisions.push(graphRecordSelector("decision", run.run_id, decision.decision_id, round));
         }
         continue;
       }
@@ -408,24 +442,33 @@ export function evaluateGraphFrontier(
             manifest: node.capability_id ? inputContext.registry.capabilities.get(node.capability_id)?.manifest : undefined });
         } catch (error) {
           if (!(error instanceof GraphRunError)) throw error;
-          blockers.push({ node_id: node.node_id, code: error.code, message: error.message, refs: [node.node_id] });
+          const material = graphErrorMaterialDetail(error.details);
+          blockers.push({
+            node_id: node.node_id,
+            ...graphBlockRound(run.run_id, node.node_id, round),
+            code: error.code,
+            message: error.message,
+            refs: [node.node_id],
+            ...material,
+            details: error.details,
+          });
           continue;
         }
       }
       if (node.kind === "subgraph") {
         const children = boundChildren(childRuns, run.run_id, node.node_id, round);
-        const selector = round === undefined ? `node:${run.run_id}/${node.node_id}` : `node:${run.run_id}/${node.node_id}@${String(round)}`;
+        const selector = graphRecordSelector("node", run.run_id, node.node_id, round);
         if (children.length > 1) {
-          blockers.push({ node_id: node.node_id, code: "child_run_ambiguous", message: `Subgraph node ${node.node_id} has multiple child runs.`, refs: children.map((child) => `run:${child.run.run_id}`) });
+          blockers.push({ node_id: node.node_id, ...graphBlockRound(run.run_id, node.node_id, round), code: "child_run_ambiguous", message: `Subgraph node ${node.node_id} has multiple child runs.`, refs: children.map((child) => `run:${child.run.run_id}`) });
         } else if (children.length === 0) {
           pendingSubgraphStarts.push({ node_id: node.node_id, ...(round === undefined ? {} : { round }), selector });
         } else {
           const child = children[0];
           const declaration = graph.subgraphs.find((item) => item.subgraph_id === node.subgraph_id);
           if (!declaration || !childMatchesDeclaration(child, declaration)) {
-            blockers.push({ node_id: node.node_id, code: "child_run_binding_invalid", message: `Subgraph node ${node.node_id} has an inconsistent child binding.`, refs: [`run:${child?.run.run_id ?? "unknown"}`] });
+            blockers.push({ node_id: node.node_id, ...graphBlockRound(run.run_id, node.node_id, round), code: "child_run_binding_invalid", message: `Subgraph node ${node.node_id} has an inconsistent child binding.`, refs: [`run:${child?.run.run_id ?? "unknown"}`] });
           } else if (child?.run.status !== "active" && child?.run.status !== "complete") {
-            blockers.push({ node_id: node.node_id, code: "child_run_blocked", message: `Child run ${child?.run.run_id ?? "unknown"} is ${child?.run.status ?? "unknown"}.`, refs: [`run:${child?.run.run_id ?? "unknown"}`] });
+            blockers.push({ node_id: node.node_id, ...graphBlockRound(run.run_id, node.node_id, round), code: "child_run_blocked", message: `Child run ${child?.run.run_id ?? "unknown"} is ${child?.run.status ?? "unknown"}.`, refs: [`run:${child?.run.run_id ?? "unknown"}`] });
           }
         }
         continue;
@@ -433,7 +476,7 @@ export function evaluateGraphFrontier(
       eligibleNodes.push({
         node_id: node.node_id,
         ...(round === undefined ? {} : { round }),
-        selector: round === undefined ? `node:${run.run_id}/${node.node_id}` : `node:${run.run_id}/${node.node_id}@${String(round)}`,
+        selector: graphRecordSelector("node", run.run_id, node.node_id, round),
       });
     }
   }
@@ -859,18 +902,18 @@ export function resolveGraphNodeInputs(input: {
   const projectedNodes = projectCompletedSubgraphs(input.run, input.graph, input.nodes, input.childRuns ?? [], new Set([input.run.run_id]));
   return definition.input_bindings.map((binding) => {
     if (binding.source === "parameter") {
-      if (binding.value === undefined) throw new GraphRunError("node_input_unresolved", `Parameter input has no value: ${binding.role}`, "conflict");
+      if (binding.value === undefined) throw unresolvedGraphInputError(`Parameter input has no value: ${binding.role}`, binding);
       return { role: binding.role, source: binding.source, value: binding.value };
     }
     if (binding.source === "stable_spec") {
       const schema = input.manifest?.inputs.find((declared) => declared.role === binding.role)?.schema_ref;
       const stablePath = schema ? STABLE_SPEC_PATHS[schema] : undefined;
-      if (!stablePath) throw new GraphRunError("node_input_unresolved", `Stable-spec input has no bounded path: ${binding.role}`, "conflict");
+      if (!stablePath) throw unresolvedGraphInputError(`Stable-spec input has no bounded path: ${binding.role}`, binding);
       return { role: binding.role, source: binding.source, path: stablePath };
     }
     if (binding.source === "handoff") {
       const handoff = [...input.handoff.inputs, ...input.handoff.outputs].find((entry) => entry.role === binding.role);
-      if (!handoff) throw new GraphRunError("node_input_unresolved", `Run handoff does not provide input: ${binding.role}`, "conflict");
+      if (!handoff) throw unresolvedGraphInputError(`Run handoff does not provide input: ${binding.role}`, binding);
       return {
         role: binding.role,
         source: binding.source,
@@ -885,7 +928,7 @@ export function resolveGraphNodeInputs(input: {
       .filter((node) => input.round === undefined || node.round === undefined || node.round === input.round)
       .sort((left, right) => Date.parse(left.updated_at) - Date.parse(right.updated_at));
     const output = candidates.at(-1)?.outputs.find((entry) => entry.role === (binding.from_role ?? binding.role));
-    if (!output) throw new GraphRunError("node_input_unresolved", `Node output is unavailable for ${binding.role} from ${binding.from_node_id ?? "unknown"}.`, "conflict");
+    if (!output) throw unresolvedGraphInputError(`Node output is unavailable for ${binding.role} from ${binding.from_node_id ?? "unknown"}.`, binding);
     return { role: binding.role, source: binding.source, path: output.path, from_node_id: binding.from_node_id };
   });
 }

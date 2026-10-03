@@ -44,8 +44,13 @@ maintenance review never supplies a user's runtime Gate or Decision verdict.
    as derivation, with actual source paths, rather than verbatim extraction.
 4. Run `pnpm patent-maintenance:artifacts`. This prepares reviewed resources,
    builds definitions, emits extraction/audit records, authors patent packages
-   and projects the preset registry. It never executes vendor runtime tools.
-   Review generated diff and verify existing unrelated packages remain intact.
+   and refreshes the analysis records. It never executes vendor runtime tools
+   and never writes `skills/arsu/profiles`: the ARSU conversion projects every
+   authored profile, patent ones included, and owns their registry and
+   conversion manifest. Change a profile definition, then run the ARSU
+   conversion (`pnpm arsu:convert`) before patent acceptance, and read the
+   projection back through `check`. Review generated diff and verify existing
+   unrelated packages remain intact.
 5. Verify behavior through existing copied-tree runtime tests and graph tests.
    Exercise ordinary file indexes, Word/Excel/drawing paths, reader extraction,
    selected-vault projection and map inputs as applicable. Use local fixtures
@@ -80,11 +85,13 @@ pnpm patent-maintenance:check [anchor]
 pnpm patent-maintenance:diff <old-anchor> <new-anchor>
 ```
 
-`artifacts` regenerates deterministic production and analysis records.
-`records` refreshes analysis/ingestion/conversion/review evidence without writing
-semantic conclusions. `baseline` freezes reviewed bytes and rejects unfinished
-or stale review. `check` is offline and read-only, detects source and output
-drift, and never repairs it. `diff` compares two archived manifests.
+`artifacts` regenerates deterministic patent-owned production and analysis
+records. `records` refreshes analysis/ingestion/conversion/review evidence
+without writing semantic conclusions. `baseline` freezes reviewed bytes and
+rejects unfinished or stale review. `check` is offline and read-only, detects
+source and output drift including profile projection drift, and never repairs
+it. `diff` compares two archived manifests. Profile repair belongs to the ARSU
+conversion, not to these commands.
 
 For detailed source and business decisions read
 `docs/maintainer/patent-disclosure-skill.md`. Read

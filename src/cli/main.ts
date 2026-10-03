@@ -8,12 +8,15 @@ import {
   handleGraphDecide,
   handleGraphDoctor,
   handleGraphInstructions,
+  handleProcedureCheck,
   handleGraphStart,
   handleGraphStatus,
   type GraphAdvanceOptions,
   type GraphDecideOptions,
   type GraphDoctorOptions,
   type GraphStartOptions,
+  type GraphInstructionsOptions,
+  type ProcedureCheckOptions,
 } from "./handlers/graph.js";
 import { handleGraphInit, handleGraphUpdate, type GraphInitOptions, type GraphUpdateOptions } from "./handlers/graph-bootstrap.js";
 import {
@@ -96,13 +99,18 @@ function registerCommands(program: Command, run: Runner): void {
   registerCliCommand(program, "status")
     .action(async (_options: Record<string, never>, command: Command) => run("status", command, () => handleGraphStatus(commandContext("status", command))));
   registerCliCommand(program, "instructions")
-    .action(async (selector: string, _options: Record<string, never>, command: Command) => run("instructions", command, () => handleGraphInstructions(selector, commandContext("instructions", command))));
+    .action(async (selector: string, options: GraphInstructionsOptions, command: Command) => run("instructions", command, () => handleGraphInstructions(selector, commandContext("instructions", command), options)));
   registerCliCommand(program, "start")
     .action(async (selector: string, options: GraphStartOptions, command: Command) => run("start", command, () => handleGraphStart({ input: options.input, selector, confirmedBy: options.confirmedBy }, commandContext("start", command))));
   registerCliCommand(program, "advance")
     .action(async (selector: string, options: GraphAdvanceOptions, command: Command) => run("advance", command, () => handleGraphAdvance(selector, { input: options.input, actorName: options.actorName }, commandContext("advance", command))));
   registerCliCommand(program, "check")
-    .action(async (target: string | undefined, options: { strict?: boolean }, command: Command) => run("check", command, () => handleGraphCheck(Boolean(options.strict), commandContext("check", command), requireCheckTarget(target))));
+    .action(async (target: string | undefined, options: ProcedureCheckOptions, command: Command) => run("check", command, () => {
+      const context = commandContext("check", command);
+      if (target?.startsWith("procedure:")) return handleProcedureCheck(target, options, context);
+      if (options.input !== undefined) throw new CliError("procedure_material_option_invalid", "Material bindings apply only to a Procedure check target.", 2);
+      return handleGraphCheck(Boolean(options.strict), context, requireCheckTarget(target));
+    }));
   registerCliCommand(program, "doctor")
     .action(async (_options: GraphDoctorOptions, command: Command) => run("doctor", command, () => handleGraphDoctor(commandContext("doctor", command))));
   registerCliCommand(program, "list")

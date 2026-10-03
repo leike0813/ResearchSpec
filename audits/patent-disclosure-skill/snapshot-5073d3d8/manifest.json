@@ -142,7 +142,7 @@
     },
     {
       "path": ".agents/skills/patent-disclosure-skill-maintenance/SKILL.md",
-      "sha256": "3359ce2b3d49b943951e5db040958d009dd46612bde4bfe2dceb8a10cc7d23dc"
+      "sha256": "3c3c37084d87aaec9c66e89aae907cb22bd77f46154a0e5debea438373368c01"
     },
     {
       "path": "scripts/patent-source-audit.mjs",
@@ -154,7 +154,7 @@
     },
     {
       "path": "scripts/patent-disclosure-skill-maintenance.mjs",
-      "sha256": "06d3fae5a8a1ca2a5b8280e0f548454c412a094552dd48572d08e2ea9c715a26"
+      "sha256": "ac866b7cc5e0cf13595af7f8c781ed3c7732d902907422b35477758bd9d7d41d"
     },
     {
       "path": "src/vendor-converters/patent-disclosure-skill/cli.ts",
@@ -170,7 +170,7 @@
     },
     {
       "path": "docs/maintainer/patent-disclosure-skill.md",
-      "sha256": "ae7253cc0251078c2371d396f8a0a1cdf83139a6068f4c6bc762fe487f4cb0bf"
+      "sha256": "0de5e9e9d21887cfffc86d41ac68985ab5816b4c40c00219363c238c61206511"
     },
     {
       "path": "NOTICE",
@@ -181,6 +181,6 @@
       "sha256": "c71373b4c1fb686247081e6c8a32bf360c7ea712ab0e88da0f6429299ec76e65"
     }
   ],
-  "review_sha256": "b608bbff12c3873a31e69ae5664440d3a184b28ae75945d70cd2fd8b897bfa35",
-  "record_sha256": "861de83e472440df7b57d4953f6a366a89f66e0701bb9d2e246c1a89efe3aa44"
+  "review_sha256": "c06fd9017da86c607999f0b72186f1061540ce3441cf0b6c5bfe95904065bfb8",
+  "record_sha256": "d3d2bd7527edb51acb73344aeba59527c657f0ead059e26d2a5c8bc1030f7c7c"
 }

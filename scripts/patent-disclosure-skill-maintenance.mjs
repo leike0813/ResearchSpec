@@ -93,6 +93,11 @@ export function checkBaseline(root, anchor) {
 }
 
 async function checkProfiles(root, catalog) {
+  // skills/arsu/profiles is owned by the ARSU conversion: it projects every
+  // authored profile, patent ones included, and records them in the ARSU
+  // conversion manifest. This command only reads the projection and compares
+  // it with the authored definitions, so it can never leave that registry half
+  // written. Repair a profile by running the ARSU conversion first.
   const { PATENT_GRAPH_PROFILES } = await import(pathToFileURL(path.join(root, "dist/src/arsu-converter/workflow/graph-profiles/patent.js")).href);
   const registry = read(root, `${catalog.profile_root}/registry.json`);
   for (const id of catalog.profile_ids) {
@@ -102,7 +107,7 @@ async function checkProfiles(root, catalog) {
       || shipped.profile_version !== authored.profile.profile_version
       || shipped.profile_sha256 !== sha256(authored.projection)
       || readFileSync(path.join(root, catalog.profile_root, `${id}.yaml`), "utf8") !== authored.projection) {
-      throw new Error(`Patent profile generation drift: ${id}`);
+      throw new Error(`Patent profile generation drift: ${id}. The ARSU conversion owns the shared profile projection; repair it with pnpm arsu:convert, then rerun this check.`);
     }
   }
 }
@@ -117,7 +122,6 @@ async function main(args) {
     execFileSync("pnpm", ["build"], { cwd: root, stdio: "inherit" });
     run("scripts/patent-source-audit.mjs");
     run("dist/src/vendor-converters/patent-disclosure-skill/cli.js", "author");
-    execFileSync(process.execPath, ["--input-type=module", "-e", "import {emitPresetGraphProfiles} from './dist/src/arsu-converter/workflow/generate.js'; await emitPresetGraphProfiles('skills/arsu');"], { cwd: root, stdio: "inherit" });
     records(root, catalog, collectState(root, anchor));
   } else if (command === "records") records(root, catalog, collectState(root, anchor));
   else if (command === "baseline") {

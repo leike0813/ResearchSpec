@@ -9,9 +9,16 @@ accounted for in `audits/patent-disclosure-skill/source-audit.json`.
 The nine businesses become eighteen fixed stages in the ordinary capability
 registry. No plugin vendor, domain membership or additional host entry is
 created. Seven graph profiles are authored in
-`src/arsu-converter/workflow/graph-profiles/patent.ts`; the existing profile
-emitter projects them together with academic profiles. Core workflow code has
-no patent-specific control branches.
+`src/arsu-converter/workflow/graph-profiles/patent.ts`; the ARSU conversion
+projects them together with the academic profiles and owns
+`skills/arsu/profiles` plus the entries that describe it in the ARSU conversion
+manifest. Patent maintenance reads that projection back and compares it with
+the authored definitions, so profile repair means editing the definition and
+running the ARSU conversion, never writing the shared registry from this
+maintenance path. `pnpm arsu:convert` refuses to write when the current output
+already differs from its own manifest; that state is repaired once with the
+converter's `--force` option, after inspecting the drift. Core workflow code
+has no patent-specific control branches.
 
 `audits/patent-disclosure-skill/catalog.json` owns maintained paths and the pin.
 Typed definitions in `src/vendor-converters/patent-disclosure-skill/capabilities.ts`

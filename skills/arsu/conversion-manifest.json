@@ -11,7 +11,7 @@
     "remote_url": "https://github.com/Imbad0202/academic-research-skills",
     "dirty": false
   },
-  "generated_at": "2026-09-30T09:27:01Z",
+  "generated_at": "2026-10-03T12:25:39Z",
   "generated_groups": [
     "academic-paper",
     "academic-paper-reviewer",
@@ -44984,10 +44984,52 @@
     },
     {
       "group": "root",
+      "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/patent-application.ts",
+      "output_path": "profiles/patent-application.yaml",
+      "transform_rule": "preset_graph_profile_projection",
+      "sha256": "f67e1603e845b28142731bb380d02f801e10012bf0f6273ebdb7a334aa75da3f"
+    },
+    {
+      "group": "root",
+      "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/patent-disclosure.ts",
+      "output_path": "profiles/patent-disclosure.yaml",
+      "transform_rule": "preset_graph_profile_projection",
+      "sha256": "d21f3848db4d7f9eaa14603b44fe9cd23bf04118f807011bbc3caf7bc9d02199"
+    },
+    {
+      "group": "root",
+      "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/patent-docket.ts",
+      "output_path": "profiles/patent-docket.yaml",
+      "transform_rule": "preset_graph_profile_projection",
+      "sha256": "419af1793d779ce29cce8e1999ec61e9d191af13d31e7cb68faa8526e882bd78"
+    },
+    {
+      "group": "root",
+      "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/patent-informed-paper.ts",
+      "output_path": "profiles/patent-informed-paper.yaml",
+      "transform_rule": "preset_graph_profile_projection",
+      "sha256": "3681ea5c01ba8f56dce54cd3fd2fc22502f34de827a1ea56f2c4422fb507d298"
+    },
+    {
+      "group": "root",
+      "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/patent-intelligence.ts",
+      "output_path": "profiles/patent-intelligence.yaml",
+      "transform_rule": "preset_graph_profile_projection",
+      "sha256": "9f7dc5816c0ca576c4c50f0ff6c1cfc3f4fbd04a713a147b8fc9451164449a94"
+    },
+    {
+      "group": "root",
+      "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/patent-oa.ts",
+      "output_path": "profiles/patent-oa.yaml",
+      "transform_rule": "preset_graph_profile_projection",
+      "sha256": "5ed6dcc013f822454025af5415b637aac47db19c082e0b5f97ff8faf3e44f6e6"
+    },
+    {
+      "group": "root",
       "source_path": "generated:preset-graph-profile-registry",
       "output_path": "profiles/registry.json",
       "transform_rule": "preset_graph_profile_registry_projection",
-      "sha256": "528f99e35ec89e50f7708c6b660410a523b64c8e8b3afaac31340a7d11d064db"
+      "sha256": "8ceed4b41ab6102a2c1068853d2be0ed64508fbfed9d2762c584cd1d54ca3341"
     },
     {
       "group": "root",
@@ -44995,6 +45037,13 @@
       "output_path": "profiles/research-main.yaml",
       "transform_rule": "preset_graph_profile_projection",
       "sha256": "1fc09369bffb9b10a2c6279e90dcca0563d32bea04edad291987d32801381a9a"
+    },
+    {
+      "group": "root",
+      "source_path": "researchspec:src/arsu-converter/workflow/graph-profiles/research-to-patent.ts",
+      "output_path": "profiles/research-to-patent.yaml",
+      "transform_rule": "preset_graph_profile_projection",
+      "sha256": "3e757f2ef993f3fec05aa3c19888ccb6d629892f50f55b44626f3d2feef23529"
     },
     {
       "group": "root",
@@ -89296,8 +89345,8 @@
     "path": "profiles/registry.json",
     "schema_version": "1",
     "registry_version": "0.1.0",
-    "profile_count": 7,
-    "sha256": "528f99e35ec89e50f7708c6b660410a523b64c8e8b3afaac31340a7d11d064db"
+    "profile_count": 14,
+    "sha256": "8ceed4b41ab6102a2c1068853d2be0ed64508fbfed9d2762c584cd1d54ca3341"
   },
   "anchor_replacements": {
     "profile_id": "researchspec-anchor-replacement-v4",

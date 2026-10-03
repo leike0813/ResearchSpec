@@ -8,6 +8,7 @@ import { loadGraphProfileRegistry } from "../graph-profiles/registry.js";
 import { ARSU_ROUTING_CATALOG } from "../arsu-converter/routing/catalog.js";
 import { PACKAGE_ROOT } from "../capabilities/registry.js";
 import { loadPluginExtensionRegistry } from "../plugins/extensions.js";
+import { procedureEligibility, type ProcedureEligibility, type ProcedureEligibilityContext } from "./eligibility.js";
 
 export type ProcedureKind = "arsu" | "companion" | "capability" | "plugin";
 export type ProcedureMode = "standalone" | "graph";
@@ -40,6 +41,8 @@ export interface ProcedureCard {
   domains: readonly string[];
   profiles: readonly string[];
   resource_count: number;
+  /** Static workspace and domain selection facts. Absent only when no context was resolved. */
+  eligibility?: ProcedureEligibility;
 }
 
 export async function loadProcedureCatalog(packageRoot = PACKAGE_ROOT): Promise<ReadonlyMap<string, ProcedureDefinition>> {
@@ -135,7 +138,7 @@ export async function loadProcedureCatalog(packageRoot = PACKAGE_ROOT): Promise<
   return new Map([...result].sort(([left], [right]) => compareText(left, right)));
 }
 
-export function procedureCard(procedure: ProcedureDefinition): ProcedureCard {
+export function procedureCard(procedure: ProcedureDefinition, selection?: ProcedureEligibilityContext): ProcedureCard {
   return {
     selector: procedure.selector,
     procedure_id: procedure.id,
@@ -148,6 +151,7 @@ export function procedureCard(procedure: ProcedureDefinition): ProcedureCard {
     domains: procedure.domains,
     profiles: procedure.profiles,
     resource_count: procedure.manifest?.knowledge_refs.length ?? 0,
+    ...(selection === undefined ? {} : { eligibility: procedureEligibility(procedure, selection) }),
   };
 }
 

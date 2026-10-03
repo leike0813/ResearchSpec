@@ -47,8 +47,15 @@ void test("source-compiled CLI initializes and completes a schema 2 graph worksp
     const runId = started.data?.run_id;
     assert.ok(runId);
 
-    const afterStart = parseEnvelope<{ frontier: Array<{ selector: string }> }>(runCli(["status", "--json"], root));
+    const afterStart = parseEnvelope<{ frontier: Array<{ selector: string }>; run_summaries: Array<{ run_id: string; profile_id: string; unfinished: boolean; declared_delivery: { outputs: Array<{ role: string; purpose?: string }> }; next_inspections: string[] }> }>(runCli(["status", "--json"], root));
     assert.equal(afterStart.data?.frontier[0]?.selector, `node:${runId}/rq`);
+    const [activeSummary] = afterStart.data?.run_summaries ?? [];
+    assert.equal(activeSummary?.run_id, runId);
+    assert.equal(activeSummary?.profile_id, "minimal");
+    assert.equal(activeSummary?.unfinished, true);
+    assert.deepEqual(activeSummary?.declared_delivery.outputs.map((output) => [output.role, output.purpose]),
+      [["rq_brief", "research question brief"], ["research_report", "research report"]]);
+    assert.deepEqual(activeSummary?.next_inspections, [`instructions node:${runId}/rq`]);
 
     const advanceInput = path.join(root, "advance.yaml");
     const steps = [
@@ -76,11 +83,16 @@ void test("source-compiled CLI initializes and completes a schema 2 graph worksp
     const runPath = path.join(workspace, "runs", runId, "run.yaml");
     const completedRun = await readFile(runPath, "utf8");
     assert.equal((parseYaml(completedRun) as { status: string }).status, "complete");
-    const completed = parseEnvelope<{ runs: { active: number }; frontier: unknown[] }>(runCli(["status", "--json"], root));
+    const completed = parseEnvelope<{ runs: { active: number }; frontier: unknown[]; run_summaries: unknown[] }>(runCli(["status", "--json"], root));
     assert.equal(completed.data?.runs.active, 0);
     assert.deepEqual(completed.data?.frontier, []);
-    const instructions = parseEnvelope<{ completion_ready: boolean }>(runCli(["instructions", `run:${runId}`, "--json"], root));
+    assert.deepEqual(completed.data?.run_summaries, []);
+    const instructions = parseEnvelope<{ completion_ready: boolean; summary: { run_id: string; profile_id: string; unfinished: boolean; next_inspections: string[] } }>(runCli(["instructions", `run:${runId}`, "--json"], root));
     assert.equal(instructions.data?.completion_ready, true);
+    assert.deepEqual(
+      { run_id: instructions.data?.summary.run_id, profile_id: instructions.data?.summary.profile_id, unfinished: instructions.data?.summary.unfinished, next_inspections: instructions.data?.summary.next_inspections },
+      { run_id: runId, profile_id: "minimal", unfinished: false, next_inspections: [] },
+    );
     const rejected = parseEnvelope(runCli(["advance", `node:${runId}/report`, "--input", advanceInput, "--json"], root));
     assert.equal(rejected.error?.code, "run_not_active");
     assert.equal(await readFile(runPath, "utf8"), completedRun);

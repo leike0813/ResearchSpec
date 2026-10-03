@@ -15,6 +15,7 @@ import {
   submitGraphNode,
 } from "../../core/runtime/graph-run.js";
 import { loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
+import { buildGraphRunSummary, type GraphRunSummary } from "../../core/runtime/graph-recovery.js";
 import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
 import { validateGraphAgainstCapabilityRegistry } from "../../capabilities/registry.js";
 import type { CapabilityManifest } from "../../core/contracts/capability-manifest.js";
@@ -28,6 +29,8 @@ import { loadGraphPluginStatusView } from "../../plugins/graph-status.js";
 import { domainIsAvailable, loadPluginRegistry } from "../../plugins/registry.js";
 import { buildProcedurePacket } from "../../procedures/packet.js";
 import { loadProcedureCatalog } from "../../procedures/catalog.js";
+import { loadProcedureEligibilityContext, procedureEligibility, procedureEligibilityContextFromSelection } from "../../procedures/eligibility.js";
+import { inspectProcedureMaterials, ProcedureMaterialError, readProcedureMaterialBindings } from "../../procedures/materials.js";
 import { inspectWorkspaceSearch } from "../../procedures/workspace-search.js";
 import { reviewWorkspaceInstruction } from "../../review-workspace/instructions.js";
 import { inspectProjectEntries } from "../../adapters/project-entry.js";
@@ -44,10 +47,19 @@ export interface GraphDecideOptions {
   decision?: "accept" | "reject" | "defer" | "supersede";
 }
 export interface GraphAdvanceOptions { input?: string; actorName?: string }
+export interface GraphInstructionsOptions { input?: string }
+export interface ProcedureCheckOptions { input?: string; strict?: boolean }
 
 function graphControlCliError(error: unknown): CliError {
   if (!(error instanceof GraphRunError)) return new CliError("graph_control_internal_error", error instanceof Error ? error.message : String(error), 4);
-  return new CliError(error.code, error.message, error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1, undefined, error.details);
+  const hint = error.code === "node_validators_failed"
+    ? "Inspect the returned validator results and correct the affected output before retrying the same node."
+    : error.code === "node_input_unresolved"
+      ? "Read current status and exact node instructions; resolve the reported role using its declared input source."
+      : error.kind === "conflict"
+        ? "Read current status and exact selector instructions before retrying the requested action."
+        : undefined;
+  return new CliError(error.code, error.message, error.kind === "usage" ? 2 : error.kind === "conflict" ? 3 : 1, hint, error.details);
 }
 
 async function graphWorkspace(context: CommandContext): Promise<string> {
@@ -74,6 +86,7 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
   const pendingGateItems: Array<Record<string, unknown>> = [];
   const pendingDecisionItems: Array<Record<string, unknown>> = [];
   const nodesByRun: Record<string, Array<Record<string, unknown>>> = {};
+  const runSummaries: GraphRunSummary[] = [];
   const childRuns = graphChildRunSnapshots(index);
   const registry = index.runs.length > 0 ? await loadWorkspaceCapabilityRegistry(index) : undefined;
   for (const record of index.runs) {
@@ -88,6 +101,8 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
     }));
     const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, childRuns,
       registry && record.handoff ? { registry, handoff: record.handoff.frontmatter } : undefined);
+    const summary = buildGraphRunSummary(record, frontier);
+    if (summary?.unfinished) runSummaries.push(summary);
     for (const item of frontier.eligible_nodes) frontierItems.push({ selector: item.selector, run_id: record.run.run_id, node_id: item.node_id, ...(item.round === undefined ? {} : { round: item.round }) });
     for (const item of frontier.pending_subgraph_starts) childStartItems.push({ selector: item.selector, run_id: record.run.run_id, node_id: item.node_id, ...(item.round === undefined ? {} : { round: item.round }) });
     for (const selector of frontier.pending_gates) pendingGateItems.push({ selector, run_id: record.run.run_id });
@@ -122,6 +137,7 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
     procedure_search: search.status,
     profiles: [...index.profiles.values()].map((profile) => ({ profile_id: profile.profile_id, profile_version: profile.profile_version })),
     runs: { total: index.runs.length, active: index.runs.filter((item) => item.run?.status === "active").length },
+    run_summaries: runSummaries.sort((left, right) => left.run_id < right.run_id ? -1 : left.run_id > right.run_id ? 1 : 0),
     nodes: nodesByRun,
     frontier: frontierItems,
     pending_subgraph_starts: childStartItems,
@@ -144,7 +160,10 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
   };
 }
 
-export async function handleGraphInstructions(selector: string, context: CommandContext): Promise<CommandResult> {
+export async function handleGraphInstructions(selector: string, context: CommandContext, options: GraphInstructionsOptions = {}): Promise<CommandResult> {
+  if (options.input !== undefined && !selector.startsWith("procedure:")) {
+    throw new CliError("procedure_material_option_invalid", "Material bindings apply only to standalone Procedure instructions.", 2);
+  }
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
   if (index.manifestStatus === "invalid") {
@@ -156,20 +175,26 @@ export async function handleGraphInstructions(selector: string, context: Command
     if (!procedure) throw new CliError("procedure_not_found", `Procedure not found: ${procedureId}`, 1);
     if (procedure.kind === "plugin") {
       const registry = await loadPluginRegistry();
-      const eligibleDomains = procedure.domains.filter((domainId) =>
-        index.config.plugins.selected.includes(domainId) && domainIsAvailable(registry.domains.get(domainId)));
-      if (eligibleDomains.length === 0) {
+      const eligibility = procedureEligibility(procedure, procedureEligibilityContextFromSelection(
+        workspace, index.config.plugins.selected, (domainId) => domainIsAvailable(registry.domains.get(domainId)),
+      ));
+      if (eligibility.state !== "eligible") {
         throw new CliError(
           "procedure_domain_selection_required",
           `Procedure requires a selected available domain: ${procedureId}`,
           1,
           "Inspect the listed domains and install one with explicit consent.",
-          { procedure_id: procedureId, eligible_domains: procedure.domains },
+          { procedure_id: procedureId, eligible_domains: procedure.domains, eligibility },
         );
       }
     }
-    const packet = await buildProcedurePacket(procedure, { mode: "standalone", workspace });
-    return success("instructions", { selector, kind: "procedure", packet }, { stdout: packet.procedure.content });
+    const materials = options.input === undefined ? undefined : await loadProcedureMaterials(options.input, context);
+    const inspection = materials === undefined ? undefined : await inspectProcedureMaterials(procedure.manifest, index.projectRoot, materials, "planned");
+    const packet = await buildProcedurePacket(procedure, {
+      mode: "standalone", workspace,
+      ...(materials === undefined || inspection === undefined ? {} : { materials: { bindings: materials, inspection } }),
+    });
+    return success("instructions", { selector, kind: "procedure", packet }, { stdout: packet.procedure.content }, inspection?.diagnostics);
   }
   if (selector.startsWith("profile:")) {
     const profileId = selector.slice("profile:".length);
@@ -272,6 +297,7 @@ export async function handleGraphInstructions(selector: string, context: Command
       pending_gates: frontier.pending_gates,
       pending_decisions: frontier.pending_decisions,
       blockers: frontier.blockers,
+      summary: buildGraphRunSummary(record, frontier),
       completion_ready: frontier.completion_ready,
       ...(reviewWorkspace === undefined ? {} : { review_workspace: reviewWorkspace }),
     }, { stdout: `Run instructions: ${runId}\n` });
@@ -528,6 +554,31 @@ export async function handleGraphCheck(strict: boolean, context: CommandContext,
     ? { stdout: `ResearchSpec graph check passed: ${workspace}\n` }
     : { stderr: `ResearchSpec graph check failed: ${workspace}\n${diagnostics.map((item) => `- [${item.code}] ${item.path ?? ""} ${item.message}`).join("\n")}\n` };
   return { command: "check", ok, exitCode: ok ? 0 : 1, data: { workspace, target, diagnostics }, diagnostics, human };
+}
+
+async function loadProcedureMaterials(input: string, context: CommandContext) {
+  try { return await readProcedureMaterialBindings(path.resolve(context.cwd, input)); }
+  catch (error) {
+    if (error instanceof ProcedureMaterialError) throw new CliError(error.code, error.message, 2, undefined, error.details);
+    throw error;
+  }
+}
+
+export async function handleProcedureCheck(selector: string, options: ProcedureCheckOptions, context: CommandContext): Promise<CommandResult> {
+  if (options.input === undefined) throw new CliError("procedure_material_input_required", "Procedure material check requires --input with explicit bindings.", 2);
+  const workspace = await graphWorkspace(context);
+  const procedure = (await loadProcedureCatalog()).get(selector.slice("procedure:".length));
+  if (!procedure) throw new CliError("procedure_not_found", `Procedure not found: ${selector}`, 1);
+  const bindings = await loadProcedureMaterials(options.input, context);
+  const inspection = await inspectProcedureMaterials(procedure.manifest, path.dirname(workspace), bindings, "delivered");
+  const ok = !options.strict || inspection.diagnostics.every((item) => item.severity !== "warning");
+  const eligibility = procedureEligibility(procedure, await loadProcedureEligibilityContext(context.cwd, workspace));
+  const data = { workspace, selector, eligibility, material_bindings: bindings, material_inspection: inspection };
+  const message = `Procedure material observations: ${selector}\n${inspection.diagnostics.map((item) => `- [${item.code}] ${item.message}`).join("\n")}\n`;
+  return {
+    command: "check", ok, exitCode: ok ? 0 : 1, data, diagnostics: inspection.diagnostics,
+    human: ok ? { stdout: message } : { stderr: message },
+  };
 }
 
 export async function handleGraphDoctor(context: CommandContext): Promise<CommandResult> {

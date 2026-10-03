@@ -46,6 +46,7 @@ export const CLI_PAYLOADS = {
   status: none("No command payload. Reads the nearest current workspace and returns a bounded snapshot."),
   instructions: payload("selector-options", "One exact procedure or graph control/inspection selector.", [
     field("selector", "procedure:... | profile:... | run:... | node:<run>/<node>[@round] | gate:... | decision:... | change:...", true, "Procedure or current graph item whose action contract is needed."),
+    field("--input", "YAML/JSON material bindings", false, "Standalone Procedure context only: inputs[{role,path}|{role,value}], planned outputs[{role,path}]. Omitted arrays are uninspected; empty arrays inspect declared omissions."),
   ]),
   start: payload("yaml-json", "A confirmed root profile selector with --input, or an eligible node selector for an inherited child run.", [
     field("selector", "<profile-id> | profile:<profile-id> | node:<run>/<subgraph>[@round]", true, "Root profile or exact pending subgraph start."),
@@ -72,9 +73,10 @@ export const CLI_PAYLOADS = {
     field("--input", "YAML/JSON with outputs[]", true, "Declared output role/path submissions."),
     field("--actor-name", "non-empty string", false, "Action executor."),
   ]),
-  check: payload("options", "An optional validation target and strictness flag.", [
-    field("target", "all | specs | profiles | runs | changes | handoffs | tools | plugins | literature-adapters", false, "Validation scope; defaults to all."),
+  check: payload("options", "An optional workspace validation target, or explicit advisory Procedure material inspection.", [
+    field("target", "all | specs | profiles | runs | changes | handoffs | tools | plugins | literature-adapters | procedure:<id>", false, "Validation scope; defaults to all."),
     field("--strict", "boolean", false, "Treat warnings as failures."),
+    field("--input", "YAML/JSON material bindings", false, "Required only for procedure:<id>; inputs[{role,path}|{role,value}], outputs[{role,path}]."),
   ]),
   doctor: none("No command payload. Runs the full current-workspace diagnostic report."),
   list: payload("options", "An optional collection type with cursor pagination.", [

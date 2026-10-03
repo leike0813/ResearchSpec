@@ -118,6 +118,10 @@ Show procedure, profile, run, node, Gate, Decision, or change instructions
 - Static effect: `read`
 - Related commands: `status`, `start`, `advance`, `decide`
 
+| Command option | Required | Purpose |
+| --- | --- | --- |
+| `--input <materials.yaml|json>` | no | optional standalone Procedure input and planned output bindings |
+
 #### Input shape
 
 One exact procedure or graph control/inspection selector.
@@ -125,6 +129,7 @@ One exact procedure or graph control/inspection selector.
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
 | `selector` | `procedure:... \| profile:... \| run:... \| node:<run>/<node>[@round] \| gate:... \| decision:... \| change:...` | yes | Procedure or current graph item whose action contract is needed. |
+| `--input` | `YAML/JSON material bindings` | no | Standalone Procedure context only: inputs[{role,path}\|{role,value}], planned outputs[{role,path}]. Omitted arrays are uninspected; empty arrays inspect declared omissions. |
 
 ### `researchspec start <profile-id|node-selector>`
 
@@ -214,15 +219,17 @@ Check schema 2 workspace contracts
 | Command option | Required | Purpose |
 | --- | --- | --- |
 | `--strict` | no | treat warnings as failures |
+| `--input <materials.yaml|json>` | no | explicit input and delivered output bindings for procedure:<id> |
 
 #### Input shape
 
-An optional validation target and strictness flag.
+An optional workspace validation target, or explicit advisory Procedure material inspection.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `target` | `all \| specs \| profiles \| runs \| changes \| handoffs \| tools \| plugins \| literature-adapters` | no | Validation scope; defaults to all. |
+| `target` | `all \| specs \| profiles \| runs \| changes \| handoffs \| tools \| plugins \| literature-adapters \| procedure:<id>` | no | Validation scope; defaults to all. |
 | `--strict` | `boolean` | no | Treat warnings as failures. |
+| `--input` | `YAML/JSON material bindings` | no | Required only for procedure:<id>; inputs[{role,path}\|{role,value}], outputs[{role,path}]. |
 
 ### `researchspec list [type]`
 

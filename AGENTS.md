@@ -124,6 +124,10 @@ The locked direction is:
   requirements. Candidate questions, provisional positions, and draft outlines
   remain in ordinary working files. Promoting or changing a commitment uses
   the existing project change lifecycle.
+- Standalone material inspection is optional, bounded and read-only. It reports
+  explicit role/file facts, never execution permission or semantic adequacy.
+  Missing material pauses only dependent work. Navigate may bridge ordinary
+  materials with native capabilities while identifying unmet Procedure contracts.
 - Starting a run requires a user-confirmed profile entry summary with
   prerequisites, boundary outputs, formal Gates, and cost. Nodes authorized by
   the frozen graph do not require per-node starts; each formal Gate and Decision

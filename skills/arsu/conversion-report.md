@@ -4,7 +4,7 @@
 - Source: `vendor/ars`
 - Source commit: `7de1c9dfb7af9c02a9b57750761323f35a743aa2`
 - Output: `skills/arsu`
-- Generated at: `2026-09-30T09:27:01Z`
+- Generated at: `2026-10-03T12:25:39Z`
 - Validation: pass
 
 ## Source Checkout
@@ -46,7 +46,7 @@
 
 - Registry: `profiles/registry.json`
 - Registry version: `0.1.0`
-- Profiles: 7
+- Profiles: 14
 
 ## Anchor Replacement Semantics
 
@@ -64,7 +64,7 @@
 
 ## File Summary
 
-- Output files: 739
+- Output files: 746
 - Excluded source files: 1659
 - Unclassified source files: 789
 - Risk findings: 3555
