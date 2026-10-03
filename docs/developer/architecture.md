@@ -18,8 +18,11 @@ ResearchSpec CLI ──写──> stable specs / changes / frozen runs / node in
              └─引用──> researchspec/ 外的论文、报告、评审、图表和数据
 ```
 
-ResearchSpec 不调用模型 API，不管理数据库，不执行 vendor 脚本，也不接管 Zotero 或交付物。Git
-可以管理外部文件版本；ResearchSpec 只保存边界角色与安全相对路径。
+ResearchSpec 不调用模型 API，不管理数据库，不执行 vendor 脚本，也不接管 Zotero 或交付物。可选
+Procedure 语义发现使用用户缓存中的独立本地 CPU embedding runtime，只处理公开目录和当前查询，
+不参与学术内容生成或工作流状态判断。显式初始化确认或 hybrid 选项拥有下载权限；查询只读并有界，
+静态诊断只读缓存元数据，失效时回退内置中英 BM25。项目配置仅保存模式，向量是可重建缓存。
+Git 可以管理外部文件版本；ResearchSpec 只保存边界角色与安全相对路径。
 
 ## 每个概念只有一个 owner
 

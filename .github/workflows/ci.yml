@@ -6,6 +6,11 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      semantic_search:
+        description: Run real local multilingual embedding acceptance (downloads model/runtime)
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -15,6 +20,30 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  semantic-search:
+    if: github.event_name == 'workflow_dispatch' && inputs.semantic_search
+    name: Semantic search / ${{ matrix.os }} / Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm semantic-search:smoke --yes
+        env:
+          RESEARCHSPEC_SEARCH_CACHE: ${{ runner.temp }}/researchspec-search
+
   verify:
     name: ${{ matrix.os }} / Node ${{ matrix.node }}
     runs-on: ${{ matrix.os }}

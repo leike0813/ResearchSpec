@@ -38,7 +38,7 @@ An explicit bounded procedure can route directly after the same eligibility chec
 For research or patent work in an initialized project:
 
 1. Run \`researchspec status --json\`. If a related confirmed run is unfinished, follow its current exact selector instructions and pending controls. A completed historical run does not take over a new task.
-2. Otherwise, if continuing ordinary work, compare the matching task note with current materials. If the work needs ${GRAPH_REASONS}, follow the Graph section below. For standalone work, search \`researchspec list procedures --query "<short domain terms>" --json\`; translate a Chinese request into useful catalog terms when needed. Inspect promising cards with \`show procedure:<id> --json\`. Retry with different terms only if the first search has no suitable candidate.
+2. Otherwise, if continuing ordinary work, compare the matching task note with current materials. If the work needs ${GRAPH_REASONS}, follow the Graph section below. For standalone work, search \`researchspec list procedures --query "<original user request>" --json\` using the original request, including Chinese or mixed language. Compare candidate purposes and declared input/output roles against the task and actual materials; inspect promising cards with \`show procedure:<id> --json\`. If no candidate fits, make at most one focused reformulation. An empty-query error requires meaningful task text. A reported semantic fallback leaves offline candidates usable; propose explicit model preparation only when the user wants it.
 3. For standalone work, load \`researchspec instructions procedure:<id> --json\` for the selected eligible procedure. Check its required inputs against actual files before producing content. If a required material is missing, stop and ask one focused question about it.
 4. Carry out the selected packet's scholarly work inline or through an eligible worker. Save its declared outputs as ordinary project files outside \`researchspec/\`; a chat-only answer does not replace a declared file. For a second standalone procedure, pass the first output's project-relative path only through a matching declared input role.
 5. Report the produced paths, evidence and limits, unresolved items, and next step. For graph work, reread status after each CLI mutation. Stop for a fresh human verdict or choice at each pending Gate or Decision.
@@ -73,7 +73,7 @@ The references provide detail. The complete mode decision, authority boundaries,
     : `This commands-only entry installs no Skill-relative reference file. Reach the same detail through the CLI at these decision points:
 
 - Run \`researchspec --help\` or \`researchspec <command> --help\` before constructing a nontrivial or file-based payload, explaining the complete CLI, comparing command options, or troubleshooting selectors, syntax, payload fields, or exit classes.
-- Run \`researchspec list procedures --query "<terms>" --json\` and, in a workspace, \`researchspec list profiles --json\` when a goal is vague or crosses capabilities, or when comparing profiles, prerequisites, boundary outputs, Gates, risk, and cost before choosing an entry.
+- Run \`researchspec list procedures --query "<original user request>" --json\` and, in a workspace, \`researchspec list profiles --json\` when a goal is vague or crosses capabilities, or when comparing profiles, prerequisites, boundary outputs, Gates, risk, and cost before choosing an entry.
 
 The complete mode decision, authority boundaries, confirmation rules, and recovery flow remain here.`}
 

@@ -78,11 +78,13 @@ const definitions: readonly CliCommandDefinition[] = [
     option("tools", "--tools <ids>", "replace with all, none, or comma-separated tool IDs"),
     option("delivery", "--delivery <mode>", "skills, commands, or both"),
     option("literatureAdapters", "--literature-adapters <ids>", "replace with all, none, or comma-separated literature Adapter IDs"),
+    option("procedureSearch", "--procedure-search <mode>", "offline or hybrid; explicit hybrid prepares optional local search resources"),
   ], ["update", "status"]),
   command("update", ["update"], "update [path]", "bootstrap", "Refresh selected generated agent files", "required", "write", [
     option("tools", "--tools <ids>", "refresh/add a tool subset"),
     option("delivery", "--delivery <mode>", "skills, commands, or both"),
     option("literatureAdapters", "--literature-adapters <ids>", "replace selected literature Adapters"),
+    option("procedureSearch", "--procedure-search <mode>", "offline or hybrid; explicit hybrid prepares or refreshes optional local search resources"),
   ], ["init", "status", "doctor"]),
   command("status", ["status"], "status", "control-plane", "Show derived schema 2 run/node status", "required", "read", [], ["instructions", "show", "list"]),
   command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show procedure, profile, run, node, Gate, Decision, or change instructions", "required", "read", [], ["status", "start", "advance", "decide"]),
@@ -102,7 +104,7 @@ const definitions: readonly CliCommandDefinition[] = [
   command("list", ["list"], "list [type]", "inspection", "List procedures, tools, profiles, runs, nodes, changes, or diagnostics", "optional", "read", [
     option("limit", "--limit <count>", "page size from 1 to 50"),
     option("cursor", "--cursor <cursor>", "opaque cursor returned by the prior page"),
-    option("query", "--query <text>", "lexical procedure search terms"),
+    option("query", "--query <text>", "original natural-language request for Procedure discovery"),
   ], ["show", "status"]),
   command("show", ["show"], "show <selector>", "inspection", "Show one exact procedure, profile, run, node, or project change", "optional", "read", [], ["list", "check"]),
   command("handoff", ["handoff"], "handoff <run-selector>", "context", "Render or replace one directly editable run handoff", "required", "conditional-write", [

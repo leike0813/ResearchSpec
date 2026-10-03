@@ -3,13 +3,15 @@ import path from "node:path";
 import { parse as parseYaml, stringify } from "yaml";
 import { strToU8, zipSync, type Zippable } from "fflate";
 
-import { renderRunHandoff, RunHandoffSchema } from "../../core/contracts/graph-workspace.js";
+import { GraphWorkspaceConfigSchema, renderRunHandoff, RunHandoffSchema } from "../../core/contracts/graph-workspace.js";
 import { loadGraphWorkspaceIndex, type GraphWorkspaceFile } from "../../core/runtime/graph-workspace-index.js";
 import { GraphRunError, writeGraphHandoff } from "../../core/runtime/graph-run.js";
-import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
+import { requireGraphWorkspace, resolveGraphWorkspace } from "../../core/workspace/graph-discover.js";
 import { sha256 } from "../../core/workspace/write-plan.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
-import { loadProcedureCatalog, procedureCard, searchProcedures } from "../../procedures/catalog.js";
+import { loadProcedureCatalog, procedureCard } from "../../procedures/catalog.js";
+import { ProcedureQueryError, searchProcedures, type ProcedureSearchResult } from "../../procedures/search.js";
+import type { ProcedureSearchMode } from "../../procedures/search-contracts.js";
 import { TOOLS } from "../../adapters/tools.js";
 
 
@@ -28,8 +30,27 @@ async function graphWorkspace(context: CommandContext): Promise<string> {
 export async function handleGraphList(type: string | undefined, options: GraphListOptions, context: CommandContext): Promise<CommandResult> {
   const resolved = type ?? "runs";
   let items: Array<Record<string, unknown>> = [];
+  let retrieval: ProcedureSearchResult["retrieval"] | undefined;
   if (resolved === "procedures") {
-    items = searchProcedures(await loadProcedureCatalog(), options.query).map((procedure) => ({ ...procedureCard(procedure) }));
+    let mode: ProcedureSearchMode = "offline";
+    if (options.query !== undefined) {
+      const resolution = await resolveGraphWorkspace(context.cwd, context.workspace);
+      if (resolution.status === "found") {
+        const config = GraphWorkspaceConfigSchema.parse(parseYaml(await readFile(path.join(resolution.workspace, "config.yaml"), "utf8")));
+        mode = config.procedure_search?.mode ?? "offline";
+      } else if (resolution.status !== "missing") {
+        throw new CliError("workspace_unsupported", "Procedure search requires a current schema 2 configuration when a workspace is present.", 1);
+      }
+    }
+    try {
+      const result = await searchProcedures(await loadProcedureCatalog(), options.query, { mode: context.dryRun ? "offline" : mode });
+      retrieval = result.retrieval;
+      if (context.dryRun && mode === "hybrid") retrieval = { ...retrieval, requested_mode: mode, fallback_reason: "dry_run" };
+      items = result.items.map(({ procedure, match }) => ({ ...procedureCard(procedure), ...(options.query === undefined ? {} : { match }) }));
+    } catch (error) {
+      if (error instanceof ProcedureQueryError) throw new CliError(error.code, error.message, 2);
+      throw error;
+    }
   } else if (resolved === "tools") {
     items = TOOLS.map((tool) => ({
       selector: `tool:${tool.id}`, tool_id: tool.id, name: tool.name,
@@ -52,7 +73,7 @@ export async function handleGraphList(type: string | undefined, options: GraphLi
   }
   const limit = options.limit === undefined ? (resolved === "procedures" ? 10 : 20) : Number(options.limit);
   if (!Number.isInteger(limit) || limit < 1 || limit > 50) throw new CliError("list_limit_invalid", "List limit must be an integer from 1 to 50.", 2);
-  const fingerprint = sha256(JSON.stringify(items));
+  const fingerprint = sha256(JSON.stringify(retrieval ? { query: options.query, catalog_id: retrieval.catalog_id, backend: retrieval.effective_mode, ids: items.map((item) => item.selector) } : items));
   const offset = options.cursor === undefined ? 0 : decodeListCursor(options.cursor, resolved, fingerprint);
   if (offset > items.length) throw new CliError("list_cursor_stale", "List cursor no longer matches the current collection.", 2);
   const page = items.slice(offset, offset + limit);
@@ -63,9 +84,10 @@ export async function handleGraphList(type: string | undefined, options: GraphLi
     items: page,
     total: items.length,
     offset,
+    ...(retrieval === undefined ? {} : { retrieval }),
     truncated: nextCursor !== undefined,
     ...(nextCursor === undefined ? {} : { next_cursor: nextCursor }),
-  }, { stdout: page.map((item) => item.selector).join("\n") + (page.length ? "\n" : `No ${resolved}.\n`) });
+  }, { stdout: page.map((item) => item.selector).join("\n") + (page.length ? "\n" : `No ${resolved}.\n`), ...(retrieval?.fallback_reason ? { stderr: `Procedure discovery used offline retrieval (${retrieval.fallback_reason}).\n` } : {}) });
 }
 
 export async function handleGraphShow(selector: string, context: CommandContext): Promise<CommandResult> {

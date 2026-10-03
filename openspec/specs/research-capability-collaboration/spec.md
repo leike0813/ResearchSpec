@@ -7,17 +7,17 @@ Define how Navigate turns a natural research request into the right capability a
 
 ### Requirement: Intent Discovery Over The Existing Catalog
 
-Navigate SHALL translate a natural research request, including one written in Chinese, into short catalog search terms and use the existing procedure discovery command. It SHALL retry once with different terms when the first search yields no suitable candidate, and SHALL use host-native capabilities only after that retry finds nothing.
+Navigate SHALL first pass the user's original research request, including Chinese requests, to Procedure discovery. It SHALL inspect candidate metadata and declared roles before selecting and loading instructions. It SHALL retry once with a reformulated query when no candidate is suitable; translation is optional. Only after the retry finds nothing SHALL it use host-native capabilities. A relevant unfinished confirmed run SHALL retain priority.
 
 #### Scenario: Natural request finds a capability
 
 - **WHEN** the user describes a research task without naming a procedure
-- **THEN** Navigate searches the compact catalog with short terms and inspects at most a few candidate cards before selecting one
+- **THEN** Navigate first searches with the original request and inspects a few candidate cards and declared roles
 
 #### Scenario: First search misses
 
-- **WHEN** the first term set returns no suitable candidate
-- **THEN** Navigate retries once with different terms before deciding that no procedure fits
+- **WHEN** the original-request search yields no suitable candidate
+- **THEN** Navigate retries once with a reformulated query before deciding that no procedure fits
 
 #### Scenario: Second search misses
 

@@ -1,0 +1,14 @@
+{
+  "name": "researchspec-semantic-search-runtime",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Isolated locked CPU inference assets for ResearchSpec local Procedure semantic search.",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "3.8.1"
+  }
+}

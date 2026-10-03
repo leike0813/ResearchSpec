@@ -20,6 +20,7 @@ Refresh selected generated agent files
 | `--tools <ids>` | no | refresh/add a tool subset |
 | `--delivery <mode>` | no | skills, commands, or both |
 | `--literature-adapters <ids>` | no | replace selected literature Adapters |
+| `--procedure-search <mode>` | no | offline or hybrid; explicit hybrid prepares or refreshes optional local search resources |
 
 #### Input shape
 
@@ -31,3 +32,4 @@ Optional replacement or extension selections for an existing current workspace.
 | `--tools` | `all \| none \| comma-separated tool IDs` | no | Refresh or add this tool subset. |
 | `--delivery` | `skills \| commands \| both` | no | Replace the generated delivery mode; omission preserves current intent. |
 | `--literature-adapters` | `all \| none \| comma-separated Adapter IDs` | no | Replace the selected Adapter set. |
+| `--procedure-search` | `offline \| hybrid` | no | Preserve selection when omitted; explicit hybrid prepares or refreshes local search resources. |

@@ -5,6 +5,7 @@
 frontier、Gate、Decision、handoff 和完成条件。
 
 - [CLI handbook](cli-handbook.md)：从 typed catalog 生成的完整命令参数；
+- [Procedure 发现](procedure-discovery.md)：自然语言检索、本地语义发现、缓存和离线回退；
 - [Agent 项目入口矩阵](agent-entry-matrix.md)：各宿主的规则文件、发现回退与验证边界；
 - [交互式论文审阅工作台](review-workspace.md)：本地批注、修订意见和正式确认之间的边界；
 - [Zotero 文献系统 Adapter](literature-adapters.md)：可选文献能力及安全边界。

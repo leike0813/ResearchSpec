@@ -44,6 +44,7 @@ export const GraphWorkspaceConfigSchema = z.strictObject({
   }),
   literature_adapters: z.strictObject({ selected: z.array(NonEmptySchema) }),
   plugins: z.strictObject({ selected: z.array(NonEmptySchema) }),
+  procedure_search: z.strictObject({ mode: z.enum(["offline", "hybrid"]) }).optional(),
 });
 
 export const ProjectFrontmatterV2Schema = z.strictObject({

@@ -5,7 +5,8 @@ import { test } from "node:test";
 
 import { parse } from "yaml";
 import { TOOL_IDS } from "../src/adapters/tools.js";
-import { loadProcedureCatalog, searchProcedures } from "../src/procedures/catalog.js";
+import { loadProcedureCatalog } from "../src/procedures/catalog.js";
+import { searchProcedures } from "../src/procedures/search.js";
 
 interface DogfoodingCatalog {
   schema_version: "1";
@@ -115,7 +116,7 @@ void test("dogfooding playbook catalog covers routes, fixtures, and release mapp
 
   const firstQuery = byId.get("DF-T2-FIRST-SEARCH-MISS")?.first_query;
   assert.ok(firstQuery);
-  assert.equal(searchProcedures(await loadProcedureCatalog(), firstQuery).length, 0, "The staged first search must miss");
+  assert.equal((await searchProcedures(await loadProcedureCatalog(), firstQuery)).items.length, 0, "The staged first search must miss");
 
   const chain = byId.get("DF-T2-TWO-CAPABILITIES")?.procedure_chain;
   assert.ok(chain);

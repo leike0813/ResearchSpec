@@ -4,6 +4,13 @@ Passing technical checks does not authorize a Git tag, GitHub Release, or npm pu
 
 ## 1. Technical gates
 
+Local multilingual discovery has a separate opt-in acceptance check:
+`pnpm semantic-search:smoke` downloads the pinned model and isolated CPU runtime
+to the user cache, builds the public Procedure index, and runs real bilingual
+queries. CI's manual `semantic_search` input runs this on Linux/macOS/Windows
+with Node 22 and 24. Ordinary CI and installed-package verification stay offline;
+record hosted results separately from local smoke and live Agent dogfooding.
+
 Run from a clean checkout on a supported Node release:
 
 ```bash

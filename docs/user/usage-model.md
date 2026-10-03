@@ -30,6 +30,11 @@ Skills、converter 与验收必须与本文一致。
 `researchspec init` 创建 schema `"2"` workspace、投影所选 Agent 表面和 preset profiles。它不会
 开始学术工作，也不会创建 run。
 
+首次交互初始化会询问是否启用本地多语言语义发现。确认后下载约 140 MB 的模型与 tokenizer，
+另加独立 CPU runtime，保存到用户缓存；项目仅保存 `procedure_search.mode`。非交互初始化默认
+离线，`--yes` 本身不授权下载。显式 `init/update --procedure-search hybrid` 才准备或刷新缓存；
+`offline` 使用内置检索。已有工作区省略该选项会保留选择。`--dry-run` 只预览，不下载或推理。
+
 已核实原生项目规则的宿主还会收到简短的研究任务入口约定，用来提醒 Agent 按普通研究请求发现
 Navigate。约定独立于 `skills`、`commands` 或 `both` 交付模式，并只引用实际安装的入口文件；
 未核实规则路径的宿主保持现有显式发现方式。安装只证明静态投影，不能证明宿主会在真实会话中主动
@@ -77,6 +82,13 @@ list procedures --query <意图> --json
 
 `list` 只返回紧凑卡片，`show` 返回单项元数据，`instructions` 才加载完整 Procedure、资源引用和
 激活包。发现可以在 workspace 外只读执行；激活要求当前 schema 2 workspace。
+
+Navigate 首次检索直接提交用户原始请求，保留中文、英文或混合语言，并按用途及声明的输入输出角色
+判断候选。没有合适候选时，最多改写一次。离线检索使用 Unicode 分词、内置中英概念词表和字段
+加权 BM25；hybrid 再融合本地多语言向量排序。精确 ID 优先。结果说明匹配依据、请求和实际检索
+方式及回退原因；排序相似度不能证明能力适用。空白、标点或仅停用词的显式查询会报错，正常查询
+无匹配返回空列表；省略查询才浏览目录。模型未就绪或推理超时自动回退离线。查询不联网、不写缓存，
+`status/check/doctor` 仅静态检查；准备、缓存位置与恢复方式见[Procedure 发现](procedure-discovery.md)。
 
 不需要正式流程控制的普通任务使用 standalone 模式，持续工作也可留在此模式：Procedure 只能写
 `researchspec/` 外的普通项目文件，完成时把路径返回调用者，不创建或修改 run、node、handoff、

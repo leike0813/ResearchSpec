@@ -18,6 +18,7 @@ export interface ProcedureDefinition {
   kind: ProcedureKind;
   title: string;
   description: string;
+  intents?: readonly string[];
   modes: readonly ProcedureMode[];
   domains: readonly string[];
   profiles: readonly string[];
@@ -33,6 +34,8 @@ export interface ProcedureCard {
   kind: ProcedureKind;
   title: string;
   description: string;
+  inputs: readonly string[];
+  outputs: readonly string[];
   modes: readonly ProcedureMode[];
   domains: readonly string[];
   profiles: readonly string[];
@@ -58,6 +61,7 @@ export async function loadProcedureCatalog(packageRoot = PACKAGE_ROOT): Promise<
       kind: "arsu",
       title: skill.title,
       description: skill.summary,
+      intents: [...new Set([...skill.intents, ...skill.routes.flatMap((route) => route.intents)])],
       modes: ["standalone"],
       domains: [],
       profiles: [...profiles.profiles.values()]
@@ -138,6 +142,8 @@ export function procedureCard(procedure: ProcedureDefinition): ProcedureCard {
     kind: procedure.kind,
     title: procedure.title,
     description: compact(procedure.description),
+    inputs: procedure.manifest?.inputs.map((role) => role.role) ?? [],
+    outputs: procedure.manifest?.outputs.map((role) => role.role) ?? [],
     modes: procedure.modes,
     domains: procedure.domains,
     profiles: procedure.profiles,
@@ -145,30 +151,10 @@ export function procedureCard(procedure: ProcedureDefinition): ProcedureCard {
   };
 }
 
-export function searchProcedures(catalog: ReadonlyMap<string, ProcedureDefinition>, query?: string): ProcedureDefinition[] {
-  const terms = normalize(query ?? "").split(" ").filter(Boolean);
-  return [...catalog.values()]
-    .map((procedure) => ({ procedure, score: procedureScore(procedure, terms) }))
-    .filter((item) => terms.length === 0 || item.score > 0)
-    .sort((left, right) => right.score - left.score || compareText(left.procedure.id, right.procedure.id))
-    .map((item) => item.procedure);
-}
-
 export async function readProcedureContent(procedure: ProcedureDefinition): Promise<string> {
   if (procedure.content !== undefined) return procedure.content;
   if (!procedure.contentPath) throw new Error(`Procedure content is unavailable: ${procedure.id}`);
   return readFile(procedure.contentPath, "utf8");
-}
-
-function procedureScore(procedure: ProcedureDefinition, terms: readonly string[]): number {
-  if (terms.length === 0) return 0;
-  const id = normalize(procedure.id);
-  const title = normalize(procedure.title);
-  const haystack = normalize([procedure.id, procedure.title, procedure.description, ...procedure.domains, ...procedure.profiles].join(" "));
-  const query = terms.join(" ");
-  if (id === query || title === query) return 4;
-  if (terms.every((term) => haystack.includes(term))) return 3;
-  return terms.some((term) => haystack.includes(term)) ? 2 : 0;
 }
 
 function profileMembership(profiles: readonly { profile_id: string; nodes: readonly { capability_id?: string }[] }[]): Map<string, string[]> {
@@ -182,10 +168,6 @@ function profileMembership(profiles: readonly { profile_id: string; nodes: reado
   }
   for (const memberships of result.values()) memberships.sort(compareText);
   return result;
-}
-
-function normalize(value: string): string {
-  return value.toLocaleLowerCase("en-US").replace(/[^a-z0-9]+/g, " ").trim();
 }
 
 function compact(value: string): string {

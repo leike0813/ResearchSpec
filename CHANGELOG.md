@@ -4,6 +4,8 @@ All notable ResearchSpec releases are documented here.
 
 ## Unreleased
 
+- Added original-query bilingual Procedure discovery with Unicode segmentation, weighted BM25, declared roles and match evidence. Optional explicitly prepared local multilingual embeddings provide hybrid ranking with bounded offline fallback.
+
 - Reoriented the usage specifications and documentation around natural research tasks and usable deliverables. Sustained ordinary work and its recovery use plain task notes without requiring a graph run; formal controls still use graph runs.
 - Clarified that exploratory drafts stay in ordinary working files and stable specs hold confirmed research commitments.
 

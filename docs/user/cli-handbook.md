@@ -55,6 +55,7 @@ Initialize or reconfigure a ResearchSpec workspace
 | `--tools <ids>` | no | replace with all, none, or comma-separated tool IDs |
 | `--delivery <mode>` | no | skills, commands, or both |
 | `--literature-adapters <ids>` | no | replace with all, none, or comma-separated literature Adapter IDs |
+| `--procedure-search <mode>` | no | offline or hybrid; explicit hybrid prepares optional local search resources |
 
 #### Input shape
 
@@ -66,6 +67,7 @@ Optional complete bootstrap selections; the path positional argument defaults to
 | `--tools` | `all \| none \| comma-separated tool IDs` | no | Complete desired Agent-tool selection. |
 | `--delivery` | `skills \| commands \| both` | no | Generated Agent surface mode; omission preserves an existing value. |
 | `--literature-adapters` | `all \| none \| comma-separated Adapter IDs` | no | Complete desired optional literature Adapter selection. |
+| `--procedure-search` | `offline \| hybrid` | no | Choose retrieval mode; explicit hybrid authorizes optional user-cache runtime/model preparation. |
 
 ### `researchspec update [path]`
 
@@ -80,6 +82,7 @@ Refresh selected generated agent files
 | `--tools <ids>` | no | refresh/add a tool subset |
 | `--delivery <mode>` | no | skills, commands, or both |
 | `--literature-adapters <ids>` | no | replace selected literature Adapters |
+| `--procedure-search <mode>` | no | offline or hybrid; explicit hybrid prepares or refreshes optional local search resources |
 
 #### Input shape
 
@@ -91,6 +94,7 @@ Optional replacement or extension selections for an existing current workspace.
 | `--tools` | `all \| none \| comma-separated tool IDs` | no | Refresh or add this tool subset. |
 | `--delivery` | `skills \| commands \| both` | no | Replace the generated delivery mode; omission preserves current intent. |
 | `--literature-adapters` | `all \| none \| comma-separated Adapter IDs` | no | Replace the selected Adapter set. |
+| `--procedure-search` | `offline \| hybrid` | no | Preserve selection when omitted; explicit hybrid prepares or refreshes local search resources. |
 
 ## Control plane
 
@@ -232,7 +236,7 @@ List procedures, tools, profiles, runs, nodes, changes, or diagnostics
 | --- | --- | --- |
 | `--limit <count>` | no | page size from 1 to 50 |
 | `--cursor <cursor>` | no | opaque cursor returned by the prior page |
-| `--query <text>` | no | lexical procedure search terms |
+| `--query <text>` | no | original natural-language request for Procedure discovery |
 
 #### Input shape
 
@@ -243,7 +247,7 @@ An optional collection type with cursor pagination.
 | `type` | `procedures \| profiles \| runs \| nodes \| changes \| diagnostics` | no | Collection to list; defaults to runs. |
 | `--limit` | `integer 1..50` | no | Page size; procedures default to 10, other collections to 20. |
 | `--cursor` | `opaque base64url cursor` | no | Cursor returned by the immediately preceding page for the same unchanged collection. |
-| `--query` | `string` | no | Lexical search terms used only with procedures. |
+| `--query` | `string` | no | Original Chinese, English or mixed natural-language request, used only with procedures. |
 
 ### `researchspec show <selector>`
 

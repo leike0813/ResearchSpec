@@ -28,6 +28,7 @@ import { loadGraphPluginStatusView } from "../../plugins/graph-status.js";
 import { domainIsAvailable, loadPluginRegistry } from "../../plugins/registry.js";
 import { buildProcedurePacket } from "../../procedures/packet.js";
 import { loadProcedureCatalog } from "../../procedures/catalog.js";
+import { inspectWorkspaceSearch } from "../../procedures/workspace-search.js";
 import { reviewWorkspaceInstruction } from "../../review-workspace/instructions.js";
 import { inspectProjectEntries } from "../../adapters/project-entry.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
@@ -93,6 +94,8 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
     for (const selector of frontier.pending_decisions) pendingDecisionItems.push({ selector, run_id: record.run.run_id });
   }
   const diagnostics = [...index.diagnostics];
+  const search = await inspectWorkspaceSearch(index.config);
+  diagnostics.push(...search.diagnostics);
   if (!plugins.loadable) {
     diagnostics.push({
       severity: "warning",
@@ -116,6 +119,7 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
       installations: index.manifest.installations.length,
     },
     literature_adapters: { selected: index.config.literature_adapters.selected },
+    procedure_search: search.status,
     profiles: [...index.profiles.values()].map((profile) => ({ profile_id: profile.profile_id, profile_version: profile.profile_version })),
     runs: { total: index.runs.length, active: index.runs.filter((item) => item.run?.status === "active").length },
     nodes: nodesByRun,
@@ -518,6 +522,7 @@ export async function handleGraphCheck(strict: boolean, context: CommandContext,
     }
   }
   if (target === "all" || target === "plugins") diagnostics.push(...await pluginWorkspaceDiagnostics(index, target === "plugins"));
+  if (target === "all" || target === "tools") diagnostics.push(...(await inspectWorkspaceSearch(index.config)).diagnostics);
   const ok = diagnostics.every((item) => !item.blocking && (!strict || item.severity !== "warning"));
   const human = ok
     ? { stdout: `ResearchSpec graph check passed: ${workspace}\n` }
@@ -529,7 +534,8 @@ export async function handleGraphDoctor(context: CommandContext): Promise<Comman
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
   const diagnostics = [...index.diagnostics, ...await pluginWorkspaceDiagnostics(index, true),
-    ...await inspectProjectEntries(index.projectRoot, index.config.agent_tools.selected, index.manifest.installations)];
+    ...await inspectProjectEntries(index.projectRoot, index.config.agent_tools.selected, index.manifest.installations),
+    ...(await inspectWorkspaceSearch(index.config)).diagnostics];
   const report = { workspace, healthy: diagnostics.every((item) => !item.blocking), diagnostics };
   const message = diagnostics.length
     ? `ResearchSpec Doctor found ${String(diagnostics.length)} diagnostic(s): ${workspace}\n${diagnostics.map((item) => `- [${item.code}] ${item.path ?? ""} ${item.message}`).join("\n")}\n`

@@ -108,6 +108,18 @@ try {
   const currentWorkspace = path.join(projectDirectory, "researchspec");
   const currentConfig = parseYaml(await readFile(path.join(currentWorkspace, "config.yaml"), "utf8"));
   assert(currentConfig?.schema_version === "2", "Installed init did not create schema 2 config.");
+  assert(currentConfig?.procedure_search?.mode === "offline", "Noninteractive init must default to offline discovery.");
+  const semanticRuntime = JSON.parse(await readFile(path.join(installedPackageRoot, "semantic-search/runtime/package.json"), "utf8"));
+  await readFile(path.join(installedPackageRoot, "semantic-search/runtime/package-lock.json"), "utf8");
+  assert(semanticRuntime.dependencies?.["@huggingface/transformers"] === "3.8.1", "Packaged local runtime pin is missing.");
+  assert(!installedPackage.dependencies?.["@huggingface/transformers"], "Semantic runtime must stay outside core dependencies.");
+  const discovery = JSON.parse(run(bin, ["list", "procedures", "--query", "系统检索文献并找出研究空白", "--json"], projectDirectory, environment).stdout);
+  assert(discovery.ok && discovery.data.retrieval.effective_mode === "offline", "Installed bilingual discovery failed.");
+  assert(discovery.data.items.length > 0 && discovery.data.items.every((item) => Array.isArray(item.inputs) && Array.isArray(item.outputs) && item.match), "Installed discovery lost declared roles or match evidence.");
+  const beforeSearchPreview = await readFile(path.join(currentWorkspace, "config.yaml"), "utf8");
+  const preview = JSON.parse(run(bin, ["update", "--procedure-search", "hybrid", "--dry-run", "--json"], projectDirectory, environment).stdout);
+  assert(preview.data?.procedure_search?.preparation === "planned", "Packaged semantic preparation preview is missing.");
+  assert(await readFile(path.join(currentWorkspace, "config.yaml"), "utf8") === beforeSearchPreview, "Semantic dry-run changed workspace configuration.");
   assert(equal(currentConfig?.literature_adapters?.selected, ["zotero-library"]), "Installed init did not persist the selected literature adapter.");
   for (const profileId of expectedProfiles) {
     const profile = parseYaml(await readFile(path.join(currentWorkspace, "profiles", `${profileId}.yaml`), "utf8"));
@@ -281,7 +293,7 @@ function verifyTarballFiles(files) {
   );
   assert(adapterOpaqueFiles.length === 14, `Tarball Zotero opaque runtime metadata count mismatch: ${String(adapterOpaqueFiles.length)}`);
 
-  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/.*|artifacts\/(?:README\.md|release\/mvp-release-checklist\.md)|review-workspace\/(?:index|v1|revision-master)\.html|dist\/src\/.*\.(?:js|d\.ts)|skills\/.*|literature-adapters\/.*)$/;
+  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/.*|artifacts\/(?:README\.md|release\/mvp-release-checklist\.md)|review-workspace\/(?:index|v1|revision-master)\.html|dist\/src\/.*\.(?:js|d\.ts)|skills\/.*|literature-adapters\/.*|semantic-search\/runtime\/(?:package|package-lock)\.json)$/;
   const retired = /^dist\/src\/adapters\/companion\/workflows\/(?:archive|check|context|explore|next|submit)\.js$/;
   for (const file of files) {
     assert(allowed.test(file), `Tarball contains a path outside the release allowlist: ${file}`);

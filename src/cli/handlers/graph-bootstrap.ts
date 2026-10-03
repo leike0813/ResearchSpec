@@ -1,5 +1,6 @@
 import path from "node:path";
 import { ExitPromptError } from "@inquirer/core";
+import { confirm } from "@inquirer/prompts";
 import { stringify } from "yaml";
 
 import { detectTools, orderTools, parseToolExpression, type DeliveryMode } from "../../adapters/tools.js";
@@ -12,16 +13,22 @@ import { resolveInitTarget } from "../../core/workspace/layout.js";
 import { executeWritePlan, planDirectFileEdit, planFile, type PlannedWrite } from "../../core/workspace/write-plan.js";
 import { assertLiteratureAdapterSelection, LITERATURE_ADAPTER_CATALOG, parseLiteratureAdapterExpression } from "../../literature-adapters/index.js";
 import { fileExists } from "../../utils/fs.js";
+import { loadProcedureCatalog } from "../../procedures/catalog.js";
+import { buildSearchDocuments } from "../../procedures/search.js";
+import { prepareSemanticSearch, semanticCacheRoot } from "../../procedures/runtime.js";
+import type { ProcedureSearchMode } from "../../procedures/search-contracts.js";
+import type { Diagnostic } from "../../core/validation/types.js";
 import { searchableMultiSelect, type SearchableChoice } from "../prompts/searchable-multi-select.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 
-export interface GraphInitOptions { tools?: string; literatureAdapters?: string; delivery?: DeliveryMode }
-export interface GraphUpdateOptions { tools?: string; literatureAdapters?: string; delivery?: DeliveryMode }
+export interface GraphInitOptions { tools?: string; literatureAdapters?: string; delivery?: DeliveryMode; procedureSearch?: string }
+export interface GraphUpdateOptions { tools?: string; literatureAdapters?: string; delivery?: DeliveryMode; procedureSearch?: string }
 export interface GraphBootstrapPromptPort {
   multiSelect(config: { id: "agent-tools" | "literature-adapters"; message: string; choices: SearchableChoice[] }): Promise<string[]>;
+  confirm(config: { id: "procedure-search"; message: string; default: boolean }): Promise<boolean>;
 }
 
-const DEFAULT_BOOTSTRAP_PROMPTS: GraphBootstrapPromptPort = { multiSelect: searchableMultiSelect };
+const DEFAULT_BOOTSTRAP_PROMPTS: GraphBootstrapPromptPort = { multiSelect: searchableMultiSelect, confirm };
 
 const PROJECT_SPEC = '---\nschema_version: "2"\nproject_id: project\n---\n\n# Project intent\n\n## Research question\n\n## Scope and boundaries\n\n## Method stance\n\n## Expected contribution\n';
 
@@ -40,6 +47,7 @@ async function applyGraphWorkspaceProjection(input: {
   adapters: string[];
   delivery: DeliveryMode;
   selectedPlugins: string[];
+  procedureSearch: ProcedureSearchMode;
   index?: Awaited<ReturnType<typeof loadGraphWorkspaceIndex>>;
   context: CommandContext;
 }): Promise<{ projected: number; operations: PlannedWrite[] }> {
@@ -73,6 +81,7 @@ async function applyGraphWorkspaceProjection(input: {
     agent_tools: { selected: input.tools, delivery: input.delivery },
     literature_adapters: { selected: input.adapters },
     plugins: { selected: input.selectedPlugins },
+    procedure_search: { mode: input.procedureSearch },
   }));
   const configPath = path.join(input.workspace, "config.yaml");
   const projectOperations: PlannedWrite[] = [input.index
@@ -102,20 +111,23 @@ export async function handleGraphInit(
   options: GraphInitOptions,
   context: CommandContext,
   prompts: GraphBootstrapPromptPort = DEFAULT_BOOTSTRAP_PROMPTS,
+  prepareSearch: typeof prepareSemanticSearch = prepareSemanticSearch,
 ): Promise<CommandResult> {
   const workspace = context.workspace ? path.resolve(context.cwd, context.workspace) : resolveInitTarget(inputPath, context.cwd);
   if (await fileExists(workspace)) {
     const format = await inspectGraphWorkspaceFormat(workspace);
     if (!format.current) throw new CliError("unsupported_workspace", `Initialization target is not a current schema 2 workspace: ${workspace}`, 1, "Existing files were left unchanged.");
     const index = await loadGraphWorkspaceIndex(workspace);
-    return handleGraphReinit(workspace, index, options, context, prompts);
+    return handleGraphReinit(workspace, index, options, context, prompts, prepareSearch);
   }
   const detected = await detectTools(path.dirname(workspace));
   const tools = await selectTools({ configured: [], detected, expression: options.tools, context, fresh: true, prompts });
   const literatureAdapters = await selectLiteratureAdapters({ configured: [], expression: options.literatureAdapters, context, prompts });
   const delivery = options.delivery ?? "skills";
-  const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters: literatureAdapters, delivery, selectedPlugins: [], context });
-  return success("init", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: literatureAdapters, selected_plugins: [], projected_capability_files: applied.projected }, { stdout: `${context.dryRun ? "Would initialize" : "ResearchSpec schema 2 workspace initialized"}: ${workspace}\n` });
+  const search = await selectProcedureSearch(options.procedureSearch, "offline", context, prompts);
+  const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters: literatureAdapters, delivery, selectedPlugins: [], procedureSearch: search.mode, context });
+  const searchResult = await prepareSelectedSearch(search, context, prepareSearch);
+  return success("init", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: literatureAdapters, selected_plugins: [], projected_capability_files: applied.projected, procedure_search: searchResult }, { stdout: `${context.dryRun ? "Would initialize" : "ResearchSpec schema 2 workspace initialized"}: ${workspace}\n`, stderr: preparationWarning(searchResult) }, preparationDiagnostics(searchResult));
 }
 
 async function handleGraphReinit(
@@ -124,18 +136,21 @@ async function handleGraphReinit(
   options: GraphInitOptions,
   context: CommandContext,
   prompts: GraphBootstrapPromptPort,
+  prepareSearch: typeof prepareSemanticSearch,
 ): Promise<CommandResult> {
   const configured = index.config.agent_tools.selected;
   const detected = await detectTools(index.projectRoot);
   const tools = await selectTools({ configured, detected, expression: options.tools, context, fresh: false, prompts });
   const literatureAdapters = await selectLiteratureAdapters({ configured: index.config.literature_adapters.selected, expression: options.literatureAdapters, context, prompts });
   const delivery = options.delivery ?? index.config.agent_tools.delivery;
-  const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters: literatureAdapters, delivery, selectedPlugins: index.config.plugins.selected, index, context });
+  const search = await selectProcedureSearch(options.procedureSearch, index.config.procedure_search?.mode ?? "offline", context);
+  const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters: literatureAdapters, delivery, selectedPlugins: index.config.plugins.selected, procedureSearch: search.mode, index, context });
+  const searchResult = await prepareSelectedSearch(search, context, prepareSearch);
   const projected = applied.projected;
-  return success("init", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: literatureAdapters, previous_tools: configured, projected_capability_files: projected }, { stdout: `${context.dryRun ? "Would reconfigure" : "Reconfigured"} schema 2 workspace: ${workspace}\n` });
+  return success("init", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: literatureAdapters, previous_tools: configured, projected_capability_files: projected, procedure_search: searchResult }, { stdout: `${context.dryRun ? "Would reconfigure" : "Reconfigured"} schema 2 workspace: ${workspace}\n`, stderr: preparationWarning(searchResult) }, preparationDiagnostics(searchResult));
 }
 
-export async function handleGraphUpdate(options: GraphUpdateOptions, context: CommandContext): Promise<CommandResult> {
+export async function handleGraphUpdate(options: GraphUpdateOptions, context: CommandContext, prepareSearch: typeof prepareSemanticSearch = prepareSemanticSearch): Promise<CommandResult> {
   const explicit = context.workspace ? path.resolve(context.cwd, context.workspace) : undefined;
   const workspace = explicit ?? (await requireGraphWorkspaceForUpdate(context));
   const index = await loadGraphWorkspaceIndex(workspace);
@@ -145,9 +160,46 @@ export async function handleGraphUpdate(options: GraphUpdateOptions, context: Co
     ? index.config.literature_adapters.selected
     : parseLiteratureAdapterExpression(options.literatureAdapters);
   const delivery = options.delivery ?? index.config.agent_tools.delivery;
-  const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters, delivery, selectedPlugins: index.config.plugins.selected, index, context });
+  const search = await selectProcedureSearch(options.procedureSearch, index.config.procedure_search?.mode ?? "offline", context);
+  const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters, delivery, selectedPlugins: index.config.plugins.selected, procedureSearch: search.mode, index, context });
+  const searchResult = await prepareSelectedSearch(search, context, prepareSearch);
   const projected = applied.projected;
-  return success("update", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: adapters, projected_capability_files: projected }, { stdout: `${context.dryRun ? "Would update" : "Updated"} schema 2 workspace: ${workspace}\n` });
+  return success("update", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: adapters, projected_capability_files: projected, procedure_search: searchResult }, { stdout: `${context.dryRun ? "Would update" : "Updated"} schema 2 workspace: ${workspace}\n`, stderr: preparationWarning(searchResult) }, preparationDiagnostics(searchResult));
+}
+
+async function selectProcedureSearch(expression: string | undefined, configured: ProcedureSearchMode, context: CommandContext, prompts?: GraphBootstrapPromptPort): Promise<{ mode: ProcedureSearchMode; prepare: boolean }> {
+  if (expression !== undefined) {
+    if (expression !== "offline" && expression !== "hybrid") throw new CliError("invalid_procedure_search", "--procedure-search accepts offline or hybrid.", 2);
+    return { mode: expression, prepare: expression === "hybrid" };
+  }
+  if (!prompts || !context.interactive) return { mode: configured, prepare: false };
+  try {
+    const enabled = await prompts.confirm({ id: "procedure-search", default: true, message: `Enable local multilingual semantic discovery? Downloads about 140 MB of model/tokenizer files plus a CPU runtime to ${semanticCacheRoot()}. Queries stay local; preparation failure falls back to offline search.` });
+    return { mode: enabled ? "hybrid" : "offline", prepare: enabled };
+  } catch (error) {
+    if (error instanceof ExitPromptError) throw new CliError("cancelled", "Initialization cancelled.", 1);
+    throw error;
+  }
+}
+
+async function prepareSelectedSearch(selection: { mode: ProcedureSearchMode; prepare: boolean }, context: CommandContext, prepareSearch: typeof prepareSemanticSearch): Promise<Record<string, unknown>> {
+  if (!selection.prepare) return { mode: selection.mode, preparation: "skipped" };
+  if (context.dryRun) return { mode: selection.mode, preparation: "planned", cache_root: semanticCacheRoot() };
+  try {
+    const result = await prepareSearch(buildSearchDocuments(await loadProcedureCatalog()));
+    return { mode: selection.mode, preparation: result.ready ? "ready" : "failed", effective_mode: result.ready ? "hybrid" : "offline", ...result };
+  } catch (error) {
+    return { mode: selection.mode, preparation: "failed", effective_mode: "offline", ready: false, cache_root: semanticCacheRoot(), reason: error instanceof Error ? error.message : String(error) };
+  }
+}
+
+function preparationDiagnostics(result: Record<string, unknown>): Diagnostic[] {
+  const warning = preparationWarning(result);
+  return warning ? [{ severity: "warning", blocking: false, code: "procedure_search_fallback", message: warning.trim(), path: typeof result.cache_root === "string" ? result.cache_root : undefined }] : [];
+}
+
+function preparationWarning(result: Record<string, unknown>): string | undefined {
+  return result.preparation === "failed" ? `Local semantic preparation failed (${String(result.reason)}); offline discovery remains available. Retry update --procedure-search hybrid when ready.\n` : undefined;
 }
 
 async function requireGraphWorkspaceForUpdate(context: CommandContext): Promise<string> {

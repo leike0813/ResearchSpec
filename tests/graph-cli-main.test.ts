@@ -99,6 +99,7 @@ void test("graph init prompts for tools and Adapters and preserves omitted machi
     await mkdir(path.join(root, ".qwen"));
     const calls: Array<Parameters<GraphBootstrapPromptPort["multiSelect"]>[0]> = [];
     const prompts: GraphBootstrapPromptPort = {
+      confirm: () => Promise.resolve(false),
       multiSelect(config) {
         calls.push(config);
         return Promise.resolve(config.id === "agent-tools" ? ["qwen"] : ["zotero-library"]);
@@ -122,6 +123,7 @@ void test("graph init prompts for tools and Adapters and preserves omitted machi
 
     const reconfigureCalls: typeof calls = [];
     await handleGraphInit(root, {}, context, {
+      confirm: () => { throw new Error("Existing search selection must be preserved"); },
       multiSelect(config) {
         reconfigureCalls.push(config);
         return Promise.resolve([]);
@@ -140,7 +142,7 @@ void test("graph init prompts for tools and Adapters and preserves omitted machi
     const configPath = path.join(root, "researchspec/config.yaml");
     const beforeCancellation = await readFile(configPath, "utf8");
     await assert.rejects(
-      handleGraphInit(root, {}, context, { multiSelect: () => Promise.reject(new ExitPromptError("SIGINT")) }),
+      handleGraphInit(root, {}, context, { multiSelect: () => Promise.reject(new ExitPromptError("SIGINT")), confirm: () => Promise.resolve(false) }),
       (error: unknown) => error instanceof CliError && error.code === "cancelled",
     );
     assert.equal(await readFile(configPath, "utf8"), beforeCancellation);

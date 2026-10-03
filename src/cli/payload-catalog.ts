@@ -34,12 +34,14 @@ export const CLI_PAYLOADS = {
     field("--tools", "all | none | comma-separated tool IDs", false, "Complete desired Agent-tool selection."),
     field("--delivery", "skills | commands | both", false, "Generated Agent surface mode; omission preserves an existing value."),
     field("--literature-adapters", "all | none | comma-separated Adapter IDs", false, "Complete desired optional literature Adapter selection."),
+    field("--procedure-search", "offline | hybrid", false, "Choose retrieval mode; explicit hybrid authorizes optional user-cache runtime/model preparation."),
   ]),
   update: payload("options", "Optional replacement or extension selections for an existing current workspace.", [
     field("path", "directory path", false, "Project root containing the workspace."),
     field("--tools", "all | none | comma-separated tool IDs", false, "Refresh or add this tool subset."),
     field("--delivery", "skills | commands | both", false, "Replace the generated delivery mode; omission preserves current intent."),
     field("--literature-adapters", "all | none | comma-separated Adapter IDs", false, "Replace the selected Adapter set."),
+    field("--procedure-search", "offline | hybrid", false, "Preserve selection when omitted; explicit hybrid prepares or refreshes local search resources."),
   ]),
   status: none("No command payload. Reads the nearest current workspace and returns a bounded snapshot."),
   instructions: payload("selector-options", "One exact procedure or graph control/inspection selector.", [
@@ -79,7 +81,7 @@ export const CLI_PAYLOADS = {
     field("type", "procedures | profiles | runs | nodes | changes | diagnostics", false, "Collection to list; defaults to runs."),
     field("--limit", "integer 1..50", false, "Page size; procedures default to 10, other collections to 20."),
     field("--cursor", "opaque base64url cursor", false, "Cursor returned by the immediately preceding page for the same unchanged collection."),
-    field("--query", "string", false, "Lexical search terms used only with procedures."),
+    field("--query", "string", false, "Original Chinese, English or mixed natural-language request, used only with procedures."),
   ]),
   show: payload("selector-options", "One exact stable spec, profile, run, node, Gate, Decision, change, handoff, or tool selector.", [
     field("selector", "procedure:... | profile:... | run:... | node:... | change:...", true, "Exact item to inspect."),

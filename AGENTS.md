@@ -156,6 +156,19 @@ The locked direction is:
   ask again, and ResearchSpec never stores model consent or configures/calls a
   model service.
 
+Procedure discovery accepts the original natural-language request first and
+checks candidate purposes and declared input/output roles. Its offline backend
+uses Unicode segmentation, a shared bilingual concept lexicon and weighted BM25.
+Optional local embedding inference is discovery-only infrastructure, separate
+from scholarly LLM execution: explicit fresh-init confirmation or
+`init/update --procedure-search hybrid` prepares a pinned CPU runtime and model
+in the user OS cache. Project configuration stores only the selected mode.
+Queries are read-only, local and bounded, with structured offline fallback;
+`status/check/doctor` inspect cache metadata without inference or repair.
+Non-interactive omission, `--yes` alone and dry-run never install this runtime.
+The model, runtime, public-catalog vectors and staging files stay outside the
+project; capability, plugin, graph and Agent/model consent boundaries still apply.
+
 The fixed base user-visible Agent surface is exactly one Skill:
 `researchspec-navigate`. Its generated `references/cli-handbook.md` and
 `references/arsu-routes.md` provide progressive CLI and ARSU route detail from
