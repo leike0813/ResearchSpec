@@ -27,17 +27,45 @@ const RECORD_FILES = ["01-analysis.md", "02-ingestion.md", "03-conversion.md", "
 function json(pathName) { return JSON.parse(readFileSync(pathName, "utf8")); }
 function esc(text) { return String(text ?? "").replaceAll("|", "\\|").replaceAll("\n", " "); }
 
-function treeSha(root) {
+function treeSha(root, includedRoots, registryContent) {
   const files = [];
   const walk = (dir) => {
     for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
       const target = path.join(dir, entry.name);
+      if (dir === root && includedRoots && !includedRoots.has(entry.name)) continue;
       if (entry.isDirectory()) walk(target);
       else if (entry.isFile()) files.push(target);
     }
   };
   walk(root);
-  return sha256(files.map((file) => `${path.relative(root, file).split(path.sep).join("/")}\0${fileSha(file)}`).join("\n"));
+  return sha256(files.map((file) => `${path.relative(root, file).split(path.sep).join("/")}\0${registryContent && file === REGISTRY ? sha256(registryContent) : fileSha(file)}`).join("\n"));
+}
+
+// ARSU's fixed-package anchor includes its extracted capabilities and the owned
+// companions recorded in their catalog. Independent third-party fixed vendors
+// keep their own anchors even though they share the runtime registry.
+function maintainedRegistry() {
+  const registry = json(REGISTRY);
+  const artifactIds = new Set(json(EXTRACTION_INDEX).artifacts.map((entry) => entry.artifact_id));
+  const ownedIds = new Set(json(path.join(ROOT, "audits/own-vendors/catalog.json")).vendors.flatMap((vendor) => vendor.capability_ids));
+  return { ...registry, capabilities: registry.capabilities.filter((entry) => {
+    if (ownedIds.has(entry.capability_id)) return true;
+    const manifest = parseYaml(readFileSync(path.join(PACKAGES, entry.source_path, "manifest.yaml"), "utf8"));
+    return manifest.provenance.extraction_artifact_ids?.some((id) => artifactIds.has(id));
+  }) };
+}
+
+function maintainedParity() {
+  const ids = new Set(maintainedRegistry().capabilities.map((entry) => entry.capability_id));
+  const packages = json(PARITY_REPORT).packages.filter((entry) => ids.has(entry.capability_id));
+  return {
+    avg_section_coverage: packages.reduce((sum, entry) => sum + entry.section_coverage, 0) / packages.length,
+    avg_rule_coverage: packages.reduce((sum, entry) => sum + entry.rule_coverage, 0) / packages.length,
+    below_section_threshold: packages.filter((entry) => entry.section_coverage < 0.7).map((entry) => entry.capability_id),
+    below_rule_threshold: packages.filter((entry) => entry.rule_coverage < 0.6).map((entry) => entry.capability_id),
+    output_missing: packages.filter((entry) => !entry.output_format_preserved).map((entry) => entry.capability_id),
+    flow_retained: packages.filter((entry) => entry.flow_sections_retained.length).map((entry) => ({ capability_id: entry.capability_id, headings: entry.flow_sections_retained })),
+  };
 }
 
 function git(cwd, args) {
@@ -85,7 +113,7 @@ function modeRegistryRows() {
 }
 
 function capabilityRows() {
-  const registry = json(REGISTRY);
+  const registry = maintainedRegistry();
   return registry.capabilities.map((entry) => {
     const manifest = parseYaml(readFileSync(path.join(PACKAGES, entry.source_path, "manifest.yaml"), "utf8"));
     const files = [];
@@ -118,7 +146,15 @@ function capabilityRows() {
 
 function graphProfileRows() {
   const registry = json(path.join(GRAPH_PROFILES, "registry.json"));
-  return registry.profiles.map((entry) => {
+  const owned = new Set(maintainedRegistry().capabilities.map((entry) => entry.capability_id));
+  const profiles = new Map(registry.profiles.map((entry) => [entry.profile_id, parseYaml(readFileSync(path.join(GRAPH_PROFILES, entry.source_path), "utf8"))]));
+  const belongsToArsu = (id, visited = new Set()) => {
+    const profile = profiles.get(id);
+    if (!profile || visited.has(id)) return false;
+    return profile.nodes.every((node) => !node.capability_id || owned.has(node.capability_id))
+      && profile.subgraphs.every((child) => belongsToArsu(child.profile_id, new Set([...visited, id])));
+  };
+  return registry.profiles.filter((entry) => belongsToArsu(entry.profile_id)).map((entry) => {
     const profile = parseYaml(readFileSync(path.join(GRAPH_PROFILES, entry.source_path), "utf8"));
     return {
       profile_id: profile.profile_id,
@@ -137,7 +173,8 @@ function graphProfileRows() {
 
 function parityPackageRows() {
   const report = json(PARITY_REPORT);
-  return report.packages.map((pkg) => ({
+  const owned = new Set(maintainedRegistry().capabilities.map((entry) => entry.capability_id));
+  return report.packages.filter((pkg) => owned.has(pkg.capability_id)).map((pkg) => ({
     capability_id: pkg.capability_id,
     section_coverage: pkg.section_coverage,
     rule_coverage: pkg.rule_coverage,
@@ -361,8 +398,9 @@ function currentState() {
   const assessmentHtml = assessmentHtmlPath();
   const gapReviewHtml = gapReviewHtmlPath();
   const extraction = json(EXTRACTION_INDEX);
-  const registry = json(REGISTRY);
-  const parity = json(PARITY_REPORT).summary;
+  const registry = maintainedRegistry();
+  const registryContent = `${JSON.stringify(registry, null, 2)}\n`;
+  const parity = maintainedParity();
   return {
     upstream: {
       submodule_path: "vendor/ars",
@@ -378,10 +416,10 @@ function currentState() {
       error: extraction.verification_summary?.error ?? 0,
     },
     conversion: {
-      registry_sha256: fileSha(REGISTRY),
+      registry_sha256: sha256(registryContent),
       capability_count: registry.capabilities.length,
       operational_count: operationalCount(),
-      packages_tree_sha256: treeSha(PACKAGES),
+      packages_tree_sha256: treeSha(PACKAGES, new Set(["registry.json", ...registry.capabilities.map((entry) => entry.source_path)]), registryContent),
     },
     review: {
       parity_report_sha256: fileSha(PARITY_REPORT),
@@ -435,7 +473,7 @@ function records(anchorId) {
 }
 
 function operationalCount() {
-  const registry = json(REGISTRY);
+  const registry = maintainedRegistry();
   let count = 0;
   for (const entry of registry.capabilities) {
     const manifest = readFileSync(path.join(PACKAGES, entry.source_path, "manifest.yaml"), "utf8");

@@ -1,0 +1,69 @@
+schema_version: "2"
+profile_id: patent-oa
+profile_version: 0.1.0
+capability_registry_version: 0.1.0
+entries:
+  - entry_id: main
+    kind: end-to-end
+    node_id: oa-response
+nodes:
+  - node_id: oa-response
+    kind: capability
+    capability_id: generation-patent-oa-response
+    input_bindings:
+      - role: office_action
+        source: handoff
+      - role: application_bundle
+        source: handoff
+    expected_outputs:
+      - role: oa_response
+        required: true
+    prerequisites: []
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: check-oa
+    kind: capability
+    capability_id: check-patent-oa-response
+    input_bindings:
+      - role: office_action
+        source: handoff
+      - role: application_bundle
+        source: handoff
+      - role: oa_response
+        source: node_output
+        from_node_id: oa-response
+    expected_outputs:
+      - role: oa_review
+        required: true
+    prerequisites:
+      - oa-response
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: oa-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - check-oa
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+parallel_groups: []
+subgraphs: []
+gates:
+  - gate_id: patent-oa-complete
+    owner_node_id: oa-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+decisions: []
+revision_round_template: null
+override_policy:
+  failed_gate_requires_decision: true

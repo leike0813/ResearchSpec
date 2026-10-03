@@ -1,0 +1,193 @@
+schema_version: "2"
+profile_id: patent-disclosure
+profile_version: 0.1.0
+capability_registry_version: 0.1.0
+entries:
+  - entry_id: main
+    kind: end-to-end
+    node_id: intake
+nodes:
+  - node_id: intake
+    kind: capability
+    capability_id: design-patent-intake
+    input_bindings:
+      - role: technical_materials
+        source: handoff
+    expected_outputs:
+      - role: patent_case
+        required: true
+    prerequisites: []
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: mining
+    kind: capability
+    capability_id: design-patent-invention-mining
+    input_bindings:
+      - role: patent_case
+        source: node_output
+        from_node_id: intake
+    expected_outputs:
+      - role: invention_brief
+        required: true
+      - role: search_request
+        required: true
+    prerequisites:
+      - intake
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: search
+    kind: capability
+    capability_id: discovery-patent-search
+    input_bindings:
+      - role: search_request
+        source: node_output
+        from_node_id: mining
+    expected_outputs:
+      - role: search_results
+        required: true
+    prerequisites:
+      - mining
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: prior-art
+    kind: capability
+    capability_id: analysis-patent-prior-art
+    input_bindings:
+      - role: patent_case
+        source: node_output
+        from_node_id: intake
+      - role: invention_brief
+        source: node_output
+        from_node_id: mining
+      - role: search_results
+        source: node_output
+        from_node_id: search
+    expected_outputs:
+      - role: prior_art_report
+        required: true
+    prerequisites:
+      - search
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: disclosure
+    kind: capability
+    capability_id: generation-patent-disclosure
+    input_bindings:
+      - role: patent_case
+        source: node_output
+        from_node_id: intake
+      - role: invention_brief
+        source: node_output
+        from_node_id: mining
+      - role: prior_art_report
+        source: node_output
+        from_node_id: prior-art
+    expected_outputs:
+      - role: disclosure_bundle
+        required: true
+    prerequisites:
+      - prior-art
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: check-disclosure
+    kind: capability
+    capability_id: check-patent-disclosure
+    input_bindings:
+      - role: disclosure_bundle
+        source: node_output
+        from_node_id: disclosure
+    expected_outputs:
+      - role: disclosure_review
+        required: true
+    prerequisites:
+      - disclosure
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: disclosure-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - check-disclosure
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: layout-choice
+    kind: decision
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - disclosure-gate
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: protection-layout
+    kind: capability
+    capability_id: design-patent-protection-layout
+    input_bindings:
+      - role: disclosure_bundle
+        source: node_output
+        from_node_id: disclosure
+    expected_outputs:
+      - role: protection_plan
+        required: true
+    prerequisites:
+      - layout-choice
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: optional
+    round_role: null
+  - node_id: layout-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - protection-layout
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: optional
+    round_role: null
+parallel_groups: []
+subgraphs: []
+gates:
+  - gate_id: patent-disclosure-complete
+    owner_node_id: disclosure-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+  - gate_id: patent-disclosure-layout
+    owner_node_id: layout-gate
+    policy: conditional
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+decisions:
+  - decision_id: patent-disclosure-layout
+    owner_node_id: layout-choice
+    options:
+      - option_id: include-layout
+        unlocks:
+          - protection-layout
+          - layout-gate
+      - option_id: omit-layout
+        unlocks: []
+revision_round_template: null
+override_policy:
+  failed_gate_requires_decision: true

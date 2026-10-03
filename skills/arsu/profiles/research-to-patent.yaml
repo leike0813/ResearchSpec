@@ -1,0 +1,99 @@
+schema_version: "2"
+profile_id: research-to-patent
+profile_version: 0.1.0
+capability_registry_version: 0.1.0
+entries:
+  - entry_id: main
+    kind: end-to-end
+    node_id: research
+nodes:
+  - node_id: research
+    kind: subgraph
+    subgraph_id: research-main
+    input_bindings: []
+    expected_outputs:
+      - role: research_report
+        from_role: research_report
+        required: true
+      - role: annotated_bibliography
+        from_role: annotated_bibliography
+        required: true
+      - role: synthesis_report
+        from_role: synthesis_report
+        required: true
+      - role: graded_sources
+        from_role: graded_sources
+        required: true
+    prerequisites: []
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: research-intake
+    kind: capability
+    capability_id: design-patent-intake
+    input_bindings:
+      - role: technical_materials
+        source: handoff
+      - role: research_report
+        source: node_output
+        from_node_id: research
+        from_role: research_report
+      - role: synthesis_report
+        source: node_output
+        from_node_id: research
+        from_role: synthesis_report
+      - role: graded_sources
+        source: node_output
+        from_node_id: research
+        from_role: graded_sources
+    expected_outputs:
+      - role: patent_case
+        required: true
+    prerequisites:
+      - research
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: patent
+    kind: subgraph
+    subgraph_id: patent-docket
+    input_bindings:
+      - role: technical_materials
+        source: node_output
+        from_node_id: research-intake
+        from_role: patent_case
+    expected_outputs:
+      - role: patent_case
+        from_role: patent_case
+        required: true
+      - role: disclosure_bundle
+        from_role: disclosure_bundle
+        required: true
+      - role: application_bundle
+        from_role: application_bundle
+        required: true
+    prerequisites:
+      - research-intake
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+parallel_groups: []
+subgraphs:
+  - subgraph_id: research-main
+    profile_id: research-main
+    profile_version: 0.1.0
+    entry_id: main
+    entry_node_id: research-question
+  - subgraph_id: patent-docket
+    profile_id: patent-docket
+    profile_version: 0.1.0
+    entry_id: main
+    entry_node_id: disclosure
+gates: []
+decisions: []
+revision_round_template: null
+override_policy:
+  failed_gate_requires_decision: true

@@ -1,0 +1,139 @@
+schema_version: "2"
+profile_id: patent-intelligence
+profile_version: 0.1.0
+capability_registry_version: 0.1.0
+entries:
+  - entry_id: main
+    kind: end-to-end
+    node_id: search
+nodes:
+  - node_id: search
+    kind: capability
+    capability_id: discovery-patent-search
+    input_bindings:
+      - role: search_request
+        source: handoff
+    expected_outputs:
+      - role: search_results
+        required: true
+    prerequisites: []
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: reading
+    kind: capability
+    capability_id: analysis-patent-reading
+    input_bindings:
+      - role: patent_corpus
+        source: node_output
+        from_node_id: search
+        from_role: search_results
+    expected_outputs:
+      - role: patent_notes
+        required: true
+      - role: claim_features
+        required: true
+    prerequisites:
+      - search
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: branch-choice
+    kind: decision
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - reading
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: claim-chart
+    kind: capability
+    capability_id: analysis-patent-claim-chart
+    input_bindings:
+      - role: claim_features
+        source: node_output
+        from_node_id: reading
+      - role: comparison_materials
+        source: handoff
+    expected_outputs:
+      - role: claim_chart
+        required: true
+      - role: chart_evidence
+        required: true
+    prerequisites:
+      - reading
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: optional
+    round_role: null
+  - node_id: patent-map
+    kind: capability
+    capability_id: generation-patent-map
+    input_bindings:
+      - role: patent_notes
+        source: node_output
+        from_node_id: reading
+    expected_outputs:
+      - role: patent_map
+        required: true
+    prerequisites:
+      - reading
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: optional
+    round_role: null
+  - node_id: exam-policy
+    kind: capability
+    capability_id: discovery-patent-exam-policy
+    input_bindings: []
+    expected_outputs:
+      - role: policy_brief
+        required: true
+    prerequisites:
+      - reading
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: optional
+    round_role: null
+parallel_groups: []
+subgraphs: []
+gates: []
+decisions:
+  - decision_id: patent-intelligence-branch
+    owner_node_id: branch-choice
+    options:
+      - option_id: claim-chart
+        unlocks:
+          - claim-chart
+      - option_id: patent-map
+        unlocks:
+          - patent-map
+      - option_id: exam-policy
+        unlocks:
+          - exam-policy
+      - option_id: chart-and-map
+        unlocks:
+          - claim-chart
+          - patent-map
+      - option_id: chart-and-policy
+        unlocks:
+          - claim-chart
+          - exam-policy
+      - option_id: map-and-policy
+        unlocks:
+          - patent-map
+          - exam-policy
+      - option_id: all
+        unlocks:
+          - claim-chart
+          - patent-map
+          - exam-policy
+      - option_id: interpret-only
+        unlocks: []
+revision_round_template: null
+override_policy:
+  failed_gate_requires_decision: true

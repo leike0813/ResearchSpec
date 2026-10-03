@@ -108,7 +108,7 @@ void test("bundled capability registry loads all authored packages", async () =>
     "judgment-review-synthesis",
     "check-citation-existence-verification",
   ]) assert.ok(loaded.capabilities.has(id), id);
-  assert.equal(loaded.capabilities.size, 47);
+  assert.equal(loaded.capabilities.size, loaded.registry.capabilities.length);
 });
 
 void test("every bundled capability id is a kebab-case package directory name", async () => {
@@ -134,7 +134,7 @@ void test("capability registry entries reject non-kebab-case IDs and source path
 
 void test("every bundled capability is operational with curated procedure and knowledge", async () => {
   const loaded = await loadCapabilityRegistry();
-  assert.equal(loaded.capabilities.size, 47);
+  assert.equal(loaded.capabilities.size, loaded.registry.capabilities.length);
   for (const registered of loaded.capabilities.values()) {
     assert.equal(registered.manifest.maturity, "operational", registered.entry.capability_id);
     assert.ok((registered.manifest.knowledge_refs?.length ?? 0) > 0, registered.entry.capability_id);

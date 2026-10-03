@@ -1,5 +1,6 @@
 {
   "schema_version": "1",
+  "includes": ["authoring/patent-disclosure-skill/whitespace-exemptions.json"],
   "exemptions": [
     {
       "path": "vendor/revision-master/upstream/skills/revision-master/assets/templates/supplement-suggestion-plan.md.j2",

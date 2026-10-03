@@ -6,12 +6,20 @@ ResearchSpec is distributed under multiple licenses. A single SPDX identifier wo
 
 Unless identified below as ARSU-derived material, ResearchSpec-authored source code, tests, documentation, Companion Skills, and command adapters are licensed under the MIT License, copyright 2026 ResearchSpec contributors. The complete text is in `LICENSES/MIT.txt`.
 
+Fixed patent capabilities under `skills/capabilities/*patent*/**` adapt MIT
+material by handsomestWei, copyright 2026, and include the upstream license.
+Bundled Mermaid and Three.js resources retain their own MIT notices. The seven
+patent and research/patent composition profiles are ResearchSpec-authored MIT
+graph declarations; licenses of referenced academic packages remain unchanged.
+
 ## CC BY-NC 4.0 material
 
 The following material is adapted from Academic Research Skills (ARS), copyright 2026 Cheng-I Wu, and remains licensed under the Creative Commons Attribution-NonCommercial 4.0 International License:
 
 - `vendor/ars/**`
-- `skills/arsu/**`
+- `skills/arsu/**`, except the seven MIT graph declarations
+  `patent-disclosure`, `patent-application`, `patent-docket`, `patent-intelligence`,
+  `patent-oa`, `research-to-patent` and `patent-informed-paper` under `profiles/`
 - `src/arsu-converter/routing/catalog.ts`
 - `src/arsu-converter/workflow/catalog.ts`
 - `src/core/workflow/profiles/arsu-v0-1.generated.ts`

@@ -132,7 +132,15 @@
     "own-vendor-maintenance:artifacts": "node scripts/own-vendor-maintenance.mjs artifacts",
     "own-vendor-maintenance:records": "node scripts/own-vendor-maintenance.mjs records",
     "own-vendor-maintenance:baseline": "node scripts/own-vendor-maintenance.mjs baseline",
-    "own-vendor-maintenance:check": "node scripts/own-vendor-maintenance.mjs check"
+    "own-vendor-maintenance:check": "node scripts/own-vendor-maintenance.mjs check",
+    "patent:author": "pnpm build && node scripts/patent-source-audit.mjs && node dist/src/vendor-converters/patent-disclosure-skill/cli.js author",
+    "patent:check": "pnpm build && node scripts/patent-source-audit.mjs --check && node dist/src/vendor-converters/patent-disclosure-skill/cli.js check",
+    "patent:idempotence": "pnpm build && node dist/src/vendor-converters/patent-disclosure-skill/cli.js idempotence",
+    "patent-maintenance:artifacts": "node scripts/patent-disclosure-skill-maintenance.mjs artifacts",
+    "patent-maintenance:records": "node scripts/patent-disclosure-skill-maintenance.mjs records",
+    "patent-maintenance:baseline": "pnpm build && node scripts/patent-disclosure-skill-maintenance.mjs baseline",
+    "patent-maintenance:check": "pnpm build && node scripts/patent-disclosure-skill-maintenance.mjs check",
+    "patent-maintenance:diff": "node scripts/patent-disclosure-skill-maintenance.mjs diff"
   },
   "engines": {
     "node": ">=22"

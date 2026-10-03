@@ -1,0 +1,181 @@
+schema_version: "1"
+capability_id: check-patent-disclosure
+title: 交底自检 (Disclosure Review)
+description: 只读核查交底书的逻辑闭环、公式符号、视图与法定要件，记录问题和残留项。用于交底成稿后的内部复核。
+maturity: operational
+class: verification
+node_kind: checker
+execution_type: mixed
+params: {}
+inputs:
+  - role: disclosure_bundle
+    schema_ref: disclosure-bundle.v1
+    required: true
+    source_policy:
+      - handoff
+      - node_output
+outputs:
+  - role: disclosure_review
+    schema_ref: disclosure-review.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - disclosure_bundle
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: PD-KP-01
+    path: knowledge/pd-kp-01-patent-guardrails.md
+    content_hash: ab01580829ba0ab322cf8c51f93304a1d09f971c1c27e76339ea8540aff62d27
+    license: MIT
+  - knowledge_id: PD-KP-05
+    path: knowledge/pd-kp-05-disclosure-structure.md
+    content_hash: 135e482af9db28770ff2993c50b385a073db51fa21d0f2d229b12478e6a62750
+    license: MIT
+  - knowledge_id: PD-KP-17
+    path: knowledge/pd-kp-17-runtime-tools-rules.md
+    content_hash: 4a3d1f31f37d0883de8837f5b597cd432ca1f38314640b2a1e11a13cdd2f6985
+    license: MIT
+  - knowledge_id: contracts-patent-file-index.v1.md
+    path: contracts/patent-file-index.v1.md
+    content_hash: 50a575de941636f02f86e0c459a5aa635897f24d811e995b2f2ab954e18a33ee
+    license: MIT
+  - knowledge_id: contracts-patent-role-schemas.v1.md
+    path: contracts/patent-role-schemas.v1.md
+    content_hash: 90aae1c8d8d36f14d78fc52562cd2fb8fc87d93a4cb0b0e4e9ad411c502219b1
+    license: MIT
+  - knowledge_id: tools-structure_lineart_gate.py
+    path: tools/structure_lineart_gate.py
+    content_hash: 651cabbcfd37fb1e263ef5b92e5f02c5761248f0ae48de1cceac191981ed612d
+    license: MIT
+  - knowledge_id: tools-image_gen.py
+    path: tools/image_gen.py
+    content_hash: 53da8cc27417e8e5726678b7a692c6488e8b23c47ad6dc2ce4aa81d549c24bc7
+    license: MIT
+  - knowledge_id: tools-check_source_parts.py
+    path: tools/check_source_parts.py
+    content_hash: 2c93aa75f902704576a5124bfaf4bcad1534895ef5613608621c0dc622e621d5
+    license: MIT
+  - knowledge_id: tools-stdio_utf8.py
+    path: tools/stdio_utf8.py
+    content_hash: b66838457a55499568ffcce347e75b348ccccb2af4cd73f5799b16e4ed127e84
+    license: MIT
+  - knowledge_id: tools-latex_delimiters.py
+    path: tools/latex_delimiters.py
+    content_hash: a294510fde74ae9bc3f05b7de08013be7bcab0de8628a0d3ad3b20450fa19d33
+    license: MIT
+  - knowledge_id: tools-design_lineart_gate.py
+    path: tools/design_lineart_gate.py
+    content_hash: 7d33f06f2e2f806529d1e57aa13d3e2d9b851f3341009750a147a1c13a901eff
+    license: MIT
+  - knowledge_id: tools-check_formula_plan.py
+    path: tools/check_formula_plan.py
+    content_hash: 6b1334fa7b0bb57e25cca174fd855197ba7b57deed8103206c4858c7b5eb9b37
+    license: MIT
+  - knowledge_id: tools-formula_units.py
+    path: tools/formula_units.py
+    content_hash: 814e01190a3183c2c14ff3cc4941e68eaf7a836d285a93a896d95c563f4e1b52
+    license: MIT
+  - knowledge_id: tools-formula_paradigms.py
+    path: tools/formula_paradigms.py
+    content_hash: 1f0032ec0dc0c9dacf792648a0b7f1181ed198c408d2d7434aaba679ed91a759
+    license: MIT
+  - knowledge_id: tools-formula_eval.py
+    path: tools/formula_eval.py
+    content_hash: 2478bbcb94add44b523a365f4e2af40960c58d911eefcb9bd5dcadc2fb7900e2
+    license: MIT
+  - knowledge_id: tools-formula_chem.py
+    path: tools/formula_chem.py
+    content_hash: 4707843a43a844cf03ac61eb298b4465c2e2ce739e3041d3aea1b8202ce93664
+    license: MIT
+  - knowledge_id: tools-check_design_views.py
+    path: tools/check_design_views.py
+    content_hash: ef28b61e10e8d1d63224c837b0671c1c1500075597230ae33e6aa6f17faefde2
+    license: MIT
+  - knowledge_id: references-schemas-structure.schema.yaml
+    path: references/schemas/structure.schema.yaml
+    content_hash: 8847d23d38ce5d2266c7bbc36544b2b297b10a1ba938f2da3887b0e7d83f7340
+    license: MIT
+  - knowledge_id: references-schemas-structure_lineart_compose.schema.yaml
+    path: references/schemas/structure_lineart_compose.schema.yaml
+    content_hash: 28b66c0c9d99d1d737c322a386c90d377c5089c646ca585f3322c900cac20156
+    license: MIT
+  - knowledge_id: references-schemas-structure_lineart_brief.schema.yaml
+    path: references/schemas/structure_lineart_brief.schema.yaml
+    content_hash: b9e8d4b5fc503781ef481c6c9e688ca9a2b9bc6486f53e127d8fbafa58eb894f
+    license: MIT
+  - knowledge_id: references-schemas-structure_callout_anchors.schema.yaml
+    path: references/schemas/structure_callout_anchors.schema.yaml
+    content_hash: f0ff1b5e134391fdc90e7905cb0700a0ac620c743bd448ebe98ec5ac4586f0ee
+    license: MIT
+  - knowledge_id: references-schemas-scorecard.schema.yaml
+    path: references/schemas/scorecard.schema.yaml
+    content_hash: eea2714a09602b8686becaecf7ad7ec2884d1fe55cea56a0044307def311ea80
+    license: MIT
+  - knowledge_id: references-schemas-README.md
+    path: references/schemas/README.md
+    content_hash: 1eb6a4ced423807a0b4eef4bd78de9b268c3381a8c3ea6189f276e1146682cb3
+    license: MIT
+  - knowledge_id: references-schemas-patent_file_index.schema.yaml
+    path: references/schemas/patent_file_index.schema.yaml
+    content_hash: 09cb810f603f0f6648c4603939adaa033a5e4eaa0f037dc60ecb0466e9bed8e1
+    license: MIT
+  - knowledge_id: references-schemas-matrix.schema.yaml
+    path: references/schemas/matrix.schema.yaml
+    content_hash: c608a323cb91066bb7737e16b910cb1a68c7e2d551b5403819399c48a8bca361
+    license: MIT
+  - knowledge_id: references-schemas-formula_plan.schema.yaml
+    path: references/schemas/formula_plan.schema.yaml
+    content_hash: fa4b27ee273266f112cff8e5e65c199190d23d0bdc90f6fd9984987eb1c33b31
+    license: MIT
+  - knowledge_id: references-schemas-figure_plan.schema.yaml
+    path: references/schemas/figure_plan.schema.yaml
+    content_hash: 0b4268c00328a7517a7f6b9d0ec45e45210f6319ed1366982ce825c8c06cd23b
+    license: MIT
+  - knowledge_id: references-schemas-family_plan.schema.yaml
+    path: references/schemas/family_plan.schema.yaml
+    content_hash: d42ddb39a6790469ae65a726bd3e899ac69e17bb5258f1c5504450c081edd576
+    license: MIT
+  - knowledge_id: references-schemas-design_lineart_brief.schema.yaml
+    path: references/schemas/design_lineart_brief.schema.yaml
+    content_hash: 5ea85a6f398a3155b06e1edf26fce96ff65cbe5d0f726b4e128df8345a811c9c
+    license: MIT
+  - knowledge_id: references-schemas-design_around.schema.yaml
+    path: references/schemas/design_around.schema.yaml
+    content_hash: 89193787060ea780eeb3bc8fbe3768f29c0d29bd5dc253535ce9102857697484
+    license: MIT
+  - knowledge_id: references-schemas-decompose.schema.yaml
+    path: references/schemas/decompose.schema.yaml
+    content_hash: b455698889d5d1b9965afb3682e9041aa06174d5cfbd366045503265e26d9077
+    license: MIT
+  - knowledge_id: references-schemas-appearance.schema.yaml
+    path: references/schemas/appearance.schema.yaml
+    content_hash: ef0ab9aaa612f9e08e7e21bc94472b1e59ec0c702896760c8d3f54b0f2c73fa3
+    license: MIT
+  - knowledge_id: tools-patent_files.py
+    path: tools/patent_files.py
+    content_hash: 642269c8d3005216d8b42fa4c332cb9a3533d0e228468edfc823b017db8fca25
+    license: MIT
+  - knowledge_id: NOTICE.md
+    path: NOTICE.md
+    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    license: MIT
+  - knowledge_id: LICENSE
+    path: LICENSE
+    content_hash: d9329ae3b2de58aebaa015d8d1570513d48f1702318e6423896a4620845ab798
+    license: MIT
+gate_policy: none
+provenance:
+  origin: vendor-derived
+  extraction_artifact_ids:
+    - PD-CAP-07
+    - PD-KP-01
+    - PD-KP-05
+    - PD-KP-17
+  upstream_sources:
+    - path: authoring/patent-disclosure-skill/extracted/capabilities/07.md
+      sha256: fe93aa6342f689fb3f765cd1f00580b3014a3855ea3b3b45864292cd092eea82
+license: MIT

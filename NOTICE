@@ -121,4 +121,18 @@ contact services, or upload material. The audit is the sole source of binding
 evidence; production update requires the audit to validate and a human to
 review the complete generated tree bound to its hash.
 
+Patent Disclosure Skill
+
+- Source: https://github.com/handsomestWei/patent-disclosure-skill
+- Revision: 5073d3d837a5d139ef2bc763c9dd46bb9605df84
+- Copyright: 2026 handsomestWei
+- License: MIT, preserved in each patent package's LICENSE.
+
+ResearchSpec adapts the nine businesses into eighteen fixed semantic stages,
+configured local tools and graph-owned workflow control. Root routing,
+installers, autonomous coordination, examples, model weights and IPC datasets
+are not distributed. Mermaid and Three.js retain their own copyright and
+license notices with the applicable resources. Source and resource decisions
+are recorded in audits/patent-disclosure-skill/source-audit.json.
+
 ResearchSpec-authored material is copyright 2026 ResearchSpec contributors and is licensed under MIT where identified by the root license map.

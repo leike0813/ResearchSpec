@@ -1,0 +1,148 @@
+schema_version: "2"
+profile_id: patent-informed-paper
+profile_version: 0.1.0
+capability_registry_version: 0.1.0
+entries:
+  - entry_id: main
+    kind: end-to-end
+    node_id: source-gate
+nodes:
+  - node_id: source-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites: []
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: research
+    kind: subgraph
+    subgraph_id: research-main
+    input_bindings: []
+    expected_outputs:
+      - role: research_report
+        from_role: research_report
+        required: true
+      - role: annotated_bibliography
+        from_role: annotated_bibliography
+        required: true
+      - role: synthesis_report
+        from_role: synthesis_report
+        required: true
+      - role: graded_sources
+        from_role: graded_sources
+        required: true
+    prerequisites:
+      - source-gate
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: intelligence
+    kind: subgraph
+    subgraph_id: patent-intelligence
+    input_bindings:
+      - role: search_request
+        source: handoff
+    expected_outputs:
+      - role: patent_notes
+        from_role: patent_notes
+        required: true
+      - role: claim_chart
+        from_role: claim_chart
+        required: false
+    prerequisites:
+      - source-gate
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: bridge
+    kind: capability
+    capability_id: transform-patent-research-evidence
+    input_bindings:
+      - role: patent_notes
+        source: node_output
+        from_node_id: intelligence
+        from_role: patent_notes
+      - role: annotated_bibliography
+        source: node_output
+        from_node_id: research
+        from_role: annotated_bibliography
+      - role: synthesis_report
+        source: node_output
+        from_node_id: research
+        from_role: synthesis_report
+      - role: graded_sources
+        source: node_output
+        from_node_id: research
+        from_role: graded_sources
+    expected_outputs:
+      - role: annotated_bibliography
+        required: true
+      - role: synthesis_report
+        required: true
+    prerequisites:
+      - research
+      - intelligence
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: writing
+    kind: subgraph
+    subgraph_id: academic-paper
+    input_bindings:
+      - role: annotated_bibliography
+        source: node_output
+        from_node_id: bridge
+        from_role: annotated_bibliography
+      - role: synthesis_report
+        source: node_output
+        from_node_id: bridge
+        from_role: synthesis_report
+    expected_outputs:
+      - role: manuscript_draft
+        from_role: manuscript_draft
+        required: true
+    prerequisites:
+      - bridge
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+parallel_groups:
+  - group_id: patent-informed-sources
+    node_ids:
+      - research
+      - intelligence
+    join_policy: all
+subgraphs:
+  - subgraph_id: research-main
+    profile_id: research-main
+    profile_version: 0.1.0
+    entry_id: main
+    entry_node_id: research-question
+  - subgraph_id: patent-intelligence
+    profile_id: patent-intelligence
+    profile_version: 0.1.0
+    entry_id: main
+    entry_node_id: search
+  - subgraph_id: academic-paper
+    profile_id: academic-paper
+    profile_version: 0.1.0
+    entry_id: main
+    entry_node_id: intake
+gates:
+  - gate_id: patent-informed-source-scope
+    owner_node_id: source-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+decisions: []
+revision_round_template: null
+override_policy:
+  failed_gate_requires_decision: true

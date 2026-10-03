@@ -1,0 +1,22 @@
+# 案卷问题的语义处置；正式轮次、节点和分支由 ResearchSpec CLI 管理。
+schema: patent-docket-dispositions
+version: 1
+
+dispositions:
+  ignore:
+    meaning: 不是真问题或已过时
+  application_fix:
+    meaning: 只改申请文件包（书式、出图、对照、摘要字数）
+  disclosure_fix:
+    meaning: 交底事实缺口或查新；禁止编造
+    follow_up: 修订交底后重新生成申请，并保留两个新版本
+  ask_human:
+    meaning: 只有发明人/用户能定
+    blocking_default: false
+  defer:
+    meaning: 本轮不做，记入修订说明；预算用尽时说明残留问题与新增成本
+
+statuses:
+  - open
+  - done
+  - deferred

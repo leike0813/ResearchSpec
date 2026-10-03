@@ -1,0 +1,173 @@
+schema_version: "1"
+capability_id: generation-patent-map
+title: 专利地图 (Patent Map)
+description: 基于已解读入库案例摊成可交互地图页面，给代理师找相近案子与申请人重叠（patent map, terrain, vault）。
+maturity: operational
+class: generation
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: patent_notes
+    schema_ref: patent-notes.v1
+    required: true
+    source_policy:
+      - handoff
+      - node_output
+outputs:
+  - role: patent_map
+    schema_ref: patent-map.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - patent_notes
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: PD-KP-01
+    path: knowledge/pd-kp-01-patent-guardrails.md
+    content_hash: ab01580829ba0ab322cf8c51f93304a1d09f971c1c27e76339ea8540aff62d27
+    license: MIT
+  - knowledge_id: PD-KP-12
+    path: knowledge/pd-kp-12-patent-map-terrain.md
+    content_hash: 575b3169988246706c2dce0be9446fc4bd5c91d0f732cf260f953e0e19a2c69a
+    license: MIT
+  - knowledge_id: PD-KP-17
+    path: knowledge/pd-kp-17-runtime-tools-rules.md
+    content_hash: 4a3d1f31f37d0883de8837f5b597cd432ca1f38314640b2a1e11a13cdd2f6985
+    license: MIT
+  - knowledge_id: contracts-patent-file-index.v1.md
+    path: contracts/patent-file-index.v1.md
+    content_hash: 50a575de941636f02f86e0c459a5aa635897f24d811e995b2f2ab954e18a33ee
+    license: MIT
+  - knowledge_id: contracts-patent-role-schemas.v1.md
+    path: contracts/patent-role-schemas.v1.md
+    content_hash: 90aae1c8d8d36f14d78fc52562cd2fb8fc87d93a4cb0b0e4e9ad411c502219b1
+    license: MIT
+  - knowledge_id: web-vendor-three.module.min.js
+    path: web/vendor/three.module.min.js
+    content_hash: 08fd7545d13d2c7fb65ab691530a802dafefd638596501854f267d0fb13c39e7
+    license: MIT
+  - knowledge_id: web-vendor-THREE_LICENSE
+    path: web/vendor/THREE_LICENSE
+    content_hash: 4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454
+    license: MIT
+  - knowledge_id: web-vendor-README.txt
+    path: web/vendor/README.txt
+    content_hash: ffebc8e91681ead807f9d34f7d7d8e816cd53486aa29ee6a91dedb20363dbcf2
+    license: MIT
+  - knowledge_id: web-terrain3d.js
+    path: web/terrain3d.js
+    content_hash: 6c607ae1e00ed8c67e04b1d87339b6f8c59a014842eb78bcd7ea2e697f859913
+    license: MIT
+  - knowledge_id: web-styles.css
+    path: web/styles.css
+    content_hash: 7647f5881afb575fcb8c1e89912ca2615e38d59e3406207e79cabce0ba8dc074
+    license: MIT
+  - knowledge_id: web-js-view-terrain.js
+    path: web/js/view-terrain.js
+    content_hash: 1d5db63df201467540b787d4ee7f44e318451b8893112a3a4fca1bb8f65e0e0a
+    license: MIT
+  - knowledge_id: web-js-view-matrix.js
+    path: web/js/view-matrix.js
+    content_hash: dd3a09f81db7a84ba5a207a424febe9d1c564d13944655e4d20c7fc7a0e9108d
+    license: MIT
+  - knowledge_id: web-js-view-dashboard.js
+    path: web/js/view-dashboard.js
+    content_hash: 74b0d1623bacf42add9718163f58deb3e85c5678b29d28973788d9f97403be87
+    license: MIT
+  - knowledge_id: web-js-view-citation.js
+    path: web/js/view-citation.js
+    content_hash: 505ca03fda4a61020b1656faa4d275a6e50b6a0dbbc1dfcea01f961f942c4213
+    license: MIT
+  - knowledge_id: web-js-view-bubble.js
+    path: web/js/view-bubble.js
+    content_hash: d4a84546b068a9f4e8000f780ae6ef05dcab124cf33e6eb3344fc3ec8e762f04
+    license: MIT
+  - knowledge_id: web-js-layout.js
+    path: web/js/layout.js
+    content_hash: eb5c26eebb7fe597aab3e6283e3695125c36d720bff2f8d1db384b5510f92556
+    license: MIT
+  - knowledge_id: web-js-detail.js
+    path: web/js/detail.js
+    content_hash: 6a24e56b6667a2fad0f2924a7d71b38ff2022b85cbfbe805c54d4b9d61d89741
+    license: MIT
+  - knowledge_id: web-js-core.js
+    path: web/js/core.js
+    content_hash: 5e7e6282d9f231f9d55e1237abaa5de8cf9e574f149a79e13853f588c490713b
+    license: MIT
+  - knowledge_id: web-js-chrome.js
+    path: web/js/chrome.js
+    content_hash: cd7b00916b3ef2db5836e643c07b325a07b8604539de52102bd34843ece6c068
+    license: MIT
+  - knowledge_id: web-js-camera.js
+    path: web/js/camera.js
+    content_hash: 4d310454d70a94e4ebf6573777819463bd7728ce3da276cacf524de2a69c7fdb
+    license: MIT
+  - knowledge_id: web-js-app.js
+    path: web/js/app.js
+    content_hash: 0b99932b79d990382f62969e3e10a2cf82029eb9b967368f3028d9250afeaf7b
+    license: MIT
+  - knowledge_id: web-index.html
+    path: web/index.html
+    content_hash: 85eb1fdd8b83a03803f34b596b3ff24c8bbc7bb95bfe7f09de50616c3cf08abb
+    license: MIT
+  - knowledge_id: tools-serve_map.py
+    path: tools/serve_map.py
+    content_hash: d1886e73679c7a075962230ee52f0513c03162877d56a8aa7c5ba368f51d98c7
+    license: MIT
+  - knowledge_id: tools-vault_index.py
+    path: tools/vault_index.py
+    content_hash: e50af93f3934b23e66672d2da038d73d8fb67cf268dbf29f48bfb2ad634922f3
+    license: MIT
+  - knowledge_id: tools-embed_layout.py
+    path: tools/embed_layout.py
+    content_hash: b095fc6e8ea1133727f001337682338fbeacd5a8a83e60afe8589fc6ba03b1e6
+    license: MIT
+  - knowledge_id: tools-map_cache.py
+    path: tools/map_cache.py
+    content_hash: 466e471969d3e19ffbd0e586cf57291266af606cf4ca2ef2eb1c282707e670fa
+    license: MIT
+  - knowledge_id: tools-model_store.py
+    path: tools/model_store.py
+    content_hash: b60ad95098da8fcdc531cb56ad74b2c85bc4d2552d221cec0ee891914f34deb2
+    license: MIT
+  - knowledge_id: tools-patent_files.py
+    path: tools/patent_files.py
+    content_hash: 642269c8d3005216d8b42fa4c332cb9a3533d0e228468edfc823b017db8fca25
+    license: MIT
+  - knowledge_id: tools-ipc_titles.py
+    path: tools/ipc_titles.py
+    content_hash: 48d12e447a84bfe449a0d6311d3a71ad92bceba384af99998a11dac121035ddf
+    license: MIT
+  - knowledge_id: references-schemas-patent_file_index.schema.yaml
+    path: references/schemas/patent_file_index.schema.yaml
+    content_hash: 09cb810f603f0f6648c4603939adaa033a5e4eaa0f037dc60ecb0466e9bed8e1
+    license: MIT
+  - knowledge_id: tools-stdio_utf8.py
+    path: tools/stdio_utf8.py
+    content_hash: b66838457a55499568ffcce347e75b348ccccb2af4cd73f5799b16e4ed127e84
+    license: MIT
+  - knowledge_id: NOTICE.md
+    path: NOTICE.md
+    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    license: MIT
+  - knowledge_id: LICENSE
+    path: LICENSE
+    content_hash: d9329ae3b2de58aebaa015d8d1570513d48f1702318e6423896a4620845ab798
+    license: MIT
+gate_policy: none
+provenance:
+  origin: vendor-derived
+  extraction_artifact_ids:
+    - PD-CAP-14
+    - PD-KP-01
+    - PD-KP-12
+    - PD-KP-17
+  upstream_sources:
+    - path: authoring/patent-disclosure-skill/extracted/capabilities/14.md
+      sha256: 031e6176cfcddd69a54654c8cc9618e0c47ba1b6313c7f924f3595412abc21ec
+license: MIT

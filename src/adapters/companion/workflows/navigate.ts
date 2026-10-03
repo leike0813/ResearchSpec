@@ -6,7 +6,7 @@ const GRAPH_REASONS = "formal Gates or Decisions, parallel or joined execution, 
 export const navigateWorkflow = {
   id: "navigate",
   name: "ResearchSpec Navigate",
-  description: "Use for literature synthesis, manuscript writing or revision, evidence checks, peer review, reviewer replies, and continuing research work in a ResearchSpec project, even when the request does not name ResearchSpec. Navigate discovers the relevant procedure or governed workflow and carries the work through its current instructions.",
+  description: "Use for literature synthesis, manuscript writing or revision, evidence checks, peer review, reviewer replies, patent research or document preparation, and continuing research work in a ResearchSpec project, even when the request does not name ResearchSpec. Navigate discovers the relevant procedure or governed workflow and carries the work through its current instructions.",
   instructions: renderNavigateExecutionGuidance("skill"),
 } satisfies CompanionWorkflowSource;
 
@@ -19,14 +19,14 @@ export const navigateWorkflow = {
 export function renderNavigateExecutionGuidance(surface: "skill" | "command"): string {
   return `## Goal
 
-Translate the user's academic request into a legal ResearchSpec action, carry it through the appropriate standalone procedure or graph workflow, and keep the user informed at every human decision boundary. Prefer the lightest mode that provides the lifecycle guarantees the work actually needs.
+Translate the user's research request into a legal ResearchSpec action, carry it through the appropriate standalone procedure or graph workflow, and keep the user informed at every human decision boundary. Prefer the lightest mode that provides the lifecycle guarantees the work actually needs.
 
 ## When To Use
 
 Use Navigate when the user:
 
-- describes an ordinary literature, manuscript, evidence, or review task, including a bounded one that names no ResearchSpec term;
-- describes a vague, broad, or cross-capability academic goal;
+- describes an ordinary literature, manuscript, evidence, review, or patent task, including a bounded one that names no ResearchSpec term;
+- describes a vague, broad, or cross-capability research goal;
 - asks which ResearchSpec procedure, profile, command, or selector to use;
 - wants to start, resume, inspect, verify, explain, export, or finish governed work;
 - needs plugin-domain, Zotero Adapter, or alternate-model routing within ResearchSpec.
@@ -35,7 +35,7 @@ An explicit bounded procedure can route directly after the same eligibility chec
 
 ## Work Loop
 
-For scholarly work in an initialized project:
+For research or patent work in an initialized project:
 
 1. Run \`researchspec status --json\`. If a related confirmed run is unfinished, follow its current exact selector instructions and pending controls. A completed historical run does not take over a new task.
 2. Otherwise, if continuing ordinary work, compare the matching task note with current materials. If the work needs ${GRAPH_REASONS}, follow the Graph section below. For standalone work, search \`researchspec list procedures --query "<short domain terms>" --json\`; translate a Chinese request into useful catalog terms when needed. Inspect promising cards with \`show procedure:<id> --json\`. Retry with different terms only if the first search has no suitable candidate.
@@ -44,6 +44,8 @@ For scholarly work in an initialized project:
 5. Report the produced paths, evidence and limits, unresolved items, and next step. For graph work, reread status after each CLI mutation. Stop for a fresh human verdict or choice at each pending Gate or Decision.
 
 For an explanation-only request, use the narrowest current read command; it needs no research deliverable. An unrelated request or explicit opt-out uses host-native capabilities.
+
+Patent work uses the same discovery and authority boundaries. Confirm jurisdiction and patent type; China is the default jurisdiction. Fixed patent capabilities need no plugin installation. Before a docket run, disclose the default three-round budget, document/CAD/browser prerequisites and optional vault or map projection costs. At each continuation Decision, report remaining issues and the cost of another round; the budget is guidance and the human chooses continuation. After a confirmed continue, use the CLI handoff command to select the preceding round's accepted disclosure_bundle and application_bundle outputs before consuming the next revision node; verify the paths in current instructions. Preserve all earlier versions. Pass ordinary patent file indexes only through declared roles. Optional Obsidian writes use an explicitly selected vault; maps read the selected frozen corpus. Preserve patent source categories and evidence limits when combining them with academic research.
 
 ## Non-goals
 

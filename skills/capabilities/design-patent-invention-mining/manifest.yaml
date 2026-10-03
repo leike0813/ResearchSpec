@@ -1,0 +1,76 @@
+schema_version: "1"
+capability_id: design-patent-invention-mining
+title: 专利点挖掘 (Invention Mining)
+description: 从技术材料挖掘候选专利点并派生检索请求，覆盖发明、实用新型与外观设计（invention mining, patent points,
+  search request）。
+maturity: operational
+class: design
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: patent_case
+    schema_ref: patent-case.v1
+    required: true
+    source_policy:
+      - handoff
+      - node_output
+outputs:
+  - role: invention_brief
+    schema_ref: invention-brief.v1
+    required: true
+  - role: search_request
+    schema_ref: search-request.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - patent_case
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: PD-KP-01
+    path: knowledge/pd-kp-01-patent-guardrails.md
+    content_hash: ab01580829ba0ab322cf8c51f93304a1d09f971c1c27e76339ea8540aff62d27
+    license: MIT
+  - knowledge_id: PD-KP-03
+    path: knowledge/pd-kp-03-patent-point-mining.md
+    content_hash: 6b719efe7446476a7dbd42c221721a4618ffdc7ed839fd7d94270b96c0000fb0
+    license: MIT
+  - knowledge_id: contracts-patent-file-index.v1.md
+    path: contracts/patent-file-index.v1.md
+    content_hash: 50a575de941636f02f86e0c459a5aa635897f24d811e995b2f2ab954e18a33ee
+    license: MIT
+  - knowledge_id: contracts-patent-role-schemas.v1.md
+    path: contracts/patent-role-schemas.v1.md
+    content_hash: 90aae1c8d8d36f14d78fc52562cd2fb8fc87d93a4cb0b0e4e9ad411c502219b1
+    license: MIT
+  - knowledge_id: tools-stdio_utf8.py
+    path: tools/stdio_utf8.py
+    content_hash: b66838457a55499568ffcce347e75b348ccccb2af4cd73f5799b16e4ed127e84
+    license: MIT
+  - knowledge_id: tools-patent_files.py
+    path: tools/patent_files.py
+    content_hash: 642269c8d3005216d8b42fa4c332cb9a3533d0e228468edfc823b017db8fca25
+    license: MIT
+  - knowledge_id: NOTICE.md
+    path: NOTICE.md
+    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    license: MIT
+  - knowledge_id: LICENSE
+    path: LICENSE
+    content_hash: d9329ae3b2de58aebaa015d8d1570513d48f1702318e6423896a4620845ab798
+    license: MIT
+gate_policy: none
+provenance:
+  origin: vendor-derived
+  extraction_artifact_ids:
+    - PD-CAP-02
+    - PD-KP-01
+    - PD-KP-03
+  upstream_sources:
+    - path: authoring/patent-disclosure-skill/extracted/capabilities/02.md
+      sha256: fe93aa6342f689fb3f765cd1f00580b3014a3855ea3b3b45864292cd092eea82
+license: MIT

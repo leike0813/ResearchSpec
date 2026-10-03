@@ -1,6 +1,6 @@
 # ResearchSpec
 
-ResearchSpec helps an Agent carry out academic research tasks through reusable capabilities and ordinary project files. The user describes a research goal; the Agent finds suitable capabilities, delivers usable results, and saves the progress needed to continue. Formal graph runs provide Gates, Decisions, parallel work, revision rounds, and auditable state when the task calls for them.
+ResearchSpec helps an Agent carry out academic and patent research tasks through reusable capabilities and ordinary project files. The user describes a research goal; the Agent finds suitable capabilities, delivers usable results, and saves the progress needed to continue. Formal graph runs provide Gates, Decisions, parallel work, revision rounds, and auditable state when the task calls for them.
 
 Version `0.1.0` is an MVP release candidate. The functional user model is implemented and covered by public-CLI acceptance journeys; publication remains blocked until the hosted CI and manual dogfooding checklist are signed.
 
@@ -50,6 +50,11 @@ ResearchSpec 不是从零构建——它吸纳并整合了多个优秀上游项�
 | **Academic Research Skills (ARS)** / **Academic Research Skills Universal (ARSU)** | `deep-research`、`academic-paper`、`academic-paper-reviewer`、`academic-pipeline` | ResearchSpec 的主要能力载荷，覆盖深度研究、论文规划写作、同行评议、跨阶段协调 |
 
 ### 领域 Skill 插件（经审查转换的第三方上游项目）
+
+专利固定能力吸纳 [patent-disclosure-skill](https://github.com/handsomestWei/patent-disclosure-skill)
+的九项业务，拆成十八个可复用阶段，提供五个独立 graph 以及 `research-to-patent`、
+`patent-informed-paper` 两个组合。它们随基础安装提供，支持 Word、Excel、附图/CAD、
+Obsidian 和本地交互地图的配置式交付。见[专利任务](docs/user/patent-workflows.md)。
 
 | 上游项目 | 版本 | 经审查输出的 Skills 数量 | 覆盖领域 |
 |---|---|---|---|
@@ -127,7 +132,7 @@ researchspec init . --tools codex --literature-adapters zotero-library
 已完成内容和下一步；新会话可据此继续，不需要为保存或恢复普通工作启动 graph。正式 Gate/Decision、
 并行汇合、重复轮次或可审计状态才需要 graph。具体边界见[用户使用模型](docs/user/usage-model.md)。
 
-ResearchSpec 默认只投影 `researchspec-navigate`。它自带从 typed catalog 生成的 CLI handbook 和 ARSU route reference：主文件负责完整控制流程，详细参数与路由表按需读取。四个 ARSU 工作流、其余三个 Companion、47 个 core capability 与 332 个 plugin extension 通过 `list/show/instructions procedure` 按需发现和加载；预设 graph profiles 保持可组合。
+ResearchSpec 默认只投影 `researchspec-navigate`。它自带从 typed catalog 生成的 CLI handbook 和 ARSU route reference：主文件负责完整控制流程，详细参数与路由表按需读取。四个 ARSU 工作流、其余三个 Companion、65 个 core capability 与 332 个 plugin extension 通过 `list/show/instructions procedure` 按需发现和加载；预设 graph profiles 保持可组合。
 
 可选的 [Zotero 文献系统 Adapter](docs/user/literature-adapters.md) 会额外安装七个 Skill、项目级 `.zotero-bridge` runtime 和配置模板。`update --literature-adapters none` 可取消选择；未修改的托管文件会被移除，发生 drift 的文件会保留并报告。初始化及状态检查阶段不与 Zotero 通信。
 

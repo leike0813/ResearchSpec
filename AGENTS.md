@@ -25,6 +25,7 @@ Current external reference paths:
 - Revision-Master audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/audits/revision-master/snapshot-13e69610`
 - Education Agent Skills working checkout: `/home/joshua/Workspace/Code/Skill/education-agent-skills`
 - Education Agent Skills audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/education-agent-skills`
+- Patent Disclosure Skill converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/patent-disclosure-skill`
 
 When paths or ownership change, update this file in the same change so future
 agents do not follow stale locations.
@@ -159,7 +160,7 @@ The fixed base user-visible Agent surface is exactly one Skill:
 `researchspec-navigate`. Its generated `references/cli-handbook.md` and
 `references/arsu-routes.md` provide progressive CLI and ARSU route detail from
 their canonical renderers. ARSU Skills, the other three Companion workflows, the
-47 bundled core capabilities, and all registered plugin extensions are hidden
+65 bundled core capabilities, and all registered plugin extensions are hidden
 Procedures discovered from their existing registries and loaded on demand with
 `list procedures`, `show procedure:<id>`, and
 `instructions procedure:<id>`. The Procedure catalog is runtime-derived and is
@@ -595,6 +596,23 @@ commit author `Joshua Reed (leike0813)`, the same principal as ResearchSpec
 contributors. Authoring is offline and never executes upstream Python or
 installs PyYAML/Jinja2. Vendor root licensing does not replace an evidenced
 Skill-level content license.
+
+`vendor/patent-disclosure-skill` is a third-party pinned input at commit
+`5073d3d837a5d139ef2bc763c9dd46bb9605df84`, tree
+`d4abb0dd1b7cc8b2f0f131060faad707be63ca96`. Its complete 489-file inventory
+feeds eighteen fixed capabilities and seven profiles, including research-to-patent
+and patent-informed-paper. It has no plugin-domain membership or additional host
+entry. The source root is MIT; copied Mermaid/Three.js assets retain their notices.
+Models and IPC data are configured external inputs. Tools produce ordinary files;
+CLI alone owns formal workflow state. Docket performs bounded semantic rounds,
+with the default three-round budget presented to the user and continuation chosen
+through human Decisions. The research bridge preserves source types and evidence
+limits. Static conversion and checking never execute patent tools or install
+dependencies. Maintain this source through
+`audits/patent-disclosure-skill/catalog.json`,
+`scripts/patent-disclosure-skill-maintenance.mjs` and
+`.agents/skills/patent-disclosure-skill-maintenance/SKILL.md`; the dedicated
+snapshot-5073d3d8 anchor binds the complete semantically reviewed output tree.
 
 `audits/own-vendors/catalog.json` is the unified maintenance catalog for
 user-owned upstream vendors (currently `paper-humanizer` and

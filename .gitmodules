@@ -23,3 +23,6 @@
 	path = vendor/zotero-library-agent-bundle
 	url = https://github.com/leike0813/zotero-library-agent-bundle
 	branch = main
+[submodule "vendor/patent-disclosure-skill"]
+	path = vendor/patent-disclosure-skill
+	url = https://github.com/handsomestWei/patent-disclosure-skill.git

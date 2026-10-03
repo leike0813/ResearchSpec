@@ -1,0 +1,515 @@
+{
+  "schema_version": "1",
+  "exemptions": [
+    {
+      "path": "authoring/patent-disclosure-skill/extracted/capabilities/01.md",
+      "byte_preserved": true,
+      "sha256": "fe93aa6342f689fb3f765cd1f00580b3014a3855ea3b3b45864292cd092eea82",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-CAP-01",
+        "source_sha256": "fe93aa6342f689fb3f765cd1f00580b3014a3855ea3b3b45864292cd092eea82"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/extracted/capabilities/02.md",
+      "byte_preserved": true,
+      "sha256": "fe93aa6342f689fb3f765cd1f00580b3014a3855ea3b3b45864292cd092eea82",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-CAP-02",
+        "source_sha256": "fe93aa6342f689fb3f765cd1f00580b3014a3855ea3b3b45864292cd092eea82"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/extracted/capabilities/05.md",
+      "byte_preserved": true,
+      "sha256": "fe93aa6342f689fb3f765cd1f00580b3014a3855ea3b3b45864292cd092eea82",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-CAP-05",
+        "source_sha256": "fe93aa6342f689fb3f765cd1f00580b3014a3855ea3b3b45864292cd092eea82"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/extracted/capabilities/06.md",
+      "byte_preserved": true,
+      "sha256": "fe93aa6342f689fb3f765cd1f00580b3014a3855ea3b3b45864292cd092eea82",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-CAP-06",
+        "source_sha256": "fe93aa6342f689fb3f765cd1f00580b3014a3855ea3b3b45864292cd092eea82"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/extracted/capabilities/07.md",
+      "byte_preserved": true,
+      "sha256": "fe93aa6342f689fb3f765cd1f00580b3014a3855ea3b3b45864292cd092eea82",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-CAP-07",
+        "source_sha256": "fe93aa6342f689fb3f765cd1f00580b3014a3855ea3b3b45864292cd092eea82"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/extracted/capabilities/13.md",
+      "byte_preserved": true,
+      "sha256": "702dccc81899b6f18fbc634bd3fa17352b352570c12551d1f5803826d197516e",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-CAP-13",
+        "source_sha256": "702dccc81899b6f18fbc634bd3fa17352b352570c12551d1f5803826d197516e"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-application/references/schemas/application_figure_plan.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "4cfdf4dde76aeeb99d8a781ea8e99bd9b71dbde1b2e84fac37280a7b296229c6",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-003",
+        "source_sha256": "4cfdf4dde76aeeb99d8a781ea8e99bd9b71dbde1b2e84fac37280a7b296229c6"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/formulas/README.md",
+      "byte_preserved": true,
+      "sha256": "c933bebaf4bb32872da93af0cbdf3bd3cb57480cb941fdeeac296e3d72859fb2",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-010",
+        "source_sha256": "c933bebaf4bb32872da93af0cbdf3bd3cb57480cb941fdeeac296e3d72859fb2"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/patent_type_search.yaml",
+      "byte_preserved": true,
+      "sha256": "1c563aa56551fee98f6ffe192ce29b96d26b9e48c89f704b569d7025ddf32b66",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-011",
+        "source_sha256": "1c563aa56551fee98f6ffe192ce29b96d26b9e48c89f704b569d7025ddf32b66"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/appearance.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "ef0ab9aaa612f9e08e7e21bc94472b1e59ec0c702896760c8d3f54b0f2c73fa3",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-012",
+        "source_sha256": "ef0ab9aaa612f9e08e7e21bc94472b1e59ec0c702896760c8d3f54b0f2c73fa3"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/design_lineart_brief.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "5ea85a6f398a3155b06e1edf26fce96ff65cbe5d0f726b4e128df8345a811c9c",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-015",
+        "source_sha256": "5ea85a6f398a3155b06e1edf26fce96ff65cbe5d0f726b4e128df8345a811c9c"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/figure_plan.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "0b4268c00328a7517a7f6b9d0ec45e45210f6319ed1366982ce825c8c06cd23b",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-017",
+        "source_sha256": "0b4268c00328a7517a7f6b9d0ec45e45210f6319ed1366982ce825c8c06cd23b"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/formula_plan.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "fa4b27ee273266f112cff8e5e65c199190d23d0bdc90f6fd9984987eb1c33b31",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-018",
+        "source_sha256": "fa4b27ee273266f112cff8e5e65c199190d23d0bdc90f6fd9984987eb1c33b31"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/README.md",
+      "byte_preserved": true,
+      "sha256": "1eb6a4ced423807a0b4eef4bd78de9b268c3381a8c3ea6189f276e1146682cb3",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-020",
+        "source_sha256": "1eb6a4ced423807a0b4eef4bd78de9b268c3381a8c3ea6189f276e1146682cb3"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/structure_lineart_brief.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "b9e8d4b5fc503781ef481c6c9e688ca9a2b9bc6486f53e127d8fbafa58eb894f",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-023",
+        "source_sha256": "b9e8d4b5fc503781ef481c6c9e688ca9a2b9bc6486f53e127d8fbafa58eb894f"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/structure.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "8847d23d38ce5d2266c7bbc36544b2b297b10a1ba938f2da3887b0e7d83f7340",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-025",
+        "source_sha256": "8847d23d38ce5d2266c7bbc36544b2b297b10a1ba938f2da3887b0e7d83f7340"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-reader/references/patent_obsidian_format.md",
+      "byte_preserved": true,
+      "sha256": "72c5d7a8f35b137c7ecba0352c31e6fdc8983b590ef874c485b083421bf14ca2",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-059",
+        "source_sha256": "72c5d7a8f35b137c7ecba0352c31e6fdc8983b590ef874c485b083421bf14ca2"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-reader/references/schemas/appearance.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "8a641bbb0282fb1a6d79977175d836f361ac7398990b6b6a898da79086feac31",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-061",
+        "source_sha256": "8a641bbb0282fb1a6d79977175d836f361ac7398990b6b6a898da79086feac31"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/patent-reader/references/schemas/structure.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "3eb5946e33df050ebd69347e151b6c31922b52702d233a03e7672d8949049686",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-063",
+        "source_sha256": "3eb5946e33df050ebd69347e151b6c31922b52702d233a03e7672d8949049686"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/resources/shared/design_view_cnipa.md",
+      "byte_preserved": true,
+      "sha256": "18e477fb9d70be43d9e0d37301afb0620018a4f87d8e19b00a2d0d94afcfd1f0",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-067",
+        "source_sha256": "18e477fb9d70be43d9e0d37301afb0620018a4f87d8e19b00a2d0d94afcfd1f0"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/README.md",
+      "byte_preserved": true,
+      "sha256": "249dd00bd35ee31d29de63b1dd0da5922c9bb30242512ee92f292e89e510b75c",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-082",
+        "source_sha256": "249dd00bd35ee31d29de63b1dd0da5922c9bb30242512ee92f292e89e510b75c"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/README.md",
+      "byte_preserved": true,
+      "sha256": "6710f4e23419d0d4f8c3635ca1ca41c634f76f06a58cb0486f1334e96d5058dc",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-120",
+        "source_sha256": "6710f4e23419d0d4f8c3635ca1ca41c634f76f06a58cb0486f1334e96d5058dc"
+      }
+    },
+    {
+      "path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/vendor/mermaid.min.js",
+      "byte_preserved": true,
+      "sha256": "a43bc1afd446f9c4cc66ac5dd45d02e8d65e26fc5344ec0ef787f88d6ddb6f9e",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-130",
+        "source_sha256": "a43bc1afd446f9c4cc66ac5dd45d02e8d65e26fc5344ec0ef787f88d6ddb6f9e"
+      }
+    },
+    {
+      "path": "skills/capabilities/analysis-patent-reading/references/schemas/structure.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "3eb5946e33df050ebd69347e151b6c31922b52702d233a03e7672d8949049686",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-063",
+        "source_sha256": "3eb5946e33df050ebd69347e151b6c31922b52702d233a03e7672d8949049686"
+      }
+    },
+    {
+      "path": "skills/capabilities/analysis-patent-reading/references/schemas/appearance.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "8a641bbb0282fb1a6d79977175d836f361ac7398990b6b6a898da79086feac31",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-061",
+        "source_sha256": "8a641bbb0282fb1a6d79977175d836f361ac7398990b6b6a898da79086feac31"
+      }
+    },
+    {
+      "path": "skills/capabilities/analysis-patent-reading/references/patent_obsidian_format.md",
+      "byte_preserved": true,
+      "sha256": "72c5d7a8f35b137c7ecba0352c31e6fdc8983b590ef874c485b083421bf14ca2",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-059",
+        "source_sha256": "72c5d7a8f35b137c7ecba0352c31e6fdc8983b590ef874c485b083421bf14ca2"
+      }
+    },
+    {
+      "path": "skills/capabilities/generation-patent-disclosure/tools/vendor/mermaid.min.js",
+      "byte_preserved": true,
+      "sha256": "a43bc1afd446f9c4cc66ac5dd45d02e8d65e26fc5344ec0ef787f88d6ddb6f9e",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-130",
+        "source_sha256": "a43bc1afd446f9c4cc66ac5dd45d02e8d65e26fc5344ec0ef787f88d6ddb6f9e"
+      }
+    },
+    {
+      "path": "skills/capabilities/generation-patent-disclosure/references/schemas/structure.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "8847d23d38ce5d2266c7bbc36544b2b297b10a1ba938f2da3887b0e7d83f7340",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-025",
+        "source_sha256": "8847d23d38ce5d2266c7bbc36544b2b297b10a1ba938f2da3887b0e7d83f7340"
+      }
+    },
+    {
+      "path": "skills/capabilities/generation-patent-disclosure/references/schemas/structure_lineart_brief.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "b9e8d4b5fc503781ef481c6c9e688ca9a2b9bc6486f53e127d8fbafa58eb894f",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-023",
+        "source_sha256": "b9e8d4b5fc503781ef481c6c9e688ca9a2b9bc6486f53e127d8fbafa58eb894f"
+      }
+    },
+    {
+      "path": "skills/capabilities/generation-patent-disclosure/references/schemas/README.md",
+      "byte_preserved": true,
+      "sha256": "1eb6a4ced423807a0b4eef4bd78de9b268c3381a8c3ea6189f276e1146682cb3",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-020",
+        "source_sha256": "1eb6a4ced423807a0b4eef4bd78de9b268c3381a8c3ea6189f276e1146682cb3"
+      }
+    },
+    {
+      "path": "skills/capabilities/generation-patent-disclosure/references/schemas/formula_plan.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "fa4b27ee273266f112cff8e5e65c199190d23d0bdc90f6fd9984987eb1c33b31",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-018",
+        "source_sha256": "fa4b27ee273266f112cff8e5e65c199190d23d0bdc90f6fd9984987eb1c33b31"
+      }
+    },
+    {
+      "path": "skills/capabilities/generation-patent-disclosure/references/schemas/figure_plan.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "0b4268c00328a7517a7f6b9d0ec45e45210f6319ed1366982ce825c8c06cd23b",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-017",
+        "source_sha256": "0b4268c00328a7517a7f6b9d0ec45e45210f6319ed1366982ce825c8c06cd23b"
+      }
+    },
+    {
+      "path": "skills/capabilities/generation-patent-disclosure/references/schemas/design_lineart_brief.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "5ea85a6f398a3155b06e1edf26fce96ff65cbe5d0f726b4e128df8345a811c9c",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-015",
+        "source_sha256": "5ea85a6f398a3155b06e1edf26fce96ff65cbe5d0f726b4e128df8345a811c9c"
+      }
+    },
+    {
+      "path": "skills/capabilities/generation-patent-disclosure/references/schemas/appearance.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "ef0ab9aaa612f9e08e7e21bc94472b1e59ec0c702896760c8d3f54b0f2c73fa3",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-012",
+        "source_sha256": "ef0ab9aaa612f9e08e7e21bc94472b1e59ec0c702896760c8d3f54b0f2c73fa3"
+      }
+    },
+    {
+      "path": "skills/capabilities/generation-patent-disclosure/references/design_view_cnipa.md",
+      "byte_preserved": true,
+      "sha256": "18e477fb9d70be43d9e0d37301afb0620018a4f87d8e19b00a2d0d94afcfd1f0",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-067",
+        "source_sha256": "18e477fb9d70be43d9e0d37301afb0620018a4f87d8e19b00a2d0d94afcfd1f0"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-patent-disclosure/references/schemas/structure.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "8847d23d38ce5d2266c7bbc36544b2b297b10a1ba938f2da3887b0e7d83f7340",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-025",
+        "source_sha256": "8847d23d38ce5d2266c7bbc36544b2b297b10a1ba938f2da3887b0e7d83f7340"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-patent-disclosure/references/schemas/structure_lineart_brief.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "b9e8d4b5fc503781ef481c6c9e688ca9a2b9bc6486f53e127d8fbafa58eb894f",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-023",
+        "source_sha256": "b9e8d4b5fc503781ef481c6c9e688ca9a2b9bc6486f53e127d8fbafa58eb894f"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-patent-disclosure/references/schemas/README.md",
+      "byte_preserved": true,
+      "sha256": "1eb6a4ced423807a0b4eef4bd78de9b268c3381a8c3ea6189f276e1146682cb3",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-020",
+        "source_sha256": "1eb6a4ced423807a0b4eef4bd78de9b268c3381a8c3ea6189f276e1146682cb3"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-patent-disclosure/references/schemas/formula_plan.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "fa4b27ee273266f112cff8e5e65c199190d23d0bdc90f6fd9984987eb1c33b31",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-018",
+        "source_sha256": "fa4b27ee273266f112cff8e5e65c199190d23d0bdc90f6fd9984987eb1c33b31"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-patent-disclosure/references/schemas/figure_plan.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "0b4268c00328a7517a7f6b9d0ec45e45210f6319ed1366982ce825c8c06cd23b",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-017",
+        "source_sha256": "0b4268c00328a7517a7f6b9d0ec45e45210f6319ed1366982ce825c8c06cd23b"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-patent-disclosure/references/schemas/design_lineart_brief.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "5ea85a6f398a3155b06e1edf26fce96ff65cbe5d0f726b4e128df8345a811c9c",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-015",
+        "source_sha256": "5ea85a6f398a3155b06e1edf26fce96ff65cbe5d0f726b4e128df8345a811c9c"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-patent-disclosure/references/schemas/appearance.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "ef0ab9aaa612f9e08e7e21bc94472b1e59ec0c702896760c8d3f54b0f2c73fa3",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-012",
+        "source_sha256": "ef0ab9aaa612f9e08e7e21bc94472b1e59ec0c702896760c8d3f54b0f2c73fa3"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-patent-application/references/schemas/application_figure_plan.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "4cfdf4dde76aeeb99d8a781ea8e99bd9b71dbde1b2e84fac37280a7b296229c6",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-003",
+        "source_sha256": "4cfdf4dde76aeeb99d8a781ea8e99bd9b71dbde1b2e84fac37280a7b296229c6"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-patent-application/references/design_view_cnipa.md",
+      "byte_preserved": true,
+      "sha256": "18e477fb9d70be43d9e0d37301afb0620018a4f87d8e19b00a2d0d94afcfd1f0",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-067",
+        "source_sha256": "18e477fb9d70be43d9e0d37301afb0620018a4f87d8e19b00a2d0d94afcfd1f0"
+      }
+    },
+    {
+      "path": "skills/capabilities/design-patent-protection-layout/references/schemas/structure.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "8847d23d38ce5d2266c7bbc36544b2b297b10a1ba938f2da3887b0e7d83f7340",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-025",
+        "source_sha256": "8847d23d38ce5d2266c7bbc36544b2b297b10a1ba938f2da3887b0e7d83f7340"
+      }
+    },
+    {
+      "path": "skills/capabilities/design-patent-protection-layout/references/schemas/structure_lineart_brief.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "b9e8d4b5fc503781ef481c6c9e688ca9a2b9bc6486f53e127d8fbafa58eb894f",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-023",
+        "source_sha256": "b9e8d4b5fc503781ef481c6c9e688ca9a2b9bc6486f53e127d8fbafa58eb894f"
+      }
+    },
+    {
+      "path": "skills/capabilities/design-patent-protection-layout/references/schemas/README.md",
+      "byte_preserved": true,
+      "sha256": "1eb6a4ced423807a0b4eef4bd78de9b268c3381a8c3ea6189f276e1146682cb3",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-020",
+        "source_sha256": "1eb6a4ced423807a0b4eef4bd78de9b268c3381a8c3ea6189f276e1146682cb3"
+      }
+    },
+    {
+      "path": "skills/capabilities/design-patent-protection-layout/references/schemas/formula_plan.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "fa4b27ee273266f112cff8e5e65c199190d23d0bdc90f6fd9984987eb1c33b31",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-018",
+        "source_sha256": "fa4b27ee273266f112cff8e5e65c199190d23d0bdc90f6fd9984987eb1c33b31"
+      }
+    },
+    {
+      "path": "skills/capabilities/design-patent-protection-layout/references/schemas/figure_plan.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "0b4268c00328a7517a7f6b9d0ec45e45210f6319ed1366982ce825c8c06cd23b",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-017",
+        "source_sha256": "0b4268c00328a7517a7f6b9d0ec45e45210f6319ed1366982ce825c8c06cd23b"
+      }
+    },
+    {
+      "path": "skills/capabilities/design-patent-protection-layout/references/schemas/design_lineart_brief.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "5ea85a6f398a3155b06e1edf26fce96ff65cbe5d0f726b4e128df8345a811c9c",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-015",
+        "source_sha256": "5ea85a6f398a3155b06e1edf26fce96ff65cbe5d0f726b4e128df8345a811c9c"
+      }
+    },
+    {
+      "path": "skills/capabilities/design-patent-protection-layout/references/schemas/appearance.schema.yaml",
+      "byte_preserved": true,
+      "sha256": "ef0ab9aaa612f9e08e7e21bc94472b1e59ec0c702896760c8d3f54b0f2c73fa3",
+      "evidence": {
+        "catalog_path": "authoring/patent-disclosure-skill/extraction-index.json",
+        "artifact_id": "PD-ASSET-012",
+        "source_sha256": "ef0ab9aaa612f9e08e7e21bc94472b1e59ec0c702896760c8d3f54b0f2c73fa3"
+      }
+    }
+  ]
+}

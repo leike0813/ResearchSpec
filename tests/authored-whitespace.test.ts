@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -50,6 +50,22 @@ void test("authored whitespace checker rejects authored whitespace and invalid e
     } finally {
       await rm(fixture.root, { recursive: true, force: true });
     }
+  }
+});
+
+void test("changed-file discovery checks Unicode and newline filenames", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "researchspec-whitespace-git-"));
+  try {
+    execFileSync("git", ["clone", "--quiet", "--shared", "--no-checkout", ROOT, root], { stdio: "pipe" });
+    const catalogPath = path.join(root, "catalog.json");
+    await writeFile(catalogPath, JSON.stringify({ schema_version: "1", exemptions: [] }));
+    await writeFile(path.join(root, "附图\n说明.md"), "authored whitespace  \n");
+    const result = spawnSync(process.execPath, [CHECKER, "--root", root, "--catalog", catalogPath], { encoding: "utf8" });
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /附图/);
+    assert.match(result.stderr, /trailing whitespace/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
   }
 });
 

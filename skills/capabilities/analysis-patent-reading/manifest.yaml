@@ -1,0 +1,320 @@
+schema_version: "1"
+capability_id: analysis-patent-reading
+title: 专利通俗解读 (Patent Reading)
+description: 把公开号、PDF 或全文读成通俗笔记与图谱，产出稳定特征行与可机读段落（patent reading, claim features）。
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: patent_corpus
+    schema_ref: patent-corpus.v1
+    required: true
+    source_policy:
+      - handoff
+      - node_output
+outputs:
+  - role: patent_notes
+    schema_ref: patent-notes.v1
+    required: true
+  - role: claim_features
+    schema_ref: claim-features.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - patent_corpus
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: PD-KP-01
+    path: knowledge/pd-kp-01-patent-guardrails.md
+    content_hash: ab01580829ba0ab322cf8c51f93304a1d09f971c1c27e76339ea8540aff62d27
+    license: MIT
+  - knowledge_id: PD-KP-11
+    path: knowledge/pd-kp-11-patent-reading.md
+    content_hash: 8e164aa0fade96c18557e0eb939821e0709c0996a10fdcf8539ff8520401346c
+    license: MIT
+  - knowledge_id: PD-KP-17
+    path: knowledge/pd-kp-17-runtime-tools-rules.md
+    content_hash: 4a3d1f31f37d0883de8837f5b597cd432ca1f38314640b2a1e11a13cdd2f6985
+    license: MIT
+  - knowledge_id: contracts-patent-file-index.v1.md
+    path: contracts/patent-file-index.v1.md
+    content_hash: 50a575de941636f02f86e0c459a5aa635897f24d811e995b2f2ab954e18a33ee
+    license: MIT
+  - knowledge_id: contracts-patent-role-schemas.v1.md
+    path: contracts/patent-role-schemas.v1.md
+    content_hash: 90aae1c8d8d36f14d78fc52562cd2fb8fc87d93a4cb0b0e4e9ad411c502219b1
+    license: MIT
+  - knowledge_id: tools-vault-write_patent_obsidian_note.py
+    path: tools/vault/write_patent_obsidian_note.py
+    content_hash: c192ed1a300667bb05f473016d39cdd5da78dba05878ebd0e4e147dfc28a7393
+    license: MIT
+  - knowledge_id: tools-vault-setup_obsidian_vault.py
+    path: tools/vault/setup_obsidian_vault.py
+    content_hash: db0cb8ab1392a7c1f65fc46b3a47f6226e7b99982e5c768be04bed63ae8a145b
+    license: MIT
+  - knowledge_id: tools-vault-schema_vault.py
+    path: tools/vault/schema_vault.py
+    content_hash: 84e4aec6b8d95a178b4007e9651c2d605daf630700c6fa7ddd2cd43c053820ac
+    license: MIT
+  - knowledge_id: tools-vault-patent_link.py
+    path: tools/vault/patent_link.py
+    content_hash: bacd4c809d9dc44707b1fdce910c3d8247bf2f90c0f6832235118d5fbca5ad8b
+    license: MIT
+  - knowledge_id: tools-vault-obsidian.py
+    path: tools/vault/obsidian.py
+    content_hash: b50a21906fa19e84a893696e8956bb804a32f6e89f80b662afe3357fa8b8eeff
+    license: MIT
+  - knowledge_id: tools-vault-obsidian_paths.py
+    path: tools/vault/obsidian_paths.py
+    content_hash: 3a3da7a3dd27cf50c53a300ffa9503d5ba1704a70e80b01a513dab666aebe2e2
+    license: MIT
+  - knowledge_id: tools-vault-obsidian_glossary.py
+    path: tools/vault/obsidian_glossary.py
+    content_hash: 94db22a514b8115788161bd2b5df6c02772c845d93dac708cfd0d4752981208a
+    license: MIT
+  - knowledge_id: tools-vault-obsidian_frontmatter.py
+    path: tools/vault/obsidian_frontmatter.py
+    content_hash: d731b29f1900197046ac81fc3920fb62a7938133fe3e140afeca760dc4864e0c
+    license: MIT
+  - knowledge_id: tools-vault-obsidian_claims.py
+    path: tools/vault/obsidian_claims.py
+    content_hash: d06ad3ce9d8b87d15c90be55ac22b4c001ece24267616c2e2373845dad61f71e
+    license: MIT
+  - knowledge_id: tools-vault-obsidian_canvas.py
+    path: tools/vault/obsidian_canvas.py
+    content_hash: b6849493f05ce70471a7e1c609fce377ceb7861e47b7753c52dc64f55e5d5fac
+    license: MIT
+  - knowledge_id: tools-vault-obsidian_bootstrap.py
+    path: tools/vault/obsidian_bootstrap.py
+    content_hash: 131863847cc7da9157d1019eae271913f19155c84d8d3a0f15a3f1423a4c48ed
+    license: MIT
+  - knowledge_id: tools-vault-note_cites.py
+    path: tools/vault/note_cites.py
+    content_hash: 10e81ed6202df43577bdec7b30721b64ca660f8e00f90ff583beeec4ea4a8939
+    license: MIT
+  - knowledge_id: tools-vault-materialize_public_clues.py
+    path: tools/vault/materialize_public_clues.py
+    content_hash: d80eb1e48ec3bc6cb8207115208c71aaade9056f17240878cb35cd3dc6f38266
+    license: MIT
+  - knowledge_id: tools-vault-link_patent_notes.py
+    path: tools/vault/link_patent_notes.py
+    content_hash: bfa3289b0ff2fe9fa3906e5c68e5a5cb66979308fdebe69e4210a255c3fa0933
+    license: MIT
+  - knowledge_id: tools-vault-desc_paragraphs.py
+    path: tools/vault/desc_paragraphs.py
+    content_hash: a46bf1c20a118e68f685d2bbee620c18a62f6a6c23969c9534513a01fd7ea787
+    license: MIT
+  - knowledge_id: tools-vault-clue_vault.py
+    path: tools/vault/clue_vault.py
+    content_hash: ffedb10c947bf88c68f1b7894631f19e4e40c86531c2b5763d22734d001ede86
+    license: MIT
+  - knowledge_id: tools-vault-check_obsidian_env.py
+    path: tools/vault/check_obsidian_env.py
+    content_hash: f1fac9472ec9ec1b64080863da1a44db58426b61d9a3531d62f44be70e232ede
+    license: MIT
+  - knowledge_id: tools-vault-build_patent_canvas.py
+    path: tools/vault/build_patent_canvas.py
+    content_hash: 125a1daed1d6612a0f80be8302d5bc4c406acaf6dd98016d5ee0f1fefcebeaa2
+    license: MIT
+  - knowledge_id: tools-vault-__init__.py
+    path: tools/vault/__init__.py
+    content_hash: 22c1329da7fefa2bad856fa71073e53c412b10c38678e3f5e27138f086114efa
+    license: MIT
+  - knowledge_id: tools-shared-common.py
+    path: tools/shared/common.py
+    content_hash: 85cab67ccab1e634137243106aea5c3ef2b5fc225e0502a1517f864e6586e98e
+    license: MIT
+  - knowledge_id: tools-shared-__init__.py
+    path: tools/shared/__init__.py
+    content_hash: a08dfcb1f131a092fed1fa6649aa3a20e4e5c04b7a432220674eba93801583fb
+    license: MIT
+  - knowledge_id: tools-requirements.txt
+    path: tools/requirements.txt
+    content_hash: 74747a5640889437ba77a5194aecdca54e753c284f6a6a488d857482c29ba6a4
+    license: MIT
+  - knowledge_id: tools-README.md
+    path: tools/README.md
+    content_hash: 786dd0e0114fa4913ae3d11a95a031b48254305e9b09fd05822432d77394b8de
+    license: MIT
+  - knowledge_id: tools-patent_type.py
+    path: tools/patent_type.py
+    content_hash: 26ff0b601b2704ba559e5d75abb40b5e0360d1f794df4c402427b5a54cfa1929
+    license: MIT
+  - knowledge_id: tools-extract-figure_extract.py
+    path: tools/extract/figure_extract.py
+    content_hash: 2ac8586ee023d348a34786d64bc4e0840bc37594bbce1f4c97eeae5df3b847b1
+    license: MIT
+  - knowledge_id: tools-extract-fetch_patent_pdf.py
+    path: tools/extract/fetch_patent_pdf.py
+    content_hash: c7695df1ebcbd3db5573e498a8a57d4964ae891a0f1bbc5262b4cfc3380c4c00
+    license: MIT
+  - knowledge_id: tools-extract-fetch_design_views.py
+    path: tools/extract/fetch_design_views.py
+    content_hash: e50d3704b871145a2a03be1eff62c47b39b5a512e0fe365da5215f63716de8b9
+    license: MIT
+  - knowledge_id: tools-extract-extract_patent_text.py
+    path: tools/extract/extract_patent_text.py
+    content_hash: 5ae210fc47987253de4bb962ca9b83cae161757d8f06e1bc20036a828f5f7305
+    license: MIT
+  - knowledge_id: tools-extract-extract_patent_figures.py
+    path: tools/extract/extract_patent_figures.py
+    content_hash: 43f1ced9b56441ac2e2e99606f2f002a36e0104dee2358d3072b233285df8ec1
+    license: MIT
+  - knowledge_id: tools-extract-__init__.py
+    path: tools/extract/__init__.py
+    content_hash: 4aa411432528b5cc17b99662d447ea822d0c00501e14a57ed6ee9aa91fbc2d51
+    license: MIT
+  - knowledge_id: tools-crawl-requirements-cnipa.txt
+    path: tools/crawl/requirements-cnipa.txt
+    content_hash: 203d3c4bb4a9981f429feb3561bc129def171d1af4e7cb77f65dabaed0524499
+    license: MIT
+  - knowledge_id: tools-crawl-cnipa_epub_parse.py
+    path: tools/crawl/cnipa_epub_parse.py
+    content_hash: 6caf7033ea9e67263ffff7b7d436491e8d126047d1af87808ef119d4a0c39b5c
+    license: MIT
+  - knowledge_id: tools-crawl-cnipa_epub_crawler.py
+    path: tools/crawl/cnipa_epub_crawler.py
+    content_hash: f3a494a97157e47aa992ae3cbcec3d35196fe912f330da7b007dfd1a8051cac0
+    license: MIT
+  - knowledge_id: tools-stdio_utf8.py
+    path: tools/stdio_utf8.py
+    content_hash: b66838457a55499568ffcce347e75b348ccccb2af4cd73f5799b16e4ed127e84
+    license: MIT
+  - knowledge_id: tools-browser.py
+    path: tools/browser.py
+    content_hash: 28ca833b97bfea93d4fbaf76926b4acc71480b384468af7930b910c511a2f283
+    license: MIT
+  - knowledge_id: tools-analyze-validate_public_clues.py
+    path: tools/analyze/validate_public_clues.py
+    content_hash: 08d9750b882b73ed207414c41d6752c75de2c01d1eb0b3bfbb6d2776f0286f15
+    license: MIT
+  - knowledge_id: tools-analyze-validate_claim_tree.py
+    path: tools/analyze/validate_claim_tree.py
+    content_hash: 152045ef01f4bd9c73c5533af73ed941fad75abce781f6d550b8056388a830f4
+    license: MIT
+  - knowledge_id: tools-analyze-validate_claim_features.py
+    path: tools/analyze/validate_claim_features.py
+    content_hash: 627c623175eb96452d7304cfeadcee8d6995444281e40f9eba06c8d726bc5744
+    license: MIT
+  - knowledge_id: tools-analyze-lint_patent_note.py
+    path: tools/analyze/lint_patent_note.py
+    content_hash: ced38d56dd291f6d53c06d84cf9c83207d4840d8a16863fc4080f9bb06940c72
+    license: MIT
+  - knowledge_id: tools-analyze-claim_features.py
+    path: tools/analyze/claim_features.py
+    content_hash: dd6e77a12d6d6d8f66bfa3268187af19fe251fb12f568ed86ac2c0c51cd55d8e
+    license: MIT
+  - knowledge_id: tools-analyze-build_context_anchor.py
+    path: tools/analyze/build_context_anchor.py
+    content_hash: 4252511ba8bc0aabf519b63026e274d862b67addf5cca907484e131de55d4872
+    license: MIT
+  - knowledge_id: tools-analyze-build_claim_mermaid.py
+    path: tools/analyze/build_claim_mermaid.py
+    content_hash: 2c2df71f42d36ddd3dec518bafd235386e23617bddc791f05eb09967795100f6
+    license: MIT
+  - knowledge_id: tools-analyze-__init__.py
+    path: tools/analyze/__init__.py
+    content_hash: 6c02468ac664226c9089129e854d9883965f7eecd8519663b651d944532ee3d4
+    license: MIT
+  - knowledge_id: tools-__init__.py
+    path: tools/__init__.py
+    content_hash: c0b94f1e7642ff4810dfdd55bda5df8ecdf384e97ff5ae59cfdfc38fffcd6d5d
+    license: MIT
+  - knowledge_id: references-tech_effect_hints.yaml
+    path: references/tech_effect_hints.yaml
+    content_hash: 364972428c82074ffbc76cb8cf4a394cc79229a7981721c79300eb10a42c3f0e
+    license: MIT
+  - knowledge_id: references-schemas-structure.schema.yaml
+    path: references/schemas/structure.schema.yaml
+    content_hash: 3eb5946e33df050ebd69347e151b6c31922b52702d233a03e7672d8949049686
+    license: MIT
+  - knowledge_id: references-schemas-patent_file_index.schema.yaml
+    path: references/schemas/patent_file_index.schema.yaml
+    content_hash: 09cb810f603f0f6648c4603939adaa033a5e4eaa0f037dc60ecb0466e9bed8e1
+    license: MIT
+  - knowledge_id: references-schemas-claim_features.schema.yaml
+    path: references/schemas/claim_features.schema.yaml
+    content_hash: 5074487b5d17af45f4899286d405a20088ab7f06881b3a66b0214868aacd59e7
+    license: MIT
+  - knowledge_id: references-schemas-appearance.schema.yaml
+    path: references/schemas/appearance.schema.yaml
+    content_hash: 8a641bbb0282fb1a6d79977175d836f361ac7398990b6b6a898da79086feac31
+    license: MIT
+  - knowledge_id: references-patent_pdf_sources.yaml
+    path: references/patent_pdf_sources.yaml
+    content_hash: 5fd353a1d20408c44a7050b33b8b60ac0e284eba1d13e3df65fa1a90c343f7ed
+    license: MIT
+  - knowledge_id: references-patent_obsidian_format.md
+    path: references/patent_obsidian_format.md
+    content_hash: 72c5d7a8f35b137c7ecba0352c31e6fdc8983b590ef874c485b083421bf14ca2
+    license: MIT
+  - knowledge_id: references-patent_domain_rules.yaml
+    path: references/patent_domain_rules.yaml
+    content_hash: fc693ab60c8d44d09bd81c9bdf9aee8dabcccc8391ce7b4f09a531c79015f0fb
+    license: MIT
+  - knowledge_id: references-ipc_application_hints.yaml
+    path: references/ipc_application_hints.yaml
+    content_hash: c2ed3405c9a8a4fbd271c69a2ed7b85a87eac85e102ab70bc234112a97551eb0
+    license: MIT
+  - knowledge_id: docs-obsidian-setup-guide.md
+    path: docs/obsidian-setup-guide.md
+    content_hash: faed7ef10b96ba2939404e3012a7e2a67243719c40e8624173c88375fea1e1de
+    license: MIT
+  - knowledge_id: assets-patent_note_template.md
+    path: assets/patent_note_template.md
+    content_hash: c3579b003bacd9c1c1d710195e9608cd3851fa98474b57ba42e799fb76f339a6
+    license: MIT
+  - knowledge_id: assets-obsidian-README.md
+    path: assets/obsidian/README.md
+    content_hash: 03ed78f82bf4662b535388ff3f218f64d1a8692ef81629b946d60e8af8953116
+    license: MIT
+  - knowledge_id: assets-obsidian-patents.base.yaml
+    path: assets/obsidian/patents.base.yaml
+    content_hash: 33d4b2107192bd78b0d28be6d57ceac1c9d01126a965ba0b59f92aa015fded58
+    license: MIT
+  - knowledge_id: assets-obsidian-patent-reader.css
+    path: assets/obsidian/patent-reader.css
+    content_hash: 423b1f312f9f3c08d1541a763ce5fd2cf98c62d1007955f908ad57ac9da38245
+    license: MIT
+  - knowledge_id: assets-obsidian-graph_color_groups.json
+    path: assets/obsidian/graph_color_groups.json
+    content_hash: d6e41ef0894461057d58de1a270c772e66cdda6b6c7c8f9b79a92d4aed588efe
+    license: MIT
+  - knowledge_id: assets-obsidian-glossary.base.yaml
+    path: assets/obsidian/glossary.base.yaml
+    content_hash: 81330ff1f59e6682c846137fc8a1ff4630804003f51f5ae1f00c3e93a6958b37
+    license: MIT
+  - knowledge_id: assets-obsidian-_-u4e13--u5229--u89e3--u8bfb--u7d22--u5f15-.template.md
+    path: assets/obsidian/_专利解读索引.template.md
+    content_hash: 3f51d0dcddc6a3df5eb87b385a0a71eef360c99b51b9e3946f1318a4177458e6
+    license: MIT
+  - knowledge_id: tools-patent_files.py
+    path: tools/patent_files.py
+    content_hash: 642269c8d3005216d8b42fa4c332cb9a3533d0e228468edfc823b017db8fca25
+    license: MIT
+  - knowledge_id: NOTICE.md
+    path: NOTICE.md
+    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    license: MIT
+  - knowledge_id: LICENSE
+    path: LICENSE
+    content_hash: d9329ae3b2de58aebaa015d8d1570513d48f1702318e6423896a4620845ab798
+    license: MIT
+gate_policy: none
+provenance:
+  origin: vendor-derived
+  extraction_artifact_ids:
+    - PD-CAP-04
+    - PD-KP-01
+    - PD-KP-11
+    - PD-KP-17
+  upstream_sources:
+    - path: authoring/patent-disclosure-skill/extracted/capabilities/04.md
+      sha256: 1862e514a2f43022f96006948d79b6fa53e164428571114b55dc63895627ba36
+license: MIT

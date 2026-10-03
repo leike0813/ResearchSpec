@@ -19,7 +19,7 @@ void test("converter-owned preset registry matches the packaged projection deter
   const loaded = await loadGraphProfileRegistry();
   assert.deepEqual(loaded.registry, buildPresetGraphProfileRegistry());
   assert.deepEqual(buildPresetGraphProfileRegistry(), buildPresetGraphProfileRegistry());
-  assert.equal(loaded.profiles.size, 7);
+  assert.equal(loaded.profiles.size, AUTHORED_GRAPH_PROFILES.length);
 });
 
 void test("research-main preset is a valid reachable capability graph", async () => {

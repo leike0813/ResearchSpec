@@ -1,0 +1,156 @@
+schema_version: "1"
+capability_id: generation-patent-oa-response
+title: 审查答复草稿 (Office-Action Response)
+description: 审查意见问答与内部草稿，确认采纳后才出意见陈述 Word，并可按对比文件导出驳回映射（office action, OA
+  response, rejection mapping）。
+maturity: operational
+class: generation
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: office_action
+    schema_ref: office-action.v1
+    required: true
+    source_policy:
+      - handoff
+      - node_output
+  - role: application_bundle
+    schema_ref: application-bundle.v1
+    required: true
+    source_policy:
+      - handoff
+      - node_output
+  - role: comparison_materials
+    schema_ref: comparison-materials.v1
+    required: false
+    source_policy:
+      - handoff
+      - node_output
+outputs:
+  - role: oa_response
+    schema_ref: oa-response.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - office_action
+      - application_bundle
+      - comparison_materials
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: PD-KP-01
+    path: knowledge/pd-kp-01-patent-guardrails.md
+    content_hash: ab01580829ba0ab322cf8c51f93304a1d09f971c1c27e76339ea8540aff62d27
+    license: MIT
+  - knowledge_id: PD-KP-13
+    path: knowledge/pd-kp-13-oa-response.md
+    content_hash: cab073e7c83bf1a567753ae22ded397109576c71f77b62c92fb5c10e3e146f99
+    license: MIT
+  - knowledge_id: PD-KP-17
+    path: knowledge/pd-kp-17-runtime-tools-rules.md
+    content_hash: 4a3d1f31f37d0883de8837f5b597cd432ca1f38314640b2a1e11a13cdd2f6985
+    license: MIT
+  - knowledge_id: contracts-patent-file-index.v1.md
+    path: contracts/patent-file-index.v1.md
+    content_hash: 50a575de941636f02f86e0c459a5aa635897f24d811e995b2f2ab954e18a33ee
+    license: MIT
+  - knowledge_id: contracts-patent-role-schemas.v1.md
+    path: contracts/patent-role-schemas.v1.md
+    content_hash: 90aae1c8d8d36f14d78fc52562cd2fb8fc87d93a4cb0b0e4e9ad411c502219b1
+    license: MIT
+  - knowledge_id: tools-xlsx_minimal.py
+    path: tools/xlsx_minimal.py
+    content_hash: edb12c22173ec802ca98c4538d970b07426189d3a33f48e3d8767a75af1a7445
+    license: MIT
+  - knowledge_id: tools-highlights.py
+    path: tools/highlights.py
+    content_hash: 52304f1e08adb0bae749b2a5209aa3154c817144ea82944250f427e6adf7af87
+    license: MIT
+  - knowledge_id: tools-write_intake.py
+    path: tools/write_intake.py
+    content_hash: aceaa70316f9f32d006dd5d673fd34d05fd657d59d774d9f41fadeb82b724781
+    license: MIT
+  - knowledge_id: tools-requirements-oa.txt
+    path: tools/requirements-oa.txt
+    content_hash: 6c0af1ffc488275b1292a59691b339f077dc998aa1dbd65fcbf10ce8c8c6ae7e
+    license: MIT
+  - knowledge_id: tools-README.md
+    path: tools/README.md
+    content_hash: 6bd1908419b57fde6373d0a5bec525ceb0b1e664b11a8ac307c7f14ca2a65307
+    license: MIT
+  - knowledge_id: tools-pdf_text.py
+    path: tools/pdf_text.py
+    content_hash: bd45e1406a8ccce0be4cb06d4da20f33b65005d17d4e9d4f48ea9e617015215a
+    license: MIT
+  - knowledge_id: tools-oa_history.py
+    path: tools/oa_history.py
+    content_hash: 799cfb27fdc88ac2bc6bcba061c193568fe5d3189233506dacf4cb8da5064846
+    license: MIT
+  - knowledge_id: tools-patent_files.py
+    path: tools/patent_files.py
+    content_hash: 642269c8d3005216d8b42fa4c332cb9a3533d0e228468edfc823b017db8fca25
+    license: MIT
+  - knowledge_id: tools-md_to_docx.py
+    path: tools/md_to_docx.py
+    content_hash: 19505b83621401c39ba29dcbfd18df59572b21e2133675064a3e38658850779d
+    license: MIT
+  - knowledge_id: tools-latex_delimiters.py
+    path: tools/latex_delimiters.py
+    content_hash: 72c89e2755d0b9e526fd3ddbcdee8a452106591a5e47ef6d836b0cfe3abb7ee8
+    license: MIT
+  - knowledge_id: tools-stdio_utf8.py
+    path: tools/stdio_utf8.py
+    content_hash: b66838457a55499568ffcce347e75b348ccccb2af4cd73f5799b16e4ed127e84
+    license: MIT
+  - knowledge_id: tools-math_render.py
+    path: tools/math_render.py
+    content_hash: 5f0fbfbfe23c48a5dc9f28c62b717107544fa9256900a7698dc282077d947807
+    license: MIT
+  - knowledge_id: tools-math_to_omml.py
+    path: tools/math_to_omml.py
+    content_hash: 88720dd354b5f25f58e851a9d9540fb98c81d8f064ea3498afd554250cd503a0
+    license: MIT
+  - knowledge_id: tools-emit_opinion_docx.py
+    path: tools/emit_opinion_docx.py
+    content_hash: 121ea69c52fe3f71183d75bec78a37d09b909ecb4032702b3155d90ab73b926c
+    license: MIT
+  - knowledge_id: tools-emit_chart.py
+    path: tools/emit_chart.py
+    content_hash: bcba5941e689fa973bfad3e59968564f1c9403709884c52a3a81d490cfda940e
+    license: MIT
+  - knowledge_id: tools-__init__.py
+    path: tools/__init__.py
+    content_hash: 175e7cc075d0bad9464292b33e880bee45548f50ddb321c099831798086176cc
+    license: MIT
+  - knowledge_id: references-schemas-patent_file_index.schema.yaml
+    path: references/schemas/patent_file_index.schema.yaml
+    content_hash: 09cb810f603f0f6648c4603939adaa033a5e4eaa0f037dc60ecb0466e9bed8e1
+    license: MIT
+  - knowledge_id: assets-opinion_statement.md
+    path: assets/opinion_statement.md
+    content_hash: 168c52e029a435d87396139a3e03cf0a64c4366ace20312e3bdcf8b92f19ad06
+    license: MIT
+  - knowledge_id: NOTICE.md
+    path: NOTICE.md
+    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    license: MIT
+  - knowledge_id: LICENSE
+    path: LICENSE
+    content_hash: d9329ae3b2de58aebaa015d8d1570513d48f1702318e6423896a4620845ab798
+    license: MIT
+gate_policy: required
+provenance:
+  origin: vendor-derived
+  extraction_artifact_ids:
+    - PD-CAP-15
+    - PD-KP-01
+    - PD-KP-13
+    - PD-KP-17
+  upstream_sources:
+    - path: authoring/patent-disclosure-skill/extracted/capabilities/15.md
+      sha256: cafc4ad2a21ee2054f54d42fe4710e2b9f1c612fca8d767c98c99d1d91a31a9d
+license: MIT

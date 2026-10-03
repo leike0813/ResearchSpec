@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
@@ -51,6 +51,29 @@ void test("authoring converter is deterministic and idempotent", async () => {
     assert.equal(await readFile(path.join(root, "registry.json"), "utf8"), beforeRegistry);
     assert.equal(await readFile(path.join(root, source.capability_id, "manifest.yaml"), "utf8"), beforeManifest);
     assert.equal(await readFile(path.join(root, source.capability_id, "SKILL.md"), "utf8"), beforeSkill);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+void test("authoring preserves binary resources and their individual distribution licenses", async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "researchspec-authoring-binary-"));
+  try {
+    const source = M1_AUTHORING_SOURCES[0];
+    assert.ok(source);
+    const bytes = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x00, 0xff, 0xfe, 0x80]);
+    const resource = path.join(root, "source.png");
+    await writeFile(resource, bytes);
+    const authored = await authorCapabilityPackage(path.join(root, "packages"), {
+      ...source,
+      package_assets: [{ source_path: resource, output_path: "assets/附图.png", license: "MIT" }],
+    });
+    assert.deepEqual(await readFile(path.join(authored.packageRoot, "assets/附图.png")), bytes);
+    const ref = authored.manifest.knowledge_refs.find((item) => item.path === "assets/附图.png");
+    assert.equal(ref?.content_hash, createHash("sha256").update(bytes).digest("hex"));
+    assert.equal(ref?.license, "MIT");
+    const registered = await loadCapabilityRegistry(path.join(root, "packages"));
+    assert.equal(registered.capabilities.get(source.capability_id)?.manifest.knowledge_refs.find((item) => item.path === "assets/附图.png")?.content_hash, ref?.content_hash);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

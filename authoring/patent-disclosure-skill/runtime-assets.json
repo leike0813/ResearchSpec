@@ -1,0 +1,2819 @@
+{
+  "schema_version": "1",
+  "groups": {
+    "patent-disclosure": [
+      {
+        "upstream_path": "LICENSE",
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/LICENSE",
+        "output_path": "LICENSE",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/NOTICE.md",
+        "output_path": "NOTICE.md",
+        "license": "MIT",
+        "read_when": "when auditing upstream or third-party attribution for this package"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/design_view_cnipa.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/design_view_cnipa.md",
+        "output_path": "references/design_view_cnipa.md",
+        "license": "MIT",
+        "read_when": "when designing appearance/design line-art views or checking design-view conformity"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/formulas/paradigms.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/formulas/paradigms.yaml",
+        "output_path": "references/formulas/paradigms.yaml",
+        "license": "MIT",
+        "read_when": "when a formula plan needs a paradigm template"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/formulas/README.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/formulas/README.md",
+        "output_path": "references/formulas/README.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/patent_type_search.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/patent_type_search.yaml",
+        "output_path": "references/patent_type_search.yaml",
+        "license": "MIT",
+        "read_when": "when classifying patent type for a search request"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/appearance.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/appearance.schema.yaml",
+        "output_path": "references/schemas/appearance.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the appearance structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/decompose.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/decompose.schema.yaml",
+        "output_path": "references/schemas/decompose.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the decompose structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/design_around.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/design_around.schema.yaml",
+        "output_path": "references/schemas/design_around.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the design_around structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/design_lineart_brief.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/design_lineart_brief.schema.yaml",
+        "output_path": "references/schemas/design_lineart_brief.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the design_lineart_brief structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/family_plan.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/family_plan.schema.yaml",
+        "output_path": "references/schemas/family_plan.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the family_plan structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/figure_plan.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/figure_plan.schema.yaml",
+        "output_path": "references/schemas/figure_plan.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the figure_plan structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/formula_plan.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/formula_plan.schema.yaml",
+        "output_path": "references/schemas/formula_plan.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the formula_plan structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/matrix.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/matrix.schema.yaml",
+        "output_path": "references/schemas/matrix.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the matrix structured artifact"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/schemas/patent_file_index.schema.yaml",
+        "output_path": "references/schemas/patent_file_index.schema.yaml",
+        "license": "MIT",
+        "read_when": "when creating or validating a patent file index"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/README.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/README.md",
+        "output_path": "references/schemas/README.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/scorecard.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/scorecard.schema.yaml",
+        "output_path": "references/schemas/scorecard.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the scorecard structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/structure_callout_anchors.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/structure_callout_anchors.schema.yaml",
+        "output_path": "references/schemas/structure_callout_anchors.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the structure_callout_anchors structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/structure_lineart_brief.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/structure_lineart_brief.schema.yaml",
+        "output_path": "references/schemas/structure_lineart_brief.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the structure_lineart_brief structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/structure_lineart_compose.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/structure_lineart_compose.schema.yaml",
+        "output_path": "references/schemas/structure_lineart_compose.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the structure_lineart_compose structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/schemas/structure.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/schemas/structure.schema.yaml",
+        "output_path": "references/schemas/structure.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the structure structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/scorecards/gbt42748_fence.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/scorecards/gbt42748_fence.yaml",
+        "output_path": "references/scorecards/gbt42748_fence.yaml",
+        "license": "MIT",
+        "read_when": "when scoring a disclosure against the fence scorecard"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/references/scorecards/README.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/scorecards/README.md",
+        "output_path": "references/scorecards/README.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/browser.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/browser.py",
+        "output_path": "tools/browser.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/cad_formats.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/cad_formats.py",
+        "output_path": "tools/cad_formats.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/cad_scan.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/cad_scan.py",
+        "output_path": "tools/cad_scan.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/cad_venv.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/cad_venv.py",
+        "output_path": "tools/cad_venv.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/check_design_views.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/check_design_views.py",
+        "output_path": "tools/check_design_views.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/check_formula_plan.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/check_formula_plan.py",
+        "output_path": "tools/check_formula_plan.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/check_source_parts.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/check_source_parts.py",
+        "output_path": "tools/check_source_parts.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/crawl/cnipa_epub_crawler.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/crawl/cnipa_epub_crawler.py",
+        "output_path": "tools/crawl/cnipa_epub_crawler.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/crawl/cnipa_epub_nav.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/crawl/cnipa_epub_nav.py",
+        "output_path": "tools/crawl/cnipa_epub_nav.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/crawl/cnipa_epub_parse.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/crawl/cnipa_epub_parse.py",
+        "output_path": "tools/crawl/cnipa_epub_parse.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/crawl/cnipa_epub_search.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/crawl/cnipa_epub_search.py",
+        "output_path": "tools/crawl/cnipa_epub_search.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/crawl/cnipa_epub_wait.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/crawl/cnipa_epub_wait.py",
+        "output_path": "tools/crawl/cnipa_epub_wait.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/crawl/cnipa_epub_wait.yaml",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/crawl/cnipa_epub_wait.yaml",
+        "output_path": "tools/crawl/cnipa_epub_wait.yaml",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/crawl/requirements-cnipa.txt",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/crawl/requirements-cnipa.txt",
+        "output_path": "tools/crawl/requirements-cnipa.txt",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/design_lineart_gate.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/design_lineart_gate.py",
+        "output_path": "tools/design_lineart_gate.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/docx_to_md.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/docx_to_md.py",
+        "output_path": "tools/docx_to_md.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/fence/check_layout.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/fence/check_layout.py",
+        "output_path": "tools/fence/check_layout.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/fence/check_scorecard.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/fence/check_scorecard.py",
+        "output_path": "tools/fence/check_scorecard.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/fence/family_lib.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/fence/family_lib.py",
+        "output_path": "tools/fence/family_lib.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/fence/layout_lib.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/fence/layout_lib.py",
+        "output_path": "tools/fence/layout_lib.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/fence/README.md",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/fence/README.md",
+        "output_path": "tools/fence/README.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/fence/scorecard_lib.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/fence/scorecard_lib.py",
+        "output_path": "tools/fence/scorecard_lib.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/formula_chem.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/formula_chem.py",
+        "output_path": "tools/formula_chem.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/formula_eval.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/formula_eval.py",
+        "output_path": "tools/formula_eval.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/formula_paradigms.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/formula_paradigms.py",
+        "output_path": "tools/formula_paradigms.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/formula_units.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/formula_units.py",
+        "output_path": "tools/formula_units.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/gen_demo_snap_step.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/gen_demo_snap_step.py",
+        "output_path": "tools/gen_demo_snap_step.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/image_gen.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/image_gen.py",
+        "output_path": "tools/image_gen.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/iteration_dialog_log.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/iteration_dialog_log.py",
+        "output_path": "tools/iteration_dialog_log.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/latex_delimiters.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/latex_delimiters.py",
+        "output_path": "tools/latex_delimiters.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/math_render.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/math_render.py",
+        "output_path": "tools/math_render.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/math_to_omml.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/math_to_omml.py",
+        "output_path": "tools/math_to_omml.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/md_to_docx.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/md_to_docx.py",
+        "output_path": "tools/md_to_docx.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/mermaid_render.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/mermaid_render.py",
+        "output_path": "tools/mermaid_render.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/patent_files.py",
+        "output_path": "tools/patent_files.py",
+        "license": "MIT",
+        "read_when": "when creating, validating, or projecting an ordinary patent file index for any stage"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/patent_type.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/patent_type.py",
+        "output_path": "tools/patent_type.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/pdf_to_md.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/pdf_to_md.py",
+        "output_path": "tools/pdf_to_md.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/pptx_to_md.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/pptx_to_md.py",
+        "output_path": "tools/pptx_to_md.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/README.md",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/README.md",
+        "output_path": "tools/README.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/requirements-pdf.txt",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/requirements-pdf.txt",
+        "output_path": "tools/requirements-pdf.txt",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/requirements-step.txt",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/requirements-step.txt",
+        "output_path": "tools/requirements-step.txt",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/run_step_to_views.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/run_step_to_views.py",
+        "output_path": "tools/run_step_to_views.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/stdio_utf8.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/stdio_utf8.py",
+        "output_path": "tools/stdio_utf8.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/step_to_views.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/step_to_views.py",
+        "output_path": "tools/step_to_views.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/structure_callout_layout.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/structure_callout_layout.py",
+        "output_path": "tools/structure_callout_layout.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/structure_callout_overlay.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/structure_callout_overlay.py",
+        "output_path": "tools/structure_callout_overlay.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/structure_lineart_compose.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/structure_lineart_compose.py",
+        "output_path": "tools/structure_lineart_compose.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/structure_lineart_gate.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/structure_lineart_gate.py",
+        "output_path": "tools/structure_lineart_gate.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/svg_screenshot.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/svg_screenshot.py",
+        "output_path": "tools/svg_screenshot.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/third-party/mermaid@11.4.1/LICENSE",
+        "output_path": "tools/vendor/MERMAID_LICENSE",
+        "license": "MIT",
+        "read_when": "when redistributing or auditing the bundled mermaid renderer"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/vendor/mermaid.min.js",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/vendor/mermaid.min.js",
+        "output_path": "tools/vendor/mermaid.min.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/vendor/README.md",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/vendor/README.md",
+        "output_path": "tools/vendor/README.md",
+        "license": "MIT"
+      }
+    ],
+    "patent-application": [
+      {
+        "upstream_path": "LICENSE",
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/LICENSE",
+        "output_path": "LICENSE",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/NOTICE.md",
+        "output_path": "NOTICE.md",
+        "license": "MIT",
+        "read_when": "when auditing upstream or third-party attribution for this package"
+      },
+      {
+        "upstream_path": "skills/patent-application/references/design_view_cnipa.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/design_view_cnipa.md",
+        "output_path": "references/design_view_cnipa.md",
+        "license": "MIT",
+        "read_when": "when designing appearance/design line-art views or checking design-view conformity"
+      },
+      {
+        "upstream_path": "skills/patent-application/references/disclosure_to_spec_map.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-application/references/disclosure_to_spec_map.md",
+        "output_path": "references/disclosure_to_spec_map.md",
+        "license": "MIT",
+        "read_when": "when mapping a disclosure bundle into application specification sections"
+      },
+      {
+        "upstream_path": "skills/patent-application/references/promo_terms.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-application/references/promo_terms.yaml",
+        "output_path": "references/promo_terms.yaml",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/references/schemas/application_figure_plan.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-application/references/schemas/application_figure_plan.schema.yaml",
+        "output_path": "references/schemas/application_figure_plan.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the application_figure_plan structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-application/references/schemas/application_plan.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-application/references/schemas/application_plan.schema.yaml",
+        "output_path": "references/schemas/application_plan.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the application_plan structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-application/references/schemas/invention_figures.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-application/references/schemas/invention_figures.schema.yaml",
+        "output_path": "references/schemas/invention_figures.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the invention_figures structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-application/references/schemas/numeral_register.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-application/references/schemas/numeral_register.schema.yaml",
+        "output_path": "references/schemas/numeral_register.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the numeral_register structured artifact"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/schemas/patent_file_index.schema.yaml",
+        "output_path": "references/schemas/patent_file_index.schema.yaml",
+        "license": "MIT",
+        "read_when": "when creating or validating a patent file index"
+      },
+      {
+        "upstream_path": "skills/patent-application/references/schemas/README.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-application/references/schemas/README.md",
+        "output_path": "references/schemas/README.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/__init__.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/__init__.py",
+        "output_path": "tools/__init__.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/audit_claims.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/audit_claims.py",
+        "output_path": "tools/audit_claims.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/check_design_views.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/check_design_views.py",
+        "output_path": "tools/check_design_views.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/check_numeral_register.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/check_numeral_register.py",
+        "output_path": "tools/check_numeral_register.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/check_support.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/check_support.py",
+        "output_path": "tools/check_support.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/compose_application_figure.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/compose_application_figure.py",
+        "output_path": "tools/compose_application_figure.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/emit_application_docx.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/emit_application_docx.py",
+        "output_path": "tools/emit_application_docx.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/iteration_dialog_log.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/iteration_dialog_log.py",
+        "output_path": "tools/iteration_dialog_log.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/latex_delimiters.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/latex_delimiters.py",
+        "output_path": "tools/latex_delimiters.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/lexicon.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/lexicon.py",
+        "output_path": "tools/lexicon.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/material_gate.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/material_gate.py",
+        "output_path": "tools/material_gate.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/math_render.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/math_render.py",
+        "output_path": "tools/math_render.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/math_to_omml.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/math_to_omml.py",
+        "output_path": "tools/math_to_omml.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/md_to_docx.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/md_to_docx.py",
+        "output_path": "tools/md_to_docx.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/patent_files.py",
+        "output_path": "tools/patent_files.py",
+        "license": "MIT",
+        "read_when": "when creating, validating, or projecting an ordinary patent file index for any stage"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/plan_figures.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/plan_figures.py",
+        "output_path": "tools/plan_figures.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/README.md",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/README.md",
+        "output_path": "tools/README.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/render_invention_figures.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-application/tools/render_invention_figures.py",
+        "output_path": "tools/render_invention_figures.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-application/tools/stdio_utf8.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/stdio_utf8.py",
+        "output_path": "tools/stdio_utf8.py",
+        "license": "MIT"
+      }
+    ],
+    "patent-docket": [
+      {
+        "upstream_path": "LICENSE",
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/LICENSE",
+        "output_path": "LICENSE",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/NOTICE.md",
+        "output_path": "NOTICE.md",
+        "license": "MIT",
+        "read_when": "when auditing upstream or third-party attribution for this package"
+      },
+      {
+        "upstream_path": "skills/patent-docket/references/dispositions.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-docket/references/dispositions.yaml",
+        "output_path": "references/dispositions.yaml",
+        "license": "MIT",
+        "read_when": "when recording docket dispositions"
+      },
+      {
+        "upstream_path": "skills/patent-docket/references/issue_taxonomy.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-docket/references/issue_taxonomy.md",
+        "output_path": "references/issue_taxonomy.md",
+        "license": "MIT",
+        "read_when": "when triaging docket review issues"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/schemas/patent_file_index.schema.yaml",
+        "output_path": "references/schemas/patent_file_index.schema.yaml",
+        "license": "MIT",
+        "read_when": "when creating or validating a patent file index"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/patent_files.py",
+        "output_path": "tools/patent_files.py",
+        "license": "MIT",
+        "read_when": "when creating, validating, or projecting an ordinary patent file index for any stage"
+      }
+    ],
+    "patent-search": [
+      {
+        "upstream_path": "skills/patent-search/config.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-search/config.yaml",
+        "output_path": "config.yaml",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "LICENSE",
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/LICENSE",
+        "output_path": "LICENSE",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/NOTICE.md",
+        "output_path": "NOTICE.md",
+        "license": "MIT",
+        "read_when": "when auditing upstream or third-party attribution for this package"
+      },
+      {
+        "upstream_path": "skills/patent-search/references/patent_type_search.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-search/references/patent_type_search.yaml",
+        "output_path": "references/patent_type_search.yaml",
+        "license": "MIT",
+        "read_when": "when classifying patent type for a search request"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/schemas/patent_file_index.schema.yaml",
+        "output_path": "references/schemas/patent_file_index.schema.yaml",
+        "license": "MIT",
+        "read_when": "when creating or validating a patent file index"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/browser.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-search/tools/browser.py",
+        "output_path": "tools/browser.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/cnipa_crawler.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-search/tools/cnipa_crawler.py",
+        "output_path": "tools/cnipa_crawler.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/cnipa_parse.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-search/tools/cnipa_parse.py",
+        "output_path": "tools/cnipa_parse.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/cnipa_search.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-search/tools/cnipa_search.py",
+        "output_path": "tools/cnipa_search.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/derived_query.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-search/tools/derived_query.py",
+        "output_path": "tools/derived_query.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/emit_covers_report.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-search/tools/emit_covers_report.py",
+        "output_path": "tools/emit_covers_report.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/emit_search_report.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-search/tools/emit_search_report.py",
+        "output_path": "tools/emit_search_report.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/patent_files.py",
+        "output_path": "tools/patent_files.py",
+        "license": "MIT",
+        "read_when": "when creating, validating, or projecting an ordinary patent file index for any stage"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/patent_type.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-search/tools/patent_type.py",
+        "output_path": "tools/patent_type.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/requirements-cnipa.txt",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-search/tools/requirements-cnipa.txt",
+        "output_path": "tools/requirements-cnipa.txt",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/search_config.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-search/tools/search_config.py",
+        "output_path": "tools/search_config.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/stdio_utf8.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/stdio_utf8.py",
+        "output_path": "tools/stdio_utf8.py",
+        "license": "MIT"
+      }
+    ],
+    "patent-reader": [
+      {
+        "upstream_path": "skills/patent-reader/assets/obsidian/_专利解读索引.template.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/assets/obsidian/_专利解读索引.template.md",
+        "output_path": "assets/obsidian/_专利解读索引.template.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/assets/obsidian/glossary.base.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/assets/obsidian/glossary.base.yaml",
+        "output_path": "assets/obsidian/glossary.base.yaml",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/assets/obsidian/graph_color_groups.json",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/assets/obsidian/graph_color_groups.json",
+        "output_path": "assets/obsidian/graph_color_groups.json",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/assets/obsidian/patent-reader.css",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/assets/obsidian/patent-reader.css",
+        "output_path": "assets/obsidian/patent-reader.css",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/assets/obsidian/patents.base.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/assets/obsidian/patents.base.yaml",
+        "output_path": "assets/obsidian/patents.base.yaml",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/assets/obsidian/README.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/assets/obsidian/README.md",
+        "output_path": "assets/obsidian/README.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/assets/patent_note_template.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/assets/patent_note_template.md",
+        "output_path": "assets/patent_note_template.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/docs/obsidian-setup-guide.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/docs/obsidian-setup-guide.md",
+        "output_path": "docs/obsidian-setup-guide.md",
+        "license": "MIT",
+        "read_when": "when the user explicitly selects Obsidian projection for patent notes"
+      },
+      {
+        "upstream_path": "LICENSE",
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/LICENSE",
+        "output_path": "LICENSE",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/NOTICE.md",
+        "output_path": "NOTICE.md",
+        "license": "MIT",
+        "read_when": "when auditing upstream or third-party attribution for this package"
+      },
+      {
+        "upstream_path": "skills/patent-reader/references/ipc_application_hints.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/references/ipc_application_hints.yaml",
+        "output_path": "references/ipc_application_hints.yaml",
+        "license": "MIT",
+        "read_when": "when relating IPC classes to application drafting"
+      },
+      {
+        "upstream_path": "skills/patent-reader/references/patent_domain_rules.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/references/patent_domain_rules.yaml",
+        "output_path": "references/patent_domain_rules.yaml",
+        "license": "MIT",
+        "read_when": "when applying per-domain patent reading rules"
+      },
+      {
+        "upstream_path": "skills/patent-reader/references/patent_obsidian_format.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/references/patent_obsidian_format.md",
+        "output_path": "references/patent_obsidian_format.md",
+        "license": "MIT",
+        "read_when": "when projecting patent notes into an Obsidian vault"
+      },
+      {
+        "upstream_path": "skills/patent-reader/references/patent_pdf_sources.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/references/patent_pdf_sources.yaml",
+        "output_path": "references/patent_pdf_sources.yaml",
+        "license": "MIT",
+        "read_when": "when resolving configured patent PDF sources"
+      },
+      {
+        "upstream_path": "skills/patent-reader/references/schemas/appearance.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/references/schemas/appearance.schema.yaml",
+        "output_path": "references/schemas/appearance.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the appearance structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-reader/references/schemas/claim_features.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/references/schemas/claim_features.schema.yaml",
+        "output_path": "references/schemas/claim_features.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the claim_features structured artifact"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/schemas/patent_file_index.schema.yaml",
+        "output_path": "references/schemas/patent_file_index.schema.yaml",
+        "license": "MIT",
+        "read_when": "when creating or validating a patent file index"
+      },
+      {
+        "upstream_path": "skills/patent-reader/references/schemas/structure.schema.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/references/schemas/structure.schema.yaml",
+        "output_path": "references/schemas/structure.schema.yaml",
+        "license": "MIT",
+        "read_when": "when producing or validating the structure structured artifact"
+      },
+      {
+        "upstream_path": "skills/patent-reader/references/tech_effect_hints.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-reader/references/tech_effect_hints.yaml",
+        "output_path": "references/tech_effect_hints.yaml",
+        "license": "MIT",
+        "read_when": "when extracting technical-effect pairs from a patent"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/__init__.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/__init__.py",
+        "output_path": "tools/__init__.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/analyze/__init__.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/analyze/__init__.py",
+        "output_path": "tools/analyze/__init__.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/analyze/build_claim_mermaid.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/analyze/build_claim_mermaid.py",
+        "output_path": "tools/analyze/build_claim_mermaid.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/analyze/build_context_anchor.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/analyze/build_context_anchor.py",
+        "output_path": "tools/analyze/build_context_anchor.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/analyze/claim_features.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/analyze/claim_features.py",
+        "output_path": "tools/analyze/claim_features.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/analyze/lint_patent_note.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/analyze/lint_patent_note.py",
+        "output_path": "tools/analyze/lint_patent_note.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/analyze/validate_claim_features.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/analyze/validate_claim_features.py",
+        "output_path": "tools/analyze/validate_claim_features.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/analyze/validate_claim_tree.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/analyze/validate_claim_tree.py",
+        "output_path": "tools/analyze/validate_claim_tree.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/analyze/validate_public_clues.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/analyze/validate_public_clues.py",
+        "output_path": "tools/analyze/validate_public_clues.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/browser.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/browser.py",
+        "output_path": "tools/browser.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/crawl/cnipa_epub_crawler.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/crawl/cnipa_epub_crawler.py",
+        "output_path": "tools/crawl/cnipa_epub_crawler.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/crawl/cnipa_epub_parse.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/crawl/cnipa_epub_parse.py",
+        "output_path": "tools/crawl/cnipa_epub_parse.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/crawl/requirements-cnipa.txt",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/crawl/requirements-cnipa.txt",
+        "output_path": "tools/crawl/requirements-cnipa.txt",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/extract/__init__.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/extract/__init__.py",
+        "output_path": "tools/extract/__init__.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/extract/extract_patent_figures.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/extract/extract_patent_figures.py",
+        "output_path": "tools/extract/extract_patent_figures.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/extract/extract_patent_text.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/extract/extract_patent_text.py",
+        "output_path": "tools/extract/extract_patent_text.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/extract/fetch_design_views.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/extract/fetch_design_views.py",
+        "output_path": "tools/extract/fetch_design_views.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/extract/fetch_patent_pdf.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/extract/fetch_patent_pdf.py",
+        "output_path": "tools/extract/fetch_patent_pdf.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/extract/figure_extract.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/extract/figure_extract.py",
+        "output_path": "tools/extract/figure_extract.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/patent_files.py",
+        "output_path": "tools/patent_files.py",
+        "license": "MIT",
+        "read_when": "when creating, validating, or projecting an ordinary patent file index for any stage"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/patent_type.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/patent_type.py",
+        "output_path": "tools/patent_type.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/README.md",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/README.md",
+        "output_path": "tools/README.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/requirements.txt",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/requirements.txt",
+        "output_path": "tools/requirements.txt",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/shared/__init__.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/shared/__init__.py",
+        "output_path": "tools/shared/__init__.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/shared/common.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/shared/common.py",
+        "output_path": "tools/shared/common.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/stdio_utf8.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/stdio_utf8.py",
+        "output_path": "tools/stdio_utf8.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/__init__.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/__init__.py",
+        "output_path": "tools/vault/__init__.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/build_patent_canvas.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/build_patent_canvas.py",
+        "output_path": "tools/vault/build_patent_canvas.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/check_obsidian_env.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/check_obsidian_env.py",
+        "output_path": "tools/vault/check_obsidian_env.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/clue_vault.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/clue_vault.py",
+        "output_path": "tools/vault/clue_vault.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/desc_paragraphs.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/desc_paragraphs.py",
+        "output_path": "tools/vault/desc_paragraphs.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/link_patent_notes.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/link_patent_notes.py",
+        "output_path": "tools/vault/link_patent_notes.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/materialize_public_clues.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/materialize_public_clues.py",
+        "output_path": "tools/vault/materialize_public_clues.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/note_cites.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/note_cites.py",
+        "output_path": "tools/vault/note_cites.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/obsidian_bootstrap.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/obsidian_bootstrap.py",
+        "output_path": "tools/vault/obsidian_bootstrap.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/obsidian_canvas.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/obsidian_canvas.py",
+        "output_path": "tools/vault/obsidian_canvas.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/obsidian_claims.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/obsidian_claims.py",
+        "output_path": "tools/vault/obsidian_claims.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/obsidian_frontmatter.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/obsidian_frontmatter.py",
+        "output_path": "tools/vault/obsidian_frontmatter.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/obsidian_glossary.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/obsidian_glossary.py",
+        "output_path": "tools/vault/obsidian_glossary.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/obsidian_paths.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/obsidian_paths.py",
+        "output_path": "tools/vault/obsidian_paths.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/obsidian.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/obsidian.py",
+        "output_path": "tools/vault/obsidian.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/patent_link.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/patent_link.py",
+        "output_path": "tools/vault/patent_link.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/schema_vault.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/schema_vault.py",
+        "output_path": "tools/vault/schema_vault.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/setup_obsidian_vault.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/setup_obsidian_vault.py",
+        "output_path": "tools/vault/setup_obsidian_vault.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/vault/write_patent_obsidian_note.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/write_patent_obsidian_note.py",
+        "output_path": "tools/vault/write_patent_obsidian_note.py",
+        "license": "MIT"
+      }
+    ],
+    "patent-chart": [
+      {
+        "upstream_path": "LICENSE",
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/LICENSE",
+        "output_path": "LICENSE",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/NOTICE.md",
+        "output_path": "NOTICE.md",
+        "license": "MIT",
+        "read_when": "when auditing upstream or third-party attribution for this package"
+      },
+      {
+        "upstream_path": "skills/patent-chart/references/handoff.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-chart/references/handoff.md",
+        "output_path": "references/handoff.md",
+        "license": "MIT",
+        "read_when": "when receiving or emitting the claim-chart handoff bundle"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/schemas/patent_file_index.schema.yaml",
+        "output_path": "references/schemas/patent_file_index.schema.yaml",
+        "license": "MIT",
+        "read_when": "when creating or validating a patent file index"
+      },
+      {
+        "upstream_path": "skills/patent-chart/tools/emit_chart.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/emit_chart.py",
+        "output_path": "tools/emit_chart.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-chart/tools/highlights.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/highlights.py",
+        "output_path": "tools/highlights.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/patent_files.py",
+        "output_path": "tools/patent_files.py",
+        "license": "MIT",
+        "read_when": "when creating, validating, or projecting an ordinary patent file index for any stage"
+      },
+      {
+        "upstream_path": "skills/patent-chart/tools/write_intake.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/write_intake.py",
+        "output_path": "tools/write_intake.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-chart/tools/xlsx_minimal.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/xlsx_minimal.py",
+        "output_path": "tools/xlsx_minimal.py",
+        "license": "MIT"
+      }
+    ],
+    "patent-map": [
+      {
+        "upstream_path": "LICENSE",
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/LICENSE",
+        "output_path": "LICENSE",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/NOTICE.md",
+        "output_path": "NOTICE.md",
+        "license": "MIT",
+        "read_when": "when auditing upstream or third-party attribution for this package"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/schemas/patent_file_index.schema.yaml",
+        "output_path": "references/schemas/patent_file_index.schema.yaml",
+        "license": "MIT",
+        "read_when": "when creating or validating a patent file index"
+      },
+      {
+        "upstream_path": "skills/patent-map/tools/__init__.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-map/tools/__init__.py",
+        "output_path": "tools/__init__.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/tools/embed_layout.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-map/tools/embed_layout.py",
+        "output_path": "tools/embed_layout.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/tools/ipc_titles.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-map/tools/ipc_titles.py",
+        "output_path": "tools/ipc_titles.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/tools/map_cache.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-map/tools/map_cache.py",
+        "output_path": "tools/map_cache.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/tools/model_store.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-map/tools/model_store.py",
+        "output_path": "tools/model_store.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/patent_files.py",
+        "output_path": "tools/patent_files.py",
+        "license": "MIT",
+        "read_when": "when creating, validating, or projecting an ordinary patent file index for any stage"
+      },
+      {
+        "upstream_path": "skills/patent-map/tools/requirements.txt",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-map/tools/requirements.txt",
+        "output_path": "tools/requirements.txt",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/tools/serve_map.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-map/tools/serve_map.py",
+        "output_path": "tools/serve_map.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/tools/vault_index.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-map/tools/vault_index.py",
+        "output_path": "tools/vault_index.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/index.html",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/index.html",
+        "output_path": "web/index.html",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/js/app.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/js/app.js",
+        "output_path": "web/js/app.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/js/camera.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/js/camera.js",
+        "output_path": "web/js/camera.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/js/chrome.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/js/chrome.js",
+        "output_path": "web/js/chrome.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/js/core.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/js/core.js",
+        "output_path": "web/js/core.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/js/detail.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/js/detail.js",
+        "output_path": "web/js/detail.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/js/layout.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/js/layout.js",
+        "output_path": "web/js/layout.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/js/view-bubble.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/js/view-bubble.js",
+        "output_path": "web/js/view-bubble.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/js/view-citation.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/js/view-citation.js",
+        "output_path": "web/js/view-citation.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/js/view-dashboard.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/js/view-dashboard.js",
+        "output_path": "web/js/view-dashboard.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/js/view-matrix.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/js/view-matrix.js",
+        "output_path": "web/js/view-matrix.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/js/view-terrain.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/js/view-terrain.js",
+        "output_path": "web/js/view-terrain.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/styles.css",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/styles.css",
+        "output_path": "web/styles.css",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/terrain3d.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/terrain3d.js",
+        "output_path": "web/terrain3d.js",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/vendor/README.txt",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/vendor/README.txt",
+        "output_path": "web/vendor/README.txt",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/vendor/THREE_LICENSE",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/vendor/THREE_LICENSE",
+        "output_path": "web/vendor/THREE_LICENSE",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-map/web/vendor/three.module.min.js",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-map/web/vendor/three.module.min.js",
+        "output_path": "web/vendor/three.module.min.js",
+        "license": "MIT"
+      }
+    ],
+    "patent-oa": [
+      {
+        "upstream_path": "skills/patent-oa/assets/opinion_statement.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-oa/assets/opinion_statement.md",
+        "output_path": "assets/opinion_statement.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "LICENSE",
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/LICENSE",
+        "output_path": "LICENSE",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/NOTICE.md",
+        "output_path": "NOTICE.md",
+        "license": "MIT",
+        "read_when": "when auditing upstream or third-party attribution for this package"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/schemas/patent_file_index.schema.yaml",
+        "output_path": "references/schemas/patent_file_index.schema.yaml",
+        "license": "MIT",
+        "read_when": "when creating or validating a patent file index"
+      },
+      {
+        "upstream_path": "skills/patent-oa/tools/__init__.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-oa/tools/__init__.py",
+        "output_path": "tools/__init__.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-oa/tools/emit_chart.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/emit_chart.py",
+        "output_path": "tools/emit_chart.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-oa/tools/emit_opinion_docx.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-oa/tools/emit_opinion_docx.py",
+        "output_path": "tools/emit_opinion_docx.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-oa/tools/highlights.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/highlights.py",
+        "output_path": "tools/highlights.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-oa/tools/latex_delimiters.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-oa/tools/latex_delimiters.py",
+        "output_path": "tools/latex_delimiters.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/math_render.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/math_render.py",
+        "output_path": "tools/math_render.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-disclosure/tools/math_to_omml.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/math_to_omml.py",
+        "output_path": "tools/math_to_omml.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-oa/tools/md_to_docx.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-oa/tools/md_to_docx.py",
+        "output_path": "tools/md_to_docx.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-oa/tools/oa_history.py",
+        "output_path": "tools/oa_history.py",
+        "license": "MIT",
+        "read_when": "when ingesting explicitly redacted case history, retrieving local cases, or comparing supported response strategies"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/patent_files.py",
+        "output_path": "tools/patent_files.py",
+        "license": "MIT",
+        "read_when": "when creating, validating, or projecting an ordinary patent file index for any stage"
+      },
+      {
+        "upstream_path": "skills/patent-oa/tools/pdf_text.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-oa/tools/pdf_text.py",
+        "output_path": "tools/pdf_text.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-oa/tools/README.md",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-oa/tools/README.md",
+        "output_path": "tools/README.md",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-oa/tools/requirements-oa.txt",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-oa/tools/requirements-oa.txt",
+        "output_path": "tools/requirements-oa.txt",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-oa/tools/stdio_utf8.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/stdio_utf8.py",
+        "output_path": "tools/stdio_utf8.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-oa/tools/write_intake.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/write_intake.py",
+        "output_path": "tools/write_intake.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-oa/tools/xlsx_minimal.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/xlsx_minimal.py",
+        "output_path": "tools/xlsx_minimal.py",
+        "license": "MIT"
+      }
+    ],
+    "patent-exam-policy": [
+      {
+        "upstream_path": "LICENSE",
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/LICENSE",
+        "output_path": "LICENSE",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/NOTICE.md",
+        "output_path": "NOTICE.md",
+        "license": "MIT",
+        "read_when": "when auditing upstream or third-party attribution for this package"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/resources/shared/schemas/patent_file_index.schema.yaml",
+        "output_path": "references/schemas/patent_file_index.schema.yaml",
+        "license": "MIT",
+        "read_when": "when creating or validating a patent file index"
+      },
+      {
+        "upstream_path": "skills/patent-exam-policy/references/sources.yaml",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-exam-policy/references/sources.yaml",
+        "output_path": "references/sources.yaml",
+        "license": "MIT",
+        "read_when": "when researching examination-policy topics"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/patent_files.py",
+        "output_path": "tools/patent_files.py",
+        "license": "MIT",
+        "read_when": "when creating, validating, or projecting an ordinary patent file index for any stage"
+      }
+    ]
+  },
+  "adaptations": [
+    {
+      "source": "skills/patent-disclosure/tools/fence/README.md",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/fence/README.md",
+      "reason": "documents package-relative layout tools and actual scorecard arguments under human graph control."
+    },
+    {
+      "source": "skills/patent-disclosure/references/scorecards/README.md",
+      "target": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/scorecards/README.md",
+      "reason": "scorecard guidance uses actual local tool paths and keeps scoring advisory."
+    },
+    {
+      "source": "skills/patent-reader/tools/README.md",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/README.md",
+      "reason": "documents package-relative tools and explicit configured vault selection."
+    },
+    {
+      "source": "skills/patent-reader/docs/obsidian-setup-guide.md",
+      "target": "authoring/patent-disclosure-skill/resources/patent-reader/docs/obsidian-setup-guide.md",
+      "reason": "Obsidian projection requires a selected vault and explicit write scope, without global discovery or setup commands."
+    },
+    {
+      "source": "skills/patent-reader/references/patent_pdf_sources.yaml",
+      "target": "authoring/patent-disclosure-skill/resources/patent-reader/references/patent_pdf_sources.yaml",
+      "reason": "source metadata uses package-relative tool paths; upstream service observations remain advisory."
+    },
+    {
+      "source": "skills/patent-docket/references/dispositions.yaml",
+      "target": "authoring/patent-disclosure-skill/resources/patent-docket/references/dispositions.yaml",
+      "reason": "issue dispositions describe semantic revision work; graph control and procedure activation belong to Navigate and the CLI."
+    },
+    {
+      "source": "skills/patent-chart/references/handoff.md",
+      "target": "authoring/patent-disclosure-skill/resources/patent-chart/references/handoff.md",
+      "reason": "claim-chart inputs and bounded semantic completion use the active procedure packet and ordinary project files."
+    },
+    {
+      "source": "skills/patent-oa/tools/README.md",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-oa/tools/README.md",
+      "reason": "documents the explicitly scoped local case-history helper and the shipped Word and Excel tools."
+    },
+    {
+      "source": "skills/patent-disclosure/tools/cad_venv.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/cad_venv.py",
+      "reason": "the environment probe points at a configured CadQuery environment instead of a removed installer."
+    },
+    {
+      "source": "skills/patent-disclosure/tools/step_to_views.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/step_to_views.py",
+      "reason": "the dependency report describes a configured CadQuery environment instead of a removed installer."
+    },
+    {
+      "source": "skills/patent-disclosure/tools/run_step_to_views.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/run_step_to_views.py",
+      "reason": "STEP view rendering never bootstraps cad-env automatically; a missing cad-env is reported as not_ready so the semantic pipeline runs against a configured environment."
+    },
+    {
+      "source": "skills/patent-map/tools/model_store.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-map/tools/model_store.py",
+      "reason": "the module is a configured-local reader: it never downloads, mutates the process environment, or writes to or deletes from configured model directories."
+    },
+    {
+      "source": "skills/patent-map/tools/map_cache.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-map/tools/map_cache.py",
+      "reason": "the cache root comes from explicit configuration or the current project directory instead of operating-system document discovery."
+    },
+    {
+      "source": "skills/patent-map/tools/vault_index.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-map/tools/vault_index.py",
+      "reason": "notes are read from an explicit frozen corpus directory or an explicit file index and are bounded in count and size; whole-vault discovery is removed."
+    },
+    {
+      "source": "skills/patent-map/tools/serve_map.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-map/tools/serve_map.py",
+      "reason": "the map serves an explicit corpus directory or an explicit file index instead of an implied Obsidian vault scan."
+    },
+    {
+      "source": "skills/patent-map/tools/ipc_titles.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-map/tools/ipc_titles.py",
+      "reason": "IPC subclass titles are read from an explicitly configured CSV; no repository data file is required."
+    },
+    {
+      "source": "skills/patent-reader/tools/shared/common.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/shared/common.py",
+      "reason": "the Obsidian vault is resolved only from an explicit path or environment variable; operating-system and persisted global discovery is removed."
+    },
+    {
+      "source": "skills/patent-reader/tools/vault/check_obsidian_env.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/check_obsidian_env.py",
+      "reason": "reports only the selected vault without installing software, discovering global vaults or persisting configuration."
+    },
+    {
+      "source": "skills/patent-reader/tools/vault/write_patent_obsidian_note.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/vault/write_patent_obsidian_note.py",
+      "reason": "an explicit --vault path takes precedence over environment configuration for user-selected note, Canvas, Base and glossary projection."
+    },
+    {
+      "source": "skills/patent-map/tools/embed_layout.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-map/tools/embed_layout.py",
+      "reason": "uses a configured local model and reports missing prerequisites honestly, with IPC fallback."
+    }
+  ],
+  "exclusions": [
+    {
+      "path": ".github/workflows/update-star-history.yml",
+      "reason": "repository maintenance metadata"
+    },
+    {
+      "path": ".gitignore",
+      "reason": "repository maintenance metadata"
+    },
+    {
+      "path": "docs/thanks.jpg",
+      "reason": "root product and marketing image"
+    },
+    {
+      "path": "docs/效果例-cad提取等轴测投影图.png",
+      "reason": "root product and marketing image"
+    },
+    {
+      "path": "docs/效果例-obs图谱.jpg",
+      "reason": "root product and marketing image"
+    },
+    {
+      "path": "docs/效果例-专利地图.jpg",
+      "reason": "root product and marketing image"
+    },
+    {
+      "path": "docs/效果例-初版生成.jpg",
+      "reason": "root product and marketing image"
+    },
+    {
+      "path": "docs/效果例-外观专利线稿.png",
+      "reason": "root product and marketing image"
+    },
+    {
+      "path": "docs/效果例-实用新型专利线稿含部件序号引出线.png",
+      "reason": "root product and marketing image"
+    },
+    {
+      "path": "docs/效果例-解读.jpg",
+      "reason": "root product and marketing image"
+    },
+    {
+      "path": "docs/效果例-迭代更新.jpg",
+      "reason": "root product and marketing image"
+    },
+    {
+      "path": "INSTALL.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "README.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "requirements.txt",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "scripts/generate-star-history.py",
+      "reason": "repository maintenance metadata"
+    },
+    {
+      "path": "SKILL.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-application/prompts/claim_strategy.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/claims_builder.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/consistency.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/design_application.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/figure_plan.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/figures.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/guardrails.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/intake.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/issues.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/iteration_context.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/iteration.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/material_gate.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/numeral_register.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/self_check.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/specification_builder.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/README.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-application/SKILL.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-application/tests/test_audit_claims.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-application/tests/test_design_view_sync.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-application/tests/test_emit_application_docx.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-application/tests/test_invention_figures.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-application/tests/test_lexicon.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-application/tests/test_material_gate.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-application/tests/test_math_to_omml.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-application/tests/test_numeral_register.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-application/tests/test_plan_figures.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-application/tests/test_support_and_antecedent.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-chart/examples/example_cgm_implant_chart/README.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-chart/prompts/delivery_confirm.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-chart/prompts/fill_chart.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-chart/prompts/guardrails.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-chart/prompts/intake.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-chart/README.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-chart/SKILL.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-chart/tests/test_emit_chart.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-chart/tests/test_highlights.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-chart/tests/test_write_intake.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/docs/architecture.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/docs/README.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/docs/sample_architecture_review.docx",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/docs/sample_assets/sample_fig_modules.png",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/docs/sample_assets/sample_fig_queue.png",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/docs/sample_scheduler_deck.pptx",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/meeting_notes_intake_example.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/pkg/scheduler/heartbeat.go",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/pkg/scheduler/reorder.go",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/pkg/scheduler/scorer.go",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/pkg/scheduler/types.go",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/tex/macros.tex",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/tex/main.tex",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/tex/README.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/knowledge/tex/sections/method.tex",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_batch_job_scheduler/README.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_design_desk_lamp/knowledge/assets/mi_desk_lamp_pro.jpg",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_design_desk_lamp/knowledge/assets/view_arm_detail.jpg",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_design_desk_lamp/knowledge/assets/view_joint_detail.jpg",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_design_desk_lamp/knowledge/assets/view_packaging.jpg",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_design_desk_lamp/knowledge/assets/view_perspective.jpg",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_design_desk_lamp/knowledge/assets/views_ortho.jpg",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_design_desk_lamp/knowledge/docs/design_brief.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_design_desk_lamp/README.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_utility_model_ev_powertrain/knowledge/assets/photo_motor_pcu.jpg",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_utility_model_ev_powertrain/knowledge/docs/structure_brief.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/example_utility_model_ev_powertrain/README.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/examples/README.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/correction_handler.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/delivery_confirm.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/design_lineart_assist.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/design/disclosure_builder.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/design/patent_points.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/design/template_reference.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/disclosure_preview.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/disclosure_self_check.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/fence/decompose.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/fence/design_around.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/fence/dispatch.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/fence/guardrails.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/fence/matrix.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/fence/plan.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/fence/score.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/fill_appearance_schema.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/fill_structure_schema.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/image_gen.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/intake.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/invention/disclosure_builder.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/invention/patent_points_analyzer.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/invention/template_reference.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/iteration_context.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/merger.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/prior_art_search.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/project_scan.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/structure_lineart_assist.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/structure_lineart_compose.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/tex_scan.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/utility_model/disclosure_builder.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/utility_model/patent_points.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/prompts/utility_model/template_reference.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-disclosure/README.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-disclosure/SKILL.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/__init__.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/fixtures/cad/demo_snap_plate.step",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/fixtures/epub_item_ipc.html",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/fixtures/epub_item_loc.html",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/README.md",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_cad_step_scan.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_cad_venv.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_check_design_views.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_cnipa_class_codes.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_cnipa_epub_chain.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_cnipa_epub_crawler.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_cnipa_epub_wait.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_design_lineart_gate.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_fence.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_formula_eval.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_formula_paradigms.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_image_gen.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_latex_delimiters.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_math_omml.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_math_render.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_md_to_docx_list.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_md_to_docx_table.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_mermaid_browser.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_mermaid_step_labels.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_pdf_to_md.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_source_parts.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_stdio_utf8.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_structure_callout_layout.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_structure_callout_overlay.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_structure_lineart_compose.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_structure_lineart_gate.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tests/test_svg_screenshot.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-disclosure/tools/bootstrap_cad_venv.py",
+      "reason": "CadQuery installer; CAD work uses a configured environment and never installs during distribution"
+    },
+    {
+      "path": "skills/patent-disclosure/tools/package-lock.json",
+      "reason": "npm dependency manifest for an optional renderer that stays user-managed"
+    },
+    {
+      "path": "skills/patent-disclosure/tools/package.json",
+      "reason": "npm dependency manifest for an optional renderer that stays user-managed"
+    },
+    {
+      "path": "skills/patent-docket/assets/tracker_readme.md",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/config.yaml",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/examples/README.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-docket/prompts/ask_human.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-docket/prompts/bootstrap.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-docket/prompts/dispatch_application.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-docket/prompts/dispatch_disclosure.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-docket/prompts/emit_tracker.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-docket/prompts/guardrails.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-docket/prompts/intake.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-docket/prompts/resume.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-docket/prompts/round_close.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-docket/prompts/triage.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-docket/README.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-docket/references/docket.schema.yaml",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/references/handoff_contract.md",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/references/max_rounds.md",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/references/phase_machine.md",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/references/phases.yaml",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/SKILL.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-docket/tests/__init__.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-docket/tests/test_docket.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-docket/tools/docket_config.py",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/tools/docket_paths.py",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/tools/docket_spec.py",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/tools/emit_tracker.py",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/tools/init_docket.py",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/tools/README.md",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/tools/stdio_utf8.py",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-docket/tools/validate_docket.py",
+      "reason": "docket phase/state machinery owned by the graph engine instead of the package"
+    },
+    {
+      "path": "skills/patent-exam-policy/docs/archive.md",
+      "reason": "self-evolution policy backlog state maintained outside the distributed package"
+    },
+    {
+      "path": "skills/patent-exam-policy/prompts/apply_after_confirm.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-exam-policy/prompts/emit_backlog.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-exam-policy/prompts/guardrails.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-exam-policy/prompts/intake.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-exam-policy/prompts/research.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-exam-policy/prompts/soft_nudge.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-exam-policy/README.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-exam-policy/references/schemas/exam_policy_backlog.schema.yaml",
+      "reason": "self-evolution policy backlog state maintained outside the distributed package"
+    },
+    {
+      "path": "skills/patent-exam-policy/references/topic_prompt_map.md",
+      "reason": "self-evolution policy backlog state maintained outside the distributed package"
+    },
+    {
+      "path": "skills/patent-exam-policy/SKILL.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-map/data/ipc_subclasses_2026.01.csv",
+      "reason": "IPC classification or vector model data supplied through explicit configuration"
+    },
+    {
+      "path": "skills/patent-map/prompts/guardrails.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-map/prompts/intake.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-map/README.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-map/SKILL.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-map/tests/test_map.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-map/tools/ensure_model.py",
+      "reason": "automatic vector model downloader; the map consumes explicitly configured local model files"
+    },
+    {
+      "path": "skills/patent-map/tools/ipc_scheme/__init__.py",
+      "reason": "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead"
+    },
+    {
+      "path": "skills/patent-map/tools/ipc_scheme/__main__.py",
+      "reason": "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead"
+    },
+    {
+      "path": "skills/patent-map/tools/ipc_scheme/build.py",
+      "reason": "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead"
+    },
+    {
+      "path": "skills/patent-map/tools/ipc_scheme/cli.py",
+      "reason": "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead"
+    },
+    {
+      "path": "skills/patent-map/tools/ipc_scheme/config.py",
+      "reason": "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead"
+    },
+    {
+      "path": "skills/patent-map/tools/ipc_scheme/download.py",
+      "reason": "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead"
+    },
+    {
+      "path": "skills/patent-map/tools/ipc_scheme/emit.py",
+      "reason": "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead"
+    },
+    {
+      "path": "skills/patent-map/tools/ipc_scheme/parse.py",
+      "reason": "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead"
+    },
+    {
+      "path": "skills/patent-map/tools/ipc_scheme/README.md",
+      "reason": "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead"
+    },
+    {
+      "path": "skills/patent-map/tools/ipc_scheme/requirements.txt",
+      "reason": "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead"
+    },
+    {
+      "path": "skills/patent-map/tools/ipc_scheme/testdata/sample_en_scheme.xml",
+      "reason": "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead"
+    },
+    {
+      "path": "skills/patent-map/tools/ipc_scheme/testdata/sample_ipcpub.json",
+      "reason": "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead"
+    },
+    {
+      "path": "skills/patent-oa/assets/obsidian/oa.base.yaml",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/docs/.gitignore",
+      "reason": "repository maintenance metadata"
+    },
+    {
+      "path": "skills/patent-oa/docs/embedding.config.yaml",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/docs/vault.md",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/examples/example_oa_response/cases/history/hist-clarity-connector.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-oa/examples/example_oa_response/cases/history/hist-inventiveness-clamp.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-oa/examples/example_oa_response/pending/oa_notice_pending.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-oa/examples/example_oa_response/README.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-oa/prompts/case_note_template.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-oa/prompts/configure_embedding.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-oa/prompts/guardrails.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-oa/prompts/ingest_case.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-oa/prompts/intake.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-oa/prompts/respond_office_action.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-oa/prompts/soft_nudge.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-oa/README.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-oa/references/schemas/oa_case.schema.yaml",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/SKILL.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-oa/tests/__init__.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-oa/tests/test_chart_tools_sync.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-oa/tests/test_oa_store.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-oa/tests/test_opinion_docx.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-oa/tools/case_md.py",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/tools/config.py",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/tools/embed.py",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/tools/ingest_case.py",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/tools/rebuild_vectors.py",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/tools/redact.py",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/tools/refresh_vault.py",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/tools/search_cases.py",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/tools/store.py",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-oa/tools/vault_layout.py",
+      "reason": "office-action global case store, vector, and vault writers replaced by the explicitly scoped oa_history.py case collection"
+    },
+    {
+      "path": "skills/patent-reader/examples/example_patent_reader/README.md",
+      "reason": "example case and product image"
+    },
+    {
+      "path": "skills/patent-reader/prompts/fill_appearance_schema.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-reader/prompts/fill_structure_schema.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-reader/prompts/obsidian_ofm_companion.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-reader/prompts/obsidian_plugin_guide.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-reader/prompts/patent_plain_reader.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-reader/prompts/patent_reader_self_check.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-reader/prompts/type_hooks.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-reader/README.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-reader/SKILL.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-reader/tests/__init__.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/fixtures/patent_reader_sample.txt",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_biblio_extract.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_claim_features.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_desc_paragraphs.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_extract_patent_text.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_fetch_patent_pdf.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_note_cites.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_patent_reader_debt_fixes.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_patent_reader_links.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_patent_reader_p0_p2.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_patent_reader_pipeline.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_schema_vault.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-search/prompts/covers_rank.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-search/prompts/derived_query.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-search/prompts/patent_search.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-search/README.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-search/SKILL.md",
+      "reason": "root entry, routing, or aggregate dependency list"
+    },
+    {
+      "path": "skills/patent-search/tests/__init__.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-search/tests/test_cnipa_search.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-search/tests/test_emit_covers_report.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-search/tests/test_emit_search_report.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    }
+  ]
+}

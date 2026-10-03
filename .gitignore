@@ -30,6 +30,8 @@
 !.agents/skills/materials-science-skills-for-llm-maintenance/**
 !.agents/skills/own-vendor-maintenance/
 !.agents/skills/own-vendor-maintenance/**
+!.agents/skills/patent-disclosure-skill-maintenance/
+!.agents/skills/patent-disclosure-skill-maintenance/**
 !.agents/skills/scientific-agent-skills-maintenance/
 !.agents/skills/scientific-agent-skills-maintenance/**
 !.agents/skills/tooluniverse-maintenance/

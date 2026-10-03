@@ -1,0 +1,50 @@
+{
+  "schema_version": "1",
+  "vendor_id": "patent-disclosure-skill",
+  "delivery": "fixed-capabilities",
+  "anchor_id": "snapshot-5073d3d8",
+  "upstream": {
+    "url": "https://github.com/handsomestWei/patent-disclosure-skill",
+    "path": "vendor/patent-disclosure-skill",
+    "revision": "5073d3d837a5d139ef2bc763c9dd46bb9605df84",
+    "tree": "d4abb0dd1b7cc8b2f0f131060faad707be63ca96",
+    "reported_version": "5.0.0",
+    "tracked_file_count": 489,
+    "license": "MIT"
+  },
+  "authoring_root": "authoring/patent-disclosure-skill",
+  "generated_root": "skills/capabilities",
+  "profile_root": "skills/arsu/profiles",
+  "source_definitions": "src/vendor-converters/patent-disclosure-skill/capabilities.ts",
+  "graph_definitions": "src/arsu-converter/workflow/graph-profiles/patent.ts",
+  "maintenance_skill": ".agents/skills/patent-disclosure-skill-maintenance/SKILL.md",
+  "source_audit": "audits/patent-disclosure-skill/source-audit.json",
+  "profile_ids": [
+    "patent-disclosure", "patent-application", "patent-docket", "patent-intelligence",
+    "patent-oa", "research-to-patent", "patent-informed-paper"
+  ],
+  "third_party_resources": [
+    {
+      "component": "Mermaid 11.4.1",
+      "license": "MIT",
+      "copyright": "2014–2022 Knut Sveidqvist",
+      "license_source": "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/LICENSE",
+      "license_path": "authoring/patent-disclosure-skill/resources/third-party/mermaid@11.4.1/LICENSE",
+      "notice_output": "tools/vendor/MERMAID_LICENSE"
+    },
+    {
+      "component": "Three.js r170",
+      "license": "MIT",
+      "copyright": "2010–2024 three.js authors",
+      "license_source": "vendor/patent-disclosure-skill/skills/patent-map/web/vendor/THREE_LICENSE",
+      "license_path": "authoring/patent-disclosure-skill/resources/patent-map/web/vendor/THREE_LICENSE",
+      "notice_output": "web/vendor/THREE_LICENSE"
+    }
+  ],
+  "external_resources": [
+    { "resource": "IPC classification datasets", "policy": "explicit user-configured local input; upstream data not redistributed" },
+    { "resource": "embedding model weights", "policy": "explicit user-configured local input; no automatic download" },
+    { "resource": "CNIPA and other patent services", "policy": "target Agent uses user-authorized configuration and access" },
+    { "resource": "CAD/browser/document interpreters", "policy": "user-managed prerequisites; ResearchSpec does not install them" }
+  ]
+}

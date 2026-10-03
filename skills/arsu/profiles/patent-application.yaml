@@ -1,0 +1,63 @@
+schema_version: "2"
+profile_id: patent-application
+profile_version: 0.1.0
+capability_registry_version: 0.1.0
+entries:
+  - entry_id: main
+    kind: end-to-end
+    node_id: application
+nodes:
+  - node_id: application
+    kind: capability
+    capability_id: generation-patent-application
+    input_bindings:
+      - role: disclosure_bundle
+        source: handoff
+    expected_outputs:
+      - role: application_bundle
+        required: true
+    prerequisites: []
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: check-application
+    kind: capability
+    capability_id: check-patent-application
+    input_bindings:
+      - role: application_bundle
+        source: node_output
+        from_node_id: application
+    expected_outputs:
+      - role: application_review
+        required: true
+    prerequisites:
+      - application
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: application-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - check-application
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+parallel_groups: []
+subgraphs: []
+gates:
+  - gate_id: patent-application-complete
+    owner_node_id: application-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+decisions: []
+revision_round_template: null
+override_policy:
+  failed_gate_requires_decision: true

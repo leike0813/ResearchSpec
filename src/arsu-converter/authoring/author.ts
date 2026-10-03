@@ -11,6 +11,10 @@ export interface AuthoringKnowledgeSource {
   knowledge_id: string;
   extraction_artifact_id: string;
   output_path: string;
+  license?: string;
+  read_when?: string;
+  /** Render shared hard constraints in the main Procedure from this same source. */
+  inline_in_procedure?: boolean;
 }
 
 export interface AuthoringPackageAsset {
@@ -18,6 +22,8 @@ export interface AuthoringPackageAsset {
   source_path?: string;
   output_path: string;
   recovery_only?: boolean;
+  license?: string;
+  read_when?: string;
 }
 
 export interface AuthoringOptions {
@@ -73,8 +79,12 @@ export interface AuthoringResult {
   files: string[];
 }
 
-export function sha256(text: string): string {
-  return createHash("sha256").update(text, "utf8").digest("hex");
+export function sha256(text: string | Uint8Array): string {
+  return createHash("sha256").update(text).digest("hex");
+}
+
+function assetKnowledgeId(outputPath: string): string {
+  return outputPath.replaceAll("/", "-").replace(/[^A-Za-z0-9._-]/gu, (character) => `-u${(character.codePointAt(0) ?? 0).toString(16)}-`);
 }
 
 function stripExtractionHeader(text: string): string {
@@ -104,10 +114,12 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
   await mkdir(packageRoot, { recursive: true });
   const files: string[] = [];
   const knowledgeRefs: CapabilityManifest["knowledge_refs"] = [];
+  const inlineKnowledge: string[] = [];
   for (const knowledge of source.knowledge_sources) {
     const artifact = byId.get(knowledge.extraction_artifact_id);
     if (!artifact) throw new Error(`Missing extraction artifact: ${knowledge.extraction_artifact_id}`);
     const sourceText = await readFile(artifact.path, "utf8");
+    if (knowledge.inline_in_procedure) inlineKnowledge.push(stripExtractionHeader(sourceText).trim());
     const outputPath = path.join(packageRoot, ...knowledge.output_path.split("/"));
     await mkdir(path.dirname(outputPath), { recursive: true });
     await writeFile(outputPath, sourceText, "utf8");
@@ -116,7 +128,7 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
       knowledge_id: knowledge.knowledge_id,
       path: knowledge.output_path,
       content_hash: sha256(sourceText),
-      license: source.license,
+      license: knowledge.license ?? source.license,
     });
   }
 
@@ -124,13 +136,15 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
     const assetArtifact = asset.extraction_artifact_id ? byId.get(asset.extraction_artifact_id) : undefined;
     const assetSourcePath = asset.source_path ?? assetArtifact?.path;
     if (!assetSourcePath) throw new Error(`Missing package asset source: ${asset.output_path}`);
-    const assetSourceText = await readFile(path.resolve(assetSourcePath), "utf8");
-    const assetText = !asset.source_path && /\.(?:py|yaml|j2)$/.test(asset.output_path) ? stripExtractionHeader(assetSourceText) : assetSourceText;
+    const assetBytes = await readFile(path.resolve(assetSourcePath));
+    const assetContent = !asset.source_path && /\.(?:py|yaml|j2)$/.test(asset.output_path)
+      ? Buffer.from(stripExtractionHeader(assetBytes.toString("utf8")), "utf8")
+      : assetBytes;
     const assetPath = path.join(packageRoot, ...asset.output_path.split("/"));
     await mkdir(path.dirname(assetPath), { recursive: true });
-    await writeFile(assetPath, assetText, "utf8");
+    await writeFile(assetPath, assetContent);
     files.push(path.relative(packageRoot, assetPath).split(path.sep).join("/"));
-    if (asset.source_path) knowledgeRefs.push({ knowledge_id: asset.output_path.replaceAll("/", "-"), path: asset.output_path, content_hash: sha256(assetText), license: source.license });
+    if (asset.source_path) knowledgeRefs.push({ knowledge_id: assetKnowledgeId(asset.output_path), path: asset.output_path, content_hash: sha256(assetContent), license: asset.license ?? source.license });
   }
 
   const validators: CapabilityManifest["validators"] = [{
@@ -190,7 +204,7 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
   const procedureText = source.procedure_path
     ? await readFile(path.resolve(source.procedure_path), "utf8")
     : "";
-  const skillText = renderThinSkill(source, manifest, procedureText);
+  const skillText = renderThinSkill(source, manifest, [...inlineKnowledge, procedureText].filter(Boolean).join("\n\n"));
   await writeFile(path.join(packageRoot, "SKILL.md"), skillText, "utf8");
   files.push("SKILL.md");
   const manifestText = stringify(manifest);
@@ -259,10 +273,21 @@ ${manifest.outputs.map((item) => `- \`${item.role}\` (${item.schema_ref})`).join
 
 ## Knowledge
 
-${manifest.knowledge_refs.map((item) => (source.package_assets ?? []).some((asset) => asset.recovery_only && asset.output_path === item.path)
+${manifest.knowledge_refs.map((item) => {
+    if (source.knowledge_sources.some((knowledge) => knowledge.output_path === item.path && knowledge.inline_in_procedure)) {
+      return `- Knowledge ID \`${item.knowledge_id}\` is included in the Procedure; its source is \`${item.path}\`.`;
+    }
+    const condition = source.knowledge_sources.find((knowledge) => knowledge.output_path === item.path)?.read_when
+      ?? source.package_assets?.find((asset) => asset.output_path === item.path)?.read_when;
+    return condition
+      ? `- ${/^before\s/i.test(condition) ? condition[0]?.toUpperCase() + condition.slice(1) : `When ${condition.replace(/^when\s+/i, "")}`}, load knowledge ID \`${item.knowledge_id}\` from \`${item.path}\`.`
+      : (source.package_assets ?? []).some((asset) => asset.recovery_only && asset.output_path === item.path)
     ? `- For an existing review workspace only, load knowledge ID \`${item.knowledge_id}\` from \`${item.path}\`.`
-    : `- Load knowledge ID \`${item.knowledge_id}\` from \`${item.path}\`.`).join("\n")}
-${(source.package_assets ?? []).some((item) => !item.recovery_only) ? `\n## Tools\n\n${(source.package_assets ?? []).filter((item) => !item.recovery_only).map((item) => item.output_path.endsWith(".html")
+    : `- Load knowledge ID \`${item.knowledge_id}\` from \`${item.path}\`.`;
+  }).join("\n")}
+${(source.package_assets ?? []).some((item) => !item.recovery_only) ? `\n## Tools\n\n${(source.package_assets ?? []).filter((item) => !item.recovery_only).map((item) => item.read_when
+    ? `- Use \`${item.output_path}\` when ${item.read_when.replace(/^when\s+/i, "")}, as directed by the Procedure.`
+    : item.output_path.endsWith(".html")
     ? `- \`${item.output_path}\` is an optional local static review surface; it exports advisory working material and never owns workflow state.`
     : !item.output_path.endsWith(".py")
     ? `- \`${item.output_path}\` is a package resource; use it as directed by the Procedure.`

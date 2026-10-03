@@ -30,25 +30,7 @@ const expectedCommands = [
   "pack", "plugin", "propose", "show", "start", "status", "update",
 ];
 const expectedCommandWrappers = ["navigate"];
-const expectedDomains = [
-  "accounting-auditing-and-accountability", "analytical-chemistry", "applied-mathematics", "artificial-intelligence", "astronomical-sciences",
-  "biochemistry-and-cell-biology", "bioinformatics-and-computational-biology",
-  "banking-finance-and-investment", "clinical-sciences", "computational-modeling-and-simulation", "computer-vision-and-multimedia-computation",
-  "control-engineering-mechatronics-and-robotics",
-  "curriculum-and-pedagogy", "data-management-and-data-science", "design", "distributed-computing-and-systems-software",
-  "education-systems",
-  "ecological-applications", "ecology", "epidemiology", "evolutionary-biology",
-  "experimental-design-and-data-analysis", "fluid-mechanics-and-thermal-engineering", "genetics",
-  "geoinformatics", "geomatic-engineering",
-  "health-services-and-systems", "human-centred-computing", "immunology", "inorganic-chemistry",
-  "heritage-archive-and-museum-studies", "historical-studies", "laboratory-automation-and-informatics", "library-and-information-studies", "machine-learning",
-  "macromolecular-and-materials-chemistry", "materials-engineering", "medical-and-biological-physics",
-  "medical-biochemistry-and-metabolomics", "medical-biotechnology", "medical-microbiology",
-  "medicinal-and-biomolecular-chemistry", "microbiology", "neurosciences", "numerical-and-computational-mathematics",
-  "oncology-and-carcinogenesis",
-  "organic-chemistry", "pharmacology-and-pharmaceutical-sciences", "physical-chemistry", "plant-biology", "statistics",
-  "quantum-physics", "research-computing-infrastructure", "scientific-visualization-and-communication", "specialist-studies-in-education", "theory-of-computation",
-].sort();
+let expectedDomains = [];
 
 try {
   run(process.execPath, ["scripts/check-authored-whitespace.mjs"], packageRoot);
@@ -469,6 +451,9 @@ async function loadPackagedSurface(root) {
   const adapterModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "literature-adapters", "catalog.js")).href}?surface=${Date.now().toString()}`);
   const toolModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "adapters", "tools.js")).href}?surface=${Date.now().toString()}`);
   const deliveryModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "adapters", "delivery.js")).href}?surface=${Date.now().toString()}`);
+  const pluginModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "plugins", "registry.js")).href}?surface=${Date.now().toString()}`);
+  const plugins = await pluginModule.loadPluginRegistry(path.join(root, "skills", "plugins"), false);
+  const domains = uniqueSorted(pluginModule.availableDomains(plugins).map((item) => item.domain_id), "available plugin domains");
   const arsu = uniqueSorted(arsuManifest.generated_groups, "ARSU conversion manifest generated_groups");
   const companions = uniqueSorted(companionModule.COMPANION_INTENTS?.filter((item) => item.id === "navigate").map((item) => item.skillId), "visible Companion Skills");
   const capabilities = uniqueSorted(capabilityRegistry.capabilities?.map((item) => item.capability_id), "capability registry entries");
@@ -486,6 +471,7 @@ async function loadPackagedSurface(root) {
     projectTools,
     projectSkillWriters,
     commandTools,
+    domains,
     base: companions,
   };
 }
@@ -501,6 +487,7 @@ function applyExpectedSurface(surface) {
   expectedProjectToolIds = surface.projectTools;
   expectedProjectSkillWriterIds = surface.projectSkillWriters;
   expectedCommandToolIds = surface.commandTools;
+  expectedDomains = surface.domains;
 }
 
 function uniqueSorted(value, label) {

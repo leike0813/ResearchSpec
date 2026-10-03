@@ -1,0 +1,299 @@
+{
+  "schema_version": "1",
+  "status": "approved",
+  "reviewer": "Codex integration review with MiniMax-M3.1-Flash-Preview static semantic review",
+  "scope": "Fixed capability absorption and static distribution; no runtime human Gate or live-service acceptance",
+  "evidence": [
+    "05-semantic-review.md",
+    "../source-audit.json",
+    "tests/patent-capabilities.test.ts",
+    "tests/patent-runtime.test.ts",
+    "tests/patent-graphs.test.ts",
+    "tests/patent-obsidian.test.ts",
+    "tests/patent-oa-history.test.ts",
+    "tests/patent-maintenance.test.ts"
+  ],
+  "businesses": [
+    {
+      "business": "patent-application",
+      "assessment": "Four-part drafting, type-specific materials, Word/figures and read-only consistency review."
+    },
+    {
+      "business": "patent-chart",
+      "assessment": "Evidence-bound feature/paragraph comparison and XLSX with bounded semantic completion."
+    },
+    {
+      "business": "patent-disclosure",
+      "assessment": "All three patent types, prior-art positioning, six-chapter drafting and reviewed protection layout."
+    },
+    {
+      "business": "patent-docket",
+      "assessment": "Versioned semantic revision with CLI-owned rounds, human controls and explicit accepted-version handoff."
+    },
+    {
+      "business": "patent-exam-policy",
+      "assessment": "Dated source hierarchy, effective-version brief and maintenance source suggestions."
+    },
+    {
+      "business": "patent-map",
+      "assessment": "Frozen corpus, loopback presentation and configured read-only model/IPC inputs."
+    },
+    {
+      "business": "patent-oa",
+      "assessment": "Response draft, Word/Excel and read-only review with redacted local case history and relative strategy scoring."
+    },
+    {
+      "business": "patent-reader",
+      "assessment": "Full-text/figure extraction, notes/features/paragraphs and scoped selected-vault projection."
+    },
+    {
+      "business": "patent-search",
+      "assessment": "Bibliographic/derived search and explicitly selected feature coverage with retained evidence limits."
+    }
+  ],
+  "compositions": [
+    {
+      "profile_id": "research-to-patent",
+      "assessment": "Research report, synthesis and academic grading are retained with actual technical materials before the docket."
+    },
+    {
+      "profile_id": "patent-informed-paper",
+      "assessment": "Human source-scope Gate, all-join over both children and real Markdown bridge inputs to writing."
+    }
+  ],
+  "findings": [
+    {
+      "id": "type-materials",
+      "status": "resolved",
+      "resolution": "Required schemas, figures and source chapter mapping now match each patent type."
+    },
+    {
+      "id": "file-contracts",
+      "status": "resolved",
+      "resolution": "Six complete index kinds and direct semantic output files use the same contract."
+    },
+    {
+      "id": "cli-and-imports",
+      "status": "resolved",
+      "resolution": "Commands match actual argument parsers and the package carries lazily imported local dependencies."
+    },
+    {
+      "id": "read-only-reviews",
+      "status": "resolved",
+      "resolution": "Producer corrections and checker findings have distinct authority; common hard constraints are inlined from one source."
+    },
+    {
+      "id": "resource-authority",
+      "status": "resolved",
+      "resolution": "Docket dispositions, chart handoff and OA/vault guidance match current tools and CLI-owned workflow authority."
+    },
+    {
+      "id": "graph-reachability",
+      "status": "resolved",
+      "resolution": "Root source-scope Gate makes both composition children reachable and writing waits for their join."
+    },
+    {
+      "id": "research-evidence",
+      "status": "resolved",
+      "resolution": "Academic source grading, citations and synthesis are retained with distinct patent categories."
+    },
+    {
+      "id": "revision-and-branches",
+      "status": "resolved",
+      "resolution": "Accepted-version handoff and combined intelligence branches are explicit; default round budget remains human-controlled guidance."
+    },
+    {
+      "id": "licenses-and-boundaries",
+      "status": "resolved",
+      "resolution": "Raw binary copies, MIT/third-party notices and configured model/corpus boundaries are recorded and verified."
+    }
+  ],
+  "execution_limits": [
+    "Playwright and CadQuery unavailable; browser/CAD rendering not certified.",
+    "No live CNIPA/service access, configured vector-layout acceptance or visual Obsidian/browser interaction certified."
+  ],
+  "reviewed_state": {
+    "schema_version": "1",
+    "vendor_id": "patent-disclosure-skill",
+    "anchor_id": "snapshot-5073d3d8",
+    "businesses": [
+      "patent-application",
+      "patent-chart",
+      "patent-disclosure",
+      "patent-docket",
+      "patent-exam-policy",
+      "patent-map",
+      "patent-oa",
+      "patent-reader",
+      "patent-search"
+    ],
+    "upstream": {
+      "revision": "5073d3d837a5d139ef2bc763c9dd46bb9605df84",
+      "tree": "d4abb0dd1b7cc8b2f0f131060faad707be63ca96",
+      "file_count": 489,
+      "tree_sha256": "05ad65cf098aa56e499edc174700367c36627a8a26a68d6e91f975def62cf2b9"
+    },
+    "source_audit_sha256": "6c44e57273b56bc2bf7f6dd5dfbb6cf116c64298e73045031e9740b493b308db",
+    "authoring_tree_sha256": "82ed6d88d7a975d3692e594cb603d3880633c4fb4443d292e4ecc69794eb8616",
+    "packages": [
+      {
+        "capability_id": "analysis-patent-claim-chart",
+        "tree_sha256": "884e92e1df6ed2ecf19b01088534e35504fce3ca8a0f410e2823bca88d5965da"
+      },
+      {
+        "capability_id": "analysis-patent-prior-art",
+        "tree_sha256": "25f96c0ca9393067f6429076b69e34bf6b3609310c1537742da5e78014eff9a4"
+      },
+      {
+        "capability_id": "analysis-patent-reading",
+        "tree_sha256": "67732819a717ddc4c4cee0dc78b7525162f4d262ef493c65e1de3325624cda19"
+      },
+      {
+        "capability_id": "check-patent-application",
+        "tree_sha256": "b85c74ceaa124049f8f54ac7d01424327f3f08baab249b51ecbe1a671ef82405"
+      },
+      {
+        "capability_id": "check-patent-disclosure",
+        "tree_sha256": "8425fe6dd72eb76036ad336dad8c356f9c763bfdedfe600986535aee5638eb2a"
+      },
+      {
+        "capability_id": "check-patent-docket",
+        "tree_sha256": "1846ab462b56a39a5f330554cd6efca355c592da345db56f94e2ced50b8a0242"
+      },
+      {
+        "capability_id": "check-patent-oa-response",
+        "tree_sha256": "677a59a882ac47fed01902dc338e297dfe72a7752016d683ade0c1b0809202ae"
+      },
+      {
+        "capability_id": "design-patent-intake",
+        "tree_sha256": "ef6c75c6fad18f1d2420189c906d28e91f49f85e49f917848ff06f9289b855ad"
+      },
+      {
+        "capability_id": "design-patent-invention-mining",
+        "tree_sha256": "74c474b26cf61dddc809f1b393e5231a85ebae19872ccdf977f138e91e010457"
+      },
+      {
+        "capability_id": "design-patent-protection-layout",
+        "tree_sha256": "8b40d96a429e605606b1b915ed2e31f935bdffc7da99f7361b6baf9d193db6f3"
+      },
+      {
+        "capability_id": "discovery-patent-exam-policy",
+        "tree_sha256": "6a68869400ac09af90acd253816c7f080c2a387a415676928f37faa5f8a4aa80"
+      },
+      {
+        "capability_id": "discovery-patent-search",
+        "tree_sha256": "415b2fe8ca60ffbe21560fbbec6430335c7f4d7bd1b40b7fec06d30d321190c4"
+      },
+      {
+        "capability_id": "generation-patent-application",
+        "tree_sha256": "b83fb731334da9f6487c9de3538d79d5b14a82cf305393d3aadabdaca6c4b0d8"
+      },
+      {
+        "capability_id": "generation-patent-disclosure",
+        "tree_sha256": "af03a8a5dbca4f4ccb1d69e45537ad941eb8777945951271a50cf66deceeadbb"
+      },
+      {
+        "capability_id": "generation-patent-map",
+        "tree_sha256": "2fb0057ef53648720f6ed7323afc665679478b2d87460e129dcdfe74d23f7a60"
+      },
+      {
+        "capability_id": "generation-patent-oa-response",
+        "tree_sha256": "b8f0aabcb375ef1e74101b694d8119cb719e2b69c50b5657fc693a1f56726310"
+      },
+      {
+        "capability_id": "transform-patent-docket-revision",
+        "tree_sha256": "1e90542c4f2601a753594eae53a1c35652d1403bbb8abbd936b493b202dc6d99"
+      },
+      {
+        "capability_id": "transform-patent-research-evidence",
+        "tree_sha256": "3dd4f7821f28eaeb2ac8bc9108e321cfbc0e2c9010fde8e4f04fbe5fad0c33a3"
+      }
+    ],
+    "profiles": [
+      {
+        "profile_id": "patent-disclosure",
+        "sha256": "d21f3848db4d7f9eaa14603b44fe9cd23bf04118f807011bbc3caf7bc9d02199"
+      },
+      {
+        "profile_id": "patent-application",
+        "sha256": "f67e1603e845b28142731bb380d02f801e10012bf0f6273ebdb7a334aa75da3f"
+      },
+      {
+        "profile_id": "patent-docket",
+        "sha256": "419af1793d779ce29cce8e1999ec61e9d191af13d31e7cb68faa8526e882bd78"
+      },
+      {
+        "profile_id": "patent-intelligence",
+        "sha256": "9f7dc5816c0ca576c4c50f0ff6c1cfc3f4fbd04a713a147b8fc9451164449a94"
+      },
+      {
+        "profile_id": "patent-oa",
+        "sha256": "5ed6dcc013f822454025af5415b637aac47db19c082e0b5f97ff8faf3e44f6e6"
+      },
+      {
+        "profile_id": "research-to-patent",
+        "sha256": "3e757f2ef993f3fec05aa3c19888ccb6d629892f50f55b44626f3d2feef23529"
+      },
+      {
+        "profile_id": "patent-informed-paper",
+        "sha256": "3681ea5c01ba8f56dce54cd3fd2fc22502f34de827a1ea56f2c4422fb507d298"
+      }
+    ],
+    "registry_sha256": "ffcc4c42e733eaac869ec2aeb7f7a3c338e8907c00e6f892d0b2d285137de671",
+    "profile_registry_sha256": "3cf5caddd776ecdd6e9c639061c68f2488a3968fbc60e52cb7f4cd4b7adb1ded",
+    "maintained_files": [
+      {
+        "path": "audits/patent-disclosure-skill/catalog.json",
+        "sha256": "8675e099f6936e549b5fb7a5d9df6950fdc29fbd82a5b16dbe52a2ec30e6a659"
+      },
+      {
+        "path": "src/vendor-converters/patent-disclosure-skill/capabilities.ts",
+        "sha256": "cfe1ab4c903d9d303154bb9b919d066f41a66ee455da1f77778aec6550ca6267"
+      },
+      {
+        "path": "src/arsu-converter/workflow/graph-profiles/patent.ts",
+        "sha256": "a29fec2b059c60591f7bb3a2ea745e3e6e7a098f89907abd08bb42e7dd678df7"
+      },
+      {
+        "path": ".agents/skills/patent-disclosure-skill-maintenance/SKILL.md",
+        "sha256": "3359ce2b3d49b943951e5db040958d009dd46612bde4bfe2dceb8a10cc7d23dc"
+      },
+      {
+        "path": "scripts/patent-source-audit.mjs",
+        "sha256": "c4f68b416499bc056762573ce1aa05badb1a7d36bfa68dd7cfb16e9d04089037"
+      },
+      {
+        "path": "scripts/prepare-patent-authoring.mjs",
+        "sha256": "dad216740c559f1a2f09611c7e9fed742c73a2ffaf1c0c9b377aed04bcc5bd87"
+      },
+      {
+        "path": "scripts/patent-disclosure-skill-maintenance.mjs",
+        "sha256": "06d3fae5a8a1ca2a5b8280e0f548454c412a094552dd48572d08e2ea9c715a26"
+      },
+      {
+        "path": "src/vendor-converters/patent-disclosure-skill/cli.ts",
+        "sha256": "c49498329e2adfbe9519ad5598a6fba6094c07a8c1d69162dc3ac2405dbfb7df"
+      },
+      {
+        "path": "src/arsu-converter/authoring/author.ts",
+        "sha256": "2e7e71e69e83e4b502be8c6b5fb1b20234512f748dd71fb0f755197397249f37"
+      },
+      {
+        "path": "docs/user/patent-workflows.md",
+        "sha256": "222a2d5a14b47059fe6f2cf107758aeaa2e93e4885d1ca32cc62e0d0e8720494"
+      },
+      {
+        "path": "docs/maintainer/patent-disclosure-skill.md",
+        "sha256": "ae7253cc0251078c2371d396f8a0a1cdf83139a6068f4c6bc762fe487f4cb0bf"
+      },
+      {
+        "path": "NOTICE",
+        "sha256": "b01d1c0bbcf5f8d4d3063fafcb3d46d0e13758fe9d3b10fe554a4a26c5b2cc7e"
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "c71373b4c1fb686247081e6c8a32bf360c7ea712ab0e88da0f6429299ec76e65"
+      }
+    ]
+  }
+}

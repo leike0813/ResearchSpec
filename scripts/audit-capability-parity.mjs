@@ -9,8 +9,10 @@ const SKILLS = path.join(ROOT, "skills", "capabilities");
 const ARS_INDEX = JSON.parse(readFileSync(path.join(ROOT, "authoring", "ars", "extraction-index.json"), "utf8"));
 const PAPER_HUMANIZER_INDEX = JSON.parse(readFileSync(path.join(ROOT, "authoring", "paper-humanizer", "extraction-index.json"), "utf8"));
 const REVISION_MASTER_INDEX = JSON.parse(readFileSync(path.join(ROOT, "authoring", "revision-master", "extraction-index.json"), "utf8"));
+const PATENT_INDEX = JSON.parse(readFileSync(path.join(ROOT, "authoring", "patent-disclosure-skill", "extraction-index.json"), "utf8"));
 function extractionIndex(provenance = {}) {
   const ids = provenance.extraction_artifact_ids ?? [];
+  if (ids.some((id) => id.startsWith("PD-"))) return PATENT_INDEX;
   if (ids.some((id) => id.startsWith("RM-"))) return REVISION_MASTER_INDEX;
   if (ids.some((id) => id.startsWith("PH-"))) return PAPER_HUMANIZER_INDEX;
   return ARS_INDEX;

@@ -1,0 +1,162 @@
+schema_version: "2"
+profile_id: patent-docket
+profile_version: 0.1.0
+capability_registry_version: 0.1.0
+entries:
+  - entry_id: main
+    kind: end-to-end
+    node_id: disclosure
+nodes:
+  - node_id: disclosure
+    kind: subgraph
+    subgraph_id: patent-disclosure
+    input_bindings:
+      - role: technical_materials
+        source: handoff
+    expected_outputs:
+      - role: patent_case
+        from_role: patent_case
+        required: true
+      - role: disclosure_bundle
+        from_role: disclosure_bundle
+        required: true
+    prerequisites: []
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: disclosure-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - disclosure
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: application
+    kind: subgraph
+    subgraph_id: patent-application
+    input_bindings:
+      - role: disclosure_bundle
+        source: node_output
+        from_node_id: disclosure
+        from_role: disclosure_bundle
+    expected_outputs:
+      - role: application_bundle
+        from_role: application_bundle
+        required: true
+    prerequisites:
+      - disclosure-gate
+    required_gate_ids:
+      - patent-docket-disclosure
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: revision
+    kind: capability
+    capability_id: transform-patent-docket-revision
+    input_bindings:
+      - role: patent_case
+        source: node_output
+        from_node_id: disclosure
+        from_role: patent_case
+      - role: disclosure_bundle
+        source: handoff
+      - role: application_bundle
+        source: handoff
+    expected_outputs:
+      - role: disclosure_bundle
+        required: true
+      - role: application_bundle
+        required: true
+    prerequisites:
+      - application
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: repeatable
+    round_role: revision
+  - node_id: docket-check
+    kind: capability
+    capability_id: check-patent-docket
+    input_bindings:
+      - role: disclosure_bundle
+        source: node_output
+        from_node_id: revision
+      - role: application_bundle
+        source: node_output
+        from_node_id: revision
+    expected_outputs:
+      - role: docket_review
+        required: true
+    prerequisites:
+      - revision
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: repeatable
+    round_role: review
+  - node_id: docket-gate
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - docket-check
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: repeatable
+    round_role: review
+  - node_id: docket-outcome
+    kind: decision
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - docket-gate
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: repeatable
+    round_role: review
+parallel_groups: []
+subgraphs:
+  - subgraph_id: patent-disclosure
+    profile_id: patent-disclosure
+    profile_version: 0.1.0
+    entry_id: main
+    entry_node_id: intake
+  - subgraph_id: patent-application
+    profile_id: patent-application
+    profile_version: 0.1.0
+    entry_id: main
+    entry_node_id: application
+gates:
+  - gate_id: patent-docket-disclosure
+    owner_node_id: disclosure-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+  - gate_id: patent-docket-complete
+    owner_node_id: docket-gate
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+decisions:
+  - decision_id: patent-docket-outcome
+    owner_node_id: docket-outcome
+    options:
+      - option_id: continue
+        unlocks:
+          - revision
+      - option_id: complete
+        unlocks: []
+revision_round_template:
+  revision_node_id: revision
+  review_execution_node_id: docket-check
+  review_node_id: docket-outcome
+  continue_option_id: continue
+  exit_option_id: complete
+override_policy:
+  failed_gate_requires_decision: true

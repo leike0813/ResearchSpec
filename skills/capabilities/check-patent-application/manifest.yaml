@@ -1,0 +1,137 @@
+schema_version: "1"
+capability_id: check-patent-application
+title: 申请一致性检查 (Application Review)
+description: 核对权要、说明书与附图一致性、件号登记与摘要约束，产出对照与问题清单（application consistency, numeral register）。
+maturity: operational
+class: verification
+node_kind: checker
+execution_type: mixed
+params: {}
+inputs:
+  - role: application_bundle
+    schema_ref: application-bundle.v1
+    required: true
+    source_policy:
+      - handoff
+      - node_output
+outputs:
+  - role: application_review
+    schema_ref: application-review.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - application_bundle
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: PD-KP-01
+    path: knowledge/pd-kp-01-patent-guardrails.md
+    content_hash: ab01580829ba0ab322cf8c51f93304a1d09f971c1c27e76339ea8540aff62d27
+    license: MIT
+  - knowledge_id: PD-KP-08
+    path: knowledge/pd-kp-08-application-consistency.md
+    content_hash: a5ae496dec980811920c7a99f1c4dc60b37ab422529d6118b91985b14c236a33
+    license: MIT
+  - knowledge_id: PD-KP-17
+    path: knowledge/pd-kp-17-runtime-tools-rules.md
+    content_hash: 4a3d1f31f37d0883de8837f5b597cd432ca1f38314640b2a1e11a13cdd2f6985
+    license: MIT
+  - knowledge_id: contracts-patent-file-index.v1.md
+    path: contracts/patent-file-index.v1.md
+    content_hash: 50a575de941636f02f86e0c459a5aa635897f24d811e995b2f2ab954e18a33ee
+    license: MIT
+  - knowledge_id: contracts-patent-role-schemas.v1.md
+    path: contracts/patent-role-schemas.v1.md
+    content_hash: 90aae1c8d8d36f14d78fc52562cd2fb8fc87d93a4cb0b0e4e9ad411c502219b1
+    license: MIT
+  - knowledge_id: tools-latex_delimiters.py
+    path: tools/latex_delimiters.py
+    content_hash: c74ad7d67d44e9a8d9637bcd8b915ce0aea7dafac4041308fcca10aab14aaf35
+    license: MIT
+  - knowledge_id: tools-stdio_utf8.py
+    path: tools/stdio_utf8.py
+    content_hash: b66838457a55499568ffcce347e75b348ccccb2af4cd73f5799b16e4ed127e84
+    license: MIT
+  - knowledge_id: tools-check_support.py
+    path: tools/check_support.py
+    content_hash: 8f4325da11f5656169009de8d38d53dee6176574e07f71c790edfd025a1fe90d
+    license: MIT
+  - knowledge_id: tools-plan_figures.py
+    path: tools/plan_figures.py
+    content_hash: ed59aa7aadb9d1e6db1f9126aceee054abd9f1ee592953f83453b55767e6b1ad
+    license: MIT
+  - knowledge_id: tools-check_numeral_register.py
+    path: tools/check_numeral_register.py
+    content_hash: 71f6040dc065fbaafcd6704c987eeb814d060db5af23413b14f160b4b3c3e9bc
+    license: MIT
+  - knowledge_id: tools-lexicon.py
+    path: tools/lexicon.py
+    content_hash: edeee6c469ea77acbfb80173ed3f3f0aa2118d2df07a7de698d5ffa530f50e2e
+    license: MIT
+  - knowledge_id: tools-check_design_views.py
+    path: tools/check_design_views.py
+    content_hash: ef28b61e10e8d1d63224c837b0671c1c1500075597230ae33e6aa6f17faefde2
+    license: MIT
+  - knowledge_id: tools-audit_claims.py
+    path: tools/audit_claims.py
+    content_hash: 44dd9c343c1007aba6edd189db96527e9d5078593543da20ad9abbaa1fc5b904
+    license: MIT
+  - knowledge_id: references-schemas-README.md
+    path: references/schemas/README.md
+    content_hash: b1818e2fd9d3260b1cf0557470ac7a5b1296c58f5d157a9051498123759d5ea2
+    license: MIT
+  - knowledge_id: references-schemas-patent_file_index.schema.yaml
+    path: references/schemas/patent_file_index.schema.yaml
+    content_hash: 09cb810f603f0f6648c4603939adaa033a5e4eaa0f037dc60ecb0466e9bed8e1
+    license: MIT
+  - knowledge_id: references-schemas-numeral_register.schema.yaml
+    path: references/schemas/numeral_register.schema.yaml
+    content_hash: c599957b8f9c132ea3feeb725d603ba22c9eea82224247432268f7c36cd0e2f5
+    license: MIT
+  - knowledge_id: references-schemas-invention_figures.schema.yaml
+    path: references/schemas/invention_figures.schema.yaml
+    content_hash: 0df22fb799b6ca22052d00f8ece9115ea6b4b08a8f37381a6dbe0889c9298a32
+    license: MIT
+  - knowledge_id: references-schemas-application_plan.schema.yaml
+    path: references/schemas/application_plan.schema.yaml
+    content_hash: 049a2036fb6ef62ce8742066e966746dee0aaeb89e4ce199d07df9f22d487b42
+    license: MIT
+  - knowledge_id: references-schemas-application_figure_plan.schema.yaml
+    path: references/schemas/application_figure_plan.schema.yaml
+    content_hash: 4cfdf4dde76aeeb99d8a781ea8e99bd9b71dbde1b2e84fac37280a7b296229c6
+    license: MIT
+  - knowledge_id: references-promo_terms.yaml
+    path: references/promo_terms.yaml
+    content_hash: 20a2773d1b8e961762db64a9684c6c7da2aa99142d8357e68a74ea214e030b1a
+    license: MIT
+  - knowledge_id: references-design_view_cnipa.md
+    path: references/design_view_cnipa.md
+    content_hash: 18e477fb9d70be43d9e0d37301afb0620018a4f87d8e19b00a2d0d94afcfd1f0
+    license: MIT
+  - knowledge_id: tools-patent_files.py
+    path: tools/patent_files.py
+    content_hash: 642269c8d3005216d8b42fa4c332cb9a3533d0e228468edfc823b017db8fca25
+    license: MIT
+  - knowledge_id: NOTICE.md
+    path: NOTICE.md
+    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    license: MIT
+  - knowledge_id: LICENSE
+    path: LICENSE
+    content_hash: d9329ae3b2de58aebaa015d8d1570513d48f1702318e6423896a4620845ab798
+    license: MIT
+gate_policy: none
+provenance:
+  origin: vendor-derived
+  extraction_artifact_ids:
+    - PD-CAP-09
+    - PD-KP-01
+    - PD-KP-08
+    - PD-KP-17
+  upstream_sources:
+    - path: authoring/patent-disclosure-skill/extracted/capabilities/09.md
+      sha256: b39dd3729aacd42d986c621d17035b2d390359af86eb2086e526cc9ee020b116
+license: MIT

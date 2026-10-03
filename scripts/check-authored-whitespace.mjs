@@ -45,6 +45,11 @@ async function loadVerifiedExemptions(rootDirectory, exemptionCatalogPath) {
   if (catalog?.schema_version !== "1" || !Array.isArray(catalog.exemptions)) {
     throw new Error("exemption catalog must use schema 1 and contain an exemptions array");
   }
+  for (const relativePath of catalog.includes ?? []) {
+    const included = JSON.parse(await readFile(resolveInsideRoot(rootDirectory, relativePath, "included exemption catalog"), "utf8"));
+    if (included?.schema_version !== "1" || !Array.isArray(included.exemptions)) throw new Error("invalid included exemption catalog");
+    catalog.exemptions.push(...included.exemptions);
+  }
 
   const verified = new Set();
   const evidenceCache = new Map();
@@ -100,10 +105,10 @@ function changedPaths(rootDirectory, base) {
 }
 
 function runGit(rootDirectory, args) {
-  const result = spawnSync("git", args, { cwd: rootDirectory, encoding: "utf8" });
+  const result = spawnSync("git", [...args, "-z"], { cwd: rootDirectory, encoding: "utf8" });
   if (result.error) throw result.error;
   if (result.status !== 0) throw new Error(`git ${args.join(" ")} failed: ${result.stderr.trim()}`);
-  return result.stdout.split(/\r?\n/).filter(Boolean);
+  return result.stdout.split("\0").filter(Boolean);
 }
 
 function parseArguments(args) {
