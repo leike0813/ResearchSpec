@@ -1,7 +1,7 @@
 # ARSU Anchor Conversion — v3.22.2-7de1c9d
 
-- registry SHA-256: `72a22ca042debd8403f97faffc0196584a7401e96d91169483ab633f0c7b6556`
-- packages tree SHA-256: `ce38dfb5761d893f66ee97f8ac16bc1df126ce35a8abff951eef1f99a411a8fa`
+- registry SHA-256: `a6639e2c25b41b953eb77be878444a7275352122048f2b25869200d431a49be3`
+- packages tree SHA-256: `e4ce6a8239e96095cb17a2c1cb7e66ad8b452da4df4752c544191f154cd6508d`
 - capability count: 47 · operational: 47
 
 ## Capability Packages
@@ -19,8 +19,8 @@
 | `check-collaboration-depth-observer` | Collaboration Depth Observer | verification | observer | llm | required | operational | 1/1 | 1 | 1 | 3 | `d651c922357a` |
 | `check-compliance-check` | Compliance Check | verification | observer | llm | required | operational | 1/2 | 2 | 1 | 4 | `ef13c2598520` |
 | `check-contamination-signals` | Contamination Signals | verification | checker | script | required | operational | 1/1 | 2 | 2 | 5 | `6e256b4d8f67` |
-| `check-paper-humanization-review` | Paper Humanization Review | verification | checker | mixed | none | operational | 2/2 | 5 | 1 | 8 | `9f736c43df89` |
-| `check-paper-humanization-verification` | Paper Humanization Verification | verification | checker | mixed | none | operational | 2/1 | 3 | 1 | 6 | `608608b5185b` |
+| `check-paper-humanization-review` | Paper Humanization Review | verification | checker | mixed | none | operational | 2/2 | 6 | 1 | 9 | `fde2b2ef197d` |
+| `check-paper-humanization-verification` | Paper Humanization Verification | verification | checker | mixed | none | operational | 2/1 | 4 | 1 | 7 | `f16f6a5d7a26` |
 | `check-passport-verifier` | Passport Verifier | verification | checker | script | required | operational | 1/1 | 2 | 2 | 5 | `7f8079712fd7` |
 | `check-pdf-read-preflight` | PDF Read Preflight | verification | checker | script | required | operational | 1/1 | 2 | 2 | 5 | `1f60ccfba06f` |
 | `check-pre-submission-self-check` | Pre-submission Self Check | verification | checker | llm | required | operational | 3/2 | 3 | 1 | 5 | `e1356fe7e01e` |
@@ -42,7 +42,7 @@
 | `generation-abstract-writing` | Abstract Writing | generation | producer | llm | required | operational | 2/1 | 3 | 1 | 5 | `c79b4e4d4c64` |
 | `generation-figure-generation` | Figure Generation | generation | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `ac437d6da397` |
 | `generation-format-rendering` | Format Rendering | generation | producer | mixed | required | operational | 1/1 | 2 | 1 | 4 | `139f4f22d5fc` |
-| `generation-humanization-reference` | Paper Humanizer Reference Mode | generation | observer | llm | none | operational | 0/0 | 1 | 1 | 3 | `d1e6fba4efb4` |
+| `generation-humanization-reference` | Paper Humanizer Reference Mode | generation | observer | llm | none | operational | 0/0 | 1 | 1 | 3 | `21163e55acf6` |
 | `generation-manuscript-drafting` | Manuscript Drafting | generation | producer | llm | required | operational | 3/1 | 5 | 1 | 7 | `d8cbee004bf7` |
 | `generation-report-compilation` | Research Report Compilation | generation | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `8636f6ae3918` |
 | `generation-review-response-round` | Review Response Round | generation | producer | mixed | required | operational | 1/4 | 13 | 1 | 51 | `25e11535f807` |
@@ -50,7 +50,7 @@
 | `judgment-editorial-judgment` | Editorial Judgment | judgment | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `5d75c7bdd3c3` |
 | `judgment-review-synthesis` | Review Synthesis | judgment | producer | llm | required | operational | 3/1 | 1 | 1 | 3 | `fdf1370dccb4` |
 | `judgment-specialist-review` | Specialist Review | judgment | producer | llm | required | operational | 2/1 | 4 | 1 | 6 | `e4719c55d6ea` |
-| `transform-paper-humanization-revision` | Paper Humanization Revision | transformation | producer | mixed | required | operational | 2/2 | 4 | 1 | 7 | `5aebe6e201f3` |
+| `transform-paper-humanization-revision` | Paper Humanization Revision | transformation | producer | mixed | required | operational | 2/2 | 4 | 1 | 7 | `d5b77f8d7d5c` |
 | `transform-review-response-comment-atomization` | Review Response Comment Atomization | transformation | producer | mixed | required | operational | 1/2 | 10 | 1 | 42 | `3d06238d4b4a` |
 | `transform-revision-patching` | Revision Patching | transformation | checker | mixed | required | operational | 1/2 | 1 | 1 | 3 | `56143408255e` |
 | `transform-revision-roadmap-parsing` | Revision Roadmap Parsing | transformation | producer | llm | required | operational | 2/2 | 1 | 1 | 3 | `9b74c5bc3a5e` |

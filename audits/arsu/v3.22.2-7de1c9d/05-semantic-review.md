@@ -112,6 +112,10 @@ reviewer calibration专用能力gap保留；本轮不执行模型校准实验，
 - packaged checker：七节点真实生成与提交、篡改拒绝、run完成通过；当前计算脚本未修改。
 - review HTML：27个唯一mode panel；parity所有低覆盖/缺输出/flow-retained清单为空。旧锚点目录及80未变提取工件字节保持。
 
+## 共享能力目录复核（2026-10-06）
+
+paper-humanizer 的 `snapshot-84eb2ed` 更新了聚合核心能力目录中的四包，因此刷新本锚点的聚合 registry、packages tree、parity 和审阅工件身份。新增学术写作规则和 Hook 守则适配的逐包判定见 `audits/own-vendors/paper-humanizer/snapshot-84eb2ed/05-semantic-review.md`。ARS 上游、120 件 extraction、38 个 ARS 包和图 profile 均保持原字节；本次刷新不表示 ARS 上游或其语义发生变化。
+
 ## 结论
 
 declared-fit-with-notes。本轮发布版的语言配置、摘要统一规则、中文引文修复、缩略语advisory隔离、真实授权与指令/数据边界已进入现有承载路径。继承的calibration缺口、ledger运行时排除及未执行确定性缩略语检查明确披露；静态operational标签不能证明这些功能有运行证据。

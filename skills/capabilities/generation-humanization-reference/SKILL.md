@@ -23,9 +23,10 @@ Execute exactly one ResearchSpec capability node.
 
 ## Knowledge
 
-- Load knowledge ID `paper-humanizer-taxonomy` from `knowledge/paper-humanizer-taxonomy.md`.
+- When explicitly auditing upstream taxonomy examples, load knowledge ID `paper-humanizer-taxonomy` from `knowledge/paper-humanizer-taxonomy.md`.
 
 ## Procedure
+
 
 # Paper Humanizer Reference Mode
 
@@ -46,7 +47,7 @@ For any rewrite, map the source's information units first. Every source unit mus
 ## Reference-mode process
 
 1. Read the input for meaning, genre, voice, and protected content.
-2. Identify instances of the 39 patterns below. Require a real local mechanism or a cluster; a watched word alone is not evidence.
+2. Identify instances of the numbered patterns below. Require a real local mechanism or a cluster; a watched word alone is not evidence.
 3. Draft or revise only as the surrounding task calls for. Use the smallest safe edit and keep the author's lexical level.
 4. Ask privately: “What still sounds formulaic here?” and “Did this version add, remove, strengthen, or weaken any information?”
 5. Repair any remaining supported pattern or semantic drift. Return only the requested deliverable.
@@ -83,6 +84,7 @@ Restore plain verbs when serves as, represents, marks, boasts, or features adds 
 
 ### 9. Negative parallelisms and tailing negations
 Watch for not only ... but, it is not just ... it is, no guessing, no wasted motion. State the positive claim directly; preserve deliberate contrasts.
+In academic prose, keep negations that correct a real confusion or distinguish similar concepts. Remove a refutation only when no relevant claim was made and doing so preserves the source proposition, scope, and certainty.
 
 ### 10. Rule-of-three overuse
 Do not force triads for rhythm; keep real taxonomies and lists whose membership matters.
@@ -182,13 +184,32 @@ Watch for In recent years, with the rapid development of, against the backdrop o
 ### 39. Erased author stance and sterile neutrality
 Restore or clarify stance only when the source or explicit user input supports it. Match assertion strength to the evidence; never invent a judgment.
 
+## Academic patterns
+
+### 40. Academic register drift to prescription language
+Watch for requires further investigation, should be combined with, needs validation, deserves attention, warrants exploration, merits consideration, 需要调查, 应进一步检测 when they replace findings or limitations in analysis. Preserve scoped suggestions in Future Work or Recommendations and procedural language in methods. Recast as an evidence limit only when the source supports that limit; never invent an untested setting or weaken a real recommendation.
+
+### 41. Facts without argumentative function
+Check what each cited result, method, or data point explains about the paper's question. Preserve legitimate surveys, methods descriptions, and results awaiting discussion. Clarify a link only when the source already supports it. Missing reasoning is an unresolved substantive issue, not permission to add an argument or delete a distinct information unit.
+
+### 42. Repetitive study introductions
+Look for one study repeatedly introduced with authors, year, and methods in nearby passages as though it were separate evidence. Use a short reference only when study identity and the referent are clear. Preserve citation keys, distinct findings, necessary distant reintroductions, and standard abstract-to-body repetition; never infer that similar citations identify the same study.
+
+### 43. Template-driven paragraphs in academic writing
+Ask what specific question each paragraph answers. Recast mechanical topic-support-conclusion movement or generic transitions only when a safe edit preserves paragraph function, information, and required structure. Keep necessary background, legitimate literature enumeration, methods, ethics, funding, and other required sections. Leave uncertain paragraph purpose unchanged.
+
 ## False positives to protect
 
 Do not flag in isolation: perfect grammar, mixed registers, one transition word, em dash, curly quote, short sentence, or rhetorical question; functional passive; clean formatting; quotations, titles, proper names, terminology, citations, examples, mandated wording; accurate uncertainty; genre-appropriate impersonal prose; repeated terms that preserve reference stability. Look for clusters and mechanisms, and preserve human signals such as odd details, mixed feelings, unresolved tension, dated references, first-person choices, asides, and varied rhythm.
+In academic prose, protect scoped limitations, conventional methods passive, and discussion hedging that reflects evidence strength. Judge each passage in its section context.
 
 ## Protected content
 
 Unless the user explicitly places it in scope, do not alter verbatim quotations, bibliography data, identifiers, URLs, code, math, citation keys, labels, cross-references, raw markup, or examples under discussion. In Markdown protect frontmatter, fences, inline code, HTML, link destinations, image paths, and formatting markers. In Quarto also protect shortcodes, citation and cross-reference identifiers, attributes, and fenced div markers. In LaTeX protect commands, environment syntax, formulas, keys, and identifiers. If syntax and prose cannot be separated confidently, keep the span unchanged and report the ambiguity.
+
+## Before returning prose
+
+Check that each paragraph retains its purpose, connectors and emphasis do logical work, repeated wording contributes information or voice, and rhythm varies naturally without a sentence-length quota. Confirm every evaluation and author judgment has source support. Compare source and candidate information units in both directions and repair drift with the smallest safe edit. Return only the surrounding task's deliverable.
 
 
 ## Completion

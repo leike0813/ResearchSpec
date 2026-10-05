@@ -3,14 +3,14 @@
   "source": "vendor/paper-humanizer",
   "extraction_root": "authoring/paper-humanizer",
   "milestone_count": 1,
-  "artifact_count": 9,
+  "artifact_count": 10,
   "verification_summary": {
-    "pass": 9
+    "pass": 10
   },
   "milestones": {
     "paper-humanizer": {
-      "total": 9,
-      "pass": 9,
+      "total": 10,
+      "pass": 10,
       "fail": 0,
       "error": 0,
       "skip": 0
@@ -72,15 +72,16 @@
         "vendor/paper-humanizer/SKILL.md（全文）"
       ],
       "ledger": [
-        "1. [保留] SKILL.md 全文保留，含 39 patterns、false positives、protected content。",
-        "2. [标注] Routing 表与 Reference/Review/Full mode 选择属于流程层，authoring 阶段只将 taxonomy 与 invariants 作为知识包使用。"
+        "1. [保留] SKILL.md 全文逐字节保留；编号模式共 43 个，上游步骤文字仍写 39 patterns，按原文保留。",
+        "2. [保留] 新增学术语境：#9 学术否定用法扩展、#40-43（学术语域漂移、事实缺少论证功能、研究重复引介、模板化段落）与学术误报保护段落。",
+        "3. [标注] Routing 表与 Reference/Review/Full mode 选择属于流程层，authoring 阶段只将 taxonomy 与 invariants 作为知识包使用。"
       ],
-      "sha256": "9e89846ed3db75238eb64bda289409e7b0fdff957fce6b77c3685778db2773b5",
+      "sha256": "61700f2d55acc672724bf43059fcaaaaecc7f26dceddd31e5d515fdddc0c948c",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 285 artifact lines vs 285 upstream slice lines",
-        "actual_sha256": "9e89846ed3db75238eb64bda289409e7b0fdff957fce6b77c3685778db2773b5",
-        "expected_sha256": "9e89846ed3db75238eb64bda289409e7b0fdff957fce6b77c3685778db2773b5"
+        "detail": "sha256 match · 333 artifact lines vs 333 upstream slice lines",
+        "actual_sha256": "61700f2d55acc672724bf43059fcaaaaecc7f26dceddd31e5d515fdddc0c948c",
+        "expected_sha256": "61700f2d55acc672724bf43059fcaaaaecc7f26dceddd31e5d515fdddc0c948c"
       }
     },
     {
@@ -209,6 +210,28 @@
         "detail": "sha256 match · 62 artifact lines vs 62 upstream slice lines",
         "actual_sha256": "287f18d942311f16159d6470eaaa5714280fd1317abb1278e4bb6573e9f72f88",
         "expected_sha256": "287f18d942311f16159d6470eaaa5714280fd1317abb1278e4bb6573e9f72f88"
+      }
+    },
+    {
+      "milestone": "paper-humanizer",
+      "path": "authoring/paper-humanizer/knowledge/03_academic_diagnostic_guidance.md",
+      "relative_path": "knowledge/03_academic_diagnostic_guidance.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "PH-KP-03",
+      "name": "academic-diagnostic-guidance",
+      "sources": [
+        "vendor/paper-humanizer/references/academic-diagnostic-guidance.md（全文）"
+      ],
+      "ledger": [
+        "1. [保留] 来源为上游仓库根 references/diagnostic-guidance.md，完整学术诊断原文逐字节保留。",
+        "2. [标注] 作为 review/verification 的学术语境知识包，按需条件读取。"
+      ],
+      "sha256": "79cec697bdb55c21fac84aad06fc01e98f7bfa2af7af72dcc85e53a69e00f39a",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 177 artifact lines vs 177 upstream slice lines",
+        "actual_sha256": "79cec697bdb55c21fac84aad06fc01e98f7bfa2af7af72dcc85e53a69e00f39a",
+        "expected_sha256": "79cec697bdb55c21fac84aad06fc01e98f7bfa2af7af72dcc85e53a69e00f39a"
       }
     }
   ]

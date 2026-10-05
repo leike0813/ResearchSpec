@@ -4,8 +4,8 @@
 
 | metric | value |
 |---|---|
-| avg section coverage | 0.9500398986473785 |
-| avg rule coverage | 0.9508672263231532 |
+| avg section coverage | 0.9500714195299633 |
+| avg rule coverage | 0.9579594249047135 |
 | below section threshold | 0 |
 | below rule threshold | 0 |
 | output missing | 0 |
@@ -58,8 +58,8 @@
 | `check-collaboration-depth-observer` | 1.000 | 1.000 | 161 | 1 | yes | none |
 | `check-compliance-check` | 0.923 | 1.000 | 235 | 2 | yes | none |
 | `check-contamination-signals` | 1.000 | 1.000 | 98 | 2 | yes | none |
-| `check-paper-humanization-review` | 0.800 | 1.000 | 131 | 5 | yes | none |
-| `check-paper-humanization-verification` | 1.000 | 1.000 | 120 | 3 | yes | none |
+| `check-paper-humanization-review` | 0.800 | 1.000 | 142 | 6 | yes | none |
+| `check-paper-humanization-verification` | 1.000 | 1.000 | 124 | 4 | yes | none |
 | `check-passport-verifier` | 1.000 | 1.000 | 101 | 2 | yes | none |
 | `check-pdf-read-preflight` | 1.000 | 1.000 | 93 | 2 | yes | none |
 | `check-pre-submission-self-check` | 0.909 | 0.833 | 264 | 3 | yes | none |
@@ -81,7 +81,7 @@
 | `generation-abstract-writing` | 1.000 | 1.000 | 206 | 3 | yes | none |
 | `generation-figure-generation` | 0.816 | 0.667 | 226 | 2 | yes | none |
 | `generation-format-rendering` | 0.954 | 1.000 | 359 | 2 | yes | none |
-| `generation-humanization-reference` | 0.980 | 0.667 | 199 | 1 | yes | none |
+| `generation-humanization-reference` | 0.981 | 1.000 | 220 | 1 | yes | none |
 | `generation-manuscript-drafting` | 0.955 | 1.000 | 276 | 5 | yes | none |
 | `generation-report-compilation` | 0.955 | 1.000 | 265 | 2 | yes | none |
 | `generation-review-response-round` | 0.950 | 1.000 | 147 | 13 | yes | none |
@@ -89,7 +89,7 @@
 | `judgment-editorial-judgment` | 0.949 | 0.667 | 197 | 2 | yes | none |
 | `judgment-review-synthesis` | 0.820 | 0.708 | 253 | 1 | yes | none |
 | `judgment-specialist-review` | 0.956 | 1.000 | 228 | 4 | yes | none |
-| `transform-paper-humanization-revision` | 1.000 | 1.000 | 95 | 4 | yes | none |
+| `transform-paper-humanization-revision` | 1.000 | 1.000 | 96 | 4 | yes | none |
 | `transform-review-response-comment-atomization` | 1.000 | 1.000 | 124 | 10 | yes | none |
 | `transform-revision-patching` | 1.000 | 1.000 | 97 | 1 | yes | none |
 | `transform-revision-roadmap-parsing` | 0.839 | 0.900 | 294 | 1 | yes | none |
@@ -99,10 +99,10 @@
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `artifacts/generated/capability-parity-report.json` | `03c593ccc595fb95cc056b06212da5f40cdfbce77f02ccf98d3ab9ccc6edb442` |
-| mode-capability review HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-capability-review.html` | `31c5c541e4e1252f39d025217905c849ec8d844c0eb0747f97795436015fd139` |
+| parity report | `artifacts/generated/capability-parity-report.json` | `bfa1711f330fa2fb4aaebe3394e1996dd659b03827c2e8bfe3e561b7a17ab024` |
+| mode-capability review HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-capability-review.html` | `709d31079c93014a6a40775087b56d685d042dde7dcb7deccb628ead56546b71` |
 | graph-match assessment HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-graph-match-assessment.html` | `c1ab7d03b74ebe95a684b34578f511a8d9d4df8827ce773f200ac2f97bbdc3b2` |
-| gap semantic review HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-gap-semantic-review.html` | `2496bf168b7653531dca0c46de8c5eecc6b5f1f7dd948829de13a01136ebd98f` |
+| gap semantic review HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-gap-semantic-review.html` | `9dbd26b4f241b0de5c5ed6fa9f50359cc50934dc14f01f8f03ed9c08fcd31f61` |
 
 ## Semantic Review
 

@@ -58,6 +58,8 @@ Do not edit the manuscript, the candidate, the plan, or graph state.
 - Compare register, lexical level, stance, and recognizable voice with the source and any supplied writing sample.
 - Interpret refreshed sentence statistics descriptively; never edit merely to raise variation.
 
+For academic prose, use `knowledge/academic-diagnostic-guidance.md` as supporting diagnostic context and resolve patterns by their taxonomy names. Confirm patterns 40–43 and academic negation were addressed without altering paragraph purpose, required sections, meaningful contrast, evidence-calibrated hedging, or citation identity. Reject invented argumentative links, untested settings, findings, or limitations even when an example suggests them. Preserve distinct information in shortened study introductions and keep ambiguous spans unchanged with an unresolved risk.
+
 ## Bidirectional information check
 
 - Map every original-source information unit to the candidate.

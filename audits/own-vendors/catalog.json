@@ -4,8 +4,8 @@
   "vendors": [
     {
       "vendor_id": "paper-humanizer",
-      "release_label": "v2.9.1",
-      "anchor_id": "v2.9.1-1a31f2d",
+      "release_label": "snapshot-84eb2ed",
+      "anchor_id": "snapshot-84eb2ed",
       "source_meta": "vendor/paper-humanizer/SOURCE.json",
       "upstream_root": "vendor/paper-humanizer/upstream",
       "extraction_index": "authoring/paper-humanizer/extraction-index.json",

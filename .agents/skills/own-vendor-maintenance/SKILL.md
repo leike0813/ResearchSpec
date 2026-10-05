@@ -15,7 +15,7 @@ description: Maintain user-owned upstream projects absorbed as ResearchSpec capa
 
 | vendor | anchor | extraction | capability packages |
 |---|---|---|---|
-| `paper-humanizer` | `v2.9.1-1a31f2d` | `authoring/paper-humanizer/extraction-index.json` | 4 个核心 capability 包（无 `cap-` 前缀） |
+| `paper-humanizer` | `snapshot-84eb2ed` | `authoring/paper-humanizer/extraction-index.json` | 4 个核心 capability 包（无 `cap-` 前缀） |
 | `revision-master` | `snapshot-13e69610` | `authoring/revision-master/extraction-index.json` | 5 个核心 capability 包（无 `cap-` 前缀） |
 
 目录总览：
@@ -139,3 +139,5 @@ pnpm own-vendor-maintenance:check
 - 先 `diff` 后改文件；未变化的 extraction artifact 不得重写。
 - capability 重命名或删除属于破坏性变更，必须同步 graph profiles、tests、docs、审阅工件与 OpenSpec change。
 - 上游脚本/示例文件只做审计或参考；打包后也不由 ResearchSpec 执行。
+- catalog 或本 Skill 的变化影响所有当前 own-vendor 锚点的共享维护身份；先核对其他 vendor 的生产身份不变，再刷新其维护记录与 baseline。
+- own-vendor 包同时属于 ARSU 聚合锚点；更新后按 `arsu-maintenance` 刷新当前聚合审阅工件、语义复核、records、baseline 和 check。保留 ARS 上游、提取件、能力包和 graph 的未变字节。

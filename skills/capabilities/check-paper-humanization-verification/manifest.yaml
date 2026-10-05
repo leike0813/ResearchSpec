@@ -33,11 +33,15 @@ validators:
 knowledge_refs:
   - knowledge_id: paper-humanizer-taxonomy
     path: knowledge/paper-humanizer-taxonomy.md
-    content_hash: 1b5d7afa5f39bc2bcad69805106fcea122206e07d81722970d4f37c724c7161b
+    content_hash: 7382afc8814ee922867063d0b9ea2020d68313a1dc4abbc9cb3155a99b7b2381
     license: MIT
   - knowledge_id: diagnostic-guidance
     path: knowledge/diagnostic-guidance.md
     content_hash: 7e9348e3ca862707e70199cb8ebad171f39dc6e261c141b3946b198d7614cdd5
+    license: MIT
+  - knowledge_id: academic-diagnostic-guidance
+    path: knowledge/academic-diagnostic-guidance.md
+    content_hash: 78b131c8c1b3cbebdf3159c7df9e4eb776426ddbb39cc598bfab12efb9bbf333
     license: MIT
   - knowledge_id: document-yaml-contract
     path: knowledge/document-yaml-contract.md
@@ -50,6 +54,7 @@ provenance:
     - PH-CAP-05
     - PH-CAP-03
     - PH-KP-01
+    - PH-KP-03
     - PH-KP-02
   upstream_sources:
     - path: authoring/paper-humanizer/capabilities/05_verification_acceptance.md

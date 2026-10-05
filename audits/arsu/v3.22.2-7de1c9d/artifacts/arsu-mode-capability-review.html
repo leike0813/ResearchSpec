@@ -15760,10 +15760,10 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">research-main 的 quick 子集；尚无独立 quick profile，运行时可作为 research-main 的缩短实例。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/research-question, minimal:rq, research-main:research-question</span>
+    <span class="node-id">academic-pipeline:research/research-question, minimal:rq, patent-informed-paper:research/research-question, research-main:research-question, research-to-patent:research/research-question</span>
     <span class="cap-id">design-research-question-formulation</span>
     <span class="cap-title">Research Question Formulation</span>
-    <span class="meta">graph node academic-pipeline:research/research-question / minimal:rq / research-main:research-question</span>
+    <span class="meta">graph node academic-pipeline:research/research-question / minimal:rq / patent-informed-paper:research/research-question / research-main:research-question / research-to-patent:research/research-question</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Turns a project intent into a FINER-scored research question brief with scope boundaries and bound sub-questions.</div>
@@ -16031,10 +16031,10 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/literature, minimal:literature, research-main:literature</span>
+    <span class="node-id">academic-pipeline:research/literature, minimal:literature, patent-informed-paper:research/literature, research-main:literature, research-to-patent:research/literature</span>
     <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
-    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / research-main:literature</span>
+    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / patent-informed-paper:research/literature / research-main:literature / research-to-patent:research/literature</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Runs a systematic, reproducible search and screening process and produces an annotated bibliography with claim-specific coverage and PRISMA-style documentation.</div>
@@ -16602,10 +16602,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/grading, minimal:grading, research-main:grading</span>
+    <span class="node-id">academic-pipeline:research/grading, minimal:grading, patent-informed-paper:research/grading, research-main:grading, research-to-patent:research/grading</span>
     <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
-    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / research-main:grading</span>
+    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / patent-informed-paper:research/grading / research-main:grading / research-to-patent:research/grading</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Grades each source by evidence level, predatory-journal red flags and conflicts of interest.</div>
@@ -17023,10 +17023,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/report, minimal:report, research-main:report</span>
+    <span class="node-id">academic-pipeline:research/report, minimal:report, patent-informed-paper:research/report, research-main:report, research-to-patent:research/report</span>
     <span class="cap-id">generation-report-compilation</span>
     <span class="cap-title">Research Report Compilation</span>
-    <span class="meta">graph node academic-pipeline:research/report / minimal:report / research-main:report</span>
+    <span class="meta">graph node academic-pipeline:research/report / minimal:report / patent-informed-paper:research/report / research-main:report / research-to-patent:research/report</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Compiles the synthesis and method blueprint into a complete APA-style research report.</div>
@@ -25498,10 +25498,10 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">research-main 的 lit-review 片段。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/literature, minimal:literature, research-main:literature</span>
+    <span class="node-id">academic-pipeline:research/literature, minimal:literature, patent-informed-paper:research/literature, research-main:literature, research-to-patent:research/literature</span>
     <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
-    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / research-main:literature</span>
+    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / patent-informed-paper:research/literature / research-main:literature / research-to-patent:research/literature</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Runs a systematic, reproducible search and screening process and produces an annotated bibliography with claim-specific coverage and PRISMA-style documentation.</div>
@@ -26069,10 +26069,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/grading, minimal:grading, research-main:grading</span>
+    <span class="node-id">academic-pipeline:research/grading, minimal:grading, patent-informed-paper:research/grading, research-main:grading, research-to-patent:research/grading</span>
     <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
-    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / research-main:grading</span>
+    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / patent-informed-paper:research/grading / research-main:grading / research-to-patent:research/grading</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Grades each source by evidence level, predatory-journal red flags and conflicts of interest.</div>
@@ -26490,10 +26490,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/synthesis, minimal:synthesis, research-main:synthesis</span>
+    <span class="node-id">academic-pipeline:research/synthesis, minimal:synthesis, patent-informed-paper:research/synthesis, research-main:synthesis, research-to-patent:research/synthesis</span>
     <span class="cap-id">analysis-evidence-synthesis</span>
     <span class="cap-title">Evidence Synthesis</span>
-    <span class="meta">graph node academic-pipeline:research/synthesis / minimal:synthesis / research-main:synthesis</span>
+    <span class="meta">graph node academic-pipeline:research/synthesis / minimal:synthesis / patent-informed-paper:research/synthesis / research-main:synthesis / research-to-patent:research/synthesis</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions.</div>
@@ -28607,10 +28607,10 @@ Unified definitions to prevent inconsistency across agents.
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">轻量检索 + 验证片段；尚无独立 profile。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/literature, minimal:literature, research-main:literature</span>
+    <span class="node-id">academic-pipeline:research/literature, minimal:literature, patent-informed-paper:research/literature, research-main:literature, research-to-patent:research/literature</span>
     <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
-    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / research-main:literature</span>
+    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / patent-informed-paper:research/literature / research-main:literature / research-to-patent:research/literature</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Runs a systematic, reproducible search and screening process and produces an annotated bibliography with claim-specific coverage and PRISMA-style documentation.</div>
@@ -29178,10 +29178,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/grading, minimal:grading, research-main:grading</span>
+    <span class="node-id">academic-pipeline:research/grading, minimal:grading, patent-informed-paper:research/grading, research-main:grading, research-to-patent:research/grading</span>
     <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
-    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / research-main:grading</span>
+    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / patent-informed-paper:research/grading / research-main:grading / research-to-patent:research/grading</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Grades each source by evidence level, predatory-journal red flags and conflicts of interest.</div>
@@ -31287,10 +31287,10 @@ Per-source quality assessment card. Used by the source_verification_agent to sys
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">来源核验 + 引用完整性组合；尚无独立 fact-check profile。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/grading, minimal:grading, research-main:grading</span>
+    <span class="node-id">academic-pipeline:research/grading, minimal:grading, patent-informed-paper:research/grading, research-main:grading, research-to-patent:research/grading</span>
     <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
-    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / research-main:grading</span>
+    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / patent-informed-paper:research/grading / research-main:grading / research-to-patent:research/grading</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Grades each source by evidence level, predatory-journal red flags and conflicts of interest.</div>
@@ -36005,10 +36005,10 @@ The new S5/C5 (Self-Calibration) signal tracks whether the user's commitments be
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/research-question, minimal:rq, research-main:research-question</span>
+    <span class="node-id">academic-pipeline:research/research-question, minimal:rq, patent-informed-paper:research/research-question, research-main:research-question, research-to-patent:research/research-question</span>
     <span class="cap-id">design-research-question-formulation</span>
     <span class="cap-title">Research Question Formulation</span>
-    <span class="meta">graph node academic-pipeline:research/research-question / minimal:rq / research-main:research-question</span>
+    <span class="meta">graph node academic-pipeline:research/research-question / minimal:rq / patent-informed-paper:research/research-question / research-main:research-question / research-to-patent:research/research-question</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Turns a project intent into a FINER-scored research question brief with scope boundaries and bound sub-questions.</div>
@@ -45600,10 +45600,10 @@ Timing: [After publication / After study completion / Other]
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">systematic-review 尚无独立 graph profile；当前为 M1 + M5 能力的组合实例。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/research-question, minimal:rq, research-main:research-question</span>
+    <span class="node-id">academic-pipeline:research/research-question, minimal:rq, patent-informed-paper:research/research-question, research-main:research-question, research-to-patent:research/research-question</span>
     <span class="cap-id">design-research-question-formulation</span>
     <span class="cap-title">Research Question Formulation</span>
-    <span class="meta">graph node academic-pipeline:research/research-question / minimal:rq / research-main:research-question</span>
+    <span class="meta">graph node academic-pipeline:research/research-question / minimal:rq / patent-informed-paper:research/research-question / research-main:research-question / research-to-patent:research/research-question</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Turns a project intent into a FINER-scored research question brief with scope boundaries and bound sub-questions.</div>
@@ -45871,10 +45871,10 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/methodology, minimal:methodology, research-main:methodology</span>
+    <span class="node-id">academic-pipeline:research/methodology, minimal:methodology, patent-informed-paper:research/methodology, research-main:methodology, research-to-patent:research/methodology</span>
     <span class="cap-id">design-methodology-design</span>
     <span class="cap-title">Methodology Design</span>
-    <span class="meta">graph node academic-pipeline:research/methodology / minimal:methodology / research-main:methodology</span>
+    <span class="meta">graph node academic-pipeline:research/methodology / minimal:methodology / patent-informed-paper:research/methodology / research-main:methodology / research-to-patent:research/methodology</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Selects a paradigm, methods, data strategy and analysis framework coherent with the confirmed research question, with bounded human-subjects administration and preregistration handoff.</div>
@@ -47541,10 +47541,10 @@ revision instruction. Consent/protocol comparison stays under the separate
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/literature, minimal:literature, research-main:literature</span>
+    <span class="node-id">academic-pipeline:research/literature, minimal:literature, patent-informed-paper:research/literature, research-main:literature, research-to-patent:research/literature</span>
     <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
-    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / research-main:literature</span>
+    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / patent-informed-paper:research/literature / research-main:literature / research-to-patent:research/literature</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Runs a systematic, reproducible search and screening process and produces an annotated bibliography with claim-specific coverage and PRISMA-style documentation.</div>
@@ -48112,10 +48112,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/grading, minimal:grading, research-main:grading</span>
+    <span class="node-id">academic-pipeline:research/grading, minimal:grading, patent-informed-paper:research/grading, research-main:grading, research-to-patent:research/grading</span>
     <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
-    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / research-main:grading</span>
+    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / patent-informed-paper:research/grading / research-main:grading / research-to-patent:research/grading</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Grades each source by evidence level, predatory-journal red flags and conflicts of interest.</div>
@@ -49490,10 +49490,10 @@ User: "Systematic review of [topic]" / "Meta-analysis of [topic]"
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/synthesis, minimal:synthesis, research-main:synthesis</span>
+    <span class="node-id">academic-pipeline:research/synthesis, minimal:synthesis, patent-informed-paper:research/synthesis, research-main:synthesis, research-to-patent:research/synthesis</span>
     <span class="cap-id">analysis-evidence-synthesis</span>
     <span class="cap-title">Evidence Synthesis</span>
-    <span class="meta">graph node academic-pipeline:research/synthesis / minimal:synthesis / research-main:synthesis</span>
+    <span class="meta">graph node academic-pipeline:research/synthesis / minimal:synthesis / patent-informed-paper:research/synthesis / research-main:synthesis / research-to-patent:research/synthesis</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions.</div>
@@ -49942,10 +49942,10 @@ The agent's job still ends at emission. The agent does NOT post-process or audit
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/report, minimal:report, research-main:report</span>
+    <span class="node-id">academic-pipeline:research/report, minimal:report, patent-informed-paper:research/report, research-main:report, research-to-patent:research/report</span>
     <span class="cap-id">generation-report-compilation</span>
     <span class="cap-title">Research Report Compilation</span>
-    <span class="meta">graph node academic-pipeline:research/report / minimal:report / research-main:report</span>
+    <span class="meta">graph node academic-pipeline:research/report / minimal:report / patent-informed-paper:research/report / research-main:report / research-to-patent:research/report</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Compiles the synthesis and method blueprint into a complete APA-style research report.</div>
@@ -73821,10 +73821,10 @@ This template provides the skeleton for a concise conference paper presenting re
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">plan mode 尚无独立 graph profile；当前为 4 个能力的对话式组合。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-paper:intake, academic-pipeline:write/intake</span>
+    <span class="node-id">academic-paper:intake, academic-pipeline:write/intake, patent-informed-paper:writing/intake</span>
     <span class="cap-id">design-writing-intake</span>
     <span class="cap-title">Writing Intake</span>
-    <span class="meta">graph node academic-paper:intake / academic-pipeline:write/intake</span>
+    <span class="meta">graph node academic-paper:intake / academic-pipeline:write/intake / patent-informed-paper:writing/intake</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Collects paper configuration, preregistration handoff, review-target context, domain profile, and style calibration for writing work.</div>
@@ -75493,10 +75493,10 @@ The new S5/C5 (Self-Calibration) signal tracks whether the user's commitments be
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-paper:structure, academic-pipeline:write/structure</span>
+    <span class="node-id">academic-paper:structure, academic-pipeline:write/structure, patent-informed-paper:writing/structure</span>
     <span class="cap-id">design-manuscript-structure-design</span>
     <span class="cap-title">Manuscript Structure Design</span>
-    <span class="meta">graph node academic-paper:structure / academic-pipeline:write/structure</span>
+    <span class="meta">graph node academic-paper:structure / academic-pipeline:write/structure / patent-informed-paper:writing/structure</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Designs paper structure, outline, word budget, evidence mapping, and formative review-criteria coverage.</div>
@@ -76567,10 +76567,10 @@ default pair's key names for another L1.
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-paper:argument, academic-pipeline:write/argument</span>
+    <span class="node-id">academic-paper:argument, academic-pipeline:write/argument, patent-informed-paper:writing/argument</span>
     <span class="cap-id">design-argument-blueprint</span>
     <span class="cap-title">Argument Blueprint</span>
-    <span class="meta">graph node academic-paper:argument / academic-pipeline:write/argument</span>
+    <span class="meta">graph node academic-paper:argument / academic-pipeline:write/argument / patent-informed-paper:writing/argument</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Builds claim-evidence-reasoning chains and handles counterarguments.</div>
@@ -81667,10 +81667,10 @@ This template provides the skeleton for a concise conference paper presenting re
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">academic-paper profile 的前 3 个节点。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-paper:intake, academic-pipeline:write/intake</span>
+    <span class="node-id">academic-paper:intake, academic-pipeline:write/intake, patent-informed-paper:writing/intake</span>
     <span class="cap-id">design-writing-intake</span>
     <span class="cap-title">Writing Intake</span>
-    <span class="meta">graph node academic-paper:intake / academic-pipeline:write/intake</span>
+    <span class="meta">graph node academic-paper:intake / academic-pipeline:write/intake / patent-informed-paper:writing/intake</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Collects paper configuration, preregistration handoff, review-target context, domain profile, and style calibration for writing work.</div>
@@ -82655,10 +82655,10 @@ default pair's key names for another L1.
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/literature, minimal:literature, research-main:literature</span>
+    <span class="node-id">academic-pipeline:research/literature, minimal:literature, patent-informed-paper:research/literature, research-main:literature, research-to-patent:research/literature</span>
     <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
-    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / research-main:literature</span>
+    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / patent-informed-paper:research/literature / research-main:literature / research-to-patent:research/literature</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Runs a systematic, reproducible search and screening process and produces an annotated bibliography with claim-specific coverage and PRISMA-style documentation.</div>
@@ -83226,10 +83226,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-paper:structure, academic-pipeline:write/structure</span>
+    <span class="node-id">academic-paper:structure, academic-pipeline:write/structure, patent-informed-paper:writing/structure</span>
     <span class="cap-id">design-manuscript-structure-design</span>
     <span class="cap-title">Manuscript Structure Design</span>
-    <span class="meta">graph node academic-paper:structure / academic-pipeline:write/structure</span>
+    <span class="meta">graph node academic-paper:structure / academic-pipeline:write/structure / patent-informed-paper:writing/structure</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Designs paper structure, outline, word budget, evidence mapping, and formative review-criteria coverage.</div>
@@ -89236,10 +89236,10 @@ Since #576 Spec B, `reviewer_re_review` is NOT a Schema 13 mode (removed from th
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-paper:draft, academic-pipeline:write/draft</span>
+    <span class="node-id">academic-paper:draft, academic-pipeline:write/draft, patent-informed-paper:writing/draft</span>
     <span class="cap-id">generation-manuscript-drafting</span>
     <span class="cap-title">Manuscript Drafting</span>
-    <span class="meta">graph node academic-paper:draft / academic-pipeline:write/draft</span>
+    <span class="meta">graph node academic-paper:draft / academic-pipeline:write/draft / patent-informed-paper:writing/draft</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Writes manuscript sections and scope-authorized revision patches from outline and argument blueprint.</div>
@@ -90758,10 +90758,10 @@ python scripts/revision_roadmap.py validate-bundle \
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-paper:cite-check, academic-pipeline:write/cite-check</span>
+    <span class="node-id">academic-paper:cite-check, academic-pipeline:write/cite-check, patent-informed-paper:writing/cite-check</span>
     <span class="cap-id">check-citation-format-compliance</span>
     <span class="cap-title">Citation Format Compliance</span>
-    <span class="meta">graph node academic-paper:cite-check / academic-pipeline:write/cite-check</span>
+    <span class="meta">graph node academic-paper:cite-check / academic-pipeline:write/cite-check / patent-informed-paper:writing/cite-check</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Validates in-text citations and reference list formatting.</div>
@@ -97050,10 +97050,10 @@ Your abstracts are truly independent if:
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">单能力 mode。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-paper:abstract, academic-pipeline:write/abstract</span>
+    <span class="node-id">academic-paper:abstract, academic-pipeline:write/abstract, patent-informed-paper:writing/abstract</span>
     <span class="cap-id">generation-abstract-writing</span>
     <span class="cap-title">Abstract Writing</span>
-    <span class="meta">graph node academic-paper:abstract / academic-pipeline:write/abstract</span>
+    <span class="meta">graph node academic-paper:abstract / academic-pipeline:write/abstract / patent-informed-paper:writing/abstract</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Writes independent bilingual abstract and keywords.</div>
@@ -100867,10 +100867,10 @@ This template provides the skeleton for a thematic literature review paper that 
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">写作入口 + research 文献能力组合。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-paper:intake, academic-pipeline:write/intake</span>
+    <span class="node-id">academic-paper:intake, academic-pipeline:write/intake, patent-informed-paper:writing/intake</span>
     <span class="cap-id">design-writing-intake</span>
     <span class="cap-title">Writing Intake</span>
-    <span class="meta">graph node academic-paper:intake / academic-pipeline:write/intake</span>
+    <span class="meta">graph node academic-paper:intake / academic-pipeline:write/intake / patent-informed-paper:writing/intake</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Collects paper configuration, preregistration handoff, review-target context, domain profile, and style calibration for writing work.</div>
@@ -101855,10 +101855,10 @@ default pair's key names for another L1.
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/literature, minimal:literature, research-main:literature</span>
+    <span class="node-id">academic-pipeline:research/literature, minimal:literature, patent-informed-paper:research/literature, research-main:literature, research-to-patent:research/literature</span>
     <span class="cap-id">discovery-literature-search-screening</span>
     <span class="cap-title">Literature Search And Screening</span>
-    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / research-main:literature</span>
+    <span class="meta">graph node academic-pipeline:research/literature / minimal:literature / patent-informed-paper:research/literature / research-main:literature / research-to-patent:research/literature</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Runs a systematic, reproducible search and screening process and produces an annotated bibliography with claim-specific coverage and PRISMA-style documentation.</div>
@@ -102426,10 +102426,10 @@ When `literature_corpus[]` is non-empty and parses cleanly, the agent enters Ste
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/grading, minimal:grading, research-main:grading</span>
+    <span class="node-id">academic-pipeline:research/grading, minimal:grading, patent-informed-paper:research/grading, research-main:grading, research-to-patent:research/grading</span>
     <span class="cap-id">discovery-source-quality-grading</span>
     <span class="cap-title">Source Quality Grading</span>
-    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / research-main:grading</span>
+    <span class="meta">graph node academic-pipeline:research/grading / minimal:grading / patent-informed-paper:research/grading / research-main:grading / research-to-patent:research/grading</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Grades each source by evidence level, predatory-journal red flags and conflicts of interest.</div>
@@ -102847,10 +102847,10 @@ Not all fields use the same evidence hierarchy. Adjust expectations:
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-pipeline:research/synthesis, minimal:synthesis, research-main:synthesis</span>
+    <span class="node-id">academic-pipeline:research/synthesis, minimal:synthesis, patent-informed-paper:research/synthesis, research-main:synthesis, research-to-patent:research/synthesis</span>
     <span class="cap-id">analysis-evidence-synthesis</span>
     <span class="cap-title">Evidence Synthesis</span>
-    <span class="meta">graph node academic-pipeline:research/synthesis / minimal:synthesis / research-main:synthesis</span>
+    <span class="meta">graph node academic-pipeline:research/synthesis / minimal:synthesis / patent-informed-paper:research/synthesis / research-main:synthesis / research-to-patent:research/synthesis</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Synthesizes graded sources into a convergent/divergent evidence map with claim-intent and citation emissions.</div>
@@ -107188,10 +107188,10 @@ This paper was prepared with the assistance of AI-powered academic writing tools
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">单能力 mode；terminal policy 由相邻 gate 能力承担。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-paper:format, academic-pipeline:write/format</span>
+    <span class="node-id">academic-paper:format, academic-pipeline:write/format, patent-informed-paper:writing/format</span>
     <span class="cap-id">generation-format-rendering</span>
     <span class="cap-title">Format Rendering</span>
-    <span class="meta">graph node academic-paper:format / academic-pipeline:write/format</span>
+    <span class="meta">graph node academic-paper:format / academic-pipeline:write/format / patent-informed-paper:writing/format</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Converts the final manuscript into declared output formats.</div>
@@ -110600,10 +110600,10 @@ Before conversion, ALL of the following must be true:
       <p class="col-note">左侧上游语义在 capability graph 中的对应节点。每个节点可展开其 SKILL 指令与 knowledge 原文。</p>
       <div class="profile-banner">无独立 graph profile — 以下为 mode 相关的已转换 capability 节点</div><div class="note">格式合规 + 存在性验证组合。</div><details class="node" open>
   <summary>
-    <span class="node-id">academic-paper:cite-check, academic-pipeline:write/cite-check</span>
+    <span class="node-id">academic-paper:cite-check, academic-pipeline:write/cite-check, patent-informed-paper:writing/cite-check</span>
     <span class="cap-id">check-citation-format-compliance</span>
     <span class="cap-title">Citation Format Compliance</span>
-    <span class="meta">graph node academic-paper:cite-check / academic-pipeline:write/cite-check</span>
+    <span class="meta">graph node academic-paper:cite-check / academic-pipeline:write/cite-check / patent-informed-paper:writing/cite-check</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Validates in-text citations and reference list formatting.</div>
@@ -116442,10 +116442,10 @@ Total: 17 items.
 </details>
 <details class="node" open>
   <summary>
-    <span class="node-id">academic-paper:format, academic-pipeline:write/format</span>
+    <span class="node-id">academic-paper:format, academic-pipeline:write/format, patent-informed-paper:writing/format</span>
     <span class="cap-id">generation-format-rendering</span>
     <span class="cap-title">Format Rendering</span>
-    <span class="meta">graph node academic-paper:format / academic-pipeline:write/format</span>
+    <span class="meta">graph node academic-paper:format / academic-pipeline:write/format / patent-informed-paper:writing/format</span>
   </summary>
   <div class="node-meta">
     <div><strong>Description</strong> Converts the final manuscript into declared output formats.</div>

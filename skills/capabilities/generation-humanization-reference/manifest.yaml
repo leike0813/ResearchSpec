@@ -21,7 +21,7 @@ validators:
 knowledge_refs:
   - knowledge_id: paper-humanizer-taxonomy
     path: knowledge/paper-humanizer-taxonomy.md
-    content_hash: 1b5d7afa5f39bc2bcad69805106fcea122206e07d81722970d4f37c724c7161b
+    content_hash: 7382afc8814ee922867063d0b9ea2020d68313a1dc4abbc9cb3155a99b7b2381
     license: MIT
 gate_policy: none
 provenance:
@@ -31,5 +31,5 @@ provenance:
     - PH-CAP-03
   upstream_sources:
     - path: authoring/paper-humanizer/capabilities/03_reference_taxonomy.md
-      sha256: 9e89846ed3db75238eb64bda289409e7b0fdff957fce6b77c3685778db2773b5
+      sha256: 61700f2d55acc672724bf43059fcaaaaecc7f26dceddd31e5d515fdddc0c948c
 license: MIT

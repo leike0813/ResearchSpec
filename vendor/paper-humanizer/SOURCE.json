@@ -1,7 +1,14 @@
 {
   "name": "paper-humanizer",
-  "repository": "pinned-upstream",
-  "commit": "1a31f2d0ff6dab94c799f7ae1a3a469aea3e5394",
+  "repository": "https://github.com/leike0813/paper_humanizer",
+  "commit": "84eb2edf9570aea85a799e4c4db559882c19928c",
+  "source_subtree": "paper-humanizer",
+  "supplemental_sources": [
+    {
+      "upstream_path": "references/diagnostic-guidance.md",
+      "snapshot_path": "references/academic-diagnostic-guidance.md"
+    }
+  ],
   "license": "MIT",
   "status": "maintainer-input-snapshot",
   "source_tree": "upstream",

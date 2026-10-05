@@ -4,13 +4,14 @@ Paper Humanizer 提取工件（Extraction Artifact）
 ══════════════════════════════════════════════
 工件类型: capability
 能力/包 ID: PH-CAP-03 reference-taxonomy
-提取日期: 2026-08-16
+提取日期: 2026-10-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
     - vendor/paper-humanizer/SKILL.md（全文）
 变更台账（ledger）:
-    1. [保留] SKILL.md 全文保留，含 39 patterns、false positives、protected content。
-    2. [标注] Routing 表与 Reference/Review/Full mode 选择属于流程层，authoring 阶段只将 taxonomy 与 invariants 作为知识包使用。
+    1. [保留] SKILL.md 全文逐字节保留；编号模式共 43 个，上游步骤文字仍写 39 patterns，按原文保留。
+    2. [保留] 新增学术语境：#9 学术否定用法扩展、#40-43（学术语域漂移、事实缺少论证功能、研究重复引介、模板化段落）与学术误报保护段落。
+    3. [标注] Routing 表与 Reference/Review/Full mode 选择属于流程层，authoring 阶段只将 taxonomy 与 invariants 作为知识包使用。
 说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
       一律推迟到 authoring 阶段，并另行记录。
 ══════════════════════════════════════════════
@@ -126,6 +127,11 @@ AI prose replaces `is`, `are`, or `has` with `serves as`, `represents`, `marks`,
 **Watch for:** not only ... but, it is not just ... it is, no guessing, no wasted motion.
 
 State the positive claim directly or write the trailing fragment as a real clause. Preserve a deliberate contrast that genuinely distinguishes two propositions.
+
+**In academic writing:** Keep negations that correct a real confusion present in the discourse or distinguish similar concepts. Delete negations that perform rigor by refuting claims no one made.
+
+> Before: It is not merely a statistical artifact; rather, it represents a genuine physical phenomenon.  
+> After: The pattern represents a genuine physical phenomenon. (Keep the negation only if prior work claimed it was an artifact.)
 
 ### 10. Rule-of-three overuse
 
@@ -277,6 +283,47 @@ Academic prose can sound generated when it systematically turns an existing auth
 
 Restore or clarify stance only when the source or explicit user input already supports it. Match assertion strength to the evidence. If the needed judgment, disagreement, limitation, or reaction is absent, do not invent it; leave the wording unchanged in reference mode and mark the case unresolved in review or full mode.
 
+### 40. Academic register drift to prescription language
+
+**Watch for:** requires further investigation, should be combined with, needs validation, deserves attention, warrants exploration, 需要调查, 应进一步检测, merits consideration.
+
+**Problem:** AI shifts from analyzing what evidence shows to prescribing what researchers should do next, especially in discussion or analysis sections.
+
+Academic prose should explain what evidence shows and what it cannot yet resolve, not prescribe next research steps in place of analysis. Keep prescription in designated Future Work sections; flag it when it replaces concrete findings or limitations.
+
+> Before: The correlation between tower height and resonance frequency requires further investigation and should be validated across multiple wind farm contexts.  
+> After: The correlation between tower height and resonance frequency has not been tested across multiple wind farm contexts.
+
+### 41. Facts without argumentative function
+
+**Watch for:** Literature facts, methods, or data presented without explaining what they prove, solve, or clarify for this paper's question.
+
+**Problem:** AI includes material because sources mention it, not because it advances the argument.
+
+Keep fact-lists when the genre requires them (survey sections, related work enumerations). Flag them only when each fact should connect to the paper's argument but doesn't.
+
+> Before: Smith et al. (2020) used ground-penetrating radar to detect subsurface anomalies in concrete towers. The method showed 85% accuracy in controlled tests. Multiple studies have employed similar nondestructive approaches.  
+> After: Ground-penetrating radar (Smith et al., 2020) detected subsurface cracks that visual inspection missed, which explains why early damage estimates were systematically low.
+
+### 42. Repetitive study introductions
+
+**Watch for:** The same study re-introduced with full author names and methods in multiple sections, creating the impression of multiple independent sources.
+
+**Problem:** AI fragments one study to fit categorical sections.
+
+Use pronouns or short references ("the same study", "that tower", "those measurements") for subsequent mentions within a few paragraphs or closely related sections.
+
+> Before: Wang et al. (2018) measured wind loads on tower foundations using strain gauges. The study found significant dynamic amplification... Later: Wang and colleagues (2018) investigated the same tower structure using accelerometers to capture modal response...  
+> After: Wang et al. (2018) measured wind loads on tower foundations using strain gauges and found significant dynamic amplification... The same study used accelerometers to capture modal response...
+
+### 43. Template-driven paragraphs in academic writing
+
+**Problem:** Paragraphs exist to fill a template slot rather than answer a specific question. They serve structural symmetry without argumentative purpose.
+
+**Diagnostic:** Can you state in one sentence what question this paragraph answers? If the paragraph serves no clear function beyond "providing background" or "covering this subtopic," it may be template-driven.
+
+In reference mode, focus on symptoms: mechanical topic-support-conclusion structure, generic transitions between template slots, material included only for categorical completeness. Do not remove legitimately required sections (standard methods descriptions, IRB statements, funding disclosures).
+
 ## False positives to protect
 
 Do not flag these in isolation:
@@ -290,6 +337,8 @@ Do not flag these in isolation:
 - uncertainty that accurately reflects the evidence;
 - neutral or impersonal prose whose genre calls for it, and the absence of first person by itself;
 - repeated terms that preserve reference stability.
+
+**In academic papers specifically:** Properly scoped limitations sections, passive voice in methods sections, and cautious hedging in discussion are genre conventions, not AI tells. Distinguish formulaic "challenges and future prospects" (Pattern #6, #40) from legitimate acknowledgment of study boundaries.
 
 Look for clusters and mechanisms. Preserve human signals: specific odd details, mixed feelings, unresolved tension, dated references, defensible first-person choices, genuine asides and self-corrections, and naturally varied rhythm.
 

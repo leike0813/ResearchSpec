@@ -103,6 +103,10 @@
 
 新增文件/日志已落盘而 receipt 缺失的中断用例：范围漂移导致 pending，无回调重放，实际效果保留；新快照保留待处理反馈，拒绝旧结果转挂。没有引入按文字相似度推断已处理的机制。
 
+## 共享维护身份复核（2026-10-06）
+
+paper-humanizer 增量锚点更新了共用维护 catalog 和 Skill，因此刷新本锚点维护记录。revision-master 的上游、extraction index、registry subset、capability package tree 和 parity slice 与本轮开始前的 manifest 逐项一致；未再生或改写 revision-master 生产包。本节只解释共享维护身份变化，既有语义审阅结论继续成立。
+
 ## 结论
 
 declared-fit-with-notes。新增独立工作台保留五个能力的业务义务与流程权威；未发现阻塞性语义 gap。生产页的人工操作验收仍按本 change 的任务 7.3 等待用户复核，自动检查不替代该项。SQLite 事务仅覆盖数据库语义和 receipt，物理稿件编辑的中断恢复仍需要核对实际文件与日志。

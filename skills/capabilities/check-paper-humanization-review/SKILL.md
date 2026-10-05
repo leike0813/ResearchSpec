@@ -27,6 +27,7 @@ Execute exactly one ResearchSpec capability node.
 
 - Load knowledge ID `paper-humanizer-taxonomy` from `knowledge/paper-humanizer-taxonomy.md`.
 - Load knowledge ID `diagnostic-guidance` from `knowledge/diagnostic-guidance.md`.
+- When reviewing or verifying academic prose and consulting supporting examples under the Procedure's preservation and section-context rules, load knowledge ID `academic-diagnostic-guidance` from `knowledge/academic-diagnostic-guidance.md`.
 - Load knowledge ID `document-yaml-contract` from `knowledge/document-yaml-contract.md`.
 - Load knowledge ID `review-workspace-index.html` from `review-workspace/index.html`.
 - Load knowledge ID `review-workspace-v1.html` from `review-workspace/v1.html`.
@@ -38,6 +39,7 @@ Execute exactly one ResearchSpec capability node.
 - `review-workspace/v1.html` is an optional local static review surface; it exports advisory working material and never owns workflow state.
 
 ## Procedure
+
 
 # Paper Humanization Review
 
@@ -90,6 +92,15 @@ Test patterns 7–13, 23–24, 26–28, 35, 38, and 39. Confirm a mechanism rath
 ### Pass C: organization and formatting
 
 Test patterns 15–20, 25, 29–30, and 36 against headings, paragraphs, lists, openings, and conclusions.
+
+For academic prose, also scan patterns 40–43 and the academic refinement of pattern 9:
+
+- Identify the question each paragraph answers and the function each cited fact serves. Preserve necessary background, methods descriptions, legitimate surveys, and results awaiting interpretation; missing reasoning is an unresolved substantive issue.
+- Look for repeated nearby introductions of the same study only when identity is established. Preserve required citation keys, distinct findings, distant reintroductions, and normal abstract-to-body repetition.
+- Check whether prescription replaces evidence interpretation in analysis or discussion. Keep grounded future-work suggestions, recommendations, and procedural language. Propose an evidence-limit reformulation only when its scope is supported by the source.
+- Keep meaningful negation, methods passive, evidence-calibrated hedging, scoped limitations, and required ethics or funding sections. Require a local mechanism or contextual cluster rather than a word match, fixed distance, or pattern-count threshold.
+
+Read `knowledge/academic-diagnostic-guidance.md` for supporting probes and examples when the manuscript is academic. Resolve patterns by their names in the taxonomy. Examples illustrate style mechanisms; suggestions must preserve all source information and cannot import example facts, arguments, or limitations. Leave ambiguous spans unchanged and record an unresolved item.
 
 ### Pass D: rhythm and rhetoric
 

@@ -1,0 +1,412 @@
+{
+  "schema_version": "1",
+  "repository": "https://github.com/leike0813/paper_humanizer",
+  "previous_revision": "1a31f2d0ff6dab94c799f7ae1a3a469aea3e5394",
+  "revision": "84eb2edf9570aea85a799e4c4db559882c19928c",
+  "git_tree": "46eb9db7f505dca8483fc68ef31d86052f828960",
+  "inventory": [
+    {
+      "path": ".gitignore",
+      "sha256": "819f89a333c96f663584467c38bc126d30a70a974781eef8255635a0715b356f"
+    },
+    {
+      "path": ".mcp.json",
+      "sha256": "3c42889d233b69f79ee229afca1783e586e9e9f98bd648542e07e22ca75bf841"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "b46f6122a2193edf149ac5a0c2b893d2d56914220936046cffe6840f95bad127"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "4ac4810254ab36d45419141aeb8e69bf50652cfafe5b2dab947d06d44e5cbf96"
+    },
+    {
+      "path": "README.md",
+      "sha256": "3568bd4955797a594c941d7c60db01e62dcb4be2bb2987a0e4b8fcb070f7be34"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-02-initialize-paper-humanizer/.openspec.yaml",
+      "sha256": "a1153950eea53ca08195dd2a32e1ed4be9fc85634f887c9caffa3b47192e27eb"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-02-initialize-paper-humanizer/README.md",
+      "sha256": "e19df50056fe54a2869524f917e7edf3558c66683f282bc7401fa3749139b318"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-02-initialize-paper-humanizer/design.md",
+      "sha256": "4ab8c8bbecf4d9f119e7edfae0abbb6edb7610eb4f36f812047f85a7f44b916e"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-02-initialize-paper-humanizer/proposal.md",
+      "sha256": "5c56cc6dc4d3eaf5d187c93f1b10bb852e8efd53a95a2a49faed41ea4bfc06eb"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-02-initialize-paper-humanizer/specs/paper-humanization/spec.md",
+      "sha256": "daece16c44c433484573dd776e86e0eed3a3d77c5e27dd28cdc1465f0d05f06f"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-02-initialize-paper-humanizer/tasks.md",
+      "sha256": "032254bf91e21fb4a4df5379efe1e86fa99b9a197cb5b89410367398b3d822f7"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-02-rebase-paper-humanizer-on-humanizer/.openspec.yaml",
+      "sha256": "f9584bdded4f054361ae2ee826987f38348fb9f852d6ff60b1beb96fb01b7109"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-02-rebase-paper-humanizer-on-humanizer/design.md",
+      "sha256": "cb1f9208fa69c395591a22b30f6d61429932cf4ae5275f959b92ca3f2113a9d3"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-02-rebase-paper-humanizer-on-humanizer/proposal.md",
+      "sha256": "43d7006c7ca7293cf357fb0067f10d7464979b595c58f93b82f0fdd2a0dab10d"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-02-rebase-paper-humanizer-on-humanizer/specs/document-roundtrip/spec.md",
+      "sha256": "191aca0f7a8a4242a36b0fd66b4d4c316b76840d3eb99534ee2d6e5179cd6bae"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-02-rebase-paper-humanizer-on-humanizer/specs/paper-humanization/spec.md",
+      "sha256": "24a71866ec3d9967a149fc62d2be291d5b276d1a7139766717639c508d945f7d"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-02-rebase-paper-humanizer-on-humanizer/tasks.md",
+      "sha256": "b6f199a418ea860bb41fdb9859203c3681b00541fdb03b995f95af10ddb2fdb7"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-03-upgrade-full-mode-gated-workflow/.openspec.yaml",
+      "sha256": "92b2525d81859548852d4cec2a25ac7a7f9bc08dfe777798ae4c30fb1b14fa3d"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-03-upgrade-full-mode-gated-workflow/design.md",
+      "sha256": "15998305abb3a88216455519bdcadf4bc574fd954e6953ca0a056060f94cba48"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-03-upgrade-full-mode-gated-workflow/proposal.md",
+      "sha256": "6a35d5baf0e3745e90736135f039052c3a75442e9a27bd5a0b3da44058db6997"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-03-upgrade-full-mode-gated-workflow/specs/full-workflow-runtime/spec.md",
+      "sha256": "464b7d5a41e0b963de70324c87a5a2852d610504011c6803403425bb2bb3ad31"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-03-upgrade-full-mode-gated-workflow/specs/paper-humanization/spec.md",
+      "sha256": "ca440d6d27e9d93c091c87d968652da4b76da84d073cc9217010d39f988d21a5"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-03-upgrade-full-mode-gated-workflow/tasks.md",
+      "sha256": "62a232d543316c57d8a51aeff450316e055947b63a773a41f6b32480ed06a351"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-05-add-native-quarto-support/.openspec.yaml",
+      "sha256": "1613d2c15ac2e1743059176022d807603786da900e8e52409def96654c26b412"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-05-add-native-quarto-support/design.md",
+      "sha256": "5485d1c171ac0ffaef4dab148549fec50681fe9a3598942a4b5e9d795ad57cb7"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-05-add-native-quarto-support/proposal.md",
+      "sha256": "63bb65f815de39ccd6a92f304b7e5b824776179f5a93cf9b2633ad1ae8b4d99d"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-05-add-native-quarto-support/specs/document-roundtrip/spec.md",
+      "sha256": "49401651e40367987774eff3d71828cc3cf3f44b1bedf8eb07f84b64e8d8b2e7"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-05-add-native-quarto-support/specs/paper-humanization/spec.md",
+      "sha256": "28952c5e929d61e7af0315ff87e9c21cc691cae9d75afa1c0c5b8aca31daae04"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-05-add-native-quarto-support/tasks.md",
+      "sha256": "0025dcb61ee047bcc070ae42ac290f3dcf77ba6427a03e506a34ba1e0605c91c"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-05-restore-skill-runtime-instructions/.openspec.yaml",
+      "sha256": "92b2525d81859548852d4cec2a25ac7a7f9bc08dfe777798ae4c30fb1b14fa3d"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-05-restore-skill-runtime-instructions/design.md",
+      "sha256": "1535d2faebcd063572a37225e37dc76aedc57766a10fa676446c30f41398112c"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-05-restore-skill-runtime-instructions/proposal.md",
+      "sha256": "5124ace8ea832ce88c724d849f0a2341581d843a488f7e32bf9e9d928bece677"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-05-restore-skill-runtime-instructions/specs/paper-humanization/spec.md",
+      "sha256": "bcb0cce028d611ce8aa390410923f47408461e3f34278c7e3f5afb46803c59c4"
+    },
+    {
+      "path": "openspec/changes/archive/2026-08-05-restore-skill-runtime-instructions/tasks.md",
+      "sha256": "d909ea71156ce9b31ae67d6da055bb9e7a1221ffb4f659fcf4241b19ce15dd07"
+    },
+    {
+      "path": "openspec/config.yaml",
+      "sha256": "e1a50c239cce6c2c470b59492a915578d6ec7c5f3e8da51e0631c49661516022"
+    },
+    {
+      "path": "openspec/specs/document-roundtrip/spec.md",
+      "sha256": "0c9d08a8f8f4868d5ab0874979f7aa1dfb7abe48b2ab2b8fe80a327952accd03"
+    },
+    {
+      "path": "openspec/specs/full-workflow-runtime/spec.md",
+      "sha256": "a06735254356e9000dc65a61495074b1b19d6225b784724f71cc0fc07e95359f"
+    },
+    {
+      "path": "openspec/specs/paper-humanization/spec.md",
+      "sha256": "4f0a467b576695d153c9bb84fd1026981fb3b47fe07899b84cf061fc69a701e7"
+    },
+    {
+      "path": "paper-humanizer/LICENSE",
+      "sha256": "4ac4810254ab36d45419141aeb8e69bf50652cfafe5b2dab947d06d44e5cbf96"
+    },
+    {
+      "path": "paper-humanizer/SKILL.md",
+      "sha256": "61700f2d55acc672724bf43059fcaaaaecc7f26dceddd31e5d515fdddc0c948c"
+    },
+    {
+      "path": "paper-humanizer/agents/full.md",
+      "sha256": "b59e27ea9fa476efb278dcf0135df197b976be1fd2096e92c815e752407b1b9e"
+    },
+    {
+      "path": "paper-humanizer/agents/openai.yaml",
+      "sha256": "3c597c995b05c3499be0f0204e249e82a18831cceff898cba6ebed890727dda2"
+    },
+    {
+      "path": "paper-humanizer/agents/review.md",
+      "sha256": "a2bc1f63c46a7b69a7bdfbad38ee7320995faf28804bd0b263c1a29b4fd5c8c7"
+    },
+    {
+      "path": "paper-humanizer/assets/hook-inject-guard.md",
+      "sha256": "6aa145b9d300baa77cf07d57552dfdc753f64ed9b667ed0a71481ffd1b7c0f6a"
+    },
+    {
+      "path": "paper-humanizer/references/diagnostic-guidance.md",
+      "sha256": "7364799ca64c40f2cb7e31e966384161559b175467d2ef23a16d29f00af063ad"
+    },
+    {
+      "path": "paper-humanizer/references/document-yaml-contract.md",
+      "sha256": "3a8505e6a7fb6d8fa6c30914253d7e6cce0e192f01215beba5c07810b3147f46"
+    },
+    {
+      "path": "paper-humanizer/scripts/document_pipeline.py",
+      "sha256": "1f58a75033ac460a64a601464535a4d4d79cfed3d402514acc2f70271ba767d7"
+    },
+    {
+      "path": "paper-humanizer/scripts/full_workflow.py",
+      "sha256": "9e8c7d8dad1d3bd6326452cfa0e10ae509d7773c0efee3367a5c1c280c0677f2"
+    },
+    {
+      "path": "references/ai-style-feature-statistics-report.md",
+      "sha256": "ef1d9d3052addf8f76b4185e3ccb857bb2b0d4400292fe67e9efc36e390654f2"
+    },
+    {
+      "path": "references/anti-ai-fix-strategies-report.md",
+      "sha256": "37aea119d352489f2a6f9664c0aee6261c8fdf18aeb97aedd7d36c0436d62be7"
+    },
+    {
+      "path": "references/anti-ai-pipeline-design.md",
+      "sha256": "a391beca521592a1352b9f13a8913c9fcd8f641afe2b7b7dcdf6cf8b248db747"
+    },
+    {
+      "path": "references/diagnostic-guidance.md",
+      "sha256": "79cec697bdb55c21fac84aad06fc01e98f7bfa2af7af72dcc85e53a69e00f39a"
+    },
+    {
+      "path": "references/harness-hooks-survey.md",
+      "sha256": "f05a5040ec6194a95875476886aebf2e094ab9cf884535df6fd0af73cf5837a2"
+    },
+    {
+      "path": "references/humanizer/.claude-plugin/marketplace.json",
+      "sha256": "141736822a343ca0b605d7a9298fef4b692a69368215338df76efb876af442e4"
+    },
+    {
+      "path": "references/humanizer/.claude-plugin/plugin.json",
+      "sha256": "f31bf57f37eabb0d4e2eab4deb4f69bf64cc4db164d4809cc57f8c9502aa4eb8"
+    },
+    {
+      "path": "references/humanizer/.github/workflows/validate.yml",
+      "sha256": "4ee5852335371388b4a621e2a1e5d0115b3046d214ff2b43377a2422e77a4185"
+    },
+    {
+      "path": "references/humanizer/AGENTS.md",
+      "sha256": "9ab5edfbc3df52417d54a1acb6b83536778157750992a99e1e39992cc918ce66"
+    },
+    {
+      "path": "references/humanizer/LICENSE",
+      "sha256": "4ac4810254ab36d45419141aeb8e69bf50652cfafe5b2dab947d06d44e5cbf96"
+    },
+    {
+      "path": "references/humanizer/README.md",
+      "sha256": "cb771a5ac98040b72ea1479f25bedec9e619c85f8b1493c205105a3b714a9d86"
+    },
+    {
+      "path": "references/humanizer/SKILL.md",
+      "sha256": "70938f3cce25970e1ded5fdd194b755c03f1e4e4fa76820958ce78f86b677b1a"
+    },
+    {
+      "path": "references/humanizer/agents/openai.yaml",
+      "sha256": "7b4289413ca3de49c7efc2798ac230e7ae563a6bd7eadf799ee5b2d75c261d25"
+    },
+    {
+      "path": "references/humanizer/scripts/validate-package.py",
+      "sha256": "d2c5496ca73a8ce2d3f0cad6681724170d8566bef54d36dfc1e5d3972597b614"
+    },
+    {
+      "path": "references/ponytail-hook-injection.md",
+      "sha256": "2e7c9d93564ffcfa5f0a05864019c272e416ac0a611c7534a4a6b5f55fcc138f"
+    },
+    {
+      "path": "references/write-like-me/.gitignore",
+      "sha256": "abcc1b380729dae3dd87dcbe34ef31bc2bbab3fd82274554a5705da2212f1148"
+    },
+    {
+      "path": "references/write-like-me/LICENSE",
+      "sha256": "3b0cbb71f76d9460eba20fd2ee1cd2a4050e285f87f805d9eee282a5ebbb4656"
+    },
+    {
+      "path": "references/write-like-me/README.md",
+      "sha256": "6741ccb16d2ca926a96eacde181519cf12b1496cd4b53dae91cce42177a6eb40"
+    },
+    {
+      "path": "references/write-like-me/SKILL.md",
+      "sha256": "13cc8601f856c4142c250211e1a99eb7799c02000b76e27140f70efa7ebba564"
+    },
+    {
+      "path": "references/write-like-me/docs/write-like-me.webp",
+      "sha256": "8faecf5623706cd3abdd573b63f9aea07243f3fced95b5083b87b9c6600500f6"
+    },
+    {
+      "path": "references/write-like-me/references/00-universal-baseline.md",
+      "sha256": "97a91a5dbb57adeb6bb7fa8799399ebaa5d7f960d0b6e927c8d65504df41a8ab"
+    },
+    {
+      "path": "references/write-like-me/references/01-corpus-discovery.md",
+      "sha256": "5c4a29b93b69159ec7ea36bc5c66b0a427b3c2ec9e2d8d242227f85d834d831b"
+    },
+    {
+      "path": "references/write-like-me/references/02-author-filtering.md",
+      "sha256": "c16e236df83c8eb8177bb6b930c7146722894c3001e63343249bae8a2e1e03d9"
+    },
+    {
+      "path": "references/write-like-me/references/03-methodology.md",
+      "sha256": "bf614759c30f9604a59a3eab5a4ecbd170829f8207c37f34ece2389da7f733bc"
+    },
+    {
+      "path": "references/write-like-me/references/04-rule-mining.md",
+      "sha256": "c104ad83c17a465f008973981df60ab85230e11f36ed2289dd4f6ee120af9d39"
+    },
+    {
+      "path": "references/write-like-me/references/05-exemplar-selection.md",
+      "sha256": "c19d9ff046902fe338a5c2fb94f1c7afd3566038ef15779cef5c893379792cea"
+    },
+    {
+      "path": "references/write-like-me/references/06-skill-emission.md",
+      "sha256": "b1a5d66f9d9b9b779da5d4855d51910802e9c398d62a5557286bd048e38715f2"
+    },
+    {
+      "path": "references/write-like-me/references/07-verification.md",
+      "sha256": "9be2010354a54def6ee1a6d1fb9770fc30787c17dc0f115763ddf9df343e0d08"
+    },
+    {
+      "path": "references/write-like-me/references/08-regeneration-and-diff.md",
+      "sha256": "f2b742e68c1f7e5326a6e04e72402f281166bb3cd234e64df733f59660ff77cd"
+    },
+    {
+      "path": "references/write-like-me/scripts/extract_author_turns.py",
+      "sha256": "adf6e496da371c58e552c15c10d4f8ab2e7202d301d22b6d1749cd23baa38dbe"
+    },
+    {
+      "path": "references/write-like-me/scripts/generate_report_from_json.py",
+      "sha256": "ca5f2f9e4b9fa7e73b29b44bbaf4daf5ca8448bd3e0b58e8134b2d3de4d7b7e9"
+    },
+    {
+      "path": "references/write-like-me/scripts/requirements.txt",
+      "sha256": "f91ed7211875dfc2af180df1a8bdfbd16d4a9091c9eb804c2fca14ee63cf445e"
+    },
+    {
+      "path": "references/write-like-me/scripts/stylometry.py",
+      "sha256": "0890cabf913185bece212b35f9f3e9825e7d00583072e7185adcb4e46dbfebfe"
+    },
+    {
+      "path": "references/write-like-me/templates/generated-01-generative.md",
+      "sha256": "d760b221d7d36e8315a64325b8d09588414c3ba5448fd52d74e81e0da5ae0881"
+    },
+    {
+      "path": "references/write-like-me/templates/generated-02-corrective.md",
+      "sha256": "bee2d59a0a3f92a991cde6f6ca4449baedd94020011260a01d22e6189caeca5f"
+    },
+    {
+      "path": "references/write-like-me/templates/generated-03-corpus-source.md",
+      "sha256": "8cd715e109a1e6c834738279545aee9114f69bf1b38670b3abe35367a8d8166f"
+    },
+    {
+      "path": "references/write-like-me/templates/generated-SKILL.md",
+      "sha256": "ade5ef9eb4b21d863d7b7981a57f0a23a3fb24993f67203e7c6ef5c762a5deb3"
+    },
+    {
+      "path": "references/write-like-me/templates/generated-claude-ai-skill.md",
+      "sha256": "c38bc1fb7bf1de2493e31fd0f777d8af3274248fd2299c93085f821f62f5256b"
+    },
+    {
+      "path": "references/write-like-me/templates/style-profile-report.md",
+      "sha256": "469561e4400d2841bf0b792d5b9699e414bc64ca235be2ef57c147919d69bdba"
+    },
+    {
+      "path": "references/write-like-me/voices/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tests/test_document_pipeline.py",
+      "sha256": "b1038978fdd670c0964386aa023410f547df1bb686eb39662ed64e360a43a43b"
+    },
+    {
+      "path": "tests/test_full_workflow.py",
+      "sha256": "cefc4799e0256a812037c5f99b7408a729b9cf03bdef6cf4da247b1a9cb882c1"
+    }
+  ],
+  "changes": [
+    {
+      "status": "A",
+      "path": ".mcp.json"
+    },
+    {
+      "status": "M",
+      "path": "AGENTS.md"
+    },
+    {
+      "status": "A",
+      "path": "LICENSE"
+    },
+    {
+      "status": "A",
+      "path": "README.md"
+    },
+    {
+      "status": "M",
+      "path": "paper-humanizer/SKILL.md"
+    },
+    {
+      "status": "A",
+      "path": "paper-humanizer/assets/hook-inject-guard.md"
+    },
+    {
+      "status": "A",
+      "path": "references/diagnostic-guidance.md"
+    },
+    {
+      "status": "A",
+      "path": "references/harness-hooks-survey.md"
+    },
+    {
+      "status": "M",
+      "path": "references/humanizer/AGENTS.md"
+    },
+    {
+      "status": "A",
+      "path": "references/ponytail-hook-injection.md"
+    }
+  ],
+  "upstream_diff": "diff --git a/.mcp.json b/.mcp.json\nnew file mode 100644\nindex 0000000..b05814c\n--- /dev/null\n+++ b/.mcp.json\n@@ -0,0 +1,12 @@\n+{\n+  \"mcpServers\": {\n+    \"agent-harness-wiki\": {\n+      \"command\": \"npx\",\n+      \"args\": [\n+        \"-y\",\n+        \"agent-harness-wiki\",\n+        \"mcp\"\n+      ]\n+    }\n+  }\n+}\ndiff --git a/AGENTS.md b/AGENTS.md\nindex 112d735..763c873 100644\n--- a/AGENTS.md\n+++ b/AGENTS.md\n@@ -9,8 +9,8 @@\n \n - **降低/去除文本的 AI 生成特征**：本 Skill 的核心目标是将一段文本中可能存在的 AI 生成特征降低或去除，使其更接近人类写作风格\n - **基准**：本 Skill 应将 `blader/humanizer` 项目（位于 `references/humanizer` 目录）作为最主要的参考基准，在其基础上进行优化，没必要从0重做\n-- **执行模式**：- 本 Skill 应支持 3 种模式：\n-  1. 参考模式：仅依赖 SKILL.md 工作，类似于原始的 humanizer skill。Agent可以在任何需要生成或修改一段文本时读取，并且不应该也不需要读取更多的额外指令文件。在该模式下工作时，本 Skill 应当被视作一个“插件”而非一个需要执行的任务流程，Agent 仍应专注于其本来进行的任务；\n+- **执行模式**：本 Skill 应支持 3 种模式：\n+  1. 参考模式：仅依赖 SKILL.md 工作，类似于原始的 humanizer skill。Agent可以在任何需要生成或修改一段文本时读取，并且不应该也不需要读取更多的额外指令文件。在该模式下工作时，本 Skill 应当被视作一个”插件”而非一个需要执行的任务流程，Agent 仍应专注于其本来进行的任务；\n   2. 审查模式：该模式用于对一段文本进行详细的、彻底的审查，最终列出所有疑似具有AI特征的文本片段/段落，并针对每一项给出修改建议\n   3. 完全模式：该模式用于端到端地去AI化处理，在审查的基础上，询问用户意见并执行修改，生成最终的去AI化文本\n - **审查模式和完全模式需要加入句长统计**：应提供一个多类型输入（plain/markdown/latex）与结构化yaml的双向转换引擎，用于统计文本的句长分布。句长分布不合理也要作为一个AI特征（参考模式除外）。\n@@ -21,6 +21,47 @@\n - **不修改文本的文体、结构**：去AI化后的文本应于原始文本具有相同的文体和结构\n - **不对文本的质量进行判断或试图优化**：不要试图把一篇随手笔记变成一篇书面文档，但更要避免去AI化处理后的文本质量发生劣化\n \n+## 已完成的工作\n+\n+### WindTurbine 学术写作经验整合 (2026-10-05)\n+\n+从 `/home/joshua/Workspace/Paper/LiSongTao/WindTurbineTowerDetectionReview/AGENTS.md` 中提取并整合了学术论文写作的经验教训，新增 5 项学术文体特定的模式：\n+\n+**已纳入 SKILL.md 的扩展：**\n+\n+1. **Pattern #9 扩展** - 否定句的语用精确性\n+   - 区分纠正真实混淆的否定 vs. 表演严谨的否定\n+   - 学术写作中保留有真实话语指称对象的否定，删除无人提出的观点的否定\n+\n+2. **Pattern #40** - 学术文体漂移到处方式语言\n+   - 识别在分析/讨论段落中用”需要进一步研究”等处方语言替代具体发现的情况\n+   - 保持分析文体，将处方语言限制在明确的 Future Work 章节\n+\n+3. **Pattern #41** - 事实缺乏论证功能\n+   - 检测已正确引用但未连接到论文论点的材料\n+   - 文献事实应说明其证明什么、解决什么问题\n+\n+4. **Pattern #42** - 重复性研究引入\n+   - 标记同一研究被多次完整介绍（作者+年份+方法），造成多个独立来源的假象\n+   - 后续引用应使用代词或简短指称\n+\n+5. **Pattern #43** - 模板驱动的段落\n+   - 元诊断：”能否一句话说出本段回答什么问题？”\n+   - 识别仅为填充模板槽位而存在的段落\n+\n+**已创建的新文件：**\n+- `references/diagnostic-guidance.md` - 为审查/完全模式提供学术体裁诊断指导\n+\n+**范围边界决策：**\n+- ✓ 不进行事实核查（不验证声明是已证明 vs. 仅推断）\n+- ✓ 仅处理重复性引入措辞（不主动解析引用模式）\n+- ✓ SKILL.md 本身携带轻量级学术意识（项目名为 paper-humanizer）\n+\n+**交叉验证：**\n+- 与现有 45 个 AI 特征族统计报告交叉验证，无冲突\n+- 与 P0-P8 去 AI 化流程架构对齐\n+- 填补了现有 baseline 在学术文体方面的真实空白\n+\n ## 你该做什么\n \n - 本文档仅是一份宏观指导，距离可供 Agent 实施的详细指令（SKILL.md）还有不小距离\n@@ -34,13 +75,6 @@\n - **避免生成不符合 Open Agent Skills 规范的文件**：Open Agent Skills 规范规定，一个 Skill 包中必须有一个位于包根目录的 `SKILL.md` 作为 Agent 直接读取的核心指令文件。核心指令文件不宜过长。按需执行的补充指令、参考文档等可放在 Skill 包中的 `references` 目录中（需要在 `SKILL.md` 中声明其用途及用法）；Python 脚本放在 Skill 包中的 `scripts` 目录中；其它资产文件可放在 Skill 包中的 `assets` 目录中。\n - **避免在 `SKILL.md` 中添加对 Skill 执行没有帮助的信息**: `SKILL.md` 中应仅包含对 Skill 执行具有约束作用或帮助作用的指令。一切面向用户的提示、说明，以及错误的、自相矛盾的、模棱两可的指令均不应该出现在 `SKILL.md`中\n \n-## 你该怎么做（总体流程建议，非强制，灵活参考）\n-\n-1. 制定实现方案：明确任务目标，进行任务拆解，制定实现路线图\n-2. 建立项目骨架，制定 `SKILL.md`大纲，拟定需要哪些脚本、承担哪些职责\n-3. 和用户交互，细化每一步方案，对方案中需要决策的地方询问用户，可以附带你的建议\n-4. 锁定方案后，开始按路线图实现\n-\n ## 参考项目\n \n - `references/humanizer`：一个文本去AI化 Skill，本项目的核心参考和优化基础\ndiff --git a/LICENSE b/LICENSE\nnew file mode 100644\nindex 0000000..625297f\n--- /dev/null\n+++ b/LICENSE\n@@ -0,0 +1,21 @@\n+MIT License\n+\n+Copyright (c) 2025 Siqi Chen\n+\n+Permission is hereby granted, free of charge, to any person obtaining a copy\n+of this software and associated documentation files (the \"Software\"), to deal\n+in the Software without restriction, including without limitation the rights\n+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n+copies of the Software, and to permit persons to whom the Software is\n+furnished to do so, subject to the following conditions:\n+\n+The above copyright notice and this permission notice shall be included in all\n+copies or substantial portions of the Software.\n+\n+THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n+SOFTWARE.\ndiff --git a/README.md b/README.md\nnew file mode 100644\nindex 0000000..9fbc49d\n--- /dev/null\n+++ b/README.md\n@@ -0,0 +1,72 @@\n+# Paper Humanizer\n+\n+> **本项目基于 [blader/humanizer](https://github.com/blader/humanizer) 之上构建，baseline 为 `humanizer-2.9.1`。**\n+> 在保留其核心规则与不变量的同时，针对学术 / 论文场景做了扩展：新增审查与完全两种执行模式，并加入句长分布作为 AI 特征信号。\n+\n+Paper Humanizer 是一个 [Open Agent Skills](https://opencode.ai/docs/skills) 规范的 Skill 包，用于在不改写原文含义、不损失信息密度、不破坏文体与结构的前提下，降低或去除文本中的 AI 生成特征。\n+\n+## 三种执行模式\n+\n+| 模式 | 用途 | 是否读取额外文档 |\n+|---|---|---|\n+| **参考模式** | 在任意写作任务中作为内联参考，Agent 仅依赖 `SKILL.md` 工作 | 否 |\n+| **审查模式** | 给出可定位的疑似 AI 特征清单与修改建议，不动原文 | 是 |\n+| **完全模式** | 审查 → 计划协商 → 改写 → 验证 → 交付，端到端产出最终稿 | 是 |\n+\n+审查与完全模式额外要求：\n+\n+- 将原文解析为结构化表示（plain / Markdown / LaTeX）。\n+- 统计句长分布，作为 AI 特征信号之一。\n+- 任何修改都需要保留原文的每一条信息单元，禁止新增事实、引用或润色。\n+\n+## 仓库结构\n+\n+```\n+paper_humanizer/\n+├── AGENTS.md                       # 项目级 Agent 协作约束\n+├── README.md                       # 本文件\n+├── LICENSE                         # MIT（与 paper-humanizer/LICENSE 内容一致）\n+├── paper-humanizer/                # Skill 包发布目录（与 Skill 名一致）\n+│   ├── SKILL.md                    # Agent 直接读取的核心指令\n+│   ├── LICENSE\n+│   ├── agents/                     # 审查 / 完全模式的执行指令\n+│   ├── references/                 # 诊断指引与文档 YAML 契约\n+│   └── scripts/                    # 文档解析与句长统计等确定性脚本\n+├── references/                     # 设计参考与外部资料\n+│   ├── humanizer/                  # blader/humanizer 源码（baseline）\n+│   ├── write-like-me/              # 另一份 voice-profile 参考\n+│   └── *.md                        # AI 特征统计 / 修正策略 / 流程设计报告\n+└── tests/                          # paper-humanizer/scripts 的测试\n+```\n+\n+## 与 blader/humanizer 的关系\n+\n+- 本项目以 `references/humanizer/` 中的代码与 `SKILL.md` 为起点，没有从零重写。\n+- 沿用其 33 项基础模式，并扩展为 **44 项**（包含 LaTeX/Markdown 结构噪声、句长均质化等学术场景信号，以及学术文体特定的 5 项扩展）。\n+- 保持其\"不伪造事实、不擅自加引用\"的核心约束。\n+- 在原项目\"参考模式（指令即用）\"的基础上，新增独立的审查模式与完全模式。\n+\n+### 学术文体扩展（5 项新增模式）\n+\n+基于真实学术论文写作经验，paper-humanizer 在 humanizer 基础上新增了以下学术场景特定的模式：\n+\n+1. **Pattern #9 扩展：否定句的语用精确性** - 区分纠正真实混淆的否定 vs. 表演严谨的否定\n+2. **Pattern #40：学术文体漂移到处方式语言** - 识别分析段落中用处方语言（\"需要进一步研究\"）替代具体发现的情况\n+3. **Pattern #41：事实缺乏论证功能** - 检测已正确引用但未连接到论文论点的材料\n+4. **Pattern #42：重复性研究引入** - 标记同一研究被多次完整介绍，造成多个独立来源的假象\n+5. **Pattern #43：模板驱动的段落** - 元诊断：\"能否一句话说出本段回答什么问题？\"\n+\n+这些扩展源自对学术写作 AI 化问题的系统分析，并与现有 AI 特征统计报告（45 个特征族、9 份指南的元分析）交叉验证，确保无冲突且填补真实空白。\n+\n+## 参考项目与资料\n+\n+- [blader/humanizer](https://github.com/blader/humanizer) —— 本项目最核心的参考与起点\n+- [blader/write-like-me](https://github.com/blader/write-like-me) —— voice profile 思路参考\n+- [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) —— 主要权威依据\n+- `references/ai-style-feature-statistics-report.md`\n+- `references/anti-ai-fix-strategies-report.md`\n+- `references/anti-ai-pipeline-design.md`\n+\n+## 许可\n+\n+MIT。详见 [LICENSE](./LICENSE)。\n\\ No newline at end of file\ndiff --git a/paper-humanizer/SKILL.md b/paper-humanizer/SKILL.md\nindex 0610619..143676f 100644\n--- a/paper-humanizer/SKILL.md\n+++ b/paper-humanizer/SKILL.md\n@@ -109,6 +109,11 @@ AI prose replaces `is`, `are`, or `has` with `serves as`, `represents`, `marks`,\n \n State the positive claim directly or write the trailing fragment as a real clause. Preserve a deliberate contrast that genuinely distinguishes two propositions.\n \n+**In academic writing:** Keep negations that correct a real confusion present in the discourse or distinguish similar concepts. Delete negations that perform rigor by refuting claims no one made.\n+\n+> Before: It is not merely a statistical artifact; rather, it represents a genuine physical phenomenon.  \n+> After: The pattern represents a genuine physical phenomenon. (Keep the negation only if prior work claimed it was an artifact.)\n+\n ### 10. Rule-of-three overuse\n \n Do not force ideas into triads for rhythm or a false sense of completeness. Keep real taxonomies, three actual findings, and lists whose membership matters.\n@@ -259,6 +264,47 @@ Academic prose can sound generated when it systematically turns an existing auth\n \n Restore or clarify stance only when the source or explicit user input already supports it. Match assertion strength to the evidence. If the needed judgment, disagreement, limitation, or reaction is absent, do not invent it; leave the wording unchanged in reference mode and mark the case unresolved in review or full mode.\n \n+### 40. Academic register drift to prescription language\n+\n+**Watch for:** requires further investigation, should be combined with, needs validation, deserves attention, warrants exploration, 需要调查, 应进一步检测, merits consideration.\n+\n+**Problem:** AI shifts from analyzing what evidence shows to prescribing what researchers should do next, especially in discussion or analysis sections.\n+\n+Academic prose should explain what evidence shows and what it cannot yet resolve, not prescribe next research steps in place of analysis. Keep prescription in designated Future Work sections; flag it when it replaces concrete findings or limitations.\n+\n+> Before: The correlation between tower height and resonance frequency requires further investigation and should be validated across multiple wind farm contexts.  \n+> After: The correlation between tower height and resonance frequency has not been tested across multiple wind farm contexts.\n+\n+### 41. Facts without argumentative function\n+\n+**Watch for:** Literature facts, methods, or data presented without explaining what they prove, solve, or clarify for this paper's question.\n+\n+**Problem:** AI includes material because sources mention it, not because it advances the argument.\n+\n+Keep fact-lists when the genre requires them (survey sections, related work enumerations). Flag them only when each fact should connect to the paper's argument but doesn't.\n+\n+> Before: Smith et al. (2020) used ground-penetrating radar to detect subsurface anomalies in concrete towers. The method showed 85% accuracy in controlled tests. Multiple studies have employed similar nondestructive approaches.  \n+> After: Ground-penetrating radar (Smith et al., 2020) detected subsurface cracks that visual inspection missed, which explains why early damage estimates were systematically low.\n+\n+### 42. Repetitive study introductions\n+\n+**Watch for:** The same study re-introduced with full author names and methods in multiple sections, creating the impression of multiple independent sources.\n+\n+**Problem:** AI fragments one study to fit categorical sections.\n+\n+Use pronouns or short references (\"the same study\", \"that tower\", \"those measurements\") for subsequent mentions within a few paragraphs or closely related sections.\n+\n+> Before: Wang et al. (2018) measured wind loads on tower foundations using strain gauges. The study found significant dynamic amplification... Later: Wang and colleagues (2018) investigated the same tower structure using accelerometers to capture modal response...  \n+> After: Wang et al. (2018) measured wind loads on tower foundations using strain gauges and found significant dynamic amplification... The same study used accelerometers to capture modal response...\n+\n+### 43. Template-driven paragraphs in academic writing\n+\n+**Problem:** Paragraphs exist to fill a template slot rather than answer a specific question. They serve structural symmetry without argumentative purpose.\n+\n+**Diagnostic:** Can you state in one sentence what question this paragraph answers? If the paragraph serves no clear function beyond \"providing background\" or \"covering this subtopic,\" it may be template-driven.\n+\n+In reference mode, focus on symptoms: mechanical topic-support-conclusion structure, generic transitions between template slots, material included only for categorical completeness. Do not remove legitimately required sections (standard methods descriptions, IRB statements, funding disclosures).\n+\n ## False positives to protect\n \n Do not flag these in isolation:\n@@ -273,6 +319,8 @@ Do not flag these in isolation:\n - neutral or impersonal prose whose genre calls for it, and the absence of first person by itself;\n - repeated terms that preserve reference stability.\n \n+**In academic papers specifically:** Properly scoped limitations sections, passive voice in methods sections, and cautious hedging in discussion are genre conventions, not AI tells. Distinguish formulaic \"challenges and future prospects\" (Pattern #6, #40) from legitimate acknowledgment of study boundaries.\n+\n Look for clusters and mechanisms. Preserve human signals: specific odd details, mixed feelings, unresolved tension, dated references, defensible first-person choices, genuine asides and self-corrections, and naturally varied rhythm.\n \n ## Protected content\ndiff --git a/paper-humanizer/assets/hook-inject-guard.md b/paper-humanizer/assets/hook-inject-guard.md\nnew file mode 100644\nindex 0000000..01cc1cd\n--- /dev/null\n+++ b/paper-humanizer/assets/hook-inject-guard.md\n@@ -0,0 +1,51 @@\n+# 去AI化写作守则（Hook注入版）\n+\n+**目的**：生成文本时预防AI特征，非事后诊断。每轮输出前内化，不向用户提及。\n+\n+## 核心约束\n+\n+1. **保护语义**：每个命题、事实、限定、否定、因果关系必须保留；信息密度不增不减\n+2. **保护体裁**：文体、语域、篇章结构、段落功能不变；笔记仍是笔记，学术仍是学术\n+3. **保护作者性**：已有的声音、节奏不规则性、领域术语、标点习惯不动\n+\n+## 八条防线（100%共识）\n+\n+| # | 特征 | 守则 |\n+|---|------|------|\n+| 1 | **显性连接词过密** | 删除后逻辑仍通的 Furthermore/Moreover/Additionally/首先其次 → 删 |\n+| 2 | **段落模板化** | 总—分—总/汉堡包/topic→support→summary → 按实际逻辑组织，非对称可 |\n+| 3 | **学术套话/AI标志词** | plays a crucial role, delve into, 综上所述, 至关重要 → 具体动词/事实 |\n+| 4 | **句长高度均匀** | 句长集中15-25词、缺极短/极长句 → 自然分合，制造句长起伏 |\n+| 5 | **名词化/弱动词链** | conduct analysis→analyze; provide explanation→explain; of链 → 精确动词 |\n+| 6 | **语义重复/零信息句** | 换词复述同一命题、in other words无增量 → 删除或合并到前句 |\n+| 7 | **重要性词通胀** | important/crucial/significant/具有重要意义 泛滥 → 用证据说话，少评价 |\n+| 8 | **作者声音缺失** | 匿名百科感、无明确主张、处处中立 → 恢复判断、立场、disagreement（需证据支持） |\n+\n+## 次高频陷阱（78%共识）\n+\n+- **机械列举**：First/Second/Third，三元排比 → 仅当分类学确需时保留\n+- **元话语过密**：It is worth noting/值得注意的是/路标句 → 直接陈述，少宣布\n+- **Hedging异常**：多重堆叠(could potentially possibly)或机械均匀撒布 → 一个不确定性一个hedge\n+- **信息平原化**：每句信息量相近，摘要/结论近同义 → 突出核心，次要从简\n+- **回避简单词**：is→serves as, use→leverage → 简单词优先\n+- **宏大背景开头**：In recent years/随着…快速发展 → 从具体问题/发现开场\n+\n+## 学术文体专项（仅学术写作）\n+\n+- **否定的语用功能**：保留纠正真实混淆的否定（prior work claimed X, but...），删除无人提出观点的否定（不仅仅是…更是…）\n+- **处方语言漂移**：requires further investigation/needs validation → 改为 has not been tested/remains unclear（分析段落用分析语言，Future Work用处方语言）\n+- **事实无论证功能**：Smith (2020) measured X with 85% accuracy [停] → 补上 which explains why早期估计systematically low\n+- **重复性研究引入**：同一研究多次完整介绍（作者+年份+方法） → 后续用代词/简短指称\n+- **模板驱动段落**：自问\"本段回答什么问题\"，答不出 → 该段可能是凑结构，需重构或删除\n+\n+## 执行检查\n+\n+输出前问自己：\n+1. 能否一句话说出每段的具体目的？（非\"提供背景\"）\n+2. 删掉连接词/评价词后，命题链是否仍完整？\n+3. 有没有换词复述同一件事？\n+4. 句长是否有 5-10词的短句和 30+词的长句混合？\n+5. 是否每个 crucial/significant 都有证据支撑？\n+6. 作者的主张/判断/disagreement 是否清晰？（需有依据时）\n+\n+**边界**：引文、代码、公式、标识符、required模板（IRB/funding）不动。\ndiff --git a/references/diagnostic-guidance.md b/references/diagnostic-guidance.md\nnew file mode 100644\nindex 0000000..8c89440\n--- /dev/null\n+++ b/references/diagnostic-guidance.md\n@@ -0,0 +1,177 @@\n+# Diagnostic Guidance for Review and Full Modes\n+\n+This document provides additional diagnostic procedures and calibration guidance for **review mode** and **full mode** only. Reference mode must work from SKILL.md alone and should not load this file.\n+\n+## Academic Genre Diagnostics\n+\n+When the input is academic writing (research papers, theses, dissertations, literature reviews), apply these additional diagnostics alongside the 43 core patterns.\n+\n+### 1. Question-First Diagnostic\n+\n+**Target sections:** Introduction, Discussion, Analysis, Literature Review\n+\n+**Procedure:**\n+- For each paragraph, ask: \"What specific question does this paragraph answer?\"\n+- A well-formed academic paragraph addresses a clear question: Why does this matter? What evidence supports X? How do these findings differ? What explains this phenomenon?\n+\n+**Flag when:**\n+- The paragraph exists only to fill a template slot (Background, Context, Related Work) without clear argumentative function\n+- Material is included for categorical completeness (\"we should mention Y because papers in this field always do\") rather than to advance this paper's argument\n+- The paragraph could be removed without creating a gap in the paper's reasoning\n+\n+**Do not flag:**\n+- Standard required sections: methods descriptions, IRB/ethics statements, funding disclosures, acknowledgments\n+- Survey/related-work sections that legitimately enumerate prior work\n+- Background paragraphs that establish necessary context for understanding the research question\n+\n+**Example:**\n+\n+> **Template-driven (flag):** \"Wind energy has experienced rapid growth in recent years. Turbine technology continues to advance. Many countries have invested in wind infrastructure. This background provides context for our study.\"\n+>\n+> **Question-driven (keep):** \"Early wind turbine designs assumed linear structural response under operational loads, but recent field measurements show nonlinear behavior above 15 m/s wind speeds (Smith 2020, Jones 2021). Whether this nonlinearity arises from material properties or geometric effects remains unclear, and resolving this determines which monitoring approach is appropriate.\"\n+\n+### 2. Fact-Function Diagnostic\n+\n+**Target sections:** Introduction, Results discussion, Literature Review\n+\n+**Procedure:**\n+- For each cited result, method, or data point, check: \"Does the text explain what this proves, solves, or clarifies for this paper's question?\"\n+- Academic facts should connect to the argument: \"X was measured → X shows Y → Y matters because Z\"\n+\n+**Flag when:**\n+- Methods or results are listed without explaining their contribution to the paper's findings\n+- Data appears because sources mention it, not because it advances the argument\n+- Technical details accumulate without showing what observation or interpretation problem they solve\n+- Generic significance tags (\"这说明\", \"由此可见\", \"this demonstrates\") substitute for actual analysis\n+\n+**Do not flag:**\n+- Survey sections that legitimately enumerate findings across studies\n+- Methods sections where procedure descriptions don't need argumentative links\n+- Results sections presenting data before interpretation (interpretation comes in Discussion)\n+\n+**Example:**\n+\n+> **Inert facts (flag):** \"Smith et al. (2020) used ground-penetrating radar to detect subsurface anomalies in concrete towers. The method showed 85% accuracy in controlled tests. Multiple studies have employed similar nondestructive approaches. Wang et al. (2019) applied ultrasonic testing with good results.\"\n+>\n+> **Argumentative facts (keep):** \"Ground-penetrating radar (Smith et al., 2020) detected subsurface cracks that visual inspection missed, which explains why early damage estimates were systematically low. This measurement gap matters because maintenance schedules based on surface inspection alone may miss load-bearing deterioration.\"\n+\n+### 3. Citation-Continuity Diagnostic\n+\n+**Target:** All sections with literature citations\n+\n+**Procedure:**\n+- Scan for author names throughout the document\n+- Flag if the same study appears with full introduction (authors + year + method description) in multiple sections within 5-10 paragraphs\n+- Check if pronouns or short references (\"that study\", \"those measurements\", \"the same approach\") could replace subsequent full introductions\n+\n+**Flag when:**\n+- \"Wang et al. (2018) measured X using method Y...\" appears in Section 3, then \"Wang and colleagues (2018) investigated Z using method Y...\" appears in Section 4, creating the impression of two independent studies\n+- The same study is fragmented to fit categorical sections (one result in \"Structural Analysis\", another in \"Dynamic Response\") with redundant setup each time\n+\n+**Do not flag:**\n+- Studies genuinely referenced far apart in the document (different chapters, 20+ pages separation)\n+- First mention in abstract/introduction + detailed mention in literature review (standard structure)\n+- Cases where the second mention adds genuinely new information about the study not stated before\n+\n+**Suggested fix:**\n+- Use pronouns or brief references for continuity: \"The same study found...\", \"Those measurements also revealed...\", \"Wang et al. subsequently showed...\"\n+\n+### 4. Register-Drift Diagnostic\n+\n+**Target sections:** Discussion, Analysis, Results interpretation\n+\n+**Procedure:**\n+- Scan analysis and discussion sections for clusters of prescription language\n+- Check if the text shifts from analyzing what evidence shows to prescribing what researchers should do\n+\n+**Prescription markers:**\n+- \"requires further investigation\"\n+- \"should be combined with\"\n+- \"needs validation\"\n+- \"deserves attention\"\n+- \"warrants exploration\"\n+- \"merits consideration\"\n+- \"需要调查\"\n+- \"应进一步检测\"\n+\n+**Flag when:**\n+- Prescription language appears in place of concrete findings or limitations\n+- Analysis sections prescribe next steps instead of interpreting current evidence\n+- Multiple prescription phrases cluster in paragraphs meant to discuss current results\n+\n+**Do not flag:**\n+- Dedicated \"Future Work\" or \"Recommendations\" sections where prescription is legitimate\n+- Single, well-scoped suggestions grounded in specific study limitations\n+- Methods sections describing what procedures should be followed (procedural, not analytical)\n+\n+**Suggested fix:**\n+- Replace: \"The correlation between X and Y requires further investigation\" \n+- With: \"The correlation between X and Y has not been tested across multiple wind farm contexts\"\n+- Or simply state the finding and move on, leaving future directions to a dedicated section\n+\n+### 5. Section-Specific Pattern Calibration\n+\n+Different sections of academic papers have different genre conventions. Calibrate pattern detection accordingly:\n+\n+#### Methods Sections\n+- **Passive voice is conventional**, not an AI tell (Pattern #13)\n+- \"The samples were prepared...\" is standard academic style\n+- Only flag passive voice if it obscures agency where clarity matters (\"Measurements were taken\" vs. \"We measured\")\n+\n+#### Results Sections\n+- **Hedging reflects statistical uncertainty**, not AI over-caution (Pattern #24)\n+- \"The data suggest...\", \"may indicate...\", \"appears to show...\" are appropriate when statistical confidence is limited\n+- Flag hedging only if it's uniform across all claims regardless of evidence strength\n+\n+#### Discussion Sections\n+- **Some prescription is legitimate** in future-work subsections (Pattern #40)\n+- Distinguish between prescription replacing analysis (flag) vs. scoped suggestions in a dedicated paragraph (keep)\n+- Author stance and interpretation should be strongest here (Pattern #39)\n+\n+#### Introduction Sections\n+- **Generic background is more suspect** than in dedicated Background/Related Work sections (Pattern #38)\n+- \"In recent years, with the rapid development of...\" as an opening is a stronger AI signal in introductions\n+- Background sections legitimately establish context; introductions should move quickly to the research question\n+\n+#### Literature Review / Related Work\n+- **Enumeration of prior studies is legitimate** (Pattern #41)\n+- Don't expect every cited fact to connect to an argument in pure survey sections\n+- Flag only if the section reads like an annotated bibliography without synthesis or thematic organization\n+\n+## Cross-Pattern Interactions\n+\n+Some patterns amplify each other when they co-occur:\n+\n+### High-Confidence Clusters\n+\n+When 3+ of these appear together, confidence increases:\n+- Pattern #1 (inflated significance) + Pattern #3 (superficial -ing) + Pattern #7 (stock AI vocabulary)\n+- Pattern #9 (negative parallelisms) + Pattern #10 (rule of three) + Pattern #32 (aphorism formulas)\n+- Pattern #36 (connector density) + Pattern #2 (paragraph templates) + Pattern #43 (template-driven paragraphs)\n+\n+### Mutually Exclusive Patterns\n+\n+Some patterns contradict each other; if both appear, reconsider:\n+- Pattern #13 (passive voice overuse) vs. legitimate academic methods section\n+- Pattern #24 (excessive hedging) vs. statistically cautious results section\n+- Pattern #39 (erased stance) vs. encyclopedic literature review section\n+\n+## Verification Checklist\n+\n+Before finalizing review or full mode output:\n+\n+1. **False positives scanned:** Did you preserve legitimate academic conventions?\n+2. **Section context checked:** Did you calibrate patterns by section type?\n+3. **Cluster principle applied:** Did you require multiple patterns, not single tells?\n+4. **Genre honored:** Did you preserve the document's academic register and required structure?\n+5. **Scope maintained:** Did you avoid fact-checking or adding missing arguments?\n+\n+## When to Mark \"Unresolved\"\n+\n+In review and full modes, mark cases as unresolved (don't edit) when:\n+- A paragraph seems template-driven but removing it would violate journal requirements\n+- Author stance is unclear and adding it would require judgment beyond your scope\n+- Facts seem inert but you cannot determine if they serve a purpose readers would recognize\n+- Register drift is ambiguous (is this Future Work or misplaced prescription?)\n+\n+Always prefer leaving ambiguous spans unchanged over making uncertain edits.\ndiff --git a/references/harness-hooks-survey.md b/references/harness-hooks-survey.md\nnew file mode 100644\nindex 0000000..1820a51\n--- /dev/null\n+++ b/references/harness-hooks-survey.md\n@@ -0,0 +1,194 @@\n+# Agent Harness 钩子（Hooks）能力调查\n+\n+**调查对象**：agent-harness-wiki 收录的 20 个 harness 的 `hooks` 主题章节\n+**数据源 release**：`web-v1-7bd0a72df0ca6bcafb7575e0cecf266b044adae9`（知识发布 2026-10-05T12:07:10Z，access_mode: online）\n+**调查日期**：2026-10-05\n+**性质声明**：本文是外部能力情报记录，不直接约束本 Skill 的执行流程。每条结论均可回溯到对应 harness 的官方文档或仓库快照。知识库标记为 `unknown` / `partial` / `not_applicable` / `conflict` 的项目按原样保留，不做补全或推断。\n+\n+---\n+\n+## 1. 结论速览\n+\n+20 个 harness 分三类：\n+\n+- **有真正 hook 机制：17 个**——可按事件触发，并能通过 stdin/stdout 或回调返回干预流程。\n+- **基本没有：3 个**——Zoo Code 明确无 hook 机制；Aider 只有固定 CLI 触发点，无事件系统；Zed 只有一个任务钩子且无决策通道。\n+\n+17 个\"有\"的 harness 在**定义形式**上分两派：\n+\n+1. **配置文件声明 shell 命令**（Claude Code 风格）——占多数，见第 3 节。\n+2. **插件导出 TS/JS 回调函数**——OpenCode、Kilo Code、Amp、Pi、OMP，见第 4 节。\n+\n+**项目级定义**：17 个里有 14 个明确支持。例外是 Codex（`hooks.json` 搜索目录未文档化，无法确认）、Amp（仅\"项目目录放插件\"的间接形态）、Pi（v3 章节未给出确切项目路径，正文指向 v2）。\n+\n+---\n+\n+## 2. 两种主要定义形态\n+\n+| 维度 | 配置命令型 | 插件函数型 |\n+| :--- | :--- | :--- |\n+| 声明位置 | JSON/TOML 的 `hooks` 段 | TS/JS 模块导出的对象键或 `on()` 注册 |\n+| 执行方式 | 宿主 fork 子进程，stdin 送 JSON、stdout 回 JSON | 进程内回调，可直接改写运行状态 |\n+| 能力上限 | 受限于协议：exit code + stdout JSON | 可访问宿主 API（`client`、`$`、worktree 等） |\n+| 语言要求 | 任意语言（shell/python/node 均可） | TS/JS |\n+| 代表 | Claude Code、Qwen Code、Cursor、Trae、Gemini CLI、Auggie | OpenCode、Kilo Code、Amp、Pi、OMP |\n+\n+**判据**：需要访问宿主内部能力（如列目录、跑 git、改模型参数）时选插件函数型；只需要在事件点插入检查/拦截/日志时配置命令型足够，且可移植性更好。\n+\n+---\n+\n+## 3. 完整对照表\n+\n+| Harness | 定义形式 | 项目级路径 | 事件数 | 关键条件 / 坑 |\n+| :--- | :--- | :--- | :--- | :--- |\n+| **claude-code** | settings 的 `hooks` 数组；Skill frontmatter `hooks` 字段；插件可打包 | `.claude/settings.json`；Skill `hooks:` | 仅确认 2 个（`Elicitation`、`ConfigChange`） | ⚠️ 完整事件表未纳入本次快照。`hooks.output`/`order` = **unknown**。settings 变更热重载；`claude -p` 与 SDK 会话自动信任，但父目录信任不算数 |\n+| **qwen-code** | 配置 `hooks` 对象（事件→matcher 组→处理器数组）；Skill / agent frontmatter；扩展 | `.qwen/settings.json` | 20+ | 项目 hook **仅在文件夹受信任时加载**（未受信时跳过；User/System 级不受影响）。`stopHookBlockingCap` 默认 8 防死循环；`PostToolBatch` 超时 15s 降级继续 |\n+| **cursor** | 子进程，`type: command\\|prompt`，顶层必填 `version: 1` | `{project-root}/.cursor/hooks.json` | 20 | 项目级仅受信任工作区运行。云端 agent 只跑仓库项目级 + team/enterprise 级，用户级不可用。⚠️ 企业文档 camelCase + `exit 1/3` 与主文档 snake_case + `exit 2` **冲突** |\n+| **trae** | shell 命令，`type` 仅 `command` | `$PROJECT_FOLDER/.trae/hooks.json` | 6 | **文件存在 ≠ 启用**，须在 `Settings > Hooks` 确认安全警告。分沙箱与本地执行两档 |\n+| **gemini-cli** | 外部命令，stdin JSON → stdout 单个 JSON 对象 | `<项目根>/.gemini/settings.json`；扩展目录 `hooks/hooks.json` | 11 | 合并顺序 project > user > system > extensions。文件夹未受信则跳过项目 hook 并警告。hook 带指纹，command 变化（如 `git pull` 后）视为新 hook 需重新确认 |\n+| **continue** | `command` / `http` 两型（`prompt`/`agent` 仅解析未实现） | `.claude/settings.json`、`.continue/settings.json` 及 `.local.json` | 17 | ⚠️ **机制已实现但 `fireHook` 无任何调用方**，运行期是否触发无证据 |\n+| **auggie** | 脚本，必须以 `.sh/.ps1/.cmd/.bat` 结尾 | `.augment/settings.json`、`.augment/settings.local.json` | 5–6 | 项目设置随仓库走、对所有贡献者生效（官方推荐用于策略强制）。`permissionDecision` 的 `allow`/`ask` **未实现**，只支持 `deny`；`updatedInput` 未实现 |\n+| **antigravity** | shell 命令，顶层键=Hook 名，值=事件→处理器数组 | 项目根 `.agents/hooks.json` | 5 | 工作区信任是加载**前置条件**，且信任集合变化即重载。token 预算截断时 `hooks.json` 曾被静默丢弃 |\n+| **kiro** | `.kiro/hooks/*.json` 独立文件；agent 配置内联 hooks | `.kiro/hooks/` | 11 触发器 | 全局 + 项目 **all scopes merged**。⚠️ 官方文档自身冲突：超时字段 `timeout`（默认 60s）vs `timeout_ms`（默认 30s） |\n+| **goose** | Open Plugins 规范的命令钩子（`sh -c COMMAND`） | `PROJECT/.agents/plugins/<PLUGIN>/hooks/hooks.json` | 12 | 钩子必须属于插件目录。源码中**无任何沙箱或权限层拦截**。matcher 用 Rust 正则（`*` 非法）。`SubagentStart`/`SubagentStop` 明确不发射 |\n+| **cline** | **文件名即事件**的可执行脚本（`.sh/.py/.ts/...`，按 shebang 选解释器） | `.cline/hooks/` | 10 | ⚠️ `hooks.entry` = **conflict**：`--hooks-dir` / `CLINE_HOOKS_DIR` 在代码中**无人读取**，自定义目录不生效。无文件监听，改动下会话才生效 |\n+| **codex** | `config.toml` 的 `[hooks]` 表 或 `hooks.json`（同 schema） | **未知** | 12 | 需 `features.hooks` 开启。`type` 支持 `command` / `mcp_tool`；`prompt`、`agent` 会被解析但跳过。input/output/order/diagnostics = partial |\n+| **opencode** | **仅插件导出函数**（返回对象键），无 shell 形态 | `.opencode/plugins/`（启动时自动加载）+ `opencode.json` 的 `plugin` 数组 | ~20 | 源码 hook 分发处**无权限判断**。无热重载；`engines.opencode` 不满足则跳过 |\n+| **kilo-code** | 插件导出函数（`Plugin` 返回 `Hooks`） | `.kilo/plugin/`（旧 `.kilocode/plugin/`）自动发现 + `kilo.json` 的 `plugin` 数组 | 30+ | 改动**需重启**才生效，同会话不重扫。7 个取证维度全部 answered |\n+| **amp** | **仅插件导出函数** `amp.on(event, handler)` | `.amp/plugins/` | 6 | **无 hook 配置文件形态**；**无 matcher**，筛选只能在 handler 内自判。闭源，无脚本机制；`tool.call` 的 `reject` 需显式 `return` 才生效 |\n+| **pi** | TS 扩展工厂 `pi.on(...)` | 存在\"项目扩展\"间接形态，**确切路径未取证** | ~12 | `project_trust` 在项目扩展加载**之前**运行，故项目扩展无法参与该事件。`/reload` 会替换运行时 |\n+| **omp** | 目录自动发现 + 能力注册表 | `.omp/hooks/pre/` 与 `.omp/hooks/post/`（仅这两个子目录） | ~25 | 目录名/文件名只提供能力元数据与去重键，**不自动注册事件**。`ambient: false` 跳过自动发现；`enabledProviders` 门控**不作用于项目级来源** |\n+| **zed** | 任务钩子（挂 task 模板，非回调） | `.zed/tasks.json` | 1（`create_worktree`） | 无 stdin 负载、无 exit code 决策、不能阻断。`hooks.output` = **not_applicable** |\n+| **aider** | **无事件系统**，只有 CLI 开关 | 配置靠 `.aider.conf.yml` / `AIDER_*` env | 3 个固定触发点 | 无事件名、无 matcher、无回调注册。默认 `--no-verify` 跳过仓库 pre-commit |\n+| **zoo-code** | **无** | — | — | 全题 **not_applicable**。有 MCP `watchPaths`、Custom Tools，但都不是 hook |\n+\n+---\n+\n+## 4. 详解：配置命令型\n+\n+### 4.1 schema 家族\n+\n+存在三个可辨认的 schema 家族，跨 harness 迁移时不能混用：\n+\n+- **Claude Code 家族**（事件→matcher 组数组→hooks 处理器数组）：Claude Code、Qwen Code、Cursor、Trae、Auggie、Continue、Kilo Code（`kilo.json`/`opencode.json`）。\n+- **Hook 名→事件→处理器**（顶层键是 Hook 名而非事件名）：Antigravity、Goose。\n+- **文件名即事件**：Cline。Kiro 介于两者之间——每个 `.kiro/hooks/*.json` 独立描述一个触发器。\n+\n+### 4.2 退出码与输出协议\n+\n+主流约定（Trae、Qwen Code、Cursor 一致）：\n+\n+| exit code | 行为 |\n+| :---- | :--- |\n+| `0` | 成功。stdout 上的 JSON 对象控制行为；其余 stdout 为纯文本 |\n+| `2` | 阻断性错误。stdout 忽略，stderr 作为错误反馈回传给模型 |\n+| 其他 | 非阻断性错误。仅 debug 模式显示 stderr，执行继续 |\n+\n+`hookSpecificOutput` 需带 `hookEventName`；官方 `PreToolUse` 接口期望 `permissionDecision`（`allow`/`deny`/`ask`）+ `permissionDecisionReason`，可选 `updatedInput` 与 `additionalContext`。`ask` 会暂停等 TUI 确认，无法提示时回退为 `deny`。\n+\n+Kiro 是例外：`command` 动作只有 exit 0（stdout 进上下文）与 exit 2（stderr 进上下文）两档。\n+\n+### 4.3 改写能力（分水岭）\n+\n+能改写工具入参/输出的极少，这决定了\"参数规整\"类需求能否实现：\n+\n+| 能力 | 支持者 |\n+| :--- | :--- |\n+| `updatedInput` / `updatedMCPToolOutput` | Qwen Code、Cursor、Trae、Continue、OpenCode、Kilo Code |\n+| 仅能 `deny` / `block` | Auggie（`allow`/`ask` 未实现，`updatedInput` 未实现）、Goose、Kiro |\n+\n+---\n+\n+## 5. 详解：插件函数型\n+\n+| Harness | 导出形态 | 注册方式 | 能否访问宿主 |\n+| :--- | :--- | :--- | :--- |\n+| **opencode** | `export const X = async ({project, client, $, directory, worktree}) => ({ \"tool.execute.before\": async (input, output) => {} })` | 返回对象的键即 hook 名 | 能（`client.app.log()` 等） |\n+| **kilo-code** | 模块默认导出 `{id, server}`，`Plugin = (input, options) => Hooks` | 启动时调用工厂 | 能 |\n+| **amp** | `amp.on(event, handler)` 返回 `unsubscribe()` | 工厂内注册 | 能，但闭源、无 hook 开关 |\n+| **pi** | `export default function (pi: ExtensionAPI)`，内 `pi.on(...)` | 工厂内注册 | 能；`pi.on()` 返回取消注册函数 |\n+| **omp** | 模块默认导出工厂（**必须默认导出**，否则记为加载失败） | 按 `hookCapability` 能力注册表发现 | 能；运行时对象是 `ExtensionAPI`/`ExtensionContext`，**不是** `HookAPI`/`HookContext`（旧名无 shim） |\n+\n+**加载顺序**（OpenCode / Kilo Code 一致）：全局配置 → 项目配置 → 全局插件目录 → 项目插件目录，同名同版本 npm 包只加载一次。\n+\n+---\n+\n+## 6. 项目级定义汇总\n+\n+| 项目级形态 | Harness |\n+| :--- | :--- |\n+| 项目配置文件内声明 hook | Claude Code、Qwen Code、Cursor、Trae、Gemini CLI、Continue、Auggie、Antigravity、Codex（形式确认但路径未知） |\n+| 项目目录内放置 hook 定义文件 | Cline（`.cline/hooks/`）、Kiro（`.kiro/hooks/`）、Antigravity（`.agents/hooks.json`） |\n+| 项目目录内放置插件文件（间接） | OpenCode、Kilo Code、Amp、OMP、Goose |\n+| 项目级与全局 all-scopes 合并 | Kiro |\n+| 不支持 / 未取证 | Zoo Code（无）、Codex（未知）、Amp（仅间接）、Pi（未取证） |\n+\n+**信任门槛不一致**，这是把项目级 hook 当团队策略强制手段前必须搞清楚的：\n+\n+- **Auggie**：`.augment/settings.json` 随仓库走、对所有贡献者自动生效，官方明确推荐用于策略强制。\n+- **Qwen Code / Cursor / Gemini CLI / Antigravity**：项目级 hook 均需文件夹或工作区受信任。\n+- **Cline / Goose**：没有任何 hook 级信任、白名单或沙箱，发现即执行。\n+- **Kilo Code / OpenCode / Pi / OMP / Amp**：未提及文件夹信任或沙箱。\n+\n+---\n+\n+## 7. 证据状态与已知冲突\n+\n+### 7.1 取证缺口\n+\n+- **claude-code**：`hooks.output`、`hooks.order` = **unknown**。完整事件表未纳入本次快照（`@anthropic-ai/claude-code` 2.1.283，`version_applicability` unknown），正文整体标 partial。Skill frontmatter `hooks` 字段的格式记于未纳入的 Hook 页。\n+- **codex**：input / output / order / diagnostics = **partial**；`hooks.json` 搜索目录未知 → 项目级无法确认。\n+- **zed**：`hooks.output` = **not_applicable**。\n+- **aider**：`hooks.events` = **not_applicable**（无事件系统）。\n+- **cline**：`hooks.order` = partial。\n+- **cursor**：`order` 两界面均 partial；`cursor` 界面的 conditions、diagnostics 为 partial。\n+- **amp**：input / order / conditions = partial。\n+- **pi**：input / output = partial；SDK surface 全部 `not_investigated`。\n+- **omp**：input / diagnostics = partial。\n+- **antigravity**：input / output / order / conditions / diagnostics = partial。\n+- **gemini-cli**：order / conditions / diagnostics = partial。\n+- **continue**：entry / events / input / output 为 answered，但因\"无调用方\"问题而不可信。\n+- **qwen-code**：order / diagnostics = partial。\n+- **goose**：events / order / diagnostics = partial。\n+- **trae**：conditions / diagnostics = partial。\n+- **auggie**：order / conditions = partial；events 为 not_applicable（\"无 harness 级事件\"），但底层动作脚本与仓库示例中实际用了 `PromptSubmit`。\n+- **opencode**：conditions / diagnostics = partial。\n+- **kilo-code**：**7 个维度全部 answered**，是取证最完整的一个。\n+\n+### 7.2 文档自身冲突\n+\n+1. **Cursor**：企业文档示例用 camelCase 字段与 `exit 1/3`，与 `hooks.md` 的 snake_case + `exit 2` 才阻断矛盾。\n+2. **Cline**（`hooks.entry` = **conflict**）：CLI 有 `--hooks-dir` 参数（帮助文本称默认 `~/.cline/hooks`），`main.ts` 写入 `CLINE_HOOKS_DIR`，但固定提交中**无任何代码读取该变量**；文档却声称它会追加 hooks 目录——按代码自定义 hooks 目录不生效。另 `docs/sdk/plugins.mdx` 的 \"Hook Policies\" 中 `mode`/`retries`/`failureMode`/`maxConcurrency`/`queueLimit`/`fail_closed`/`hookPaths` 全部无实现，只有 `timeoutMs` 存在。\n+3. **Kiro**：超时字段名与默认值在官方文档内自相矛盾（`timeout` 默认 60s vs `timeout_ms` 默认 30s）。\n+4. **Goose**：`on_failure` 的 `block` **仅 `PreToolUse` 有解析与校验**，其余事件写上不生效。\n+\n+### 7.3 已修复但留有痕迹\n+\n+- **Antigravity**：CHANGELOG 记录过\"禁用插件仍跑 Hook\"的问题，已修复。\n+- **OMP**：`--hook` 是 `--extension` 的别名，并入 `additionalExtensionPaths`；工具由 `ExtensionToolWrapper` 包装（非 `HookToolWrapper`）。\n+\n+---\n+\n+## 8. 选型建议\n+\n+1. **优先选配置命令型**。跨 harness 可移植性远好于插件函数型，且不需要 Node 运行时。\n+2. **需要访问宿主能力时才上插件函数型**。Kilo Code 的取证完整度最高（7 维全 answered），可作为插件型 hook 的参考实现。\n+3. **事件最全的是 Qwen Code（20+）与 Cursor（20）**。Kiro 的文件类触发器（`PostFileCreate/Save/Delete`）在别家都不常见，但要注意它只响应 agent 的改动，手动编辑不触发。\n+4. **注意事件数 ≠ 可用性**。Continue 有 17 个事件却整套未接线，Auggie 的 `allow`/`ask` 是空实现。先验证运行期行为再写规则。\n+5. **项目级 hook 承担策略强制前，先确认信任模型**。Auggie 是唯一明确\"随仓库对所有人生效\"的；Qwen Code、Cursor、Gemini CLI、Antigravity 都要受信任；Cline、Goose 则完全无门槛。\n+6. **移植已有规则时注意 schema 家族**。Claude Code 家族（事件为顶层键）与 Antigravity/Goose（Hook 名为顶层键）、Cline（文件名为事件）三者不可直接互换。\n+\n+---\n+\n+## 9. 复现方式\n+\n+```\n+mcp: agent-harness-wiki / get_topic(harness=<id>, topic=\"hooks\")\n+```\n+\n+- `list_harnesses(scope=\"registry\")` 取全部 20 个 harness 的 id。\n+- `compare_topics(topic=\"hooks\", targets=[...], question_ids=[...])` 只返回状态元数据，不含正文。\n+- 需要某维度是否存在，用 `hooks.entry`、`hooks.events`、`hooks.conditions` 等 question id；正文需逐个 `get_topic`。\n+- 注意 `search_knowledge` 的 query 过长会返回 `query_too_broad`。\n+\n+各 harness 的官方来源（部分）：Kiro <https://kiro.dev/docs/hooks.md>、Trae <https://docs.trae.ai/ide/hook-configuration-reference>、Auggie <https://docs.augmentcode.com/cli/hooks.md>、Cursor <https://cursor.com/docs/hooks.md>、Amp <https://ampcode.com/docs/markdown/plugin-api>、Gemini CLI <https://github.com/google-gemini/gemini-cli>、Goose <https://github.com/block/goose>、Codex <https://github.com/openai/codex>。\ndiff --git a/references/humanizer/AGENTS.md b/references/humanizer/AGENTS.md\nindex 0e63764..1e049a4 100644\n--- a/references/humanizer/AGENTS.md\n+++ b/references/humanizer/AGENTS.md\n@@ -6,6 +6,8 @@ Guidance for AI coding agents (Claude Code, Codex, Warp, etc.) working in this r\n \n A portable agent skill implemented entirely as Markdown. The runtime artifact is `SKILL.md`: the agent reads its YAML frontmatter and editor prompt. There is no build step, and the repo should avoid wording that limits support to one or two harnesses.\n \n+**Note:** This is the baseline `humanizer` skill (v2.9.1). The parent project `paper-humanizer` extends this baseline with 5 additional academic-aware patterns. See `../../AGENTS.md` for the parent project's guidance.\n+\n ## Key files\n \n - `SKILL.md` — the skill itself. Portable YAML frontmatter (`name`, `description`, `license`, `metadata.version`) followed by the canonical, numbered pattern list with before/after examples. **This is the source of truth.**\n@@ -28,3 +30,21 @@ A portable agent skill implemented entirely as Markdown. The runtime artifact is\n \n - Preserve valid YAML frontmatter (formatting and indentation).\n - The prompt below the frontmatter is the product. Edit it like a careful instruction document, not code.\n+\n+## Relationship to paper-humanizer\n+\n+This repository is maintained as the baseline reference for the `paper-humanizer` project located at `../..` (two directories up).\n+\n+**Baseline divergence:** `paper-humanizer` extends this baseline with 5 additional patterns (#9 extension, #40-#43) that address academic writing specifically:\n+- Pattern #9 extension: pragmatic negation guidance (corrective vs. performative)\n+- Pattern #40: academic register drift to prescription language\n+- Pattern #41: facts without argumentative function\n+- Pattern #42: repetitive study introductions\n+- Pattern #43: template-driven paragraphs (meta-diagnostic)\n+\n+These extensions are documented in `paper-humanizer/SKILL.md` and `paper-humanizer/references/diagnostic-guidance.md`. They do not affect the baseline humanizer patterns maintained here.\n+\n+When making changes to this baseline:\n+1. Verify changes don't conflict with paper-humanizer's extensions\n+2. Consider whether paper-humanizer should inherit the change\n+3. Notify the parent project maintainer if a baseline change affects extended patterns\ndiff --git a/references/ponytail-hook-injection.md b/references/ponytail-hook-injection.md\nnew file mode 100644\nindex 0000000..0fee033\n--- /dev/null\n+++ b/references/ponytail-hook-injection.md\n@@ -0,0 +1,381 @@\n+# Ponytail 钩子指令注入机制剖析\n+\n+**调查对象**：`ponytail` 插件（`@dietrichgebert/ponytail`，v4.9.0）的指令注入实现\n+**安装路径**：本机 `~/.config/opencode/ponytail/`（另有 `~/.cache/*/packages/@dietrichgebert/ponytail` 等分发副本）\n+**调查日期**：2026-10-05\n+**性质声明**：本文是外部实现案例记录，供本 Skill 设计执行模式时参考，不直接约束本 Skill 的执行流程。所有结论均来自实际读取源文件与运行钩子脚本，未做推断补全。\n+\n+---\n+\n+## 1. 结论速览\n+\n+ponytail 用**三段式**结构做指令注入，核心是把「触发」和「内容」彻底分离：\n+\n+1. **钩子只负责触发与调度**，不持有任何指令正文；\n+2. **指令正文只有一个事实源** —— `skills/ponytail/SKILL.md`，运行时读取、剥 frontmatter、按强度过滤后注入；\n+3. **状态存在 flag 文件里**，与内容彻底解耦。\n+\n+这套结构的直接收益是：同一份 SKILL.md 同时服务「用户手动调用 skill」和「会话自动注入」两条路径，不需要维护两份内容。代价是多 harness 分发时静态副本会漂移（见第 9 节）。\n+\n+---\n+\n+## 2. 模块划分\n+\n+```\n+hooks/ponytail-config.js        模式解析优先级链、路径探测、环境身份识别\n+hooks/ponytail-instructions.js  共享指令构建器（唯一事实源入口）\n+hooks/ponytail-runtime.js       flag 文件读写 + 多 harness 输出协议适配\n+hooks/ponytail-activate.js      入口①SessionStart\n+hooks/ponytail-mode-tracker.js  入口②UserPromptSubmit\n+hooks/ponytail-subagent.js      入口③SubagentStart\n+skills/ponytail/SKILL.md        指令正文本体（注入时从这里读）\n+```\n+\n+四个内部模块职责边界清晰，没有交叉：`config` 是纯解析（无状态写入），`instructions` 是纯文本变换（无 I/O 副作用），`runtime` 是状态与输出协议，三个入口脚本只做编排。\n+\n+---\n+\n+## 3. 钩子注册方式\n+\n+`.claude-plugin/plugin.json` 声明 `\"hooks\": \"./hooks/claude-codex-hooks.json\"`，事件定义在后者：\n+\n+| 事件 | matcher | 执行脚本 | timeout | 作用 |\n+| :--- | :--- | :--- | :--- | :--- |\n+| `SessionStart` | `startup\\|resume\\|clear\\|compact` | `ponytail-activate.js` | 5s | 写入 flag + 注入完整规则集 |\n+| `SubagentStart` | — | `ponytail-subagent.js` | 5s | 给子 Agent 补注入 |\n+| `UserPromptSubmit` | — | `ponytail-mode-tracker.js` | 5s | 追踪 `/ponytail` 切档 |\n+\n+三个钩子都用 `node \"${CLAUDE_PLUGIN_ROOT}/hooks/xxx.js\"` 定位自身，`statusMessage` 提供加载反馈。\n+\n+`SessionStart` 的 matcher 覆盖 `compact` 值得注意：上下文压缩后必须重新注入，否则长会话压缩一次规则就丢了。\n+\n+**`SubagentStart` 为何必需**：SessionStart 注入的上下文只到主线程，Task 派生的子 Agent 完全收不到。ponytail 源码注释明确记录了这个缺口（issue #252）。该钩子还支持环境变量 `PONYTAIL_SUBAGENT_MATCHER`（大小写不敏感、未锚定正则）限定 `agent_type`。\n+\n+---\n+\n+## 4. 注入文本的实际形态\n+\n+实跑 `node hooks/ponytail-activate.js`（full 档）的 stdout 节选：\n+\n+```\n+PONYTAIL MODE ACTIVE — level: full\n+\n+# Ponytail\n+\n+You are a lazy senior developer. Lazy means efficient, not careless. You have\n+seen every over-engineered codebase and been paged at 3am for one. The best\n+code is the code never written.\n+\n+## Persistence\n+\n+ACTIVE EVERY RESPONSE. No drift back to over-building. Still active if\n+unsure. Off only: \"stop ponytail\" / \"normal mode\". Default: **full**.\n+Switch: `/ponytail lite|full|ultra`.\n+\n+## The ladder\n+\n+Stop at the first rung that holds:\n+\n+1. **Does this need to exist at all?** Speculative need = skip it, say so in one line. (YAGNI)\n+2. **Already in this codebase?** A helper, util, type, or pattern that already\n+   lives here → reuse it. Look before you write; re-implementing what's a few\n+   files over is the most common slop.\n+3. **Stdlib does it?** Use it.\n+4. **Native platform feature covers it?** `<input type=\"date\">` over a picker\n+   lib, CSS over JS, DB constraint over app code.\n+5. **Already-installed dependency solves it?** Use it.\n+6. **Can it be one line?** One line.\n+7. **Only then:** the minimum code that works.\n+\n+**Bug fix = root cause, not symptom.** A report names a symptom. Before you\n+edit, grep every caller of the function you're about to touch...\n+\n+## Rules\n+\n+- No unrequested abstractions: no interface with one implementation...\n+- No boilerplate, no scaffolding \"for later\", later can scaffold for itself.\n+- Deletion over addition. Boring over clever...\n+\n+## Output\n+\n+Code first. Then at most three short lines: what was skipped, when to add it.\n+\n+## Intensity\n+\n+| Level | What change |\n+|-------|------------|\n+| **full** | The ladder enforced. Stdlib and native first. Shortest diff, shortest explanation. Default. |\n+\n+Example: \"Add a cache for these API responses.\"\n+- full: \"`@lru_cache(maxsize=1000)` on the fetch function. Skipped custom\n+  cache class, add when lru_cache measurably falls short.\"\n+\n+## When NOT to be lazy\n+\n+Never simplify away: input validation at trust boundaries, error handling\n+that prevents data loss, security measures, accessibility basics...\n+\n+Hardware is never the ideal on paper: a real clock drifts... Leave the\n+calibration knob, not just less code.\n+\n+Lazy code without its check is unfinished. Non-trivial logic (a branch, a\n+loop, a parser, a money/security path) leaves ONE runnable check behind...\n+\n+## Boundaries\n+\n+Ponytail governs what you build, not how you talk. \"stop ponytail\" /\n+\"normal mode\": revert. Level persists until changed or session end.\n+```\n+\n+### 4.1 结构公式\n+\n+```\n+一行状态声明头（MODE ACTIVE — level: X）\n+  + 分节规则体（ ladders / Rules / Output / When NOT to be lazy / Boundaries ）\n+```\n+\n+### 4.2 三个非标准段落\n+\n+这三段是它区别于普通规则文档的地方，也是最值得借鉴的部分：\n+\n+| 段落 | 作用 |\n+| :--- | :--- |\n+| **Persistence** | 显式声明「每轮都生效，不确定时仍按本模式走，只有 `stop ponytail` / `normal mode` 能关」。这是在对抗长会话中的规则衰减，属于**指令稳定性补丁**，不是规则本身。 |\n+| **When NOT to be lazy** | 给出禁止简化项（信任边界校验、防数据丢失的错误处理、安全、无障碍、用户明确要求保留的），并补充两条校准条款：硬件不能按纸面理想建模须留调节旋钮；懒代码必须留一个可运行检查。 |\n+| **Boundaries** | 划定管辖范围：「管你建什么，不管你怎么说话」，并明确关闭方式。 |\n+\n+### 4.3 强度过滤机制\n+\n+`filterSkillBodyForMode()` 逐行处理 SKILL.md 正文，只删模式专属行，通用规则原样保留：\n+\n+- 表格行 `^\\|\\s*\\*\\*(.+?)\\*\\*\\s*\\|` —— 标签解析为模式名，非当前档则丢弃；\n+- 示例行 `^-\\s*([^:]+):\\s*\"` —— **要求引号**，只有 `- lite: \"...\"` 这种 worked example 才会被过滤。\n+\n+引号约束解决了一个真实歧义：普通规则行若恰好以模式词开头（如 `- Full: ...`），无引号时不会被误判为示例而丢弃。\n+\n+实测三档注入体量均为 100 行、约 5200 字符，差异仅在 Intensity 表格行与示例行。\n+\n+### 4.4 review 档的特殊处理\n+\n+`review` 属于 `INDEPENDENT_MODES`，不注入完整规则集，只输出一句指路：\n+\n+```\n+PONYTAIL MODE ACTIVE — level: review. Behavior defined by /ponytail-review skill.\n+```\n+\n+即「模式 = 指向另一个 skill」，而不是本模式自带规则。\n+\n+### 4.5 降级路径\n+\n+`getFallbackInstructions()` 内联了一份精简版规则（梯子 + Rules + Output + When NOT to be lazy + Boundaries）。SKILL.md 读取失败时自动回退，不会退化成「注入为空」。\n+\n+---\n+\n+## 5. 状态管理\n+\n+### 5.1 flag 文件\n+\n+路径 `$CLAUDE_CONFIG_DIR/.ponytail-active`（默认 `~/.claude/`），内容是裸字符串 `full`。语义：**文件存在即激活，文件不存在即关闭**。\n+\n+### 5.2 默认档位优先级链\n+\n+1. 环境变量 `PONYTAIL_DEFAULT_MODE`\n+2. 配置文件 `config.json` 的 `defaultMode`\n+   - `$XDG_CONFIG_HOME/ponytail/config.json`\n+   - `~/.config/ponytail/config.json`（macOS / Linux）\n+   - `%APPDATA%\\ponytail\\config.json`（Windows）\n+3. 兜底 `full`\n+\n+`review` 被显式排除在合法默认值之外（`RUNTIME_MODES = ['off','lite','full','ultra']`），因为 review 是会话级模式，不应持久化。`/ponytail default <mode>` 是**唯一**会写 config 的路径；普通切档只写 flag，会话结束即失效。\n+\n+### 5.3 切档命令\n+\n+`UserPromptSubmit` 钩子从 stdin JSON 读 `prompt`，小写化后匹配 `/^[/@$]ponytail/`，兼容 `/ponytail`、`@ponytail`、`$ponytail` 三种前缀。`isDeactivationCommand()` 做了严格约束——必须整条消息就是 `stop ponytail` 或 `normal mode`，忽略大小写与尾部标点。源码注释记录了原因：早期实现在消息任意位置匹配，把「加个 normal mode 开关」这种普通请求误关成了停用。\n+\n+---\n+\n+## 6. 输出协议适配\n+\n+`writeHookOutput()` 按 harness 分派，这是跨平台复用的关键一层：\n+\n+```js\n+// 原生 Claude：SessionStart 直接输出裸文本；SubagentStart 必须包 JSON 否则丢弃\n+if (event === 'SubagentStart') {\n+  stdout.write(JSON.stringify({\n+    hookSpecificOutput: { hookEventName: event, additionalContext: context }\n+  }));\n+} else stdout.write(context);\n+\n+// Codex：额外带 systemMessage 供 UI 显示\n+{ systemMessage: 'PONYTAIL:FULL',\n+  hookSpecificOutput: { hookEventName: event, additionalContext: context } }\n+\n+// Copilot：只有 SessionStart 认 additionalContext，其他事件返回 {}\n+{ additionalContext: context }   // event === 'SessionStart' && context\n+\n+// Qoder：同 Codex 形状，去掉 systemMessage\n+```\n+\n+**harness 身份靠环境变量嗅探**（`ponytail-runtime.js`）：\n+\n+| 判据 | 结论 |\n+| :--- | :--- |\n+| `COPILOT_PLUGIN_DATA` 或 `CLAUDE_PLUGIN_ROOT` 含 `.vscode` + `agent-plugins` | Copilot |\n+| `PLUGIN_DATA` | Codex |\n+| `QODER_SESSION_ID` | Qoder |\n+| 以上皆无 | 原生 Claude Code |\n+\n+`.vscode/agent-plugins` 路径特征是专门为 VS Code Copilot 补的（issue #528）——它不设 `COPILOT_PLUGIN_DATA`，导致误判为原生 Claude 而发出 Copilot 读不到的 statusline 提示。\n+\n+各 harness 的 flag 文件位置也随之分派：Codex 用 `PLUGIN_DATA`，Copilot 用 `COPILOT_PLUGIN_DATA`，Qoder 用 `~/.qoder`，其余用 `getClaudeDir()`。\n+\n+---\n+\n+## 7. 健壮性工程细节\n+\n+这几条都是踩过坑后加的，注释里带 issue 编号。\n+\n+### 7.1 绝不阻塞会话\n+\n+三个读 stdin 的脚本统一挂 `setTimeout(..., 1000).unref()` 兜底：\n+\n+```js\n+process.stdin.on('error', () => { finish(); process.exit(0); });\n+setTimeout(() => { finish(); process.exit(0); }, 1000).unref();\n+```\n+\n+原因（#443）：Windows 下 Claude Code 用 PowerShell `if {}` 包装运行钩子，会吞掉管道输入，`stdin` 的 `end` 事件永不触发，钩子永久挂死、冻结整个会话。`unref()` 保证正常路径（`end` 先到）不增加延迟。\n+\n+`ponytail-subagent.js` 在无 matcher 时**完全走同步路径，不读 stdin**，否则每个子 Agent 派生都会卡 1 秒。\n+\n+### 7.2 UTF-8 BOM 剥离\n+\n+所有 `JSON.parse` 前统一 `.replace(/^\\uFEFF/, '')`。Windows 编辑器保存的 `settings.json` / 管道传入的 prompt JSON 都可能带 BOM，不剥离会直接抛异常。剥离失败被 `catch` 静默吞掉，绝不让钩子以失败状态退出。\n+\n+### 7.3 Qoder 兼容：mode-tracker 一钩两用\n+\n+Qoder 没有 `SessionStart` 事件，所以 `UserPromptSubmit` 同时承担**首次激活**（无 flag 时从默认值初始化）与**每轮注入**两个职责。模式切换的确认文案折进规则集头部，保证一次调用只吐一个 JSON —— 多个 JSON 输出会覆盖而非追加。\n+\n+### 7.4 失败即放开（fail-open）\n+\n+子 Agent 限定的所有异常路径 —— `agent_type` 缺失、JSON 不可解析、stdin 出错、超时 —— 一律按「注入」处理。理由是 persona 被静默丢弃比多注入一次更糟。非法正则也降级为「无 matcher，全量注入」。\n+\n+### 7.5 statusline 提示只发一次\n+\n+检测到 `settings.json` 缺 `statusLine` 时，钩子会追加一段配置提示让 Agent 主动帮用户装。但用 `.ponytail-statusline-nudged` 空文件标记「已提示过」，避免每次开 session 都唠叨。提示内容还分两档：若安装路径含 shell 元字符（`isShellSafe()` 用白名单 `/^[A-Za-z0-9 _.\\-:/\\\\~]+$/` 判定），不把路径嵌进命令行，改为让 Agent 手工接线。\n+\n+---\n+\n+## 8. 无钩子 harness 的替代路径\n+\n+并非所有 harness 都有 hook 机制，ponytail 为此准备了两套旁路，二者**共用同一个 `getPonytailInstructions()`**。\n+\n+### 8.1 静态文件型\n+\n+| 路径 | 形态 | 行数 |\n+| :--- | :--- | :--- |\n+| `.cursor/rules/ponytail.mdc` | frontmatter + `alwaysApply: true` | 36 |\n+| `.agents/rules/ponytail.md` | 规则文件 | 30 |\n+| `.clinerules/ponytail.md` | 规则文件 | 30 |\n+| `.kiro/steering/ponytail.md` | steering 文档 | — |\n+| `AGENTS.md` / `gemini-extension.json` 的 `contextFileName` | 宿主自动加载 | — |\n+\n+这些是**手工维护的精简副本**，不是从 SKILL.md 生成的。\n+\n+### 8.2 OpenCode 插件型\n+\n+`.opencode/plugins/ponytail.mjs` 挂两个 hook：\n+\n+```js\n+// 每轮把规则集追加到 system prompt\n+'experimental.chat.system.transform': async (_input, output) => {\n+  const mode = readMode();\n+  if (mode === 'off') return;\n+  const instructions = getPonytailInstructions(mode);\n+  if (output.system.length > 0)\n+    output.system[output.system.length - 1] += '\\n\\n' + instructions;\n+  else output.system.push(instructions);\n+},\n+\n+// /ponytail <level> 落盘，下一轮生效\n+'command.execute.before': async (input) => {\n+  if (input?.command !== 'ponytail') return;\n+  writeMode(normalizePersistedMode(input.arguments) || getDefaultMode());\n+},\n+```\n+\n+因为 OpenCode 无 flag 文件约定，状态改存 `~/.config/opencode/.ponytail-active`。插件同时注册 slash command 与 skills 目录（`config.skills.paths`）。\n+\n+源码注释坦承了一个时序缺陷：模式切换从**下一条消息**生效而非当前条，因为 transform 读的是 command 刚写入的 flag。\n+\n+---\n+\n+## 9. 已知代价：多形态内容漂移\n+\n+ponytail 的核心指令文本目前同时存在于四处：\n+\n+1. `skills/ponytail/SKILL.md` —— 完整版，唯一事实源，钩子从这里读\n+2. `getFallbackInstructions()` 内联版 —— 精简降级副本\n+3. `.cursor/rules/`、`.clinerules/`、`.agents/rules/` —— 手抄静态副本\n+4. `AGENTS.md` —— 又一份手抄\n+\n+第 2～4 项没有从第 1 项生成，已经构成漂移面。这是「单一事实源 + 运行时读取」方案的固有代价：**harness 不支持运行时注入时，就只能退回静态副本**。\n+\n+---\n+\n+## 10. 对本 Skill 的可借鉴点\n+\n+### 10.1 可直接复用\n+\n+- **模式过滤的引号约束**（4.3）：`- <mode>: \"...\"` 必须带引号才判定为 worked example。这条规则解决的是真歧义，本 Skill 若用一份 SKILL.md 承载三模式，可直接套用。\n+- **模式 = 指向另一个 skill**（4.4）：若某模式的行为完全由另一处定义，注入只需一句指路，不必重复正文。\n+- **降级文本内联**（4.5）：核心指令构建失败时必须有回退，否则静默变成空注入。\n+- **BOM 剥离 + 静默失败 + 1s 超时兜底**（7.1 / 7.2）：只要本 Skill 有任何 Python 脚本被外部触发，这三条都应默认加上。\n+- **Persistence 段**（4.2）：本 Skill 的审查/完全模式若需跨长文本保持一致，可仿照加一段显式生效声明。\n+\n+### 10.2 结构差异\n+\n+ponytail 是**常驻型**（SessionStart 注入、每轮生效、`/ponytail` 切档），本 Skill 是**显式调用型**（审查模式 / 完全模式由用户或 Agent 主动触发）。这意味着：\n+\n+- 不需要 SessionStart 全局注入，也就不会污染无关会话；\n+- 「句长统计需要每轮注入」在本 Skill 中不成立 —— 统计只在审查/完全模式启动时跑一次；\n+- 若后续要加「始终生效的文体基线」，第 3～6 节的 flag 文件 + 优先级链 + 输出协议分派可直接照搬。\n+\n+### 10.3 脚本边界的一致性\n+\n+ponytail 把 flag 读写、模式解析、指令裁剪都做成脚本，只把「这算不算 AI 特征」的判断留给 LLM。这与本 Skill 既定决策一致：多类型输入 ↔ 结构化 yaml 双向转换、句长分布统计交给脚本，AI 特征识别交给 LLM。\n+\n+### 10.4 应当避免\n+\n+不要手抄多份指令正文。第 9 节的分歧已经发生，本 Skill 若要为 Cursor / Gemini CLI 等做静态分发，应当**构建期生成**而非手工维护，否则与 SKILL.md 的漂移只是时间问题。\n+\n+---\n+\n+## 11. 复现方式\n+\n+```bash\n+# 定位安装\n+ls -d ~/.config/opencode/ponytail\n+\n+# 查看钩子注册\n+cat ~/.config/opencode/ponytail/.claude-plugin/plugin.json\n+cat ~/.config/opencode/ponytail/hooks/claude-codex-hooks.json\n+\n+# 实跑注入，看真实输出\n+cd ~/.config/opencode/ponytail && echo '{}' | node hooks/ponytail-activate.js\n+\n+# 对比三档注入体量\n+cd ~/.config/opencode/ponytail && node -e \"\n+const {getPonytailInstructions} = require('./hooks/ponytail-instructions');\n+for (const m of ['lite','full','ultra'])\n+  console.log(m, getPonytailInstructions(m).split('\\n').length + ' lines');\n+\"\n+```\n+\n+关键文件：\n+- `hooks/ponytail-instructions.js` —— 指令构建与强度过滤\n+- `hooks/ponytail-runtime.js` —— 输出协议分派与 flag 读写\n+- `hooks/ponytail-config.js` —— 模式优先级链与环境识别\n+- `.opencode/plugins/ponytail.mjs` —— 无钩子 harness 的旁路实现\n+\n+上游项目：<https://github.com/DietrichGebert/ponytail>（本机 npm 包 `@dietrichgebert/ponytail`，v4.9.0）\n"
+}

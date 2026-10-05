@@ -23,7 +23,8 @@ void test("paper-humanizer extraction index verifies against the pinned vendor",
     artifact_count: number;
     artifacts: Array<{ artifact_id: string; path: string; sha256: string; sources: string[] }>;
   };
-  assert.equal(index.artifact_count, 9);
+  assert.equal(index.artifact_count, index.artifacts.length);
+  assert.ok(index.artifact_count > 0);
   for (const artifact of index.artifacts) {
     assert.equal(artifact.sources.length, 1);
     const source = artifact.sources[0] ?? "";
@@ -33,6 +34,10 @@ void test("paper-humanizer extraction index verifies against the pinned vendor",
     const upstream = rangeMatch
       ? upstreamText.split("\n").slice(Number(rangeMatch[1]) - 1, Number(rangeMatch[2])).join("\n") + "\n"
       : upstreamText;
+    const extractionText = await readFile(path.join(root, artifact.path), "utf8");
+    const headerEnd = extractionText.indexOf("-->");
+    assert.notEqual(headerEnd, -1, artifact.artifact_id);
+    assert.equal(extractionText.slice(headerEnd + 3).replace(/^\r?\n+/, ""), rangeMatch ? upstream.slice(0, -1) : upstream, artifact.artifact_id);
     assert.equal(sha256(upstream), artifact.sha256, artifact.artifact_id);
   }
 });

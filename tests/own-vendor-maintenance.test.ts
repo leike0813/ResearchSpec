@@ -29,7 +29,10 @@ void test("own-vendor catalog declares the two current vendors", async () => {
 });
 
 void test("own-vendor anchors contain generated records and completed semantic reviews", async () => {
-  for (const [vendor, anchor] of [["paper-humanizer", "v2.9.1-1a31f2d"], ["revision-master", "snapshot-13e69610"]]) {
+  const catalog = JSON.parse(await readFile(path.join(root, "audits/own-vendors/catalog.json"), "utf8")) as {
+    vendors: Array<{ vendor_id: string; anchor_id: string }>;
+  };
+  for (const { vendor_id: vendor, anchor_id: anchor } of catalog.vendors) {
     const dir = path.join(root, "audits/own-vendors", vendor, anchor);
     const analysis = await readFile(path.join(dir, "01-analysis.md"), "utf8");
     const ingestion = await readFile(path.join(dir, "02-ingestion.md"), "utf8");
@@ -46,10 +49,12 @@ void test("own-vendor anchors contain generated records and completed semantic r
   }
 });
 
-void test("own-vendor maintenance check passes for every current anchor", () => {
+void test("own-vendor maintenance check passes for every current anchor", async () => {
+  const catalog = JSON.parse(await readFile(path.join(root, "audits/own-vendors/catalog.json"), "utf8")) as {
+    vendors: Array<{ vendor_id: string; anchor_id: string }>;
+  };
   const stdout = execFileSync(process.execPath, ["scripts/own-vendor-maintenance.mjs", "check"], { encoding: "utf8" });
-  assert.match(stdout, /^OK paper-humanizer@v2\.9\.1-1a31f2d/m);
-  assert.match(stdout, /^OK revision-master@snapshot-13e69610/m);
+  assert.deepEqual(stdout.trim().split("\n"), catalog.vendors.map(({ vendor_id, anchor_id }) => `OK ${vendor_id}@${anchor_id}`));
 });
 
 void test("package scripts expose the own-vendor maintenance loop", async () => {

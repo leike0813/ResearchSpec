@@ -1,0 +1,101 @@
+{
+  "summary": {
+    "package_count": 4,
+    "operational_count": 4,
+    "avg_section_coverage": 0.9453703703703704,
+    "avg_rule_coverage": 1,
+    "below_section_threshold": [],
+    "below_rule_threshold": [],
+    "output_missing": [],
+    "knowledge_below_threshold": [],
+    "flow_retained": []
+  },
+  "packages": [
+    {
+      "capability_id": "check-paper-humanization-review",
+      "maturity": "operational",
+      "skill_lines": 142,
+      "knowledge_refs": 6,
+      "knowledge_artifacts": 3,
+      "knowledge_coverage": 1,
+      "knowledge_refs_referenced": 1,
+      "knowledge_refs_unreferenced": [],
+      "upstream_sections": 15,
+      "covered_sections": 12,
+      "section_coverage": 0.8,
+      "upstream_rules": 5,
+      "covered_rules": 5,
+      "rule_coverage": 1,
+      "uncovered_sections": [
+        "Contents",
+        "7. Full-mode structured payload",
+        "8. Deliver the review"
+      ],
+      "uncovered_rules": [],
+      "output_format_preserved": true,
+      "flow_sections_retained": []
+    },
+    {
+      "capability_id": "check-paper-humanization-verification",
+      "maturity": "operational",
+      "skill_lines": 124,
+      "knowledge_refs": 4,
+      "knowledge_artifacts": 3,
+      "knowledge_coverage": 1,
+      "knowledge_refs_referenced": 1,
+      "knowledge_refs_unreferenced": [],
+      "upstream_sections": 5,
+      "covered_sections": 5,
+      "section_coverage": 1,
+      "upstream_rules": 1,
+      "covered_rules": 1,
+      "rule_coverage": 1,
+      "uncovered_sections": [],
+      "uncovered_rules": [],
+      "output_format_preserved": true,
+      "flow_sections_retained": []
+    },
+    {
+      "capability_id": "generation-humanization-reference",
+      "maturity": "operational",
+      "skill_lines": 220,
+      "knowledge_refs": 1,
+      "knowledge_artifacts": 0,
+      "knowledge_coverage": 1,
+      "knowledge_refs_referenced": 1,
+      "knowledge_refs_unreferenced": [],
+      "upstream_sections": 54,
+      "covered_sections": 53,
+      "section_coverage": 0.9814814814814815,
+      "upstream_rules": 6,
+      "covered_rules": 6,
+      "rule_coverage": 1,
+      "uncovered_sections": [
+        "Route the request"
+      ],
+      "uncovered_rules": [],
+      "output_format_preserved": true,
+      "flow_sections_retained": []
+    },
+    {
+      "capability_id": "transform-paper-humanization-revision",
+      "maturity": "operational",
+      "skill_lines": 96,
+      "knowledge_refs": 4,
+      "knowledge_artifacts": 1,
+      "knowledge_coverage": 1,
+      "knowledge_refs_referenced": 1,
+      "knowledge_refs_unreferenced": [],
+      "upstream_sections": 1,
+      "covered_sections": 1,
+      "section_coverage": 1,
+      "upstream_rules": 0,
+      "covered_rules": 0,
+      "rule_coverage": 1,
+      "uncovered_sections": [],
+      "uncovered_rules": [],
+      "output_format_preserved": true,
+      "flow_sections_retained": []
+    }
+  ]
+}

@@ -38,6 +38,7 @@ Execute exactly one ResearchSpec capability node.
 
 ## Procedure
 
+
 # Paper Humanization Revision
 
 Execute an approved humanization revision plan against one boundary manuscript. The graph engine owns approval state; this node receives the manuscript and the approved plan and performs exactly one bounded revision pass.

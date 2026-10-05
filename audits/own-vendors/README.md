@@ -2,7 +2,7 @@
 
 本目录保存用户自有上游项目的统一维护锚点。catalog 驱动，当前包含：
 
-- `paper-humanizer`：`v2.9.1-1a31f2d`
+- `paper-humanizer`：`snapshot-84eb2ed`
 - `revision-master`：`snapshot-13e69610`
 
 ## 工件生成

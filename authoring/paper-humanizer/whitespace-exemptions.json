@@ -1,0 +1,105 @@
+{
+  "schema_version": "1",
+  "exemptions": [
+    {
+      "path": "vendor/paper-humanizer/upstream/SKILL.md",
+      "byte_preserved": true,
+      "sha256": "61700f2d55acc672724bf43059fcaaaaecc7f26dceddd31e5d515fdddc0c948c",
+      "evidence": {
+        "catalog_path": "authoring/paper-humanizer/extraction-index.json",
+        "artifact_id": "PH-CAP-03",
+        "source_sha256": "61700f2d55acc672724bf43059fcaaaaecc7f26dceddd31e5d515fdddc0c948c"
+      }
+    },
+    {
+      "path": "authoring/paper-humanizer/capabilities/03_reference_taxonomy.md",
+      "byte_preserved": true,
+      "sha256": "7382afc8814ee922867063d0b9ea2020d68313a1dc4abbc9cb3155a99b7b2381",
+      "evidence": {
+        "catalog_path": "authoring/paper-humanizer/extraction-index.json",
+        "artifact_id": "PH-CAP-03",
+        "source_sha256": "61700f2d55acc672724bf43059fcaaaaecc7f26dceddd31e5d515fdddc0c948c"
+      }
+    },
+    {
+      "path": "skills/capabilities/generation-humanization-reference/knowledge/paper-humanizer-taxonomy.md",
+      "byte_preserved": true,
+      "sha256": "7382afc8814ee922867063d0b9ea2020d68313a1dc4abbc9cb3155a99b7b2381",
+      "evidence": {
+        "catalog_path": "authoring/paper-humanizer/extraction-index.json",
+        "artifact_id": "PH-CAP-03",
+        "source_sha256": "61700f2d55acc672724bf43059fcaaaaecc7f26dceddd31e5d515fdddc0c948c"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-paper-humanization-review/knowledge/paper-humanizer-taxonomy.md",
+      "byte_preserved": true,
+      "sha256": "7382afc8814ee922867063d0b9ea2020d68313a1dc4abbc9cb3155a99b7b2381",
+      "evidence": {
+        "catalog_path": "authoring/paper-humanizer/extraction-index.json",
+        "artifact_id": "PH-CAP-03",
+        "source_sha256": "61700f2d55acc672724bf43059fcaaaaecc7f26dceddd31e5d515fdddc0c948c"
+      }
+    },
+    {
+      "path": "skills/capabilities/transform-paper-humanization-revision/knowledge/paper-humanizer-taxonomy.md",
+      "byte_preserved": true,
+      "sha256": "7382afc8814ee922867063d0b9ea2020d68313a1dc4abbc9cb3155a99b7b2381",
+      "evidence": {
+        "catalog_path": "authoring/paper-humanizer/extraction-index.json",
+        "artifact_id": "PH-CAP-03",
+        "source_sha256": "61700f2d55acc672724bf43059fcaaaaecc7f26dceddd31e5d515fdddc0c948c"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-paper-humanization-verification/knowledge/paper-humanizer-taxonomy.md",
+      "byte_preserved": true,
+      "sha256": "7382afc8814ee922867063d0b9ea2020d68313a1dc4abbc9cb3155a99b7b2381",
+      "evidence": {
+        "catalog_path": "authoring/paper-humanizer/extraction-index.json",
+        "artifact_id": "PH-CAP-03",
+        "source_sha256": "61700f2d55acc672724bf43059fcaaaaecc7f26dceddd31e5d515fdddc0c948c"
+      }
+    },
+    {
+      "path": "vendor/paper-humanizer/upstream/references/academic-diagnostic-guidance.md",
+      "byte_preserved": true,
+      "sha256": "79cec697bdb55c21fac84aad06fc01e98f7bfa2af7af72dcc85e53a69e00f39a",
+      "evidence": {
+        "catalog_path": "authoring/paper-humanizer/extraction-index.json",
+        "artifact_id": "PH-KP-03",
+        "source_sha256": "79cec697bdb55c21fac84aad06fc01e98f7bfa2af7af72dcc85e53a69e00f39a"
+      }
+    },
+    {
+      "path": "authoring/paper-humanizer/knowledge/03_academic_diagnostic_guidance.md",
+      "byte_preserved": true,
+      "sha256": "78b131c8c1b3cbebdf3159c7df9e4eb776426ddbb39cc598bfab12efb9bbf333",
+      "evidence": {
+        "catalog_path": "authoring/paper-humanizer/extraction-index.json",
+        "artifact_id": "PH-KP-03",
+        "source_sha256": "79cec697bdb55c21fac84aad06fc01e98f7bfa2af7af72dcc85e53a69e00f39a"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-paper-humanization-review/knowledge/academic-diagnostic-guidance.md",
+      "byte_preserved": true,
+      "sha256": "78b131c8c1b3cbebdf3159c7df9e4eb776426ddbb39cc598bfab12efb9bbf333",
+      "evidence": {
+        "catalog_path": "authoring/paper-humanizer/extraction-index.json",
+        "artifact_id": "PH-KP-03",
+        "source_sha256": "79cec697bdb55c21fac84aad06fc01e98f7bfa2af7af72dcc85e53a69e00f39a"
+      }
+    },
+    {
+      "path": "skills/capabilities/check-paper-humanization-verification/knowledge/academic-diagnostic-guidance.md",
+      "byte_preserved": true,
+      "sha256": "78b131c8c1b3cbebdf3159c7df9e4eb776426ddbb39cc598bfab12efb9bbf333",
+      "evidence": {
+        "catalog_path": "authoring/paper-humanizer/extraction-index.json",
+        "artifact_id": "PH-KP-03",
+        "source_sha256": "79cec697bdb55c21fac84aad06fc01e98f7bfa2af7af72dcc85e53a69e00f39a"
+      }
+    }
+  ]
+}

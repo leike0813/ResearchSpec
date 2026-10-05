@@ -36,7 +36,7 @@ validators:
 knowledge_refs:
   - knowledge_id: paper-humanizer-taxonomy
     path: knowledge/paper-humanizer-taxonomy.md
-    content_hash: 1b5d7afa5f39bc2bcad69805106fcea122206e07d81722970d4f37c724c7161b
+    content_hash: 7382afc8814ee922867063d0b9ea2020d68313a1dc4abbc9cb3155a99b7b2381
     license: MIT
   - knowledge_id: document-yaml-contract
     path: knowledge/document-yaml-contract.md

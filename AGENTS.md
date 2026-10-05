@@ -21,6 +21,8 @@ Current external reference paths:
 - Materials-Science-Skills-For-LLM audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/materials-science-skills-for-llm`
 - FinRobot audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/finrobot`
 - HistAgent audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/histagent`
+- Paper-Humanizer working checkout: `/home/joshua/Workspace/Code/Skill/paper_humanizer`
+- Paper-Humanizer converter snapshot: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/paper-humanizer/upstream`
 - Revision-Master vendor converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/revision-master`
 - Revision-Master audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/audits/revision-master/snapshot-13e69610`
 - Education Agent Skills working checkout: `/home/joshua/Workspace/Code/Skill/education-agent-skills`
@@ -638,6 +640,16 @@ user-owned upstream vendors (currently `paper-humanizer` and
 `artifacts / records / baseline / check / diff` anchors and the Agent semantic
 review gate. A future owned vendor is added through its extraction index,
 authoring sources, package script, and one additive catalog entry.
+
+Paper-humanizer is pinned to local upstream commit
+`84eb2edf9570aea85a799e4c4db559882c19928c` at
+`audits/own-vendors/paper-humanizer/snapshot-84eb2ed/`. Its snapshot maps the
+`paper-humanizer/` subtree and the root academic diagnostic reference through
+`vendor/paper-humanizer/SOURCE.json`. Reference carries all 43 numbered patterns
+and qualitative output checks; Review and Verification conditionally load
+academic diagnostic context. Source information-unit preservation governs
+examples and protects section conventions. The Hook guard asset is provenance;
+host Hook deployment and upstream MCP configuration stay outside delivery.
 
 Non-native upstream projects such as HistAgent, FinRobot, and
 Materials-Science-Skills-For-LLM follow

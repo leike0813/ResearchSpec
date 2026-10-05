@@ -1,0 +1,52 @@
+{
+  "schema_version": "1",
+  "vendor_id": "paper-humanizer",
+  "anchor_id": "snapshot-84eb2ed",
+  "created_at": "2026-10-05T16:29:30.645Z",
+  "upstream": {
+    "source_meta": "vendor/paper-humanizer/SOURCE.json",
+    "upstream_root": "vendor/paper-humanizer/upstream",
+    "release_label": "snapshot-84eb2ed",
+    "commit": "84eb2edf9570aea85a799e4c4db559882c19928c",
+    "tree_sha256": "b6879782fdb9ef1215e1a3cfbed5752e88778bd693489fea55521149a5dcd61d"
+  },
+  "extraction": {
+    "index_path": "authoring/paper-humanizer/extraction-index.json",
+    "index_sha256": "5d1301146b86818248d758584528418479219f0951c95db92b175c61e8c5999e",
+    "artifact_count": 10,
+    "pass": 10,
+    "fail": 0,
+    "error": 0
+  },
+  "conversion": {
+    "capability_count": 4,
+    "operational_count": 4,
+    "capability_ids": [
+      "check-paper-humanization-review",
+      "check-paper-humanization-verification",
+      "generation-humanization-reference",
+      "transform-paper-humanization-revision"
+    ],
+    "registry_subset_sha256": "30f0c919fba8b8eac42381d14c8fffafda42645960c806cd7c60de7ce84180ac",
+    "packages_tree_sha256": "508a3fc6bfa9df2aed5eca9680a87a4c30549f8057f43ef57d512d5be405dc76"
+  },
+  "review": {
+    "parity_report_path": "/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json",
+    "parity_artifact_path": "audits/own-vendors/paper-humanizer/snapshot-84eb2ed/artifacts/parity-packages.json",
+    "parity_artifact_sha256": "4ec81d9c0adc60cc5959e17e6c7c7d6a2fab27f54195dc1d13c7f22aeffd069e",
+    "package_count": 4,
+    "operational_count": 4,
+    "avg_section_coverage": 0.9453703703703704,
+    "avg_rule_coverage": 1,
+    "below_section_threshold": [],
+    "below_rule_threshold": [],
+    "output_missing": [],
+    "knowledge_below_threshold": [],
+    "flow_retained": []
+  },
+  "maintenance": {
+    "skill_sha256": "5690429a3282506b3c156c70b544a58d3533e7a4cbf34ab8ce2888568b63fffa",
+    "catalog_sha256": "34f89292d35dfc5ff3ed93e56bde5f3fcb8a2e1b48a0f6f737aa7fd2287ce258",
+    "record_sha256": "030d84568f5841680294013476a1b0a2c8b540c32d293f3ba736afd4811af1e9"
+  }
+}

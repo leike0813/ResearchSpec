@@ -26,6 +26,7 @@ Execute exactly one ResearchSpec capability node.
 
 - Load knowledge ID `paper-humanizer-taxonomy` from `knowledge/paper-humanizer-taxonomy.md`.
 - Load knowledge ID `diagnostic-guidance` from `knowledge/diagnostic-guidance.md`.
+- When reviewing or verifying academic prose and consulting supporting examples under the Procedure's preservation and section-context rules, load knowledge ID `academic-diagnostic-guidance` from `knowledge/academic-diagnostic-guidance.md`.
 - Load knowledge ID `document-yaml-contract` from `knowledge/document-yaml-contract.md`.
 
 ## Tools
@@ -33,6 +34,7 @@ Execute exactly one ResearchSpec capability node.
 - `scripts/document_pipeline.py` is packaged from extraction artifact `PH-SCRIPT-01`; invoke it only through the declared runner and arguments.
 
 ## Procedure
+
 
 # Paper Humanization Verification
 
@@ -93,6 +95,8 @@ Do not edit the manuscript, the candidate, the plan, or graph state.
 - Search for newly introduced instances of all numbered patterns.
 - Compare register, lexical level, stance, and recognizable voice with the source and any supplied writing sample.
 - Interpret refreshed sentence statistics descriptively; never edit merely to raise variation.
+
+For academic prose, use `knowledge/academic-diagnostic-guidance.md` as supporting diagnostic context and resolve patterns by their taxonomy names. Confirm patterns 40–43 and academic negation were addressed without altering paragraph purpose, required sections, meaningful contrast, evidence-calibrated hedging, or citation identity. Reject invented argumentative links, untested settings, findings, or limitations even when an example suggests them. Preserve distinct information in shortened study introductions and keep ambiguous spans unchanged with an unresolved risk.
 
 ## Bidirectional information check
 

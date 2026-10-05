@@ -75,12 +75,12 @@
     {
       "capability_id": "check-paper-humanization-review",
       "source_path": "check-paper-humanization-review",
-      "manifest_sha256": "9f736c43df89b87fa0548929bb0421ab6e21f795ee6aa0077f642826efa77c6b"
+      "manifest_sha256": "fde2b2ef197d09edeb0df927ea81d49b684da2a4cfdf251b6982c295a4374a5b"
     },
     {
       "capability_id": "check-paper-humanization-verification",
       "source_path": "check-paper-humanization-verification",
-      "manifest_sha256": "608608b5185bd7fed1b88f686685409d3af6b7439c1ae84338fc984138812ffa"
+      "manifest_sha256": "f16f6a5d7a269159d2d64512dc77b796cf6d43a1966b630680ea69329dd694fd"
     },
     {
       "capability_id": "check-passport-verifier",
@@ -235,7 +235,7 @@
     {
       "capability_id": "generation-humanization-reference",
       "source_path": "generation-humanization-reference",
-      "manifest_sha256": "d1e6fba4efb47b7e94902fdb84cbd4f9e8ceea967e1e8dfb81323f72bfce90b5"
+      "manifest_sha256": "21163e55acf6c7c40219cd64d49d5b6b59f4f0beeeb4c82e7fc11c7b279a3912"
     },
     {
       "capability_id": "generation-manuscript-drafting",
@@ -295,7 +295,7 @@
     {
       "capability_id": "transform-paper-humanization-revision",
       "source_path": "transform-paper-humanization-revision",
-      "manifest_sha256": "5aebe6e201f3ac451ea197d024736fb6e47eaf9ac094b0b6799baeb3c7579bc4"
+      "manifest_sha256": "d5b77f8d7d5cf8e8b09771062ab67866df55f084df78b5fcecc571275836ccd0"
     },
     {
       "capability_id": "transform-patent-docket-revision",

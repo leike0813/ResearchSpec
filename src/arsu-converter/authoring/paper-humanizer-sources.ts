@@ -5,6 +5,12 @@ const PROCEDURES = "src/arsu-converter/authoring/procedures/paper-humanizer";
 const INDEX = "authoring/paper-humanizer/extraction-index.json";
 const REVIEW_WORKSPACE = { source_path: "review-workspace/index.html", output_path: "review-workspace/index.html" };
 const REVIEW_WORKSPACE_V1 = { source_path: "review-workspace/v1.html", output_path: "review-workspace/v1.html" };
+const ACADEMIC_DIAGNOSTICS = {
+  knowledge_id: "academic-diagnostic-guidance",
+  extraction_artifact_id: "PH-KP-03",
+  output_path: "knowledge/academic-diagnostic-guidance.md",
+  read_when: "reviewing or verifying academic prose and consulting supporting examples under the Procedure's preservation and section-context rules",
+};
 
 export const PAPER_HUMANIZER_AUTHORING_OPTIONS = {
   extractionIndexPath: INDEX,
@@ -24,7 +30,7 @@ export const PAPER_HUMANIZER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
     license: MIT,
     extraction_artifact_id: "PH-CAP-03",
     knowledge_sources: [
-      { knowledge_id: "paper-humanizer-taxonomy", extraction_artifact_id: "PH-CAP-03", output_path: "knowledge/paper-humanizer-taxonomy.md" },
+      { knowledge_id: "paper-humanizer-taxonomy", extraction_artifact_id: "PH-CAP-03", output_path: "knowledge/paper-humanizer-taxonomy.md", read_when: "explicitly auditing upstream taxonomy examples" },
     ],
     inputs: [],
     outputs: [],
@@ -49,6 +55,7 @@ export const PAPER_HUMANIZER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
     knowledge_sources: [
       { knowledge_id: "paper-humanizer-taxonomy", extraction_artifact_id: "PH-CAP-03", output_path: "knowledge/paper-humanizer-taxonomy.md" },
       { knowledge_id: "diagnostic-guidance", extraction_artifact_id: "PH-KP-01", output_path: "knowledge/diagnostic-guidance.md" },
+      ACADEMIC_DIAGNOSTICS,
       { knowledge_id: "document-yaml-contract", extraction_artifact_id: "PH-KP-02", output_path: "knowledge/document-yaml-contract.md" },
     ],
     inputs: [
@@ -106,6 +113,7 @@ export const PAPER_HUMANIZER_AUTHORING_SOURCES: readonly CapabilityAuthoringSour
     knowledge_sources: [
       { knowledge_id: "paper-humanizer-taxonomy", extraction_artifact_id: "PH-CAP-03", output_path: "knowledge/paper-humanizer-taxonomy.md" },
       { knowledge_id: "diagnostic-guidance", extraction_artifact_id: "PH-KP-01", output_path: "knowledge/diagnostic-guidance.md" },
+      ACADEMIC_DIAGNOSTICS,
       { knowledge_id: "document-yaml-contract", extraction_artifact_id: "PH-KP-02", output_path: "knowledge/document-yaml-contract.md" },
     ],
     inputs: [

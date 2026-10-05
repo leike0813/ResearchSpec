@@ -10,8 +10,8 @@
   "summary": {
     "total": 65,
     "operational": 65,
-    "avg_section_coverage": 0.9638750036373354,
-    "avg_rule_coverage": 0.9644732251875107,
+    "avg_section_coverage": 0.9638977956601273,
+    "avg_rule_coverage": 0.9696014303157159,
     "below_section_threshold": [],
     "below_rule_threshold": [],
     "output_missing": [],
@@ -326,9 +326,9 @@
     {
       "capability_id": "check-paper-humanization-review",
       "maturity": "operational",
-      "skill_lines": 131,
-      "knowledge_refs": 5,
-      "knowledge_artifacts": 2,
+      "skill_lines": 142,
+      "knowledge_refs": 6,
+      "knowledge_artifacts": 3,
       "knowledge_coverage": 1,
       "knowledge_refs_referenced": 1,
       "knowledge_refs_unreferenced": [],
@@ -350,9 +350,9 @@
     {
       "capability_id": "check-paper-humanization-verification",
       "maturity": "operational",
-      "skill_lines": 120,
-      "knowledge_refs": 3,
-      "knowledge_artifacts": 2,
+      "skill_lines": 124,
+      "knowledge_refs": 4,
+      "knowledge_artifacts": 3,
       "knowledge_coverage": 1,
       "knowledge_refs_referenced": 1,
       "knowledge_refs_unreferenced": [],
@@ -1038,25 +1038,22 @@
     {
       "capability_id": "generation-humanization-reference",
       "maturity": "operational",
-      "skill_lines": 199,
+      "skill_lines": 220,
       "knowledge_refs": 1,
       "knowledge_artifacts": 0,
       "knowledge_coverage": 1,
       "knowledge_refs_referenced": 1,
       "knowledge_refs_unreferenced": [],
-      "upstream_sections": 50,
-      "covered_sections": 49,
-      "section_coverage": 0.98,
+      "upstream_sections": 54,
+      "covered_sections": 53,
+      "section_coverage": 0.9814814814814815,
       "upstream_rules": 6,
-      "covered_rules": 4,
-      "rule_coverage": 0.6666666666666666,
+      "covered_rules": 6,
+      "rule_coverage": 1,
       "uncovered_sections": [
         "Route the request"
       ],
-      "uncovered_rules": [
-        "| Inspect, review, diagnose, or list AI-like features and suggestions | **Review** | `agents/review.md`, then `references/diagnostic-guidance.md` and `references/document-yaml-contract.md` | Exhaustive review; never edit the source |",
-        "Review mode may recommend changes but must not rewrite or modify the supplied source. Full mode treats the initial request as approval to review and negotiate a plan. It requires explicit approval of the current plan before editing and explicit acceptance of the verified candidate before completion."
-      ],
+      "uncovered_rules": [],
       "output_format_preserved": true,
       "flow_sections_retained": []
     },
@@ -1328,7 +1325,7 @@
     {
       "capability_id": "transform-paper-humanization-revision",
       "maturity": "operational",
-      "skill_lines": 95,
+      "skill_lines": 96,
       "knowledge_refs": 4,
       "knowledge_artifacts": 1,
       "knowledge_coverage": 1,
