@@ -199,6 +199,16 @@ unreviewed targets retain explicit Navigate discovery. Region hashes cover only
 the owned bytes, while whole-file transaction preconditions protect surrounding
 user content. Entry installation does not certify live host invocation or grant
 workflow, model, plugin, Adapter, or external-service consent.
+The tool catalog also owns reviewed prompt-guard metadata
+(`TOOLS[].promptGuard` in `src/adapters/tools.ts`). `init/update` install by
+default, independently of delivery mode, a project-local writing guard at
+`researchspec/hooks/paper-humanizer/{guard.md,inject.cjs}` plus only the
+ResearchSpec-owned native hook entries. `agent_tools.paper_humanizer_guard`
+persists `on|off`, omission preserves the current preference, and an absent
+field resolves to `on`. User hooks, settings and host trust stay untouched and
+are never auto-approved; `status`, `check` and `doctor` inspect installation,
+drift and retirement only and never certify host loading. Drifted or retained
+hooks keep their shared resources and report a nonblocking diagnostic.
 Optional ResearchSpec-maintained domains select extension Procedures and graph
 profiles without projecting their raw or extension Skills into the host catalog.
 
@@ -648,8 +658,9 @@ Paper-humanizer is pinned to local upstream commit
 `vendor/paper-humanizer/SOURCE.json`. Reference carries all 43 numbered patterns
 and qualitative output checks; Review and Verification conditionally load
 academic diagnostic context. Source information-unit preservation governs
-examples and protects section conventions. The Hook guard asset is provenance;
-host Hook deployment and upstream MCP configuration stay outside delivery.
+examples and protects section conventions. The extracted Hook guard and its
+dependency-free publisher are the reviewed delivery assets behind the
+project-local writing guard; upstream MCP configuration stays outside delivery.
 
 Non-native upstream projects such as HistAgent, FinRobot, and
 Materials-Science-Skills-For-LLM follow

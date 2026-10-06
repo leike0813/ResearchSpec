@@ -25,6 +25,7 @@
     "!dist/src/vendor-evidence",
     "!dist/src/vendor-converters",
     "skills",
+    "hooks/paper-humanizer",
     "review-workspace/index.html",
     "review-workspace/v1.html",
     "review-workspace/revision-master.html",

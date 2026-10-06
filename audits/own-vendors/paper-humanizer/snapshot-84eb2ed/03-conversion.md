@@ -13,6 +13,14 @@
 | `generation-humanization-reference` | Paper Humanizer Reference Mode | generation | observer | llm | none | operational | 0/0 | 1 | 1 | 3 | `21163e55acf6` |
 | `transform-paper-humanization-revision` | Paper Humanization Revision | transformation | producer | mixed | required | operational | 2/2 | 4 | 1 | 7 | `d5b77f8d7d5c` |
 
+## Delivery Assets
+
+| path | sha256 |
+|---|---|
+| `hooks/paper-humanizer/guard.md` | `55b9d67efa5d6712bbeb156595ecdfba941ce64ed93efbd23d1d9100cd21008a` |
+| `hooks/paper-humanizer/inject.cjs` | `02398ab616b3fcd2626c83b23c220f49663d2701e0490d6fce848c1fa2c1fbae` |
+| `hooks/paper-humanizer/LICENSE` | `4ac4810254ab36d45419141aeb8e69bf50652cfafe5b2dab947d06d44e5cbf96` |
+
 ## Verification
 
 - [x] `pnpm paper-humanizer:author` twice: byte-identical

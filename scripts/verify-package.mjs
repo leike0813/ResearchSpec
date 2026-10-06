@@ -134,7 +134,15 @@ try {
     const profile = parseYaml(await readFile(path.join(currentWorkspace, "profiles", `${profileId}.yaml`), "utf8"));
     assert(profile?.schema_version === "2" && profile?.profile_id === profileId, `Installed init did not project current graph profile: ${profileId}`);
   }
-  assert(equal((await directoryNames(currentWorkspace)).sort(), ["changes", "profiles", "runs", "specs"]), "Installed current workspace directory set is invalid.");
+  assert(equal((await directoryNames(currentWorkspace)).sort(), ["changes", "hooks", "profiles", "runs", "specs"]), "Installed current workspace directory set is invalid.");
+  assert(currentConfig?.agent_tools?.paper_humanizer_guard === "on", "Installed writing guard default was not persisted.");
+  const guardRoot = path.join(currentWorkspace, "hooks/paper-humanizer");
+  const guardText = await readFile(path.join(guardRoot, "guard.md"), "utf8");
+  assert(guardText === await readFile(path.join(installedPackageRoot, "hooks/paper-humanizer/guard.md"), "utf8"), "Installed writing guard differs from the package.");
+  for (let turn = 0; turn < 2; turn++) {
+    const context = JSON.parse(run(process.execPath, [path.join(guardRoot, "inject.cjs"), "context", "UserPromptSubmit"], projectDirectory).stdout);
+    assert(context.hookSpecificOutput?.additionalContext === guardText, "Installed publisher did not inject the complete guard.");
+  }
   for (const spec of ["project.md", "sources.yaml", "claims.yaml", "manuscript.yaml"]) {
     await readFile(path.join(currentWorkspace, "specs", spec), "utf8");
   }
@@ -199,6 +207,8 @@ try {
 function verifyTarballFiles(files) {
   const required = [
     "package.json", "README.md", "CHANGELOG.md", "SECURITY.md", "LICENSE", "NOTICE",
+    "hooks/paper-humanizer/guard.md", "hooks/paper-humanizer/inject.cjs",
+    "hooks/paper-humanizer/LICENSE",
     "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "LICENSES/CC-BY-SA-4.0.txt", "LICENSES/Apache-2.0.txt", "LICENSES/AGPL-3.0.txt",
     "docs/README.md", "docs/user/README.md", "docs/user/usage-model.md", "docs/user/cli-handbook.md", "docs/user/literature-adapters.md", "docs/user/review-workspace.md",
     "docs/developer/README.md", "docs/developer/architecture.md", "docs/developer/cli-interface.md", "docs/developer/domain-plugins.md", "docs/developer/domain-taxonomy.md", "docs/developer/manuscript-annotations.md",
@@ -302,7 +312,7 @@ function verifyTarballFiles(files) {
   );
   assert(adapterOpaqueFiles.length === 14, `Tarball Zotero opaque runtime metadata count mismatch: ${String(adapterOpaqueFiles.length)}`);
 
-  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/.*|artifacts\/(?:README\.md|release\/mvp-release-checklist\.md)|review-workspace\/(?:index|v1|revision-master)\.html|dist\/src\/.*\.(?:js|d\.ts)|skills\/.*|literature-adapters\/.*|semantic-search\/runtime\/(?:package|package-lock)\.json)$/;
+  const allowed = /^(?:package\.json|README\.md|CHANGELOG\.md|SECURITY\.md|LICENSE|NOTICE|LICENSES\/[^/]+|docs\/.*|hooks\/paper-humanizer\/(?:guard\.md|inject\.cjs|LICENSE)|artifacts\/(?:README\.md|release\/mvp-release-checklist\.md)|review-workspace\/(?:index|v1|revision-master)\.html|dist\/src\/.*\.(?:js|d\.ts)|skills\/.*|literature-adapters\/.*|semantic-search\/runtime\/(?:package|package-lock)\.json)$/;
   const retired = /^dist\/src\/adapters\/companion\/workflows\/(?:archive|check|context|explore|next|submit)\.js$/;
   for (const file of files) {
     assert(allowed.test(file), `Tarball contains a path outside the release allowlist: ${file}`);

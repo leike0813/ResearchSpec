@@ -40,10 +40,21 @@ Navigate。约定独立于 `skills`、`commands` 或 `both` 交付模式，并�
 未核实规则路径的宿主保持现有显式发现方式。安装只证明静态投影，不能证明宿主会在真实会话中主动
 触发能力。各宿主机制、路径和文档依据见[项目入口矩阵](agent-entry-matrix.md)。
 
+经审查的宿主还会默认收到项目级写作 guard。`init/update` 把完整 guard 与无依赖 publisher
+投影到 `researchspec/hooks/paper-humanizer/`，并在宿主原生 hooks 配置中只登记归属
+ResearchSpec 的注入条目，`skills`、`commands`、`both` 三种交付模式行为一致。
+`init/update --paper-humanizer-guard on|off` 持久化选择；省略时保留当前值，没有该字段的
+schema 2 workspace 视为 `on`。用户已有 hooks、settings 和宿主 trust 不被修改，也不会被
+自动确认；`status`、`check`、`doctor` 只检查静态安装与漂移，不证明宿主真的加载 guard。
+宿主支持范围、协议与前置条件见[写作 guard 协议](../developer/paper-humanizer-hooks.md)。
+
 ```text
 researchspec/
   config.yaml
   tool-installation-manifest.json
+  hooks/paper-humanizer/
+    guard.md
+    inject.cjs
   profiles/
   specs/
     project.md

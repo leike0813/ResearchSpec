@@ -2,7 +2,7 @@
   "schema_version": "1",
   "vendor_id": "paper-humanizer",
   "anchor_id": "snapshot-84eb2ed",
-  "created_at": "2026-10-05T16:29:30.645Z",
+  "created_at": "2026-10-05T18:11:28.524Z",
   "upstream": {
     "source_meta": "vendor/paper-humanizer/SOURCE.json",
     "upstream_root": "vendor/paper-humanizer/upstream",
@@ -12,9 +12,9 @@
   },
   "extraction": {
     "index_path": "authoring/paper-humanizer/extraction-index.json",
-    "index_sha256": "5d1301146b86818248d758584528418479219f0951c95db92b175c61e8c5999e",
-    "artifact_count": 10,
-    "pass": 10,
+    "index_sha256": "a76064f6f191c89174775fc1771c7f594763641a55950135de3cff8816ae8622",
+    "artifact_count": 11,
+    "pass": 11,
     "fail": 0,
     "error": 0
   },
@@ -29,6 +29,22 @@
     ],
     "registry_subset_sha256": "30f0c919fba8b8eac42381d14c8fffafda42645960c806cd7c60de7ce84180ac",
     "packages_tree_sha256": "508a3fc6bfa9df2aed5eca9680a87a4c30549f8057f43ef57d512d5be405dc76"
+  },
+  "delivery": {
+    "assets": [
+      {
+        "path": "hooks/paper-humanizer/guard.md",
+        "sha256": "55b9d67efa5d6712bbeb156595ecdfba941ce64ed93efbd23d1d9100cd21008a"
+      },
+      {
+        "path": "hooks/paper-humanizer/inject.cjs",
+        "sha256": "02398ab616b3fcd2626c83b23c220f49663d2701e0490d6fce848c1fa2c1fbae"
+      },
+      {
+        "path": "hooks/paper-humanizer/LICENSE",
+        "sha256": "4ac4810254ab36d45419141aeb8e69bf50652cfafe5b2dab947d06d44e5cbf96"
+      }
+    ]
   },
   "review": {
     "parity_report_path": "/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json",
@@ -45,8 +61,8 @@
     "flow_retained": []
   },
   "maintenance": {
-    "skill_sha256": "5690429a3282506b3c156c70b544a58d3533e7a4cbf34ab8ce2888568b63fffa",
-    "catalog_sha256": "34f89292d35dfc5ff3ed93e56bde5f3fcb8a2e1b48a0f6f737aa7fd2287ce258",
-    "record_sha256": "030d84568f5841680294013476a1b0a2c8b540c32d293f3ba736afd4811af1e9"
+    "skill_sha256": "54da495208f529136035ff10375cc7ae76981c6d44a3f0f1795e744c6b5f68af",
+    "catalog_sha256": "d57a538118b5b24e00212cdbe250c1474d4d23adb8dadd693e849eced641bf7e",
+    "record_sha256": "174786f2d237ec20bb1beedb2be8de341ef99567a5c11d26fa86bc3c8dbfdcf5"
   }
 }

@@ -79,12 +79,14 @@ const definitions: readonly CliCommandDefinition[] = [
     option("delivery", "--delivery <mode>", "skills, commands, or both"),
     option("literatureAdapters", "--literature-adapters <ids>", "replace with all, none, or comma-separated literature Adapter IDs"),
     option("procedureSearch", "--procedure-search <mode>", "offline or hybrid; explicit hybrid prepares optional local search resources"),
+    option("paperHumanizerGuard", "--paper-humanizer-guard <mode>", "on or off; omitted preserves the configured preference"),
   ], ["update", "status"]),
   command("update", ["update"], "update [path]", "bootstrap", "Refresh selected generated agent files", "required", "write", [
     option("tools", "--tools <ids>", "refresh/add a tool subset"),
     option("delivery", "--delivery <mode>", "skills, commands, or both"),
     option("literatureAdapters", "--literature-adapters <ids>", "replace selected literature Adapters"),
     option("procedureSearch", "--procedure-search <mode>", "offline or hybrid; explicit hybrid prepares or refreshes optional local search resources"),
+    option("paperHumanizerGuard", "--paper-humanizer-guard <mode>", "on or off; omitted preserves the configured preference"),
   ], ["init", "status", "doctor"]),
   command("status", ["status"], "status", "control-plane", "Show derived schema 2 run/node status", "required", "read", [], ["instructions", "show", "list"]),
   command("instructions", ["instructions"], "instructions <selector>", "control-plane", "Show procedure, profile, run, node, Gate, Decision, or change instructions", "required", "read", [

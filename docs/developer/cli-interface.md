@@ -67,6 +67,9 @@ version 与 workspace schema 无关。旧或未知 workspace 对 mutation fail c
 依据和限制；`doctor --json` 静态检查已选目标的入口缺失、漂移、标记错误和已知遮蔽条件，并在
 人类可读输出中显示非阻塞诊断。二者都不探测宿主运行状态。共享区域的 manifest 哈希只覆盖标记
 区域，实际写入仍使用整文件快照前置条件保护用户字节。
+工具目录同时是写作 guard 的宿主元数据来源（`TOOLS[].promptGuard`）；`init/update` 默认投影
+共享 guard 与归属条目，`--paper-humanizer-guard on|off` 持久化偏好，协议与限制见
+[写作 guard](paper-humanizer-hooks.md)。
 
 ## 确认边界
 

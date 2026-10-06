@@ -2,7 +2,7 @@
   "schema_version": "1",
   "vendor_id": "revision-master",
   "anchor_id": "snapshot-13e69610",
-  "created_at": "2026-10-05T16:22:47.262Z",
+  "created_at": "2026-10-05T18:11:28.671Z",
   "upstream": {
     "source_meta": "vendor/revision-master/SOURCE.json",
     "upstream_root": "vendor/revision-master/upstream/skills/revision-master",
@@ -46,8 +46,8 @@
     "flow_retained": []
   },
   "maintenance": {
-    "skill_sha256": "5690429a3282506b3c156c70b544a58d3533e7a4cbf34ab8ce2888568b63fffa",
-    "catalog_sha256": "34f89292d35dfc5ff3ed93e56bde5f3fcb8a2e1b48a0f6f737aa7fd2287ce258",
-    "record_sha256": "0578b3e9e3e7642c8644d9c11242760a3e380874987a524f0fa122efba1ad10a"
+    "skill_sha256": "54da495208f529136035ff10375cc7ae76981c6d44a3f0f1795e744c6b5f68af",
+    "catalog_sha256": "d57a538118b5b24e00212cdbe250c1474d4d23adb8dadd693e849eced641bf7e",
+    "record_sha256": "76dfff417da2980483ccd2fd2895470a2dd307abb83c936974988ce160aad594"
   }
 }

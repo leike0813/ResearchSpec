@@ -10,6 +10,11 @@
       "upstream_root": "vendor/paper-humanizer/upstream",
       "extraction_index": "authoring/paper-humanizer/extraction-index.json",
       "author_script": "paper-humanizer:author",
+      "delivery_assets": [
+        "hooks/paper-humanizer/guard.md",
+        "hooks/paper-humanizer/inject.cjs",
+        "hooks/paper-humanizer/LICENSE"
+      ],
       "capability_ids": [
         "generation-humanization-reference",
         "check-paper-humanization-review",

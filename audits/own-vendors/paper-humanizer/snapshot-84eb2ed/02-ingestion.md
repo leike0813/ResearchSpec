@@ -1,8 +1,8 @@
 # Own Vendor Anchor Ingestion — paper-humanizer @ snapshot-84eb2ed
 
 - extraction index: `authoring/paper-humanizer/extraction-index.json`
-- index SHA-256: `5d1301146b86818248d758584528418479219f0951c95db92b175c61e8c5999e`
-- artifact count: 10 · pass: 10 · fail: 0 · error: 0
+- index SHA-256: `a76064f6f191c89174775fc1771c7f594763641a55950135de3cff8816ae8622`
+- artifact count: 11 · pass: 11 · fail: 0 · error: 0
 
 ## Artifact Inventory
 
@@ -18,6 +18,7 @@
 | `PH-CAP-04` | paper-humanizer | capability | `authoring/paper-humanizer/capabilities/04_revision_execution.md` | `017605fb428a5c40198cd51a82aa399287a508a3c9584ca77fa768bb16ffcbaf` |
 | `PH-CAP-05` | paper-humanizer | capability | `authoring/paper-humanizer/capabilities/05_verification_acceptance.md` | `287f18d942311f16159d6470eaaa5714280fd1317abb1278e4bb6573e9f72f88` |
 | `PH-KP-03` | paper-humanizer | knowledge-pack | `authoring/paper-humanizer/knowledge/03_academic_diagnostic_guidance.md` | `79cec697bdb55c21fac84aad06fc01e98f7bfa2af7af72dcc85e53a69e00f39a` |
+| `PH-KP-04` | paper-humanizer | knowledge-pack | `authoring/paper-humanizer/knowledge/04_hook_inject_guard.md` | `6aa145b9d300baa77cf07d57552dfdc753f64ed9b667ed0a71481ffd1b7c0f6a` |
 
 ## Verification
 

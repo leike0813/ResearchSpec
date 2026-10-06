@@ -69,6 +69,27 @@ revision-master 当前锚点仅刷新共用维护 catalog / Skill 的身份及�
 - paper-humanizer、revision-master 与 ARSU 当前维护锚点检查通过。ARSU 原有人工增量说明保留，记录摘要同步实际内容。
 - `pnpm whitespace:check` 通过；原文硬换行空格由现有逐字节来源豁免检查验证。OpenSpec change 严格验证通过，主规格 62/62 通过。
 
+## 项目常驻守则交付复核（2026-10-06）
+
+新增 PH-KP-04 `authoring/paper-humanizer/knowledge/04_hook_inject_guard.md`，正文逐字节对应 `vendor/paper-humanizer/upstream/assets/hook-inject-guard.md`，SHA-256 为 `6aa145b9d300baa77cf07d57552dfdc753f64ed9b667ed0a71481ffd1b7c0f6a`。此前十件 extraction 正文、四个 capability 包、registry 与 graph profiles 均未改写。常驻交付独立于 Procedure parity，由 catalog 的 `delivery_assets` 冻结字节身份。
+
+| 来源语义 | 交付承载与判定 |
+|---|---|
+| “保护语义 / 保护体裁 / 保护作者性” | `hooks/paper-humanizer/guard.md` 保留约束，并明确用户体裁/输出格式优先，独立信息不得丢失；adapted |
+| 八条防线、次高频陷阱、学术专项、执行检查 | 全部主题进入同一 guard；所有宿主读取它，不维护另一份规则正文；preserved / adapted |
+| “句长集中15-25词”“5-10词…30+词” | 以内容决定的自然节奏替换固定词数配额；adapted |
+| “恢复判断、立场”“补上 which explains why” | 只还原材料或用户已给出的判断及论证联系；不能补造作者性、因果、证据、引用或未测试结果；adapted |
+| “引文、代码、公式、标识符、required模板不动” | 守则明确保留，并纳入用户提供的受保护模板；preserved |
+| 上游原始 MIT 通知 | `hooks/paper-humanizer/LICENSE` 保留 Copyright (c) 2025 Siqi Chen 与完整许可；NOTICE 标明衍生范围；preserved |
+
+`inject.cjs` 为 ResearchSpec 编写的 Node 标准库发布器。进程协议只读守则；Copilot 变换另读取有界输入，保留完整 transformedPrompt 并追加守则。其他进程事件不读 prompt；原生插件直接相对自身读取相同守则。失败返回宿主空成功响应，不写状态、不记录提示、不调用模型或网络。
+
+`src/adapters/tools.ts` 声明 18 个经审阅的目标及原生事件、协议、证据 URL、复核日期和加载限制。Claude/Codex/Qwen/Qoder/Copilot 的已声明 subagent 事件使用同一发布器；Codex 5000-token context 额度在 handler 显式设置。Cursor additional_context 属于 Ponytail 的指定版本私有接口证据；Junie TUI/EAP、Cline POSIX、Kiro CLI 3、宿主信任与启用条件由静态状态报告披露，不视为活宿主验收。
+
+所有 hook 都是建议性写作上下文。init/update 在同一现有事务内安装配置与资源，只合并原生配置中的拥有条目；整文件快照保护其他设置与并发变化。off/deselection 保留已改 hook 及依赖并报告未完成移除。无新增 Procedure、模型服务、授权、Gate、Decision 或 workflow-state 写入。
+
+独立验证覆盖每个原生投影的连续两轮注入、原提示/既有 system 保留、无守则/异常/超限/超时输入、用户设置、漂移、安全路径、子集更新、事务并发和三种 delivery 模式。具体最终命令与结果在本 change 的 `verification.md` 留存；上述静态验收不证明 Agent 完全遵守守则或全部宿主实际加载。
+
 ## 结论
 
 declared-fit-with-notes。新增学术写作语义与 Hook 守则的可移植检查均有明确承载；原始来源逐字保留，矛盾和不安全的例示操作由主程序的来源支持、体裁保护和未决报告约束处理。工作流与宿主边界维持既有权威划分。

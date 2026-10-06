@@ -13,6 +13,7 @@ const PathComponentSchema = IdentifierSchema.refine(isSafePathComponent, "must b
 const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
 
 export const ManagedInstallationSourceSchema = z.discriminatedUnion("kind", [
+  z.strictObject({ kind: z.literal("prompt-guard"), component: z.enum(["config", "script", "guard", "publisher"]), mode: z.enum(["file", "entries"]), entry_key: z.string().min(1).optional() }),
   z.strictObject({ kind: z.literal("arsu-skill"), skill_id: PathComponentSchema }),
   z.strictObject({ kind: z.literal("core-skill"), skill_id: PathComponentSchema }),
   z.strictObject({ kind: z.literal("framework-capability"), capability_id: PathComponentSchema }),
@@ -77,7 +78,7 @@ export const ManagedInstallationSchema = z.strictObject({
   if (value.owner === "literature-adapter" && value.tool_id !== null) {
     context.addIssue({ code: "custom", path: ["tool_id"], message: "shared literature-adapter installations require null tool_id" });
   }
-  const frameworkProfileSource = value.source.kind === "framework-profile" || value.source.kind === "plugin-profile";
+  const frameworkProfileSource = value.source.kind === "framework-profile" || value.source.kind === "plugin-profile" || value.source.kind === "prompt-guard" && (value.source.component === "guard" || value.source.component === "publisher");
   if (value.owner === "framework" && (value.tool_id !== null || !frameworkProfileSource || value.target.scope !== "project")) {
     context.addIssue({ code: "custom", path: ["owner"], message: "framework profile installations require null tool_id, project scope, and a profile source" });
   }
@@ -243,6 +244,7 @@ export async function reconcileAgentToolInstallations(input: {
   const preservedSkills = new Set(input.preserveSkillIds ?? []);
 
   for (const installation of input.existingInstallations) {
+    if (installation.source.kind === "prompt-guard") continue;
     if (desiredKeys.has(installationKey(installation))) continue;
     if (isPluginProfileInstallation(installation)) {
       retainedInstallations.push(installation);

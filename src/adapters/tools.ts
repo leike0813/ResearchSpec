@@ -20,6 +20,19 @@ export type ToolId = typeof TOOL_IDS[number];
 export type DeliveryMode = "skills" | "commands" | "both";
 export type AgentProfileFormat = "frontmatter" | "toml";
 
+export interface PromptGuardDefinition {
+  path: string;
+  format: "groups" | "events" | "cursor" | "kiro" | "antigravity" | "copilot" | "script" | "opencode" | "kilo" | "pi" | "omp";
+  protocol: string;
+  event: string;
+  subagentEvent?: string;
+  documentation: string;
+  checked_on: string;
+  limitation: string;
+  alternatePath?: string;
+  additionalContextLimit?: number;
+}
+
 export interface ProjectEntryDefinition {
   mechanism: "region" | "file" | "discovery";
   path?: string;
@@ -63,6 +76,7 @@ export interface ToolDefinition {
   detectionPaths?: readonly string[];
   setupNote?: string;
   entry: ProjectEntryDefinition;
+  promptGuard?: PromptGuardDefinition;
   agentProfile?: AgentProfileToolDefinition;
   command?: {
     scope: "project";
@@ -129,6 +143,32 @@ const DISCOVERY_ENTRY: ProjectEntryDefinition = {
   limitation: "Project-rule support has not been reviewed; use the delivered Navigate Skill or command through host discovery.",
 };
 
+const GUARD_CHECKED_ON = "2026-10-06";
+const GUARD_DEFINITIONS: Partial<Record<ToolId, PromptGuardDefinition>> = {
+  claude: guard(".claude/settings.json", "groups", "context", "UserPromptSubmit", "https://code.claude.com/docs/en/hooks", "Project hooks require host trust and review.", "SubagentStart"),
+  codex: { ...guard(".codex/hooks.json", "groups", "context", "UserPromptSubmit", "https://learn.chatgpt.com/docs/hooks", "Requires features.hooks, project trust and hook review; context is delivered as developer instructions.", "SubagentStart"), additionalContextLimit: 5000 },
+  qwen: guard(".qwen/settings.json", "groups", "context", "UserPromptSubmit", "https://qwenlm.github.io/qwen-code-docs/en/users/features/hooks/", "Requires a trusted project and enabled hooks.", "SubagentStart"),
+  qoder: guard(".qoder/settings.json", "groups", "context", "UserPromptSubmit", "https://docs.qoder.com/cli/hooks", "Requires host hook review; IDE and CLI support prompt and subagent context.", "SubagentStart"),
+  codebuddy: guard(".codebuddy/settings.json", "groups", "context", "UserPromptSubmit", "https://www.codebuddy.ai/docs/cli/hooks", "Requires CodeBuddy Code 1.16+ and /hooks review; settings are snapshotted at startup."),
+  trae: guard(".trae/hooks.json", "groups", "context", "UserPromptSubmit", "https://docs.trae.cn/ide_hook-configuration-reference", "Enable project hooks in Settings > Hooks; Claude hook imports can cause duplicate reminders."),
+  gemini: guard(".gemini/settings.json", "groups", "gemini", "BeforeAgent", "https://geminicli.com/docs/hooks/reference/", "Requires project trust and command fingerprint approval."),
+  factory: { ...guard(".factory/hooks.json", "events", "plain", "UserPromptSubmit", "https://docs.factory.com/harness/hooks", "Requires enabled project hooks; managed-only settings can suppress them."), alternatePath: ".factory/settings.json" },
+  cursor: guard(".cursor/hooks.json", "cursor", "cursor", "beforeSubmitPrompt", "https://cursor.com/docs/hooks", "additional_context is an undocumented interface verified by Ponytail for Cursor 3.20.17 on Windows; other versions remain unverified. Requires project trust."),
+  cline: guard(".clinerules/hooks/UserPromptSubmit", "script", "cline", "UserPromptSubmit", "https://github.com/cline/cline/blob/main/.clinerules/hooks/README.md", "VS Code Cline on POSIX only; enable hooks in Cline settings. CLI and Windows are not verified."),
+  kiro: guard(".kiro/hooks/researchspec-paper-humanizer.json", "kiro", "plain", "UserPromptSubmit", "https://kiro.dev/docs/cli/v3/migration-guide/", "Targets Kiro CLI 3 standalone hooks; legacy agent and IDE formats remain unverified."),
+  "github-copilot": guard(".github/hooks/researchspec-paper-humanizer.json", "copilot", "copilot-transform", "userPromptTransformed", "https://docs.github.com/en/copilot/reference/hooks-reference", "Targets Copilot CLI; VS Code Local prompt submission cannot inject this context. The general-purpose agent does not emit subagentStart.", "subagentStart"),
+  junie: guard(".junie/config.json", "groups", "junie", "UserPromptSubmit", "https://junie.jetbrains.com/docs/junie-cli-hooks.html", "Requires Junie CLI EAP TUI and explicit --config-location .junie/config.json; project hooks are otherwise ignored."),
+  antigravity: guard(".agents/hooks.json", "antigravity", "antigravity", "PreInvocation", "https://antigravity.google/docs/hooks", "Requires workspace trust; injects ephemeral system context before every model call."),
+  opencode: guard(".opencode/plugins/researchspec-paper-humanizer.mjs", "opencode", "", "experimental.chat.system.transform", "https://opencode.ai/docs/plugins/", "Uses the experimental system transform API; restart or reload the host after changes."),
+  kilocode: guard(".kilo/plugin/researchspec-paper-humanizer.mjs", "kilo", "", "experimental.chat.system.transform", "https://kilo.ai/docs/automate/extending/plugins", "Targets Kilo CLI native plugins, not the VS Code extension; experimental system transform API."),
+  pi: guard(".pi/extensions/researchspec-paper-humanizer.mjs", "pi", "", "before_agent_start", "https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/extensions.md", "Requires trusted project extensions; reload extensions after changes."),
+  "oh-my-pi": guard(".omp/hooks/pre/researchspec-paper-humanizer.mjs", "omp", "", "before_agent_start", "https://github.com/can1357/oh-my-pi/blob/main/docs/extensions.md", "Requires project extension discovery; reload after changes. System prompt is an array."),
+};
+
+function guard(path: string, format: PromptGuardDefinition["format"], protocol: string, event: string, documentation: string, limitation: string, subagentEvent?: string): PromptGuardDefinition {
+  return { path, format, protocol, event, documentation, checked_on: GUARD_CHECKED_ON, limitation, ...(subagentEvent ? { subagentEvent } : {}) };
+}
+
 export const TOOLS: readonly ToolDefinition[] = [
   tool("amazon-q", "Amazon Q Developer", ".amazonq", ".amazonq/prompts/researchspec-<id>.md", "description"),
   tool("antigravity", "Antigravity", ".agent", ".agent/workflows/researchspec-<id>.md", "description"),
@@ -173,7 +213,7 @@ export const TOOLS: readonly ToolDefinition[] = [
   skillsOnly("agents", "Shared .agents skills", ".agents", { detectionPaths: [".agents/skills"] }),
 ].map((definition) => {
   const agentProfile = AGENT_PROFILES[definition.id];
-  return { ...definition, entry: DOCUMENTED_ENTRIES[definition.id] ?? DISCOVERY_ENTRY, ...(agentProfile ? { agentProfile } : {}) };
+  return { ...definition, entry: DOCUMENTED_ENTRIES[definition.id] ?? DISCOVERY_ENTRY, ...(agentProfile ? { agentProfile } : {}), ...(GUARD_DEFINITIONS[definition.id] ? { promptGuard: GUARD_DEFINITIONS[definition.id] } : {}) };
 });
 
 export function resolveToolIdAlias(toolId: string): string {

@@ -116,6 +116,10 @@ reviewer calibration专用能力gap保留；本轮不执行模型校准实验，
 
 paper-humanizer 的 `snapshot-84eb2ed` 更新了聚合核心能力目录中的四包，因此刷新本锚点的聚合 registry、packages tree、parity 和审阅工件身份。新增学术写作规则和 Hook 守则适配的逐包判定见 `audits/own-vendors/paper-humanizer/snapshot-84eb2ed/05-semantic-review.md`。ARS 上游、120 件 extraction、38 个 ARS 包和图 profile 均保持原字节；本次刷新不表示 ARS 上游或其语义发生变化。
 
+## 项目写作守则聚合身份复核（2026-10-06）
+
+PH-KP-04 与 paper-humanizer delivery assets 分别承载原始守则证据和常驻建议，未投影到 capability knowledge_refs。所有核心 capability 与 profiles 字节不变；聚合上游、120 件 ARS extraction 和模式语义不变。重生成聚合审阅工件仅同步提取库存与来源清单。宿主协议与配置所有权的语义审阅见 paper-humanizer 当前 own-vendor 锚点，不新增 ARSU 节点或流程权威。
+
 ## 结论
 
 declared-fit-with-notes。本轮发布版的语言配置、摘要统一规则、中文引文修复、缩略语advisory隔离、真实授权与指令/数据边界已进入现有承载路径。继承的calibration缺口、ledger运行时排除及未执行确定性缩略语检查明确披露；静态operational标签不能证明这些功能有运行证据。

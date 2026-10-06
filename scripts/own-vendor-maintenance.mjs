@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { parse as parseYaml } from "yaml";
@@ -20,8 +20,36 @@ let currentAnchor = "";
 
 function sha256(text) { return createHash("sha256").update(text, "utf8").digest("hex"); }
 function fileSha(pathName) { return sha256(readFileSync(pathName, "utf8")); }
+function byteSha(pathName) { return createHash("sha256").update(readFileSync(pathName)).digest("hex"); }
 function json(pathName) { return JSON.parse(readFileSync(pathName, "utf8")); }
 function esc(text) { return String(text ?? "").replaceAll("|", "\\|").replaceAll("\n", " "); }
+
+function deliveryState(vendor) {
+  if (vendor.delivery_assets === undefined) return null;
+  if (!Array.isArray(vendor.delivery_assets) || vendor.delivery_assets.some((asset) => typeof asset !== "string")) {
+    throw new Error(`delivery_assets must be a string array for ${vendor.vendor_id}`);
+  }
+  const seen = new Set();
+  const assets = vendor.delivery_assets.map((assetPath) => {
+    const parts = assetPath.split("/");
+    if (assetPath.length === 0 || assetPath.includes("\0") || assetPath.includes("\\") || path.isAbsolute(assetPath) || path.win32.isAbsolute(assetPath)
+      || parts.some((part) => part === "" || part === "." || part === "..")) {
+      throw new Error(`Unsafe delivery asset path: ${assetPath}`);
+    }
+    if (seen.has(assetPath)) throw new Error(`Duplicate delivery asset path: ${assetPath}`);
+    seen.add(assetPath);
+    let file = ROOT;
+    let stats;
+    for (const part of parts) {
+      file = path.join(file, part);
+      try { stats = lstatSync(file); } catch { throw new Error(`Missing delivery asset: ${assetPath}`); }
+      if (stats.isSymbolicLink()) throw new Error(`Delivery asset path contains a symlink: ${assetPath}`);
+    }
+    if (!stats.isFile()) throw new Error(`Delivery asset is not a regular file: ${assetPath}`);
+    return { path: assetPath, sha256: byteSha(file) };
+  });
+  return { assets: assets.sort((a, b) => a.path.localeCompare(b.path)) };
+}
 
 function catalog() {
   const parsed = json(CATALOG_PATH);
@@ -174,6 +202,7 @@ function currentState(vendor, anchorId) {
   const extraction = json(path.join(ROOT, vendor.extraction_index));
   const capabilities = capabilityRows(vendor);
   const parity = paritySlice(vendor);
+  const delivery = deliveryState(vendor);
   const parityArtifact = path.join(artifactDir(vendor, anchorId), "parity-packages.json");
   return {
     schema_version: "1",
@@ -202,6 +231,7 @@ function currentState(vendor, anchorId) {
       registry_subset_sha256: registrySubsetSha(vendor),
       packages_tree_sha256: packageTreeSha(vendor),
     },
+    ...(delivery ? { delivery } : {}),
     review: {
       parity_report_path: PARITY_REPORT_PATH,
       parity_artifact_path: path.relative(ROOT, parityArtifact),
@@ -234,6 +264,9 @@ function writeRecords(vendor, anchorId) {
   const extraction = json(path.join(ROOT, vendor.extraction_index));
   const capabilities = capabilityRows(vendor);
   const parity = paritySlice(vendor);
+  const deliverySection = state.delivery
+    ? `\n## Delivery Assets\n\n| path | sha256 |\n|---|---|\n${state.delivery.assets.map((asset) => `| \`${esc(asset.path)}\` | \`${asset.sha256}\` |`).join("\n")}\n`
+    : "";
 
   const analysis = `# Own Vendor Anchor Analysis — ${vendor.vendor_id} @ ${anchorId}
 
@@ -297,7 +330,7 @@ ${extraction.artifacts.map((a) => `| \`${a.artifact_id}\` | ${esc(a.milestone)} 
 | capability_id | title | class | node_kind | execution | gate | maturity | in/out | knowledge | validators | files | manifest sha12 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 ${capabilities.map((c) => `| \`${c.capability_id}\` | ${esc(c.title)} | ${c.class} | ${c.node_kind} | ${c.execution_type} | ${c.gate_policy} | ${c.maturity} | ${c.inputs}/${c.outputs} | ${c.knowledge_refs} | ${c.validators} | ${c.files} | \`${c.manifest_sha256.slice(0, 12)}\` |`).join("\n")}
-
+${deliverySection}
 ## Verification
 
 - [x] \`pnpm ${vendor.author_script}\` twice: byte-identical
@@ -334,7 +367,7 @@ ${parity.packages.map((p) => `| \`${p.capability_id}\` | ${p.section_coverage.to
 |---|---|---|
 | parity report | \`${esc(state.review.parity_report_path)}\` | \`${fileSha(PARITY_REPORT_PATH)}\` |
 | parity package slice | \`${esc(state.review.parity_artifact_path)}\` | \`${state.review.parity_artifact_sha256 ?? "missing"}\` |
-
+${deliverySection}
 ## Human Confirmation
 
 - [x] 所有 vendor capability 包均在 parity report 中可见且无缺口。
@@ -427,6 +460,8 @@ function check(vendorId, anchorId) {
     const issue = compareValue(["conversion", key], manifest.conversion?.[key], state.conversion[key]);
     if (issue) problems.push(issue);
   }
+  const deliveryIssue = compareValue(["delivery"], manifest.delivery, state.delivery);
+  if (deliveryIssue) problems.push(deliveryIssue);
   for (const key of ["package_count", "operational_count", "avg_section_coverage", "avg_rule_coverage", "below_section_threshold", "below_rule_threshold", "output_missing", "knowledge_below_threshold", "flow_retained"]) {
     const issue = compareValue(["review", key], manifest.review?.[key], state.review[key]);
     if (issue) problems.push(issue);

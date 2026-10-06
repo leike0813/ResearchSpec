@@ -54,6 +54,7 @@ export async function handleGraphList(type: string | undefined, options: GraphLi
     items = TOOLS.map((tool) => ({
       selector: `tool:${tool.id}`, tool_id: tool.id, name: tool.name,
       entry: { ...tool.entry, runtime_status: "unverified" },
+      prompt_guard: tool.promptGuard ? { ...tool.promptGuard, runtime_status: "unverified" } : { supported: false },
       delivery: { skills: true, commands: Boolean(tool.command) },
     })).sort((left, right) => compareText(left.selector, right.selector));
   } else {

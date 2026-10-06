@@ -102,7 +102,7 @@
 | parity report | `artifacts/generated/capability-parity-report.json` | `bfa1711f330fa2fb4aaebe3394e1996dd659b03827c2e8bfe3e561b7a17ab024` |
 | mode-capability review HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-capability-review.html` | `709d31079c93014a6a40775087b56d685d042dde7dcb7deccb628ead56546b71` |
 | graph-match assessment HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-graph-match-assessment.html` | `c1ab7d03b74ebe95a684b34578f511a8d9d4df8827ce773f200ac2f97bbdc3b2` |
-| gap semantic review HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-gap-semantic-review.html` | `9dbd26b4f241b0de5c5ed6fa9f50359cc50934dc14f01f8f03ed9c08fcd31f61` |
+| gap semantic review HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-gap-semantic-review.html` | `d5096e6a1a1d1e229fee2720a721ce9b4de88c1b9fea80a2e5bea3ae847458de` |
 
 ## Semantic Review
 

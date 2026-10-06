@@ -101,6 +101,15 @@ function resolveAgentTarget(
     return resolveExactTarget(projectRoot, scope, targetPath, path.join(projectRoot, ...tool.entry.path.split("/")), projectRoot);
   }
 
+  if (source.kind === "prompt-guard") {
+    const definition = tool.promptGuard;
+    if (!definition || ![definition.path, definition.alternatePath].includes(targetPath) || source.component !== (definition.format === "script" || ["opencode", "kilo", "pi", "omp"].includes(definition.format) ? "script" : "config")) fail("prompt guard destination is not defined for this tool");
+    if (scope !== "project") fail("prompt guards are project-scoped");
+    const file = source.component === "script";
+    if (source.mode !== (file ? "file" : "entries") || (file ? source.entry_key !== undefined : source.entry_key !== "researchspec-paper-humanizer")) fail("prompt guard ownership mode is invalid");
+    return resolveExactTarget(projectRoot, scope, targetPath, path.join(projectRoot, targetPath), projectRoot);
+  }
+
   if (source.kind === "command") {
     assertSafeComponent(source.command_id, "command_id");
     if (!COMMAND_IDS.has(source.command_id)) {
@@ -141,6 +150,11 @@ function resolveFrameworkTarget(
   targetPath: string,
   source: ManagedInstallationSource,
 ): ManagedTarget {
+  if (source.kind === "prompt-guard") {
+    if (toolId !== null || scope !== "project" || source.mode !== "file" || source.entry_key !== undefined || !["guard", "publisher"].includes(source.component)) fail("invalid shared prompt guard resource");
+    const name = source.component === "guard" ? "guard.md" : "inject.cjs";
+    return resolveExactTarget(projectRoot, scope, targetPath, path.join(projectRoot, "researchspec", "hooks", "paper-humanizer", name), projectRoot);
+  }
   if (toolId !== null) fail("framework profile installations require null tool_id");
   if (scope !== "project") fail("framework profiles are project-scoped");
   if (source.kind !== "framework-profile" && source.kind !== "plugin-profile") {

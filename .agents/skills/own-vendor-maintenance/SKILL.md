@@ -13,10 +13,10 @@ description: Maintain user-owned upstream projects absorbed as ResearchSpec capa
 
 当前纳入管理的项目：
 
-| vendor | anchor | extraction | capability packages |
-|---|---|---|---|
-| `paper-humanizer` | `snapshot-84eb2ed` | `authoring/paper-humanizer/extraction-index.json` | 4 个核心 capability 包（无 `cap-` 前缀） |
-| `revision-master` | `snapshot-13e69610` | `authoring/revision-master/extraction-index.json` | 5 个核心 capability 包（无 `cap-` 前缀） |
+| vendor | anchor | extraction | capability packages | delivery assets |
+|---|---|---|---|---|
+| `paper-humanizer` | `snapshot-84eb2ed` | `authoring/paper-humanizer/extraction-index.json` | 4 个核心 capability 包（无 `cap-` 前缀） | `hooks/paper-humanizer/guard.md`、`hooks/paper-humanizer/inject.cjs`、`hooks/paper-humanizer/LICENSE`（MIT 原许可） |
+| `revision-master` | `snapshot-13e69610` | `authoring/revision-master/extraction-index.json` | 5 个核心 capability 包（无 `cap-` 前缀） | — |
 
 目录总览：
 
@@ -33,6 +33,16 @@ audits/own-vendors/
       artifacts/parity-packages.json
       manifest.json
 ```
+
+## Delivery assets（可选）
+
+catalog 条目可声明可选 `delivery_assets` 字符串数组，值为项目相对路径：
+
+- 路径必须安全、不重复且指向普通文件；绝对路径、`..`、symlink、缺失或非普通文件都会让脚本直接报错。
+- `records` 在 `03-conversion.md`、`04-review.md` 生成 path/sha256 身份表（sha256 取文件原始字节）；未声明时两份记录不增加段落。
+- `baseline` 将 `delivery: { assets: [{ path, sha256 }] }`（按路径排序）固化进 `manifest.json`。
+- `check` 整体比较 `manifest.delivery` 与当前状态：声明增加/移除或任一资产字节漂移都 FAIL，即使 capability 包字节未变。
+- delivery assets 的冻结与审阅独立于 capability package parity，但不获得 runtime workflow 权威：它们只承载交付给宿主的内容与发布器，不参与 Gate、Decision、节点状态或任何 workflow 变更。语义审阅必须在 `05-semantic-review.md` 记录其 derivation 与 runtime 权威边界。
 
 ## 维护模式
 
@@ -70,7 +80,7 @@ pnpm own-vendor-maintenance:check
 1. 记录上游身份：`SOURCE.json` 的 `name`、`commit`、`source_tree`、`license`。
 2. 确定分析范围：完整 `upstream_root` 文件清单、extension 分布、与已有 extraction artifact 的映射。
 3. 更新 `audits/own-vendors/catalog.json`：
-   - `vendor_id`、`release_label`、`anchor_id`、`source_meta`、`upstream_root`、`extraction_index`、`author_script`、`capability_ids`。
+   - `vendor_id`、`release_label`、`anchor_id`、`source_meta`、`upstream_root`、`extraction_index`、`author_script`、`capability_ids`；可选 `delivery_assets`。
 4. 将分析写入 `01-analysis.md`。
 
 ## 阶段二：吸纳
@@ -109,6 +119,7 @@ pnpm own-vendor-maintenance:check
 3. **Agent 语义审阅门（不能省略，不能只贴脚本输出）**：
    - 对每个 capability，阅读上游 extraction 原文与生成的 SKILL/knowledge，判定 `preserved / adapted / removed / gap`，并记录证据路径与原文片段。
    - 执行流程权威检查：grep 生成 SKILL 的 next-node/next-phase/agent-team 模式；确认流程锚点由 graph profile 承接。
+   - 若 vendor 声明 `delivery_assets`，逐项记录 derivation 与 runtime 权威边界；该判定独立于 capability parity 结论。
    - 将结果写入 `audits/own-vendors/<vendor>/<anchor>/05-semantic-review.md`，必须以 `## 结论` 给出 `declared-fit / declared-fit-with-notes / not-fit`。
    - `05-semantic-review.md` 含 `[NOT-COMPLETED]` 时，`baseline` 必须拒绝生成 manifest。
 4. 将机器结果写入 `04-review.md`；语义结论单独写入 `05-semantic-review.md`。
@@ -116,7 +127,7 @@ pnpm own-vendor-maintenance:check
 ## 阶段五：审计固化
 
 1. 运行 `node scripts/own-vendor-maintenance.mjs records <vendor> <anchor>`，自动生成/刷新 `01–04`；已存在的 `05-semantic-review.md` 不会被覆盖。
-2. 运行 `node scripts/own-vendor-maintenance.mjs baseline <vendor> <anchor>`，生成 `manifest.json`，固化上游树、extraction index、registry subset、packages tree、parity slice、维护 Skill、catalog 与五份记录 SHA-256。
+2. 运行 `node scripts/own-vendor-maintenance.mjs baseline <vendor> <anchor>`，生成 `manifest.json`，固化上游树、extraction index、registry subset、packages tree、delivery assets（若声明）、parity slice、维护 Skill、catalog 与五份记录 SHA-256。
 3. 运行 `node scripts/own-vendor-maintenance.mjs check <vendor> <anchor>`，必须 `OK`。
 4. 若为增量更新，运行 `diff <vendor> <old-anchor> <new-anchor>` 并归档到新锚点记录。
 5. 提交时保持审计目录与生成物同步；审计记录必须可独立验证，不依赖聊天历史。

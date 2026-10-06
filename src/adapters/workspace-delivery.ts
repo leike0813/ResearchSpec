@@ -15,6 +15,7 @@ import { planToolDelivery } from "./delivery.js";
 import { resolveManagedTarget, validateManagedTarget } from "./managed-target.js";
 import type { DeliveryMode } from "./tools.js";
 import { planLegacyToolReconciliation } from "./legacy-reconciliation.js";
+import { planPaperHumanizerHooks } from "./prompt-guard.js";
 import {
   deduplicateInstallations,
   reconcileAgentToolInstallations,
@@ -49,6 +50,7 @@ export async function planWorkspaceDelivery(input: {
   operation?: "init" | "update";
   reconcileLegacy?: boolean;
   globalCleanupAuthorized?: boolean;
+  paperHumanizerGuard?: "on" | "off";
 }): Promise<WorkspaceDeliveryPlan> {
   for (const installation of input.existingInstallations) await validateManagedTarget(input.projectRoot, installation);
   const profileDefinitions = [...(await loadGraphProfileRegistry()).profiles.values()];
@@ -132,9 +134,15 @@ export async function planWorkspaceDelivery(input: {
       })
     : undefined;
 
+  const promptGuard = await planPaperHumanizerHooks({
+    projectRoot: input.projectRoot, selectedToolIds: input.selectedToolIds,
+    reconciledToolIds: input.reconciledToolIds, existingInstallations: input.existingInstallations,
+    enabled: input.paperHumanizerGuard !== "off",
+  });
   return {
     operations: [
       ...profileOperations,
+      ...promptGuard.operations,
       ...toolDelivery.operations,
       ...toolReconciliation.operations,
       ...legacyReconciliation.operations,
@@ -144,6 +152,7 @@ export async function planWorkspaceDelivery(input: {
     ],
     installations: deduplicateInstallations([
       ...profileInstallations,
+      ...promptGuard.installations,
       ...literatureReconciliation.retainedInstallations,
       ...literatureDelivery.installations,
       ...(pluginDelivery?.retainedInstallations ?? []),
@@ -153,6 +162,7 @@ export async function planWorkspaceDelivery(input: {
     pluginResolutions: [...(pluginDelivery?.resolutions ?? input.existingPluginResolutions ?? [])],
     diagnostics: [
       ...toolDelivery.diagnostics,
+      ...promptGuard.diagnostics,
       ...toolReconciliation.diagnostics,
       ...legacyReconciliation.diagnostics,
       ...literatureDelivery.diagnostics,

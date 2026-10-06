@@ -1,8 +1,8 @@
 # Own Vendor Anchor Analysis — paper-humanizer @ snapshot-84eb2ed
 
-- generated: 2026-10-05T16:29:30.633Z
+- generated: 2026-10-05T18:11:28.510Z
 - upstream: snapshot-84eb2ed @ 84eb2edf9570aea85a799e4c4db559882c19928c
-- maintenance skill SHA-256: `5690429a3282506b3c156c70b544a58d3533e7a4cbf34ab8ce2888568b63fffa`
+- maintenance skill SHA-256: `54da495208f529136035ff10375cc7ae76981c6d44a3f0f1795e744c6b5f68af`
 
 ## Upstream Inventory
 
@@ -36,6 +36,6 @@
 ## Decisions
 
 - [x] 以 `snapshot-84eb2ed @ 84eb2edf9570aea85a799e4c4db559882c19928c` 作为当前锚点。
-- [x] extraction index 固定为 10 artifacts。
+- [x] extraction index 固定为 11 artifacts。
 - [x] capability package 命名采用 kebab-case，并由 manifest/registry schema 强制。
 - [x] 上游 workflow/state-machine 文本只进入审计与分析，流程权威由 graph profile 与 Gate/Decision 承接。

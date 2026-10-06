@@ -56,6 +56,7 @@ Initialize or reconfigure a ResearchSpec workspace
 | `--delivery <mode>` | no | skills, commands, or both |
 | `--literature-adapters <ids>` | no | replace with all, none, or comma-separated literature Adapter IDs |
 | `--procedure-search <mode>` | no | offline or hybrid; explicit hybrid prepares optional local search resources |
+| `--paper-humanizer-guard <mode>` | no | on or off; omitted preserves the configured preference |
 
 #### Input shape
 
@@ -83,6 +84,7 @@ Refresh selected generated agent files
 | `--delivery <mode>` | no | skills, commands, or both |
 | `--literature-adapters <ids>` | no | replace selected literature Adapters |
 | `--procedure-search <mode>` | no | offline or hybrid; explicit hybrid prepares or refreshes optional local search resources |
+| `--paper-humanizer-guard <mode>` | no | on or off; omitted preserves the configured preference |
 
 #### Input shape
 

@@ -140,6 +140,12 @@ ResearchSpec 默认只投影 `researchspec-navigate`。它自带从 typed catalo
 
 这里的“可选”控制 workspace 投影；安装 CLI 仍会下载包含全部插件和 Adapter 资源的离线包。能力包的 `operational` 是已编写完整执行流程的成熟度声明，内容覆盖由独立 parity 检查验证；真实 Agent 的证据质量和交付可用性仍需单独演练、人工签收。
 
+`init/update` 默认给经审查的宿主安装项目级写作 guard：完整 guard 与无依赖 publisher 投影到
+`researchspec/hooks/paper-humanizer/`，并在宿主原生 hooks 配置中登记归属条目，不受
+`--delivery` 模式影响。`--paper-humanizer-guard on|off` 显式开关，省略时保留当前选择（没有
+该字段的现有 workspace 视为 `on`）。用户原有 hooks 与宿主 trust 保持不变；静态检查不证明
+宿主实际加载。支持范围与协议见[写作 guard](docs/developer/paper-humanizer-hooks.md)。
+
 ## 运行时协议
 
 正式 graph run 按以下协议运行：

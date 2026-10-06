@@ -135,4 +135,16 @@ are not distributed. Mermaid and Three.js retain their own copyright and
 license notices with the applicable resources. Source and resource decisions
 are recorded in audits/patent-disclosure-skill/source-audit.json.
 
+Paper Humanizer writing guard
+
+- Source: the paper-humanizer snapshot at 84eb2edf9570aea85a799e4c4db559882c19928c.
+- Original asset: paper-humanizer/assets/hook-inject-guard.md.
+- Copyright (c) 2025 Siqi Chen; MIT License, complete text retained in
+  hooks/paper-humanizer/LICENSE.
+- hooks/paper-humanizer/guard.md preserves the reviewed writing guidance with
+  explicit source-supported authorship, information preservation, user-format
+  boundaries and natural sentence rhythm. ResearchSpec authors the publisher
+  and host projections. Derivation and review are frozen in
+  audits/own-vendors/paper-humanizer/snapshot-84eb2ed/.
+
 ResearchSpec-authored material is copyright 2026 ResearchSpec contributors and is licensed under MIT where identified by the root license map.

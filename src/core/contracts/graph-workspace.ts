@@ -41,6 +41,7 @@ export const GraphWorkspaceConfigSchema = z.strictObject({
   agent_tools: z.strictObject({
     selected: z.array(NonEmptySchema),
     delivery: z.enum(["skills", "commands", "both"]),
+    paper_humanizer_guard: z.enum(["on", "off"]).optional(),
   }),
   literature_adapters: z.strictObject({ selected: z.array(NonEmptySchema) }),
   plugins: z.strictObject({ selected: z.array(NonEmptySchema) }),
