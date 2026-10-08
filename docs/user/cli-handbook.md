@@ -282,11 +282,38 @@ Diagnose current workspace contracts without modifying them
 
 - Workspace: `required`
 - Static effect: `read`
-- Related commands: `check`, `status`
+- Related commands: `check`, `status`, `doctor search-cache`
 
 #### Input shape
 
 No command payload. Runs the full current-workspace diagnostic report.
+
+### `researchspec doctor search-cache`
+
+Inspect or explicitly clear the shared local semantic search cache
+
+- Workspace: `none`
+- Static effect: `conditional-write`
+- Related commands: `doctor`, `update`
+
+| Command option | Required | Purpose |
+| --- | --- | --- |
+| `--clear` | no | clear all recognized search resources; affects every project sharing this cache |
+
+#### Input shape
+
+Inspect the shared semantic search cache without requiring a workspace; explicit --clear requests cleanup.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `--clear` | `boolean` | no | Delete recognized model, runtime, index and staging entries across versions; retain unknown files and project preferences. |
+| `--yes` | `boolean` | no | Confirm explicit cleanup without an interactive prompt; required for non-interactive cleanup. |
+| `--dry-run` | `boolean` | no | Preview cleanup without confirmation, deletion, lock creation or directory creation. |
+
+Constraints:
+
+- The cache is shared across projects; clearing it makes hybrid discovery fall back to offline until resources are explicitly prepared again.
+- Inspection is read-only. Cleanup never downloads, runs inference, installs dependencies or changes workspace configuration.
 
 ## Context
 

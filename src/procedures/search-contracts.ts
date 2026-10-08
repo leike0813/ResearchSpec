@@ -12,7 +12,18 @@ export interface SemanticSearchStatus {
   cache_root: string;
   reason?: string;
 }
-export interface SemanticPreparation extends SemanticSearchStatus { prepared: boolean }
+export interface SemanticPreparationProgress {
+  stage: "cache" | "runtime" | "model" | "index" | "self-test";
+  status: "started" | "progress" | "reused" | "completed";
+  completed?: number;
+  total?: number;
+  file?: string;
+}
+export interface SemanticPreparation extends SemanticSearchStatus {
+  prepared: boolean;
+  detail?: string;
+  stage?: SemanticPreparationProgress["stage"];
+}
 export const SEARCH_DOCUMENT_VERSION = "1";
 
 export function searchDocumentIdentity(documents: readonly ProcedureSearchDocument[]): string {

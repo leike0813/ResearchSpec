@@ -17,6 +17,7 @@ export const cliSidebar = [
   ] },
   { type: "category" as const, label: "Recovery", items: [
     "cli/doctor",
+    "cli/doctor-search-cache",
   ] },
   { type: "category" as const, label: "Context", items: [
     "cli/handoff",

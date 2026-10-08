@@ -41,6 +41,9 @@
 .mattpack/
 .playwright-mcp/
 
+.mcp.json
+opencode.json
+
 __pycache__/
 *.py[cod]
 *.egg-info/

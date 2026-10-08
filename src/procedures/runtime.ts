@@ -2,16 +2,16 @@ import { spawn } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
 import { createWriteStream } from "node:fs";
 import { cp, mkdir, mkdtemp, readFile, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
-import { homedir } from "node:os";
 import path from "node:path";
 import process from "node:process";
-import { Readable } from "node:stream";
+import { Readable, Transform } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { fileURLToPath } from "node:url";
 
 import { PACKAGE_ROOT } from "../capabilities/registry.js";
 import { searchDocumentIdentity, searchDocumentText } from "./search-contracts.js";
-import type { ProcedureSearchDocument, SemanticHit, SemanticPreparation, SemanticSearchStatus } from "./search-contracts.js";
+import type { ProcedureSearchDocument, SemanticHit, SemanticPreparation, SemanticPreparationProgress, SemanticSearchStatus } from "./search-contracts.js";
+import { acquireSemanticCacheLock, SemanticCacheError, semanticCacheRoot } from "./cache.js";
 import { SEMANTIC_WORKER_RESULT_PREFIX } from "./semantic-worker.js";
 import type { SemanticWorkerRequest, SemanticWorkerResult } from "./semantic-worker.js";
 
@@ -69,6 +69,8 @@ export type SemanticSearchErrorCode =
   | "index_stale"
   | "inference_failed"
   | "deadline_exceeded"
+  | "cache_busy"
+  | "cache_unsafe"
   | "unknown";
 
 export const SEMANTIC_ERROR_MESSAGES: Readonly<Record<SemanticSearchErrorCode, string>> = {
@@ -81,6 +83,8 @@ export const SEMANTIC_ERROR_MESSAGES: Readonly<Record<SemanticSearchErrorCode, s
   index_stale: "The prepared Procedure vector index does not match the current catalog.",
   inference_failed: "Local semantic inference failed.",
   deadline_exceeded: "Local semantic retrieval exceeded its time budget.",
+  cache_busy: "The shared semantic cache is being modified by another process.",
+  cache_unsafe: "The shared semantic cache path is unsafe to modify.",
   unknown: "Local semantic retrieval is unavailable for an unrecognized reason.",
 };
 
@@ -97,6 +101,7 @@ export class SemanticSearchError extends Error {
 /** Parents receive a stable code vocabulary; anything unrecognized degrades to "unknown". */
 export function semanticErrorCode(value: unknown): SemanticSearchErrorCode {
   if (value instanceof SemanticSearchError) return value.code;
+  if (value instanceof SemanticCacheError) return value.code;
   if (typeof value === "string" && Object.hasOwn(SEMANTIC_ERROR_MESSAGES, value)) return value as SemanticSearchErrorCode;
   return "unknown";
 }
@@ -108,7 +113,7 @@ export interface SemanticModelFile {
 
 export interface SemanticRuntimeEnvironment {
   installRuntime(runtimeDirectory: string, timeoutMs: number): Promise<void>;
-  downloadModelFile(modelDirectory: string, file: SemanticModelFile, timeoutMs: number): Promise<void>;
+  downloadModelFile(modelDirectory: string, file: SemanticModelFile, timeoutMs: number, onProgress?: (completed: number) => void): Promise<void>;
   runInference(request: SemanticWorkerRequest, timeoutMs: number): Promise<SemanticWorkerResult>;
 }
 
@@ -128,6 +133,7 @@ export interface SemanticInspectOptions {
 export interface SemanticPrepareOptions extends SemanticInspectOptions {
   timeoutMs?: number;
   environment?: SemanticRuntimeEnvironment;
+  onProgress?: (progress: SemanticPreparationProgress) => void;
 }
 
 export interface SemanticSearchOptions {
@@ -172,17 +178,8 @@ const SEMANTIC_WORKER_ENV_PASSTHROUGH = [
   "USERPROFILE",
 ] as const;
 
-export function semanticCacheRoot(): string {
-  const override = process.env.RESEARCHSPEC_SEARCH_CACHE?.trim();
-  if (override) return path.resolve(override);
-  if (process.platform === "win32") {
-    const local = process.env.LOCALAPPDATA?.trim();
-    return path.join(local ? path.resolve(local) : path.join(homedir(), "AppData", "Local"), "researchspec", "search");
-  }
-  if (process.platform === "darwin") return path.join(homedir(), "Library", "Caches", "researchspec", "search");
-  const xdg = process.env.XDG_CACHE_HOME?.trim();
-  return path.join(xdg ? path.resolve(xdg) : path.join(homedir(), ".cache"), "researchspec", "search");
-}
+export { clearSemanticSearchCache, inspectSemanticSearchCache } from "./cache.js";
+export { semanticCacheRoot };
 
 export async function semanticRuntimeIdentity(packageRoot = PACKAGE_ROOT): Promise<string> {
   const lock = await readFile(path.join(packageRoot, SEMANTIC_RUNTIME_ASSET_DIRECTORY, "package-lock.json"), "utf8");
@@ -227,45 +224,78 @@ export async function prepareSemanticSearch(
   const cacheRoot = options.cacheRoot ?? semanticCacheRoot();
   const packageRoot = options.packageRoot ?? PACKAGE_ROOT;
   const environment = options.environment ?? defaultSemanticRuntimeEnvironment(packageRoot);
+  const onProgress = options.onProgress;
+  const report = (progress: SemanticPreparationProgress): void => { try { onProgress?.(progress); } catch { /* Progress observers cannot break preparation. */ } };
   const deadline = Date.now() + Math.max(1, options.timeoutMs ?? SEMANTIC_PREPARE_TIMEOUT_MS);
   const metadata = await semanticIndexMetadata(documents, { packageRoot });
-  if ((await inspectResolved(cacheRoot, metadata)).ready) return { ready: true, prepared: false, cache_root: cacheRoot };
+  report({ stage: "cache", status: "started" });
+  if ((await inspectResolved(cacheRoot, metadata)).ready) {
+    report({ stage: "cache", status: "reused" });
+    report({ stage: "cache", status: "completed" });
+    return { ready: true, prepared: false, cache_root: cacheRoot };
+  }
 
   const stagingRoot = path.join(cacheRoot, "staging");
   let staged: string | undefined;
+  let release: (() => Promise<void>) | undefined;
+  let stage: SemanticPreparationProgress["stage"] = "cache";
   try {
+    release = await acquireSemanticCacheLock(cacheRoot);
+    if ((await inspectResolved(cacheRoot, metadata)).ready) {
+      report({ stage: "cache", status: "reused" });
+      report({ stage: "cache", status: "completed" });
+      return { ready: true, prepared: false, cache_root: cacheRoot };
+    }
     await mkdir(stagingRoot, { recursive: true });
     const runtimeDirectory = path.join(cacheRoot, "runtime", metadata.runtime_identity);
     const modelDirectory = path.join(cacheRoot, "model", metadata.model_identity);
+    stage = "runtime";
+    report({ stage, status: "started" });
     if (!(await runtimeInstalled(cacheRoot, metadata.runtime_identity))) {
       staged = await mkdtemp(path.join(stagingRoot, "runtime-"));
-      await runWithinBudget(installRuntime(environment, staged, remaining(deadline)), remaining(deadline), "Runtime installation exceeded the preparation deadline.");
+      await runWithinBudget(installRuntime(environment, staged, remaining(deadline)), remaining(deadline), "Runtime installation exceeded the preparation deadline.", true);
       await publishDirectory(stagingRoot, staged, runtimeDirectory, "runtime", runtimeDirectoryUsable);
       staged = undefined;
-    }
+      report({ stage, status: "completed" });
+    } else report({ stage, status: "reused" });
     if (!(await runtimeInstalled(cacheRoot, metadata.runtime_identity))) throw new SemanticSearchError("runtime_unusable");
 
+    stage = "model";
+    report({ stage, status: "started" });
     if (!(await modelInstalled(cacheRoot, metadata.model_identity))) {
       staged = await mkdtemp(path.join(stagingRoot, "model-"));
-      await downloadModel(environment, staged, deadline);
+      await downloadModel(environment, staged, deadline, report);
       await publishDirectory(stagingRoot, staged, modelDirectory, "model", modelDirectoryUsable);
       staged = undefined;
-    }
+      report({ stage, status: "completed", completed: SEMANTIC_DOWNLOAD_BYTES, total: SEMANTIC_DOWNLOAD_BYTES });
+    } else report({ stage, status: "reused" });
     if (!(await modelInstalled(cacheRoot, metadata.model_identity))) throw new SemanticSearchError("model_missing");
 
+    stage = "index";
+    report({ stage, status: "started", completed: 0, total: documents.length });
     if (!(await indexUsable(cacheRoot, metadata))) {
       staged = await mkdtemp(path.join(stagingRoot, "index-"));
       const indexPath = path.join(staged, "vectors.json");
-      await writeFile(indexPath, await buildIndex(environment, runtimeDirectory, modelDirectory, documents, deadline));
+      await writeFile(indexPath, await buildIndex(environment, runtimeDirectory, modelDirectory, documents, deadline, (completed, total) => report({ stage: "index", status: "progress", completed, total })));
+      stage = "self-test";
+      report({ stage, status: "started" });
       await selfTest(environment, runtimeDirectory, modelDirectory, indexPath, metadata, deadline);
+      report({ stage, status: "completed" });
       await publishDirectory(stagingRoot, staged, indexDirectoryFor(cacheRoot, metadata), "index", (directory) => indexDirectoryUsable(directory, metadata));
       staged = undefined;
       await writeIndexCurrent(cacheRoot, metadata);
-    }
+      stage = "index";
+      report({ stage, status: "completed", completed: documents.length, total: documents.length });
+    } else report({ stage, status: "reused", completed: documents.length, total: documents.length });
   } catch (error) {
-    return { ready: false, prepared: false, reason: semanticErrorCode(error), cache_root: cacheRoot };
+    const reason = error instanceof SemanticCacheError ? error.code : semanticErrorCode(error);
+    return { ready: false, prepared: false, reason, detail: detail(error), stage, cache_root: cacheRoot };
   } finally {
-    if (staged !== undefined) await rm(staged, { recursive: true, force: true });
+    try {
+      if (staged !== undefined) await rm(staged, { recursive: true, force: true });
+    } finally {
+      await release?.();
+    }
   }
 
   const completed = await inspectResolved(cacheRoot, metadata);
@@ -342,19 +372,32 @@ async function installRuntime(environment: SemanticRuntimeEnvironment, runtimeDi
   try {
     await environment.installRuntime(runtimeDirectory, timeoutMs);
   } catch (error) {
+    if (error instanceof SemanticSearchError) throw error;
     throw new SemanticSearchError("install_failed", detail(error));
   }
 }
 
-async function downloadModel(environment: SemanticRuntimeEnvironment, modelDirectory: string, deadline: number): Promise<void> {
+async function downloadModel(
+  environment: SemanticRuntimeEnvironment,
+  modelDirectory: string,
+  deadline: number,
+  report: (progress: SemanticPreparationProgress) => void,
+): Promise<void> {
   const target = path.join(modelDirectory, SEMANTIC_MODEL_ID);
   await mkdir(target, { recursive: true });
+  let completed = 0;
   for (const file of SEMANTIC_MODEL_FILES) {
     const budget = remaining(deadline);
+    report({ stage: "model", status: "started", completed, total: SEMANTIC_DOWNLOAD_BYTES, file: file.path });
     try {
-      await runWithinBudget(environment.downloadModelFile(target, file, budget), budget, `Downloading ${file.path} exceeded the preparation deadline.`);
+      await runWithinBudget(environment.downloadModelFile(target, file, budget, (received) => {
+        report({ stage: "model", status: "progress", completed: completed + received, total: SEMANTIC_DOWNLOAD_BYTES, file: file.path });
+      }), budget, `Downloading ${file.path} exceeded the preparation deadline.`, true);
+      completed += file.bytes;
+      report({ stage: "model", status: "progress", completed, total: SEMANTIC_DOWNLOAD_BYTES, file: file.path });
     } catch (error) {
       if (error instanceof SemanticSearchError) throw error;
+      if (error instanceof Error && error.name === "TimeoutError") throw new SemanticSearchError("deadline_exceeded", `${file.path}: ${detail(error)}`);
       throw new SemanticSearchError("model_download_failed", `${file.path}: ${detail(error)}`);
     }
   }
@@ -366,6 +409,7 @@ async function buildIndex(
   modelDirectory: string,
   documents: readonly ProcedureSearchDocument[],
   deadline: number,
+  onProgress?: (completed: number, total: number) => void,
 ): Promise<string> {
   const texts = documents.map((document) => searchDocumentText(document).slice(0, SEMANTIC_MAX_INPUT_CHARACTERS));
   const vectors: number[][] = [];
@@ -376,9 +420,10 @@ async function buildIndex(
       runtime_dir: runtimeDirectory,
       model_dir: modelDirectory,
       texts: batch,
-    }, remaining(deadline));
+    }, remaining(deadline), true);
     if (embedded.length !== batch.length) throw new SemanticSearchError("inference_failed", "The encoder returned an unexpected batch size.");
     vectors.push(...embedded.map((vector) => validateEmbedding(vector).map((value) => Number(value.toFixed(SEMANTIC_VECTOR_PRECISION)))));
+    onProgress?.(vectors.length, texts.length);
   }
   const index: SemanticIndexFile = {
     version: SEMANTIC_INDEX_VERSION,
@@ -403,18 +448,19 @@ async function selfTest(
     runtime_dir: runtimeDirectory,
     model_dir: modelDirectory,
     texts: [SEMANTIC_SELF_TEST_QUERY],
-  }, remaining(deadline));
+  }, remaining(deadline), true);
   const probe = validateEmbedding(vectors[0]);
   const best = index.vectors.reduce((highest, vector) => Math.max(highest, cosine(probe, vector)), Number.NEGATIVE_INFINITY);
   if (!Number.isFinite(best)) throw new SemanticSearchError("inference_failed", "The self-test produced no comparable neighbor.");
 }
 
-async function runBounded(environment: SemanticRuntimeEnvironment, request: SemanticWorkerRequest, timeoutMs: number): Promise<SemanticWorkerResult> {
+async function runBounded(environment: SemanticRuntimeEnvironment, request: SemanticWorkerRequest, timeoutMs: number, waitForCompletion = false): Promise<SemanticWorkerResult> {
   try {
     return await runWithinBudget(
       environment.runInference(request, timeoutMs),
       timeoutMs,
       "The semantic encoder exceeded its time budget.",
+      waitForCompletion,
     );
   } catch (error) {
     if (error instanceof SemanticSearchError) throw error;
@@ -423,7 +469,7 @@ async function runBounded(environment: SemanticRuntimeEnvironment, request: Sema
 }
 
 /** The parent owns the budget so an unusable encoder degrades to lexical results instead of stalling a query. */
-async function runWithinBudget<T>(execution: Promise<T>, timeoutMs: number, detail_: string): Promise<T> {
+async function runWithinBudget<T>(execution: Promise<T>, timeoutMs: number, detail_: string, waitForCompletion = false): Promise<T> {
   let timer: NodeJS.Timeout | undefined;
   try {
     return await Promise.race([
@@ -432,6 +478,10 @@ async function runWithinBudget<T>(execution: Promise<T>, timeoutMs: number, deta
         timer = setTimeout(() => reject(new SemanticSearchError("deadline_exceeded", detail_)), timeoutMs);
       }),
     ]);
+  } catch (error) {
+    // Writers must settle before their cache lock and staging directory are released.
+    if (waitForCompletion && error instanceof SemanticSearchError && error.code === "deadline_exceeded") await execution.catch(() => undefined);
+    throw error;
   } finally {
     if (timer !== undefined) clearTimeout(timer);
   }
@@ -669,14 +719,25 @@ async function installDefaultRuntime(packageRoot: string, runtimeDirectory: stri
   await runProcess(npm, ["ci", "--ignore-scripts", "--omit=dev", "--no-audit", "--no-fund"], runtimeDirectory, timeoutMs);
 }
 
-async function downloadModelFile(modelDirectory: string, file: SemanticModelFile, timeoutMs: number): Promise<void> {
+async function downloadModelFile(
+  modelDirectory: string,
+  file: SemanticModelFile,
+  timeoutMs: number,
+  onProgress?: (completed: number) => void,
+): Promise<void> {
   const target = path.join(modelDirectory, ...file.path.split("/"));
   await mkdir(path.dirname(target), { recursive: true });
   const url = `https://huggingface.co/${SEMANTIC_MODEL_ID}/resolve/${SEMANTIC_MODEL_REVISION}/${file.path}`;
   const response = await fetch(url, { signal: AbortSignal.timeout(timeoutMs), redirect: "follow" });
   if (!response.ok || response.body === null) throw new Error(`HTTP ${String(response.status)} for ${file.path}`);
   const body = Readable.fromWeb(response.body);
-  await pipeline(body, createWriteStream(target));
+  let completed = 0;
+  const progress = new Transform({ transform(chunk: Buffer, _encoding, callback) {
+    completed += chunk.length;
+    onProgress?.(completed);
+    callback(null, chunk);
+  } });
+  await pipeline(body, progress, createWriteStream(target));
   const size = (await stat(target)).size;
   if (size !== file.bytes) {
     await rm(target, { force: true });
@@ -689,10 +750,8 @@ function runProcess(command: string, args: readonly string[], cwd: string, timeo
     const child = spawn(command, [...args], { cwd, stdio: ["ignore", "pipe", "pipe"], shell: process.platform === "win32" });
     let output = "";
     let settled = false;
-    const timer = setTimeout(() => {
-      child.kill("SIGKILL");
-      finish(() => reject(new SemanticSearchError("deadline_exceeded", `${command} exceeded ${String(timeoutMs)}ms`)));
-    }, timeoutMs);
+    let deadlineExceeded = false;
+    const timer = setTimeout(() => { deadlineExceeded = true; child.kill("SIGKILL"); }, timeoutMs);
     const finish = (action: () => void): void => {
       if (settled) return;
       settled = true;
@@ -705,9 +764,10 @@ function runProcess(command: string, args: readonly string[], cwd: string, timeo
     child.stderr?.on("data", (chunk: Buffer) => {
       if (output.length < SEMANTIC_PROCESS_OUTPUT_LIMIT) output += chunk.toString("utf8");
     });
-    child.on("error", (error: Error) => finish(() => reject(error)));
+    child.on("error", (error: Error) => finish(() => reject(deadlineExceeded ? new SemanticSearchError("deadline_exceeded", `${command} exceeded ${String(timeoutMs)}ms`) : error)));
     child.on("close", (code: number | null) => finish(() => {
-      if (code === 0) resolve();
+      if (deadlineExceeded) reject(new SemanticSearchError("deadline_exceeded", `${command} exceeded ${String(timeoutMs)}ms`));
+      else if (code === 0) resolve();
       else reject(new Error(`${command} exited with ${String(code ?? "signal")}: ${output.slice(-400)}`));
     }));
   });
@@ -723,10 +783,8 @@ function runSemanticWorker(request: SemanticWorkerRequest, timeoutMs: number): P
     let stdout = "";
     let stderr = "";
     let settled = false;
-    const timer = setTimeout(() => {
-      child.kill("SIGKILL");
-      finish(() => reject(new SemanticSearchError("deadline_exceeded", `semantic worker exceeded ${String(timeoutMs)}ms`)));
-    }, timeoutMs);
+    let deadlineExceeded = false;
+    const timer = setTimeout(() => { deadlineExceeded = true; child.kill("SIGKILL"); }, timeoutMs);
     const finish = (action: () => void): void => {
       if (settled) return;
       settled = true;
@@ -740,8 +798,14 @@ function runSemanticWorker(request: SemanticWorkerRequest, timeoutMs: number): P
       if (stderr.length < SEMANTIC_PROCESS_OUTPUT_LIMIT) stderr += chunk.toString("utf8");
     });
     child.stdin?.end(JSON.stringify(request));
-    child.on("error", (error: Error) => finish(() => reject(new SemanticSearchError("inference_failed", error.message))));
+    child.on("error", (error: Error) => finish(() => reject(deadlineExceeded
+      ? new SemanticSearchError("deadline_exceeded", `semantic worker exceeded ${String(timeoutMs)}ms`)
+      : new SemanticSearchError("inference_failed", error.message))));
     child.on("close", () => finish(() => {
+      if (deadlineExceeded) {
+        reject(new SemanticSearchError("deadline_exceeded", `semantic worker exceeded ${String(timeoutMs)}ms`));
+        return;
+      }
       const line = stdout.split("\n").reverse().find((candidate) => candidate.startsWith(SEMANTIC_WORKER_RESULT_PREFIX));
       if (line === undefined) {
         reject(new SemanticSearchError("inference_failed", `semantic worker produced no result: ${stderr.slice(-400)}`));

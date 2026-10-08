@@ -21,6 +21,7 @@ void test("graph CLI reports its package version without a workspace", () => {
 void test("static help target resolution remains catalog-backed", () => {
   assert.equal(cliHelpTarget(["plugin", "install", "domain-id", "--summary"]), "researchspec plugin install --help");
   assert.equal(cliHelpTarget(["advance", "node:run/node", "--input", "advance.yaml"]), "researchspec advance --help");
+  assert.equal(cliHelpTarget(["doctor", "search-cache", "--clear"]), "researchspec doctor search-cache --help");
   assert.equal(cliHelpTarget(["unknown"]), "researchspec --help");
 });
 

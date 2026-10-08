@@ -170,7 +170,14 @@ from scholarly LLM execution: explicit fresh-init confirmation or
 `init/update --procedure-search hybrid` prepares a pinned CPU runtime and model
 in the user OS cache. Project configuration stores only the selected mode.
 Queries are read-only, local and bounded, with structured offline fallback;
-`status/check/doctor` inspect cache metadata without inference or repair.
+`status/check` and ordinary `doctor` inspect cache metadata without inference or repair.
+Preparation reports stages, actual download bytes, index progress and cache reuse.
+Interactive failure offers explicit retry or temporary offline continuation while
+retaining hybrid preference; non-interactive failure never automatically retries.
+Workspace-independent `doctor search-cache` inspects shared resources; only
+explicitly confirmed `--clear` removes recognized resources across versions,
+preserving unknown files and project preferences. Dry-run performs no writes.
+Preparation and clearing share a process-owner cache mutation lock; queries stay read-only.
 Non-interactive omission, `--yes` alone and dry-run never install this runtime.
 The model, runtime, public-catalog vectors and staging files stay outside the
 project; capability, plugin, graph and Agent/model consent boundaries still apply.

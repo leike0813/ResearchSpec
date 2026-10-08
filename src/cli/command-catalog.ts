@@ -43,6 +43,7 @@ export type CliCommandId =
   | "advance"
   | "check"
   | "doctor"
+  | "doctor-search-cache"
   | "list"
   | "show"
   | "handoff"
@@ -105,7 +106,10 @@ const definitions: readonly CliCommandDefinition[] = [
     option("strict", "--strict", "treat warnings as failures"),
     option("input", "--input <materials.yaml|json>", "explicit input and delivered output bindings for procedure:<id>"),
   ], ["status", "doctor", "show"]),
-  command("doctor", ["doctor"], "doctor", "recovery", "Diagnose current workspace contracts without modifying them", "required", "read", [], ["check", "status"]),
+  command("doctor", ["doctor"], "doctor", "recovery", "Diagnose current workspace contracts without modifying them", "required", "read", [], ["check", "status", "doctor-search-cache"]),
+  command("doctor-search-cache", ["doctor", "search-cache"], "search-cache", "recovery", "Inspect or explicitly clear the shared local semantic search cache", "none", "conditional-write", [
+    option("clear", "--clear", "clear all recognized search resources; affects every project sharing this cache"),
+  ], ["doctor", "update"]),
   command("list", ["list"], "list [type]", "inspection", "List procedures, tools, profiles, runs, nodes, changes, or diagnostics", "optional", "read", [
     option("limit", "--limit <count>", "page size from 1 to 50"),
     option("cursor", "--cursor <cursor>", "opaque cursor returned by the prior page"),

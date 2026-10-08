@@ -14,6 +14,7 @@ import {
   SEMANTIC_QUERY_TIMEOUT_MS,
   SEMANTIC_RUNTIME,
   SemanticSearchError,
+  defaultSemanticRuntimeEnvironment,
   inspectSemanticSearch,
   prepareSemanticSearch,
   searchSemanticDocuments,
@@ -25,6 +26,7 @@ import {
 } from "../src/procedures/runtime.js";
 import type { SemanticModelFile, SemanticRuntimeEnvironment } from "../src/procedures/runtime.js";
 import { semanticEmbeddingInput } from "../src/procedures/semantic-worker.js";
+import { acquireSemanticCacheLock } from "../src/procedures/cache.js";
 
 const DOCUMENTS: readonly ProcedureSearchDocument[] = [
   {
@@ -174,6 +176,20 @@ void test("an unprepared cache reports the first missing resource", async () => 
   });
 });
 
+void test("preparation reports an active cache writer without mutating the cache", async () => {
+  await withCacheRoot(async (cacheRoot) => {
+    const release = await acquireSemanticCacheLock(cacheRoot);
+    try {
+      const result = await prepareSemanticSearch(DOCUMENTS, { cacheRoot, environment: createEnvironment() });
+      assert.equal(result.reason, "cache_busy");
+      assert.equal(result.stage, "cache");
+      assert.match(result.detail ?? "", /locked/);
+    } finally {
+      await release();
+    }
+  });
+});
+
 void test("preparation publishes reusable resources and a second call reuses them", async () => {
   await withCacheRoot(async (cacheRoot) => {
     const environment = createEnvironment();
@@ -196,6 +212,7 @@ void test("preparation publishes reusable resources and a second call reuses the
     assert.equal(environment.installs, installs);
     assert.equal(environment.downloads, downloads);
     assert.deepEqual(await inspectSemanticSearch(DOCUMENTS, { cacheRoot }), { ready: true, cache_root: cacheRoot });
+    assert.ok((await prepareSemanticSearch(DOCUMENTS, { cacheRoot, environment, onProgress: () => undefined })).ready);
   });
 });
 
@@ -208,8 +225,12 @@ void test("a changed catalog publishes a new index and marks the old one stale",
       { ...firstDocument, fields: { ...firstDocument.fields, description: ["organize existing literature and compare methods"] } },
       ...DOCUMENTS.slice(1),
     ];
-    const second = await prepareSemanticSearch(changed, { cacheRoot, environment });
+    const progress: { stage: string; status: string; completed?: number; total?: number }[] = [];
+    const second = await prepareSemanticSearch(changed, { cacheRoot, environment, onProgress: (event) => progress.push(event) });
     assert.equal(second.prepared, true);
+    assert.ok(progress.some((event) => event.stage === "runtime" && event.status === "reused"));
+    assert.ok(progress.some((event) => event.stage === "model" && event.status === "reused"));
+    assert.ok(progress.some((event) => event.stage === "index" && event.status === "progress" && event.completed === DOCUMENTS.length));
 
     const first = await semanticIndexMetadata(DOCUMENTS);
     const next = await semanticIndexMetadata(changed);
@@ -218,6 +239,27 @@ void test("a changed catalog publishes a new index and marks the old one stale",
     const source = DOCUMENTS[0];
     const unprepared: ProcedureSearchDocument[] = [{ id: "unprepared", fields: { ...source.fields } }];
     assert.equal(await codeOf(() => searchSemanticDocuments(unprepared, "literature", { cacheRoot, environment })), "index_stale");
+  });
+});
+
+void test("the default model downloader reports bytes from streamed response chunks", async () => {
+  await withCacheRoot(async (cacheRoot) => {
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = () => Promise.resolve(new Response(new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(new Uint8Array([1, 2]));
+        controller.enqueue(new Uint8Array([3, 4, 5]));
+        controller.close();
+      },
+    })));
+    try {
+      const progress: number[] = [];
+      const environment = defaultSemanticRuntimeEnvironment();
+      await assert.rejects(environment.downloadModelFile(path.join(cacheRoot, "model"), SEMANTIC_MODEL_FILES[0], 1_000, (bytes) => progress.push(bytes)), /expected .* bytes, received 5/);
+      assert.deepEqual(progress, [2, 5]);
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
   });
 });
 
@@ -335,7 +377,10 @@ void test("static inspection reports prepared runtime and model without an index
       },
     });
     const failed = await prepareSemanticSearch(DOCUMENTS, { cacheRoot, environment });
-    assert.deepEqual(failed, { ready: false, prepared: false, reason: "inference_failed", cache_root: cacheRoot });
+    assert.equal(failed.ready, false);
+    assert.equal(failed.reason, "inference_failed");
+    assert.equal(failed.stage, "index");
+    assert.match(failed.detail ?? "", /inference_failed|local semantic inference/i);
     const duringPreparation = inferences;
     assert.deepEqual(await inspectSemanticSearch(undefined, { cacheRoot }), { ready: true, cache_root: cacheRoot });
     assert.equal(inferences, duringPreparation);
@@ -366,6 +411,8 @@ void test("preparation failures report a code and publish nothing", async () => 
       }),
     });
     assert.equal(downloadFailure.reason, "model_download_failed");
+    assert.equal(downloadFailure.stage, "model");
+    assert.match(downloadFailure.detail ?? "", /download failed/);
     assert.deepEqual(await listTree(path.join(cacheRoot, "model")), []);
   });
 });
@@ -378,7 +425,9 @@ void test("a preparation that runs out of time leaves no published resources", a
       },
     });
     const outcome = await prepareSemanticSearch(DOCUMENTS, { cacheRoot, environment, timeoutMs: 40 });
-    assert.deepEqual(outcome, { ready: false, prepared: false, reason: "deadline_exceeded", cache_root: cacheRoot });
+    assert.equal(outcome.ready, false);
+    assert.equal(outcome.reason, "deadline_exceeded");
+    assert.equal(outcome.stage, "runtime");
     assert.deepEqual(await listTree(path.join(cacheRoot, "runtime")), []);
     assert.deepEqual(await listTree(path.join(cacheRoot, "staging")), []);
   });

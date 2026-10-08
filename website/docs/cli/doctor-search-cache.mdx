@@ -1,0 +1,35 @@
+---
+sidebar_position: 11
+title: "doctor search-cache"
+description: "Inspect or explicitly clear the shared local semantic search cache"
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# `researchspec doctor search-cache`
+
+Inspect or explicitly clear the shared local semantic search cache
+
+- **Group**: Recovery
+- **Workspace**: `none`
+- **Effect**: `conditional-write`
+- **Related**: [`doctor`](./doctor), [`update`](./update)
+
+| Option | Required | Description |
+| --- | --- | --- |
+| `--clear` | no | clear all recognized search resources; affects every project sharing this cache |
+
+#### Input shape
+
+Inspect the shared semantic search cache without requiring a workspace; explicit --clear requests cleanup.
+
+| Field or option | Type | Required | Meaning |
+| --- | --- | --- | --- |
+| `--clear` | `boolean` | no | Delete recognized model, runtime, index and staging entries across versions; retain unknown files and project preferences. |
+| `--yes` | `boolean` | no | Confirm explicit cleanup without an interactive prompt; required for non-interactive cleanup. |
+| `--dry-run` | `boolean` | no | Preview cleanup without confirmation, deletion, lock creation or directory creation. |
+
+Constraints:
+
+- The cache is shared across projects; clearing it makes hybrid discovery fall back to offline until resources are explicitly prepared again.
+- Inspection is read-only. Cleanup never downloads, runs inference, installs dependencies or changes workspace configuration.

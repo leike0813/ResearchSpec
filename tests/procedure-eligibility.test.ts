@@ -22,6 +22,7 @@ interface ListData { total: number; next_cursor?: string; items: Card[] }
 const silentPrompts: GraphBootstrapPromptPort = {
   multiSelect: () => { throw new Error("No noninteractive prompt"); },
   confirm: () => { throw new Error("No noninteractive consent"); },
+  select: () => { throw new Error("No noninteractive recovery prompt"); },
 };
 
 async function initWorkspace(root: string, selectedDomains: string[]): Promise<void> {

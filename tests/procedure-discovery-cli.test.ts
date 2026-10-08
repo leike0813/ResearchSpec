@@ -39,7 +39,7 @@ void test("semantic preparation requires explicit selection, preserves mode and 
   const root = await tempProject();
   let preparations = 0;
   const context: CommandContext = { command: "init", cwd: root, json: true, dryRun: false, force: false, yes: true, quiet: false, interactive: false };
-  const prompts: GraphBootstrapPromptPort = { multiSelect: () => { throw new Error("No noninteractive prompt"); }, confirm: () => { throw new Error("No noninteractive consent"); } };
+  const prompts: GraphBootstrapPromptPort = { multiSelect: () => { throw new Error("No noninteractive prompt"); }, confirm: () => { throw new Error("No noninteractive consent"); }, select: () => { throw new Error("No noninteractive recovery prompt"); } };
   const prepare = () => { preparations++; return Promise.resolve({ prepared: false, ready: false, cache_root: path.join(root, "cache"), reason: "runtime_missing" }); };
   try {
     await handleGraphInit(root, { tools: "none" }, context, prompts, prepare);
@@ -80,13 +80,73 @@ void test("fresh interactive init prepares only after affirmative model confirma
     const root = await tempProject();
     let confirmed = 0;
     let prepared = 0;
+    let confirmationMessage = "";
     try {
       const context: CommandContext = { command: "init", cwd: root, json: false, dryRun: false, force: false, yes: false, quiet: false, interactive: true };
-      const prompts: GraphBootstrapPromptPort = { multiSelect: () => Promise.resolve([]), confirm: () => { confirmed++; return Promise.resolve(enabled); } };
+      const prompts: GraphBootstrapPromptPort = { multiSelect: () => Promise.resolve([]), confirm: (config) => { confirmed++; confirmationMessage = config.message; return Promise.resolve(enabled); }, select: () => Promise.resolve("offline") };
       const result = await handleGraphInit(root, { tools: "none", literatureAdapters: "none" }, context, prompts, () => { prepared++; return Promise.resolve({ prepared: true, ready: true, cache_root: "/test/cache" }); });
       assert.equal(result.ok, true);
       assert.equal(confirmed, 1);
+      assert.ok(confirmationMessage.length < 60);
       assert.equal(prepared, enabled ? 1 : 0);
     } finally { await cleanup(root); }
   }
+});
+
+void test("interactive semantic setup retries once per explicit choice and offers offline after repeated failure", async () => {
+  const root = await tempProject();
+  let preparations = 0;
+  let recoveryPrompts = 0;
+  const context: CommandContext = { command: "init", cwd: root, json: false, dryRun: false, force: false, yes: false, quiet: false, interactive: true };
+  const prompts: GraphBootstrapPromptPort = {
+    multiSelect: () => Promise.resolve([]),
+    confirm: () => Promise.resolve(true),
+    select: () => { recoveryPrompts++; return Promise.resolve(recoveryPrompts < 2 ? "retry" : "offline"); },
+  };
+  try {
+    const result = await handleGraphInit(root, { tools: "none", literatureAdapters: "none" }, context, prompts, () => {
+      preparations++;
+      return Promise.resolve({ prepared: false, ready: false, cache_root: path.join(root, "cache"), reason: "runtime_missing", detail: "runtime unavailable", stage: "runtime" });
+    });
+    assert.equal(result.ok, true);
+    assert.equal(preparations, 2);
+    assert.equal(recoveryPrompts, 2);
+    assert.equal((result.data as { procedure_search: { mode: string; effective_mode: string } }).procedure_search.mode, "hybrid");
+    assert.equal((result.data as { procedure_search: { effective_mode: string } }).procedure_search.effective_mode, "offline");
+  } finally { await cleanup(root); }
+});
+
+void test("semantic setup retries explicitly and offline recovery keeps hybrid preference", async () => {
+  const root = await tempProject();
+  const context: CommandContext = { command: "init", cwd: root, json: false, dryRun: false, force: false, yes: false, quiet: false, interactive: true };
+  let preparations = 0;
+  const choices: Array<"retry" | "offline"> = ["retry", "offline", "retry", "offline"];
+  const prompts: GraphBootstrapPromptPort = {
+    multiSelect: () => Promise.resolve([]),
+    confirm: () => Promise.resolve(true),
+    select: () => Promise.resolve(choices.shift() ?? "offline"),
+  };
+  const prepare = () => {
+    preparations += 1;
+    return Promise.resolve(preparations === 2
+      ? { prepared: true, ready: true, cache_root: path.join(root, "cache") }
+      : { prepared: false, ready: false, cache_root: path.join(root, "cache"), reason: "runtime_missing", detail: "runtime unavailable" });
+  };
+  try {
+    const initialized = await handleGraphInit(root, { tools: "none", literatureAdapters: "none" }, context, prompts, prepare);
+    assert.equal(initialized.ok, true);
+    assert.equal(preparations, 2);
+    const configPath = path.join(root, "researchspec/config.yaml");
+    assert.equal((parseYaml(await readFile(configPath, "utf8")) as { procedure_search: { mode: string } }).procedure_search.mode, "hybrid");
+
+    const updated = await handleGraphUpdate({ procedureSearch: "hybrid" }, context, prepare, prompts);
+    assert.equal(updated.ok, true);
+    assert.equal((updated.data as { procedure_search: { effective_mode: string } }).procedure_search.effective_mode, "offline");
+    assert.equal((parseYaml(await readFile(configPath, "utf8")) as { procedure_search: { mode: string } }).procedure_search.mode, "hybrid");
+
+    const reinitialized = await handleGraphInit(root, { procedureSearch: "hybrid" }, context, prompts, prepare);
+    assert.equal(reinitialized.ok, true);
+    assert.equal(preparations, 5);
+    assert.equal((parseYaml(await readFile(configPath, "utf8")) as { procedure_search: { mode: string } }).procedure_search.mode, "hybrid");
+  } finally { await cleanup(root); }
 });

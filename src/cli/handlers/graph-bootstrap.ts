@@ -1,6 +1,6 @@
 import path from "node:path";
 import { ExitPromptError } from "@inquirer/core";
-import { confirm } from "@inquirer/prompts";
+import { confirm, select } from "@inquirer/prompts";
 import { stringify } from "yaml";
 
 import { detectTools, orderTools, parseToolExpression, type DeliveryMode } from "../../adapters/tools.js";
@@ -15,10 +15,11 @@ import { assertLiteratureAdapterSelection, LITERATURE_ADAPTER_CATALOG, parseLite
 import { fileExists } from "../../utils/fs.js";
 import { loadProcedureCatalog } from "../../procedures/catalog.js";
 import { buildSearchDocuments } from "../../procedures/search.js";
-import { prepareSemanticSearch, semanticCacheRoot } from "../../procedures/runtime.js";
-import type { ProcedureSearchMode } from "../../procedures/search-contracts.js";
+import { prepareSemanticSearch, semanticCacheRoot, semanticErrorCode } from "../../procedures/runtime.js";
+import type { ProcedureSearchMode, SemanticPreparation } from "../../procedures/search-contracts.js";
 import type { Diagnostic } from "../../core/validation/types.js";
 import { searchableMultiSelect, type SearchableChoice } from "../prompts/searchable-multi-select.js";
+import { createSemanticSearchProgress, semanticPreparationFailure, semanticSearchSetupDisclosure } from "../prompts/semantic-search.js";
 import { CliError, success, type CommandContext, type CommandResult } from "../types.js";
 
 export interface GraphInitOptions { tools?: string; literatureAdapters?: string; delivery?: DeliveryMode; procedureSearch?: string; paperHumanizerGuard?: string }
@@ -26,9 +27,10 @@ export interface GraphUpdateOptions { tools?: string; literatureAdapters?: strin
 export interface GraphBootstrapPromptPort {
   multiSelect(config: { id: "agent-tools" | "literature-adapters"; message: string; choices: SearchableChoice[] }): Promise<string[]>;
   confirm(config: { id: "procedure-search"; message: string; default: boolean }): Promise<boolean>;
+  select(config: { id: "procedure-search-recovery"; message: string; default: "offline"; choices: Array<{ name: string; value: "retry" | "offline"; description?: string }> }): Promise<"retry" | "offline">;
 }
 
-const DEFAULT_BOOTSTRAP_PROMPTS: GraphBootstrapPromptPort = { multiSelect: searchableMultiSelect, confirm };
+const DEFAULT_BOOTSTRAP_PROMPTS: GraphBootstrapPromptPort = { multiSelect: searchableMultiSelect, confirm, select };
 
 const PROJECT_SPEC = '---\nschema_version: "2"\nproject_id: project\n---\n\n# Project intent\n\n## Research question\n\n## Scope and boundaries\n\n## Method stance\n\n## Expected contribution\n';
 
@@ -129,7 +131,7 @@ export async function handleGraphInit(
   const delivery = options.delivery ?? "skills";
   const search = await selectProcedureSearch(options.procedureSearch, "offline", context, prompts);
   const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters: literatureAdapters, delivery, selectedPlugins: [], procedureSearch: search.mode, paperHumanizerGuard, context });
-  const searchResult = await prepareSelectedSearch(search, context, prepareSearch);
+  const searchResult = await prepareSelectedSearch(search, context, prepareSearch, prompts);
   return success("init", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: literatureAdapters, selected_plugins: [], projected_capability_files: applied.projected, paper_humanizer_guard: paperHumanizerGuard, procedure_search: searchResult }, { stdout: `${context.dryRun ? "Would initialize" : "ResearchSpec schema 2 workspace initialized"}: ${workspace}\n`, stderr: bootstrapWarningText(applied.diagnostics, searchResult) }, [...applied.diagnostics, ...preparationDiagnostics(searchResult)]);
 }
 
@@ -149,12 +151,12 @@ async function handleGraphReinit(
   const delivery = options.delivery ?? index.config.agent_tools.delivery;
   const search = await selectProcedureSearch(options.procedureSearch, index.config.procedure_search?.mode ?? "offline", context);
   const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters: literatureAdapters, delivery, selectedPlugins: index.config.plugins.selected, procedureSearch: search.mode, paperHumanizerGuard, index, context });
-  const searchResult = await prepareSelectedSearch(search, context, prepareSearch);
+  const searchResult = await prepareSelectedSearch(search, context, prepareSearch, prompts);
   const projected = applied.projected;
   return success("init", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: literatureAdapters, previous_tools: configured, projected_capability_files: projected, paper_humanizer_guard: paperHumanizerGuard, procedure_search: searchResult }, { stdout: `${context.dryRun ? "Would reconfigure" : "Reconfigured"} schema 2 workspace: ${workspace}\n`, stderr: bootstrapWarningText(applied.diagnostics, searchResult) }, [...applied.diagnostics, ...preparationDiagnostics(searchResult)]);
 }
 
-export async function handleGraphUpdate(options: GraphUpdateOptions, context: CommandContext, prepareSearch: typeof prepareSemanticSearch = prepareSemanticSearch): Promise<CommandResult> {
+export async function handleGraphUpdate(options: GraphUpdateOptions, context: CommandContext, prepareSearch: typeof prepareSemanticSearch = prepareSemanticSearch, prompts: GraphBootstrapPromptPort = DEFAULT_BOOTSTRAP_PROMPTS): Promise<CommandResult> {
   const explicit = context.workspace ? path.resolve(context.cwd, context.workspace) : undefined;
   const workspace = explicit ?? (await requireGraphWorkspaceForUpdate(context));
   const index = await loadGraphWorkspaceIndex(workspace);
@@ -167,7 +169,7 @@ export async function handleGraphUpdate(options: GraphUpdateOptions, context: Co
   const delivery = options.delivery ?? index.config.agent_tools.delivery;
   const search = await selectProcedureSearch(options.procedureSearch, index.config.procedure_search?.mode ?? "offline", context);
   const applied = await applyGraphWorkspaceProjection({ workspace, tools, adapters, delivery, selectedPlugins: index.config.plugins.selected, procedureSearch: search.mode, paperHumanizerGuard, index, context });
-  const searchResult = await prepareSelectedSearch(search, context, prepareSearch);
+  const searchResult = await prepareSelectedSearch(search, context, prepareSearch, prompts);
   const projected = applied.projected;
   return success("update", { workspace, schema_version: "2", dry_run: context.dryRun, selected_tools: tools, delivery, selected_literature_adapters: adapters, projected_capability_files: projected, paper_humanizer_guard: paperHumanizerGuard, procedure_search: searchResult }, { stdout: `${context.dryRun ? "Would update" : "Updated"} schema 2 workspace: ${workspace}\n`, stderr: bootstrapWarningText(applied.diagnostics, searchResult) }, [...applied.diagnostics, ...preparationDiagnostics(searchResult)]);
 }
@@ -196,7 +198,8 @@ async function selectProcedureSearch(expression: string | undefined, configured:
   }
   if (!prompts || !context.interactive) return { mode: configured, prepare: false };
   try {
-    const enabled = await prompts.confirm({ id: "procedure-search", default: true, message: `Enable local multilingual semantic discovery? Downloads about 140 MB of model/tokenizer files plus a CPU runtime to ${semanticCacheRoot()}. Queries stay local; preparation failure falls back to offline search.` });
+    process.stderr.write(semanticSearchSetupDisclosure());
+    const enabled = await prompts.confirm({ id: "procedure-search", default: true, message: "Enable local semantic search?" });
     return { mode: enabled ? "hybrid" : "offline", prepare: enabled };
   } catch (error) {
     if (error instanceof ExitPromptError) throw new CliError("cancelled", "Initialization cancelled.", 1);
@@ -204,14 +207,41 @@ async function selectProcedureSearch(expression: string | undefined, configured:
   }
 }
 
-async function prepareSelectedSearch(selection: { mode: ProcedureSearchMode; prepare: boolean }, context: CommandContext, prepareSearch: typeof prepareSemanticSearch): Promise<Record<string, unknown>> {
+async function prepareSelectedSearch(selection: { mode: ProcedureSearchMode; prepare: boolean }, context: CommandContext, prepareSearch: typeof prepareSemanticSearch, prompts: GraphBootstrapPromptPort): Promise<Record<string, unknown>> {
   if (!selection.prepare) return { mode: selection.mode, preparation: "skipped" };
   if (context.dryRun) return { mode: selection.mode, preparation: "planned", cache_root: semanticCacheRoot() };
-  try {
-    const result = await prepareSearch(buildSearchDocuments(await loadProcedureCatalog()));
-    return { mode: selection.mode, preparation: result.ready ? "ready" : "failed", effective_mode: result.ready ? "hybrid" : "offline", ...result };
-  } catch (error) {
-    return { mode: selection.mode, preparation: "failed", effective_mode: "offline", ready: false, cache_root: semanticCacheRoot(), reason: error instanceof Error ? error.message : String(error) };
+  let documents: ReturnType<typeof buildSearchDocuments> | undefined;
+  for (;;) {
+    const progress = createSemanticSearchProgress(context);
+    let result: SemanticPreparation;
+    try {
+      documents ??= buildSearchDocuments(await loadProcedureCatalog());
+      result = await prepareSearch(documents, { onProgress: progress.onProgress });
+    } catch (error) {
+      result = { ready: false, prepared: false, cache_root: semanticCacheRoot(), reason: semanticErrorCode(error), detail: error instanceof Error ? error.message : String(error) };
+    } finally {
+      progress.stop();
+    }
+    if (result.ready) return { mode: selection.mode, preparation: "ready", effective_mode: "hybrid", ...result };
+    const failure = { mode: selection.mode, preparation: "failed", effective_mode: "offline", ...result };
+    if (!context.interactive || context.json) return failure;
+    process.stderr.write(`${result.stage ? `Preparation stopped during ${result.stage}. ` : ""}${semanticPreparationFailure(result.reason, result.detail)}\n`);
+    let choice: "retry" | "offline";
+    try {
+      choice = await prompts.select({
+        id: "procedure-search-recovery",
+        message: "Retry local semantic setup or continue with offline search?",
+        default: "offline",
+        choices: [
+          { name: "Retry setup", value: "retry" },
+          { name: "Continue with offline search", value: "offline", description: "Keep hybrid enabled for a later update", },
+        ],
+      });
+    } catch (error) {
+      if (!(error instanceof ExitPromptError)) throw error;
+      choice = "offline";
+    }
+    if (choice === "offline") return failure;
   }
 }
 
@@ -221,7 +251,9 @@ function preparationDiagnostics(result: Record<string, unknown>): Diagnostic[] {
 }
 
 function preparationWarning(result: Record<string, unknown>): string | undefined {
-  return result.preparation === "failed" ? `Local semantic preparation failed (${String(result.reason)}); offline discovery remains available. Retry update --procedure-search hybrid when ready.\n` : undefined;
+  return result.preparation === "failed"
+    ? `Local semantic preparation failed: ${semanticPreparationFailure(typeof result.reason === "string" ? result.reason : undefined, typeof result.detail === "string" ? result.detail : undefined)} Offline discovery remains available. Retry update --procedure-search hybrid when ready.\n`
+    : undefined;
 }
 
 async function requireGraphWorkspaceForUpdate(context: CommandContext): Promise<string> {

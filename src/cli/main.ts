@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { Command, CommanderError, InvalidArgumentError } from "commander";
+import { handleSearchCache, type SearchCacheOptions } from "./handlers/search-cache.js";
 
 import {
   handleGraphAdvance,
@@ -111,8 +112,10 @@ function registerCommands(program: Command, run: Runner): void {
       if (options.input !== undefined) throw new CliError("procedure_material_option_invalid", "Material bindings apply only to a Procedure check target.", 2);
       return handleGraphCheck(Boolean(options.strict), context, requireCheckTarget(target));
     }));
-  registerCliCommand(program, "doctor")
+  const doctor = registerCliCommand(program, "doctor")
     .action(async (_options: GraphDoctorOptions, command: Command) => run("doctor", command, () => handleGraphDoctor(commandContext("doctor", command))));
+  registerCliCommand(doctor, "doctor-search-cache")
+    .action(async (options: SearchCacheOptions, command: Command) => run("doctor", command, () => handleSearchCache(options, commandContext("doctor", command))));
   registerCliCommand(program, "list")
     .action(async (type: string | undefined, options: GraphListOptions, command: Command) => run("list", command, () => handleGraphList(type, options, commandContext("list", command))));
   registerCliCommand(program, "show")

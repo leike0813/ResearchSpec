@@ -79,6 +79,14 @@ export const CLI_PAYLOADS = {
     field("--input", "YAML/JSON material bindings", false, "Required only for procedure:<id>; inputs[{role,path}|{role,value}], outputs[{role,path}]."),
   ]),
   doctor: none("No command payload. Runs the full current-workspace diagnostic report."),
+  "doctor-search-cache": payload("options", "Inspect the shared semantic search cache without requiring a workspace; explicit --clear requests cleanup.", [
+    field("--clear", "boolean", false, "Delete recognized model, runtime, index and staging entries across versions; retain unknown files and project preferences."),
+    field("--yes", "boolean", false, "Confirm explicit cleanup without an interactive prompt; required for non-interactive cleanup."),
+    field("--dry-run", "boolean", false, "Preview cleanup without confirmation, deletion, lock creation or directory creation."),
+  ], [
+    "The cache is shared across projects; clearing it makes hybrid discovery fall back to offline until resources are explicitly prepared again.",
+    "Inspection is read-only. Cleanup never downloads, runs inference, installs dependencies or changes workspace configuration.",
+  ]),
   list: payload("options", "An optional collection type with cursor pagination.", [
     field("type", "procedures | profiles | runs | nodes | changes | diagnostics", false, "Collection to list; defaults to runs."),
     field("--limit", "integer 1..50", false, "Page size; procedures default to 10, other collections to 20."),

@@ -30,10 +30,16 @@ Skills、converter 与验收必须与本文一致。
 `researchspec init` 创建 schema `"2"` workspace、投影所选 Agent 表面和 preset profiles。它不会
 开始学术工作，也不会创建 run。
 
-首次交互初始化会询问是否启用本地多语言语义发现。确认后下载约 140 MB 的模型与 tokenizer，
-另加独立 CPU runtime，保存到用户缓存；项目仅保存 `procedure_search.mode`。非交互初始化默认
+首次交互初始化会分行说明用途、下载量和共享缓存路径，再询问是否启用本地多语言语义发现。
+确认后下载约 140 MB 的模型与 tokenizer，另加独立 CPU runtime，保存到用户缓存；准备过程显示
+下载进度、目录向量生成和自检状态，已有资源会直接复用。项目仅保存 `procedure_search.mode`。非交互初始化默认
 离线，`--yes` 本身不授权下载。显式 `init/update --procedure-search hybrid` 才准备或刷新缓存；
 `offline` 使用内置检索。已有工作区省略该选项会保留选择。`--dry-run` 只预览，不下载或推理。
+
+交互准备失败会提供“重试”或“暂时使用离线检索”，默认选择后者；重试有新的十分钟预算，
+暂时离线仍保留 hybrid 偏好。非交互失败只回退离线，不自动重试。
+`doctor search-cache` 可在任意目录查看共享缓存；显式 `--clear` 清理时另行确认，影响所有共享
+该缓存的项目，但保留各项目的模式选择和研究文件。详见[缓存与恢复](procedure-discovery.md#缓存与恢复)。
 
 已核实原生项目规则的宿主还会收到简短的研究任务入口约定，用来提醒 Agent 按普通研究请求发现
 Navigate。约定独立于 `skills`、`commands` 或 `both` 交付模式，并只引用实际安装的入口文件；
