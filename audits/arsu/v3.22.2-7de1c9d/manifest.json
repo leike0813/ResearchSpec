@@ -16,25 +16,25 @@
     "registry_sha256": "da00e22021742e382d9eb4d2ca1d439ab951a7dca64bc0385e15cc24284d7557",
     "capability_count": 47,
     "operational_count": 47,
-    "packages_tree_sha256": "0d1eb75091d22f8f6d370c0ebdeff895dde8165e003172b3c0961a83ef4521be"
+    "packages_tree_sha256": "7cbd5c79597b1e4c944fe881b4e385b07f6d0c911c64c9518f71b8f42e1a9879"
   },
   "review": {
-    "parity_report_sha256": "26dad8541a4c8c5136cd7417b010d6aa43ecc92a20c261b2fb97a8297fd54146",
-    "section_coverage": 0.9500714195299633,
+    "parity_report_sha256": "ecfc901f7ffc55b0b089916e3e1170dd7b351e2fcba16c22b28ae15e6a7fd65f",
+    "section_coverage": 0.9510385375183579,
     "rule_coverage": 0.9579594249047135,
     "below_section_threshold": [],
     "below_rule_threshold": [],
     "output_missing": [],
     "flow_retained": [],
-    "review_html_sha256": "99c48cf339719c3b4fd0517f5ded98801019b0f1c7e2d4f0f6ecd833b62d7981",
-    "assessment_html_sha256": "12e108452b84e64f96163e2f7e056d86546c1037853398e4a33b54a4ed531cfd",
-    "gap_review_html_sha256": "50fcd01ee9558ac821de472819990916f2d5be54c6e4dda7795fd2233eef9284"
+    "review_html_sha256": "b958fd9d19f22fdb1e06c15823ae31e789e69dee5caa767de74a4565fce02a1f",
+    "assessment_html_sha256": "505853ddc42f4305518691541d1da069284fa6fab34321316cb7d6fdbf663f87",
+    "gap_review_html_sha256": "5b54a61f7a3b1e14a00c5c8b827a4a315555b97c4027fd9daed0bf9995849ce3"
   },
   "maintenance": {
     "skill_sha256": "d1fef0c28e0ce8f75dab5848b9d39f29885e507ae31321bf3b2d166618be9938",
-    "record_sha256": "de6e0b5ab0181b2ea9d6ba375616b366e66932037718f7ff946d2e1211da8716"
+    "record_sha256": "799879f235c2243111edd85be61dbdab819b257a7caaeffe03ba1fdb572a5d4c"
   },
   "schema_version": "1",
   "anchor_id": "v3.22.2-7de1c9d",
-  "created_at": "2026-10-23T11:43:09.492Z"
+  "created_at": "2026-10-23T15:20:37.159Z"
 }

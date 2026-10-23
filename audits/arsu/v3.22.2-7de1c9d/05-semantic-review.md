@@ -128,6 +128,24 @@ PH-KP-04 与 paper-humanizer delivery assets 分别承载原始守则证据和�
 
 共享接收端只保存可信冻结快照对应的结果文件；wait 只返回成功落盘通知，不调用 Agent 或模型，不变更稿件、SQLite、handoff 或 graph。正式 Gate/Decision 的人工确认和 CLI 权威不变。原 v1 恢复页保持原字节。
 
+## 稿件协作默认行为复核（2026-10-23）
+
+本轮按已接受的 `improve-manuscript-collaboration-defaults` 修改项目自有指令；ARS 固定提交、120 件 extraction、capability 输入输出声明、知识资源、graph profiles、Gate/Decision 和确定性脚本未改。
+
+| 上游来源与引文 | 承载与判定 |
+|---|---|
+| CAP-M2-01 `01_writing_intake.md`：“Smart defaults — suggest sensible defaults”；handoff 后仍需确认 “Citation Format, Output Format” | `design-writing-intake` adapted：复用已答问题，将工作源格式与最终交付分开；默认只是建议，简化访谈记录在正文生产前保持 provisional。来源、venue/layout 声明规则与完整记录确认保留。 |
+| CAP-M2-04 manuscript 变体：“Paper Configuration Record (from intake_agent)”；report 变体：“APA 7.0 compliance” | `generation-manuscript-drafting` adapted：合并能力以已确认的引用与工作源格式为准；APA 示例限定于选定 APA，缺必要要求返回主 Agent。`ref`、`anchor`、claim-intent、时间约束与信息隔离保留，支持 QMD/LaTeX 的源码保护。 |
+| CAP-M2-06 `06_citation_format_compliance.md`：五种 supported citation formats 与格式不明时默认 APA 的来源规则 | `check-citation-format-compliance` adapted：检测作为观察，确认后才做样式修正；未知样式保留 style-independent checks，不把沉默当选择。原 DOI、孤立引用、归属歧义及中文规则保留。 |
+| CAP-M4-03 `03_format_rendering.md`：“user's requested output format(s)” 与默认 Markdown | `generation-format-rendering` adapted：未知目标返回具体缺项；保留格式转换、原源稿、终结标记检查及最终产物 strip 顺序。source 与 final target 分开，不自动安装或执行文档代码。 |
+| 四个原 ARSU Skill 的 preflight 与 mode 入口 | academic-paper/pipeline adapted：共享 manuscript preparation 先检查材料、讨论方向/格式、按证据缺口调研、对齐后生产；沿用 run 优先权和正式确认。reviewer 只澄清普通工作源格式的上下文，deep-research 保持原字节。 |
+
+普通 drafting、roadmap parsing、revision patching 和 academic-paper 的 runtime packet 新增现有 annotation-intake v2 提示，复用已发布 HTML；没有新增 adapter/schema/图节点。无候选时允许零 Agent 项的正文批注；有候选时使用原 evidence-preserving 投影。用户选择前不准备，界面结果不成为修改授权。
+
+27 mode 审阅工件继续覆盖所有入口；本轮实际受影响的 academic-paper 全部 mode 和 pipeline 入口均检查共享 preflight 的优先关系。原 full intake 确认、plan 暂定材料、revision source/patch 约束、format-convert 独立入口继续成立。deep-research 的问题界定与 evidence 路径、reviewer full 的独立判断作未变抽检。非 preserved 的 FNR/FPR/gold set calibration 缺口、resume reset/awaiting_resume/consumes_hash 适配、EIC 显示名及 pipeline flow 判定均保留前节结论；没有以新增 preparation 假称修复。
+
+own-vendor 五份审阅 instruction 的 adapted 判定见两个当前锚点的同名小节。父 Agent 保留讨论和界面准备，worker 只消费已有绑定或报告缺项；资料检查仍为建议性，未新增机器门禁。语义检查与最终验证记录见该 change 的 `verification.md`，不宣称真实宿主行为已通过。
+
 ## 结论
 
 declared-fit-with-notes。本轮发布版的语言配置、摘要统一规则、中文引文修复、缩略语advisory隔离、真实授权与指令/数据边界已进入现有承载路径。继承的calibration缺口、ledger运行时排除及未执行确定性缩略语检查明确披露；静态operational标签不能证明这些功能有运行证据。

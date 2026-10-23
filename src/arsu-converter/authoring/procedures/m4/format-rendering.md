@@ -43,12 +43,15 @@ or `format-convert` behavior.
 4. Package completeness: deliver all required files (main text, bibliography, figures, cover letter).
 5. AI disclosure: on the normal Phase 7 path, render only the AI use confirmed by
    the input ledger; standalone `disclosure` uses the protocol-driven result above.
+6. Source and delivery separation: render from the confirmed working source format; final deliverables such as Word or PDF are separate from the source.
 
 ## Supported Output Formats
 
+Use the confirmed final deliverables. When a target is unresolved, return the missing target to the coordinating Agent (or ask the user when running inline) before rendering; the working source format alone does not choose an output.
+
 ### 1. Markdown (.md)
 
-Default format: clean markdown with proper heading levels, tables in markdown format, and a reference list at the end.
+Clean markdown with proper heading levels, tables in markdown format, and a reference list at the end. Use this route when Markdown is a confirmed final deliverable.
 
 ### 2. LaTeX (.tex + .bib)
 
@@ -109,7 +112,7 @@ directed the content, and take responsibility for its accuracy and integrity.
 
 1. Parse existing in-text citations and reference-list entries; extract authors, year, title, source title, volume/issue/pages, DOI/URL, publisher, edition, editors, and access date.
 2. Normalize into a structured intermediate representation; resolve ambiguities (e.g., expand "et al." when the full author list is available).
-3. Regenerate in-text citations and reference-list entries in the target format.
+3. Regenerate visible in-text citations and reference-list entries in the target format; leave `<!--ref:...-->`, `<!--anchor:...-->`, and claim-intent markers unchanged.
 4. Verify: input citation count equals output count; all bibliographic elements survive; every in-text citation has a reference; and output matches target-format rules.
 
 ### Format-Specific Features
@@ -231,12 +234,12 @@ Record exact Pandoc/LaTeX commands used. Chinese content must use xelatex or lua
 
 1. Preflight: read the manuscript and all format/venue profiles; fail closed before formatting on any malformed profile.
 2. Hard gate: scan citation-provenance markers and HIGH-BLOCK tokens; refuse on any terminal marker.
-3. Convert: render each requested target from the same source bytes.
+3. Convert: render each confirmed target from the same source bytes while preserving the working source format and protected structures.
 4. Strip internal markers after the gate.
 5. Build the output package and append advisory sections.
 6. Run the final quality checklist.
 
-### APA 7.0 LaTeX Mandatory Rules
+### APA 7.0 LaTeX Rules (When Selected)
 
 Use `apa7` class where configured; second-language headings MUST use `\begin{center}...\end{center}` rather than bare `\textbf{}`; never use bare `p{0.25\linewidth}` columns, which ignore `\tabcolsep` and cause overflow; `man` mode forces `\raggedright` after `\begin{document}` and must be overridden; compilation must use xelatex or lualatex for Chinese content.
 
@@ -271,7 +274,7 @@ When the journal template conflicts with the manuscript source, prefer the journ
 
 ### Incomplete Input
 
-Missing manuscript -> stop with the missing input. Missing target format -> default to Markdown. Missing venue profile -> no journal-specific application; never infer one.
+Missing manuscript -> stop with the missing input. Missing target format -> return the missing target to the coordinating Agent (or ask the user when running inline) before rendering. Missing venue profile -> no journal-specific application; never infer one.
 
 ### Poor Quality Upstream Input
 
@@ -304,5 +307,6 @@ The formatted package, cover letter, conversion commands, and provenance summary
 
 - Formatting is format-only; never alter content, meaning, or citations.
 - Never infer missing layout fields from venue or filename.
+- Never install renderers or execute project scripts during rendering without separate user approval.
 - Never strip markers before the cite-time hard gate passes.
 - Do not apply terminal policy or submission checks in this node; gate on stamped tokens only.

@@ -125,6 +125,25 @@ Gate 或 Decision。恢复普通工作不需要 graph。
 普通 Procedure 之间可以显式传递材料。没有现成角色衔接时，Agent 核对内容、解释用途与证据限制，
 可用原生能力转换或继续；不能把未满足的 Procedure 契约描述为已经满足。
 
+### 写稿前的讨论与准备
+
+新写稿或实质性改稿时，Navigate 先检查现有稿件、来源、已确认要求和任务笔记，再与用户讨论
+尚未明确的目标、读者、研究问题、主要论点、范围和修改方向。直接指定 Procedure 或图节点也沿用
+这一准备过程。发现能力、只读检查和探索性提纲可以先做；完成准备后才写入依赖这些选择的正文。
+
+写稿前须明确工作源格式、最终交付形式、期刊或通用要求，以及引用规范。Agent 先复用用户已确认的
+信息，只询问材料无法解决的选择；Markdown、APA 等可以作为建议，须由用户接受或明确授权 Agent
+选择。当前文件扩展名说明已有源格式，不代表用户同意改变交付要求。
+
+Agent 将主要论点与实际证据对应，检查反证和限制，再按缺口调研。已有材料充分时无需重复外部检索；
+来源或工具不可用时，说明影响，与用户对齐缩小论断、略去内容或保留明确的暂定范围。材料不支持的
+主张不能靠模型记忆补齐。开始正文前，向用户对齐论证或修改方向、证据依据、未决限制及交付要求；
+适用的既有确认可以直接复用。
+
+这些讨论由主 Agent 承担。委派前通过现有材料绑定或已解析输入传递必要的已确认要求，无法传递时
+保留在主 Agent 执行。持续任务笔记记录要求、审阅偏好和证据限制，以便恢复时核对复用。少量且不改变
+含义、论点、结构或交付的措辞修改采用简化准备，无需完整访谈或新一轮文献检索。
+
 需要 formal Gate/Decision、parallel/join、重复轮次或可审计工作流状态时进入 graph 模式：
 
 ```text
@@ -160,10 +179,16 @@ Reviewer 获得独立上下文；producer 只在隔离或并行确有帮助时�
 询问用户、选择模型或继续委派。它返回 Procedure hash、输出路径、检查结果和 blocker；Navigate
 校验后才串行执行 `advance` 等 CLI mutation。worker 回报本身不改变 run、node、Gate 或 Decision。
 
-## 交互式审阅交接（可选）
+## 交互式审阅交接
 
-当前 profile、node、Gate 或 Decision 的 instructions 提供 `review_workspace` 时，Agent 可以准备冻结
-页面，默认启动仅监听 `127.0.0.1` 的本地会话并交付 URL；通用 `review-workspace.v2` 与独立的
+实质性改稿首次需要用户判断时，主 Agent 主动推荐浏览器批注，同时提供对话审阅选项。用户选择
+浏览器后才准备冻结页面；适用的当前任务偏好直接复用，少量措辞修改可留在对话中。未答复不视为
+选择。独立 Procedure 和图流程均适用，浏览器始终可选。
+
+当前 Procedure packet、profile、node、Gate 或 Decision 的 instructions 可提供 `review_workspace`，
+它说明可用协议和资源，不代表用户已选择。普通稿件、drafting、roadmap 和 patching 使用现有
+`annotation-intake` v2；有实际注释候选时投影其证据，没有时可以提供零 Agent 项的正文批注。
+选定后默认启动仅监听 `127.0.0.1` 的本地会话并交付 URL；通用 `review-workspace.v2` 与独立的
 `revision-master-review-workspace.v1` 都无需手动导入 JSON。通用工作区先保存为 `workspace.json` 再
 启动；revision-master 会话使用原始包模板，准备 API 返回的嵌入版 HTML 只作离线备用。浏览器只保存
 本地草稿；用户显式提交后，服务校验保留的工作区并在 `workspace.json` 同目录写入 `result.json`，
@@ -283,10 +308,12 @@ Graph Decision 同样逐项确认；记录 choice 后只有对应分支进入 fr
 动态 revision template 每轮实例化 revision、re-review 与 round Decision。选择继续会开启下一轮；
 选择接受才解锁 format。轮次计数属于 graph runtime，Capability Skills 不能另建计数器。
 
-## 7. Markdown、QMD 与 Quarto
+## 7. 工作源格式与最终交付
 
-首次进入稿件工作时，用户在 `manuscript.yaml.delivery` 选择 `markdown` 或 `qmd`；QMD 还需
-安全的 `final_output_format`。后续改变已确认交付格式属于高影响 project change。
+首次进入稿件生产前，用户明确工作源格式与最终交付形式。现有工作源格式契约支持 `markdown`、
+`qmd`、`latex`、`latex-project`；Word、PDF 等属于最终交付要求，不能与工作源格式混为一谈。
+QMD 还需安全的 `final_output_format`。普通任务在已确认材料中保留要求；形成稳定承诺时记录到
+`manuscript.yaml.delivery`，后续改变已确认稳定交付格式属于高影响 project change。
 
 Markdown 与 QMD 都是 Markdown-compatible 源稿。Review、annotation 和 revision 必须保留 QMD
 frontmatter、代码围栏、cell options、引用和交叉引用。

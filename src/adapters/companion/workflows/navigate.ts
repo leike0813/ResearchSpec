@@ -1,5 +1,6 @@
 import type { CompanionWorkflowSource } from "../types.js";
 import { renderLiteratureSourcePolicyProjection } from "../../../literature-adapters/provider-policy.js";
+import { MANUSCRIPT_PREPARATION_GUIDANCE } from "../../../manuscript-guidance.js";
 
 const GRAPH_REASONS = "formal Gates or Decisions, parallel or joined execution, child profiles, revision rounds, or auditable workflow state";
 
@@ -31,7 +32,7 @@ Use Navigate when the user:
 - wants to start, resume, inspect, verify, explain, export, or finish governed work;
 - needs plugin-domain, Zotero Adapter, or alternate-model routing within ResearchSpec.
 
-An explicit bounded procedure can route directly after the same eligibility check. An explicit graph selector still requires current instructions before any action.
+An explicit bounded procedure can route directly after the same eligibility check and applicable manuscript preparation. An explicit graph selector still requires current instructions before any action.
 
 ## Work Loop
 
@@ -40,7 +41,7 @@ For research or patent work in an initialized project:
 1. Run \`researchspec status --json\`. Compare unfinished \`run_summaries\` with the current task, including declared delivery, blockers, and next inspections. If a related confirmed run is unfinished, follow its current exact selector instructions and pending controls. A completed historical run does not take over a new task.
 2. Otherwise, if continuing ordinary work, compare the matching task note with current materials. If the work needs ${GRAPH_REASONS}, follow the Graph section below. For standalone work, search \`researchspec list procedures --query "<original user request>" --json\` using the original request, including Chinese or mixed language. Compare candidate purposes and declared input/output roles against the task and actual materials; inspect promising cards with \`show procedure:<id> --json\`. If no candidate fits, make at most one focused reformulation. An empty-query error requires meaningful task text. A reported semantic fallback leaves offline candidates usable; propose explicit model preparation only when the user wants it.
 3. For standalone work, load \`researchspec instructions procedure:<id> --json\` for the selected eligible procedure. Use actual files or inline material to assess its input needs. For uncertain material or an exchange, optionally add \`--input <materials.yaml>\` as described under Standalone below. If a required material is missing, pause the work that depends on it and ask one focused question; continue independent work with its limits stated.
-4. Carry out the selected packet's scholarly work inline or through an eligible worker. Save its declared file outputs as ordinary project files outside \`researchspec/\`, distinguishing usable partial outputs from completed delivery. Connect ordinary materials by their actual purpose; use native interpretation or transformation where a declared Procedure link is absent, and identify any unmet contract.
+4. Complete Prepare Manuscript Work below before manuscript production or delegation. Then carry out the selected packet's scholarly work inline or through an eligible worker. Save its declared file outputs as ordinary project files outside \`researchspec/\`, distinguishing usable partial outputs from completed delivery. Connect ordinary materials by their actual purpose; use native interpretation or transformation where a declared Procedure link is absent, and identify any unmet contract.
 5. Report the produced paths, evidence and limits, unresolved items, and next step. For graph work, reread status after each CLI mutation. Stop for a fresh human verdict or choice at each pending Gate or Decision.
 
 For an explanation-only request, use the narrowest current read command; it needs no research deliverable. An unrelated request or explicit opt-out uses host-native capabilities.
@@ -48,6 +49,8 @@ For an explanation-only request, use the narrowest current read command; it need
 Candidate-card eligibility describes current workspace and domain selection facts. It leaves research fit, input adequacy and consent for the Agent to assess; successful activation still validates the current package and workspace.
 
 Patent work uses the same discovery and authority boundaries. Confirm jurisdiction and patent type; China is the default jurisdiction. Fixed patent capabilities need no plugin installation. Before a docket run, disclose the default three-round budget, document/CAD/browser prerequisites and optional vault or map projection costs. At each continuation Decision, report remaining issues and the cost of another round; the budget is guidance and the human chooses continuation. After a confirmed continue, use the CLI handoff command to select the preceding round's accepted disclosure_bundle and application_bundle outputs before consuming the next revision node; verify the paths in current instructions. Preserve all earlier versions. Bind patent file indexes to applicable declared roles, and explain any native interpretation needed for ordinary composition. Optional Obsidian writes use an explicitly selected vault; maps read the selected frozen corpus. Preserve patent source categories and evidence limits when combining them with academic research.
+
+${MANUSCRIPT_PREPARATION_GUIDANCE}
 
 ## Non-goals
 
@@ -57,7 +60,7 @@ Patent work uses the same discovery and authority boundaries. Confirm jurisdicti
 
 ## Inputs And Outputs
 
-Inputs may include the user's goal, project files, a procedure or profile name, an existing run, or a request for explanation. For workspace actions, discover the current schema \`"2"\` workspace and read structured CLI output. Ask the user only for a decision or missing material that changes the legal route or deliverable.
+Inputs may include the user's goal, project files, a procedure or profile name, an existing run, or a request for explanation. For workspace actions, discover the current schema \`"2"\` workspace and read structured CLI output. Ask focused questions about unresolved research direction, evidence, delivery or decisions after checking available materials.
 
 For a completed standalone capability, use the single result report defined below. For governed work, report the current CLI-confirmed state and next action. Name internal mode names, procedure IDs, and selectors only when the user needs them to act.
 
@@ -99,7 +102,7 @@ Use optional material inspection when inputs are uncertain, files are exchanged,
 
 On completion, give one user-facing standalone result report: outcome and every produced ordinary file path; evidence and its limits; unresolved items; and the next step. Show internal mode names, procedure IDs, or selectors only when the user must act on them. A standalone finding is working evidence, never a completed run, node, Gate, or Decision.
 
-For sustained ordinary research work, only the main Agent maintains \`work/researchspec-notes/<task-id>.md\` outside \`researchspec/\`; delegated workers return outputs for the main Agent to validate before it updates the note. Record the user's goal and delivery expectations; inputs and produced files with their purpose; completed substantive work and evidence limits; open questions and the next step; and any related run selector. Update the note when a stage output is reached, the work is blocked, or a work session ends. A one-shot exchange with no continuing deliverable creates no note.
+For sustained ordinary research work, only the main Agent maintains \`work/researchspec-notes/<task-id>.md\` outside \`researchspec/\`; delegated workers return outputs for the main Agent to validate before it updates the note. Record the user's goal and confirmed delivery and review preferences; inputs and produced files with their purpose; completed substantive work and evidence limits; unresolved choices, open questions and the next step; and any related run selector. Update the note when a stage output is reached, the work is blocked, or a work session ends. A one-shot exchange with no continuing deliverable creates no note.
 
 To resume ordinary work, read the related note and check its recorded materials and outputs against current project files. Never choose a task by note modification order:
 
@@ -132,20 +135,20 @@ For an active workspace, resume from exactly one status collection:
 
 | Status collection | Next action |
 | --- | --- |
-| \`frontier\` | Read \`instructions node:<run>/<node> --json\`, activate its graph procedure packet, produce declared outputs, then submit with \`advance node:<run>/<node>\`. |
+| \`frontier\` | Read \`instructions node:<run>/<node> --json\`, apply manuscript preparation where relevant, activate its graph procedure packet, produce declared outputs, then submit with \`advance node:<run>/<node>\`. |
 | \`pending_subgraph_starts\` | Start the exact returned child-profile node selector. Parent authorization covers the declared child start; do not ask for another root-run confirmation. |
 | \`pending_gates\` | Read \`instructions gate:<run>/<node> --json\`, verify evidence, present a recommendation, obtain this Gate's human verdict, then call \`decide\`. |
 | \`pending_decisions\` | Read \`instructions decision:<run>/<node> --json\`, present allowed choices and consequences, obtain this Decision's human choice, then call \`decide\`. |
 
 After every mutation, rerun \`status --json\`. Never predict the successor from prose or silently combine Gate confirmation, Decision choice, and node Advance.
 
-### Interactive Review Workspace
+## Interactive Review Workspace
 
-When current profile, node, Gate, or Decision instructions include \`review_workspace\`, follow the protocol named by its \`adapter\` and \`descriptor_schema\`: the generic \`review-workspace.v2\` page, or the independent \`revision-master-review-workspace.v1\` workbench. The user may always continue in chat instead, and browser availability is never a workflow prerequisite.
+Apply the review choice in Prepare Manuscript Work in standalone and graph tasks. Current procedure packets, profile, node, Gate or Decision instructions may include \`review_workspace\`; this advertises an available surface, not the user's selection. Once browser review is selected, follow its \`adapter\` and \`descriptor_schema\`: the generic \`review-workspace.v2\` page, or the independent \`revision-master-review-workspace.v1\` workbench. For native manuscript work without a hint, use the packaged generic page and annotation-intake protocol below. The user may always continue in chat instead, and browser availability is never a workflow prerequisite.
 
 **Generic \`review-workspace.v2\`** (annotation-intake and paper-humanizer, including verified candidate comparison and article revision):
 
-1. Capture an exact frozen copy of the entry and relevant included source files and local images outside \`researchspec/\`. Prepare and retain one \`workspace.json\` with a static selectable document, source manifest, and original Agent items. Supply display locations against the rendered blocks while retaining original evidence targets. For a verified paper-humanizer candidate, capture this round's base and candidate together and pair corresponding blocks in source order; use a visible raw-source fallback if they cannot be paired reliably. Use the bundled Markdown renderer or host Quarto/LaTeX tools. Ask separately before every render that can run project scripts, filters, or computation; run an approved render in a temporary copy. Show original source for unreliable conversion regions.
+1. Capture an exact frozen copy of the entry and relevant included source files and local images outside \`researchspec/\`. Prepare and retain one \`workspace.json\` with a static selectable document, source manifest, and original Agent items. Ordinary revision uses \`captureReviewSources\`, \`reviewBlocksFromMarkdown\` or the host renderer, and \`assembleReviewWorkspace\` with adapter \`annotation-intake\`; use \`annotationCandidateReviewWorkspaceV2\` when an actual annotation candidate exists, or no Agent items for pure user comments. Supply display locations against the rendered blocks while retaining original evidence targets. For a verified paper-humanizer candidate, capture this round's base and candidate together and pair corresponding blocks in source order; use a visible raw-source fallback if they cannot be paired reliably. Use the bundled Markdown renderer or host Quarto/LaTeX tools. Ask separately before every render that can run project scripts, filters, or computation; run an approved render in a temporary copy. Show original source for unreliable conversion regions.
 2. Normally start a loopback session with \`startReviewSession({projectRoot, workspacePath, assetPath})\` from \`researchspec/review-workspace\`, using the retained \`workspace.json\` and the returned \`asset_path\` when present or the packaged \`review-workspace/index.html\`. Give the user \`session.url\`, \`session.resultPath\`, and \`session.historyDir\`; no manual JSON import is needed. The page keeps only browser-local drafts. An explicit submit posts a complete revisioned \`review-workspace-result.v2\` to the service, which validates the retained workspace and writes \`result.json\` beside \`workspace.json\` plus immutable \`results/<submission-id>.json\`. The offline page and its explicit backup download remain available; a failure never switches to download automatically. Existing v1 drafts use \`review-workspace/v1.html\` and v1 results stay under their old contract.
 3. When waiting, call \`session.waitForResult({after?, timeoutMs?, signal?})\`; the default timeout is ten minutes. It sees already committed submissions in the current service and can be cancelled. After a restart, read retained files directly. Validate the receipt's immutable \`history_path\` against the retained workspace rather than trusting mutable \`result.json\`; waiting never applies feedback. Close the returned session when review is complete.
 4. This protocol is frozen as a whole: compare every captured file with current source before applying feedback. If anything changed, show the differences and affected comments and ask how to proceed; if unchanged, locate comments by quote and context, asking when source placement is ambiguous. Translate accepted intent back into the owning annotation intake or paper-humanizer plan, then prepare a new workspace identity with no processed comments. Never treat browser state as semantic or workflow truth.
@@ -163,7 +166,7 @@ For either protocol, before any formal action, reread the exact current selector
 
 If the page cannot be opened, a port is unavailable, or the user prefers conversation, render the same items in chat and preserve the same result fields and confirmation boundary. Do not make browser availability a workflow prerequisite.
 
-### Native
+## Native
 
 If no eligible procedure or graph entry fits, use the host Agent's native capabilities and state that the work is outside a governed ResearchSpec run. Do not invent a procedure, profile, selector, or workflow record.
 
@@ -175,7 +178,7 @@ The activation packet's \`delegation\` field is advice, not workflow authority. 
 - Delegate an eligible \`researchspec-executor\` packet only when context isolation helps or when independent frontier nodes have disjoint outputs and can run in parallel. Keep simple work inline.
 - Never delegate a packet whose recommendation is null. Keep \`mixed\`, \`script\`, reference-only, and coordinator work in the parent.
 
-Dispatch at most one worker per independent packet. Give it the packet unchanged. Workers never call ResearchSpec mutation commands, ask the user, choose a model or cost, make a Gate or Decision, or delegate another agent. If input, authority, or an allowed tool is missing, the worker stops and returns the blocker to Navigate.
+Complete applicable manuscript preparation before dispatching at most one worker per independent packet. Give it the packet unchanged, with necessary confirmed requirements already supplied through its material bindings or resolved inputs; otherwise keep the task inline. Workers never call ResearchSpec mutation commands, ask the user, prepare browser sessions, choose a model or cost, make a Gate or Decision, or delegate another agent. If input, authority, or an allowed tool is missing, the worker stops and returns the blocker to Navigate.
 
 Require this brief from every worker:
 

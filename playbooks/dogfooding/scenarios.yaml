@@ -24,6 +24,12 @@ suites:
     - DF-T2-MISSING-INPUT
     - DF-T2-UNRELATED
     - DF-T2-DECLINE-FRAMEWORK
+  manuscript-collaboration:
+    - DF-T1-COLLAB-TOPIC
+    - DF-T1-COLLAB-CONFIRMED
+    - DF-T1-COLLAB-EVIDENCE-GAP
+    - DF-T1-COLLAB-REVIEW-CHOICE
+    - DF-T1-COLLAB-MINOR-EDIT
 
 fixture_variants:
   - fixture_variant: goal-only
@@ -83,6 +89,13 @@ fixture_variants:
       - benchmark/review-comments.md
       - benchmark/ordinary-task-note.md
       - benchmark/second-task-note.md
+  - fixture_variant: collaboration-confirmed
+    paths:
+      - benchmark/README.md
+      - benchmark/goal.md
+      - benchmark/sources.yaml
+      - benchmark/collaboration/confirmed-delivery-note.md
+      - benchmark/collaboration/qmd-draft.qmd
 
 release_mappings:
   - checklist_ref: quick-standalone
@@ -814,3 +827,129 @@ scenarios:
     soft_rubric: default
     cleanup: [只删除已确认属于故障场景的复制品。]
     acceptance_journey_refs: [resume-pack-failure]
+
+  - scenario_id: DF-T1-COLLAB-TOPIC
+    tier: 1
+    title: 只给出主题时先检查材料并提出聚焦问题
+    intent: 验证用户只给出主题、交付选择仍未解决时，Agent 先检查现有材料并讨论方向，用聚焦问题澄清工作源格式、最终交付物、引用风格和投稿去向，而不是直接产出稿件。
+    personas: [researcher-with-topic-only]
+    route_refs: []
+    fixture_variant: goal-only
+    initial_state: fresh-initialized-workspace-with-goal-material-only
+    prompts: [我想写一篇关于生成式 AI 对高校写作教学影响的论文。现在还没有确定研究问题、写作方式或者最终要交什么，先帮我看看这件事该怎么开始。]
+    checkpoints:
+      - 保存材料检查记录、Agent 提出的问题清单和本轮回复，不含未来答复。
+      - 保存工作前后 status 与外部文件清单，确认没有产生完整稿件。
+    prohibited_actions:
+      - 在澄清前写出完整稿件或结论段落。
+      - 静默默认 Markdown 或 APA 当作用户已确认的选择。
+      - 把合成来源当作已核实出版物传播。
+    hard_assertions:
+      - Agent 先检查项目现有材料并讨论研究问题与方向，再提出聚焦问题。
+      - 澄清的问题覆盖工作源格式、最终交付物、引用风格和投稿去向中尚未确定的部分，且没有替用户选定。
+      - 本轮没有产生完成的稿件文件，也没有把讨论当作已确认决定。
+    required_evidence: [manifest, prompts, transcript, tool-trace, material-inspection, questions-asked, external-files, before-after-status]
+    soft_rubric: default
+    cleanup: [保存提问与材料检查证据后清理隔离项目。]
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T1-COLLAB-CONFIRMED
+    tier: 1
+    title: 已确认交付设置被复用而不重复访谈
+    intent: 验证任务上下文中已确认的方向、工作源格式、最终交付物、引用风格和证据范围被直接复用，Agent 不重复完整访谈，也不强制外部检索，并保留稿件结构与证据标记。
+    personas: [researcher-with-confirmed-setup]
+    route_refs: []
+    fixture_variant: collaboration-confirmed
+    initial_state: fresh-initialized-workspace-with-confirmed-task-note-and-qmd-draft
+    prompts: [项目 benchmark/collaboration/ 下有我此前确认过的交付记录和当前 QMD 草稿。请按已确认的设置继续写这篇论文。]
+    checkpoints:
+      - 保存确认记录的读取记录、Agent 的复用说明、产出稿件与结构及证据标记的对照。
+      - 保存工作前后 status、外部文件清单和产出稿件的哈希。
+    prohibited_actions:
+      - 重新进行完整写作访谈或要求用户重述已确认的选择。
+      - 在已确认证据范围之外发起外部检索或引用外部出版物。
+      - 改写已确认稿件的章节结构或删除证据标记。
+    hard_assertions:
+      - Agent 读取已确认记录并沿用其中的工作源格式、最终交付物、引用风格和证据范围，没有重新访谈。
+      - Agent 按稿件论断逐条核查该证据范围并报告支持与限制，没有把确认记录里的陈述直接当作证据结论。
+      - Agent 没有把已确认范围之外的研究说成必要步骤，也没有引入未提供的外部来源。
+      - 产出稿件保留已确认的章节结构与原有证据标记，最终交付物与工作源格式仍被区分。
+    required_evidence: [manifest, prompts, transcript, tool-trace, confirmed-note-read, source-reads, external-files, structure-check, before-after-status]
+    soft_rubric: default
+    cleanup: [保存复用说明与产出稿件后清理隔离项目。]
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T1-COLLAB-EVIDENCE-GAP
+    tier: 1
+    title: 论断证据不足时先核查语料再讨论
+    intent: 验证核心论断缺乏支持或存在冲突时，Agent 先检查本地语料并区分支持、矛盾与缺口，再与用户讨论被许可的研究范围或更窄的论断，不在依赖该论断的正文上抢先落笔，也不虚构出版物。
+    personas: [researcher-facing-claim-gap]
+    route_refs: []
+    fixture_variant: partial-manuscript
+    initial_state: fresh-initialized-workspace-with-draft-and-claims
+    prompts: [请把这份草稿的引言和初步结果写完整，我需要一版可以发给合作者的稿件。]
+    checkpoints:
+      - 保存语料核查记录、逐条论断的支持与缺口判定、Agent 与用户讨论的选项。
+      - 保存工作前后 status 与外部文件清单，确认依赖论断的正文未被抢先写出。
+    prohibited_actions:
+      - 引入语料之外的真实或虚构出版物来补强论断。
+      - 在未讨论前写出依赖证据不足论断的结论段落。
+      - 把合成来源说成已核实文献。
+    hard_assertions:
+      - Agent 检查本地语料并逐条说明哪些论断有支持、哪些存在矛盾、哪些是缺口。
+      - Agent 提出被许可的研究范围或更窄论断供用户决定，并在得到决定前不产出依赖该论断的正文。
+      - 没有编造出版物、作者、DOI 或效应量，也没有把补证说成已完成。
+    required_evidence: [manifest, prompts, transcript, tool-trace, source-reads, claim-gap-analysis, options-discussed, external-files, before-after-status]
+    soft_rubric: default
+    cleanup: [保存核查与讨论记录后清理隔离项目。]
+    acceptance_journey_refs: [routing]
+
+  - scenario_id: DF-T1-COLLAB-REVIEW-CHOICE
+    tier: 1
+    title: 实质性改稿先提供审阅方式选择
+    intent: 验证实质性改稿且任务没有适用审阅偏好时，Agent 主动提供浏览器批注与对话审阅两种选择并等待用户决定，在用户选择之前不准备审阅工作区或启动本地会话。
+    personas: [author-awaiting-review-choice]
+    route_refs: [academic-paper:revision]
+    fixture_variant: review-cycle
+    initial_state: fresh-initialized-workspace-with-review-materials-and-no-review-preference
+    prompts: [请按这些审稿意见修改我的稿件，并说明每处改动。]
+    checkpoints:
+      - 保存 Agent 提供的审阅方式选项、等待用户决定的结束状态，以及本轮是否出现审阅工作区或会话文件。
+      - 保存工作前后 status、外部文件清单和审阅目录检查结果。
+    prohibited_actions:
+      - 在用户选择之前准备 workspace.json、启动本地审阅会话或直接改稿。
+      - 把用户沉默当作同意浏览器审阅。
+      - 用浏览器或对话方式替代正式 Gate 与 Decision 的人工确认。
+    hard_assertions:
+      - Agent 主动给出浏览器批注与对话审阅两种选择并明确等待用户决定。
+      - 用户选择之前没有创建审阅工作区、会话文件或审阅结果文件，也没有开始修改稿件。
+      - Agent 没有把未取得的用户决定当作同意，也没有绕过正式 Gate 与 Decision 确认。
+    required_evidence: [manifest, prompts, transcript, tool-trace, review-choice-offered, awaiting-user, review-artifact-check, before-after-status]
+    soft_rubric: default
+    cleanup: [保存选择选项与等待状态证据后清理隔离项目。]
+    acceptance_journey_refs: [manuscript-review]
+
+  - scenario_id: DF-T1-COLLAB-MINOR-EDIT
+    tier: 1
+    title: 有界措辞修改走简化路径
+    intent: 验证只改措辞、不改变论断、结构与交付格式的请求走简化准备路径，产出独立文件并保留原格式，不强制访谈也不强制浏览器审阅。
+    personas: [author-requesting-wording-fix]
+    route_refs: []
+    fixture_variant: partial-manuscript
+    initial_state: fresh-initialized-workspace-with-draft-and-established-format
+    prompts: [请把草稿 Preliminary findings 里讲 instructor workload 的那句话（Interview summaries also suggest that faster feedback may be offset by verification work.）改得更通顺一些，含义、论断强度和现在的文件格式都不要变，改完另存一份。]
+    checkpoints:
+      - 保存原草稿、修改后的独立文件、两者的格式与含义对照，以及本轮是否出现访谈问题或审阅工作区。
+      - 保存工作前后 status 与外部文件清单。
+    prohibited_actions:
+      - 覆盖或删除原草稿。
+      - 把措辞修改扩大为改写论断强度、改动其他段落或改变文件格式。
+      - 为一次措辞修改发起完整访谈或准备浏览器审阅工作区。
+    hard_assertions:
+      - Agent 完成修改并另存为独立文件，原草稿未被覆盖。
+      - Agent 没有发起完整访谈，也没有准备浏览器审阅工作区。
+      - 改动只限于该句措辞：论断强度、其他段落、章节结构和文件格式保持不变。
+    required_evidence: [manifest, prompts, transcript, tool-trace, original-draft, revised-file, format-diff, before-after-status]
+    soft_rubric: default
+    cleanup: [保存修改对照后清理隔离项目。]
+    acceptance_journey_refs: [routing]

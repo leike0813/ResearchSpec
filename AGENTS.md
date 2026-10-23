@@ -109,6 +109,16 @@ it through an explicit OpenSpec change before implementation.
 
 The locked direction is:
 
+- Before new manuscript prose or substantive revision, the coordinating Agent
+  inspects current materials, resolves source/delivery and venue/citation choices,
+  discusses unresolved direction, researches evidence gaps within the authorized
+  source policy, and aligns the writing direction with the user. Reuse confirmed
+  context; defaults require acceptance or delegated choice. Minor wording edits
+  use simplified preparation. Carry requirements in existing material bindings
+  before delegation, or work inline; workers never conduct the user interview.
+  At the first substantive revision judgment, proactively offer browser annotation
+  alongside dialogue and prepare only after selection or an applicable task
+  preference. Review remains advisory and retains source and authorization checks.
 - `researchspec init` prepares a schema `"2"` graph workspace and preset
   profiles; it does not start academic work.
 - User-Agent dialogue starts from a natural research task and discovers suitable

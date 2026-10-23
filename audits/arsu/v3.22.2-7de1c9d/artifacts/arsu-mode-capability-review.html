@@ -62313,7 +62313,7 @@ Before submitting the revision, verify:
     <div><strong>inputs</strong> <code>project_intent</code> ← specs.project</div>
     <div><strong>outputs</strong> <code>writing_configuration</code> → writing-configuration.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 312 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 320 行</summary><pre class="doc-body">---
 name: design-writing-intake
 description: "Collects paper configuration, preregistration handoff, review-target context, domain profile, and style calibration for writing work."
 metadata:
@@ -62359,7 +62359,7 @@ perform the procedure's semantic checks without claiming execution or consent.
 
 # Procedure
 
-Work from `project_intent` and any available research artifacts. Produce `writing_configuration` as a Paper Configuration Record, then ask the user to confirm before the record is considered final.
+Work from `project_intent` and any available research artifacts, reusing choices already confirmed in the current user/task context. Produce `writing_configuration` as a Paper Configuration Record, ask only for unresolved choices, and ask the user to confirm before the record is considered final.
 
 ## Role Definition
 
@@ -62368,10 +62368,10 @@ You are the Intake Agent. You conduct a structured configuration interview to es
 ## Core Principles
 
 1. Complete but efficient: collect all necessary parameters without over-burdening the user.
-2. Smart defaults: suggest sensible defaults based on discipline and paper type.
+2. Suggested choices: recommend defaults from discipline and paper type; use them only when the user accepts or delegates the choice.
 3. Validate early: catch incompatible configurations (e.g., a 2000-word IMRaD is too short).
 4. Existing materials inventory: understand what the user already has to avoid redundant work.
-5. Bilingual awareness: detect user language and set defaults accordingly.
+5. Bilingual awareness: detect user language and propose language defaults.
 6. Handoff awareness: detect deep-research materials and auto-import them.
 
 ## Deep Research Handoff Detection
@@ -62392,7 +62392,7 @@ a repository template. Preserve supplied evidence without modifying it and
 record its external location and validation limits in the handoff.
 
 1. Auto-populate existing parameters: research question from the RQ brief; discipline from material content; method from the methodology blueprint; existing materials from the material list.
-2. Skip redundant questions: skip Topic &amp; Research Question and the parts of Existing Materials already available. Still confirm paper type, citation format, output format, and language.
+2. Skip redundant questions: skip Topic &amp; Research Question and the parts of Existing Materials already available. Still confirm paper type, working source format, final deliverables, citation style, and language unless the confirmed context already answers a choice.
 3. Notify the user exactly which parameters were auto-populated, including the preregistration receipt status and companion replay status, and ask for confirmation.
 
 ### When No Handoff Materials Are Detected
@@ -62424,7 +62424,7 @@ When the user's request asks to be guided step by step through planning, ask onl
 2. Materials: what literature, data, or ideas do you currently have?
 3. Structure preference: IMRaD, Literature Review, Other, or Not sure.
 
-Record a simplified Paper Configuration Record containing topic, existing materials, structure preference, and handoff source.
+Record a simplified, provisional Paper Configuration Record containing topic, existing materials, structure preference, and handoff source. It is preparation material; before manuscript production, resolve the working source format, final deliverables, venue or general requirements, and citation style.
 
 ## Interview Protocol
 
@@ -62447,7 +62447,7 @@ Default: IMRaD for empirical research, Literature Review for synthesis topics.
 
 ### Step 3: Target Journal (Optional)
 
-Ask for a target journal; if none, use generic academic format. When a target journal is named, offer to record only the venue limits the user declares (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model).
+Ask for a target journal or general venue requirements. If the user has no venue, propose a general academic format and confirm it before production. When a target journal is named, offer to record only the venue limits the user declares (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model).
 
 - Declared values only: every venue-profile field comes from the user's answer; an unstated field stays null and that check reports `NOT-CHECKED(field not declared)`. NEVER fill a field from memory of the journal, its website, or its name.
 - Store declared answers as a venue profile with `declared_by: scholar` and record its path in the configuration.
@@ -62457,17 +62457,22 @@ Ask for a target journal; if none, use generic academic format. When a target jo
 
 | Format | Default Disciplines |
 |---|---|
-| APA 7th (default) | education, psychology, social sciences |
+| APA 7th | education, psychology, social sciences |
 | Chicago 17th | history, humanities, some social sciences |
 | MLA 9th | literature, languages, cultural studies |
 | IEEE | engineering, computer science, technology |
 | Vancouver | medicine, biomedical sciences, nursing |
 
-Auto-suggest from discipline; the user can override.
+Use the style already confirmed in the current user/task context. Otherwise, suggest a discipline-appropriate style and ask the user to choose; a recommendation or detected style is not confirmation.
 
-### Step 5: Output Format
+### Step 5: Source Format And Final Output
 
-Markdown (default), LaTeX (.tex + .bib), DOCX, PDF, or Combined. When the output format is DOCX, PDF, LaTeX, or Combined, offer to record a layout profile (body font and size, caption font/placement/alignment, line spacing, page margins, table-border style).
+Working source format and final deliverables are independent choices.
+
+- Working source: `markdown`, `qmd`, `latex`, or `latex-project`. This governs drafting, review, and protected structures.
+- Final output: the requested deliverables, such as Markdown, LaTeX, DOCX, PDF, or Combined.
+
+Reuse choices already confirmed in current context. Ask for each unresolved choice; when materials cannot settle it, offer a recommendation without treating silence as acceptance. When the final output is DOCX, PDF, LaTeX, or Combined, offer to record a layout profile (body font and size, caption font/placement/alignment, line spacing, page margins, table-border style).
 
 - Declared values only: every layout field comes from the user's answer; an unstated field is simply not declared and the formatter keeps its current default. NEVER infer a font or spacing from a venue, institution, language/locale, or filename.
 - A declined or skipped follow-up writes nothing; no profile and no configuration row at all.
@@ -62584,6 +62589,7 @@ For revision, format-convert, and citation-check requests, existing paper conten
 | Target Journal | [journal name or "General"] |
 | Venue Profile | [path to declared venue_profile YAML / absent if skipped] |
 | Citation Format | [APA 7th / Chicago 17th / MLA 9th / IEEE / Vancouver] |
+| Source Format | [markdown / qmd / latex / latex-project] |
 | Output Format | [Markdown / LaTeX / DOCX / PDF / Combined] |
 | Format Profile | [path to declared format_profile YAML — row omitted entirely if declined/skipped] |
 | Body Language | [EN / zh-TW / Bilingual] |
@@ -62608,14 +62614,16 @@ For revision, format-convert, and citation-check requests, existing paper conten
 - All applicable core parameters and the two independent citation-policy rows
   must be populated (journal can be "General"; co-authors can be
   "single-author"; funding can be "no funding"; style profile can be "null").
+- Reuse choices already confirmed in the current user/task context.
 - Word count must be realistic for the paper type.
-- Citation format must match discipline conventions; warn on mismatch.
-- Require explicit user confirmation of the final record.
+- Citation style must match the confirmed venue, discipline, or user choice; warn on mismatch.
+- Require explicit user confirmation of the finalized record.
 
 ## Rules
 
 - Never fill a venue or layout field from memory of the journal, institution, or filename.
 - Never auto-activate a domain evidence profile; the scholar must confirm.
+- Ask for unresolved source, delivery, venue, or citation-style choices before dependent production.
 - Do not start drafting, outlining, searching, or reviewing in this node.
 
 
@@ -65324,7 +65332,7 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
     <div><strong>inputs</strong> <code>argument_blueprint</code> ← argument-blueprint.v1 · <code>synthesis_report</code> ← synthesis-report.v1 · <code>writing_configuration</code> ← writing-configuration.v1</div>
     <div><strong>outputs</strong> <code>manuscript_draft</code> → manuscript-draft.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 276 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 281 行</summary><pre class="doc-body">---
 name: generation-manuscript-drafting
 description: "Writes manuscript sections and scope-authorized revision patches from outline and argument blueprint."
 metadata:
@@ -65374,7 +65382,7 @@ perform the procedure's semantic checks without claiming execution or consent.
 
 # Procedure
 
-Work from `argument_blueprint`, `paper_outline`, and available synthesis/graded sources. Produce `manuscript_draft`.
+Work from `argument_blueprint`, `paper_outline`, and available synthesis/graded sources. If confirmed context lacks a working source format, final deliverables, citation style, or venue requirement needed here, return the specific missing items to the coordinating Agent (or ask the user when running inline) before dependent prose. Produce `manuscript_draft`.
 
 ## Role Definition
 
@@ -65382,7 +65390,7 @@ You are the Draft Writer Agent. You write manuscript sections and revision patch
 
 ## Core Principles
 
-1. APA 7.0 compliance: every element follows APA 7th edition standards.
+1. Confirmed style and source: every visible citation and reference follows the confirmed citation style; the draft stays in the confirmed working source format.
 2. Evidence-based writing: every claim must be supported by cited evidence.
 3. Reader-centered: write for the target audience.
 4. Structure drives clarity: follow the approved outline; deviations must be justified.
@@ -65443,13 +65451,17 @@ Third person; active voice preferred; precise, concise language; no jargon witho
 
 ### Citation Practices
 
+Visible citation presentation follows the confirmed citation style. The APA author-date examples below apply when APA 7th is confirmed.
+
 - Direct quote: "exact words" (Author, Year, p. X) with page number.
 - Multiple sources: alphabetical order in one parenthetical.
 - Secondary source: (Original Author, Year, as cited in Citing Author, Year).
 
+Keep `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent markers in their existing machine syntax and position; change only the visible citation text.
+
 ### Tables &amp; Figures
 
-Every table/figure must be referenced in text, carry an APA-format number and descriptive title, and note its source beneath.
+Every table/figure must be referenced in text, carry a number and descriptive title in the confirmed style, and note its source beneath.
 
 ## Revision Protocol
 
@@ -65507,7 +65519,7 @@ throughout the process.
 
 ## Citation and Claim Intent Emission
 
-- Write every citation in two layers: visible author-year form plus `&lt;!--ref:slug--&gt;`. Emit the `&lt;!--ref:slug--&gt;` marker bare; NEVER resolve, mutate, annotate, or comment on the marker.
+- Write every citation in two layers: visible form in the confirmed citation style plus `&lt;!--ref:slug--&gt;`. Emit the `&lt;!--ref:slug--&gt;` marker bare; NEVER resolve, mutate, annotate, or comment on the marker. Style conversion changes only the visible layer.
 - R-L3-1-A: every visible citation MUST carry an anchor with a kind other than `none`; `&lt;!--anchor:none:--&gt;` triggers the finalizer gate rather than bypassing it.
 - Quote anchors are limited to 25 words; longer quotes must use page or section anchors.
 - Generate slugs and anchors only from corpus context already provided; never read entry frontmatter to discover them.
@@ -65523,7 +65535,7 @@ local authority. Patch application belongs to the separately declared revision
 capability. If the authorized scope is insufficient, report the unresolved item
 and required author decision without broadening the edit.
 
-A complete manuscript Markdown file with section headings, inline structured citations, and a reference list:
+A complete manuscript in the confirmed working source format with section headings, inline structured citations, and a reference list. Preserve QMD frontmatter, fenced code, cell options, citations, cross-references, and Quarto metadata; preserve LaTeX commands, environments, and project structure. The example below is Markdown:
 
 ```markdown
 ## Manuscript Draft
@@ -65547,6 +65559,7 @@ A complete manuscript Markdown file with section headings, inline structured cit
 
 - Compression must preserve protected hedging phrases identified by upstream calibration as budget-protected; never trim a protected hedge to meet a word budget.
 - Reflexivity disclosure must use explicit temporal bounds: an explicit year range, a past-tense disambiguating verb, or a "former" prefix. Deictic temporal phrases ("during this period" / "at the time") are forbidden.
+- QMD and LaTeX protected structures are manuscript content: preserve YAML frontmatter, fenced code, cell-option comments, citation and cross-reference syntax, Quarto metadata, LaTeX commands and environments, and project files unless the authorized edit targets them.
 - DO NOT simulate any audit step. DO NOT claim to have run codex/external review. Output metadata must not claim audit-passed state.
 
 ## Standalone Self-Gate
@@ -65574,7 +65587,7 @@ The run carries an optional `output_language_pair` onward as exchange material �
 
 ## Quality Criteria
 
-- APA 7.0 format compliance throughout.
+- Confirmed citation style and working source format compliance throughout; evidence markers and protected source structures are unchanged.
 - Every factual claim has at least one citation.
 - Abstract accurately reflects the draft content.
 - References section matches in-text citations (no orphans).
@@ -66535,7 +66548,7 @@ default pair's key names for another L1.
     <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
     <div><strong>outputs</strong> <code>citation_compliance_report</code> → citation-compliance.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 323 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 328 行</summary><pre class="doc-body">---
 name: check-citation-format-compliance
 description: "Validates in-text citations and reference list formatting."
 metadata:
@@ -66612,7 +66625,9 @@ Use the referenced citation-format standards knowledge pack as the canonical for
 
 For each in-text citation: appears in the reference list, author name(s) match exactly, year matches exactly, and "et al." is used correctly (3+ authors for APA 7, abbreviated from the first citation unless names are needed to disambiguate same-year works; for Chinese citations apply the Chinese Citation Special Checks below). For each reference-list entry: cited at least once in text; never an orphan reference.
 
-### 2. Format Compliance (APA 7th — Default)
+### 2. Format Compliance (Confirmed Style)
+
+Apply the confirmed citation style. The APA 7th checks below are the reference example when APA is confirmed.
 
 In-text:
 - One author: (Smith, 2024).
@@ -66671,6 +66686,8 @@ Is the issue formatting-only (e.g., missing DOI, incorrect italics)?
 
 Fix deterministic errors directly in the corrected reference list, log each correction, and flag ambiguous cases for human review.
 
+Apply corrections from the confirmed style. The examples below are APA 7th rules; use the equivalent rule from the confirmed style for other formats.
+
 ### Common Auto-Corrections
 
 | Error | Correction |
@@ -66695,9 +66712,9 @@ Fix deterministic errors directly in the corrected reference list, log each corr
 5. Additional checks: self-citation ratio, source-currency distribution, citation density, and correct "et al." use.
 6. Output the audit report and the corrected reference list.
 
-### Citation Format Auto-Detection
+### Citation Format Detection
 
-When no citation format is specified, identify it from the in-text signature and reference-list layout:
+Use the citation format confirmed in the current user/task context. When none is confirmed, identify candidate formats as observations from the in-text signature and reference-list layout:
 
 | In-text signature | Reference-list confirmation | Format |
 |---|---|---|
@@ -66707,7 +66724,7 @@ When no citation format is specified, identify it from the in-text signature and
 | numbered [N] | numbered list | IEEE |
 | superscript number | numbered, superscript | Vancouver |
 
-If the format cannot be determined, ask the user; default to APA 7th if unanswered.
+Report a detected format as an observation and return the unknown style to the coordinating Agent (or ask the user when running inline) before applying style-specific corrections. Keep style-independent checks available (orphans, malformed identifiers, and source-level mismatches) and mark style-specific checks unchecked until the style is confirmed.
 
 ### Core Verification Rules by Format
 
@@ -66792,7 +66809,7 @@ Build the comparison matrix of (Author, Year) pairs and their in-text count and 
 
 | Missing Item | Handling |
 |---|---|
-| No declared citation format | auto-detect; default APA 7th |
+| No declared citation format | detect as an observation; ask for the applicable style; run style-independent checks meanwhile |
 | Reference list missing | flag the entire draft; emit the corrected list when entries are recoverable |
 | Draft body missing | return an empty audit with the blocker |
 
@@ -66849,6 +66866,7 @@ Conference papers may use IEEE numbered citations; law and history may use footn
 
 - Zero orphans is mandatory; never silently drop or invent a citation.
 - Never auto-correct a semantic mismatch; flag it for human review.
+- Apply the confirmed style to visible citation text only; preserve `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent marker syntax unchanged.
 - Do not rewrite prose, produce the abstract, or perform editorial review in this node.
 
 
@@ -68354,7 +68372,7 @@ default pair's key names for another L1.
     <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
     <div><strong>outputs</strong> <code>formatted_manuscript</code> → formatted-manuscript.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 359 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 363 行</summary><pre class="doc-body">---
 name: generation-format-rendering
 description: "Converts the final manuscript into declared output formats."
 metadata:
@@ -68442,12 +68460,15 @@ or `format-convert` behavior.
 4. Package completeness: deliver all required files (main text, bibliography, figures, cover letter).
 5. AI disclosure: on the normal Phase 7 path, render only the AI use confirmed by
    the input ledger; standalone `disclosure` uses the protocol-driven result above.
+6. Source and delivery separation: render from the confirmed working source format; final deliverables such as Word or PDF are separate from the source.
 
 ## Supported Output Formats
 
+Use the confirmed final deliverables. When a target is unresolved, return the missing target to the coordinating Agent (or ask the user when running inline) before rendering; the working source format alone does not choose an output.
+
 ### 1. Markdown (.md)
 
-Default format: clean markdown with proper heading levels, tables in markdown format, and a reference list at the end.
+Clean markdown with proper heading levels, tables in markdown format, and a reference list at the end. Use this route when Markdown is a confirmed final deliverable.
 
 ### 2. LaTeX (.tex + .bib)
 
@@ -68508,7 +68529,7 @@ directed the content, and take responsibility for its accuracy and integrity.
 
 1. Parse existing in-text citations and reference-list entries; extract authors, year, title, source title, volume/issue/pages, DOI/URL, publisher, edition, editors, and access date.
 2. Normalize into a structured intermediate representation; resolve ambiguities (e.g., expand "et al." when the full author list is available).
-3. Regenerate in-text citations and reference-list entries in the target format.
+3. Regenerate visible in-text citations and reference-list entries in the target format; leave `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent markers unchanged.
 4. Verify: input citation count equals output count; all bibliographic elements survive; every in-text citation has a reference; and output matches target-format rules.
 
 ### Format-Specific Features
@@ -68630,12 +68651,12 @@ Record exact Pandoc/LaTeX commands used. Chinese content must use xelatex or lua
 
 1. Preflight: read the manuscript and all format/venue profiles; fail closed before formatting on any malformed profile.
 2. Hard gate: scan citation-provenance markers and HIGH-BLOCK tokens; refuse on any terminal marker.
-3. Convert: render each requested target from the same source bytes.
+3. Convert: render each confirmed target from the same source bytes while preserving the working source format and protected structures.
 4. Strip internal markers after the gate.
 5. Build the output package and append advisory sections.
 6. Run the final quality checklist.
 
-### APA 7.0 LaTeX Mandatory Rules
+### APA 7.0 LaTeX Rules (When Selected)
 
 Use `apa7` class where configured; second-language headings MUST use `\begin{center}...\end{center}` rather than bare `\textbf{}`; never use bare `p{0.25\linewidth}` columns, which ignore `\tabcolsep` and cause overflow; `man` mode forces `\raggedright` after `\begin{document}` and must be overridden; compilation must use xelatex or lualatex for Chinese content.
 
@@ -68670,7 +68691,7 @@ When the journal template conflicts with the manuscript source, prefer the journ
 
 ### Incomplete Input
 
-Missing manuscript -&gt; stop with the missing input. Missing target format -&gt; default to Markdown. Missing venue profile -&gt; no journal-specific application; never infer one.
+Missing manuscript -&gt; stop with the missing input. Missing target format -&gt; return the missing target to the coordinating Agent (or ask the user when running inline) before rendering. Missing venue profile -&gt; no journal-specific application; never infer one.
 
 ### Poor Quality Upstream Input
 
@@ -68703,6 +68724,7 @@ The formatted package, cover letter, conversion commands, and provenance summary
 
 - Formatting is format-only; never alter content, meaning, or citations.
 - Never infer missing layout fields from venue or filename.
+- Never install renderers or execute project scripts during rendering without separate user approval.
 - Never strip markers before the cite-time hard gate passes.
 - Do not apply terminal policy or submission checks in this node; gate on stamped tokens only.
 
@@ -73833,7 +73855,7 @@ This template provides the skeleton for a concise conference paper presenting re
     <div><strong>inputs</strong> <code>project_intent</code> ← specs.project</div>
     <div><strong>outputs</strong> <code>writing_configuration</code> → writing-configuration.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 312 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 320 行</summary><pre class="doc-body">---
 name: design-writing-intake
 description: "Collects paper configuration, preregistration handoff, review-target context, domain profile, and style calibration for writing work."
 metadata:
@@ -73879,7 +73901,7 @@ perform the procedure's semantic checks without claiming execution or consent.
 
 # Procedure
 
-Work from `project_intent` and any available research artifacts. Produce `writing_configuration` as a Paper Configuration Record, then ask the user to confirm before the record is considered final.
+Work from `project_intent` and any available research artifacts, reusing choices already confirmed in the current user/task context. Produce `writing_configuration` as a Paper Configuration Record, ask only for unresolved choices, and ask the user to confirm before the record is considered final.
 
 ## Role Definition
 
@@ -73888,10 +73910,10 @@ You are the Intake Agent. You conduct a structured configuration interview to es
 ## Core Principles
 
 1. Complete but efficient: collect all necessary parameters without over-burdening the user.
-2. Smart defaults: suggest sensible defaults based on discipline and paper type.
+2. Suggested choices: recommend defaults from discipline and paper type; use them only when the user accepts or delegates the choice.
 3. Validate early: catch incompatible configurations (e.g., a 2000-word IMRaD is too short).
 4. Existing materials inventory: understand what the user already has to avoid redundant work.
-5. Bilingual awareness: detect user language and set defaults accordingly.
+5. Bilingual awareness: detect user language and propose language defaults.
 6. Handoff awareness: detect deep-research materials and auto-import them.
 
 ## Deep Research Handoff Detection
@@ -73912,7 +73934,7 @@ a repository template. Preserve supplied evidence without modifying it and
 record its external location and validation limits in the handoff.
 
 1. Auto-populate existing parameters: research question from the RQ brief; discipline from material content; method from the methodology blueprint; existing materials from the material list.
-2. Skip redundant questions: skip Topic &amp; Research Question and the parts of Existing Materials already available. Still confirm paper type, citation format, output format, and language.
+2. Skip redundant questions: skip Topic &amp; Research Question and the parts of Existing Materials already available. Still confirm paper type, working source format, final deliverables, citation style, and language unless the confirmed context already answers a choice.
 3. Notify the user exactly which parameters were auto-populated, including the preregistration receipt status and companion replay status, and ask for confirmation.
 
 ### When No Handoff Materials Are Detected
@@ -73944,7 +73966,7 @@ When the user's request asks to be guided step by step through planning, ask onl
 2. Materials: what literature, data, or ideas do you currently have?
 3. Structure preference: IMRaD, Literature Review, Other, or Not sure.
 
-Record a simplified Paper Configuration Record containing topic, existing materials, structure preference, and handoff source.
+Record a simplified, provisional Paper Configuration Record containing topic, existing materials, structure preference, and handoff source. It is preparation material; before manuscript production, resolve the working source format, final deliverables, venue or general requirements, and citation style.
 
 ## Interview Protocol
 
@@ -73967,7 +73989,7 @@ Default: IMRaD for empirical research, Literature Review for synthesis topics.
 
 ### Step 3: Target Journal (Optional)
 
-Ask for a target journal; if none, use generic academic format. When a target journal is named, offer to record only the venue limits the user declares (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model).
+Ask for a target journal or general venue requirements. If the user has no venue, propose a general academic format and confirm it before production. When a target journal is named, offer to record only the venue limits the user declares (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model).
 
 - Declared values only: every venue-profile field comes from the user's answer; an unstated field stays null and that check reports `NOT-CHECKED(field not declared)`. NEVER fill a field from memory of the journal, its website, or its name.
 - Store declared answers as a venue profile with `declared_by: scholar` and record its path in the configuration.
@@ -73977,17 +73999,22 @@ Ask for a target journal; if none, use generic academic format. When a target jo
 
 | Format | Default Disciplines |
 |---|---|
-| APA 7th (default) | education, psychology, social sciences |
+| APA 7th | education, psychology, social sciences |
 | Chicago 17th | history, humanities, some social sciences |
 | MLA 9th | literature, languages, cultural studies |
 | IEEE | engineering, computer science, technology |
 | Vancouver | medicine, biomedical sciences, nursing |
 
-Auto-suggest from discipline; the user can override.
+Use the style already confirmed in the current user/task context. Otherwise, suggest a discipline-appropriate style and ask the user to choose; a recommendation or detected style is not confirmation.
 
-### Step 5: Output Format
+### Step 5: Source Format And Final Output
 
-Markdown (default), LaTeX (.tex + .bib), DOCX, PDF, or Combined. When the output format is DOCX, PDF, LaTeX, or Combined, offer to record a layout profile (body font and size, caption font/placement/alignment, line spacing, page margins, table-border style).
+Working source format and final deliverables are independent choices.
+
+- Working source: `markdown`, `qmd`, `latex`, or `latex-project`. This governs drafting, review, and protected structures.
+- Final output: the requested deliverables, such as Markdown, LaTeX, DOCX, PDF, or Combined.
+
+Reuse choices already confirmed in current context. Ask for each unresolved choice; when materials cannot settle it, offer a recommendation without treating silence as acceptance. When the final output is DOCX, PDF, LaTeX, or Combined, offer to record a layout profile (body font and size, caption font/placement/alignment, line spacing, page margins, table-border style).
 
 - Declared values only: every layout field comes from the user's answer; an unstated field is simply not declared and the formatter keeps its current default. NEVER infer a font or spacing from a venue, institution, language/locale, or filename.
 - A declined or skipped follow-up writes nothing; no profile and no configuration row at all.
@@ -74104,6 +74131,7 @@ For revision, format-convert, and citation-check requests, existing paper conten
 | Target Journal | [journal name or "General"] |
 | Venue Profile | [path to declared venue_profile YAML / absent if skipped] |
 | Citation Format | [APA 7th / Chicago 17th / MLA 9th / IEEE / Vancouver] |
+| Source Format | [markdown / qmd / latex / latex-project] |
 | Output Format | [Markdown / LaTeX / DOCX / PDF / Combined] |
 | Format Profile | [path to declared format_profile YAML — row omitted entirely if declined/skipped] |
 | Body Language | [EN / zh-TW / Bilingual] |
@@ -74128,14 +74156,16 @@ For revision, format-convert, and citation-check requests, existing paper conten
 - All applicable core parameters and the two independent citation-policy rows
   must be populated (journal can be "General"; co-authors can be
   "single-author"; funding can be "no funding"; style profile can be "null").
+- Reuse choices already confirmed in the current user/task context.
 - Word count must be realistic for the paper type.
-- Citation format must match discipline conventions; warn on mismatch.
-- Require explicit user confirmation of the final record.
+- Citation style must match the confirmed venue, discipline, or user choice; warn on mismatch.
+- Require explicit user confirmation of the finalized record.
 
 ## Rules
 
 - Never fill a venue or layout field from memory of the journal, institution, or filename.
 - Never auto-activate a domain evidence profile; the scholar must confirm.
+- Ask for unresolved source, delivery, venue, or citation-style choices before dependent production.
 - Do not start drafting, outlining, searching, or reviewing in this node.
 
 
@@ -81679,7 +81709,7 @@ This template provides the skeleton for a concise conference paper presenting re
     <div><strong>inputs</strong> <code>project_intent</code> ← specs.project</div>
     <div><strong>outputs</strong> <code>writing_configuration</code> → writing-configuration.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 312 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 320 行</summary><pre class="doc-body">---
 name: design-writing-intake
 description: "Collects paper configuration, preregistration handoff, review-target context, domain profile, and style calibration for writing work."
 metadata:
@@ -81725,7 +81755,7 @@ perform the procedure's semantic checks without claiming execution or consent.
 
 # Procedure
 
-Work from `project_intent` and any available research artifacts. Produce `writing_configuration` as a Paper Configuration Record, then ask the user to confirm before the record is considered final.
+Work from `project_intent` and any available research artifacts, reusing choices already confirmed in the current user/task context. Produce `writing_configuration` as a Paper Configuration Record, ask only for unresolved choices, and ask the user to confirm before the record is considered final.
 
 ## Role Definition
 
@@ -81734,10 +81764,10 @@ You are the Intake Agent. You conduct a structured configuration interview to es
 ## Core Principles
 
 1. Complete but efficient: collect all necessary parameters without over-burdening the user.
-2. Smart defaults: suggest sensible defaults based on discipline and paper type.
+2. Suggested choices: recommend defaults from discipline and paper type; use them only when the user accepts or delegates the choice.
 3. Validate early: catch incompatible configurations (e.g., a 2000-word IMRaD is too short).
 4. Existing materials inventory: understand what the user already has to avoid redundant work.
-5. Bilingual awareness: detect user language and set defaults accordingly.
+5. Bilingual awareness: detect user language and propose language defaults.
 6. Handoff awareness: detect deep-research materials and auto-import them.
 
 ## Deep Research Handoff Detection
@@ -81758,7 +81788,7 @@ a repository template. Preserve supplied evidence without modifying it and
 record its external location and validation limits in the handoff.
 
 1. Auto-populate existing parameters: research question from the RQ brief; discipline from material content; method from the methodology blueprint; existing materials from the material list.
-2. Skip redundant questions: skip Topic &amp; Research Question and the parts of Existing Materials already available. Still confirm paper type, citation format, output format, and language.
+2. Skip redundant questions: skip Topic &amp; Research Question and the parts of Existing Materials already available. Still confirm paper type, working source format, final deliverables, citation style, and language unless the confirmed context already answers a choice.
 3. Notify the user exactly which parameters were auto-populated, including the preregistration receipt status and companion replay status, and ask for confirmation.
 
 ### When No Handoff Materials Are Detected
@@ -81790,7 +81820,7 @@ When the user's request asks to be guided step by step through planning, ask onl
 2. Materials: what literature, data, or ideas do you currently have?
 3. Structure preference: IMRaD, Literature Review, Other, or Not sure.
 
-Record a simplified Paper Configuration Record containing topic, existing materials, structure preference, and handoff source.
+Record a simplified, provisional Paper Configuration Record containing topic, existing materials, structure preference, and handoff source. It is preparation material; before manuscript production, resolve the working source format, final deliverables, venue or general requirements, and citation style.
 
 ## Interview Protocol
 
@@ -81813,7 +81843,7 @@ Default: IMRaD for empirical research, Literature Review for synthesis topics.
 
 ### Step 3: Target Journal (Optional)
 
-Ask for a target journal; if none, use generic academic format. When a target journal is named, offer to record only the venue limits the user declares (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model).
+Ask for a target journal or general venue requirements. If the user has no venue, propose a general academic format and confirm it before production. When a target journal is named, offer to record only the venue limits the user declares (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model).
 
 - Declared values only: every venue-profile field comes from the user's answer; an unstated field stays null and that check reports `NOT-CHECKED(field not declared)`. NEVER fill a field from memory of the journal, its website, or its name.
 - Store declared answers as a venue profile with `declared_by: scholar` and record its path in the configuration.
@@ -81823,17 +81853,22 @@ Ask for a target journal; if none, use generic academic format. When a target jo
 
 | Format | Default Disciplines |
 |---|---|
-| APA 7th (default) | education, psychology, social sciences |
+| APA 7th | education, psychology, social sciences |
 | Chicago 17th | history, humanities, some social sciences |
 | MLA 9th | literature, languages, cultural studies |
 | IEEE | engineering, computer science, technology |
 | Vancouver | medicine, biomedical sciences, nursing |
 
-Auto-suggest from discipline; the user can override.
+Use the style already confirmed in the current user/task context. Otherwise, suggest a discipline-appropriate style and ask the user to choose; a recommendation or detected style is not confirmation.
 
-### Step 5: Output Format
+### Step 5: Source Format And Final Output
 
-Markdown (default), LaTeX (.tex + .bib), DOCX, PDF, or Combined. When the output format is DOCX, PDF, LaTeX, or Combined, offer to record a layout profile (body font and size, caption font/placement/alignment, line spacing, page margins, table-border style).
+Working source format and final deliverables are independent choices.
+
+- Working source: `markdown`, `qmd`, `latex`, or `latex-project`. This governs drafting, review, and protected structures.
+- Final output: the requested deliverables, such as Markdown, LaTeX, DOCX, PDF, or Combined.
+
+Reuse choices already confirmed in current context. Ask for each unresolved choice; when materials cannot settle it, offer a recommendation without treating silence as acceptance. When the final output is DOCX, PDF, LaTeX, or Combined, offer to record a layout profile (body font and size, caption font/placement/alignment, line spacing, page margins, table-border style).
 
 - Declared values only: every layout field comes from the user's answer; an unstated field is simply not declared and the formatter keeps its current default. NEVER infer a font or spacing from a venue, institution, language/locale, or filename.
 - A declined or skipped follow-up writes nothing; no profile and no configuration row at all.
@@ -81950,6 +81985,7 @@ For revision, format-convert, and citation-check requests, existing paper conten
 | Target Journal | [journal name or "General"] |
 | Venue Profile | [path to declared venue_profile YAML / absent if skipped] |
 | Citation Format | [APA 7th / Chicago 17th / MLA 9th / IEEE / Vancouver] |
+| Source Format | [markdown / qmd / latex / latex-project] |
 | Output Format | [Markdown / LaTeX / DOCX / PDF / Combined] |
 | Format Profile | [path to declared format_profile YAML — row omitted entirely if declined/skipped] |
 | Body Language | [EN / zh-TW / Bilingual] |
@@ -81974,14 +82010,16 @@ For revision, format-convert, and citation-check requests, existing paper conten
 - All applicable core parameters and the two independent citation-policy rows
   must be populated (journal can be "General"; co-authors can be
   "single-author"; funding can be "no funding"; style profile can be "null").
+- Reuse choices already confirmed in the current user/task context.
 - Word count must be realistic for the paper type.
-- Citation format must match discipline conventions; warn on mismatch.
-- Require explicit user confirmation of the final record.
+- Citation style must match the confirmed venue, discipline, or user choice; warn on mismatch.
+- Require explicit user confirmation of the finalized record.
 
 ## Rules
 
 - Never fill a venue or layout field from memory of the journal, institution, or filename.
 - Never auto-activate a domain evidence profile; the scholar must confirm.
+- Ask for unresolved source, delivery, venue, or citation-style choices before dependent production.
 - Do not start drafting, outlining, searching, or reviewing in this node.
 
 
@@ -89248,7 +89286,7 @@ Since #576 Spec B, `reviewer_re_review` is NOT a Schema 13 mode (removed from th
     <div><strong>inputs</strong> <code>argument_blueprint</code> ← argument-blueprint.v1 · <code>synthesis_report</code> ← synthesis-report.v1 · <code>writing_configuration</code> ← writing-configuration.v1</div>
     <div><strong>outputs</strong> <code>manuscript_draft</code> → manuscript-draft.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 276 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 281 行</summary><pre class="doc-body">---
 name: generation-manuscript-drafting
 description: "Writes manuscript sections and scope-authorized revision patches from outline and argument blueprint."
 metadata:
@@ -89298,7 +89336,7 @@ perform the procedure's semantic checks without claiming execution or consent.
 
 # Procedure
 
-Work from `argument_blueprint`, `paper_outline`, and available synthesis/graded sources. Produce `manuscript_draft`.
+Work from `argument_blueprint`, `paper_outline`, and available synthesis/graded sources. If confirmed context lacks a working source format, final deliverables, citation style, or venue requirement needed here, return the specific missing items to the coordinating Agent (or ask the user when running inline) before dependent prose. Produce `manuscript_draft`.
 
 ## Role Definition
 
@@ -89306,7 +89344,7 @@ You are the Draft Writer Agent. You write manuscript sections and revision patch
 
 ## Core Principles
 
-1. APA 7.0 compliance: every element follows APA 7th edition standards.
+1. Confirmed style and source: every visible citation and reference follows the confirmed citation style; the draft stays in the confirmed working source format.
 2. Evidence-based writing: every claim must be supported by cited evidence.
 3. Reader-centered: write for the target audience.
 4. Structure drives clarity: follow the approved outline; deviations must be justified.
@@ -89367,13 +89405,17 @@ Third person; active voice preferred; precise, concise language; no jargon witho
 
 ### Citation Practices
 
+Visible citation presentation follows the confirmed citation style. The APA author-date examples below apply when APA 7th is confirmed.
+
 - Direct quote: "exact words" (Author, Year, p. X) with page number.
 - Multiple sources: alphabetical order in one parenthetical.
 - Secondary source: (Original Author, Year, as cited in Citing Author, Year).
 
+Keep `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent markers in their existing machine syntax and position; change only the visible citation text.
+
 ### Tables &amp; Figures
 
-Every table/figure must be referenced in text, carry an APA-format number and descriptive title, and note its source beneath.
+Every table/figure must be referenced in text, carry a number and descriptive title in the confirmed style, and note its source beneath.
 
 ## Revision Protocol
 
@@ -89431,7 +89473,7 @@ throughout the process.
 
 ## Citation and Claim Intent Emission
 
-- Write every citation in two layers: visible author-year form plus `&lt;!--ref:slug--&gt;`. Emit the `&lt;!--ref:slug--&gt;` marker bare; NEVER resolve, mutate, annotate, or comment on the marker.
+- Write every citation in two layers: visible form in the confirmed citation style plus `&lt;!--ref:slug--&gt;`. Emit the `&lt;!--ref:slug--&gt;` marker bare; NEVER resolve, mutate, annotate, or comment on the marker. Style conversion changes only the visible layer.
 - R-L3-1-A: every visible citation MUST carry an anchor with a kind other than `none`; `&lt;!--anchor:none:--&gt;` triggers the finalizer gate rather than bypassing it.
 - Quote anchors are limited to 25 words; longer quotes must use page or section anchors.
 - Generate slugs and anchors only from corpus context already provided; never read entry frontmatter to discover them.
@@ -89447,7 +89489,7 @@ local authority. Patch application belongs to the separately declared revision
 capability. If the authorized scope is insufficient, report the unresolved item
 and required author decision without broadening the edit.
 
-A complete manuscript Markdown file with section headings, inline structured citations, and a reference list:
+A complete manuscript in the confirmed working source format with section headings, inline structured citations, and a reference list. Preserve QMD frontmatter, fenced code, cell options, citations, cross-references, and Quarto metadata; preserve LaTeX commands, environments, and project structure. The example below is Markdown:
 
 ```markdown
 ## Manuscript Draft
@@ -89471,6 +89513,7 @@ A complete manuscript Markdown file with section headings, inline structured cit
 
 - Compression must preserve protected hedging phrases identified by upstream calibration as budget-protected; never trim a protected hedge to meet a word budget.
 - Reflexivity disclosure must use explicit temporal bounds: an explicit year range, a past-tense disambiguating verb, or a "former" prefix. Deictic temporal phrases ("during this period" / "at the time") are forbidden.
+- QMD and LaTeX protected structures are manuscript content: preserve YAML frontmatter, fenced code, cell-option comments, citation and cross-reference syntax, Quarto metadata, LaTeX commands and environments, and project files unless the authorized edit targets them.
 - DO NOT simulate any audit step. DO NOT claim to have run codex/external review. Output metadata must not claim audit-passed state.
 
 ## Standalone Self-Gate
@@ -89498,7 +89541,7 @@ The run carries an optional `output_language_pair` onward as exchange material �
 
 ## Quality Criteria
 
-- APA 7.0 format compliance throughout.
+- Confirmed citation style and working source format compliance throughout; evidence markers and protected source structures are unchanged.
 - Every factual claim has at least one citation.
 - Abstract accurately reflects the draft content.
 - References section matches in-text citations (no orphans).
@@ -90770,7 +90813,7 @@ python scripts/revision_roadmap.py validate-bundle \
     <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
     <div><strong>outputs</strong> <code>citation_compliance_report</code> → citation-compliance.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 323 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 328 行</summary><pre class="doc-body">---
 name: check-citation-format-compliance
 description: "Validates in-text citations and reference list formatting."
 metadata:
@@ -90847,7 +90890,9 @@ Use the referenced citation-format standards knowledge pack as the canonical for
 
 For each in-text citation: appears in the reference list, author name(s) match exactly, year matches exactly, and "et al." is used correctly (3+ authors for APA 7, abbreviated from the first citation unless names are needed to disambiguate same-year works; for Chinese citations apply the Chinese Citation Special Checks below). For each reference-list entry: cited at least once in text; never an orphan reference.
 
-### 2. Format Compliance (APA 7th — Default)
+### 2. Format Compliance (Confirmed Style)
+
+Apply the confirmed citation style. The APA 7th checks below are the reference example when APA is confirmed.
 
 In-text:
 - One author: (Smith, 2024).
@@ -90906,6 +90951,8 @@ Is the issue formatting-only (e.g., missing DOI, incorrect italics)?
 
 Fix deterministic errors directly in the corrected reference list, log each correction, and flag ambiguous cases for human review.
 
+Apply corrections from the confirmed style. The examples below are APA 7th rules; use the equivalent rule from the confirmed style for other formats.
+
 ### Common Auto-Corrections
 
 | Error | Correction |
@@ -90930,9 +90977,9 @@ Fix deterministic errors directly in the corrected reference list, log each corr
 5. Additional checks: self-citation ratio, source-currency distribution, citation density, and correct "et al." use.
 6. Output the audit report and the corrected reference list.
 
-### Citation Format Auto-Detection
+### Citation Format Detection
 
-When no citation format is specified, identify it from the in-text signature and reference-list layout:
+Use the citation format confirmed in the current user/task context. When none is confirmed, identify candidate formats as observations from the in-text signature and reference-list layout:
 
 | In-text signature | Reference-list confirmation | Format |
 |---|---|---|
@@ -90942,7 +90989,7 @@ When no citation format is specified, identify it from the in-text signature and
 | numbered [N] | numbered list | IEEE |
 | superscript number | numbered, superscript | Vancouver |
 
-If the format cannot be determined, ask the user; default to APA 7th if unanswered.
+Report a detected format as an observation and return the unknown style to the coordinating Agent (or ask the user when running inline) before applying style-specific corrections. Keep style-independent checks available (orphans, malformed identifiers, and source-level mismatches) and mark style-specific checks unchecked until the style is confirmed.
 
 ### Core Verification Rules by Format
 
@@ -91027,7 +91074,7 @@ Build the comparison matrix of (Author, Year) pairs and their in-text count and 
 
 | Missing Item | Handling |
 |---|---|
-| No declared citation format | auto-detect; default APA 7th |
+| No declared citation format | detect as an observation; ask for the applicable style; run style-independent checks meanwhile |
 | Reference list missing | flag the entire draft; emit the corrected list when entries are recoverable |
 | Draft body missing | return an empty audit with the blocker |
 
@@ -91084,6 +91131,7 @@ Conference papers may use IEEE numbered citations; law and history may use footn
 
 - Zero orphans is mandatory; never silently drop or invent a citation.
 - Never auto-correct a semantic mismatch; flag it for human review.
+- Apply the confirmed style to visible citation text only; preserve `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent marker syntax unchanged.
 - Do not rewrite prose, produce the abstract, or perform editorial review in this node.
 
 
@@ -100879,7 +100927,7 @@ This template provides the skeleton for a thematic literature review paper that 
     <div><strong>inputs</strong> <code>project_intent</code> ← specs.project</div>
     <div><strong>outputs</strong> <code>writing_configuration</code> → writing-configuration.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 312 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 320 行</summary><pre class="doc-body">---
 name: design-writing-intake
 description: "Collects paper configuration, preregistration handoff, review-target context, domain profile, and style calibration for writing work."
 metadata:
@@ -100925,7 +100973,7 @@ perform the procedure's semantic checks without claiming execution or consent.
 
 # Procedure
 
-Work from `project_intent` and any available research artifacts. Produce `writing_configuration` as a Paper Configuration Record, then ask the user to confirm before the record is considered final.
+Work from `project_intent` and any available research artifacts, reusing choices already confirmed in the current user/task context. Produce `writing_configuration` as a Paper Configuration Record, ask only for unresolved choices, and ask the user to confirm before the record is considered final.
 
 ## Role Definition
 
@@ -100934,10 +100982,10 @@ You are the Intake Agent. You conduct a structured configuration interview to es
 ## Core Principles
 
 1. Complete but efficient: collect all necessary parameters without over-burdening the user.
-2. Smart defaults: suggest sensible defaults based on discipline and paper type.
+2. Suggested choices: recommend defaults from discipline and paper type; use them only when the user accepts or delegates the choice.
 3. Validate early: catch incompatible configurations (e.g., a 2000-word IMRaD is too short).
 4. Existing materials inventory: understand what the user already has to avoid redundant work.
-5. Bilingual awareness: detect user language and set defaults accordingly.
+5. Bilingual awareness: detect user language and propose language defaults.
 6. Handoff awareness: detect deep-research materials and auto-import them.
 
 ## Deep Research Handoff Detection
@@ -100958,7 +101006,7 @@ a repository template. Preserve supplied evidence without modifying it and
 record its external location and validation limits in the handoff.
 
 1. Auto-populate existing parameters: research question from the RQ brief; discipline from material content; method from the methodology blueprint; existing materials from the material list.
-2. Skip redundant questions: skip Topic &amp; Research Question and the parts of Existing Materials already available. Still confirm paper type, citation format, output format, and language.
+2. Skip redundant questions: skip Topic &amp; Research Question and the parts of Existing Materials already available. Still confirm paper type, working source format, final deliverables, citation style, and language unless the confirmed context already answers a choice.
 3. Notify the user exactly which parameters were auto-populated, including the preregistration receipt status and companion replay status, and ask for confirmation.
 
 ### When No Handoff Materials Are Detected
@@ -100990,7 +101038,7 @@ When the user's request asks to be guided step by step through planning, ask onl
 2. Materials: what literature, data, or ideas do you currently have?
 3. Structure preference: IMRaD, Literature Review, Other, or Not sure.
 
-Record a simplified Paper Configuration Record containing topic, existing materials, structure preference, and handoff source.
+Record a simplified, provisional Paper Configuration Record containing topic, existing materials, structure preference, and handoff source. It is preparation material; before manuscript production, resolve the working source format, final deliverables, venue or general requirements, and citation style.
 
 ## Interview Protocol
 
@@ -101013,7 +101061,7 @@ Default: IMRaD for empirical research, Literature Review for synthesis topics.
 
 ### Step 3: Target Journal (Optional)
 
-Ask for a target journal; if none, use generic academic format. When a target journal is named, offer to record only the venue limits the user declares (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model).
+Ask for a target journal or general venue requirements. If the user has no venue, propose a general academic format and confirm it before production. When a target journal is named, offer to record only the venue limits the user declares (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model).
 
 - Declared values only: every venue-profile field comes from the user's answer; an unstated field stays null and that check reports `NOT-CHECKED(field not declared)`. NEVER fill a field from memory of the journal, its website, or its name.
 - Store declared answers as a venue profile with `declared_by: scholar` and record its path in the configuration.
@@ -101023,17 +101071,22 @@ Ask for a target journal; if none, use generic academic format. When a target jo
 
 | Format | Default Disciplines |
 |---|---|
-| APA 7th (default) | education, psychology, social sciences |
+| APA 7th | education, psychology, social sciences |
 | Chicago 17th | history, humanities, some social sciences |
 | MLA 9th | literature, languages, cultural studies |
 | IEEE | engineering, computer science, technology |
 | Vancouver | medicine, biomedical sciences, nursing |
 
-Auto-suggest from discipline; the user can override.
+Use the style already confirmed in the current user/task context. Otherwise, suggest a discipline-appropriate style and ask the user to choose; a recommendation or detected style is not confirmation.
 
-### Step 5: Output Format
+### Step 5: Source Format And Final Output
 
-Markdown (default), LaTeX (.tex + .bib), DOCX, PDF, or Combined. When the output format is DOCX, PDF, LaTeX, or Combined, offer to record a layout profile (body font and size, caption font/placement/alignment, line spacing, page margins, table-border style).
+Working source format and final deliverables are independent choices.
+
+- Working source: `markdown`, `qmd`, `latex`, or `latex-project`. This governs drafting, review, and protected structures.
+- Final output: the requested deliverables, such as Markdown, LaTeX, DOCX, PDF, or Combined.
+
+Reuse choices already confirmed in current context. Ask for each unresolved choice; when materials cannot settle it, offer a recommendation without treating silence as acceptance. When the final output is DOCX, PDF, LaTeX, or Combined, offer to record a layout profile (body font and size, caption font/placement/alignment, line spacing, page margins, table-border style).
 
 - Declared values only: every layout field comes from the user's answer; an unstated field is simply not declared and the formatter keeps its current default. NEVER infer a font or spacing from a venue, institution, language/locale, or filename.
 - A declined or skipped follow-up writes nothing; no profile and no configuration row at all.
@@ -101150,6 +101203,7 @@ For revision, format-convert, and citation-check requests, existing paper conten
 | Target Journal | [journal name or "General"] |
 | Venue Profile | [path to declared venue_profile YAML / absent if skipped] |
 | Citation Format | [APA 7th / Chicago 17th / MLA 9th / IEEE / Vancouver] |
+| Source Format | [markdown / qmd / latex / latex-project] |
 | Output Format | [Markdown / LaTeX / DOCX / PDF / Combined] |
 | Format Profile | [path to declared format_profile YAML — row omitted entirely if declined/skipped] |
 | Body Language | [EN / zh-TW / Bilingual] |
@@ -101174,14 +101228,16 @@ For revision, format-convert, and citation-check requests, existing paper conten
 - All applicable core parameters and the two independent citation-policy rows
   must be populated (journal can be "General"; co-authors can be
   "single-author"; funding can be "no funding"; style profile can be "null").
+- Reuse choices already confirmed in the current user/task context.
 - Word count must be realistic for the paper type.
-- Citation format must match discipline conventions; warn on mismatch.
-- Require explicit user confirmation of the final record.
+- Citation style must match the confirmed venue, discipline, or user choice; warn on mismatch.
+- Require explicit user confirmation of the finalized record.
 
 ## Rules
 
 - Never fill a venue or layout field from memory of the journal, institution, or filename.
 - Never auto-activate a domain evidence profile; the scholar must confirm.
+- Ask for unresolved source, delivery, venue, or citation-style choices before dependent production.
 - Do not start drafting, outlining, searching, or reviewing in this node.
 
 
@@ -107200,7 +107256,7 @@ This paper was prepared with the assistance of AI-powered academic writing tools
     <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
     <div><strong>outputs</strong> <code>formatted_manuscript</code> → formatted-manuscript.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 359 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 363 行</summary><pre class="doc-body">---
 name: generation-format-rendering
 description: "Converts the final manuscript into declared output formats."
 metadata:
@@ -107288,12 +107344,15 @@ or `format-convert` behavior.
 4. Package completeness: deliver all required files (main text, bibliography, figures, cover letter).
 5. AI disclosure: on the normal Phase 7 path, render only the AI use confirmed by
    the input ledger; standalone `disclosure` uses the protocol-driven result above.
+6. Source and delivery separation: render from the confirmed working source format; final deliverables such as Word or PDF are separate from the source.
 
 ## Supported Output Formats
 
+Use the confirmed final deliverables. When a target is unresolved, return the missing target to the coordinating Agent (or ask the user when running inline) before rendering; the working source format alone does not choose an output.
+
 ### 1. Markdown (.md)
 
-Default format: clean markdown with proper heading levels, tables in markdown format, and a reference list at the end.
+Clean markdown with proper heading levels, tables in markdown format, and a reference list at the end. Use this route when Markdown is a confirmed final deliverable.
 
 ### 2. LaTeX (.tex + .bib)
 
@@ -107354,7 +107413,7 @@ directed the content, and take responsibility for its accuracy and integrity.
 
 1. Parse existing in-text citations and reference-list entries; extract authors, year, title, source title, volume/issue/pages, DOI/URL, publisher, edition, editors, and access date.
 2. Normalize into a structured intermediate representation; resolve ambiguities (e.g., expand "et al." when the full author list is available).
-3. Regenerate in-text citations and reference-list entries in the target format.
+3. Regenerate visible in-text citations and reference-list entries in the target format; leave `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent markers unchanged.
 4. Verify: input citation count equals output count; all bibliographic elements survive; every in-text citation has a reference; and output matches target-format rules.
 
 ### Format-Specific Features
@@ -107476,12 +107535,12 @@ Record exact Pandoc/LaTeX commands used. Chinese content must use xelatex or lua
 
 1. Preflight: read the manuscript and all format/venue profiles; fail closed before formatting on any malformed profile.
 2. Hard gate: scan citation-provenance markers and HIGH-BLOCK tokens; refuse on any terminal marker.
-3. Convert: render each requested target from the same source bytes.
+3. Convert: render each confirmed target from the same source bytes while preserving the working source format and protected structures.
 4. Strip internal markers after the gate.
 5. Build the output package and append advisory sections.
 6. Run the final quality checklist.
 
-### APA 7.0 LaTeX Mandatory Rules
+### APA 7.0 LaTeX Rules (When Selected)
 
 Use `apa7` class where configured; second-language headings MUST use `\begin{center}...\end{center}` rather than bare `\textbf{}`; never use bare `p{0.25\linewidth}` columns, which ignore `\tabcolsep` and cause overflow; `man` mode forces `\raggedright` after `\begin{document}` and must be overridden; compilation must use xelatex or lualatex for Chinese content.
 
@@ -107516,7 +107575,7 @@ When the journal template conflicts with the manuscript source, prefer the journ
 
 ### Incomplete Input
 
-Missing manuscript -&gt; stop with the missing input. Missing target format -&gt; default to Markdown. Missing venue profile -&gt; no journal-specific application; never infer one.
+Missing manuscript -&gt; stop with the missing input. Missing target format -&gt; return the missing target to the coordinating Agent (or ask the user when running inline) before rendering. Missing venue profile -&gt; no journal-specific application; never infer one.
 
 ### Poor Quality Upstream Input
 
@@ -107549,6 +107608,7 @@ The formatted package, cover letter, conversion commands, and provenance summary
 
 - Formatting is format-only; never alter content, meaning, or citations.
 - Never infer missing layout fields from venue or filename.
+- Never install renderers or execute project scripts during rendering without separate user approval.
 - Never strip markers before the cite-time hard gate passes.
 - Do not apply terminal policy or submission checks in this node; gate on stamped tokens only.
 
@@ -110612,7 +110672,7 @@ Before conversion, ALL of the following must be true:
     <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
     <div><strong>outputs</strong> <code>citation_compliance_report</code> → citation-compliance.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 323 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 328 行</summary><pre class="doc-body">---
 name: check-citation-format-compliance
 description: "Validates in-text citations and reference list formatting."
 metadata:
@@ -110689,7 +110749,9 @@ Use the referenced citation-format standards knowledge pack as the canonical for
 
 For each in-text citation: appears in the reference list, author name(s) match exactly, year matches exactly, and "et al." is used correctly (3+ authors for APA 7, abbreviated from the first citation unless names are needed to disambiguate same-year works; for Chinese citations apply the Chinese Citation Special Checks below). For each reference-list entry: cited at least once in text; never an orphan reference.
 
-### 2. Format Compliance (APA 7th — Default)
+### 2. Format Compliance (Confirmed Style)
+
+Apply the confirmed citation style. The APA 7th checks below are the reference example when APA is confirmed.
 
 In-text:
 - One author: (Smith, 2024).
@@ -110748,6 +110810,8 @@ Is the issue formatting-only (e.g., missing DOI, incorrect italics)?
 
 Fix deterministic errors directly in the corrected reference list, log each correction, and flag ambiguous cases for human review.
 
+Apply corrections from the confirmed style. The examples below are APA 7th rules; use the equivalent rule from the confirmed style for other formats.
+
 ### Common Auto-Corrections
 
 | Error | Correction |
@@ -110772,9 +110836,9 @@ Fix deterministic errors directly in the corrected reference list, log each corr
 5. Additional checks: self-citation ratio, source-currency distribution, citation density, and correct "et al." use.
 6. Output the audit report and the corrected reference list.
 
-### Citation Format Auto-Detection
+### Citation Format Detection
 
-When no citation format is specified, identify it from the in-text signature and reference-list layout:
+Use the citation format confirmed in the current user/task context. When none is confirmed, identify candidate formats as observations from the in-text signature and reference-list layout:
 
 | In-text signature | Reference-list confirmation | Format |
 |---|---|---|
@@ -110784,7 +110848,7 @@ When no citation format is specified, identify it from the in-text signature and
 | numbered [N] | numbered list | IEEE |
 | superscript number | numbered, superscript | Vancouver |
 
-If the format cannot be determined, ask the user; default to APA 7th if unanswered.
+Report a detected format as an observation and return the unknown style to the coordinating Agent (or ask the user when running inline) before applying style-specific corrections. Keep style-independent checks available (orphans, malformed identifiers, and source-level mismatches) and mark style-specific checks unchecked until the style is confirmed.
 
 ### Core Verification Rules by Format
 
@@ -110869,7 +110933,7 @@ Build the comparison matrix of (Author, Year) pairs and their in-text count and 
 
 | Missing Item | Handling |
 |---|---|
-| No declared citation format | auto-detect; default APA 7th |
+| No declared citation format | detect as an observation; ask for the applicable style; run style-independent checks meanwhile |
 | Reference list missing | flag the entire draft; emit the corrected list when entries are recoverable |
 | Draft body missing | return an empty audit with the blocker |
 
@@ -110926,6 +110990,7 @@ Conference papers may use IEEE numbered citations; law and history may use footn
 
 - Zero orphans is mandatory; never silently drop or invent a citation.
 - Never auto-correct a semantic mismatch; flag it for human review.
+- Apply the confirmed style to visible citation text only; preserve `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent marker syntax unchanged.
 - Do not rewrite prose, produce the abstract, or perform editorial review in this node.
 
 
@@ -116454,7 +116519,7 @@ Total: 17 items.
     <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
     <div><strong>outputs</strong> <code>formatted_manuscript</code> → formatted-manuscript.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 359 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 363 行</summary><pre class="doc-body">---
 name: generation-format-rendering
 description: "Converts the final manuscript into declared output formats."
 metadata:
@@ -116542,12 +116607,15 @@ or `format-convert` behavior.
 4. Package completeness: deliver all required files (main text, bibliography, figures, cover letter).
 5. AI disclosure: on the normal Phase 7 path, render only the AI use confirmed by
    the input ledger; standalone `disclosure` uses the protocol-driven result above.
+6. Source and delivery separation: render from the confirmed working source format; final deliverables such as Word or PDF are separate from the source.
 
 ## Supported Output Formats
 
+Use the confirmed final deliverables. When a target is unresolved, return the missing target to the coordinating Agent (or ask the user when running inline) before rendering; the working source format alone does not choose an output.
+
 ### 1. Markdown (.md)
 
-Default format: clean markdown with proper heading levels, tables in markdown format, and a reference list at the end.
+Clean markdown with proper heading levels, tables in markdown format, and a reference list at the end. Use this route when Markdown is a confirmed final deliverable.
 
 ### 2. LaTeX (.tex + .bib)
 
@@ -116608,7 +116676,7 @@ directed the content, and take responsibility for its accuracy and integrity.
 
 1. Parse existing in-text citations and reference-list entries; extract authors, year, title, source title, volume/issue/pages, DOI/URL, publisher, edition, editors, and access date.
 2. Normalize into a structured intermediate representation; resolve ambiguities (e.g., expand "et al." when the full author list is available).
-3. Regenerate in-text citations and reference-list entries in the target format.
+3. Regenerate visible in-text citations and reference-list entries in the target format; leave `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent markers unchanged.
 4. Verify: input citation count equals output count; all bibliographic elements survive; every in-text citation has a reference; and output matches target-format rules.
 
 ### Format-Specific Features
@@ -116730,12 +116798,12 @@ Record exact Pandoc/LaTeX commands used. Chinese content must use xelatex or lua
 
 1. Preflight: read the manuscript and all format/venue profiles; fail closed before formatting on any malformed profile.
 2. Hard gate: scan citation-provenance markers and HIGH-BLOCK tokens; refuse on any terminal marker.
-3. Convert: render each requested target from the same source bytes.
+3. Convert: render each confirmed target from the same source bytes while preserving the working source format and protected structures.
 4. Strip internal markers after the gate.
 5. Build the output package and append advisory sections.
 6. Run the final quality checklist.
 
-### APA 7.0 LaTeX Mandatory Rules
+### APA 7.0 LaTeX Rules (When Selected)
 
 Use `apa7` class where configured; second-language headings MUST use `\begin{center}...\end{center}` rather than bare `\textbf{}`; never use bare `p{0.25\linewidth}` columns, which ignore `\tabcolsep` and cause overflow; `man` mode forces `\raggedright` after `\begin{document}` and must be overridden; compilation must use xelatex or lualatex for Chinese content.
 
@@ -116770,7 +116838,7 @@ When the journal template conflicts with the manuscript source, prefer the journ
 
 ### Incomplete Input
 
-Missing manuscript -&gt; stop with the missing input. Missing target format -&gt; default to Markdown. Missing venue profile -&gt; no journal-specific application; never infer one.
+Missing manuscript -&gt; stop with the missing input. Missing target format -&gt; return the missing target to the coordinating Agent (or ask the user when running inline) before rendering. Missing venue profile -&gt; no journal-specific application; never infer one.
 
 ### Poor Quality Upstream Input
 
@@ -116803,6 +116871,7 @@ The formatted package, cover letter, conversion commands, and provenance summary
 
 - Formatting is format-only; never alter content, meaning, or citations.
 - Never infer missing layout fields from venue or filename.
+- Never install renderers or execute project scripts during rendering without separate user approval.
 - Never strip markers before the cite-time hard gate passes.
 - Do not apply terminal policy or submission checks in this node; gate on stamped tokens only.
 
@@ -168689,7 +168758,7 @@ Resolve identified writing problems within the authorized scope and report mater
     <div><strong>inputs</strong> <code>project_intent</code> ← specs.project</div>
     <div><strong>outputs</strong> <code>writing_configuration</code> → writing-configuration.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 312 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 320 行</summary><pre class="doc-body">---
 name: design-writing-intake
 description: "Collects paper configuration, preregistration handoff, review-target context, domain profile, and style calibration for writing work."
 metadata:
@@ -168735,7 +168804,7 @@ perform the procedure's semantic checks without claiming execution or consent.
 
 # Procedure
 
-Work from `project_intent` and any available research artifacts. Produce `writing_configuration` as a Paper Configuration Record, then ask the user to confirm before the record is considered final.
+Work from `project_intent` and any available research artifacts, reusing choices already confirmed in the current user/task context. Produce `writing_configuration` as a Paper Configuration Record, ask only for unresolved choices, and ask the user to confirm before the record is considered final.
 
 ## Role Definition
 
@@ -168744,10 +168813,10 @@ You are the Intake Agent. You conduct a structured configuration interview to es
 ## Core Principles
 
 1. Complete but efficient: collect all necessary parameters without over-burdening the user.
-2. Smart defaults: suggest sensible defaults based on discipline and paper type.
+2. Suggested choices: recommend defaults from discipline and paper type; use them only when the user accepts or delegates the choice.
 3. Validate early: catch incompatible configurations (e.g., a 2000-word IMRaD is too short).
 4. Existing materials inventory: understand what the user already has to avoid redundant work.
-5. Bilingual awareness: detect user language and set defaults accordingly.
+5. Bilingual awareness: detect user language and propose language defaults.
 6. Handoff awareness: detect deep-research materials and auto-import them.
 
 ## Deep Research Handoff Detection
@@ -168768,7 +168837,7 @@ a repository template. Preserve supplied evidence without modifying it and
 record its external location and validation limits in the handoff.
 
 1. Auto-populate existing parameters: research question from the RQ brief; discipline from material content; method from the methodology blueprint; existing materials from the material list.
-2. Skip redundant questions: skip Topic &amp; Research Question and the parts of Existing Materials already available. Still confirm paper type, citation format, output format, and language.
+2. Skip redundant questions: skip Topic &amp; Research Question and the parts of Existing Materials already available. Still confirm paper type, working source format, final deliverables, citation style, and language unless the confirmed context already answers a choice.
 3. Notify the user exactly which parameters were auto-populated, including the preregistration receipt status and companion replay status, and ask for confirmation.
 
 ### When No Handoff Materials Are Detected
@@ -168800,7 +168869,7 @@ When the user's request asks to be guided step by step through planning, ask onl
 2. Materials: what literature, data, or ideas do you currently have?
 3. Structure preference: IMRaD, Literature Review, Other, or Not sure.
 
-Record a simplified Paper Configuration Record containing topic, existing materials, structure preference, and handoff source.
+Record a simplified, provisional Paper Configuration Record containing topic, existing materials, structure preference, and handoff source. It is preparation material; before manuscript production, resolve the working source format, final deliverables, venue or general requirements, and citation style.
 
 ## Interview Protocol
 
@@ -168823,7 +168892,7 @@ Default: IMRaD for empirical research, Literature Review for synthesis topics.
 
 ### Step 3: Target Journal (Optional)
 
-Ask for a target journal; if none, use generic academic format. When a target journal is named, offer to record only the venue limits the user declares (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model).
+Ask for a target journal or general venue requirements. If the user has no venue, propose a general academic format and confirm it before production. When a target journal is named, offer to record only the venue limits the user declares (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model).
 
 - Declared values only: every venue-profile field comes from the user's answer; an unstated field stays null and that check reports `NOT-CHECKED(field not declared)`. NEVER fill a field from memory of the journal, its website, or its name.
 - Store declared answers as a venue profile with `declared_by: scholar` and record its path in the configuration.
@@ -168833,17 +168902,22 @@ Ask for a target journal; if none, use generic academic format. When a target jo
 
 | Format | Default Disciplines |
 |---|---|
-| APA 7th (default) | education, psychology, social sciences |
+| APA 7th | education, psychology, social sciences |
 | Chicago 17th | history, humanities, some social sciences |
 | MLA 9th | literature, languages, cultural studies |
 | IEEE | engineering, computer science, technology |
 | Vancouver | medicine, biomedical sciences, nursing |
 
-Auto-suggest from discipline; the user can override.
+Use the style already confirmed in the current user/task context. Otherwise, suggest a discipline-appropriate style and ask the user to choose; a recommendation or detected style is not confirmation.
 
-### Step 5: Output Format
+### Step 5: Source Format And Final Output
 
-Markdown (default), LaTeX (.tex + .bib), DOCX, PDF, or Combined. When the output format is DOCX, PDF, LaTeX, or Combined, offer to record a layout profile (body font and size, caption font/placement/alignment, line spacing, page margins, table-border style).
+Working source format and final deliverables are independent choices.
+
+- Working source: `markdown`, `qmd`, `latex`, or `latex-project`. This governs drafting, review, and protected structures.
+- Final output: the requested deliverables, such as Markdown, LaTeX, DOCX, PDF, or Combined.
+
+Reuse choices already confirmed in current context. Ask for each unresolved choice; when materials cannot settle it, offer a recommendation without treating silence as acceptance. When the final output is DOCX, PDF, LaTeX, or Combined, offer to record a layout profile (body font and size, caption font/placement/alignment, line spacing, page margins, table-border style).
 
 - Declared values only: every layout field comes from the user's answer; an unstated field is simply not declared and the formatter keeps its current default. NEVER infer a font or spacing from a venue, institution, language/locale, or filename.
 - A declined or skipped follow-up writes nothing; no profile and no configuration row at all.
@@ -168960,6 +169034,7 @@ For revision, format-convert, and citation-check requests, existing paper conten
 | Target Journal | [journal name or "General"] |
 | Venue Profile | [path to declared venue_profile YAML / absent if skipped] |
 | Citation Format | [APA 7th / Chicago 17th / MLA 9th / IEEE / Vancouver] |
+| Source Format | [markdown / qmd / latex / latex-project] |
 | Output Format | [Markdown / LaTeX / DOCX / PDF / Combined] |
 | Format Profile | [path to declared format_profile YAML — row omitted entirely if declined/skipped] |
 | Body Language | [EN / zh-TW / Bilingual] |
@@ -168984,14 +169059,16 @@ For revision, format-convert, and citation-check requests, existing paper conten
 - All applicable core parameters and the two independent citation-policy rows
   must be populated (journal can be "General"; co-authors can be
   "single-author"; funding can be "no funding"; style profile can be "null").
+- Reuse choices already confirmed in the current user/task context.
 - Word count must be realistic for the paper type.
-- Citation format must match discipline conventions; warn on mismatch.
-- Require explicit user confirmation of the final record.
+- Citation style must match the confirmed venue, discipline, or user choice; warn on mismatch.
+- Require explicit user confirmation of the finalized record.
 
 ## Rules
 
 - Never fill a venue or layout field from memory of the journal, institution, or filename.
 - Never auto-activate a domain evidence profile; the scholar must confirm.
+- Ask for unresolved source, delivery, venue, or citation-style choices before dependent production.
 - Do not start drafting, outlining, searching, or reviewing in this node.
 
 
@@ -171700,7 +171777,7 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
     <div><strong>inputs</strong> <code>argument_blueprint</code> ← argument-blueprint.v1 · <code>synthesis_report</code> ← synthesis-report.v1 · <code>writing_configuration</code> ← writing-configuration.v1</div>
     <div><strong>outputs</strong> <code>manuscript_draft</code> → manuscript-draft.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 276 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 281 行</summary><pre class="doc-body">---
 name: generation-manuscript-drafting
 description: "Writes manuscript sections and scope-authorized revision patches from outline and argument blueprint."
 metadata:
@@ -171750,7 +171827,7 @@ perform the procedure's semantic checks without claiming execution or consent.
 
 # Procedure
 
-Work from `argument_blueprint`, `paper_outline`, and available synthesis/graded sources. Produce `manuscript_draft`.
+Work from `argument_blueprint`, `paper_outline`, and available synthesis/graded sources. If confirmed context lacks a working source format, final deliverables, citation style, or venue requirement needed here, return the specific missing items to the coordinating Agent (or ask the user when running inline) before dependent prose. Produce `manuscript_draft`.
 
 ## Role Definition
 
@@ -171758,7 +171835,7 @@ You are the Draft Writer Agent. You write manuscript sections and revision patch
 
 ## Core Principles
 
-1. APA 7.0 compliance: every element follows APA 7th edition standards.
+1. Confirmed style and source: every visible citation and reference follows the confirmed citation style; the draft stays in the confirmed working source format.
 2. Evidence-based writing: every claim must be supported by cited evidence.
 3. Reader-centered: write for the target audience.
 4. Structure drives clarity: follow the approved outline; deviations must be justified.
@@ -171819,13 +171896,17 @@ Third person; active voice preferred; precise, concise language; no jargon witho
 
 ### Citation Practices
 
+Visible citation presentation follows the confirmed citation style. The APA author-date examples below apply when APA 7th is confirmed.
+
 - Direct quote: "exact words" (Author, Year, p. X) with page number.
 - Multiple sources: alphabetical order in one parenthetical.
 - Secondary source: (Original Author, Year, as cited in Citing Author, Year).
 
+Keep `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent markers in their existing machine syntax and position; change only the visible citation text.
+
 ### Tables &amp; Figures
 
-Every table/figure must be referenced in text, carry an APA-format number and descriptive title, and note its source beneath.
+Every table/figure must be referenced in text, carry a number and descriptive title in the confirmed style, and note its source beneath.
 
 ## Revision Protocol
 
@@ -171883,7 +171964,7 @@ throughout the process.
 
 ## Citation and Claim Intent Emission
 
-- Write every citation in two layers: visible author-year form plus `&lt;!--ref:slug--&gt;`. Emit the `&lt;!--ref:slug--&gt;` marker bare; NEVER resolve, mutate, annotate, or comment on the marker.
+- Write every citation in two layers: visible form in the confirmed citation style plus `&lt;!--ref:slug--&gt;`. Emit the `&lt;!--ref:slug--&gt;` marker bare; NEVER resolve, mutate, annotate, or comment on the marker. Style conversion changes only the visible layer.
 - R-L3-1-A: every visible citation MUST carry an anchor with a kind other than `none`; `&lt;!--anchor:none:--&gt;` triggers the finalizer gate rather than bypassing it.
 - Quote anchors are limited to 25 words; longer quotes must use page or section anchors.
 - Generate slugs and anchors only from corpus context already provided; never read entry frontmatter to discover them.
@@ -171899,7 +171980,7 @@ local authority. Patch application belongs to the separately declared revision
 capability. If the authorized scope is insufficient, report the unresolved item
 and required author decision without broadening the edit.
 
-A complete manuscript Markdown file with section headings, inline structured citations, and a reference list:
+A complete manuscript in the confirmed working source format with section headings, inline structured citations, and a reference list. Preserve QMD frontmatter, fenced code, cell options, citations, cross-references, and Quarto metadata; preserve LaTeX commands, environments, and project structure. The example below is Markdown:
 
 ```markdown
 ## Manuscript Draft
@@ -171923,6 +172004,7 @@ A complete manuscript Markdown file with section headings, inline structured cit
 
 - Compression must preserve protected hedging phrases identified by upstream calibration as budget-protected; never trim a protected hedge to meet a word budget.
 - Reflexivity disclosure must use explicit temporal bounds: an explicit year range, a past-tense disambiguating verb, or a "former" prefix. Deictic temporal phrases ("during this period" / "at the time") are forbidden.
+- QMD and LaTeX protected structures are manuscript content: preserve YAML frontmatter, fenced code, cell-option comments, citation and cross-reference syntax, Quarto metadata, LaTeX commands and environments, and project files unless the authorized edit targets them.
 - DO NOT simulate any audit step. DO NOT claim to have run codex/external review. Output metadata must not claim audit-passed state.
 
 ## Standalone Self-Gate
@@ -171950,7 +172032,7 @@ The run carries an optional `output_language_pair` onward as exchange material �
 
 ## Quality Criteria
 
-- APA 7.0 format compliance throughout.
+- Confirmed citation style and working source format compliance throughout; evidence markers and protected source structures are unchanged.
 - Every factual claim has at least one citation.
 - Abstract accurately reflects the draft content.
 - References section matches in-text citations (no orphans).
@@ -172911,7 +172993,7 @@ default pair's key names for another L1.
     <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
     <div><strong>outputs</strong> <code>citation_compliance_report</code> → citation-compliance.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 323 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 328 行</summary><pre class="doc-body">---
 name: check-citation-format-compliance
 description: "Validates in-text citations and reference list formatting."
 metadata:
@@ -172988,7 +173070,9 @@ Use the referenced citation-format standards knowledge pack as the canonical for
 
 For each in-text citation: appears in the reference list, author name(s) match exactly, year matches exactly, and "et al." is used correctly (3+ authors for APA 7, abbreviated from the first citation unless names are needed to disambiguate same-year works; for Chinese citations apply the Chinese Citation Special Checks below). For each reference-list entry: cited at least once in text; never an orphan reference.
 
-### 2. Format Compliance (APA 7th — Default)
+### 2. Format Compliance (Confirmed Style)
+
+Apply the confirmed citation style. The APA 7th checks below are the reference example when APA is confirmed.
 
 In-text:
 - One author: (Smith, 2024).
@@ -173047,6 +173131,8 @@ Is the issue formatting-only (e.g., missing DOI, incorrect italics)?
 
 Fix deterministic errors directly in the corrected reference list, log each correction, and flag ambiguous cases for human review.
 
+Apply corrections from the confirmed style. The examples below are APA 7th rules; use the equivalent rule from the confirmed style for other formats.
+
 ### Common Auto-Corrections
 
 | Error | Correction |
@@ -173071,9 +173157,9 @@ Fix deterministic errors directly in the corrected reference list, log each corr
 5. Additional checks: self-citation ratio, source-currency distribution, citation density, and correct "et al." use.
 6. Output the audit report and the corrected reference list.
 
-### Citation Format Auto-Detection
+### Citation Format Detection
 
-When no citation format is specified, identify it from the in-text signature and reference-list layout:
+Use the citation format confirmed in the current user/task context. When none is confirmed, identify candidate formats as observations from the in-text signature and reference-list layout:
 
 | In-text signature | Reference-list confirmation | Format |
 |---|---|---|
@@ -173083,7 +173169,7 @@ When no citation format is specified, identify it from the in-text signature and
 | numbered [N] | numbered list | IEEE |
 | superscript number | numbered, superscript | Vancouver |
 
-If the format cannot be determined, ask the user; default to APA 7th if unanswered.
+Report a detected format as an observation and return the unknown style to the coordinating Agent (or ask the user when running inline) before applying style-specific corrections. Keep style-independent checks available (orphans, malformed identifiers, and source-level mismatches) and mark style-specific checks unchecked until the style is confirmed.
 
 ### Core Verification Rules by Format
 
@@ -173168,7 +173254,7 @@ Build the comparison matrix of (Author, Year) pairs and their in-text count and 
 
 | Missing Item | Handling |
 |---|---|
-| No declared citation format | auto-detect; default APA 7th |
+| No declared citation format | detect as an observation; ask for the applicable style; run style-independent checks meanwhile |
 | Reference list missing | flag the entire draft; emit the corrected list when entries are recoverable |
 | Draft body missing | return an empty audit with the blocker |
 
@@ -173225,6 +173311,7 @@ Conference papers may use IEEE numbered citations; law and history may use footn
 
 - Zero orphans is mandatory; never silently drop or invent a citation.
 - Never auto-correct a semantic mismatch; flag it for human review.
+- Apply the confirmed style to visible citation text only; preserve `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent marker syntax unchanged.
 - Do not rewrite prose, produce the abstract, or perform editorial review in this node.
 
 
@@ -174730,7 +174817,7 @@ default pair's key names for another L1.
     <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
     <div><strong>outputs</strong> <code>formatted_manuscript</code> → formatted-manuscript.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 359 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 363 行</summary><pre class="doc-body">---
 name: generation-format-rendering
 description: "Converts the final manuscript into declared output formats."
 metadata:
@@ -174818,12 +174905,15 @@ or `format-convert` behavior.
 4. Package completeness: deliver all required files (main text, bibliography, figures, cover letter).
 5. AI disclosure: on the normal Phase 7 path, render only the AI use confirmed by
    the input ledger; standalone `disclosure` uses the protocol-driven result above.
+6. Source and delivery separation: render from the confirmed working source format; final deliverables such as Word or PDF are separate from the source.
 
 ## Supported Output Formats
 
+Use the confirmed final deliverables. When a target is unresolved, return the missing target to the coordinating Agent (or ask the user when running inline) before rendering; the working source format alone does not choose an output.
+
 ### 1. Markdown (.md)
 
-Default format: clean markdown with proper heading levels, tables in markdown format, and a reference list at the end.
+Clean markdown with proper heading levels, tables in markdown format, and a reference list at the end. Use this route when Markdown is a confirmed final deliverable.
 
 ### 2. LaTeX (.tex + .bib)
 
@@ -174884,7 +174974,7 @@ directed the content, and take responsibility for its accuracy and integrity.
 
 1. Parse existing in-text citations and reference-list entries; extract authors, year, title, source title, volume/issue/pages, DOI/URL, publisher, edition, editors, and access date.
 2. Normalize into a structured intermediate representation; resolve ambiguities (e.g., expand "et al." when the full author list is available).
-3. Regenerate in-text citations and reference-list entries in the target format.
+3. Regenerate visible in-text citations and reference-list entries in the target format; leave `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent markers unchanged.
 4. Verify: input citation count equals output count; all bibliographic elements survive; every in-text citation has a reference; and output matches target-format rules.
 
 ### Format-Specific Features
@@ -175006,12 +175096,12 @@ Record exact Pandoc/LaTeX commands used. Chinese content must use xelatex or lua
 
 1. Preflight: read the manuscript and all format/venue profiles; fail closed before formatting on any malformed profile.
 2. Hard gate: scan citation-provenance markers and HIGH-BLOCK tokens; refuse on any terminal marker.
-3. Convert: render each requested target from the same source bytes.
+3. Convert: render each confirmed target from the same source bytes while preserving the working source format and protected structures.
 4. Strip internal markers after the gate.
 5. Build the output package and append advisory sections.
 6. Run the final quality checklist.
 
-### APA 7.0 LaTeX Mandatory Rules
+### APA 7.0 LaTeX Rules (When Selected)
 
 Use `apa7` class where configured; second-language headings MUST use `\begin{center}...\end{center}` rather than bare `\textbf{}`; never use bare `p{0.25\linewidth}` columns, which ignore `\tabcolsep` and cause overflow; `man` mode forces `\raggedright` after `\begin{document}` and must be overridden; compilation must use xelatex or lualatex for Chinese content.
 
@@ -175046,7 +175136,7 @@ When the journal template conflicts with the manuscript source, prefer the journ
 
 ### Incomplete Input
 
-Missing manuscript -&gt; stop with the missing input. Missing target format -&gt; default to Markdown. Missing venue profile -&gt; no journal-specific application; never infer one.
+Missing manuscript -&gt; stop with the missing input. Missing target format -&gt; return the missing target to the coordinating Agent (or ask the user when running inline) before rendering. Missing venue profile -&gt; no journal-specific application; never infer one.
 
 ### Poor Quality Upstream Input
 
@@ -175079,6 +175169,7 @@ The formatted package, cover letter, conversion commands, and provenance summary
 
 - Formatting is format-only; never alter content, meaning, or citations.
 - Never infer missing layout fields from venue or filename.
+- Never install renderers or execute project scripts during rendering without separate user approval.
 - Never strip markers before the cite-time hard gate passes.
 - Do not apply terminal policy or submission checks in this node; gate on stamped tokens only.
 
@@ -184223,7 +184314,7 @@ Turn raw reviewer and editor comments into stable canonical atomic items with co
 5. Write `raw_thread_atomic_links` and guarantee each `thread_id` maps to at least one `comment_id` and each `comment_id` is referenced at least once.
 6. Write `review_comment_source_documents` and `raw_thread_source_spans`. Every thread must have at least one `span_role='primary'` whose `span_text` equals the source slice at the recorded offsets.
 7. Update resume fields, run `scripts/gate_and_render_workspace.py --artifact-root &lt;workspace&gt;`, and show the coverage view `07-review-comment-coverage.md` with the hard `30%` / soft `50%` character-coverage thresholds.
-8. Record the coverage confirmation request. This is the coverage handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session, or review coverage in dialogue. Pass the original package template as the session asset; keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths; no manual import is needed. Keep the workspace, snapshot, results, and history in the task directory. The coverage confirmation binds the complete mapping candidate and every source relation; visiting the page, submitting a result, or marking a round seen never counts as confirmation. The receiving service does not change the database or task sources. Do not proceed until the user confirms coverage review.
+8. Record the coverage confirmation request. Offer the coverage review in the `revision-master-review-workspace.v1` browser workbench and in dialogue. Prepare the retained workspace and start its loopback session only after the user selects browser review or an applicable task preference already covers it; otherwise review coverage in dialogue. When preparing the browser surface, assemble the frozen snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`). Pass the original package template as the session asset; keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths when the browser surface is used; no manual import is needed. Keep the workspace, snapshot, results, and history in the task directory. The coverage confirmation binds the complete mapping candidate and every source relation; visiting the page, submitting a result, or marking a round seen never counts as confirmation. The receiving service does not change the database or task sources. Do not proceed until the user confirms coverage review.
 
 ## Stable IDs
 
@@ -188547,7 +188638,7 @@ Build the canonical atomic workboard: priority, dependencies, evidence gaps, tar
 6. Write `workflow_pending_user_confirmations`, run `scripts/gate_and_render_workspace.py --artifact-root &lt;workspace&gt;`, and present `08-atomic-comment-workboard.md` and `06-thread-to-atomic-mapping.md`.
 7. Keep the confirmation request open until the user explicitly accepts the workboard.
 
-Review the workboard with the user in dialogue or through the board handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session with the original package template as the asset. Give the page URL and fixed result and history paths; keep the prepared embedded HTML for offline use and all handoff files in the task directory. The board confirmation binds the whole candidate board, so filtering the page view never narrows it. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes, and commit the processing receipt with the semantic write in the same task transaction. The receiving service writes only review results, not the database or task sources. Obtain the graph Gate confirmation separately in dialogue.
+Offer the workboard review in dialogue and through the board handoff. When browser review is selected or an applicable task preference already covers it, assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session with the original package template as the asset; otherwise review the same board in dialogue. Give the page URL and fixed result and history paths when the browser surface is used; keep the prepared embedded HTML for offline use and all handoff files in the task directory. The board confirmation binds the whole candidate board, so filtering the page view never narrows it. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes, and commit the processing receipt with the semantic write in the same task transaction. The receiving service writes only review results, not the database or task sources. Obtain the graph Gate confirmation separately in dialogue.
 
 ## Completion Criteria
 
@@ -194490,7 +194581,7 @@ Execute one complete revision-response round: author and confirm comment-scoped 
    - explicitly set `workflow_state.active_comment_id`; never switch silently;
    - write `strategy_cards` with `proposed_stance` and `stance_rationale`;
    - write at least one `strategy_card_actions`, plus target locations, evidence items, pending confirmations, and supplement suggestion/intake rows when needed;
-   - proactively prepare the current-strategy handoff using `workbench/README.md` and start its retained loopback session with the original `review-workspace/revision-master.html` package template as the asset, or review the same candidate in dialogue; ask for per-comment confirmation before writing manuscript and response drafts, binding the current active strategy candidate and its linked sources, evidence, and locations; a pending material blocker or substantive adjustment keeps that scope pending;
+   - offer the current-strategy handoff in the browser workbench and in dialogue; when browser review is selected or an applicable task preference already covers it, prepare the handoff using `workbench/README.md` and start its retained loopback session with the original `review-workspace/revision-master.html` package template as the asset; otherwise review the same candidate in dialogue; ask for per-comment confirmation before writing manuscript and response drafts, binding the current active strategy candidate and its linked sources, evidence, and locations; a pending material blocker or substantive adjustment keeps that scope pending;
    - after confirmation, write `strategy_action_manuscript_execution_items` and `comment_response_drafts`; keep reviewer/editor excerpts in the source language and all normalized strategy/draft text in the working language;
    - mark a comment complete only when strategy, evidence judgment, manuscript draft, response draft, and one-to-one correspondence checks all pass.
 2. Keep comment-scoped blockers local. Use global blockers only for true stage-level blockers.
@@ -194508,7 +194599,7 @@ Execute one complete revision-response round: author and confirm comment-scoped 
 7. Export final deliverables with `scripts/export_manuscript_variants.py` where the script supports the confirmed target; optional `latexdiff` is advisory only and must never block completion.
 8. Ask the user when a change would alter the main line, core claims, or conclusions; when a closing strategy needs authorization; or when a response-only resolution is ambiguous.
 
-For the final interactive pass, review the current `working_manuscript` and open workboard items with the user in dialogue or through the round handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session with the original package template as the asset; keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths; every workspace, result, history, and session file remains in the task directory, and no manual import is needed. The round view shows the frozen before/after excerpt, revision log, and thread-organized reply for every related location, plus actual delivery-file status and pending formal controls; a round seen marker is separate from feedback and never counts as confirmation. Apply accepted edits to `working_manuscript` and commit them through the existing semantic revision log scripts. Keep the per-comment confirmation and evidence boundaries intact.
+For the final interactive pass, offer the round handoff and dialogue for the current `working_manuscript` and open workboard items. When browser review is selected or an applicable task preference already covers it, assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session with the original package template as the asset; otherwise review the same items in dialogue. Keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths when the browser surface is used; every workspace, result, history, and session file remains in the task directory, and no manual import is needed. The round view shows the frozen before/after excerpt, revision log, and thread-organized reply for every related location, plus actual delivery-file status and pending formal controls; a round seen marker is separate from feedback and never counts as confirmation. Apply accepted edits to `working_manuscript` and commit them through the existing semantic revision log scripts. Keep the per-comment confirmation and evidence boundaries intact.
 
 When a committed `history_path` containing `revision-master-review-result.v1` is processed, validate it against the retained snapshot and recheck each scope's current database dependencies before writing, commit the processing receipt with the same semantic write in one task transaction, and regenerate the derived views. Keep pending or conflicting items traceable in the next handoff; recheck actual files, logs, and receipts after an interrupted manuscript write before retrying, without replaying blindly. Removing an earlier annotation never reverses an applied effect; an explicit request is required. All revision outputs remain task-local.
 
@@ -211207,7 +211298,7 @@ Resolve identified writing problems within the authorized scope and report mater
     <div><strong>inputs</strong> <code>project_intent</code> ← specs.project</div>
     <div><strong>outputs</strong> <code>writing_configuration</code> → writing-configuration.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 312 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 320 行</summary><pre class="doc-body">---
 name: design-writing-intake
 description: "Collects paper configuration, preregistration handoff, review-target context, domain profile, and style calibration for writing work."
 metadata:
@@ -211253,7 +211344,7 @@ perform the procedure's semantic checks without claiming execution or consent.
 
 # Procedure
 
-Work from `project_intent` and any available research artifacts. Produce `writing_configuration` as a Paper Configuration Record, then ask the user to confirm before the record is considered final.
+Work from `project_intent` and any available research artifacts, reusing choices already confirmed in the current user/task context. Produce `writing_configuration` as a Paper Configuration Record, ask only for unresolved choices, and ask the user to confirm before the record is considered final.
 
 ## Role Definition
 
@@ -211262,10 +211353,10 @@ You are the Intake Agent. You conduct a structured configuration interview to es
 ## Core Principles
 
 1. Complete but efficient: collect all necessary parameters without over-burdening the user.
-2. Smart defaults: suggest sensible defaults based on discipline and paper type.
+2. Suggested choices: recommend defaults from discipline and paper type; use them only when the user accepts or delegates the choice.
 3. Validate early: catch incompatible configurations (e.g., a 2000-word IMRaD is too short).
 4. Existing materials inventory: understand what the user already has to avoid redundant work.
-5. Bilingual awareness: detect user language and set defaults accordingly.
+5. Bilingual awareness: detect user language and propose language defaults.
 6. Handoff awareness: detect deep-research materials and auto-import them.
 
 ## Deep Research Handoff Detection
@@ -211286,7 +211377,7 @@ a repository template. Preserve supplied evidence without modifying it and
 record its external location and validation limits in the handoff.
 
 1. Auto-populate existing parameters: research question from the RQ brief; discipline from material content; method from the methodology blueprint; existing materials from the material list.
-2. Skip redundant questions: skip Topic &amp; Research Question and the parts of Existing Materials already available. Still confirm paper type, citation format, output format, and language.
+2. Skip redundant questions: skip Topic &amp; Research Question and the parts of Existing Materials already available. Still confirm paper type, working source format, final deliverables, citation style, and language unless the confirmed context already answers a choice.
 3. Notify the user exactly which parameters were auto-populated, including the preregistration receipt status and companion replay status, and ask for confirmation.
 
 ### When No Handoff Materials Are Detected
@@ -211318,7 +211409,7 @@ When the user's request asks to be guided step by step through planning, ask onl
 2. Materials: what literature, data, or ideas do you currently have?
 3. Structure preference: IMRaD, Literature Review, Other, or Not sure.
 
-Record a simplified Paper Configuration Record containing topic, existing materials, structure preference, and handoff source.
+Record a simplified, provisional Paper Configuration Record containing topic, existing materials, structure preference, and handoff source. It is preparation material; before manuscript production, resolve the working source format, final deliverables, venue or general requirements, and citation style.
 
 ## Interview Protocol
 
@@ -211341,7 +211432,7 @@ Default: IMRaD for empirical research, Literature Review for synthesis topics.
 
 ### Step 3: Target Journal (Optional)
 
-Ask for a target journal; if none, use generic academic format. When a target journal is named, offer to record only the venue limits the user declares (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model).
+Ask for a target journal or general venue requirements. If the user has no venue, propose a general academic format and confirm it before production. When a target journal is named, offer to record only the venue limits the user declares (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model).
 
 - Declared values only: every venue-profile field comes from the user's answer; an unstated field stays null and that check reports `NOT-CHECKED(field not declared)`. NEVER fill a field from memory of the journal, its website, or its name.
 - Store declared answers as a venue profile with `declared_by: scholar` and record its path in the configuration.
@@ -211351,17 +211442,22 @@ Ask for a target journal; if none, use generic academic format. When a target jo
 
 | Format | Default Disciplines |
 |---|---|
-| APA 7th (default) | education, psychology, social sciences |
+| APA 7th | education, psychology, social sciences |
 | Chicago 17th | history, humanities, some social sciences |
 | MLA 9th | literature, languages, cultural studies |
 | IEEE | engineering, computer science, technology |
 | Vancouver | medicine, biomedical sciences, nursing |
 
-Auto-suggest from discipline; the user can override.
+Use the style already confirmed in the current user/task context. Otherwise, suggest a discipline-appropriate style and ask the user to choose; a recommendation or detected style is not confirmation.
 
-### Step 5: Output Format
+### Step 5: Source Format And Final Output
 
-Markdown (default), LaTeX (.tex + .bib), DOCX, PDF, or Combined. When the output format is DOCX, PDF, LaTeX, or Combined, offer to record a layout profile (body font and size, caption font/placement/alignment, line spacing, page margins, table-border style).
+Working source format and final deliverables are independent choices.
+
+- Working source: `markdown`, `qmd`, `latex`, or `latex-project`. This governs drafting, review, and protected structures.
+- Final output: the requested deliverables, such as Markdown, LaTeX, DOCX, PDF, or Combined.
+
+Reuse choices already confirmed in current context. Ask for each unresolved choice; when materials cannot settle it, offer a recommendation without treating silence as acceptance. When the final output is DOCX, PDF, LaTeX, or Combined, offer to record a layout profile (body font and size, caption font/placement/alignment, line spacing, page margins, table-border style).
 
 - Declared values only: every layout field comes from the user's answer; an unstated field is simply not declared and the formatter keeps its current default. NEVER infer a font or spacing from a venue, institution, language/locale, or filename.
 - A declined or skipped follow-up writes nothing; no profile and no configuration row at all.
@@ -211478,6 +211574,7 @@ For revision, format-convert, and citation-check requests, existing paper conten
 | Target Journal | [journal name or "General"] |
 | Venue Profile | [path to declared venue_profile YAML / absent if skipped] |
 | Citation Format | [APA 7th / Chicago 17th / MLA 9th / IEEE / Vancouver] |
+| Source Format | [markdown / qmd / latex / latex-project] |
 | Output Format | [Markdown / LaTeX / DOCX / PDF / Combined] |
 | Format Profile | [path to declared format_profile YAML — row omitted entirely if declined/skipped] |
 | Body Language | [EN / zh-TW / Bilingual] |
@@ -211502,14 +211599,16 @@ For revision, format-convert, and citation-check requests, existing paper conten
 - All applicable core parameters and the two independent citation-policy rows
   must be populated (journal can be "General"; co-authors can be
   "single-author"; funding can be "no funding"; style profile can be "null").
+- Reuse choices already confirmed in the current user/task context.
 - Word count must be realistic for the paper type.
-- Citation format must match discipline conventions; warn on mismatch.
-- Require explicit user confirmation of the final record.
+- Citation style must match the confirmed venue, discipline, or user choice; warn on mismatch.
+- Require explicit user confirmation of the finalized record.
 
 ## Rules
 
 - Never fill a venue or layout field from memory of the journal, institution, or filename.
 - Never auto-activate a domain evidence profile; the scholar must confirm.
+- Ask for unresolved source, delivery, venue, or citation-style choices before dependent production.
 - Do not start drafting, outlining, searching, or reviewing in this node.
 
 
@@ -214218,7 +214317,7 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
     <div><strong>inputs</strong> <code>argument_blueprint</code> ← argument-blueprint.v1 · <code>synthesis_report</code> ← synthesis-report.v1 · <code>writing_configuration</code> ← writing-configuration.v1</div>
     <div><strong>outputs</strong> <code>manuscript_draft</code> → manuscript-draft.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 276 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 281 行</summary><pre class="doc-body">---
 name: generation-manuscript-drafting
 description: "Writes manuscript sections and scope-authorized revision patches from outline and argument blueprint."
 metadata:
@@ -214268,7 +214367,7 @@ perform the procedure's semantic checks without claiming execution or consent.
 
 # Procedure
 
-Work from `argument_blueprint`, `paper_outline`, and available synthesis/graded sources. Produce `manuscript_draft`.
+Work from `argument_blueprint`, `paper_outline`, and available synthesis/graded sources. If confirmed context lacks a working source format, final deliverables, citation style, or venue requirement needed here, return the specific missing items to the coordinating Agent (or ask the user when running inline) before dependent prose. Produce `manuscript_draft`.
 
 ## Role Definition
 
@@ -214276,7 +214375,7 @@ You are the Draft Writer Agent. You write manuscript sections and revision patch
 
 ## Core Principles
 
-1. APA 7.0 compliance: every element follows APA 7th edition standards.
+1. Confirmed style and source: every visible citation and reference follows the confirmed citation style; the draft stays in the confirmed working source format.
 2. Evidence-based writing: every claim must be supported by cited evidence.
 3. Reader-centered: write for the target audience.
 4. Structure drives clarity: follow the approved outline; deviations must be justified.
@@ -214337,13 +214436,17 @@ Third person; active voice preferred; precise, concise language; no jargon witho
 
 ### Citation Practices
 
+Visible citation presentation follows the confirmed citation style. The APA author-date examples below apply when APA 7th is confirmed.
+
 - Direct quote: "exact words" (Author, Year, p. X) with page number.
 - Multiple sources: alphabetical order in one parenthetical.
 - Secondary source: (Original Author, Year, as cited in Citing Author, Year).
 
+Keep `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent markers in their existing machine syntax and position; change only the visible citation text.
+
 ### Tables &amp; Figures
 
-Every table/figure must be referenced in text, carry an APA-format number and descriptive title, and note its source beneath.
+Every table/figure must be referenced in text, carry a number and descriptive title in the confirmed style, and note its source beneath.
 
 ## Revision Protocol
 
@@ -214401,7 +214504,7 @@ throughout the process.
 
 ## Citation and Claim Intent Emission
 
-- Write every citation in two layers: visible author-year form plus `&lt;!--ref:slug--&gt;`. Emit the `&lt;!--ref:slug--&gt;` marker bare; NEVER resolve, mutate, annotate, or comment on the marker.
+- Write every citation in two layers: visible form in the confirmed citation style plus `&lt;!--ref:slug--&gt;`. Emit the `&lt;!--ref:slug--&gt;` marker bare; NEVER resolve, mutate, annotate, or comment on the marker. Style conversion changes only the visible layer.
 - R-L3-1-A: every visible citation MUST carry an anchor with a kind other than `none`; `&lt;!--anchor:none:--&gt;` triggers the finalizer gate rather than bypassing it.
 - Quote anchors are limited to 25 words; longer quotes must use page or section anchors.
 - Generate slugs and anchors only from corpus context already provided; never read entry frontmatter to discover them.
@@ -214417,7 +214520,7 @@ local authority. Patch application belongs to the separately declared revision
 capability. If the authorized scope is insufficient, report the unresolved item
 and required author decision without broadening the edit.
 
-A complete manuscript Markdown file with section headings, inline structured citations, and a reference list:
+A complete manuscript in the confirmed working source format with section headings, inline structured citations, and a reference list. Preserve QMD frontmatter, fenced code, cell options, citations, cross-references, and Quarto metadata; preserve LaTeX commands, environments, and project structure. The example below is Markdown:
 
 ```markdown
 ## Manuscript Draft
@@ -214441,6 +214544,7 @@ A complete manuscript Markdown file with section headings, inline structured cit
 
 - Compression must preserve protected hedging phrases identified by upstream calibration as budget-protected; never trim a protected hedge to meet a word budget.
 - Reflexivity disclosure must use explicit temporal bounds: an explicit year range, a past-tense disambiguating verb, or a "former" prefix. Deictic temporal phrases ("during this period" / "at the time") are forbidden.
+- QMD and LaTeX protected structures are manuscript content: preserve YAML frontmatter, fenced code, cell-option comments, citation and cross-reference syntax, Quarto metadata, LaTeX commands and environments, and project files unless the authorized edit targets them.
 - DO NOT simulate any audit step. DO NOT claim to have run codex/external review. Output metadata must not claim audit-passed state.
 
 ## Standalone Self-Gate
@@ -214468,7 +214572,7 @@ The run carries an optional `output_language_pair` onward as exchange material �
 
 ## Quality Criteria
 
-- APA 7.0 format compliance throughout.
+- Confirmed citation style and working source format compliance throughout; evidence markers and protected source structures are unchanged.
 - Every factual claim has at least one citation.
 - Abstract accurately reflects the draft content.
 - References section matches in-text citations (no orphans).
@@ -215429,7 +215533,7 @@ default pair's key names for another L1.
     <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
     <div><strong>outputs</strong> <code>citation_compliance_report</code> → citation-compliance.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 323 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 328 行</summary><pre class="doc-body">---
 name: check-citation-format-compliance
 description: "Validates in-text citations and reference list formatting."
 metadata:
@@ -215506,7 +215610,9 @@ Use the referenced citation-format standards knowledge pack as the canonical for
 
 For each in-text citation: appears in the reference list, author name(s) match exactly, year matches exactly, and "et al." is used correctly (3+ authors for APA 7, abbreviated from the first citation unless names are needed to disambiguate same-year works; for Chinese citations apply the Chinese Citation Special Checks below). For each reference-list entry: cited at least once in text; never an orphan reference.
 
-### 2. Format Compliance (APA 7th — Default)
+### 2. Format Compliance (Confirmed Style)
+
+Apply the confirmed citation style. The APA 7th checks below are the reference example when APA is confirmed.
 
 In-text:
 - One author: (Smith, 2024).
@@ -215565,6 +215671,8 @@ Is the issue formatting-only (e.g., missing DOI, incorrect italics)?
 
 Fix deterministic errors directly in the corrected reference list, log each correction, and flag ambiguous cases for human review.
 
+Apply corrections from the confirmed style. The examples below are APA 7th rules; use the equivalent rule from the confirmed style for other formats.
+
 ### Common Auto-Corrections
 
 | Error | Correction |
@@ -215589,9 +215697,9 @@ Fix deterministic errors directly in the corrected reference list, log each corr
 5. Additional checks: self-citation ratio, source-currency distribution, citation density, and correct "et al." use.
 6. Output the audit report and the corrected reference list.
 
-### Citation Format Auto-Detection
+### Citation Format Detection
 
-When no citation format is specified, identify it from the in-text signature and reference-list layout:
+Use the citation format confirmed in the current user/task context. When none is confirmed, identify candidate formats as observations from the in-text signature and reference-list layout:
 
 | In-text signature | Reference-list confirmation | Format |
 |---|---|---|
@@ -215601,7 +215709,7 @@ When no citation format is specified, identify it from the in-text signature and
 | numbered [N] | numbered list | IEEE |
 | superscript number | numbered, superscript | Vancouver |
 
-If the format cannot be determined, ask the user; default to APA 7th if unanswered.
+Report a detected format as an observation and return the unknown style to the coordinating Agent (or ask the user when running inline) before applying style-specific corrections. Keep style-independent checks available (orphans, malformed identifiers, and source-level mismatches) and mark style-specific checks unchecked until the style is confirmed.
 
 ### Core Verification Rules by Format
 
@@ -215686,7 +215794,7 @@ Build the comparison matrix of (Author, Year) pairs and their in-text count and 
 
 | Missing Item | Handling |
 |---|---|
-| No declared citation format | auto-detect; default APA 7th |
+| No declared citation format | detect as an observation; ask for the applicable style; run style-independent checks meanwhile |
 | Reference list missing | flag the entire draft; emit the corrected list when entries are recoverable |
 | Draft body missing | return an empty audit with the blocker |
 
@@ -215743,6 +215851,7 @@ Conference papers may use IEEE numbered citations; law and history may use footn
 
 - Zero orphans is mandatory; never silently drop or invent a citation.
 - Never auto-correct a semantic mismatch; flag it for human review.
+- Apply the confirmed style to visible citation text only; preserve `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent marker syntax unchanged.
 - Do not rewrite prose, produce the abstract, or perform editorial review in this node.
 
 
@@ -217248,7 +217357,7 @@ default pair's key names for another L1.
     <div><strong>inputs</strong> <code>manuscript_draft</code> ← manuscript-draft.v1</div>
     <div><strong>outputs</strong> <code>formatted_manuscript</code> → formatted-manuscript.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 359 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 363 行</summary><pre class="doc-body">---
 name: generation-format-rendering
 description: "Converts the final manuscript into declared output formats."
 metadata:
@@ -217336,12 +217445,15 @@ or `format-convert` behavior.
 4. Package completeness: deliver all required files (main text, bibliography, figures, cover letter).
 5. AI disclosure: on the normal Phase 7 path, render only the AI use confirmed by
    the input ledger; standalone `disclosure` uses the protocol-driven result above.
+6. Source and delivery separation: render from the confirmed working source format; final deliverables such as Word or PDF are separate from the source.
 
 ## Supported Output Formats
 
+Use the confirmed final deliverables. When a target is unresolved, return the missing target to the coordinating Agent (or ask the user when running inline) before rendering; the working source format alone does not choose an output.
+
 ### 1. Markdown (.md)
 
-Default format: clean markdown with proper heading levels, tables in markdown format, and a reference list at the end.
+Clean markdown with proper heading levels, tables in markdown format, and a reference list at the end. Use this route when Markdown is a confirmed final deliverable.
 
 ### 2. LaTeX (.tex + .bib)
 
@@ -217402,7 +217514,7 @@ directed the content, and take responsibility for its accuracy and integrity.
 
 1. Parse existing in-text citations and reference-list entries; extract authors, year, title, source title, volume/issue/pages, DOI/URL, publisher, edition, editors, and access date.
 2. Normalize into a structured intermediate representation; resolve ambiguities (e.g., expand "et al." when the full author list is available).
-3. Regenerate in-text citations and reference-list entries in the target format.
+3. Regenerate visible in-text citations and reference-list entries in the target format; leave `&lt;!--ref:...--&gt;`, `&lt;!--anchor:...--&gt;`, and claim-intent markers unchanged.
 4. Verify: input citation count equals output count; all bibliographic elements survive; every in-text citation has a reference; and output matches target-format rules.
 
 ### Format-Specific Features
@@ -217524,12 +217636,12 @@ Record exact Pandoc/LaTeX commands used. Chinese content must use xelatex or lua
 
 1. Preflight: read the manuscript and all format/venue profiles; fail closed before formatting on any malformed profile.
 2. Hard gate: scan citation-provenance markers and HIGH-BLOCK tokens; refuse on any terminal marker.
-3. Convert: render each requested target from the same source bytes.
+3. Convert: render each confirmed target from the same source bytes while preserving the working source format and protected structures.
 4. Strip internal markers after the gate.
 5. Build the output package and append advisory sections.
 6. Run the final quality checklist.
 
-### APA 7.0 LaTeX Mandatory Rules
+### APA 7.0 LaTeX Rules (When Selected)
 
 Use `apa7` class where configured; second-language headings MUST use `\begin{center}...\end{center}` rather than bare `\textbf{}`; never use bare `p{0.25\linewidth}` columns, which ignore `\tabcolsep` and cause overflow; `man` mode forces `\raggedright` after `\begin{document}` and must be overridden; compilation must use xelatex or lualatex for Chinese content.
 
@@ -217564,7 +217676,7 @@ When the journal template conflicts with the manuscript source, prefer the journ
 
 ### Incomplete Input
 
-Missing manuscript -&gt; stop with the missing input. Missing target format -&gt; default to Markdown. Missing venue profile -&gt; no journal-specific application; never infer one.
+Missing manuscript -&gt; stop with the missing input. Missing target format -&gt; return the missing target to the coordinating Agent (or ask the user when running inline) before rendering. Missing venue profile -&gt; no journal-specific application; never infer one.
 
 ### Poor Quality Upstream Input
 
@@ -217597,6 +217709,7 @@ The formatted package, cover letter, conversion commands, and provenance summary
 
 - Formatting is format-only; never alter content, meaning, or citations.
 - Never infer missing layout fields from venue or filename.
+- Never install renderers or execute project scripts during rendering without separate user approval.
 - Never strip markers before the cite-time hard gate passes.
 - Do not apply terminal policy or submission checks in this node; gate on stamped tokens only.
 
@@ -226741,7 +226854,7 @@ Turn raw reviewer and editor comments into stable canonical atomic items with co
 5. Write `raw_thread_atomic_links` and guarantee each `thread_id` maps to at least one `comment_id` and each `comment_id` is referenced at least once.
 6. Write `review_comment_source_documents` and `raw_thread_source_spans`. Every thread must have at least one `span_role='primary'` whose `span_text` equals the source slice at the recorded offsets.
 7. Update resume fields, run `scripts/gate_and_render_workspace.py --artifact-root &lt;workspace&gt;`, and show the coverage view `07-review-comment-coverage.md` with the hard `30%` / soft `50%` character-coverage thresholds.
-8. Record the coverage confirmation request. This is the coverage handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session, or review coverage in dialogue. Pass the original package template as the session asset; keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths; no manual import is needed. Keep the workspace, snapshot, results, and history in the task directory. The coverage confirmation binds the complete mapping candidate and every source relation; visiting the page, submitting a result, or marking a round seen never counts as confirmation. The receiving service does not change the database or task sources. Do not proceed until the user confirms coverage review.
+8. Record the coverage confirmation request. Offer the coverage review in the `revision-master-review-workspace.v1` browser workbench and in dialogue. Prepare the retained workspace and start its loopback session only after the user selects browser review or an applicable task preference already covers it; otherwise review coverage in dialogue. When preparing the browser surface, assemble the frozen snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`). Pass the original package template as the session asset; keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths when the browser surface is used; no manual import is needed. Keep the workspace, snapshot, results, and history in the task directory. The coverage confirmation binds the complete mapping candidate and every source relation; visiting the page, submitting a result, or marking a round seen never counts as confirmation. The receiving service does not change the database or task sources. Do not proceed until the user confirms coverage review.
 
 ## Stable IDs
 
@@ -231065,7 +231178,7 @@ Build the canonical atomic workboard: priority, dependencies, evidence gaps, tar
 6. Write `workflow_pending_user_confirmations`, run `scripts/gate_and_render_workspace.py --artifact-root &lt;workspace&gt;`, and present `08-atomic-comment-workboard.md` and `06-thread-to-atomic-mapping.md`.
 7. Keep the confirmation request open until the user explicitly accepts the workboard.
 
-Review the workboard with the user in dialogue or through the board handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session with the original package template as the asset. Give the page URL and fixed result and history paths; keep the prepared embedded HTML for offline use and all handoff files in the task directory. The board confirmation binds the whole candidate board, so filtering the page view never narrows it. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes, and commit the processing receipt with the semantic write in the same task transaction. The receiving service writes only review results, not the database or task sources. Obtain the graph Gate confirmation separately in dialogue.
+Offer the workboard review in dialogue and through the board handoff. When browser review is selected or an applicable task preference already covers it, assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session with the original package template as the asset; otherwise review the same board in dialogue. Give the page URL and fixed result and history paths when the browser surface is used; keep the prepared embedded HTML for offline use and all handoff files in the task directory. The board confirmation binds the whole candidate board, so filtering the page view never narrows it. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes, and commit the processing receipt with the semantic write in the same task transaction. The receiving service writes only review results, not the database or task sources. Obtain the graph Gate confirmation separately in dialogue.
 
 ## Completion Criteria
 
@@ -237008,7 +237121,7 @@ Execute one complete revision-response round: author and confirm comment-scoped 
    - explicitly set `workflow_state.active_comment_id`; never switch silently;
    - write `strategy_cards` with `proposed_stance` and `stance_rationale`;
    - write at least one `strategy_card_actions`, plus target locations, evidence items, pending confirmations, and supplement suggestion/intake rows when needed;
-   - proactively prepare the current-strategy handoff using `workbench/README.md` and start its retained loopback session with the original `review-workspace/revision-master.html` package template as the asset, or review the same candidate in dialogue; ask for per-comment confirmation before writing manuscript and response drafts, binding the current active strategy candidate and its linked sources, evidence, and locations; a pending material blocker or substantive adjustment keeps that scope pending;
+   - offer the current-strategy handoff in the browser workbench and in dialogue; when browser review is selected or an applicable task preference already covers it, prepare the handoff using `workbench/README.md` and start its retained loopback session with the original `review-workspace/revision-master.html` package template as the asset; otherwise review the same candidate in dialogue; ask for per-comment confirmation before writing manuscript and response drafts, binding the current active strategy candidate and its linked sources, evidence, and locations; a pending material blocker or substantive adjustment keeps that scope pending;
    - after confirmation, write `strategy_action_manuscript_execution_items` and `comment_response_drafts`; keep reviewer/editor excerpts in the source language and all normalized strategy/draft text in the working language;
    - mark a comment complete only when strategy, evidence judgment, manuscript draft, response draft, and one-to-one correspondence checks all pass.
 2. Keep comment-scoped blockers local. Use global blockers only for true stage-level blockers.
@@ -237026,7 +237139,7 @@ Execute one complete revision-response round: author and confirm comment-scoped 
 7. Export final deliverables with `scripts/export_manuscript_variants.py` where the script supports the confirmed target; optional `latexdiff` is advisory only and must never block completion.
 8. Ask the user when a change would alter the main line, core claims, or conclusions; when a closing strategy needs authorization; or when a response-only resolution is ambiguous.
 
-For the final interactive pass, review the current `working_manuscript` and open workboard items with the user in dialogue or through the round handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session with the original package template as the asset; keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths; every workspace, result, history, and session file remains in the task directory, and no manual import is needed. The round view shows the frozen before/after excerpt, revision log, and thread-organized reply for every related location, plus actual delivery-file status and pending formal controls; a round seen marker is separate from feedback and never counts as confirmation. Apply accepted edits to `working_manuscript` and commit them through the existing semantic revision log scripts. Keep the per-comment confirmation and evidence boundaries intact.
+For the final interactive pass, offer the round handoff and dialogue for the current `working_manuscript` and open workboard items. When browser review is selected or an applicable task preference already covers it, assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session with the original package template as the asset; otherwise review the same items in dialogue. Keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths when the browser surface is used; every workspace, result, history, and session file remains in the task directory, and no manual import is needed. The round view shows the frozen before/after excerpt, revision log, and thread-organized reply for every related location, plus actual delivery-file status and pending formal controls; a round seen marker is separate from feedback and never counts as confirmation. Apply accepted edits to `working_manuscript` and commit them through the existing semantic revision log scripts. Keep the per-comment confirmation and evidence boundaries intact.
 
 When a committed `history_path` containing `revision-master-review-result.v1` is processed, validate it against the retained snapshot and recheck each scope's current database dependencies before writing, commit the processing receipt with the same semantic write in one task transaction, and regenerate the derived views. Keep pending or conflicting items traceable in the next handoff; recheck actual files, logs, and receipts after an interrupted manuscript write before retrying, without replaying blindly. Removing an earlier annotation never reverses an applied effect; an explicit request is required. All revision outputs remain task-local.
 

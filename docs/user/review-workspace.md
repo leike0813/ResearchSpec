@@ -1,8 +1,12 @@
 # 交互式论文审阅工作台
 
-当当前 `instructions --json` 含有 `review_workspace` 时，Agent 可以为审阅准备一份冻结页面，默认启动仅监听 `127.0.0.1` 的本地会话并把页面 URL 交给用户；用户无需手动导入 JSON。paper-humanizer 方案审阅、已核验候选稿比较以及 annotation-intake 修订使用通用 `review-workspace.v2` 页面（`review-workspace/index.html`，可能来自具体 capability package），保留工作区须先保存为 `workspace.json` 再启动会话；review-response 的语义审阅使用独立的 `revision-master-review-workspace.v1` 业务工作台（`review-workspace/revision-master.html`）。两者互不混用，已经交付的旧审阅件仍按其原路径处理；两套结果契约不变。也可以在对话中完成同样的审阅；浏览器不是流程前提。
+实质性改稿首次需要用户判断时，主 Agent 会主动推荐浏览器批注，同时提供对话审阅选项。用户选择浏览器后才准备页面；同一任务中适用的偏好直接复用，未答复不视为选择。少量措辞修改可采用简化的对话审阅。浏览器不是流程前提。
+
+当前 `instructions --json` 的 Procedure packet、profile、node、Gate 或 Decision 可含有 `review_workspace`，说明可用协议和资产；它本身不代表用户同意准备。普通稿件 drafting、roadmap 和 patching 也提供 `annotation-intake` 审阅提示。选定后，Agent 准备一份冻结页面，默认启动仅监听 `127.0.0.1` 的本地会话并把页面 URL 交给用户；用户无需手动导入 JSON。paper-humanizer 方案审阅、已核验候选稿比较以及 annotation-intake 修订使用通用 `review-workspace.v2` 页面（`review-workspace/index.html`，可能来自具体 capability package），保留工作区须先保存为 `workspace.json` 再启动会话；review-response 的语义审阅使用独立的 `revision-master-review-workspace.v1` 业务工作台（`review-workspace/revision-master.html`）。两者互不混用，已经交付的旧审阅件仍按其原路径处理；两套结果契约不变。
 
 “冻结”是这套流程的核心。准备阶段，Agent 把入口稿以及所有本地解析到的、构成审阅内容的手稿文件和图片复制到 `researchspec/` 之外的一个普通工作目录，记录按路径排序的 SHA-256 清单、入口路径和一个新的工作区标识。此后无论原稿是否被改动，页面始终显示并批注这份冻结版本。工作区 JSON 只携带可见的静态正文、公式和本地图片，不包含项目脚本，也不包含源文件树的可执行副本。工作区可以包含零个或多个 Agent 审阅项，因此也能用于纯用户批注。
+
+普通改稿复用 `captureReviewSources`、现有 Markdown 或宿主渲染器和 `assembleReviewWorkspace`，使用 `annotation-intake` adapter。有实际注释候选时用 `annotationCandidateReviewWorkspaceV2` 保留原证据；没有时直接准备正文批注，不编造 roadmap 到注释的转换。结果交回原任务处理，浏览器选择和结果导出均不替代修改授权。
 
 下面的页面与渲染、草稿与导出、交回 Agent 三节描述通用 `review-workspace.v2` 页面；review-response 的业务工作台见后一节。
 

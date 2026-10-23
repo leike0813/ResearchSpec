@@ -1,0 +1,68 @@
+---
+title: "Generative AI in University Writing Instruction: Evidence Limits in a Synthetic Corpus"
+author: "Synthetic Test Fixture"
+date: "2026-01-01"
+format: pdf
+---
+
+> TEST FIXTURE — NOT A REAL MANUSCRIPT
+>
+> All sources cited below are synthetic offline fixtures. No publication, DOI, or author
+> identity behind them has been verified.
+
+# Introduction
+
+Universities are experimenting with generative AI in writing courses while instructors and
+students negotiate new expectations for feedback, authorship, and disclosure. This draft
+reports what a small synthetic evidence set can and cannot support about structured
+AI-assisted feedback in introductory writing courses.
+
+# Method
+
+The corpus is the four synthetic source summaries supplied with this task. Each summary
+reports its own scope and limits. No external literature was consulted, and no causal
+inference is available from these records.
+
+# Findings
+
+Structured AI prompting coincided with more visible outline revisions in one first-year
+writing course [1] <!--ref:syn-classroom-01--><!--anchor:quote:Students%20using%20structured%20AI%20prompts%20produced%20more%20outline%20revisions%2C%20while%20final%20rubric%20scores%20varied%20widely-->.
+
+Instructors reported faster formative feedback but additional time spent checking
+unsupported claims [2] <!--ref:syn-interview-02--><!--anchor:quote:Instructors%20reported%20faster%20formative%20feedback%20but%20additional%20time%20spent%20checking%20unsupported%20claims-->.
+
+Respondents valued rapid feedback, and some reported uncertainty about permitted use and
+attribution [3] <!--ref:syn-survey-03--><!--anchor:quote:some%20reported%20uncertainty%20about%20permitted%20use%20and%20attribution-->.
+
+Course-level disclosure rules are required, but acceptable assistance is left to instructors
+[4] <!--ref:syn-policy-04--><!--anchor:quote:Course-level%20disclosure%20rules%20are%20required%2C%20but%20acceptable%20assistance%20is%20left%20to%20instructors-->.
+
+# Limitations
+
+- One course, no comparison group, and no validated measure of writing improvement
+  [1] <!--ref:syn-classroom-01--><!--anchor:quote:No%20comparison%20group-->
+  <!--anchor:quote:No%20validated%20measure%20of%20writing%20improvement-->.
+- Instructor workload is self-reported and unmeasured
+  [2] <!--ref:syn-interview-02--><!--anchor:quote:Self-reported%20workload-->.
+- The survey is a voluntary response sample
+  [3] <!--ref:syn-survey-03--><!--anchor:quote:Voluntary%20response%20bias-->.
+- Policy text does not show implementation quality
+  [4] <!--ref:syn-policy-04--><!--anchor:quote:Policy%20text%20does%20not%20show%20implementation%20quality-->.
+
+# Conclusion
+
+The supplied corpus supports a bounded description of revision activity and a visible
+feedback-versus-verification trade-off. It does not support a workload reduction claim, and
+it does not support a causal statement about policy clarity. Any narrowing of these
+conclusions requires the author's confirmation.
+
+# References
+
+1. SYN-CLASSROOM-01. Synthetic classroom observation summary: one first-year writing course,
+   six weeks. Offline test fixture.
+2. SYN-INTERVIEW-02. Synthetic instructor interview summary: five instructors at one
+   institution. Offline test fixture.
+3. SYN-SURVEY-03. Synthetic student survey summary: 84 voluntary responses. Offline test
+   fixture.
+4. SYN-POLICY-04. Synthetic institutional policy excerpt: one synthetic university. Offline
+   test fixture.

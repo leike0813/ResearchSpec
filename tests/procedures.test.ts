@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { stat } from "node:fs/promises";
+import path from "node:path";
 import { test } from "node:test";
 
 import { COMPANION_INTENTS } from "../src/adapters/companion/index.js";
@@ -181,4 +183,26 @@ void test("procedure packets recommend native roles only for eligible LLM work",
     const packet = await buildProcedurePacket(procedure, { mode: "standalone", workspace: "/workspace" });
     assert.deepEqual(packet.delegation, expected, id);
   }
+});
+
+void test("manuscript procedure packets expose the shared annotation-intake review page", async () => {
+  const catalog = await loadProcedureCatalog();
+  const sharedAsset = path.resolve("review-workspace/index.html");
+  const assertHint = (packet: Awaited<ReturnType<typeof buildProcedurePacket>>, label: string) => {
+    assert.equal(packet.review_workspace?.adapter, "annotation-intake", label);
+    assert.equal(packet.review_workspace?.descriptor_schema, "review-workspace.v2", label);
+    assert.equal(packet.review_workspace?.result_schema, "review-workspace-result.v2", label);
+    assert.equal(packet.review_workspace?.asset_path, sharedAsset, label);
+  };
+  for (const id of ["generation-manuscript-drafting", "transform-revision-roadmap-parsing", "transform-revision-patching"]) {
+    const procedure = catalog.get(id);
+    assert.ok(procedure, id);
+    for (const mode of ["standalone", "graph"] as const) {
+      assertHint(await buildProcedurePacket(procedure, { mode, workspace: "/workspace" }), `${id}:${mode}`);
+    }
+  }
+  const academicPaper = catalog.get("academic-paper");
+  assert.ok(academicPaper);
+  assertHint(await buildProcedurePacket(academicPaper, { mode: "standalone", workspace: "/workspace" }), "academic-paper:standalone");
+  assert.equal((await stat(sharedAsset)).isFile(), true);
 });

@@ -32,7 +32,9 @@ Use the referenced citation-format standards knowledge pack as the canonical for
 
 For each in-text citation: appears in the reference list, author name(s) match exactly, year matches exactly, and "et al." is used correctly (3+ authors for APA 7, abbreviated from the first citation unless names are needed to disambiguate same-year works; for Chinese citations apply the Chinese Citation Special Checks below). For each reference-list entry: cited at least once in text; never an orphan reference.
 
-### 2. Format Compliance (APA 7th — Default)
+### 2. Format Compliance (Confirmed Style)
+
+Apply the confirmed citation style. The APA 7th checks below are the reference example when APA is confirmed.
 
 In-text:
 - One author: (Smith, 2024).
@@ -91,6 +93,8 @@ Is the issue formatting-only (e.g., missing DOI, incorrect italics)?
 
 Fix deterministic errors directly in the corrected reference list, log each correction, and flag ambiguous cases for human review.
 
+Apply corrections from the confirmed style. The examples below are APA 7th rules; use the equivalent rule from the confirmed style for other formats.
+
 ### Common Auto-Corrections
 
 | Error | Correction |
@@ -115,9 +119,9 @@ Fix deterministic errors directly in the corrected reference list, log each corr
 5. Additional checks: self-citation ratio, source-currency distribution, citation density, and correct "et al." use.
 6. Output the audit report and the corrected reference list.
 
-### Citation Format Auto-Detection
+### Citation Format Detection
 
-When no citation format is specified, identify it from the in-text signature and reference-list layout:
+Use the citation format confirmed in the current user/task context. When none is confirmed, identify candidate formats as observations from the in-text signature and reference-list layout:
 
 | In-text signature | Reference-list confirmation | Format |
 |---|---|---|
@@ -127,7 +131,7 @@ When no citation format is specified, identify it from the in-text signature and
 | numbered [N] | numbered list | IEEE |
 | superscript number | numbered, superscript | Vancouver |
 
-If the format cannot be determined, ask the user; default to APA 7th if unanswered.
+Report a detected format as an observation and return the unknown style to the coordinating Agent (or ask the user when running inline) before applying style-specific corrections. Keep style-independent checks available (orphans, malformed identifiers, and source-level mismatches) and mark style-specific checks unchecked until the style is confirmed.
 
 ### Core Verification Rules by Format
 
@@ -212,7 +216,7 @@ Build the comparison matrix of (Author, Year) pairs and their in-text count and 
 
 | Missing Item | Handling |
 |---|---|
-| No declared citation format | auto-detect; default APA 7th |
+| No declared citation format | detect as an observation; ask for the applicable style; run style-independent checks meanwhile |
 | Reference list missing | flag the entire draft; emit the corrected list when entries are recoverable |
 | Draft body missing | return an empty audit with the blocker |
 
@@ -269,4 +273,5 @@ Conference papers may use IEEE numbered citations; law and history may use footn
 
 - Zero orphans is mandatory; never silently drop or invent a citation.
 - Never auto-correct a semantic mismatch; flag it for human review.
+- Apply the confirmed style to visible citation text only; preserve `<!--ref:...-->`, `<!--anchor:...-->`, and claim-intent marker syntax unchanged.
 - Do not rewrite prose, produce the abstract, or perform editorial review in this node.

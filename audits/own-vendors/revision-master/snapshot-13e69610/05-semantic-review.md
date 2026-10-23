@@ -127,6 +127,20 @@ paper-humanizer 声明独立 delivery assets 后，共用 catalog / own-vendor S
 
 验证：两种结果契约、并发、重试、写入失败、等待和端口恢复的 Node 测试通过；真实 Chrome 禁下载仍能提交，取消选区和重新批注正常。相关 35 项测试通过，完整验证见本 change 报告。
 
+## 稿件协作默认行为复核（2026-10-23）
+
+对照 RM-CAP-03 的“让用户确认原始审稿意见已被充分覆盖”、RM-CAP-04 的“默认形成一次用户可审阅、可确认的 planning 结果”，以及 RM-CAP-05 的“把局部 blocker 留在 comment 作用域”：本次保留业务确认，仅将审阅界面的选择改为主动提出、选定后准备。六件 capability extraction 与全部脚本、SQL、模板、页面、receipt 协议未改。
+
+| capability | 判定 | 本轮语义核对 |
+|---|---|---|
+| design-review-response-intake | preserved | 输入、语言确认、初始化与本地数据库契约不变。 |
+| analysis-review-response-manuscript-analysis | preserved | 全文结构、证据、风格分析和恢复义务不变。 |
+| transform-review-response-comment-atomization | adapted | coverage handoff 先给出浏览器与对话选择，选定后才运行只读投影并启动会话；整份映射确认、30%/50% 阈值与原始 span 保留。 |
+| design-review-response-workboard-planning | adapted | board 选定浏览器后准备；整板确认不因筛选缩小，原 SQLite recipe 与语义写入/receipt 同事务保留。 |
+| generation-review-response-round | adapted | current-strategy 不再先准备会话后询问；strategy 与 round 均复用适用偏好或主动提供选择。逐 comment 确认、证据 blocker、semantic revision log、来源语言与工作语言划分保持。 |
+
+原文只要求用户可以审阅与确认，并不要求先打开浏览器。此适配避免界面选择被误认为策略批准；round seen、内部确认和正式 Gate/Decision 仍分别处理。导出不直接修改原稿、SQLite 或 graph。具体校验见本 change 的 `verification.md`；真实宿主多轮行为与此前生产页人工复核均不由本次静态验证替代。
+
 ## 结论
 
 declared-fit-with-notes。新增独立工作台保留五个能力的业务义务与流程权威；未发现阻塞性语义 gap。生产页的人工操作验收仍按本 change 的任务 7.3 等待用户复核，自动检查不替代该项。SQLite 事务仅覆盖数据库语义和 receipt，物理稿件编辑的中断恢复仍需要核对实际文件与日志。

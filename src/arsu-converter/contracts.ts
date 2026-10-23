@@ -1,4 +1,5 @@
 import { renderLiteratureSourcePolicyProjection } from "../literature-adapters/provider-policy.js";
+import { MANUSCRIPT_PREPARATION_GUIDANCE } from "../manuscript-guidance.js";
 import {
   PAPER_HUMANIZER_REFERENCE_MODE_SKILL_PATH,
 } from "../core-skills/paper-humanizer/reference-mode.js";
@@ -142,7 +143,7 @@ graph.yaml, node instance files, and run handoff.md as runtime authority. Do not
 reconstruct the frontier from Skill prose; use selectors returned by status and
 request directed instructions for the eligible node, Gate, Decision, or pending
 child start.
-${manuscriptDeliveryBlock(skillGroup)}
+${skillGroup === "academic-paper" || skillGroup === "academic-pipeline" ? "\n" + MANUSCRIPT_PREPARATION_GUIDANCE + "\n" : ""}${manuscriptDeliveryBlock(skillGroup)}
 ${paperHumanizerReferenceBlock(skillGroup)}
 Produce semantic files at explicit project-relative paths outside
 researchspec/, then submit their unique roles, types, purposes, paths, producers
@@ -209,7 +210,8 @@ fall back to Pandoc, overwrite an existing target, or report a successful
 handoff after a partial or failed render.`
     : "";
   return `
-Treat \`specs/manuscript.yaml.delivery\` as the source-format contract.
+Treat confirmed \`specs/manuscript.yaml.delivery\` as the source-format contract;
+reuse task-local confirmed requirements for ordinary work without a stable commitment.
 The first manuscript-writing intake resolves \`working_format\`; a later change
 to a confirmed selection requires a project change. QMD is Markdown-compatible
 source: require a \`.qmd\` boundary path and preserve YAML frontmatter, fenced

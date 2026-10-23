@@ -4,7 +4,7 @@
 
 | metric | value |
 |---|---|
-| avg section coverage | 0.9500714195299633 |
+| avg section coverage | 0.9510385375183579 |
 | avg rule coverage | 0.9579594249047135 |
 | below section threshold | 0 |
 | below rule threshold | 0 |
@@ -23,16 +23,16 @@
 | `deep-research:fact-check` | Claim fact-check | 6 / 1,269 | 4 / 353 | 2 / 1,073 | 100% (4/4) | none | none |
 | `deep-research:socratic` | Socratic research planning | 10 / 2,865 | 0 / 0 | 3 / 1,694 | 100% (4/4) | none | none |
 | `deep-research:systematic-review` | Systematic review | 30 / 8,058 | 1 / 332 | 8 / 4,925 | 100% (6/6) | none | none |
-| `academic-paper:full` | Full manuscript drafting | 37 / 10,862 | 3 / 608 | 7 / 6,975 | 100% (7/7) | none | none |
-| `academic-paper:plan` | Guided paper planning | 15 / 3,733 | 3 / 608 | 4 / 3,635 | 100% (4/4) | none | none |
-| `academic-paper:outline-only` | Outline only | 14 / 3,449 | 3 / 608 | 3 / 2,588 | 100% (4/4) | none | none |
-| `academic-paper:revision` | Manuscript revision | 11 / 3,418 | 1 / 379 | 4 / 3,514 | 100% (4/4) | none | none |
+| `academic-paper:full` | Full manuscript drafting | 37 / 10,862 | 3 / 608 | 7 / 6,997 | 100% (7/7) | none | none |
+| `academic-paper:plan` | Guided paper planning | 15 / 3,733 | 3 / 608 | 4 / 3,643 | 100% (4/4) | none | none |
+| `academic-paper:outline-only` | Outline only | 14 / 3,449 | 3 / 608 | 3 / 2,596 | 100% (4/4) | none | none |
+| `academic-paper:revision` | Manuscript revision | 11 / 3,418 | 1 / 379 | 4 / 3,524 | 100% (4/4) | none | none |
 | `academic-paper:revision-coach` | Revision coaching | 6 / 1,728 | 3 / 608 | 1 / 493 | 100% (4/4) | none | none |
 | `academic-paper:abstract-only` | Abstract only | 8 / 1,958 | 1 / 379 | 1 / 816 | 100% (4/4) | none | none |
-| `academic-paper:lit-review` | Manuscript literature review | 9 / 2,304 | 3 / 608 | 4 / 2,372 | 100% (4/4) | none | none |
-| `academic-paper:format-convert` | Format conversion | 9 / 3,207 | 3 / 608 | 1 / 1,025 | 100% (4/4) | none | none |
-| `academic-paper:citation-check` | Citation check | 6 / 1,939 | 1 / 379 | 2 / 2,141 | 100% (4/4) | none | none |
-| `academic-paper:disclosure` | AI disclosure | 8 / 3,038 | 0 / 0 | 2 / 1,585 | 100% (3/3) | none | none |
+| `academic-paper:lit-review` | Manuscript literature review | 9 / 2,304 | 3 / 608 | 4 / 2,380 | 100% (4/4) | none | none |
+| `academic-paper:format-convert` | Format conversion | 9 / 3,207 | 3 / 608 | 1 / 1,029 | 100% (4/4) | none | none |
+| `academic-paper:citation-check` | Citation check | 6 / 1,939 | 1 / 379 | 2 / 2,146 | 100% (4/4) | none | none |
+| `academic-paper:disclosure` | AI disclosure | 8 / 3,038 | 0 / 0 | 2 / 1,589 | 100% (3/3) | none | none |
 | `academic-paper:rebuttal-audit` | Rebuttal audit | 4 / 1,387 | 3 / 608 | 1 / 493 | 100% (4/4) | none | none |
 | `academic-paper-reviewer:full` | Full peer review | 22 / 6,475 | 1 / 16 | 5 / 3,955 | 83% (5/6) | converted_only:EIC Review Report | none |
 | `academic-paper-reviewer:re-review` | Revision re-review | 9 / 2,681 | 0 / 0 | 3 / 2,117 | 100% (4/4) | none | none |
@@ -40,8 +40,8 @@
 | `academic-paper-reviewer:methodology-focus` | Methodology-focused review | 7 / 2,060 | 0 / 0 | 1 / 1,296 | 100% (4/4) | none | none |
 | `academic-paper-reviewer:guided` | Guided review | 12 / 3,683 | 0 / 0 | 3 / 2,739 | 100% (4/4) | none | none |
 | `academic-paper-reviewer:calibration` | Reviewer calibration | 13 / 4,371 | 0 / 0 | 2 / 2,346 | 25% (1/4) | gap:FNR, gap:FPR, gap:gold set | none |
-| `academic-pipeline:end-to-end` | End-to-end pipeline | 26 / 9,858 | 1 / 136 | 24 / 36,241 | 80% (4/5) | none | Stage 1 RESEARCH |
-| `academic-pipeline:resume_from_passport` | Resume from passport reset boundary | 9 / 5,703 | 1 / 136 | 26 / 37,108 | 40% (2/5) | gap:reset boundary, gap:awaiting_resume, gap:consumes_hash | none |
+| `academic-pipeline:end-to-end` | End-to-end pipeline | 26 / 9,858 | 1 / 136 | 24 / 36,263 | 80% (4/5) | none | Stage 1 RESEARCH |
+| `academic-pipeline:resume_from_passport` | Resume from passport reset boundary | 9 / 5,703 | 1 / 136 | 26 / 37,130 | 40% (2/5) | gap:reset boundary, gap:awaiting_resume, gap:consumes_hash | none |
 
 ## Per-Package Parity
 
@@ -52,13 +52,13 @@
 | `analysis-review-response-manuscript-analysis` | 0.933 | 1.000 | 119 | 6 | yes | none |
 | `analysis-risk-of-bias-assessment` | 0.947 | 1.000 | 218 | 1 | yes | none |
 | `check-citation-existence-verification` | 1.000 | 1.000 | 102 | 2 | yes | none |
-| `check-citation-format-compliance` | 0.951 | 1.000 | 323 | 2 | yes | none |
+| `check-citation-format-compliance` | 0.951 | 1.000 | 328 | 2 | yes | none |
 | `check-citation-verification-summary` | 1.000 | 1.000 | 90 | 2 | yes | none |
 | `check-claim-faithfulness-audit` | 0.944 | 1.000 | 229 | 1 | yes | none |
 | `check-collaboration-depth-observer` | 1.000 | 1.000 | 161 | 1 | yes | none |
 | `check-compliance-check` | 0.923 | 1.000 | 235 | 2 | yes | none |
 | `check-contamination-signals` | 1.000 | 1.000 | 98 | 2 | yes | none |
-| `check-paper-humanization-review` | 0.800 | 1.000 | 146 | 6 | yes | none |
+| `check-paper-humanization-review` | 0.800 | 1.000 | 148 | 6 | yes | none |
 | `check-paper-humanization-verification` | 1.000 | 1.000 | 124 | 4 | yes | none |
 | `check-passport-verifier` | 1.000 | 1.000 | 101 | 2 | yes | none |
 | `check-pdf-read-preflight` | 1.000 | 1.000 | 93 | 2 | yes | none |
@@ -74,15 +74,15 @@
 | `design-review-panel-config` | 1.000 | 1.000 | 198 | 2 | yes | none |
 | `design-review-response-intake` | 1.000 | 1.000 | 122 | 6 | yes | none |
 | `design-review-response-workboard-planning` | 1.000 | 1.000 | 123 | 12 | yes | none |
-| `design-writing-intake` | 1.000 | 1.000 | 312 | 3 | yes | none |
+| `design-writing-intake` | 1.000 | 1.000 | 320 | 3 | yes | none |
 | `discovery-literature-monitoring` | 1.000 | 1.000 | 223 | 1 | yes | none |
 | `discovery-literature-search-screening` | 0.837 | 1.000 | 308 | 2 | yes | none |
 | `discovery-source-quality-grading` | 1.000 | 1.000 | 199 | 1 | yes | none |
 | `generation-abstract-writing` | 1.000 | 1.000 | 206 | 3 | yes | none |
 | `generation-figure-generation` | 0.816 | 0.667 | 226 | 2 | yes | none |
-| `generation-format-rendering` | 0.954 | 1.000 | 359 | 2 | yes | none |
+| `generation-format-rendering` | 0.954 | 1.000 | 363 | 2 | yes | none |
 | `generation-humanization-reference` | 0.981 | 1.000 | 220 | 1 | yes | none |
-| `generation-manuscript-drafting` | 0.955 | 1.000 | 276 | 5 | yes | none |
+| `generation-manuscript-drafting` | 1.000 | 1.000 | 281 | 5 | yes | none |
 | `generation-report-compilation` | 0.955 | 1.000 | 265 | 2 | yes | none |
 | `generation-review-response-round` | 0.950 | 1.000 | 148 | 13 | yes | none |
 | `judgment-devils-advocate-stress-test` | 0.878 | 0.889 | 237 | 2 | yes | none |
@@ -99,10 +99,10 @@
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `artifacts/generated/capability-parity-report.json` | `26dad8541a4c8c5136cd7417b010d6aa43ecc92a20c261b2fb97a8297fd54146` |
-| mode-capability review HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-capability-review.html` | `99c48cf339719c3b4fd0517f5ded98801019b0f1c7e2d4f0f6ecd833b62d7981` |
-| graph-match assessment HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-graph-match-assessment.html` | `12e108452b84e64f96163e2f7e056d86546c1037853398e4a33b54a4ed531cfd` |
-| gap semantic review HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-gap-semantic-review.html` | `50fcd01ee9558ac821de472819990916f2d5be54c6e4dda7795fd2233eef9284` |
+| parity report | `artifacts/generated/capability-parity-report.json` | `ecfc901f7ffc55b0b089916e3e1170dd7b351e2fcba16c22b28ae15e6a7fd65f` |
+| mode-capability review HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-capability-review.html` | `b958fd9d19f22fdb1e06c15823ae31e789e69dee5caa767de74a4565fce02a1f` |
+| graph-match assessment HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-graph-match-assessment.html` | `505853ddc42f4305518691541d1da069284fa6fab34321316cb7d6fdbf663f87` |
+| gap semantic review HTML | `audits/arsu/v3.22.2-7de1c9d/artifacts/arsu-mode-gap-semantic-review.html` | `5b54a61f7a3b1e14a00c5c8b827a4a315555b97c4027fd9daed0bf9995849ce3` |
 
 ## Semantic Review
 

@@ -14,7 +14,7 @@
     {
       "capability_id": "check-paper-humanization-review",
       "maturity": "operational",
-      "skill_lines": 146,
+      "skill_lines": 148,
       "knowledge_refs": 6,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,

@@ -55,6 +55,17 @@ void test("procedure discovery is global and activation is workspace-bound", asy
     assert.equal(instructions.data?.packet.activation_mode, "standalone");
     assert.equal(instructions.data?.packet.procedure.id, "deep-research");
     assert.match(instructions.data?.packet.procedure.content_sha256 ?? "", /^[a-f0-9]{64}$/);
+
+    for (const id of ["academic-paper", "generation-manuscript-drafting", "transform-revision-roadmap-parsing", "transform-revision-patching"]) {
+      const manuscript = parseEnvelope<{ packet: { review_workspace?: { adapter?: string; descriptor_schema?: string; result_schema?: string; asset_path?: string | null } } }>(
+        runCli(["instructions", `procedure:${id}`, "--json"], root),
+      );
+      assert.equal(manuscript.ok, true, JSON.stringify(manuscript.error));
+      assert.equal(manuscript.data?.packet.review_workspace?.adapter, "annotation-intake", id);
+      assert.equal(manuscript.data?.packet.review_workspace?.descriptor_schema, "review-workspace.v2", id);
+      assert.equal(manuscript.data?.packet.review_workspace?.result_schema, "review-workspace-result.v2", id);
+      assert.equal(manuscript.data?.packet.review_workspace?.asset_path, path.resolve("review-workspace/index.html"), id);
+    }
   } finally {
     await cleanup(root);
   }

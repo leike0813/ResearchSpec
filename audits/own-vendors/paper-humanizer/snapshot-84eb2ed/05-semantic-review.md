@@ -105,6 +105,19 @@ revision-master 当前锚点仅刷新共用维护 catalog / Skill 的身份及�
 
 验证：两种协议的本地接收测试通过；真实 Chrome 在下载及 localStorage 写入不可用时仍提交成功，失败可重试；取消选区、Escape、键盘激活与重新批注通过。相关 35 项测试通过。最终全量命令记录在本 change 的验证报告中。
 
+## 稿件协作默认行为复核（2026-10-23）
+
+本轮只调整 ResearchSpec 自有审阅入口的选择顺序；上游快照、11 件 extraction、工具、模板、知识正文、页面和 Hook 交付资产未改。对照 PH-CAP-01 原文 “Review mode diagnoses eligible prose and never edits the source” 与 PH-CAP-04 “Edit only the text fields of approved prose segments”，审阅界面的选择不扩大修改范围。
+
+| capability | 判定 | 本轮语义核对 |
+|---|---|---|
+| check-paper-humanization-review | adapted | `procedures/paper-humanizer/review.md` 主动提出 browser annotation 与 dialogue，仅在选定或适用的任务偏好存在后捕获与准备；诊断只读、覆盖 ledger、原始发现与保留约束不变。 |
+| transform-paper-humanization-revision | adapted | `procedures/paper-humanizer/revision.md` 先给出界面选择；无论采用何种界面都先完成 candidate validation 与信息单元核对。浏览器路径仍冻结本轮直接 base 与 verified candidate，回执仍须核对 source、歧义及正式 acceptance 边界。 |
+| generation-humanization-reference | preserved | 原 taxonomy、误报保护、知识投影和输出角色不变。 |
+| check-paper-humanization-verification | preserved | 原验证协议、状态与结果角色不变，不把浏览器选项变成验收证据。 |
+
+新增准备与选择规则来自 `improve-manuscript-collaboration-defaults`，没有冒充上游原文。界面可选与主动推荐同时成立；小改可简化，沉默不成为授权。共享 receiver 仅保存建议性结果，正式控制和源稿写入继续由所属流程承担。静态检查与对话验收的边界见该 change 的 `verification.md`，没有运行新的宿主行为 campaign。
+
 ## 结论
 
 declared-fit-with-notes。新增学术写作语义与 Hook 守则的可移植检查均有明确承载；原始来源逐字保留，矛盾和不安全的例示操作由主程序的来源支持、体裁保护和未决报告约束处理。工作流与宿主边界维持既有权威划分。

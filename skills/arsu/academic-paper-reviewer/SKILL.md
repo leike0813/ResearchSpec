@@ -38,7 +38,8 @@ reconstruct the frontier from Skill prose; use selectors returned by status and
 request directed instructions for the eligible node, Gate, Decision, or pending
 child start.
 
-Treat `specs/manuscript.yaml.delivery` as the source-format contract.
+Treat confirmed `specs/manuscript.yaml.delivery` as the source-format contract;
+reuse task-local confirmed requirements for ordinary work without a stable commitment.
 The first manuscript-writing intake resolves `working_format`; a later change
 to a confirmed selection requires a project change. QMD is Markdown-compatible
 source: require a `.qmd` boundary path and preserve YAML frontmatter, fenced

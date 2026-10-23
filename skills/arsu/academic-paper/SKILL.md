@@ -39,7 +39,22 @@ reconstruct the frontier from Skill prose; use selectors returned by status and
 request directed instructions for the eligible node, Gate, Decision, or pending
 child start.
 
-Treat `specs/manuscript.yaml.delivery` as the source-format contract.
+## Prepare Manuscript Work
+
+Before new manuscript prose or substantive revision, the coordinating Agent completes this preparation, including when a Procedure or graph selector was named directly:
+
+1. Inspect the current manuscript, supplied sources, relevant confirmed specs and matching task note. Separate established requirements from provisional ideas. Discovery, read-only inspection and exploratory outlines can proceed during preparation.
+2. Reuse answered questions. Discuss unresolved goals, audience, research question, central argument, scope and intended changes with the user. Resolve working source format (Markdown, QMD, LaTeX or LaTeX project), final deliverables (such as Word or PDF), venue/template or general requirements, and citation style. Ask focused questions for choices the materials cannot settle; offer defaults as recommendations, using them only when accepted or the choice is explicitly delegated. A file extension identifies current source, not permission to change delivery.
+3. Map proposed claims to actual evidence, including counterevidence and limitations. Investigate material gaps with eligible Procedures or native research within the authorized source policy. Adequate supplied evidence needs no redundant external search. Report unavailable sources or tools and the affected claims; agree on a narrower claim, omission or provisional scope rather than filling gaps from memory.
+4. Present the intended argument or revision direction, evidence basis, remaining limits and delivery requirements; resolve material disagreements before dependent prose. Current user instructions or an unchanged prior agreement can establish this alignment. A provisional outline or configuration with unresolved choices is preparation, not permission to draft.
+5. Keep user discussion in the parent. Before dispatch, carry necessary confirmed context through existing material bindings or resolved inputs; if the packet cannot carry it, work inline. Workers return unresolved choices to the coordinator. Retain confirmed requirements, review preference and evidence limits in the ordinary task note for sustained work; stable commitments still use the project change lifecycle.
+
+For a small wording correction that leaves meaning, claims, structure and delivery unchanged, inspect the affected text and preserve established requirements without a full interview or fresh literature search.
+
+At the first user judgment point in substantive revision, proactively offer browser annotation alongside dialogue. Prepare a workspace only after browser review is selected; reuse an applicable task preference and ask again only if it no longer fits. Silence is not selection. Minor wording edits can stay in dialogue. Review feedback remains advisory and follows the owning task's source checks and authorization boundaries.
+
+Treat confirmed `specs/manuscript.yaml.delivery` as the source-format contract;
+reuse task-local confirmed requirements for ordinary work without a stable commitment.
 The first manuscript-writing intake resolves `working_format`; a later change
 to a confirmed selection requires a project change. QMD is Markdown-compatible
 source: require a `.qmd` boundary path and preserve YAML frontmatter, fenced

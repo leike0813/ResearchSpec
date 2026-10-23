@@ -177,3 +177,31 @@ void test("new instruction hints expose humanizer and revision-master browser re
   assert.equal(context?.asset_path, null);
   assert.equal(reviewWorkspaceInstruction({ profileId: "minimal", selector: "profile:minimal" }), undefined);
 });
+
+void test("manuscript procedure hints reuse the shared annotation-intake page", async () => {
+  const sharedAsset = path.resolve("review-workspace/index.html");
+  const sharedHtml = await readFile(sharedAsset, "utf8");
+  const capabilities = [
+    "academic-paper",
+    "generation-manuscript-drafting",
+    "transform-revision-roadmap-parsing",
+    "transform-revision-patching",
+  ];
+  for (const capabilityId of capabilities) {
+    const hint = reviewWorkspaceInstruction({
+      profileId: "minimal",
+      selector: `procedure:${capabilityId}`,
+      capabilityId,
+      packageRoot: "/tmp/package",
+    });
+    assert.equal(hint?.adapter, "annotation-intake", capabilityId);
+    assert.equal(hint?.descriptor_schema, "review-workspace.v2", capabilityId);
+    assert.equal(hint?.result_schema, "review-workspace-result.v2", capabilityId);
+    assert.equal(hint?.asset_path, sharedAsset, capabilityId);
+    assert.equal(await readFile(hint?.asset_path ?? "", "utf8"), sharedHtml, capabilityId);
+  }
+  assert.equal(
+    reviewWorkspaceInstruction({ profileId: "paper-humanizer", selector: "node:run/draft", capabilityId: "generation-manuscript-drafting", packageRoot: "/tmp/package" })?.adapter,
+    "paper-humanizer",
+  );
+});
