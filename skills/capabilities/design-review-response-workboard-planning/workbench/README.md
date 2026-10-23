@@ -58,7 +58,7 @@ Read-only preparation never initializes, migrates, repairs, or renders the
 database, and never reads another task. Capture, document/block assembly,
 anchors, and the frozen HTML remain outside this module.
 
-## Preparing the HTML
+## Preparing the session
 
 Use the exported `researchspec/review-workspace` API from the installed package.
 The context file must contain `task_id`, the exact `node:<run>/<node>[@<round>]`
@@ -68,7 +68,7 @@ values from the current graph instructions. Never infer the round from SQLite.
 
 ```javascript
 import { prepareRevisionMasterReview, readRevisionMasterProjection,
-  validateRevisionMasterResult } from 'researchspec/review-workspace';
+  startReviewSession, validateRevisionMasterResult } from 'researchspec/review-workspace';
 import { readFile } from 'node:fs/promises';
 
 const context = JSON.parse(await readFile(contextPath, 'utf8'));
@@ -85,11 +85,20 @@ const ready = await prepareRevisionMasterReview({
   templatePath: packageHtmlPath,
   nextStep: '导出结果交回 Agent，正式关口在对话中确认',
 });
-// Deliver ready.htmlPath; independently retain ready.workspacePath and sources/.
+const session = await startReviewSession({
+  projectRoot: taskRoot,
+  workspacePath: ready.workspacePath,
+  assetPath: packageHtmlPath,
+});
+// Give the user session.url and show session.resultPath.
+// Keep ready.htmlPath as the offline backup.
+// Independently retain ready.workspacePath and the captured sources.
+const receipt = await session.waitForResult(); // Optional; default timeout is 10 minutes.
 const checked = validateRevisionMasterResult(
-  JSON.parse(await readFile(returnedResultPath, 'utf8')),
+  JSON.parse(await readFile(receipt.history_path, 'utf8')),
   JSON.parse(await readFile(ready.workspacePath, 'utf8')),
 );
+await session.close(); // The main Agent decides when the review session ends.
 ```
 
 The variables above are Agent-resolved task and installed-package paths.
@@ -97,7 +106,35 @@ The variables above are Agent-resolved task and installed-package paths.
 `blocks` may come from an independently authorized frozen render. Without a
 render, captured source remains readable. The preparation API captures sources,
 rechecks the SQL projection and file contents, and publishes a fresh workspace
-and HTML only after validation. Do not open the unprepared package template.
+and HTML only after validation. Pass the original package template as the
+session `assetPath`; the server embeds the retained workspace itself. Use
+`ready.htmlPath` only for the offline fallback and do not deliver the original
+template directly.
+
+Normal delivery uses the loopback session URL, with no manual JSON import. The
+page keeps drafts in browser-local state and posts an explicit export to the
+session. The receiver validates `workspace.json`, atomically publishes
+`result.json` beside it, and retains every complete submission as
+`results/<submission-id>.json`. Wait for a receipt and validate its immutable
+`history_path`; `result.json` is only the mutable latest copy. `waitForResult`
+can resume with `after`, accepts `timeoutMs` and an `AbortSignal`, and observes
+submissions already committed in the current service. After a restart, read
+the retained files directly. Waiting never applies feedback. Reopening the same
+snapshot reuses its `review-session.json` origin to preserve drafts; report an
+occupied port instead of changing it.
+
+The installed instructions expose the real session tool as
+`review_workspace.session_tool_path`. An Agent can instead run:
+
+```bash
+node <session_tool_path> --project-root ROOT --workspace WORKSPACE_JSON \
+  --asset HTML [--wait]
+```
+
+`--wait` prints successful receipt events and leaves the service running; the
+main Agent decides when to close it. The prepared HTML also opens offline with
+its explicit backup download. A failed submission stays retryable and never
+switches to download automatically.
 
 ## Checking a returned result
 
@@ -112,7 +149,8 @@ differs from the snapshot context.
 
 ```bash
 uv run --project="$HOME/.ar" --locked -- python <package>/workbench/review_workbench.py accept \
-  --db <task>/revision-master.db --project-root <task> --result <task>/result.json --snapshot <task>/snapshot.json \
+  --db <task>/revision-master.db --project-root <task> \
+  --result <review>/results/<submission-id>.json --snapshot <task>/snapshot.json \
   --trusted <task>/retained-snapshot.json --context <task>/workbench-context.json \
   --accept-feedback f1 --accept-feedback f2 --write <task>/semantic_write.py:apply
 ```

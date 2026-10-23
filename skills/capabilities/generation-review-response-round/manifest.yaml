@@ -66,7 +66,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: review-workspace-index.html
     path: review-workspace/index.html
-    content_hash: 9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc
+    content_hash: f9cd4fdcaf2a1febe331c98e515d41627dd25505196b5b73d6472f9015cf319b
     license: MIT
   - knowledge_id: review-workspace-v1.html
     path: review-workspace/v1.html
@@ -82,11 +82,11 @@ knowledge_refs:
     license: MIT
   - knowledge_id: workbench-README.md
     path: workbench/README.md
-    content_hash: 2cf0158564583e0d43d6dd68fa3e5064c828d1f8005ac4cda6cf2169e2b2568d
+    content_hash: 22810a6fb031720b7ddac6d0a9a3d46c616ea6c7f78fc128a17c9c731df0f44b
     license: MIT
   - knowledge_id: review-workspace-revision-master.html
     path: review-workspace/revision-master.html
-    content_hash: 992386d99129f2f847f1d31a829c3615d74bff722e3de8e59978158215a18dac
+    content_hash: e7b4137520a6efb28ba17ee13acf97ce2adcd748f68887cc8aca45dbc7df5a7f
     license: MIT
 gate_policy: required
 provenance:

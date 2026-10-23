@@ -120,7 +120,9 @@
     <span id="workflow" class="badge" hidden></span>
     <span class="spacer"></span>
     <label class="file-button" for="file">导入工作区 JSON<input id="file" type="file" accept="application/json,.json"></label>
-    <button id="export" class="primary" type="button" disabled>导出审阅结果</button>
+    <span id="session-status" class="subtle"></span>
+    <button id="download" type="button" disabled>下载备用结果</button>
+    <button id="export" class="primary" type="button" disabled>提交审阅结果</button>
   </header>
   <p id="banner" class="banner" hidden></p>
   <section id="welcome" class="welcome">
@@ -682,6 +684,9 @@
   var collapsedGroups = {};
   var toastTimer = null;
   var saveTimer = null;
+  var sessionBridge = window.researchspecReviewSession || null;
+  var submitting = false;
+  var retryResult = null;
 
   function setText(node, value){ node.textContent = value === undefined || value === null ? '' : String(value); }
   function el(tag, className, textValue){ var node = document.createElement(tag); if (className) node.className = className; if (textValue !== undefined) node.textContent = textValue; return node; }
@@ -696,11 +701,12 @@
 
   function save(){
     if (!STATE) return;
+    retryResult = null;
     clearTimeout(saveTimer);
     var payload = JSON.stringify({ workspace_id: STATE.workspace.workspace_id, snapshot_id: STATE.workspace.snapshot_id, export_revision: STATE.export_revision, overall_note: STATE.overall_note, decisions: STATE.decisions, comments: STATE.comments });
     saveTimer = setTimeout(function(){
       if (storageSet(storageKey(), payload)) { setText($('save-status'), '草稿已保存在此浏览器（非正式状态）'); $('banner').hidden = true; }
-      else { setText($('save-status'), '浏览器未允许保存草稿'); setText($('banner'), '浏览器无法保存本地草稿：关闭页面前请先用“导出审阅结果”保存完整快照。'); $('banner').hidden = false; }
+      else { setText($('save-status'), '浏览器未允许保存草稿'); setText($('banner'), '浏览器无法保存本地草稿：关闭页面前请先提交到本地会话，或用“下载备用结果”保存完整快照。'); $('banner').hidden = false; }
     }, 150);
   }
 
@@ -754,7 +760,9 @@
   function openWorkspace(){
     $('welcome').hidden = true;
     $('layout').hidden = false;
-    $('export').disabled = false;
+    $('download').disabled = false;
+    $('export').disabled = !sessionBridge;
+    setText($('session-status'), sessionBridge ? '本地会话 · ' + sessionBridge.resultPath : '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。');
     $('clear').hidden = false;
     setText($('adapter'), STATE.workspace.adapter);
     $('adapter').hidden = false;
@@ -1098,7 +1106,7 @@
   function captureSelection(){
     if (!STATE) return;
     var selection = getSelection();
-    if (!selection || selection.isCollapsed || selection.rangeCount === 0) return;
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) { clearPending(); return; }
     var range = selection.getRangeAt(0);
     var startNode = range.startContainer.nodeType === 1 ? range.startContainer : range.startContainer.parentElement;
     var endNode = range.endContainer.nodeType === 1 ? range.endContainer : range.endContainer.parentElement;
@@ -1379,24 +1387,56 @@
     setTimeout(function(){ URL.revokeObjectURL(url); }, 0);
   }
 
-  function exportResult(){
+  function prepareResult(){
     if (!STATE) return;
     var empty = STATE.comments.find(function(comment){ return !comment.body.trim(); });
-    if (empty) { notify('请先填写每条批注的正文，再导出。'); activate(empty.comment_id, true); return; }
-    STATE.export_revision = STATE.export_revision + 1;
+    if (empty) { notify('请先填写每条批注的正文，再提交或下载。'); activate(empty.comment_id, true); return null; }
     var result;
     try {
-      result = buildResult(STATE.workspace, STATE, new Date().toISOString());
+      result = buildResult(STATE.workspace, Object.assign({}, STATE, { export_revision: STATE.export_revision + 1 }), new Date().toISOString());
       validateResultAgainstWorkspace(result, STATE.workspace);
-    } catch (error) { notify('导出的结果未通过校验：' + error.message); return; }
+    } catch (error) { notify('结果未通过校验：' + error.message); return null; }
+    return result;
+  }
+
+  function acceptResult(result){
+    STATE.export_revision = result.export_revision;
     save();
-    download(result, STATE.workspace.workspace_id + '-review-result-r' + STATE.export_revision + '.json');
     renderStatus();
-    notify('已导出完整结果（第 ' + STATE.export_revision + ' 次）；草稿保持可编辑，可继续修改并再次导出。');
+  }
+
+  function downloadResult(){
+    var result = prepareResult();
+    if (!result) return;
+    download(result, STATE.workspace.workspace_id + '-review-result-r' + result.export_revision + '.json');
+    acceptResult(result);
+    notify('已发起备用下载（第 ' + result.export_revision + ' 次）；无法确认文件是否已保存。');
+  }
+
+  async function submitResult(){
+    if (!sessionBridge || submitting) return;
+    var result = retryResult || prepareResult();
+    if (!result) return;
+    retryResult = result;
+    submitting = true;
+    $('export').disabled = $('download').disabled = true;
+    try {
+      var receipt = await sessionBridge.submit(result);
+      if (!receipt || typeof receipt.result_path !== 'string' || !receipt.result_path) throw new Error('本地会话未返回 result_path。');
+      acceptResult(result);
+      notify('已提交完整结果（第 ' + result.export_revision + ' 次）；结果文件：' + receipt.result_path);
+    } catch (error) {
+      notify('提交失败，草稿仍保留；可重试。' + (error && error.message ? ' ' + error.message : ''));
+    } finally {
+      submitting = false;
+      $('download').disabled = !STATE;
+      $('export').disabled = !sessionBridge;
+    }
   }
 
   function toggleOverlapOnOutsideClick(event){
     if (!event.target.closest('#overlap-menu,mark')) $('overlap-menu').hidden = true;
+    if (pending && !event.target.closest('#selection-action, [data-text-target]')) clearPending();
   }
 
   function handleWholeBlockHotkey(event){
@@ -1424,6 +1464,10 @@
   $('paper').addEventListener('keyup', function(event){ if (event.shiftKey && event.key.indexOf('Arrow') === 0) captureSelection(); });
   $('paper-scroll').addEventListener('scroll', updateCurrentSection, { passive: true });
   $('selection-action').addEventListener('pointerdown', function(event){ event.preventDefault(); });
+  $('selection-action').addEventListener('blur', function(){
+    var selection = getSelection();
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) clearPending();
+  });
   $('selection-action').addEventListener('click', function(){ if (pending) addText(pending.blockId, pending.start, pending.end); });
   $('search').addEventListener('input', function(){ forcedId = null; renderCards(); });
   $('origin-filter').addEventListener('change', function(){ forcedId = null; renderCards(); });
@@ -1439,10 +1483,20 @@
     renderAll(false);
     notify('本地草稿已清除。');
   });
-  $('export').addEventListener('click', exportResult);
+  $('download').addEventListener('click', downloadResult);
+  $('export').addEventListener('click', submitResult);
   $('legacy-close').addEventListener('click', function(){ $('legacy-dialog').close(); });
   document.addEventListener('keydown', handleWholeBlockHotkey);
   document.addEventListener('click', toggleOverlapOnOutsideClick);
+  document.addEventListener('selectionchange', function(){
+    var selection = getSelection();
+    if ((!selection || selection.isCollapsed || selection.rangeCount === 0) && document.activeElement !== $('selection-action')) clearPending();
+  });
+  if (!sessionBridge) setText($('session-status'), '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。');
+  else {
+    document.querySelector('label[for="file"]').hidden = true;
+    importWorkspace(sessionBridge.workspace);
+  }
   </script>
 </body>
 </html>

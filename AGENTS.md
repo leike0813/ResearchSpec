@@ -53,13 +53,18 @@ ResearchSpec should not become:
 - a hand-maintained copy of generated ARSU artifacts when converter rules should
   own the output.
 
-The optional interactive manuscript review workspace is a local static surface
-over frozen `review-workspace.v2` documents. An Agent captures the relevant
-source set outside `researchspec/` and prepares one static selectable document;
-the browser keeps drafts in browser-local state and exports advisory
-`review-workspace-result.v2` snapshots. It never rerenders changed source,
-relocates annotations, installs host tools, or owns manuscript, SQLite, handoff,
-Gate, Decision, node, or other ResearchSpec workflow mutations. The retained
+The optional interactive manuscript review workspace serves frozen
+`review-workspace.v2` documents from a loopback-only local session; the prepared
+HTML remains usable offline. An Agent captures the relevant source set outside
+`researchspec/`, retains a static selectable `workspace.json`, and starts the
+session. The browser keeps drafts locally, and an explicit export posts an advisory
+`review-workspace-result.v2` snapshot to a task-local receiver. The receiver
+validates the retained workspace, writes `result.json` beside `workspace.json`,
+and preserves every complete submission under `results/`. It does not apply the
+result or fall back to download automatically. The workspace never rerenders
+changed source, relocates annotations, installs host tools, or owns manuscript,
+capture, SQLite, handoff, Gate, Decision, node, or other ResearchSpec workflow
+mutations. The retained
 `review-workspace/v1.html` page and the v1 contract keep existing v1 drafts and
 results on their original path; v1 and v2 are never mixed. Browser failure falls
 back to the same review in Agent dialogue.
@@ -67,7 +72,10 @@ back to the same review in Agent dialogue.
 review-response additionally offers the independent
 `revision-master-review-workspace.v1` workbench at
 `review-workspace/revision-master.html`, delivered with its package-local
-`workbench/` read-only projection, receipt DDL, and write guidance. It carries
+`workbench/` read-only projection, receipt DDL, and write guidance. Its retained
+workspace, fixed result, complete history, and session state stay in the owning
+task directory. The session receives the original package template as its
+asset; the prepared embedded HTML is the offline fallback. It carries
 four handoffs: coverage mapping, whole workboard, current strategy, and round
 revision/response, and exports `revision-master-review-result.v1`. Internal
 confirmation is explicit and scoped to coverage, the whole board, or the current

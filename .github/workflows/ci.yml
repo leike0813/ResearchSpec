@@ -79,6 +79,8 @@ jobs:
 
       - name: Run public and focused tests
         run: pnpm test
+        env:
+          REQUIRE_REVIEW_BROWSER: ${{ runner.os == 'Linux' && '1' || '' }}
 
       - name: Run lint and typecheck
         run: pnpm lint && pnpm check

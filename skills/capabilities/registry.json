@@ -75,7 +75,7 @@
     {
       "capability_id": "check-paper-humanization-review",
       "source_path": "check-paper-humanization-review",
-      "manifest_sha256": "fde2b2ef197d09edeb0df927ea81d49b684da2a4cfdf251b6982c295a4374a5b"
+      "manifest_sha256": "b7c88d93cd7e64e59e1a2b12082de6f90d26a22d87d5ed69a66fc381a1068ffe"
     },
     {
       "capability_id": "check-paper-humanization-verification",
@@ -185,7 +185,7 @@
     {
       "capability_id": "design-review-response-workboard-planning",
       "source_path": "design-review-response-workboard-planning",
-      "manifest_sha256": "c5e4b351f139ce422e1b538c0271ffbecc43f3ff54f752abcb7e40b677f668de"
+      "manifest_sha256": "9e3d9a6bfb881c7b30a10c22b5cd4549a00649645fc6f194735af776ca6edb15"
     },
     {
       "capability_id": "design-writing-intake",
@@ -270,7 +270,7 @@
     {
       "capability_id": "generation-review-response-round",
       "source_path": "generation-review-response-round",
-      "manifest_sha256": "25e11535f807da92219536895448c3c098cdb8b5e1ed6e0a5583ff06ce186e32"
+      "manifest_sha256": "dbd50fb00c01abe04e05fe5f7baf1e2f23ae0123f7ad854b871135007657fdce"
     },
     {
       "capability_id": "judgment-devils-advocate-stress-test",
@@ -295,7 +295,7 @@
     {
       "capability_id": "transform-paper-humanization-revision",
       "source_path": "transform-paper-humanization-revision",
-      "manifest_sha256": "d5b77f8d7d5cf8e8b09771062ab67866df55f084df78b5fcecc571275836ccd0"
+      "manifest_sha256": "0d328a731a72fddf0760ecf7eb6fa1569d2b82f2bf4d216ff725018d8f380596"
     },
     {
       "capability_id": "transform-patent-docket-revision",
@@ -310,7 +310,7 @@
     {
       "capability_id": "transform-review-response-comment-atomization",
       "source_path": "transform-review-response-comment-atomization",
-      "manifest_sha256": "3d06238d4b4a78ac41fc0b8486f2b61ade0b257461345e28d64d60635dc2dbe4"
+      "manifest_sha256": "5d157fc9f1707fa02a0d5b9025f8640599e1e37b8fc0c7d6c022c7110301e648"
     },
     {
       "capability_id": "transform-revision-patching",

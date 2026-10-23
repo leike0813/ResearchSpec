@@ -14,7 +14,7 @@
     {
       "capability_id": "analysis-review-response-manuscript-analysis",
       "maturity": "operational",
-      "skill_lines": 118,
+      "skill_lines": 119,
       "knowledge_refs": 6,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
@@ -36,7 +36,7 @@
     {
       "capability_id": "design-review-response-intake",
       "maturity": "operational",
-      "skill_lines": 121,
+      "skill_lines": 122,
       "knowledge_refs": 6,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
@@ -56,7 +56,7 @@
     {
       "capability_id": "design-review-response-workboard-planning",
       "maturity": "operational",
-      "skill_lines": 122,
+      "skill_lines": 123,
       "knowledge_refs": 12,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
@@ -76,7 +76,7 @@
     {
       "capability_id": "generation-review-response-round",
       "maturity": "operational",
-      "skill_lines": 147,
+      "skill_lines": 148,
       "knowledge_refs": 13,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,
@@ -98,7 +98,7 @@
     {
       "capability_id": "transform-review-response-comment-atomization",
       "maturity": "operational",
-      "skill_lines": 124,
+      "skill_lines": 125,
       "knowledge_refs": 10,
       "knowledge_artifacts": 4,
       "knowledge_coverage": 1,

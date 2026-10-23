@@ -71,9 +71,10 @@ try {
   );
   await writeFile(path.join(installDirectory, "annotation-intake-consumer.mjs"), [
     "import { generateAnnotationReviewCopy } from 'researchspec/annotation-intake';",
-    "import { ReviewWorkspaceDescriptorSchema } from 'researchspec/review-workspace';",
+    "import { ReviewWorkspaceDescriptorSchema, startReviewSession } from 'researchspec/review-workspace';",
     "if (typeof generateAnnotationReviewCopy !== 'function') throw new Error('annotation intake API missing');",
     "if (typeof ReviewWorkspaceDescriptorSchema.safeParse !== 'function') throw new Error('review workspace API missing');",
+    "if (typeof startReviewSession !== 'function') throw new Error('review session API missing');",
     "",
   ].join("\n"), "utf8");
   run(process.execPath, ["annotation-intake-consumer.mjs"], installDirectory);
@@ -271,7 +272,7 @@ function verifyTarballFiles(files) {
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/SKILL.md",
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/LICENSE",
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/NOTICE.md",
-    "skills/arsu/researchspec-contracts.json", "artifacts/release/mvp-release-checklist.md", "review-workspace/index.html", "review-workspace/v1.html", "review-workspace/revision-master.html", "dist/src/cli/bin.js", "dist/src/annotation-intake.js", "dist/src/annotation-intake.d.ts", "dist/src/review-workspace.js", "dist/src/review-workspace.d.ts",
+    "skills/arsu/researchspec-contracts.json", "artifacts/release/mvp-release-checklist.md", "review-workspace/index.html", "review-workspace/v1.html", "review-workspace/revision-master.html", "dist/src/cli/bin.js", "dist/src/annotation-intake.js", "dist/src/annotation-intake.d.ts", "dist/src/review-workspace.js", "dist/src/review-workspace.d.ts", "dist/src/review-workspace/session-cli.js",
   ];
   for (const skill of expectedArsuSkills) required.push(`skills/arsu/${skill}/SKILL.md`);
   for (const skill of expectedCapabilitySkills) {

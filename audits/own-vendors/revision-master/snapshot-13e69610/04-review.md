@@ -18,18 +18,18 @@
 
 | capability_id | section coverage | rule coverage | skill lines | knowledge refs | output format | flow headings |
 |---|---|---|---|---|---|---|
-| `analysis-review-response-manuscript-analysis` | 0.933 | 1.000 | 118 | 6 | yes | none |
-| `design-review-response-intake` | 1.000 | 1.000 | 121 | 6 | yes | none |
-| `design-review-response-workboard-planning` | 1.000 | 1.000 | 122 | 12 | yes | none |
-| `generation-review-response-round` | 0.950 | 1.000 | 147 | 13 | yes | none |
-| `transform-review-response-comment-atomization` | 1.000 | 1.000 | 124 | 10 | yes | none |
+| `analysis-review-response-manuscript-analysis` | 0.933 | 1.000 | 119 | 6 | yes | none |
+| `design-review-response-intake` | 1.000 | 1.000 | 122 | 6 | yes | none |
+| `design-review-response-workboard-planning` | 1.000 | 1.000 | 123 | 12 | yes | none |
+| `generation-review-response-round` | 0.950 | 1.000 | 148 | 13 | yes | none |
+| `transform-review-response-comment-atomization` | 1.000 | 1.000 | 125 | 10 | yes | none |
 
 ## Artifact Hashes
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json` | `bfa1711f330fa2fb4aaebe3394e1996dd659b03827c2e8bfe3e561b7a17ab024` |
-| parity package slice | `audits/own-vendors/revision-master/snapshot-13e69610/artifacts/parity-packages.json` | `627f8142bedabdb7d1ef57b9c5febcb2c98bbd38e6fb724b808aad6c0f1401db` |
+| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json` | `26dad8541a4c8c5136cd7417b010d6aa43ecc92a20c261b2fb97a8297fd54146` |
+| parity package slice | `audits/own-vendors/revision-master/snapshot-13e69610/artifacts/parity-packages.json` | `d73c59a697258db14ca611c576721827b5bfde43907c83f4d759b9eb23974d73` |
 
 ## Human Confirmation
 

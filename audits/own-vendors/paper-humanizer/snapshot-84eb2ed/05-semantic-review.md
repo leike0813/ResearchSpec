@@ -90,6 +90,21 @@ revision-master 当前锚点仅刷新共用维护 catalog / Skill 的身份及�
 
 独立验证覆盖每个原生投影的连续两轮注入、原提示/既有 system 保留、无守则/异常/超限/超时输入、用户设置、漂移、安全路径、子集更新、事务并发和三种 delivery 模式。具体最终命令与结果在本 change 的 `verification.md` 留存；上述静态验收不证明 Agent 完全遵守守则或全部宿主实际加载。
 
+## 本地结果文件交接复核（2026-10-23）
+
+本次审阅对照 PH-CAP-01 的“Review mode diagnoses eligible prose and never edits the source”与 PH-CAP-04 的“Edit only the text fields of approved prose segments”。两份 extraction 与上游字节未变；新增传输不改变诊断、批准范围或信息单元保护。
+
+| 承载 | 判定 | 本次核对证据 |
+|---|---|---|
+| check-paper-humanization-review | adapted | procedure 的 browser review 先留存 workspace.json，再启动本地会话；生成 SKILL 保留只读诊断、完整覆盖 ledger、保留引用/事实的原义。 |
+| transform-paper-humanization-revision | adapted | procedure 保留 approved plan 与 candidate validation，结果从 history_path 接回后仍比较当前源与冻结清单；页面不能替代 acceptance Decision。 |
+| generation-humanization-reference、check-paper-humanization-verification | preserved | 两包及其 manifest、knowledge 和 scripts 未变；taxonomy 与 verification 的所有信息单元要求保留。 |
+| 两包 review-workspace/index.html | adapted | 生产 HTML 经既有 source_path 原样复制，离线 CSP 仍拒绝连接；会话渲染才注入共享提交桥与同源连接。v1.html 未变。 |
+
+接收服务仅保存同一可信快照的完整建议性结果、历史和会话资源；正式 Gate/Decision 仍在对话中确认。无上游代码运行、依赖安装、模型调用或稿件/SQLite/graph 写入。受影响 SKILL 的 next-node、next-phase、agent-team、proceed-to 扫描无命中。
+
+验证：两种协议的本地接收测试通过；真实 Chrome 在下载及 localStorage 写入不可用时仍提交成功，失败可重试；取消选区、Escape、键盘激活与重新批注通过。相关 35 项测试通过。最终全量命令记录在本 change 的验证报告中。
+
 ## 结论
 
 declared-fit-with-notes。新增学术写作语义与 Hook 守则的可移植检查均有明确承载；原始来源逐字保留，矛盾和不安全的例示操作由主程序的来源支持、体裁保护和未决报告约束处理。工作流与宿主边界维持既有权威划分。

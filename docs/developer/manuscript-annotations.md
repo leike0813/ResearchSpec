@@ -60,9 +60,14 @@ verdict 仍由 Verify、用户和 owning node 完成。
 `workbench/README.md`）：`project` 做任务边界的只读投影，`check` 重算各 scope 基线差异，
 `accept` 只在显式语义写入路径内把已核对反馈与最小处理记录放进同一事务。
 
-两套投影都包含精确手稿内容、路径、格式和 SHA-256，以便一个通过 `file://` 打开的静态页面完成本地
-审阅。页面只产生普通外部结果文件。它不读取或写入 `researchspec/`，不访问 `revision-master.db`，
-不修改手稿，也不调用 CLI。
+两套投影都包含精确手稿内容、路径、格式和 SHA-256。Agent 留存 `workspace.json` 后，通过
+`startReviewSession({projectRoot, workspacePath, assetPath})` 启动仅监听环回地址的会话；
+`assetPath` 使用对应的原始包模板。页面显式提交完整结果，服务按独立留存的快照校验，保存同目录的
+`result.json` 与不可变的 `results/<submission-id>.json`，完成后返回路径。可选
+`waitForResult({after, timeoutMs, signal})` 只返回成功接收记录；Agent 读取其 `history_path` 后
+继续执行原有源文件和语义依赖检查。端口记录保留浏览器草稿的来源，冲突时不自动换端口。
+离线 HTML 仍通过独立下载按钮交回结果。会话不读取或写入 `researchspec/`，不访问
+`revision-master.db`，不修改手稿或捕获文件，也不调用 CLI。
 
 ## 7. 显示坐标与源码坐标
 

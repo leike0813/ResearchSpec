@@ -42,7 +42,7 @@ The Agent SHALL retain a trusted snapshot, captured sources, and per-scope seman
 
 ### Requirement: Direct local HTML delivery and complete source access
 
-The Agent SHALL deliver a prepared local HTML artifact with its frozen data embedded, usable without a server, network service, or manual snapshot import. The workbench SHALL primarily show the selected item's related manuscript excerpts and list all associated locations, while providing directory access to complete frozen original review documents and relevant manuscripts in the same artifact. Markdown, QMD, single-file LaTeX, and LaTeX projects SHALL follow existing source capture, safe rendering, and readable source fallback rules. Rendering tools SHALL remain subject to the host's execution authorization.
+The Agent SHALL normally deliver a loopback review session with its frozen data embedded and acknowledged file exports. The prepared local HTML artifact SHALL also remain usable offline with an explicit download fallback and without manual snapshot import. The workbench SHALL primarily show the selected item's related manuscript excerpts and list all associated locations, while providing directory access to complete frozen original review documents and relevant manuscripts in the same artifact. Markdown, QMD, single-file LaTeX, and LaTeX projects SHALL follow existing source capture, safe rendering, and readable source fallback rules. Rendering tools SHALL remain subject to the host's execution authorization.
 
 #### Scenario: The user opens the handoff
 
@@ -134,7 +134,7 @@ The page SHALL show evidence gaps, proposed supplements, received-material statu
 
 ### Requirement: Complete exports and isolated recoverable drafts
 
-Every export SHALL contain the original frozen workspace, its task and graph context, snapshot and draft identities, a unique result identity, local export revision and time, and all current feedback categories. Feedback entries SHALL have stable identities within the draft. Browser drafts SHALL be isolated by workspace and snapshot. Export revision and time SHALL NOT establish ordering across browsers. Unavailable or failed local storage SHALL be surfaced while allowing review and export of the current in-memory draft. Embedded data and user text SHALL remain inert content rather than executable markup.
+Connected exports SHALL be acknowledged at an agreed task-local file and retained independently in history; offline downloads SHALL remain explicit. Every export SHALL contain the original frozen workspace, its task and graph context, snapshot and draft identities, a unique result identity, local export revision and time, and all current feedback categories. Feedback entries SHALL have stable identities within the draft. Browser drafts SHALL be isolated by workspace and snapshot. Export revision and time SHALL NOT establish ordering across browsers. Unavailable or failed local storage SHALL be surfaced while allowing review and export of the current in-memory draft. Embedded data and user text SHALL remain inert content rather than executable markup.
 
 #### Scenario: Two browsers export the same snapshot
 
@@ -214,3 +214,14 @@ The browser SHALL only retain local drafts and export advisory results. The Agen
 
 - **WHEN** the user cannot open or operate the page
 - **THEN** the Agent presents the same candidate and confirmation scope in dialogue and follows the same semantic and formal authority boundaries
+
+### Requirement: Selection tools follow the active annotation selection
+The page SHALL clear a pending text anchor and hide selection annotation tools when selection is cancelled, collapsed, cleared, or dismissed with Escape. Activation of the annotation tool itself SHALL preserve the valid selection long enough to create the annotation.
+
+#### Scenario: Reviewer cancels without annotating
+- **WHEN** a reviewer selects text and clicks blank space to cancel the selection
+- **THEN** selection tools disappear and no annotation is created
+
+#### Scenario: Reviewer activates the selection tool
+- **WHEN** a reviewer selects valid text and activates its annotation tool
+- **THEN** the selected range remains available and the annotation is created normally

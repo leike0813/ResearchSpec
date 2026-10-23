@@ -188,7 +188,7 @@ function chromeBinary() {
   return null;
 }
 
-function dumpWithImport(payload, comparison = false) {
+function dumpWithImport(payload, mode = "default") {
   const encoded = Buffer.from(JSON.stringify(payload), "utf8").toString("base64");
   const probe = `<script>(function(){
     var bytes=Uint8Array.from(atob('${encoded}'),function(c){return c.charCodeAt(0)});
@@ -197,7 +197,7 @@ function dumpWithImport(payload, comparison = false) {
     setTimeout(function(){
       if(document.getElementById('legacy-dialog').open){document.title='LEGACY-OPEN';return;}
       var paper=document.getElementById('paper');
-      if(${comparison}){
+      if(${mode === "comparison"}){
         var rows=paper.querySelectorAll('.compare-row').length;
         var changes=paper.querySelectorAll('.diff-before,.diff-after').length;
         addWhole('before-intro-1');addWhole('after-intro-1');
@@ -210,8 +210,15 @@ function dumpWithImport(payload, comparison = false) {
       var before=paper.querySelector('[data-block-id=intro-1]');
       var a=paper.querySelector('[data-block-id=intro-1][data-text-target]');
       var b=paper.querySelector('[data-block-id=intro-cite][data-text-target]');
-      var single=false,mixed=false;
-      if(a){var r=document.createRange();r.selectNodeContents(a);var s=getSelection();s.removeAllRanges();s.addRange(r);paper.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));single=document.getElementById('selection-action').hidden===false;}
+      var action=document.getElementById('selection-action'),single=false,hiddenAfterCancel=false,reselected=false,mixed=false,created=false;
+      if(a){var r=document.createRange();r.selectNodeContents(a);var s=getSelection();s.removeAllRanges();s.addRange(r);paper.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));single=action.hidden===false;}
+      if(${mode === "selection"}&&a){
+        var count=STATE.comments.length;s.removeAllRanges();document.body.click();hiddenAfterCancel=action.hidden&&STATE.comments.length===count&&pending===null;
+        r=document.createRange();r.selectNodeContents(a);s.addRange(r);paper.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));reselected=action.hidden===false;
+        action.click();created=STATE.comments.length===count+1;
+        document.title='hiddenAfterCancel='+hiddenAfterCancel+' reselected='+reselected+' created='+created;
+        return;
+      }
       if(a&&b){var r2=document.createRange();r2.setStart(a,0);r2.setEnd(b,b.childNodes.length);var s2=getSelection();s2.removeAllRanges();s2.addRange(r2);paper.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));var toast=document.getElementById('toast');mixed=!toast.hidden&&toast.textContent.indexOf('跨越')!==-1;}
       var expand=document.querySelector('#cards .expand');if(expand)expand.click();
       var cards=document.querySelectorAll('#cards .card').length;
@@ -259,7 +266,9 @@ if (!chrome) {
   assert.ok(rails.includes("未定位到正文"), "an item without a document target stays reachable");
   assert.match(v2Dom, /未定位到正文/);
   assert.ok(v2Dom.includes("显示 1 / 2 项"), "rail shows filtered item counts");
-  const compareDom = dumpWithImport(compareFixture, true);
+  const selectionDom = dumpWithImport(FIXTURE, "selection");
+  assert.ok(selectionDom.includes("<title>hiddenAfterCancel=true reselected=true created=true</title>"), "cancelling a selection hides the tool, keeps the comment count, and a fresh selection can still create an annotation");
+  const compareDom = dumpWithImport(compareFixture, "comparison");
   assert.match(compareDom, /<title>rows=1 changes=[1-9][0-9]* comments=2 sides=before-intro-1,after-intro-1<\/title>/, "comparison renders changed phrases and exports side-specific anchors");
   const v1Dom = dumpWithImport({ schema_version: "1", workspace_id: "old", adapter: "paper-humanizer", title: "旧版", manuscript: { path: "paper.md", entry_path: null, format: "markdown", sha256: HASH, content: "旧稿" }, items: [] });
   assert.ok(v1Dom.includes("<title>LEGACY-OPEN</title>"), "v1 input opens the recovery route");

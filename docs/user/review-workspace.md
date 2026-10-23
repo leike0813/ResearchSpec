@@ -1,6 +1,6 @@
 # 交互式论文审阅工作台
 
-当当前 `instructions --json` 含有 `review_workspace` 时，Agent 可以为审阅准备一份可直接用文件地址打开的本地静态页面。paper-humanizer 方案审阅、已核验候选稿比较以及 annotation-intake 修订使用通用 `review-workspace.v2` 页面（`review-workspace/index.html`，可能来自具体 capability package）；review-response 的语义审阅使用独立的 `revision-master-review-workspace.v1` 业务工作台（`review-workspace/revision-master.html`）。两者互不混用，已经交付的旧审阅件仍按其原路径处理。也可以在对话中完成同样的审阅；浏览器不是流程前提。
+当当前 `instructions --json` 含有 `review_workspace` 时，Agent 可以为审阅准备一份冻结页面，默认启动仅监听 `127.0.0.1` 的本地会话并把页面 URL 交给用户；用户无需手动导入 JSON。paper-humanizer 方案审阅、已核验候选稿比较以及 annotation-intake 修订使用通用 `review-workspace.v2` 页面（`review-workspace/index.html`，可能来自具体 capability package），保留工作区须先保存为 `workspace.json` 再启动会话；review-response 的语义审阅使用独立的 `revision-master-review-workspace.v1` 业务工作台（`review-workspace/revision-master.html`）。两者互不混用，已经交付的旧审阅件仍按其原路径处理；两套结果契约不变。也可以在对话中完成同样的审阅；浏览器不是流程前提。
 
 “冻结”是这套流程的核心。准备阶段，Agent 把入口稿以及所有本地解析到的、构成审阅内容的手稿文件和图片复制到 `researchspec/` 之外的一个普通工作目录，记录按路径排序的 SHA-256 清单、入口路径和一个新的工作区标识。此后无论原稿是否被改动，页面始终显示并批注这份冻结版本。工作区 JSON 只携带可见的静态正文、公式和本地图片，不包含项目脚本，也不包含源文件树的可执行副本。工作区可以包含零个或多个 Agent 审阅项，因此也能用于纯用户批注。
 
@@ -12,29 +12,33 @@
 
 文章修订显示稿件正文和注释候选项。语言润色的方案审阅在详情中显示修改操作、预期效果、风险、建议和保留约束；用户可逐项选择采用、排除、调整或暂缓。候选稿比较在完成流水线核验后，把本轮直接原文放在左侧、候选稿放在右侧，逐段显示变动词句。两侧都能批注，导出结果用不同区块 ID 保留批注所指的一侧。显示位置与原始证据目标分别保存，不能把显示高亮当成源码定位结果。若无法可靠配对，Agent 应提供原始来源回退或在对话中核对。
 
-渲染在导入浏览器之前完成。项目内置的 Markdown 渲染器处理 Markdown，包括常见表格、脚注、引用、代码和 LaTeX 公式；Quarto 和 LaTeX 使用用户主机上的工具产出可选择的 HTML。遇到无法可靠转换的公式、表格或自定义环境，该区域会作为惰性 `raw-source` 块保留原始文本，而不是被悄悄丢弃。页面从不执行 Quarto、TeX、项目钩子、过滤器或计算代码，也不加载远程资源；导入工作区、编辑草稿、导出结果都不会触发渲染。
+渲染在交给浏览器之前完成。项目内置的 Markdown 渲染器处理 Markdown，包括常见表格、脚注、引用、代码和 LaTeX 公式；Quarto 和 LaTeX 使用用户主机上的工具产出可选择的 HTML。遇到无法可靠转换的公式、表格或自定义环境，该区域会作为惰性 `raw-source` 块保留原始文本，而不是被悄悄丢弃。页面从不执行 Quarto、TeX、项目钩子、过滤器或计算代码，也不加载远程资源；打开会话、编辑草稿或提交结果都不会触发渲染。
 
 如果 Quarto 项目带脚本、过滤器、`pre-render` 或可执行单元，这类渲染会运行用户代码，因此 Agent 每次都单独请求批准，获批后在临时副本中运行——临时副本保护的是相对路径下的原稿，项目脚本仍以主机权限运行，并非安全沙箱。若临时副本因项目依赖无法渲染，Agent 会报告阻塞并另行请示。普通或非执行转换则采用最低执行模式，并确认不会在未获批准时触发项目钩子。
 
 ## 草稿与导出
 
-草稿只保存在当前浏览器，按工作区与快照标识隔离。编辑或删除草稿中的用户批注、调整 Agent 项的处置，都不会改动手稿或 `researchspec/` 下的任何文件。点击“导出审阅结果”会下载一份 `review-workspace-result.v2` JSON，它绑定同一工作区与快照，包含每个 Agent 项的一条处置、用户批注、整体说明和导出修订号。导出后草稿仍可继续编辑，再次导出会得到修订号递增、各自独立的完整结果。浏览器存储不可用时，页面会提示草稿无法持久保存，但仍提供显式导出。
+草稿只保存在当前浏览器，按工作区与快照标识隔离。编辑或删除草稿中的用户批注、调整 Agent 项的处置，都不会改动手稿或 `researchspec/` 下的任何文件。点击“提交审阅结果”后，页面把完整的 `review-workspace-result.v2` 交给本地会话；服务先校验提交与保留的 `workspace.json` 一致，再将结果写入该文件同目录的 `result.json`，并把每次完整提交保留为 `results/<submission-id>.json`。页面只在写入确认后显示 `result_path`，Agent 可直接读取该约定路径。
+
+提交后草稿仍可继续编辑，再次提交会得到修订号递增、各自独立的完整结果。同一审阅重启会话时会复用 `review-session.json` 中记录的端口，以保留浏览器草稿；端口被占用时服务报告冲突并保留原来源，Agent 不会静默换端口。“下载备用结果”作为独立操作保留；直接打开准备好的离线 HTML 仍可使用，失败时不会自动改为下载。浏览器存储不可用时，页面会提示草稿无法持久保存，但仍可提交当前内存草稿。
 
 ## 交回 Agent
 
-导出的结果不是正式操作。把它交回 Agent 后，Agent 先用保留的工作区校验结果，再比较当前源文件与冻结清单：
+提交的结果不是正式操作，等待也只接收新文件，不应用反馈。Agent 可直接读取 `result.json` 或对应历史文件；校验时使用完整历史，并用保留的工作区检查提交，再比较当前源文件与冻结清单：
 
 1. 源文件未变，且某条批注在源码中能由引用和上下文唯一定位时，Agent 在所属流程中处理反馈，并准备一份含新标识、不含已处理批注的新工作区；比较模式需同时核对本轮原文与候选稿；
 2. 源文件已变时，Agent 展示差异和受影响的批注，并在做任何改动或生成替代工作区前询问用户；
 3. 源文件未变但某条批注在源码中定位有歧义，或冻结时存在捕获限制时，Agent 在应用前询问用户。
 
-随后 Agent 重新读取当前 selector 的 `instructions --json`，单独询问 Gate verdict 或 Decision choice，再调用现有 `decide` / `advance`。工作台不会直接改手稿、数据库、handoff 或 `researchspec/`，也不具备任何 CLI 权限。
+随后 Agent 重新读取当前 selector 的 `instructions --json`，单独询问 Gate verdict 或 Decision choice，再调用现有 `decide` / `advance`。工作台不会直接改手稿、捕获源文件、数据库、handoff 或 `researchspec/`，也不具备任何 CLI 权限。
 
 ## revision-master 业务工作台（review-response）
 
 review-response 的审核使用独立业务工作台 `revision-master-review-workspace.v1`，结果契约为
-`revision-master-review-result.v1`。Agent 经包内生产准备路径，把已校验的冻结快照嵌进单文件
-`review-workspace/revision-master.html`，用户直接用文件地址打开即可，无需服务、网络或手动导入。
+`revision-master-review-result.v1`。Agent 经包内生产准备路径生成已校验的冻结工作区和嵌入式离线
+HTML，默认以包内原始 `review-workspace/revision-master.html` 作为会话页面并交付 URL，无需手动导入；
+准备 API 返回的嵌入版 HTML 只用于离线备用。工作区、结果和历史都留在当前任务目录；直接打开离线
+HTML 时仍可使用显式备用下载。
 页面默认只显示当前对象的相关稿件片段并列出全部关联位置，完整原始审阅文档与相关稿件按目录可达。
 Markdown、QMD、单文件 LaTeX 和 LaTeX project 沿用现有捕获、安全渲染与可读原文回退规则；无法可靠
 定位或渲染时保留可读原文并显式标注限制，不编造位置。
@@ -50,9 +54,11 @@ Markdown、QMD、单文件 LaTeX 和 LaTeX project 沿用现有捕获、安全�
 仍交给 Agent；拆合、依赖与策略调整以对象绑定请求导出，页面不直接编辑业务表。
 
 草稿只保存在当前浏览器，按工作区与快照标识隔离，编辑或删除草稿不会改动稿件、数据库或
-`researchspec/`。每次导出得到一份完整结果，绑定原快照与 context，包含稳定 `feedback_id`、独立
-`result_id`、本地导出修订号与时间，以及当前全部反馈类别；导出修订号和时间不跨浏览器决定权威。
-浏览器存储不可用时，页面提示本地恢复不可用，但仍允许审阅并导出当前内存草稿。
+`researchspec/`。通过本地会话提交时，服务校验原快照后把当前结果写到工作区旁的 `result.json`，并把
+每次完整历史保存为 `results/<submission-id>.json`；页面显示约定路径，Agent 可直接读取。结果绑定原快照
+与 context，包含稳定 `feedback_id`、独立 `result_id`、本地导出修订号与时间，以及当前全部反馈类别；
+导出修订号和时间不跨浏览器决定权威。浏览器存储不可用时，页面提示本地恢复不可用，但仍允许审阅并提交
+当前内存草稿。
 
 把结果交回 Agent 后，Agent 先用独立留存的快照校验结果，并比较每个 scope 的语义依赖与已捕获材料：
 

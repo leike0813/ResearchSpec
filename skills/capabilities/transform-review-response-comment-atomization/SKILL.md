@@ -76,6 +76,7 @@ Execute exactly one ResearchSpec capability node.
 
 ## Procedure
 
+
 # Review Response Comment Atomization
 
 Turn raw reviewer and editor comments into stable canonical atomic items with complete source-span evidence. This node is semantic work performed by the Agent, never by a one-off script.
@@ -101,7 +102,7 @@ Turn raw reviewer and editor comments into stable canonical atomic items with co
 5. Write `raw_thread_atomic_links` and guarantee each `thread_id` maps to at least one `comment_id` and each `comment_id` is referenced at least once.
 6. Write `review_comment_source_documents` and `raw_thread_source_spans`. Every thread must have at least one `span_role='primary'` whose `span_text` equals the source slice at the recorded offsets.
 7. Update resume fields, run `scripts/gate_and_render_workspace.py --artifact-root <workspace>`, and show the coverage view `07-review-comment-coverage.md` with the hard `30%` / soft `50%` character-coverage thresholds.
-8. Record the coverage confirmation request. This is the coverage handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`), embed the validated data in `review-workspace/revision-master.html`, and review coverage either in the page or in dialogue. The coverage confirmation binds the complete mapping candidate and every source relation; visiting the page, exporting a result, or marking a round seen never counts as confirmation. Do not proceed until the user confirms coverage review.
+8. Record the coverage confirmation request. This is the coverage handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session, or review coverage in dialogue. Pass the original package template as the session asset; keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths; no manual import is needed. Keep the workspace, snapshot, results, and history in the task directory. The coverage confirmation binds the complete mapping candidate and every source relation; visiting the page, submitting a result, or marking a round seen never counts as confirmation. The receiving service does not change the database or task sources. Do not proceed until the user confirms coverage review.
 
 ## Stable IDs
 

@@ -1,7 +1,7 @@
 # ARSU Anchor Conversion — v3.22.2-7de1c9d
 
-- registry SHA-256: `a6639e2c25b41b953eb77be878444a7275352122048f2b25869200d431a49be3`
-- packages tree SHA-256: `e4ce6a8239e96095cb17a2c1cb7e66ad8b452da4df4752c544191f154cd6508d`
+- registry SHA-256: `da00e22021742e382d9eb4d2ca1d439ab951a7dca64bc0385e15cc24284d7557`
+- packages tree SHA-256: `0d1eb75091d22f8f6d370c0ebdeff895dde8165e003172b3c0961a83ef4521be`
 - capability count: 47 · operational: 47
 
 ## Capability Packages
@@ -19,7 +19,7 @@
 | `check-collaboration-depth-observer` | Collaboration Depth Observer | verification | observer | llm | required | operational | 1/1 | 1 | 1 | 3 | `d651c922357a` |
 | `check-compliance-check` | Compliance Check | verification | observer | llm | required | operational | 1/2 | 2 | 1 | 4 | `ef13c2598520` |
 | `check-contamination-signals` | Contamination Signals | verification | checker | script | required | operational | 1/1 | 2 | 2 | 5 | `6e256b4d8f67` |
-| `check-paper-humanization-review` | Paper Humanization Review | verification | checker | mixed | none | operational | 2/2 | 6 | 1 | 9 | `fde2b2ef197d` |
+| `check-paper-humanization-review` | Paper Humanization Review | verification | checker | mixed | none | operational | 2/2 | 6 | 1 | 9 | `b7c88d93cd7e` |
 | `check-paper-humanization-verification` | Paper Humanization Verification | verification | checker | mixed | none | operational | 2/1 | 4 | 1 | 7 | `f16f6a5d7a26` |
 | `check-passport-verifier` | Passport Verifier | verification | checker | script | required | operational | 1/1 | 2 | 2 | 5 | `7f8079712fd7` |
 | `check-pdf-read-preflight` | PDF Read Preflight | verification | checker | script | required | operational | 1/1 | 2 | 2 | 5 | `1f60ccfba06f` |
@@ -34,7 +34,7 @@
 | `design-research-question-formulation` | Research Question Formulation | design | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `e0e89711f780` |
 | `design-review-panel-config` | Review Panel Configuration | design | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `2b53b11f7c9e` |
 | `design-review-response-intake` | Review Response Intake | design | producer | mixed | none | operational | 4/2 | 6 | 1 | 44 | `678e26990197` |
-| `design-review-response-workboard-planning` | Review Response Workboard Planning | design | producer | mixed | required | operational | 1/1 | 12 | 1 | 44 | `c5e4b351f139` |
+| `design-review-response-workboard-planning` | Review Response Workboard Planning | design | producer | mixed | required | operational | 1/1 | 12 | 1 | 44 | `9e3d9a6bfb88` |
 | `design-writing-intake` | Writing Intake | design | producer | llm | required | operational | 1/1 | 3 | 1 | 5 | `5d00e9a6c3f3` |
 | `discovery-literature-monitoring` | Literature Monitoring | discovery | producer | llm | required | operational | 1/1 | 1 | 1 | 3 | `5085f65eba27` |
 | `discovery-literature-search-screening` | Literature Search And Screening | discovery | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `aa5b2dcbe921` |
@@ -45,13 +45,13 @@
 | `generation-humanization-reference` | Paper Humanizer Reference Mode | generation | observer | llm | none | operational | 0/0 | 1 | 1 | 3 | `21163e55acf6` |
 | `generation-manuscript-drafting` | Manuscript Drafting | generation | producer | llm | required | operational | 3/1 | 5 | 1 | 7 | `d8cbee004bf7` |
 | `generation-report-compilation` | Research Report Compilation | generation | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `8636f6ae3918` |
-| `generation-review-response-round` | Review Response Round | generation | producer | mixed | required | operational | 1/4 | 13 | 1 | 51 | `25e11535f807` |
+| `generation-review-response-round` | Review Response Round | generation | producer | mixed | required | operational | 1/4 | 13 | 1 | 51 | `dbd50fb00c01` |
 | `judgment-devils-advocate-stress-test` | Devil's Advocate Stress Test | judgment | checker | llm | required | operational | 2/1 | 2 | 1 | 4 | `43a784cef896` |
 | `judgment-editorial-judgment` | Editorial Judgment | judgment | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `5d75c7bdd3c3` |
 | `judgment-review-synthesis` | Review Synthesis | judgment | producer | llm | required | operational | 3/1 | 1 | 1 | 3 | `fdf1370dccb4` |
 | `judgment-specialist-review` | Specialist Review | judgment | producer | llm | required | operational | 2/1 | 4 | 1 | 6 | `e4719c55d6ea` |
-| `transform-paper-humanization-revision` | Paper Humanization Revision | transformation | producer | mixed | required | operational | 2/2 | 4 | 1 | 7 | `d5b77f8d7d5c` |
-| `transform-review-response-comment-atomization` | Review Response Comment Atomization | transformation | producer | mixed | required | operational | 1/2 | 10 | 1 | 42 | `3d06238d4b4a` |
+| `transform-paper-humanization-revision` | Paper Humanization Revision | transformation | producer | mixed | required | operational | 2/2 | 4 | 1 | 7 | `0d328a731a72` |
+| `transform-review-response-comment-atomization` | Review Response Comment Atomization | transformation | producer | mixed | required | operational | 1/2 | 10 | 1 | 42 | `5d157fc9f170` |
 | `transform-revision-patching` | Revision Patching | transformation | checker | mixed | required | operational | 1/2 | 1 | 1 | 3 | `56143408255e` |
 | `transform-revision-roadmap-parsing` | Revision Roadmap Parsing | transformation | producer | llm | required | operational | 2/2 | 1 | 1 | 3 | `9b74c5bc3a5e` |
 | `transform-socratic-mentoring` | Socratic Mentoring | transformation | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `04a754562781` |

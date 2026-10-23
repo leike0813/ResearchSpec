@@ -26,7 +26,7 @@ The system SHALL validate `review-workspace.v2` and `review-workspace-result.v2`
 - **THEN** the pair is rejected with guidance to use the matching version or prepare a fresh workspace
 
 ### Requirement: Browser review is local and authority-neutral
-The browser workspace SHALL import a user-selected local v2 JSON file, retain editable drafts in browser-local state scoped to the workspace and snapshot identity, and export a result only after an explicit user action. It SHALL run without a model service, database, remote asset, or network dependency and SHALL NOT mutate the manuscript, `researchspec/`, handoff, or workflow state. Exporting SHALL leave the draft editable; each later export SHALL contain the entire current review state under a later revision.
+The browser workspace SHALL load the retained v2 JSON from its local session, or import a user-selected file when opened offline, retain editable drafts in browser-local state scoped to the workspace and snapshot identity, and export a result only after an explicit user action. It SHALL run without a model service, database, remote asset, or external network dependency and SHALL NOT mutate the manuscript, `researchspec/`, handoff, or workflow state. Exporting SHALL leave the draft editable; each later export SHALL contain the entire current review state under a later revision.
 
 #### Scenario: Reviewer changes a draft
 - **WHEN** a reviewer edits or deletes a user comment or changes an Agent-item disposition
@@ -38,7 +38,7 @@ The browser workspace SHALL import a user-selected local v2 JSON file, retain ed
 
 #### Scenario: Reviewer exports a handoff
 - **WHEN** the reviewer explicitly exports the current review
-- **THEN** the browser downloads a v2 result that can be validated independently of browser state
+- **THEN** the local receiver acknowledges a complete v2 result at the agreed fixed path and in immutable history; an independent explicit download remains available offline
 
 #### Scenario: Reviewer exports twice
 - **WHEN** a reviewer exports, edits the same workspace, and exports again
@@ -185,3 +185,14 @@ A paper-humanizer v2 workspace MAY contain a paired, frozen direct base and veri
 #### Scenario: Existing single-document v2 review opens
 - **WHEN** a v2 workspace has no comparison
 - **THEN** the existing one-document review and export path remains available
+
+### Requirement: Selection tools follow the active annotation selection
+The page SHALL clear a pending text anchor and hide selection annotation tools when selection is cancelled, collapsed, cleared, or dismissed with Escape. Activation of the annotation tool itself SHALL preserve the valid selection long enough to create the annotation.
+
+#### Scenario: Reviewer cancels without annotating
+- **WHEN** a reviewer selects text and clicks blank space to cancel the selection
+- **THEN** selection tools disappear and no annotation is created
+
+#### Scenario: Reviewer activates the selection tool
+- **WHEN** a reviewer selects valid text and activates its annotation tool
+- **THEN** the selected range remains available and the annotation is created normally

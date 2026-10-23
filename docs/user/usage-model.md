@@ -162,25 +162,33 @@ Reviewer 获得独立上下文；producer 只在隔离或并行确有帮助时�
 
 ## 交互式审阅交接（可选）
 
-对 review-response 的语义工作，Agent 可以在对话之外提供一份可选的本地静态工作台：一份嵌入冻结
-业务数据、可用文件地址直接打开的 HTML。它使用独立的 `revision-master-review-workspace.v1`
-与 `revision-master-review-result.v1`，不改动通用 `review-workspace.v2`。工作台承载四个交接点：
+当前 profile、node、Gate 或 Decision 的 instructions 提供 `review_workspace` 时，Agent 可以准备冻结
+页面，默认启动仅监听 `127.0.0.1` 的本地会话并交付 URL；通用 `review-workspace.v2` 与独立的
+`revision-master-review-workspace.v1` 都无需手动导入 JSON。通用工作区先保存为 `workspace.json` 再
+启动；revision-master 会话使用原始包模板，准备 API 返回的嵌入版 HTML 只作离线备用。浏览器只保存
+本地草稿；用户显式提交后，服务校验保留的工作区并在 `workspace.json` 同目录写入 `result.json`，
+完整历史写入 `results/<submission-id>.json`，页面显示约定路径供 Agent 读取。清晰标注的备用下载和
+离线 HTML 仍可用，
+提交失败不会自动下载。会话复用 `review-session.json` 的端口以保留草稿；端口冲突时报告而不静默换端口。
+revision-master 工作台承载四个交接点：
 
 - comment atomization 完成后审阅意见覆盖与遗漏；
 - workboard 计划完成后审阅整块工作板；
 - 执行过程中审阅当前 active 策略；
 - 每个图谱轮次接近结束时审阅本轮改稿与回复。
 
-工作台只保存浏览器本地草稿并导出建议性结果。内部确认是显式的：`coverage` 绑定完整意见映射，
+工作台只保存浏览器本地草稿并提交建议性结果。内部确认是显式的：`coverage` 绑定完整意见映射，
 `board` 绑定整块工作板，`strategy` 绑定当前策略候选及其依赖；round 只有独立的 seen 标记与反馈。
-访问页面、导出结果或标记 seen 都不产生确认，实质未决反馈会让对应范围保持 pending。
+访问页面、提交结果或标记 seen 都不产生确认，实质未决反馈会让对应范围保持 pending。
 
 结果按范围接收：Agent 用独立留存的快照校验结果，并比较每个 scope 的语义依赖与已捕获材料。
 依赖未变的独立 scope 可以接收；变化、有歧义或无法评估的 scope 显示差异并继续 pending，处理
 较早反馈会触发对剩余受影响范围的重新评估。语义写入与其成功处理记录在同一个任务 SQLite 事务
-内提交，准备与检查保持只读，未变的重复反馈不重复写入。正式 Gate verdict 与 Decision choice
-仍在对话中单独取得人工确认，并只能通过 CLI 变更；工作台不改动 graph、handoff 或
-`researchspec/`。浏览器不可用时，同一审阅可在对话中按相同边界完成。
+内提交，准备与检查保持只读，未变的重复反馈不重复写入。Agent 可以显式等待下一次成功提交，默认
+十分钟且可取消；等待只接收，不应用反馈。正式 Gate verdict 与 Decision choice 仍在对话中单独取得
+人工确认，并只能通过 CLI 变更；接收服务不改动手稿、捕获源文件、SQLite、graph、handoff 或
+`researchspec/`。
+浏览器不可用时，同一审阅可在对话中按相同边界完成。
 
 这条路径不增加入口 Skill、公开命令或图谱授权，也不改变 standalone 与 graph 的选择规则。
 

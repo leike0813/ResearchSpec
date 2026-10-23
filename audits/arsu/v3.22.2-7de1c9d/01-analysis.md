@@ -1,14 +1,8 @@
 # ARSU Anchor Analysis — v3.22.2-7de1c9d
 
-- generated: 2026-10-05T18:10:12.646Z
+- generated: 2026-10-23T11:43:09.089Z
 - upstream: https://github.com/Imbad0202/academic-research-skills @ v3.22.2 (7de1c9dfb7af9c02a9b57750761323f35a743aa2)
 - maintenance skill SHA-256: `d1fef0c28e0ce8f75dab5848b9d39f29885e507ae31321bf3b2d166618be9938`
-
-## Incremental scope and decisions
-
-Compare v3.21.1-127ff85 to v3.22.2-7de1c9d: 353 upstream files changed, 38,237 insertions and 2,998 deletions. Adopt the released tag only. Four Skills and 27 routes retain their identities; academic-paper binds intake configuration to draft/abstract, while core schemas and public CLI retain their contracts.
-
-Affected writing/citation/review/revision procedures, output-language knowledge and runtime boundaries are mapped in `05-semantic-review.md`; `06-incremental-update.md` lists every changed upstream file and extraction action. Upstream acronym/run-ledger scripts, locale loader and provider transport stay audit-only. No additional user decision is pending; the user authorized this increment. Reviewer calibration remains an explicit inherited gap.
 
 ## Upstream Inventory
 

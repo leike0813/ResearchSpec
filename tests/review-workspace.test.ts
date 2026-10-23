@@ -147,6 +147,8 @@ void test("preview samples use the real v2 adapters and embed manuscript content
 void test("new instruction hints expose humanizer and revision-master browser review", async () => {
   const humanizer = reviewWorkspaceInstruction({ profileId: "paper-humanizer", selector: "node:run/review", capabilityId: "check-paper-humanization-review", packageRoot: "/tmp/package" });
   assert.equal(humanizer?.adapter, "paper-humanizer");
+  assert.equal(humanizer?.surface, "local-session");
+  assert.ok(humanizer?.session_tool_path?.endsWith(path.join("review-workspace", "session-cli.js")));
   assert.equal(humanizer?.asset_path, path.join("/tmp/package", "review-workspace/index.html"));
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-workbench-"));
   try {

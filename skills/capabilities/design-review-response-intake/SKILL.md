@@ -73,6 +73,7 @@ Execute exactly one ResearchSpec capability node.
 
 ## Procedure
 
+
 # Review Response Intake
 
 Parse the review-response entry, confirm language context, and initialize the task-local artifact workspace. Do not perform manuscript analysis or comment atomization in this node.

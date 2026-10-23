@@ -179802,7 +179802,7 @@ Audit-log tags the orchestrator may emit:
     <div><strong>inputs</strong> <code>manuscript_source</code> ← manuscript-draft.v1 · <code>review_comments_source</code> ← review-comments.v1 · <code>editor_letter_source</code> ← editor-letter.v1 · <code>user_notes</code> ← user-notes.v1</div>
     <div><strong>outputs</strong> <code>review_response_workspace</code> → review-response-workspace.v1 · <code>intake_report</code> → review-response-intake.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 121 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 122 行</summary><pre class="doc-body">---
 name: design-review-response-intake
 description: "Parses review-response entry, confirms languages, detects the manuscript entry, and initializes the task-local semantic workspace."
 metadata:
@@ -179876,6 +179876,7 @@ Execute exactly one ResearchSpec capability node.
 - `assets/templates/thread-to-atomic-mapping.md.j2` is a package resource; use it as directed by the Procedure.
 
 ## Procedure
+
 
 # Review Response Intake
 
@@ -181961,7 +181962,7 @@ Revision Master 提取工件（Extraction Artifact）
     <div><strong>inputs</strong> <code>review_response_workspace</code> ← review-response-workspace.v1</div>
     <div><strong>outputs</strong> <code>manuscript_structure_summary</code> → review-response-manuscript-analysis.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 118 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 119 行</summary><pre class="doc-body">---
 name: analysis-review-response-manuscript-analysis
 description: "Builds the manuscript structure summary, core claims, evidence links, and high-risk modification areas needed for comment mapping."
 metadata:
@@ -182029,6 +182030,7 @@ Execute exactly one ResearchSpec capability node.
 - `assets/templates/thread-to-atomic-mapping.md.j2` is a package resource; use it as directed by the Procedure.
 
 ## Procedure
+
 
 # Review Response Manuscript Analysis
 
@@ -184117,7 +184119,7 @@ Revision Master 提取工件（Extraction Artifact）
     <div><strong>inputs</strong> <code>review_response_workspace</code> ← review-response-workspace.v1</div>
     <div><strong>outputs</strong> <code>atomic_comment_list</code> → review-response-atomic-comments.v1 · <code>comment_coverage_report</code> → review-response-coverage.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 124 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 125 行</summary><pre class="doc-body">---
 name: transform-review-response-comment-atomization
 description: "Extracts raw reviewer threads, forms canonical atomic comments with conservative merges, and writes full source-span evidence and coverage confirmation."
 metadata:
@@ -184195,6 +184197,7 @@ Execute exactly one ResearchSpec capability node.
 
 ## Procedure
 
+
 # Review Response Comment Atomization
 
 Turn raw reviewer and editor comments into stable canonical atomic items with complete source-span evidence. This node is semantic work performed by the Agent, never by a one-off script.
@@ -184220,7 +184223,7 @@ Turn raw reviewer and editor comments into stable canonical atomic items with co
 5. Write `raw_thread_atomic_links` and guarantee each `thread_id` maps to at least one `comment_id` and each `comment_id` is referenced at least once.
 6. Write `review_comment_source_documents` and `raw_thread_source_spans`. Every thread must have at least one `span_role='primary'` whose `span_text` equals the source slice at the recorded offsets.
 7. Update resume fields, run `scripts/gate_and_render_workspace.py --artifact-root &lt;workspace&gt;`, and show the coverage view `07-review-comment-coverage.md` with the hard `30%` / soft `50%` character-coverage thresholds.
-8. Record the coverage confirmation request. This is the coverage handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`), embed the validated data in `review-workspace/revision-master.html`, and review coverage either in the page or in dialogue. The coverage confirmation binds the complete mapping candidate and every source relation; visiting the page, exporting a result, or marking a round seen never counts as confirmation. Do not proceed until the user confirms coverage review.
+8. Record the coverage confirmation request. This is the coverage handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session, or review coverage in dialogue. Pass the original package template as the session asset; keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths; no manual import is needed. Keep the workspace, snapshot, results, and history in the task directory. The coverage confirmation binds the complete mapping candidate and every source relation; visiting the page, submitting a result, or marking a round seen never counts as confirmation. The receiving service does not change the database or task sources. Do not proceed until the user confirms coverage review.
 
 ## Stable IDs
 
@@ -187659,7 +187662,7 @@ CREATE TABLE IF NOT EXISTS workbench_scope_receipts (
 CREATE INDEX IF NOT EXISTS workbench_feedback_receipts_identity
     ON workbench_feedback_receipts (snapshot_id, feedback_id);
 </pre></details>
-<details class="sub"><summary>knowledge <code>workbench-README.md</code> · <code>workbench/README.md</code> · 195 行</summary><div class="doc-meta">sha256 <code>2cf0158564583e0d43d6dd68fa3e5064c828d1f8005ac4cda6cf2169e2b2568d</code> · license MIT</div><pre class="doc-body"># Revision Master Review Workbench Runtime
+<details class="sub"><summary>knowledge <code>workbench-README.md</code> · <code>workbench/README.md</code> · 233 行</summary><div class="doc-meta">sha256 <code>22810a6fb031720b7ddac6d0a9a3d46c616ea6c7f78fc128a17c9c731df0f44b</code> · license MIT</div><pre class="doc-body"># Revision Master Review Workbench Runtime
 
 This directory holds the project-owned, standard-library-only resources that
 back the interactive revision-master review workbench. They are delivered
@@ -187719,7 +187722,7 @@ Read-only preparation never initializes, migrates, repairs, or renders the
 database, and never reads another task. Capture, document/block assembly,
 anchors, and the frozen HTML remain outside this module.
 
-## Preparing the HTML
+## Preparing the session
 
 Use the exported `researchspec/review-workspace` API from the installed package.
 The context file must contain `task_id`, the exact `node:&lt;run&gt;/&lt;node&gt;[@&lt;round&gt;]`
@@ -187729,7 +187732,7 @@ values from the current graph instructions. Never infer the round from SQLite.
 
 ```javascript
 import { prepareRevisionMasterReview, readRevisionMasterProjection,
-  validateRevisionMasterResult } from 'researchspec/review-workspace';
+  startReviewSession, validateRevisionMasterResult } from 'researchspec/review-workspace';
 import { readFile } from 'node:fs/promises';
 
 const context = JSON.parse(await readFile(contextPath, 'utf8'));
@@ -187746,11 +187749,20 @@ const ready = await prepareRevisionMasterReview({
   templatePath: packageHtmlPath,
   nextStep: '导出结果交回 Agent，正式关口在对话中确认',
 });
-// Deliver ready.htmlPath; independently retain ready.workspacePath and sources/.
+const session = await startReviewSession({
+  projectRoot: taskRoot,
+  workspacePath: ready.workspacePath,
+  assetPath: packageHtmlPath,
+});
+// Give the user session.url and show session.resultPath.
+// Keep ready.htmlPath as the offline backup.
+// Independently retain ready.workspacePath and the captured sources.
+const receipt = await session.waitForResult(); // Optional; default timeout is 10 minutes.
 const checked = validateRevisionMasterResult(
-  JSON.parse(await readFile(returnedResultPath, 'utf8')),
+  JSON.parse(await readFile(receipt.history_path, 'utf8')),
   JSON.parse(await readFile(ready.workspacePath, 'utf8')),
 );
+await session.close(); // The main Agent decides when the review session ends.
 ```
 
 The variables above are Agent-resolved task and installed-package paths.
@@ -187758,7 +187770,35 @@ The variables above are Agent-resolved task and installed-package paths.
 `blocks` may come from an independently authorized frozen render. Without a
 render, captured source remains readable. The preparation API captures sources,
 rechecks the SQL projection and file contents, and publishes a fresh workspace
-and HTML only after validation. Do not open the unprepared package template.
+and HTML only after validation. Pass the original package template as the
+session `assetPath`; the server embeds the retained workspace itself. Use
+`ready.htmlPath` only for the offline fallback and do not deliver the original
+template directly.
+
+Normal delivery uses the loopback session URL, with no manual JSON import. The
+page keeps drafts in browser-local state and posts an explicit export to the
+session. The receiver validates `workspace.json`, atomically publishes
+`result.json` beside it, and retains every complete submission as
+`results/&lt;submission-id&gt;.json`. Wait for a receipt and validate its immutable
+`history_path`; `result.json` is only the mutable latest copy. `waitForResult`
+can resume with `after`, accepts `timeoutMs` and an `AbortSignal`, and observes
+submissions already committed in the current service. After a restart, read
+the retained files directly. Waiting never applies feedback. Reopening the same
+snapshot reuses its `review-session.json` origin to preserve drafts; report an
+occupied port instead of changing it.
+
+The installed instructions expose the real session tool as
+`review_workspace.session_tool_path`. An Agent can instead run:
+
+```bash
+node &lt;session_tool_path&gt; --project-root ROOT --workspace WORKSPACE_JSON \
+  --asset HTML [--wait]
+```
+
+`--wait` prints successful receipt events and leaves the service running; the
+main Agent decides when to close it. The prepared HTML also opens offline with
+its explicit backup download. A failed submission stays retryable and never
+switches to download automatically.
 
 ## Checking a returned result
 
@@ -187773,7 +187813,8 @@ differs from the snapshot context.
 
 ```bash
 uv run --project="$HOME/.ar" --locked -- python &lt;package&gt;/workbench/review_workbench.py accept \
-  --db &lt;task&gt;/revision-master.db --project-root &lt;task&gt; --result &lt;task&gt;/result.json --snapshot &lt;task&gt;/snapshot.json \
+  --db &lt;task&gt;/revision-master.db --project-root &lt;task&gt; \
+  --result &lt;review&gt;/results/&lt;submission-id&gt;.json --snapshot &lt;task&gt;/snapshot.json \
   --trusted &lt;task&gt;/retained-snapshot.json --context &lt;task&gt;/workbench-context.json \
   --accept-feedback f1 --accept-feedback f2 --write &lt;task&gt;/semantic_write.py:apply
 ```
@@ -187854,7 +187895,7 @@ path to regenerate derived views and prepare the next snapshot. Formal Gate
 verdicts and Decision choices remain separate dialogue steps through
 ResearchSpec.
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-revision-master.html</code> · <code>review-workspace/revision-master.html</code> · 503 行</summary><div class="doc-meta">sha256 <code>992386d99129f2f847f1d31a829c3615d74bff722e3de8e59978158215a18dac</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-revision-master.html</code> · <code>review-workspace/revision-master.html</code> · 534 行</summary><div class="doc-meta">sha256 <code>e7b4137520a6efb28ba17ee13acf97ce2adcd748f68887cc8aca45dbc7df5a7f</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
 &lt;meta charset="utf-8"&gt;
@@ -187885,7 +187926,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
-&lt;header&gt;&lt;div&gt;&lt;div class="eyebrow"&gt;论文修订 · 工件台账&lt;/div&gt;&lt;h1 id="title"&gt;论文修订工作台&lt;/h1&gt;&lt;div id="identity" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="header-meta"&gt;&lt;span id="counts" class="tag"&gt;&lt;/span&gt;&lt;button class="primary" id="export"&gt;导出审阅结果&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
+&lt;header&gt;&lt;div&gt;&lt;div class="eyebrow"&gt;论文修订 · 工件台账&lt;/div&gt;&lt;h1 id="title"&gt;论文修订工作台&lt;/h1&gt;&lt;div id="identity" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="header-meta"&gt;&lt;span id="counts" class="tag"&gt;&lt;/span&gt;&lt;span id="session-status" class="small muted"&gt;&lt;/span&gt;&lt;button id="download" type="button" disabled&gt;下载备用结果&lt;/button&gt;&lt;button class="primary" id="export" type="button" disabled&gt;提交审阅结果&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;nav id="stages" aria-label="审阅阶段"&gt;&lt;/nav&gt;
 &lt;div id="notice"&gt;&lt;div&gt;&lt;div class="statline" id="scope-description"&gt;&lt;/div&gt;&lt;div id="context" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;p id="message" class="small" role="status" aria-live="polite"&gt;&lt;/p&gt;&lt;p id="storage-status" class="small" role="status"&gt;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;div class="workspace"&gt;
@@ -187898,10 +187939,14 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
 (() =&gt; {
   'use strict';
   const $ = id =&gt; document.getElementById(id);
+  const sessionBridge = window.researchspecReviewSession || null;
   let w;
   try { w = JSON.parse($('revision-master-data').textContent); }
   catch { $('message').textContent = '请打开 Agent 已准备好的审阅 HTML。'; $('export').disabled = true; return; }
   if (w.schema_version !== 'revision-master-review-workspace.v1') { $('message').textContent = '审阅件格式无法识别。'; $('export').disabled = true; return; }
+  $('download').disabled = false;
+  $('export').disabled = !sessionBridge;
+  $('session-status').textContent = sessionBridge ? `本地会话 · ${sessionBridge.resultPath}` : '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。';
   const b = w.business, stageNames = {coverage:'意见覆盖',board:'整体工作板',strategy:'当前策略',round:'本轮改稿与回复'};
   const stateNames = {todo:'待处理',blocked:'阻断',ready:'可审阅',in_progress:'处理中',done:'完成',yes:'是',no:'否',high:'高',medium:'中',low:'低',covered:'已覆盖',uncovered:'未覆盖',primary:'主要',supporting:'支持',duplicate_filtered:'重复来源',completed:'完成',draft:'草案',pending:'待处理',conflict:'需核对',accepted:'已接收'};
   const labels = {comment_id:'意见',thread_id:'原始条目',reviewer_id:'审稿人',canonical_summary:'意见摘要',required_action:'所需行动',original_text:'原文',normalized_summary:'整理摘要',source_type:'来源类型',source_document_id:'原始文档',source_kind:'文档类型',source_label:'来源',source_path:'源文件',span_role:'来源作用',start_offset:'原文起点',end_offset:'原文终点',span_text:'原文片段',excerpt_text:'引文',note:'说明',coverage_status:'覆盖状态',segment_text:'覆盖片段',status:'状态',priority:'优先级',evidence_gap:'证据缺口',user_confirmation_needed:'需要用户确认',next_action:'下一步',target_location:'稿件位置',location_role:'位置作用',manuscript_claim_or_section:'论点或章节',existing_evidence:'现有证据',gap_summary:'缺口',dependency_comment_id:'依赖意见',proposed_stance:'拟定立场',stance_rationale:'立场理由',manuscript_change:'稿件修改',expected_response_letter_effect:'回复预期',required_material:'所需材料',available_now:'当前可用',gap_note:'缺口说明',message:'待核对事项',category:'类别',content_text:'候选措辞',rationale:'理由',target_scope_note:'适用范围',draft_text:'回复草案',request_summary:'补材建议',request_recommendation:'接收建议',round_id:'轮次',file_path:'材料文件',concern_summary:'材料事项',decision:'接收判断',decision_rationale:'判断理由',planned_usage_note:'使用计划',manuscript_execution_items_done:'稿件草案完成',response_draft_done:'回复完成',evidence_gap_closed:'证据缺口关闭',user_strategy_confirmed:'内部策略确认',one_to_one_link_checked:'对应已核对',export_ready:'导出就绪',plan_action_id:'计划行动',execution_category:'行动类别',title:'行动',objective:'目标',suggested_change:'修改建议',evidence_requirement:'证据要求',depends_on_plan_action_id:'依赖行动',log_id:'修改日志',operator_role:'执行者',summary:'摘要',change_note:'修改说明',response_note:'回复说明',created_at:'记录时间',target_file:'目标文件',target_locator:'位置',change_type:'修改类型',change_summary:'修改摘要',evidence_source:'证据来源',expected_response_use:'回复用途',relative_path:'文件',change_kind:'文件变化',diff_excerpt:'变化摘要',before_excerpt:'修改前',after_excerpt:'修改后',snapshot_sha256:'冻结文件标识',last_audited_sha256:'已核对文件标识',current_sha256:'当前文件标识',last_log_id:'最近日志',variant_label:'措辞版本',variant_text:'候选措辞',response_resolution_kind:'回复方式',original_comment:'原始意见',modification_scope:'修改范围',key_revision_excerpt:'修改引文',response_explanation:'回复解释',latex_excerpt:'LaTeX 引文',latex_response_text:'LaTeX 回复',artifact_name:'交付件',artifact_status:'记录状态',output_path:'交付路径',profile_target:'风格对象',profile_summary:'风格摘要',anti_ai_focus:'措辞关注点',rule_type:'规则类别',rule_text:'规则',main_entry:'稿件入口',project_shape:'稿件结构',high_risk_areas:'高风险范围',section_title:'章节',purpose_in_manuscript:'章节用途',key_files_or_locations:'文件位置',core_claim:'主要论点',main_evidence:'主要证据',supporting_section_ids:'支持章节',risk_level:'风险',link_note:'关联说明',response_role:'回复作用',patch_set_id:'交付修改组',artifact_kind:'交付类型',source_root:'原稿目录',output_root:'交付目录',operation:'操作',anchor_text:'定位引文',marked_text:'标记稿',clean_text:'净稿',notes:'说明'};
@@ -187910,11 +187955,12 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
   const id = () =&gt; crypto.randomUUID();
   const empty = () =&gt; Object.fromEntries(categories.map(key =&gt; [key, []]));
   const key = `revision-master:${w.workspace_id}:${w.snapshot_id}`;
-  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage;
+  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage, retryResult = null;
   let selected = w.context.active_comment_id ? `comment:${w.context.active_comment_id}` : (b.atomic_comments[0] ? `comment:${b.atomic_comments[0].comment_id}` : 'scope:coverage');
   let atomListOpen = false, selectedThread = rowsForInitialThread();
   function rowsForInitialThread() { return b.raw_thread_atomic_links.find(row =&gt; selected === 'comment:'+row.comment_id)?.thread_id || b.raw_review_threads[0]?.thread_id || null; }
   let reading = {mode:'related',document_id:null,start:0}, selectionAnchor = null, coverageDocumentId = null;
+  const clearSelection = () =&gt; { selectionAnchor = null; $('selection-tools').hidden = true; };
   const docs = new Map(w.documents.map(doc =&gt; [doc.document_id,doc]));
   const blocks = new Map(w.documents.flatMap(doc =&gt; doc.blocks.map(block =&gt; [block.id,block])));
   const scopes = new Map(w.scopes.map(scope =&gt; [scope.scope_id,scope]));
@@ -187938,6 +187984,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     return typeof entry.feedback_id === 'string' &amp;&amp; typeof entry.note === 'string' &amp;&amp; scope &amp;&amp; (entry.target_id === `scope:${scope.scope_id}` || scope.target_ids.includes(entry.target_id));
   }
   function save() {
+    retryResult = null;
     removeBlockedConfirmations();
     try { localStorage.setItem(key,JSON.stringify(draft)); }
     catch { $('storage-status').textContent = '草稿未能保存到浏览器；请导出当前反馈以保留。'; }
@@ -188215,7 +188262,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     parent.append(grid);
   }
   function renderReading() {
-    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); selectionAnchor = null; $('selection-tools').hidden = true;
+    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); clearSelection();
     mode.append(button('查看相关片段',() =&gt; { reading.mode = 'related'; renderReading(); }));
     if (reading.mode === 'document') {
       const doc = docs.get(reading.document_id), ranges = sectionRanges(doc);
@@ -188300,15 +188347,18 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     if (!note) { tell('先在“独立批注”中填写内容，再选择批注范围。'); $('annotation-note').focus(); return; }
     draft.feedback.annotations.push({...entry(targetForFeedback(),note),anchor}); $('annotation-note').value = ''; save(); renderReading(); tell('已保存独立批注。');
   }
+  document.addEventListener('keydown',event =&gt; { if (event.key === 'Escape') { clearSelection(); window.getSelection()?.removeAllRanges(); } });
+  $('add-selection').addEventListener('pointerdown',event =&gt; event.preventDefault());
+  $('add-selection').addEventListener('blur',() =&gt; { const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) clearSelection(); });
   document.addEventListener('selectionchange',() =&gt; {
-    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) return;
+    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) { if (document.activeElement !== $('add-selection')) clearSelection(); return; }
     const range = selection.getRangeAt(0), element = node =&gt; node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
     const startNode = element(range.startContainer)?.closest('[data-block-id]'), endNode = element(range.endContainer)?.closest('[data-block-id]');
-    if (!startNode || startNode !== endNode) { selectionAnchor = null; $('selection-tools').hidden = true; if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
+    if (!startNode || startNode !== endNode) { clearSelection(); if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
     const block = blocks.get(startNode.dataset.blockId); if (block.kind === 'image') return;
     const preceding = document.createRange(); preceding.selectNodeContents(startNode); preceding.setEnd(range.startContainer,range.startOffset);
     const start = preceding.toString().length, quote = range.toString(), end = start+quote.length;
-    if (!quote || block.text.slice(start,end) !== quote) { selectionAnchor = null; $('selection-tools').hidden = true; return; }
+    if (!quote || block.text.slice(start,end) !== quote) { clearSelection(); return; }
     selectionAnchor = {kind:'text',snapshot_id:w.snapshot_id,block_id:block.id,start,end,exact_quote:quote,prefix:block.text.slice(Math.max(0,start-24),start),suffix:block.text.slice(end,end+24)};
     $('selection-quote').textContent = `选中：${quote.slice(0,80)} `; $('selection-tools').hidden = false;
   });
@@ -188333,15 +188383,37 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
   $('focus-request').addEventListener('click',() =&gt; { if (selected.startsWith('comment:')) { put('focus_requests',entry(selected,`请评估切换执行焦点到 ${selected.slice(8)}`)); tell('已记录焦点请求；当前执行焦点未改变。'); } });
   $('target').addEventListener('change',loadRequest);
   for (const filter of ['search','reviewer','status']) $(filter).addEventListener(filter === 'search' ? 'input' : 'change',renderObjects);
-  function exportResult() {
-    removeBlockedConfirmations();
-    const feedback = structuredClone(draft.feedback), result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
+  function prepareResult() {
+    const feedback = structuredClone(draft.feedback);
+    feedback.confirmations = feedback.confirmations.filter(row =&gt; { const scope = scopes.get(row.scope_id); return scope &amp;&amp; !confirmationBlocked(scope); });
+    const result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
     const entries = categories.flatMap(category =&gt; feedback[category]);
-    if (entries.some(row =&gt; !validEntry(row)) || new Set(entries.map(row =&gt; row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return; }
-    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return; } }
-    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() =&gt; URL.revokeObjectURL(url),1000); draft.export_revision = result.export_revision; save(); tell('已导出完整结果，请交回 Agent。');
+    if (entries.some(row =&gt; !validEntry(row)) || new Set(entries.map(row =&gt; row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return null; }
+    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return null; } }
+    return result;
   }
-  $('export').addEventListener('click',exportResult);
+  function acceptResult(result) { draft.export_revision = result.export_revision; save(); }
+  function downloadResult() {
+    const result = prepareResult(); if (!result) return;
+    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() =&gt; URL.revokeObjectURL(url),1000); acceptResult(result); tell('已发起备用下载；无法确认文件是否已保存。');
+  }
+  let submitting = false;
+  async function submitResult() {
+    if (!sessionBridge || submitting) return;
+    const result = retryResult || prepareResult(); if (!result) return;
+    retryResult = result; submitting = true; $('export').disabled = $('download').disabled = true; $('export').textContent = '提交中…';
+    try {
+      const receipt = await sessionBridge.submit(result);
+      if (!receipt || typeof receipt.result_path !== 'string' || !receipt.result_path) throw new Error('本地会话未返回 result_path。');
+      acceptResult(result); tell(`已提交完整结果；结果文件：${receipt.result_path}`);
+    } catch (error) {
+      tell('提交失败，草稿仍保留；可重试。' + (error?.message ? ' ' + error.message : ''));
+    } finally {
+      submitting = false; $('download').disabled = false; $('export').disabled = !sessionBridge; $('export').textContent = '提交审阅结果';
+    }
+  }
+  $('download').addEventListener('click',downloadResult);
+  $('export').addEventListener('click',submitResult);
   function renderStages() {
     $('stages').replaceChildren();
     const stages = {coverage:['01 · 核对审稿意见','原文、拆分与遗漏'],board:['02 · 安排修订工作','优先级、证据与位置'],strategy:['03 · 确认逐项策略','修改动作与所需材料'],round:['04 · 核对修改和回复','稿件改动与回复覆盖']};
@@ -188373,7 +188445,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     <div><strong>inputs</strong> <code>review_response_workspace</code> ← review-response-workspace.v1</div>
     <div><strong>outputs</strong> <code>review_response_workboard</code> → review-response-workboard.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 122 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 123 行</summary><pre class="doc-body">---
 name: design-review-response-workboard-planning
 description: "Plans priority, dependencies, evidence gaps, target locations, and next actions for every canonical atomic comment."
 metadata:
@@ -188452,6 +188524,7 @@ Execute exactly one ResearchSpec capability node.
 
 ## Procedure
 
+
 # Review Response Workboard Planning
 
 Build the canonical atomic workboard: priority, dependencies, evidence gaps, target locations, and next actions for every atomic comment. Planning is a user-reviewable semantic artifact, not a script output.
@@ -188474,7 +188547,7 @@ Build the canonical atomic workboard: priority, dependencies, evidence gaps, tar
 6. Write `workflow_pending_user_confirmations`, run `scripts/gate_and_render_workspace.py --artifact-root &lt;workspace&gt;`, and present `08-atomic-comment-workboard.md` and `06-thread-to-atomic-mapping.md`.
 7. Keep the confirmation request open until the user explicitly accepts the workboard.
 
-Review the workboard with the user in dialogue or through the board handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and embed it in `review-workspace/revision-master.html`. The board confirmation binds the whole candidate board, so filtering the page view never narrows it. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes, and commit the processing receipt with the semantic write in the same task transaction. Obtain the graph Gate confirmation separately in dialogue.
+Review the workboard with the user in dialogue or through the board handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session with the original package template as the asset. Give the page URL and fixed result and history paths; keep the prepared embedded HTML for offline use and all handoff files in the task directory. The board confirmation binds the whole candidate board, so filtering the page view never narrows it. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes, and commit the processing receipt with the semantic write in the same task transaction. The receiving service writes only review results, not the database or task sources. Obtain the graph Gate confirmation separately in dialogue.
 
 ## Completion Criteria
 
@@ -190518,7 +190591,7 @@ Revision Master 提取工件（Extraction Artifact）
   "view.final_checklist.working_copy_table": "Working Manuscript 审计状态"
 }
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1449 行</summary><div class="doc-meta">sha256 <code>9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1503 行</summary><div class="doc-meta">sha256 <code>f9cd4fdcaf2a1febe331c98e515d41627dd25505196b5b73d6472f9015cf319b</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
   &lt;meta charset="utf-8"&gt;
@@ -190640,7 +190713,9 @@ Revision Master 提取工件（Extraction Artifact）
     &lt;span id="workflow" class="badge" hidden&gt;&lt;/span&gt;
     &lt;span class="spacer"&gt;&lt;/span&gt;
     &lt;label class="file-button" for="file"&gt;导入工作区 JSON&lt;input id="file" type="file" accept="application/json,.json"&gt;&lt;/label&gt;
-    &lt;button id="export" class="primary" type="button" disabled&gt;导出审阅结果&lt;/button&gt;
+    &lt;span id="session-status" class="subtle"&gt;&lt;/span&gt;
+    &lt;button id="download" type="button" disabled&gt;下载备用结果&lt;/button&gt;
+    &lt;button id="export" class="primary" type="button" disabled&gt;提交审阅结果&lt;/button&gt;
   &lt;/header&gt;
   &lt;p id="banner" class="banner" hidden&gt;&lt;/p&gt;
   &lt;section id="welcome" class="welcome"&gt;
@@ -191202,6 +191277,9 @@ Revision Master 提取工件（Extraction Artifact）
   var collapsedGroups = {};
   var toastTimer = null;
   var saveTimer = null;
+  var sessionBridge = window.researchspecReviewSession || null;
+  var submitting = false;
+  var retryResult = null;
 
   function setText(node, value){ node.textContent = value === undefined || value === null ? '' : String(value); }
   function el(tag, className, textValue){ var node = document.createElement(tag); if (className) node.className = className; if (textValue !== undefined) node.textContent = textValue; return node; }
@@ -191216,11 +191294,12 @@ Revision Master 提取工件（Extraction Artifact）
 
   function save(){
     if (!STATE) return;
+    retryResult = null;
     clearTimeout(saveTimer);
     var payload = JSON.stringify({ workspace_id: STATE.workspace.workspace_id, snapshot_id: STATE.workspace.snapshot_id, export_revision: STATE.export_revision, overall_note: STATE.overall_note, decisions: STATE.decisions, comments: STATE.comments });
     saveTimer = setTimeout(function(){
       if (storageSet(storageKey(), payload)) { setText($('save-status'), '草稿已保存在此浏览器（非正式状态）'); $('banner').hidden = true; }
-      else { setText($('save-status'), '浏览器未允许保存草稿'); setText($('banner'), '浏览器无法保存本地草稿：关闭页面前请先用“导出审阅结果”保存完整快照。'); $('banner').hidden = false; }
+      else { setText($('save-status'), '浏览器未允许保存草稿'); setText($('banner'), '浏览器无法保存本地草稿：关闭页面前请先提交到本地会话，或用“下载备用结果”保存完整快照。'); $('banner').hidden = false; }
     }, 150);
   }
 
@@ -191274,7 +191353,9 @@ Revision Master 提取工件（Extraction Artifact）
   function openWorkspace(){
     $('welcome').hidden = true;
     $('layout').hidden = false;
-    $('export').disabled = false;
+    $('download').disabled = false;
+    $('export').disabled = !sessionBridge;
+    setText($('session-status'), sessionBridge ? '本地会话 · ' + sessionBridge.resultPath : '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。');
     $('clear').hidden = false;
     setText($('adapter'), STATE.workspace.adapter);
     $('adapter').hidden = false;
@@ -191618,7 +191699,7 @@ Revision Master 提取工件（Extraction Artifact）
   function captureSelection(){
     if (!STATE) return;
     var selection = getSelection();
-    if (!selection || selection.isCollapsed || selection.rangeCount === 0) return;
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) { clearPending(); return; }
     var range = selection.getRangeAt(0);
     var startNode = range.startContainer.nodeType === 1 ? range.startContainer : range.startContainer.parentElement;
     var endNode = range.endContainer.nodeType === 1 ? range.endContainer : range.endContainer.parentElement;
@@ -191899,24 +191980,56 @@ Revision Master 提取工件（Extraction Artifact）
     setTimeout(function(){ URL.revokeObjectURL(url); }, 0);
   }
 
-  function exportResult(){
+  function prepareResult(){
     if (!STATE) return;
     var empty = STATE.comments.find(function(comment){ return !comment.body.trim(); });
-    if (empty) { notify('请先填写每条批注的正文，再导出。'); activate(empty.comment_id, true); return; }
-    STATE.export_revision = STATE.export_revision + 1;
+    if (empty) { notify('请先填写每条批注的正文，再提交或下载。'); activate(empty.comment_id, true); return null; }
     var result;
     try {
-      result = buildResult(STATE.workspace, STATE, new Date().toISOString());
+      result = buildResult(STATE.workspace, Object.assign({}, STATE, { export_revision: STATE.export_revision + 1 }), new Date().toISOString());
       validateResultAgainstWorkspace(result, STATE.workspace);
-    } catch (error) { notify('导出的结果未通过校验：' + error.message); return; }
+    } catch (error) { notify('结果未通过校验：' + error.message); return null; }
+    return result;
+  }
+
+  function acceptResult(result){
+    STATE.export_revision = result.export_revision;
     save();
-    download(result, STATE.workspace.workspace_id + '-review-result-r' + STATE.export_revision + '.json');
     renderStatus();
-    notify('已导出完整结果（第 ' + STATE.export_revision + ' 次）；草稿保持可编辑，可继续修改并再次导出。');
+  }
+
+  function downloadResult(){
+    var result = prepareResult();
+    if (!result) return;
+    download(result, STATE.workspace.workspace_id + '-review-result-r' + result.export_revision + '.json');
+    acceptResult(result);
+    notify('已发起备用下载（第 ' + result.export_revision + ' 次）；无法确认文件是否已保存。');
+  }
+
+  async function submitResult(){
+    if (!sessionBridge || submitting) return;
+    var result = retryResult || prepareResult();
+    if (!result) return;
+    retryResult = result;
+    submitting = true;
+    $('export').disabled = $('download').disabled = true;
+    try {
+      var receipt = await sessionBridge.submit(result);
+      if (!receipt || typeof receipt.result_path !== 'string' || !receipt.result_path) throw new Error('本地会话未返回 result_path。');
+      acceptResult(result);
+      notify('已提交完整结果（第 ' + result.export_revision + ' 次）；结果文件：' + receipt.result_path);
+    } catch (error) {
+      notify('提交失败，草稿仍保留；可重试。' + (error &amp;&amp; error.message ? ' ' + error.message : ''));
+    } finally {
+      submitting = false;
+      $('download').disabled = !STATE;
+      $('export').disabled = !sessionBridge;
+    }
   }
 
   function toggleOverlapOnOutsideClick(event){
     if (!event.target.closest('#overlap-menu,mark')) $('overlap-menu').hidden = true;
+    if (pending &amp;&amp; !event.target.closest('#selection-action, [data-text-target]')) clearPending();
   }
 
   function handleWholeBlockHotkey(event){
@@ -191944,6 +192057,10 @@ Revision Master 提取工件（Extraction Artifact）
   $('paper').addEventListener('keyup', function(event){ if (event.shiftKey &amp;&amp; event.key.indexOf('Arrow') === 0) captureSelection(); });
   $('paper-scroll').addEventListener('scroll', updateCurrentSection, { passive: true });
   $('selection-action').addEventListener('pointerdown', function(event){ event.preventDefault(); });
+  $('selection-action').addEventListener('blur', function(){
+    var selection = getSelection();
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) clearPending();
+  });
   $('selection-action').addEventListener('click', function(){ if (pending) addText(pending.blockId, pending.start, pending.end); });
   $('search').addEventListener('input', function(){ forcedId = null; renderCards(); });
   $('origin-filter').addEventListener('change', function(){ forcedId = null; renderCards(); });
@@ -191959,10 +192076,20 @@ Revision Master 提取工件（Extraction Artifact）
     renderAll(false);
     notify('本地草稿已清除。');
   });
-  $('export').addEventListener('click', exportResult);
+  $('download').addEventListener('click', downloadResult);
+  $('export').addEventListener('click', submitResult);
   $('legacy-close').addEventListener('click', function(){ $('legacy-dialog').close(); });
   document.addEventListener('keydown', handleWholeBlockHotkey);
   document.addEventListener('click', toggleOverlapOnOutsideClick);
+  document.addEventListener('selectionchange', function(){
+    var selection = getSelection();
+    if ((!selection || selection.isCollapsed || selection.rangeCount === 0) &amp;&amp; document.activeElement !== $('selection-action')) clearPending();
+  });
+  if (!sessionBridge) setText($('session-status'), '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。');
+  else {
+    document.querySelector('label[for="file"]').hidden = true;
+    importWorkspace(sessionBridge.workspace);
+  }
   &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
@@ -193479,7 +193606,7 @@ CREATE TABLE IF NOT EXISTS workbench_scope_receipts (
 CREATE INDEX IF NOT EXISTS workbench_feedback_receipts_identity
     ON workbench_feedback_receipts (snapshot_id, feedback_id);
 </pre></details>
-<details class="sub"><summary>knowledge <code>workbench-README.md</code> · <code>workbench/README.md</code> · 195 行</summary><div class="doc-meta">sha256 <code>2cf0158564583e0d43d6dd68fa3e5064c828d1f8005ac4cda6cf2169e2b2568d</code> · license MIT</div><pre class="doc-body"># Revision Master Review Workbench Runtime
+<details class="sub"><summary>knowledge <code>workbench-README.md</code> · <code>workbench/README.md</code> · 233 行</summary><div class="doc-meta">sha256 <code>22810a6fb031720b7ddac6d0a9a3d46c616ea6c7f78fc128a17c9c731df0f44b</code> · license MIT</div><pre class="doc-body"># Revision Master Review Workbench Runtime
 
 This directory holds the project-owned, standard-library-only resources that
 back the interactive revision-master review workbench. They are delivered
@@ -193539,7 +193666,7 @@ Read-only preparation never initializes, migrates, repairs, or renders the
 database, and never reads another task. Capture, document/block assembly,
 anchors, and the frozen HTML remain outside this module.
 
-## Preparing the HTML
+## Preparing the session
 
 Use the exported `researchspec/review-workspace` API from the installed package.
 The context file must contain `task_id`, the exact `node:&lt;run&gt;/&lt;node&gt;[@&lt;round&gt;]`
@@ -193549,7 +193676,7 @@ values from the current graph instructions. Never infer the round from SQLite.
 
 ```javascript
 import { prepareRevisionMasterReview, readRevisionMasterProjection,
-  validateRevisionMasterResult } from 'researchspec/review-workspace';
+  startReviewSession, validateRevisionMasterResult } from 'researchspec/review-workspace';
 import { readFile } from 'node:fs/promises';
 
 const context = JSON.parse(await readFile(contextPath, 'utf8'));
@@ -193566,11 +193693,20 @@ const ready = await prepareRevisionMasterReview({
   templatePath: packageHtmlPath,
   nextStep: '导出结果交回 Agent，正式关口在对话中确认',
 });
-// Deliver ready.htmlPath; independently retain ready.workspacePath and sources/.
+const session = await startReviewSession({
+  projectRoot: taskRoot,
+  workspacePath: ready.workspacePath,
+  assetPath: packageHtmlPath,
+});
+// Give the user session.url and show session.resultPath.
+// Keep ready.htmlPath as the offline backup.
+// Independently retain ready.workspacePath and the captured sources.
+const receipt = await session.waitForResult(); // Optional; default timeout is 10 minutes.
 const checked = validateRevisionMasterResult(
-  JSON.parse(await readFile(returnedResultPath, 'utf8')),
+  JSON.parse(await readFile(receipt.history_path, 'utf8')),
   JSON.parse(await readFile(ready.workspacePath, 'utf8')),
 );
+await session.close(); // The main Agent decides when the review session ends.
 ```
 
 The variables above are Agent-resolved task and installed-package paths.
@@ -193578,7 +193714,35 @@ The variables above are Agent-resolved task and installed-package paths.
 `blocks` may come from an independently authorized frozen render. Without a
 render, captured source remains readable. The preparation API captures sources,
 rechecks the SQL projection and file contents, and publishes a fresh workspace
-and HTML only after validation. Do not open the unprepared package template.
+and HTML only after validation. Pass the original package template as the
+session `assetPath`; the server embeds the retained workspace itself. Use
+`ready.htmlPath` only for the offline fallback and do not deliver the original
+template directly.
+
+Normal delivery uses the loopback session URL, with no manual JSON import. The
+page keeps drafts in browser-local state and posts an explicit export to the
+session. The receiver validates `workspace.json`, atomically publishes
+`result.json` beside it, and retains every complete submission as
+`results/&lt;submission-id&gt;.json`. Wait for a receipt and validate its immutable
+`history_path`; `result.json` is only the mutable latest copy. `waitForResult`
+can resume with `after`, accepts `timeoutMs` and an `AbortSignal`, and observes
+submissions already committed in the current service. After a restart, read
+the retained files directly. Waiting never applies feedback. Reopening the same
+snapshot reuses its `review-session.json` origin to preserve drafts; report an
+occupied port instead of changing it.
+
+The installed instructions expose the real session tool as
+`review_workspace.session_tool_path`. An Agent can instead run:
+
+```bash
+node &lt;session_tool_path&gt; --project-root ROOT --workspace WORKSPACE_JSON \
+  --asset HTML [--wait]
+```
+
+`--wait` prints successful receipt events and leaves the service running; the
+main Agent decides when to close it. The prepared HTML also opens offline with
+its explicit backup download. A failed submission stays retryable and never
+switches to download automatically.
 
 ## Checking a returned result
 
@@ -193593,7 +193757,8 @@ differs from the snapshot context.
 
 ```bash
 uv run --project="$HOME/.ar" --locked -- python &lt;package&gt;/workbench/review_workbench.py accept \
-  --db &lt;task&gt;/revision-master.db --project-root &lt;task&gt; --result &lt;task&gt;/result.json --snapshot &lt;task&gt;/snapshot.json \
+  --db &lt;task&gt;/revision-master.db --project-root &lt;task&gt; \
+  --result &lt;review&gt;/results/&lt;submission-id&gt;.json --snapshot &lt;task&gt;/snapshot.json \
   --trusted &lt;task&gt;/retained-snapshot.json --context &lt;task&gt;/workbench-context.json \
   --accept-feedback f1 --accept-feedback f2 --write &lt;task&gt;/semantic_write.py:apply
 ```
@@ -193674,7 +193839,7 @@ path to regenerate derived views and prepare the next snapshot. Formal Gate
 verdicts and Decision choices remain separate dialogue steps through
 ResearchSpec.
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-revision-master.html</code> · <code>review-workspace/revision-master.html</code> · 503 行</summary><div class="doc-meta">sha256 <code>992386d99129f2f847f1d31a829c3615d74bff722e3de8e59978158215a18dac</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-revision-master.html</code> · <code>review-workspace/revision-master.html</code> · 534 行</summary><div class="doc-meta">sha256 <code>e7b4137520a6efb28ba17ee13acf97ce2adcd748f68887cc8aca45dbc7df5a7f</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
 &lt;meta charset="utf-8"&gt;
@@ -193705,7 +193870,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
-&lt;header&gt;&lt;div&gt;&lt;div class="eyebrow"&gt;论文修订 · 工件台账&lt;/div&gt;&lt;h1 id="title"&gt;论文修订工作台&lt;/h1&gt;&lt;div id="identity" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="header-meta"&gt;&lt;span id="counts" class="tag"&gt;&lt;/span&gt;&lt;button class="primary" id="export"&gt;导出审阅结果&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
+&lt;header&gt;&lt;div&gt;&lt;div class="eyebrow"&gt;论文修订 · 工件台账&lt;/div&gt;&lt;h1 id="title"&gt;论文修订工作台&lt;/h1&gt;&lt;div id="identity" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="header-meta"&gt;&lt;span id="counts" class="tag"&gt;&lt;/span&gt;&lt;span id="session-status" class="small muted"&gt;&lt;/span&gt;&lt;button id="download" type="button" disabled&gt;下载备用结果&lt;/button&gt;&lt;button class="primary" id="export" type="button" disabled&gt;提交审阅结果&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;nav id="stages" aria-label="审阅阶段"&gt;&lt;/nav&gt;
 &lt;div id="notice"&gt;&lt;div&gt;&lt;div class="statline" id="scope-description"&gt;&lt;/div&gt;&lt;div id="context" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;p id="message" class="small" role="status" aria-live="polite"&gt;&lt;/p&gt;&lt;p id="storage-status" class="small" role="status"&gt;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;div class="workspace"&gt;
@@ -193718,10 +193883,14 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
 (() =&gt; {
   'use strict';
   const $ = id =&gt; document.getElementById(id);
+  const sessionBridge = window.researchspecReviewSession || null;
   let w;
   try { w = JSON.parse($('revision-master-data').textContent); }
   catch { $('message').textContent = '请打开 Agent 已准备好的审阅 HTML。'; $('export').disabled = true; return; }
   if (w.schema_version !== 'revision-master-review-workspace.v1') { $('message').textContent = '审阅件格式无法识别。'; $('export').disabled = true; return; }
+  $('download').disabled = false;
+  $('export').disabled = !sessionBridge;
+  $('session-status').textContent = sessionBridge ? `本地会话 · ${sessionBridge.resultPath}` : '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。';
   const b = w.business, stageNames = {coverage:'意见覆盖',board:'整体工作板',strategy:'当前策略',round:'本轮改稿与回复'};
   const stateNames = {todo:'待处理',blocked:'阻断',ready:'可审阅',in_progress:'处理中',done:'完成',yes:'是',no:'否',high:'高',medium:'中',low:'低',covered:'已覆盖',uncovered:'未覆盖',primary:'主要',supporting:'支持',duplicate_filtered:'重复来源',completed:'完成',draft:'草案',pending:'待处理',conflict:'需核对',accepted:'已接收'};
   const labels = {comment_id:'意见',thread_id:'原始条目',reviewer_id:'审稿人',canonical_summary:'意见摘要',required_action:'所需行动',original_text:'原文',normalized_summary:'整理摘要',source_type:'来源类型',source_document_id:'原始文档',source_kind:'文档类型',source_label:'来源',source_path:'源文件',span_role:'来源作用',start_offset:'原文起点',end_offset:'原文终点',span_text:'原文片段',excerpt_text:'引文',note:'说明',coverage_status:'覆盖状态',segment_text:'覆盖片段',status:'状态',priority:'优先级',evidence_gap:'证据缺口',user_confirmation_needed:'需要用户确认',next_action:'下一步',target_location:'稿件位置',location_role:'位置作用',manuscript_claim_or_section:'论点或章节',existing_evidence:'现有证据',gap_summary:'缺口',dependency_comment_id:'依赖意见',proposed_stance:'拟定立场',stance_rationale:'立场理由',manuscript_change:'稿件修改',expected_response_letter_effect:'回复预期',required_material:'所需材料',available_now:'当前可用',gap_note:'缺口说明',message:'待核对事项',category:'类别',content_text:'候选措辞',rationale:'理由',target_scope_note:'适用范围',draft_text:'回复草案',request_summary:'补材建议',request_recommendation:'接收建议',round_id:'轮次',file_path:'材料文件',concern_summary:'材料事项',decision:'接收判断',decision_rationale:'判断理由',planned_usage_note:'使用计划',manuscript_execution_items_done:'稿件草案完成',response_draft_done:'回复完成',evidence_gap_closed:'证据缺口关闭',user_strategy_confirmed:'内部策略确认',one_to_one_link_checked:'对应已核对',export_ready:'导出就绪',plan_action_id:'计划行动',execution_category:'行动类别',title:'行动',objective:'目标',suggested_change:'修改建议',evidence_requirement:'证据要求',depends_on_plan_action_id:'依赖行动',log_id:'修改日志',operator_role:'执行者',summary:'摘要',change_note:'修改说明',response_note:'回复说明',created_at:'记录时间',target_file:'目标文件',target_locator:'位置',change_type:'修改类型',change_summary:'修改摘要',evidence_source:'证据来源',expected_response_use:'回复用途',relative_path:'文件',change_kind:'文件变化',diff_excerpt:'变化摘要',before_excerpt:'修改前',after_excerpt:'修改后',snapshot_sha256:'冻结文件标识',last_audited_sha256:'已核对文件标识',current_sha256:'当前文件标识',last_log_id:'最近日志',variant_label:'措辞版本',variant_text:'候选措辞',response_resolution_kind:'回复方式',original_comment:'原始意见',modification_scope:'修改范围',key_revision_excerpt:'修改引文',response_explanation:'回复解释',latex_excerpt:'LaTeX 引文',latex_response_text:'LaTeX 回复',artifact_name:'交付件',artifact_status:'记录状态',output_path:'交付路径',profile_target:'风格对象',profile_summary:'风格摘要',anti_ai_focus:'措辞关注点',rule_type:'规则类别',rule_text:'规则',main_entry:'稿件入口',project_shape:'稿件结构',high_risk_areas:'高风险范围',section_title:'章节',purpose_in_manuscript:'章节用途',key_files_or_locations:'文件位置',core_claim:'主要论点',main_evidence:'主要证据',supporting_section_ids:'支持章节',risk_level:'风险',link_note:'关联说明',response_role:'回复作用',patch_set_id:'交付修改组',artifact_kind:'交付类型',source_root:'原稿目录',output_root:'交付目录',operation:'操作',anchor_text:'定位引文',marked_text:'标记稿',clean_text:'净稿',notes:'说明'};
@@ -193730,11 +193899,12 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
   const id = () =&gt; crypto.randomUUID();
   const empty = () =&gt; Object.fromEntries(categories.map(key =&gt; [key, []]));
   const key = `revision-master:${w.workspace_id}:${w.snapshot_id}`;
-  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage;
+  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage, retryResult = null;
   let selected = w.context.active_comment_id ? `comment:${w.context.active_comment_id}` : (b.atomic_comments[0] ? `comment:${b.atomic_comments[0].comment_id}` : 'scope:coverage');
   let atomListOpen = false, selectedThread = rowsForInitialThread();
   function rowsForInitialThread() { return b.raw_thread_atomic_links.find(row =&gt; selected === 'comment:'+row.comment_id)?.thread_id || b.raw_review_threads[0]?.thread_id || null; }
   let reading = {mode:'related',document_id:null,start:0}, selectionAnchor = null, coverageDocumentId = null;
+  const clearSelection = () =&gt; { selectionAnchor = null; $('selection-tools').hidden = true; };
   const docs = new Map(w.documents.map(doc =&gt; [doc.document_id,doc]));
   const blocks = new Map(w.documents.flatMap(doc =&gt; doc.blocks.map(block =&gt; [block.id,block])));
   const scopes = new Map(w.scopes.map(scope =&gt; [scope.scope_id,scope]));
@@ -193758,6 +193928,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     return typeof entry.feedback_id === 'string' &amp;&amp; typeof entry.note === 'string' &amp;&amp; scope &amp;&amp; (entry.target_id === `scope:${scope.scope_id}` || scope.target_ids.includes(entry.target_id));
   }
   function save() {
+    retryResult = null;
     removeBlockedConfirmations();
     try { localStorage.setItem(key,JSON.stringify(draft)); }
     catch { $('storage-status').textContent = '草稿未能保存到浏览器；请导出当前反馈以保留。'; }
@@ -194035,7 +194206,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     parent.append(grid);
   }
   function renderReading() {
-    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); selectionAnchor = null; $('selection-tools').hidden = true;
+    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); clearSelection();
     mode.append(button('查看相关片段',() =&gt; { reading.mode = 'related'; renderReading(); }));
     if (reading.mode === 'document') {
       const doc = docs.get(reading.document_id), ranges = sectionRanges(doc);
@@ -194120,15 +194291,18 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     if (!note) { tell('先在“独立批注”中填写内容，再选择批注范围。'); $('annotation-note').focus(); return; }
     draft.feedback.annotations.push({...entry(targetForFeedback(),note),anchor}); $('annotation-note').value = ''; save(); renderReading(); tell('已保存独立批注。');
   }
+  document.addEventListener('keydown',event =&gt; { if (event.key === 'Escape') { clearSelection(); window.getSelection()?.removeAllRanges(); } });
+  $('add-selection').addEventListener('pointerdown',event =&gt; event.preventDefault());
+  $('add-selection').addEventListener('blur',() =&gt; { const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) clearSelection(); });
   document.addEventListener('selectionchange',() =&gt; {
-    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) return;
+    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) { if (document.activeElement !== $('add-selection')) clearSelection(); return; }
     const range = selection.getRangeAt(0), element = node =&gt; node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
     const startNode = element(range.startContainer)?.closest('[data-block-id]'), endNode = element(range.endContainer)?.closest('[data-block-id]');
-    if (!startNode || startNode !== endNode) { selectionAnchor = null; $('selection-tools').hidden = true; if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
+    if (!startNode || startNode !== endNode) { clearSelection(); if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
     const block = blocks.get(startNode.dataset.blockId); if (block.kind === 'image') return;
     const preceding = document.createRange(); preceding.selectNodeContents(startNode); preceding.setEnd(range.startContainer,range.startOffset);
     const start = preceding.toString().length, quote = range.toString(), end = start+quote.length;
-    if (!quote || block.text.slice(start,end) !== quote) { selectionAnchor = null; $('selection-tools').hidden = true; return; }
+    if (!quote || block.text.slice(start,end) !== quote) { clearSelection(); return; }
     selectionAnchor = {kind:'text',snapshot_id:w.snapshot_id,block_id:block.id,start,end,exact_quote:quote,prefix:block.text.slice(Math.max(0,start-24),start),suffix:block.text.slice(end,end+24)};
     $('selection-quote').textContent = `选中：${quote.slice(0,80)} `; $('selection-tools').hidden = false;
   });
@@ -194153,15 +194327,37 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
   $('focus-request').addEventListener('click',() =&gt; { if (selected.startsWith('comment:')) { put('focus_requests',entry(selected,`请评估切换执行焦点到 ${selected.slice(8)}`)); tell('已记录焦点请求；当前执行焦点未改变。'); } });
   $('target').addEventListener('change',loadRequest);
   for (const filter of ['search','reviewer','status']) $(filter).addEventListener(filter === 'search' ? 'input' : 'change',renderObjects);
-  function exportResult() {
-    removeBlockedConfirmations();
-    const feedback = structuredClone(draft.feedback), result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
+  function prepareResult() {
+    const feedback = structuredClone(draft.feedback);
+    feedback.confirmations = feedback.confirmations.filter(row =&gt; { const scope = scopes.get(row.scope_id); return scope &amp;&amp; !confirmationBlocked(scope); });
+    const result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
     const entries = categories.flatMap(category =&gt; feedback[category]);
-    if (entries.some(row =&gt; !validEntry(row)) || new Set(entries.map(row =&gt; row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return; }
-    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return; } }
-    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() =&gt; URL.revokeObjectURL(url),1000); draft.export_revision = result.export_revision; save(); tell('已导出完整结果，请交回 Agent。');
+    if (entries.some(row =&gt; !validEntry(row)) || new Set(entries.map(row =&gt; row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return null; }
+    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return null; } }
+    return result;
   }
-  $('export').addEventListener('click',exportResult);
+  function acceptResult(result) { draft.export_revision = result.export_revision; save(); }
+  function downloadResult() {
+    const result = prepareResult(); if (!result) return;
+    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() =&gt; URL.revokeObjectURL(url),1000); acceptResult(result); tell('已发起备用下载；无法确认文件是否已保存。');
+  }
+  let submitting = false;
+  async function submitResult() {
+    if (!sessionBridge || submitting) return;
+    const result = retryResult || prepareResult(); if (!result) return;
+    retryResult = result; submitting = true; $('export').disabled = $('download').disabled = true; $('export').textContent = '提交中…';
+    try {
+      const receipt = await sessionBridge.submit(result);
+      if (!receipt || typeof receipt.result_path !== 'string' || !receipt.result_path) throw new Error('本地会话未返回 result_path。');
+      acceptResult(result); tell(`已提交完整结果；结果文件：${receipt.result_path}`);
+    } catch (error) {
+      tell('提交失败，草稿仍保留；可重试。' + (error?.message ? ' ' + error.message : ''));
+    } finally {
+      submitting = false; $('download').disabled = false; $('export').disabled = !sessionBridge; $('export').textContent = '提交审阅结果';
+    }
+  }
+  $('download').addEventListener('click',downloadResult);
+  $('export').addEventListener('click',submitResult);
   function renderStages() {
     $('stages').replaceChildren();
     const stages = {coverage:['01 · 核对审稿意见','原文、拆分与遗漏'],board:['02 · 安排修订工作','优先级、证据与位置'],strategy:['03 · 确认逐项策略','修改动作与所需材料'],round:['04 · 核对修改和回复','稿件改动与回复覆盖']};
@@ -194193,7 +194389,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     <div><strong>inputs</strong> <code>review_response_workspace</code> ← review-response-workspace.v1</div>
     <div><strong>outputs</strong> <code>working_manuscript</code> → manuscript-draft.v1 · <code>response_markdown</code> → response-letter.v1 · <code>response_latex</code> → response-letter-latex.v1 · <code>round_summary</code> → review-response-round.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 147 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 148 行</summary><pre class="doc-body">---
 name: generation-review-response-round
 description: "Executes one complete strategy/draft round plus final interactive manuscript revision, semantic revision logging, response-letter coverage, and export."
 metadata:
@@ -194279,6 +194475,7 @@ Execute exactly one ResearchSpec capability node.
 
 ## Procedure
 
+
 # Review Response Round
 
 Execute one complete revision-response round: author and confirm comment-scoped strategy and drafts, then perform final interactive manuscript revision, semantic revision logging, response-letter coverage, and export. The graph engine owns round continuation; this node returns control after one full round.
@@ -194293,7 +194490,7 @@ Execute one complete revision-response round: author and confirm comment-scoped 
    - explicitly set `workflow_state.active_comment_id`; never switch silently;
    - write `strategy_cards` with `proposed_stance` and `stance_rationale`;
    - write at least one `strategy_card_actions`, plus target locations, evidence items, pending confirmations, and supplement suggestion/intake rows when needed;
-   - proactively prepare the current-strategy handoff using `workbench/README.md` and the package's `review-workspace/revision-master.html`, or review the same candidate in dialogue; ask for per-comment confirmation before writing manuscript and response drafts, binding the current active strategy candidate and its linked sources, evidence, and locations; a pending material blocker or substantive adjustment keeps that scope pending;
+   - proactively prepare the current-strategy handoff using `workbench/README.md` and start its retained loopback session with the original `review-workspace/revision-master.html` package template as the asset, or review the same candidate in dialogue; ask for per-comment confirmation before writing manuscript and response drafts, binding the current active strategy candidate and its linked sources, evidence, and locations; a pending material blocker or substantive adjustment keeps that scope pending;
    - after confirmation, write `strategy_action_manuscript_execution_items` and `comment_response_drafts`; keep reviewer/editor excerpts in the source language and all normalized strategy/draft text in the working language;
    - mark a comment complete only when strategy, evidence judgment, manuscript draft, response draft, and one-to-one correspondence checks all pass.
 2. Keep comment-scoped blockers local. Use global blockers only for true stage-level blockers.
@@ -194311,9 +194508,9 @@ Execute one complete revision-response round: author and confirm comment-scoped 
 7. Export final deliverables with `scripts/export_manuscript_variants.py` where the script supports the confirmed target; optional `latexdiff` is advisory only and must never block completion.
 8. Ask the user when a change would alter the main line, core claims, or conclusions; when a closing strategy needs authorization; or when a response-only resolution is ambiguous.
 
-For the final interactive pass, review the current `working_manuscript` and open workboard items with the user in dialogue or through the round handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and embed it in `review-workspace/revision-master.html`. The round view shows the frozen before/after excerpt, revision log, and thread-organized reply for every related location, plus actual delivery-file status and pending formal controls; a round seen marker is separate from feedback and never counts as confirmation. Apply accepted edits to `working_manuscript` and commit them through the existing semantic revision log scripts. Keep the per-comment confirmation and evidence boundaries intact.
+For the final interactive pass, review the current `working_manuscript` and open workboard items with the user in dialogue or through the round handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session with the original package template as the asset; keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths; every workspace, result, history, and session file remains in the task directory, and no manual import is needed. The round view shows the frozen before/after excerpt, revision log, and thread-organized reply for every related location, plus actual delivery-file status and pending formal controls; a round seen marker is separate from feedback and never counts as confirmation. Apply accepted edits to `working_manuscript` and commit them through the existing semantic revision log scripts. Keep the per-comment confirmation and evidence boundaries intact.
 
-When a returned `revision-master-review-result.v1` is processed, validate it against the retained snapshot and recheck each scope's current database dependencies before writing, commit the processing receipt with the same semantic write in one task transaction, and regenerate the derived views. Keep pending or conflicting items traceable in the next handoff; recheck actual files, logs, and receipts after an interrupted manuscript write before retrying, without replaying blindly. Removing an earlier annotation never reverses an applied effect; an explicit request is required.
+When a committed `history_path` containing `revision-master-review-result.v1` is processed, validate it against the retained snapshot and recheck each scope's current database dependencies before writing, commit the processing receipt with the same semantic write in one task transaction, and regenerate the derived views. Keep pending or conflicting items traceable in the next handoff; recheck actual files, logs, and receipts after an interrupted manuscript write before retrying, without replaying blindly. Removing an earlier annotation never reverses an applied effect; an explicit request is required. All revision outputs remain task-local.
 
 ## Round Completion
 
@@ -196531,7 +196728,7 @@ Stage 6 必须持续刷新并展示：
   "view.final_checklist.working_copy_table": "Working Manuscript 审计状态"
 }
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1449 行</summary><div class="doc-meta">sha256 <code>9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1503 行</summary><div class="doc-meta">sha256 <code>f9cd4fdcaf2a1febe331c98e515d41627dd25505196b5b73d6472f9015cf319b</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
   &lt;meta charset="utf-8"&gt;
@@ -196653,7 +196850,9 @@ Stage 6 必须持续刷新并展示：
     &lt;span id="workflow" class="badge" hidden&gt;&lt;/span&gt;
     &lt;span class="spacer"&gt;&lt;/span&gt;
     &lt;label class="file-button" for="file"&gt;导入工作区 JSON&lt;input id="file" type="file" accept="application/json,.json"&gt;&lt;/label&gt;
-    &lt;button id="export" class="primary" type="button" disabled&gt;导出审阅结果&lt;/button&gt;
+    &lt;span id="session-status" class="subtle"&gt;&lt;/span&gt;
+    &lt;button id="download" type="button" disabled&gt;下载备用结果&lt;/button&gt;
+    &lt;button id="export" class="primary" type="button" disabled&gt;提交审阅结果&lt;/button&gt;
   &lt;/header&gt;
   &lt;p id="banner" class="banner" hidden&gt;&lt;/p&gt;
   &lt;section id="welcome" class="welcome"&gt;
@@ -197215,6 +197414,9 @@ Stage 6 必须持续刷新并展示：
   var collapsedGroups = {};
   var toastTimer = null;
   var saveTimer = null;
+  var sessionBridge = window.researchspecReviewSession || null;
+  var submitting = false;
+  var retryResult = null;
 
   function setText(node, value){ node.textContent = value === undefined || value === null ? '' : String(value); }
   function el(tag, className, textValue){ var node = document.createElement(tag); if (className) node.className = className; if (textValue !== undefined) node.textContent = textValue; return node; }
@@ -197229,11 +197431,12 @@ Stage 6 必须持续刷新并展示：
 
   function save(){
     if (!STATE) return;
+    retryResult = null;
     clearTimeout(saveTimer);
     var payload = JSON.stringify({ workspace_id: STATE.workspace.workspace_id, snapshot_id: STATE.workspace.snapshot_id, export_revision: STATE.export_revision, overall_note: STATE.overall_note, decisions: STATE.decisions, comments: STATE.comments });
     saveTimer = setTimeout(function(){
       if (storageSet(storageKey(), payload)) { setText($('save-status'), '草稿已保存在此浏览器（非正式状态）'); $('banner').hidden = true; }
-      else { setText($('save-status'), '浏览器未允许保存草稿'); setText($('banner'), '浏览器无法保存本地草稿：关闭页面前请先用“导出审阅结果”保存完整快照。'); $('banner').hidden = false; }
+      else { setText($('save-status'), '浏览器未允许保存草稿'); setText($('banner'), '浏览器无法保存本地草稿：关闭页面前请先提交到本地会话，或用“下载备用结果”保存完整快照。'); $('banner').hidden = false; }
     }, 150);
   }
 
@@ -197287,7 +197490,9 @@ Stage 6 必须持续刷新并展示：
   function openWorkspace(){
     $('welcome').hidden = true;
     $('layout').hidden = false;
-    $('export').disabled = false;
+    $('download').disabled = false;
+    $('export').disabled = !sessionBridge;
+    setText($('session-status'), sessionBridge ? '本地会话 · ' + sessionBridge.resultPath : '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。');
     $('clear').hidden = false;
     setText($('adapter'), STATE.workspace.adapter);
     $('adapter').hidden = false;
@@ -197631,7 +197836,7 @@ Stage 6 必须持续刷新并展示：
   function captureSelection(){
     if (!STATE) return;
     var selection = getSelection();
-    if (!selection || selection.isCollapsed || selection.rangeCount === 0) return;
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) { clearPending(); return; }
     var range = selection.getRangeAt(0);
     var startNode = range.startContainer.nodeType === 1 ? range.startContainer : range.startContainer.parentElement;
     var endNode = range.endContainer.nodeType === 1 ? range.endContainer : range.endContainer.parentElement;
@@ -197912,24 +198117,56 @@ Stage 6 必须持续刷新并展示：
     setTimeout(function(){ URL.revokeObjectURL(url); }, 0);
   }
 
-  function exportResult(){
+  function prepareResult(){
     if (!STATE) return;
     var empty = STATE.comments.find(function(comment){ return !comment.body.trim(); });
-    if (empty) { notify('请先填写每条批注的正文，再导出。'); activate(empty.comment_id, true); return; }
-    STATE.export_revision = STATE.export_revision + 1;
+    if (empty) { notify('请先填写每条批注的正文，再提交或下载。'); activate(empty.comment_id, true); return null; }
     var result;
     try {
-      result = buildResult(STATE.workspace, STATE, new Date().toISOString());
+      result = buildResult(STATE.workspace, Object.assign({}, STATE, { export_revision: STATE.export_revision + 1 }), new Date().toISOString());
       validateResultAgainstWorkspace(result, STATE.workspace);
-    } catch (error) { notify('导出的结果未通过校验：' + error.message); return; }
+    } catch (error) { notify('结果未通过校验：' + error.message); return null; }
+    return result;
+  }
+
+  function acceptResult(result){
+    STATE.export_revision = result.export_revision;
     save();
-    download(result, STATE.workspace.workspace_id + '-review-result-r' + STATE.export_revision + '.json');
     renderStatus();
-    notify('已导出完整结果（第 ' + STATE.export_revision + ' 次）；草稿保持可编辑，可继续修改并再次导出。');
+  }
+
+  function downloadResult(){
+    var result = prepareResult();
+    if (!result) return;
+    download(result, STATE.workspace.workspace_id + '-review-result-r' + result.export_revision + '.json');
+    acceptResult(result);
+    notify('已发起备用下载（第 ' + result.export_revision + ' 次）；无法确认文件是否已保存。');
+  }
+
+  async function submitResult(){
+    if (!sessionBridge || submitting) return;
+    var result = retryResult || prepareResult();
+    if (!result) return;
+    retryResult = result;
+    submitting = true;
+    $('export').disabled = $('download').disabled = true;
+    try {
+      var receipt = await sessionBridge.submit(result);
+      if (!receipt || typeof receipt.result_path !== 'string' || !receipt.result_path) throw new Error('本地会话未返回 result_path。');
+      acceptResult(result);
+      notify('已提交完整结果（第 ' + result.export_revision + ' 次）；结果文件：' + receipt.result_path);
+    } catch (error) {
+      notify('提交失败，草稿仍保留；可重试。' + (error &amp;&amp; error.message ? ' ' + error.message : ''));
+    } finally {
+      submitting = false;
+      $('download').disabled = !STATE;
+      $('export').disabled = !sessionBridge;
+    }
   }
 
   function toggleOverlapOnOutsideClick(event){
     if (!event.target.closest('#overlap-menu,mark')) $('overlap-menu').hidden = true;
+    if (pending &amp;&amp; !event.target.closest('#selection-action, [data-text-target]')) clearPending();
   }
 
   function handleWholeBlockHotkey(event){
@@ -197957,6 +198194,10 @@ Stage 6 必须持续刷新并展示：
   $('paper').addEventListener('keyup', function(event){ if (event.shiftKey &amp;&amp; event.key.indexOf('Arrow') === 0) captureSelection(); });
   $('paper-scroll').addEventListener('scroll', updateCurrentSection, { passive: true });
   $('selection-action').addEventListener('pointerdown', function(event){ event.preventDefault(); });
+  $('selection-action').addEventListener('blur', function(){
+    var selection = getSelection();
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) clearPending();
+  });
   $('selection-action').addEventListener('click', function(){ if (pending) addText(pending.blockId, pending.start, pending.end); });
   $('search').addEventListener('input', function(){ forcedId = null; renderCards(); });
   $('origin-filter').addEventListener('change', function(){ forcedId = null; renderCards(); });
@@ -197972,10 +198213,20 @@ Stage 6 必须持续刷新并展示：
     renderAll(false);
     notify('本地草稿已清除。');
   });
-  $('export').addEventListener('click', exportResult);
+  $('download').addEventListener('click', downloadResult);
+  $('export').addEventListener('click', submitResult);
   $('legacy-close').addEventListener('click', function(){ $('legacy-dialog').close(); });
   document.addEventListener('keydown', handleWholeBlockHotkey);
   document.addEventListener('click', toggleOverlapOnOutsideClick);
+  document.addEventListener('selectionchange', function(){
+    var selection = getSelection();
+    if ((!selection || selection.isCollapsed || selection.rangeCount === 0) &amp;&amp; document.activeElement !== $('selection-action')) clearPending();
+  });
+  if (!sessionBridge) setText($('session-status'), '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。');
+  else {
+    document.querySelector('label[for="file"]').hidden = true;
+    importWorkspace(sessionBridge.workspace);
+  }
   &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
@@ -199492,7 +199743,7 @@ CREATE TABLE IF NOT EXISTS workbench_scope_receipts (
 CREATE INDEX IF NOT EXISTS workbench_feedback_receipts_identity
     ON workbench_feedback_receipts (snapshot_id, feedback_id);
 </pre></details>
-<details class="sub"><summary>knowledge <code>workbench-README.md</code> · <code>workbench/README.md</code> · 195 行</summary><div class="doc-meta">sha256 <code>2cf0158564583e0d43d6dd68fa3e5064c828d1f8005ac4cda6cf2169e2b2568d</code> · license MIT</div><pre class="doc-body"># Revision Master Review Workbench Runtime
+<details class="sub"><summary>knowledge <code>workbench-README.md</code> · <code>workbench/README.md</code> · 233 行</summary><div class="doc-meta">sha256 <code>22810a6fb031720b7ddac6d0a9a3d46c616ea6c7f78fc128a17c9c731df0f44b</code> · license MIT</div><pre class="doc-body"># Revision Master Review Workbench Runtime
 
 This directory holds the project-owned, standard-library-only resources that
 back the interactive revision-master review workbench. They are delivered
@@ -199552,7 +199803,7 @@ Read-only preparation never initializes, migrates, repairs, or renders the
 database, and never reads another task. Capture, document/block assembly,
 anchors, and the frozen HTML remain outside this module.
 
-## Preparing the HTML
+## Preparing the session
 
 Use the exported `researchspec/review-workspace` API from the installed package.
 The context file must contain `task_id`, the exact `node:&lt;run&gt;/&lt;node&gt;[@&lt;round&gt;]`
@@ -199562,7 +199813,7 @@ values from the current graph instructions. Never infer the round from SQLite.
 
 ```javascript
 import { prepareRevisionMasterReview, readRevisionMasterProjection,
-  validateRevisionMasterResult } from 'researchspec/review-workspace';
+  startReviewSession, validateRevisionMasterResult } from 'researchspec/review-workspace';
 import { readFile } from 'node:fs/promises';
 
 const context = JSON.parse(await readFile(contextPath, 'utf8'));
@@ -199579,11 +199830,20 @@ const ready = await prepareRevisionMasterReview({
   templatePath: packageHtmlPath,
   nextStep: '导出结果交回 Agent，正式关口在对话中确认',
 });
-// Deliver ready.htmlPath; independently retain ready.workspacePath and sources/.
+const session = await startReviewSession({
+  projectRoot: taskRoot,
+  workspacePath: ready.workspacePath,
+  assetPath: packageHtmlPath,
+});
+// Give the user session.url and show session.resultPath.
+// Keep ready.htmlPath as the offline backup.
+// Independently retain ready.workspacePath and the captured sources.
+const receipt = await session.waitForResult(); // Optional; default timeout is 10 minutes.
 const checked = validateRevisionMasterResult(
-  JSON.parse(await readFile(returnedResultPath, 'utf8')),
+  JSON.parse(await readFile(receipt.history_path, 'utf8')),
   JSON.parse(await readFile(ready.workspacePath, 'utf8')),
 );
+await session.close(); // The main Agent decides when the review session ends.
 ```
 
 The variables above are Agent-resolved task and installed-package paths.
@@ -199591,7 +199851,35 @@ The variables above are Agent-resolved task and installed-package paths.
 `blocks` may come from an independently authorized frozen render. Without a
 render, captured source remains readable. The preparation API captures sources,
 rechecks the SQL projection and file contents, and publishes a fresh workspace
-and HTML only after validation. Do not open the unprepared package template.
+and HTML only after validation. Pass the original package template as the
+session `assetPath`; the server embeds the retained workspace itself. Use
+`ready.htmlPath` only for the offline fallback and do not deliver the original
+template directly.
+
+Normal delivery uses the loopback session URL, with no manual JSON import. The
+page keeps drafts in browser-local state and posts an explicit export to the
+session. The receiver validates `workspace.json`, atomically publishes
+`result.json` beside it, and retains every complete submission as
+`results/&lt;submission-id&gt;.json`. Wait for a receipt and validate its immutable
+`history_path`; `result.json` is only the mutable latest copy. `waitForResult`
+can resume with `after`, accepts `timeoutMs` and an `AbortSignal`, and observes
+submissions already committed in the current service. After a restart, read
+the retained files directly. Waiting never applies feedback. Reopening the same
+snapshot reuses its `review-session.json` origin to preserve drafts; report an
+occupied port instead of changing it.
+
+The installed instructions expose the real session tool as
+`review_workspace.session_tool_path`. An Agent can instead run:
+
+```bash
+node &lt;session_tool_path&gt; --project-root ROOT --workspace WORKSPACE_JSON \
+  --asset HTML [--wait]
+```
+
+`--wait` prints successful receipt events and leaves the service running; the
+main Agent decides when to close it. The prepared HTML also opens offline with
+its explicit backup download. A failed submission stays retryable and never
+switches to download automatically.
 
 ## Checking a returned result
 
@@ -199606,7 +199894,8 @@ differs from the snapshot context.
 
 ```bash
 uv run --project="$HOME/.ar" --locked -- python &lt;package&gt;/workbench/review_workbench.py accept \
-  --db &lt;task&gt;/revision-master.db --project-root &lt;task&gt; --result &lt;task&gt;/result.json --snapshot &lt;task&gt;/snapshot.json \
+  --db &lt;task&gt;/revision-master.db --project-root &lt;task&gt; \
+  --result &lt;review&gt;/results/&lt;submission-id&gt;.json --snapshot &lt;task&gt;/snapshot.json \
   --trusted &lt;task&gt;/retained-snapshot.json --context &lt;task&gt;/workbench-context.json \
   --accept-feedback f1 --accept-feedback f2 --write &lt;task&gt;/semantic_write.py:apply
 ```
@@ -199687,7 +199976,7 @@ path to regenerate derived views and prepare the next snapshot. Formal Gate
 verdicts and Decision choices remain separate dialogue steps through
 ResearchSpec.
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-revision-master.html</code> · <code>review-workspace/revision-master.html</code> · 503 行</summary><div class="doc-meta">sha256 <code>992386d99129f2f847f1d31a829c3615d74bff722e3de8e59978158215a18dac</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-revision-master.html</code> · <code>review-workspace/revision-master.html</code> · 534 行</summary><div class="doc-meta">sha256 <code>e7b4137520a6efb28ba17ee13acf97ce2adcd748f68887cc8aca45dbc7df5a7f</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
 &lt;meta charset="utf-8"&gt;
@@ -199718,7 +200007,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
-&lt;header&gt;&lt;div&gt;&lt;div class="eyebrow"&gt;论文修订 · 工件台账&lt;/div&gt;&lt;h1 id="title"&gt;论文修订工作台&lt;/h1&gt;&lt;div id="identity" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="header-meta"&gt;&lt;span id="counts" class="tag"&gt;&lt;/span&gt;&lt;button class="primary" id="export"&gt;导出审阅结果&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
+&lt;header&gt;&lt;div&gt;&lt;div class="eyebrow"&gt;论文修订 · 工件台账&lt;/div&gt;&lt;h1 id="title"&gt;论文修订工作台&lt;/h1&gt;&lt;div id="identity" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="header-meta"&gt;&lt;span id="counts" class="tag"&gt;&lt;/span&gt;&lt;span id="session-status" class="small muted"&gt;&lt;/span&gt;&lt;button id="download" type="button" disabled&gt;下载备用结果&lt;/button&gt;&lt;button class="primary" id="export" type="button" disabled&gt;提交审阅结果&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;nav id="stages" aria-label="审阅阶段"&gt;&lt;/nav&gt;
 &lt;div id="notice"&gt;&lt;div&gt;&lt;div class="statline" id="scope-description"&gt;&lt;/div&gt;&lt;div id="context" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;p id="message" class="small" role="status" aria-live="polite"&gt;&lt;/p&gt;&lt;p id="storage-status" class="small" role="status"&gt;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;div class="workspace"&gt;
@@ -199731,10 +200020,14 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
 (() =&gt; {
   'use strict';
   const $ = id =&gt; document.getElementById(id);
+  const sessionBridge = window.researchspecReviewSession || null;
   let w;
   try { w = JSON.parse($('revision-master-data').textContent); }
   catch { $('message').textContent = '请打开 Agent 已准备好的审阅 HTML。'; $('export').disabled = true; return; }
   if (w.schema_version !== 'revision-master-review-workspace.v1') { $('message').textContent = '审阅件格式无法识别。'; $('export').disabled = true; return; }
+  $('download').disabled = false;
+  $('export').disabled = !sessionBridge;
+  $('session-status').textContent = sessionBridge ? `本地会话 · ${sessionBridge.resultPath}` : '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。';
   const b = w.business, stageNames = {coverage:'意见覆盖',board:'整体工作板',strategy:'当前策略',round:'本轮改稿与回复'};
   const stateNames = {todo:'待处理',blocked:'阻断',ready:'可审阅',in_progress:'处理中',done:'完成',yes:'是',no:'否',high:'高',medium:'中',low:'低',covered:'已覆盖',uncovered:'未覆盖',primary:'主要',supporting:'支持',duplicate_filtered:'重复来源',completed:'完成',draft:'草案',pending:'待处理',conflict:'需核对',accepted:'已接收'};
   const labels = {comment_id:'意见',thread_id:'原始条目',reviewer_id:'审稿人',canonical_summary:'意见摘要',required_action:'所需行动',original_text:'原文',normalized_summary:'整理摘要',source_type:'来源类型',source_document_id:'原始文档',source_kind:'文档类型',source_label:'来源',source_path:'源文件',span_role:'来源作用',start_offset:'原文起点',end_offset:'原文终点',span_text:'原文片段',excerpt_text:'引文',note:'说明',coverage_status:'覆盖状态',segment_text:'覆盖片段',status:'状态',priority:'优先级',evidence_gap:'证据缺口',user_confirmation_needed:'需要用户确认',next_action:'下一步',target_location:'稿件位置',location_role:'位置作用',manuscript_claim_or_section:'论点或章节',existing_evidence:'现有证据',gap_summary:'缺口',dependency_comment_id:'依赖意见',proposed_stance:'拟定立场',stance_rationale:'立场理由',manuscript_change:'稿件修改',expected_response_letter_effect:'回复预期',required_material:'所需材料',available_now:'当前可用',gap_note:'缺口说明',message:'待核对事项',category:'类别',content_text:'候选措辞',rationale:'理由',target_scope_note:'适用范围',draft_text:'回复草案',request_summary:'补材建议',request_recommendation:'接收建议',round_id:'轮次',file_path:'材料文件',concern_summary:'材料事项',decision:'接收判断',decision_rationale:'判断理由',planned_usage_note:'使用计划',manuscript_execution_items_done:'稿件草案完成',response_draft_done:'回复完成',evidence_gap_closed:'证据缺口关闭',user_strategy_confirmed:'内部策略确认',one_to_one_link_checked:'对应已核对',export_ready:'导出就绪',plan_action_id:'计划行动',execution_category:'行动类别',title:'行动',objective:'目标',suggested_change:'修改建议',evidence_requirement:'证据要求',depends_on_plan_action_id:'依赖行动',log_id:'修改日志',operator_role:'执行者',summary:'摘要',change_note:'修改说明',response_note:'回复说明',created_at:'记录时间',target_file:'目标文件',target_locator:'位置',change_type:'修改类型',change_summary:'修改摘要',evidence_source:'证据来源',expected_response_use:'回复用途',relative_path:'文件',change_kind:'文件变化',diff_excerpt:'变化摘要',before_excerpt:'修改前',after_excerpt:'修改后',snapshot_sha256:'冻结文件标识',last_audited_sha256:'已核对文件标识',current_sha256:'当前文件标识',last_log_id:'最近日志',variant_label:'措辞版本',variant_text:'候选措辞',response_resolution_kind:'回复方式',original_comment:'原始意见',modification_scope:'修改范围',key_revision_excerpt:'修改引文',response_explanation:'回复解释',latex_excerpt:'LaTeX 引文',latex_response_text:'LaTeX 回复',artifact_name:'交付件',artifact_status:'记录状态',output_path:'交付路径',profile_target:'风格对象',profile_summary:'风格摘要',anti_ai_focus:'措辞关注点',rule_type:'规则类别',rule_text:'规则',main_entry:'稿件入口',project_shape:'稿件结构',high_risk_areas:'高风险范围',section_title:'章节',purpose_in_manuscript:'章节用途',key_files_or_locations:'文件位置',core_claim:'主要论点',main_evidence:'主要证据',supporting_section_ids:'支持章节',risk_level:'风险',link_note:'关联说明',response_role:'回复作用',patch_set_id:'交付修改组',artifact_kind:'交付类型',source_root:'原稿目录',output_root:'交付目录',operation:'操作',anchor_text:'定位引文',marked_text:'标记稿',clean_text:'净稿',notes:'说明'};
@@ -199743,11 +200036,12 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
   const id = () =&gt; crypto.randomUUID();
   const empty = () =&gt; Object.fromEntries(categories.map(key =&gt; [key, []]));
   const key = `revision-master:${w.workspace_id}:${w.snapshot_id}`;
-  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage;
+  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage, retryResult = null;
   let selected = w.context.active_comment_id ? `comment:${w.context.active_comment_id}` : (b.atomic_comments[0] ? `comment:${b.atomic_comments[0].comment_id}` : 'scope:coverage');
   let atomListOpen = false, selectedThread = rowsForInitialThread();
   function rowsForInitialThread() { return b.raw_thread_atomic_links.find(row =&gt; selected === 'comment:'+row.comment_id)?.thread_id || b.raw_review_threads[0]?.thread_id || null; }
   let reading = {mode:'related',document_id:null,start:0}, selectionAnchor = null, coverageDocumentId = null;
+  const clearSelection = () =&gt; { selectionAnchor = null; $('selection-tools').hidden = true; };
   const docs = new Map(w.documents.map(doc =&gt; [doc.document_id,doc]));
   const blocks = new Map(w.documents.flatMap(doc =&gt; doc.blocks.map(block =&gt; [block.id,block])));
   const scopes = new Map(w.scopes.map(scope =&gt; [scope.scope_id,scope]));
@@ -199771,6 +200065,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     return typeof entry.feedback_id === 'string' &amp;&amp; typeof entry.note === 'string' &amp;&amp; scope &amp;&amp; (entry.target_id === `scope:${scope.scope_id}` || scope.target_ids.includes(entry.target_id));
   }
   function save() {
+    retryResult = null;
     removeBlockedConfirmations();
     try { localStorage.setItem(key,JSON.stringify(draft)); }
     catch { $('storage-status').textContent = '草稿未能保存到浏览器；请导出当前反馈以保留。'; }
@@ -200048,7 +200343,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     parent.append(grid);
   }
   function renderReading() {
-    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); selectionAnchor = null; $('selection-tools').hidden = true;
+    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); clearSelection();
     mode.append(button('查看相关片段',() =&gt; { reading.mode = 'related'; renderReading(); }));
     if (reading.mode === 'document') {
       const doc = docs.get(reading.document_id), ranges = sectionRanges(doc);
@@ -200133,15 +200428,18 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     if (!note) { tell('先在“独立批注”中填写内容，再选择批注范围。'); $('annotation-note').focus(); return; }
     draft.feedback.annotations.push({...entry(targetForFeedback(),note),anchor}); $('annotation-note').value = ''; save(); renderReading(); tell('已保存独立批注。');
   }
+  document.addEventListener('keydown',event =&gt; { if (event.key === 'Escape') { clearSelection(); window.getSelection()?.removeAllRanges(); } });
+  $('add-selection').addEventListener('pointerdown',event =&gt; event.preventDefault());
+  $('add-selection').addEventListener('blur',() =&gt; { const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) clearSelection(); });
   document.addEventListener('selectionchange',() =&gt; {
-    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) return;
+    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) { if (document.activeElement !== $('add-selection')) clearSelection(); return; }
     const range = selection.getRangeAt(0), element = node =&gt; node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
     const startNode = element(range.startContainer)?.closest('[data-block-id]'), endNode = element(range.endContainer)?.closest('[data-block-id]');
-    if (!startNode || startNode !== endNode) { selectionAnchor = null; $('selection-tools').hidden = true; if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
+    if (!startNode || startNode !== endNode) { clearSelection(); if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
     const block = blocks.get(startNode.dataset.blockId); if (block.kind === 'image') return;
     const preceding = document.createRange(); preceding.selectNodeContents(startNode); preceding.setEnd(range.startContainer,range.startOffset);
     const start = preceding.toString().length, quote = range.toString(), end = start+quote.length;
-    if (!quote || block.text.slice(start,end) !== quote) { selectionAnchor = null; $('selection-tools').hidden = true; return; }
+    if (!quote || block.text.slice(start,end) !== quote) { clearSelection(); return; }
     selectionAnchor = {kind:'text',snapshot_id:w.snapshot_id,block_id:block.id,start,end,exact_quote:quote,prefix:block.text.slice(Math.max(0,start-24),start),suffix:block.text.slice(end,end+24)};
     $('selection-quote').textContent = `选中：${quote.slice(0,80)} `; $('selection-tools').hidden = false;
   });
@@ -200166,15 +200464,37 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
   $('focus-request').addEventListener('click',() =&gt; { if (selected.startsWith('comment:')) { put('focus_requests',entry(selected,`请评估切换执行焦点到 ${selected.slice(8)}`)); tell('已记录焦点请求；当前执行焦点未改变。'); } });
   $('target').addEventListener('change',loadRequest);
   for (const filter of ['search','reviewer','status']) $(filter).addEventListener(filter === 'search' ? 'input' : 'change',renderObjects);
-  function exportResult() {
-    removeBlockedConfirmations();
-    const feedback = structuredClone(draft.feedback), result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
+  function prepareResult() {
+    const feedback = structuredClone(draft.feedback);
+    feedback.confirmations = feedback.confirmations.filter(row =&gt; { const scope = scopes.get(row.scope_id); return scope &amp;&amp; !confirmationBlocked(scope); });
+    const result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
     const entries = categories.flatMap(category =&gt; feedback[category]);
-    if (entries.some(row =&gt; !validEntry(row)) || new Set(entries.map(row =&gt; row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return; }
-    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return; } }
-    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() =&gt; URL.revokeObjectURL(url),1000); draft.export_revision = result.export_revision; save(); tell('已导出完整结果，请交回 Agent。');
+    if (entries.some(row =&gt; !validEntry(row)) || new Set(entries.map(row =&gt; row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return null; }
+    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return null; } }
+    return result;
   }
-  $('export').addEventListener('click',exportResult);
+  function acceptResult(result) { draft.export_revision = result.export_revision; save(); }
+  function downloadResult() {
+    const result = prepareResult(); if (!result) return;
+    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() =&gt; URL.revokeObjectURL(url),1000); acceptResult(result); tell('已发起备用下载；无法确认文件是否已保存。');
+  }
+  let submitting = false;
+  async function submitResult() {
+    if (!sessionBridge || submitting) return;
+    const result = retryResult || prepareResult(); if (!result) return;
+    retryResult = result; submitting = true; $('export').disabled = $('download').disabled = true; $('export').textContent = '提交中…';
+    try {
+      const receipt = await sessionBridge.submit(result);
+      if (!receipt || typeof receipt.result_path !== 'string' || !receipt.result_path) throw new Error('本地会话未返回 result_path。');
+      acceptResult(result); tell(`已提交完整结果；结果文件：${receipt.result_path}`);
+    } catch (error) {
+      tell('提交失败，草稿仍保留；可重试。' + (error?.message ? ' ' + error.message : ''));
+    } finally {
+      submitting = false; $('download').disabled = false; $('export').disabled = !sessionBridge; $('export').textContent = '提交审阅结果';
+    }
+  }
+  $('download').addEventListener('click',downloadResult);
+  $('export').addEventListener('click',submitResult);
   function renderStages() {
     $('stages').replaceChildren();
     const stages = {coverage:['01 · 核对审稿意见','原文、拆分与遗漏'],board:['02 · 安排修订工作','优先级、证据与位置'],strategy:['03 · 确认逐项策略','修改动作与所需材料'],round:['04 · 核对修改和回复','稿件改动与回复覆盖']};
@@ -222000,7 +222320,7 @@ Audit-log tags the orchestrator may emit:
     <div><strong>inputs</strong> <code>manuscript_source</code> ← manuscript-draft.v1 · <code>review_comments_source</code> ← review-comments.v1 · <code>editor_letter_source</code> ← editor-letter.v1 · <code>user_notes</code> ← user-notes.v1</div>
     <div><strong>outputs</strong> <code>review_response_workspace</code> → review-response-workspace.v1 · <code>intake_report</code> → review-response-intake.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 121 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 122 行</summary><pre class="doc-body">---
 name: design-review-response-intake
 description: "Parses review-response entry, confirms languages, detects the manuscript entry, and initializes the task-local semantic workspace."
 metadata:
@@ -222074,6 +222394,7 @@ Execute exactly one ResearchSpec capability node.
 - `assets/templates/thread-to-atomic-mapping.md.j2` is a package resource; use it as directed by the Procedure.
 
 ## Procedure
+
 
 # Review Response Intake
 
@@ -224159,7 +224480,7 @@ Revision Master 提取工件（Extraction Artifact）
     <div><strong>inputs</strong> <code>review_response_workspace</code> ← review-response-workspace.v1</div>
     <div><strong>outputs</strong> <code>manuscript_structure_summary</code> → review-response-manuscript-analysis.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 118 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 119 行</summary><pre class="doc-body">---
 name: analysis-review-response-manuscript-analysis
 description: "Builds the manuscript structure summary, core claims, evidence links, and high-risk modification areas needed for comment mapping."
 metadata:
@@ -224227,6 +224548,7 @@ Execute exactly one ResearchSpec capability node.
 - `assets/templates/thread-to-atomic-mapping.md.j2` is a package resource; use it as directed by the Procedure.
 
 ## Procedure
+
 
 # Review Response Manuscript Analysis
 
@@ -226315,7 +226637,7 @@ Revision Master 提取工件（Extraction Artifact）
     <div><strong>inputs</strong> <code>review_response_workspace</code> ← review-response-workspace.v1</div>
     <div><strong>outputs</strong> <code>atomic_comment_list</code> → review-response-atomic-comments.v1 · <code>comment_coverage_report</code> → review-response-coverage.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 124 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 125 行</summary><pre class="doc-body">---
 name: transform-review-response-comment-atomization
 description: "Extracts raw reviewer threads, forms canonical atomic comments with conservative merges, and writes full source-span evidence and coverage confirmation."
 metadata:
@@ -226393,6 +226715,7 @@ Execute exactly one ResearchSpec capability node.
 
 ## Procedure
 
+
 # Review Response Comment Atomization
 
 Turn raw reviewer and editor comments into stable canonical atomic items with complete source-span evidence. This node is semantic work performed by the Agent, never by a one-off script.
@@ -226418,7 +226741,7 @@ Turn raw reviewer and editor comments into stable canonical atomic items with co
 5. Write `raw_thread_atomic_links` and guarantee each `thread_id` maps to at least one `comment_id` and each `comment_id` is referenced at least once.
 6. Write `review_comment_source_documents` and `raw_thread_source_spans`. Every thread must have at least one `span_role='primary'` whose `span_text` equals the source slice at the recorded offsets.
 7. Update resume fields, run `scripts/gate_and_render_workspace.py --artifact-root &lt;workspace&gt;`, and show the coverage view `07-review-comment-coverage.md` with the hard `30%` / soft `50%` character-coverage thresholds.
-8. Record the coverage confirmation request. This is the coverage handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`), embed the validated data in `review-workspace/revision-master.html`, and review coverage either in the page or in dialogue. The coverage confirmation binds the complete mapping candidate and every source relation; visiting the page, exporting a result, or marking a round seen never counts as confirmation. Do not proceed until the user confirms coverage review.
+8. Record the coverage confirmation request. This is the coverage handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session, or review coverage in dialogue. Pass the original package template as the session asset; keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths; no manual import is needed. Keep the workspace, snapshot, results, and history in the task directory. The coverage confirmation binds the complete mapping candidate and every source relation; visiting the page, submitting a result, or marking a round seen never counts as confirmation. The receiving service does not change the database or task sources. Do not proceed until the user confirms coverage review.
 
 ## Stable IDs
 
@@ -229857,7 +230180,7 @@ CREATE TABLE IF NOT EXISTS workbench_scope_receipts (
 CREATE INDEX IF NOT EXISTS workbench_feedback_receipts_identity
     ON workbench_feedback_receipts (snapshot_id, feedback_id);
 </pre></details>
-<details class="sub"><summary>knowledge <code>workbench-README.md</code> · <code>workbench/README.md</code> · 195 行</summary><div class="doc-meta">sha256 <code>2cf0158564583e0d43d6dd68fa3e5064c828d1f8005ac4cda6cf2169e2b2568d</code> · license MIT</div><pre class="doc-body"># Revision Master Review Workbench Runtime
+<details class="sub"><summary>knowledge <code>workbench-README.md</code> · <code>workbench/README.md</code> · 233 行</summary><div class="doc-meta">sha256 <code>22810a6fb031720b7ddac6d0a9a3d46c616ea6c7f78fc128a17c9c731df0f44b</code> · license MIT</div><pre class="doc-body"># Revision Master Review Workbench Runtime
 
 This directory holds the project-owned, standard-library-only resources that
 back the interactive revision-master review workbench. They are delivered
@@ -229917,7 +230240,7 @@ Read-only preparation never initializes, migrates, repairs, or renders the
 database, and never reads another task. Capture, document/block assembly,
 anchors, and the frozen HTML remain outside this module.
 
-## Preparing the HTML
+## Preparing the session
 
 Use the exported `researchspec/review-workspace` API from the installed package.
 The context file must contain `task_id`, the exact `node:&lt;run&gt;/&lt;node&gt;[@&lt;round&gt;]`
@@ -229927,7 +230250,7 @@ values from the current graph instructions. Never infer the round from SQLite.
 
 ```javascript
 import { prepareRevisionMasterReview, readRevisionMasterProjection,
-  validateRevisionMasterResult } from 'researchspec/review-workspace';
+  startReviewSession, validateRevisionMasterResult } from 'researchspec/review-workspace';
 import { readFile } from 'node:fs/promises';
 
 const context = JSON.parse(await readFile(contextPath, 'utf8'));
@@ -229944,11 +230267,20 @@ const ready = await prepareRevisionMasterReview({
   templatePath: packageHtmlPath,
   nextStep: '导出结果交回 Agent，正式关口在对话中确认',
 });
-// Deliver ready.htmlPath; independently retain ready.workspacePath and sources/.
+const session = await startReviewSession({
+  projectRoot: taskRoot,
+  workspacePath: ready.workspacePath,
+  assetPath: packageHtmlPath,
+});
+// Give the user session.url and show session.resultPath.
+// Keep ready.htmlPath as the offline backup.
+// Independently retain ready.workspacePath and the captured sources.
+const receipt = await session.waitForResult(); // Optional; default timeout is 10 minutes.
 const checked = validateRevisionMasterResult(
-  JSON.parse(await readFile(returnedResultPath, 'utf8')),
+  JSON.parse(await readFile(receipt.history_path, 'utf8')),
   JSON.parse(await readFile(ready.workspacePath, 'utf8')),
 );
+await session.close(); // The main Agent decides when the review session ends.
 ```
 
 The variables above are Agent-resolved task and installed-package paths.
@@ -229956,7 +230288,35 @@ The variables above are Agent-resolved task and installed-package paths.
 `blocks` may come from an independently authorized frozen render. Without a
 render, captured source remains readable. The preparation API captures sources,
 rechecks the SQL projection and file contents, and publishes a fresh workspace
-and HTML only after validation. Do not open the unprepared package template.
+and HTML only after validation. Pass the original package template as the
+session `assetPath`; the server embeds the retained workspace itself. Use
+`ready.htmlPath` only for the offline fallback and do not deliver the original
+template directly.
+
+Normal delivery uses the loopback session URL, with no manual JSON import. The
+page keeps drafts in browser-local state and posts an explicit export to the
+session. The receiver validates `workspace.json`, atomically publishes
+`result.json` beside it, and retains every complete submission as
+`results/&lt;submission-id&gt;.json`. Wait for a receipt and validate its immutable
+`history_path`; `result.json` is only the mutable latest copy. `waitForResult`
+can resume with `after`, accepts `timeoutMs` and an `AbortSignal`, and observes
+submissions already committed in the current service. After a restart, read
+the retained files directly. Waiting never applies feedback. Reopening the same
+snapshot reuses its `review-session.json` origin to preserve drafts; report an
+occupied port instead of changing it.
+
+The installed instructions expose the real session tool as
+`review_workspace.session_tool_path`. An Agent can instead run:
+
+```bash
+node &lt;session_tool_path&gt; --project-root ROOT --workspace WORKSPACE_JSON \
+  --asset HTML [--wait]
+```
+
+`--wait` prints successful receipt events and leaves the service running; the
+main Agent decides when to close it. The prepared HTML also opens offline with
+its explicit backup download. A failed submission stays retryable and never
+switches to download automatically.
 
 ## Checking a returned result
 
@@ -229971,7 +230331,8 @@ differs from the snapshot context.
 
 ```bash
 uv run --project="$HOME/.ar" --locked -- python &lt;package&gt;/workbench/review_workbench.py accept \
-  --db &lt;task&gt;/revision-master.db --project-root &lt;task&gt; --result &lt;task&gt;/result.json --snapshot &lt;task&gt;/snapshot.json \
+  --db &lt;task&gt;/revision-master.db --project-root &lt;task&gt; \
+  --result &lt;review&gt;/results/&lt;submission-id&gt;.json --snapshot &lt;task&gt;/snapshot.json \
   --trusted &lt;task&gt;/retained-snapshot.json --context &lt;task&gt;/workbench-context.json \
   --accept-feedback f1 --accept-feedback f2 --write &lt;task&gt;/semantic_write.py:apply
 ```
@@ -230052,7 +230413,7 @@ path to regenerate derived views and prepare the next snapshot. Formal Gate
 verdicts and Decision choices remain separate dialogue steps through
 ResearchSpec.
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-revision-master.html</code> · <code>review-workspace/revision-master.html</code> · 503 行</summary><div class="doc-meta">sha256 <code>992386d99129f2f847f1d31a829c3615d74bff722e3de8e59978158215a18dac</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-revision-master.html</code> · <code>review-workspace/revision-master.html</code> · 534 行</summary><div class="doc-meta">sha256 <code>e7b4137520a6efb28ba17ee13acf97ce2adcd748f68887cc8aca45dbc7df5a7f</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
 &lt;meta charset="utf-8"&gt;
@@ -230083,7 +230444,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
-&lt;header&gt;&lt;div&gt;&lt;div class="eyebrow"&gt;论文修订 · 工件台账&lt;/div&gt;&lt;h1 id="title"&gt;论文修订工作台&lt;/h1&gt;&lt;div id="identity" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="header-meta"&gt;&lt;span id="counts" class="tag"&gt;&lt;/span&gt;&lt;button class="primary" id="export"&gt;导出审阅结果&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
+&lt;header&gt;&lt;div&gt;&lt;div class="eyebrow"&gt;论文修订 · 工件台账&lt;/div&gt;&lt;h1 id="title"&gt;论文修订工作台&lt;/h1&gt;&lt;div id="identity" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="header-meta"&gt;&lt;span id="counts" class="tag"&gt;&lt;/span&gt;&lt;span id="session-status" class="small muted"&gt;&lt;/span&gt;&lt;button id="download" type="button" disabled&gt;下载备用结果&lt;/button&gt;&lt;button class="primary" id="export" type="button" disabled&gt;提交审阅结果&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;nav id="stages" aria-label="审阅阶段"&gt;&lt;/nav&gt;
 &lt;div id="notice"&gt;&lt;div&gt;&lt;div class="statline" id="scope-description"&gt;&lt;/div&gt;&lt;div id="context" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;p id="message" class="small" role="status" aria-live="polite"&gt;&lt;/p&gt;&lt;p id="storage-status" class="small" role="status"&gt;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;div class="workspace"&gt;
@@ -230096,10 +230457,14 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
 (() =&gt; {
   'use strict';
   const $ = id =&gt; document.getElementById(id);
+  const sessionBridge = window.researchspecReviewSession || null;
   let w;
   try { w = JSON.parse($('revision-master-data').textContent); }
   catch { $('message').textContent = '请打开 Agent 已准备好的审阅 HTML。'; $('export').disabled = true; return; }
   if (w.schema_version !== 'revision-master-review-workspace.v1') { $('message').textContent = '审阅件格式无法识别。'; $('export').disabled = true; return; }
+  $('download').disabled = false;
+  $('export').disabled = !sessionBridge;
+  $('session-status').textContent = sessionBridge ? `本地会话 · ${sessionBridge.resultPath}` : '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。';
   const b = w.business, stageNames = {coverage:'意见覆盖',board:'整体工作板',strategy:'当前策略',round:'本轮改稿与回复'};
   const stateNames = {todo:'待处理',blocked:'阻断',ready:'可审阅',in_progress:'处理中',done:'完成',yes:'是',no:'否',high:'高',medium:'中',low:'低',covered:'已覆盖',uncovered:'未覆盖',primary:'主要',supporting:'支持',duplicate_filtered:'重复来源',completed:'完成',draft:'草案',pending:'待处理',conflict:'需核对',accepted:'已接收'};
   const labels = {comment_id:'意见',thread_id:'原始条目',reviewer_id:'审稿人',canonical_summary:'意见摘要',required_action:'所需行动',original_text:'原文',normalized_summary:'整理摘要',source_type:'来源类型',source_document_id:'原始文档',source_kind:'文档类型',source_label:'来源',source_path:'源文件',span_role:'来源作用',start_offset:'原文起点',end_offset:'原文终点',span_text:'原文片段',excerpt_text:'引文',note:'说明',coverage_status:'覆盖状态',segment_text:'覆盖片段',status:'状态',priority:'优先级',evidence_gap:'证据缺口',user_confirmation_needed:'需要用户确认',next_action:'下一步',target_location:'稿件位置',location_role:'位置作用',manuscript_claim_or_section:'论点或章节',existing_evidence:'现有证据',gap_summary:'缺口',dependency_comment_id:'依赖意见',proposed_stance:'拟定立场',stance_rationale:'立场理由',manuscript_change:'稿件修改',expected_response_letter_effect:'回复预期',required_material:'所需材料',available_now:'当前可用',gap_note:'缺口说明',message:'待核对事项',category:'类别',content_text:'候选措辞',rationale:'理由',target_scope_note:'适用范围',draft_text:'回复草案',request_summary:'补材建议',request_recommendation:'接收建议',round_id:'轮次',file_path:'材料文件',concern_summary:'材料事项',decision:'接收判断',decision_rationale:'判断理由',planned_usage_note:'使用计划',manuscript_execution_items_done:'稿件草案完成',response_draft_done:'回复完成',evidence_gap_closed:'证据缺口关闭',user_strategy_confirmed:'内部策略确认',one_to_one_link_checked:'对应已核对',export_ready:'导出就绪',plan_action_id:'计划行动',execution_category:'行动类别',title:'行动',objective:'目标',suggested_change:'修改建议',evidence_requirement:'证据要求',depends_on_plan_action_id:'依赖行动',log_id:'修改日志',operator_role:'执行者',summary:'摘要',change_note:'修改说明',response_note:'回复说明',created_at:'记录时间',target_file:'目标文件',target_locator:'位置',change_type:'修改类型',change_summary:'修改摘要',evidence_source:'证据来源',expected_response_use:'回复用途',relative_path:'文件',change_kind:'文件变化',diff_excerpt:'变化摘要',before_excerpt:'修改前',after_excerpt:'修改后',snapshot_sha256:'冻结文件标识',last_audited_sha256:'已核对文件标识',current_sha256:'当前文件标识',last_log_id:'最近日志',variant_label:'措辞版本',variant_text:'候选措辞',response_resolution_kind:'回复方式',original_comment:'原始意见',modification_scope:'修改范围',key_revision_excerpt:'修改引文',response_explanation:'回复解释',latex_excerpt:'LaTeX 引文',latex_response_text:'LaTeX 回复',artifact_name:'交付件',artifact_status:'记录状态',output_path:'交付路径',profile_target:'风格对象',profile_summary:'风格摘要',anti_ai_focus:'措辞关注点',rule_type:'规则类别',rule_text:'规则',main_entry:'稿件入口',project_shape:'稿件结构',high_risk_areas:'高风险范围',section_title:'章节',purpose_in_manuscript:'章节用途',key_files_or_locations:'文件位置',core_claim:'主要论点',main_evidence:'主要证据',supporting_section_ids:'支持章节',risk_level:'风险',link_note:'关联说明',response_role:'回复作用',patch_set_id:'交付修改组',artifact_kind:'交付类型',source_root:'原稿目录',output_root:'交付目录',operation:'操作',anchor_text:'定位引文',marked_text:'标记稿',clean_text:'净稿',notes:'说明'};
@@ -230108,11 +230473,12 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
   const id = () =&gt; crypto.randomUUID();
   const empty = () =&gt; Object.fromEntries(categories.map(key =&gt; [key, []]));
   const key = `revision-master:${w.workspace_id}:${w.snapshot_id}`;
-  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage;
+  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage, retryResult = null;
   let selected = w.context.active_comment_id ? `comment:${w.context.active_comment_id}` : (b.atomic_comments[0] ? `comment:${b.atomic_comments[0].comment_id}` : 'scope:coverage');
   let atomListOpen = false, selectedThread = rowsForInitialThread();
   function rowsForInitialThread() { return b.raw_thread_atomic_links.find(row =&gt; selected === 'comment:'+row.comment_id)?.thread_id || b.raw_review_threads[0]?.thread_id || null; }
   let reading = {mode:'related',document_id:null,start:0}, selectionAnchor = null, coverageDocumentId = null;
+  const clearSelection = () =&gt; { selectionAnchor = null; $('selection-tools').hidden = true; };
   const docs = new Map(w.documents.map(doc =&gt; [doc.document_id,doc]));
   const blocks = new Map(w.documents.flatMap(doc =&gt; doc.blocks.map(block =&gt; [block.id,block])));
   const scopes = new Map(w.scopes.map(scope =&gt; [scope.scope_id,scope]));
@@ -230136,6 +230502,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     return typeof entry.feedback_id === 'string' &amp;&amp; typeof entry.note === 'string' &amp;&amp; scope &amp;&amp; (entry.target_id === `scope:${scope.scope_id}` || scope.target_ids.includes(entry.target_id));
   }
   function save() {
+    retryResult = null;
     removeBlockedConfirmations();
     try { localStorage.setItem(key,JSON.stringify(draft)); }
     catch { $('storage-status').textContent = '草稿未能保存到浏览器；请导出当前反馈以保留。'; }
@@ -230413,7 +230780,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     parent.append(grid);
   }
   function renderReading() {
-    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); selectionAnchor = null; $('selection-tools').hidden = true;
+    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); clearSelection();
     mode.append(button('查看相关片段',() =&gt; { reading.mode = 'related'; renderReading(); }));
     if (reading.mode === 'document') {
       const doc = docs.get(reading.document_id), ranges = sectionRanges(doc);
@@ -230498,15 +230865,18 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     if (!note) { tell('先在“独立批注”中填写内容，再选择批注范围。'); $('annotation-note').focus(); return; }
     draft.feedback.annotations.push({...entry(targetForFeedback(),note),anchor}); $('annotation-note').value = ''; save(); renderReading(); tell('已保存独立批注。');
   }
+  document.addEventListener('keydown',event =&gt; { if (event.key === 'Escape') { clearSelection(); window.getSelection()?.removeAllRanges(); } });
+  $('add-selection').addEventListener('pointerdown',event =&gt; event.preventDefault());
+  $('add-selection').addEventListener('blur',() =&gt; { const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) clearSelection(); });
   document.addEventListener('selectionchange',() =&gt; {
-    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) return;
+    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) { if (document.activeElement !== $('add-selection')) clearSelection(); return; }
     const range = selection.getRangeAt(0), element = node =&gt; node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
     const startNode = element(range.startContainer)?.closest('[data-block-id]'), endNode = element(range.endContainer)?.closest('[data-block-id]');
-    if (!startNode || startNode !== endNode) { selectionAnchor = null; $('selection-tools').hidden = true; if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
+    if (!startNode || startNode !== endNode) { clearSelection(); if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
     const block = blocks.get(startNode.dataset.blockId); if (block.kind === 'image') return;
     const preceding = document.createRange(); preceding.selectNodeContents(startNode); preceding.setEnd(range.startContainer,range.startOffset);
     const start = preceding.toString().length, quote = range.toString(), end = start+quote.length;
-    if (!quote || block.text.slice(start,end) !== quote) { selectionAnchor = null; $('selection-tools').hidden = true; return; }
+    if (!quote || block.text.slice(start,end) !== quote) { clearSelection(); return; }
     selectionAnchor = {kind:'text',snapshot_id:w.snapshot_id,block_id:block.id,start,end,exact_quote:quote,prefix:block.text.slice(Math.max(0,start-24),start),suffix:block.text.slice(end,end+24)};
     $('selection-quote').textContent = `选中：${quote.slice(0,80)} `; $('selection-tools').hidden = false;
   });
@@ -230531,15 +230901,37 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
   $('focus-request').addEventListener('click',() =&gt; { if (selected.startsWith('comment:')) { put('focus_requests',entry(selected,`请评估切换执行焦点到 ${selected.slice(8)}`)); tell('已记录焦点请求；当前执行焦点未改变。'); } });
   $('target').addEventListener('change',loadRequest);
   for (const filter of ['search','reviewer','status']) $(filter).addEventListener(filter === 'search' ? 'input' : 'change',renderObjects);
-  function exportResult() {
-    removeBlockedConfirmations();
-    const feedback = structuredClone(draft.feedback), result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
+  function prepareResult() {
+    const feedback = structuredClone(draft.feedback);
+    feedback.confirmations = feedback.confirmations.filter(row =&gt; { const scope = scopes.get(row.scope_id); return scope &amp;&amp; !confirmationBlocked(scope); });
+    const result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
     const entries = categories.flatMap(category =&gt; feedback[category]);
-    if (entries.some(row =&gt; !validEntry(row)) || new Set(entries.map(row =&gt; row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return; }
-    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return; } }
-    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() =&gt; URL.revokeObjectURL(url),1000); draft.export_revision = result.export_revision; save(); tell('已导出完整结果，请交回 Agent。');
+    if (entries.some(row =&gt; !validEntry(row)) || new Set(entries.map(row =&gt; row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return null; }
+    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return null; } }
+    return result;
   }
-  $('export').addEventListener('click',exportResult);
+  function acceptResult(result) { draft.export_revision = result.export_revision; save(); }
+  function downloadResult() {
+    const result = prepareResult(); if (!result) return;
+    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() =&gt; URL.revokeObjectURL(url),1000); acceptResult(result); tell('已发起备用下载；无法确认文件是否已保存。');
+  }
+  let submitting = false;
+  async function submitResult() {
+    if (!sessionBridge || submitting) return;
+    const result = retryResult || prepareResult(); if (!result) return;
+    retryResult = result; submitting = true; $('export').disabled = $('download').disabled = true; $('export').textContent = '提交中…';
+    try {
+      const receipt = await sessionBridge.submit(result);
+      if (!receipt || typeof receipt.result_path !== 'string' || !receipt.result_path) throw new Error('本地会话未返回 result_path。');
+      acceptResult(result); tell(`已提交完整结果；结果文件：${receipt.result_path}`);
+    } catch (error) {
+      tell('提交失败，草稿仍保留；可重试。' + (error?.message ? ' ' + error.message : ''));
+    } finally {
+      submitting = false; $('download').disabled = false; $('export').disabled = !sessionBridge; $('export').textContent = '提交审阅结果';
+    }
+  }
+  $('download').addEventListener('click',downloadResult);
+  $('export').addEventListener('click',submitResult);
   function renderStages() {
     $('stages').replaceChildren();
     const stages = {coverage:['01 · 核对审稿意见','原文、拆分与遗漏'],board:['02 · 安排修订工作','优先级、证据与位置'],strategy:['03 · 确认逐项策略','修改动作与所需材料'],round:['04 · 核对修改和回复','稿件改动与回复覆盖']};
@@ -230571,7 +230963,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     <div><strong>inputs</strong> <code>review_response_workspace</code> ← review-response-workspace.v1</div>
     <div><strong>outputs</strong> <code>review_response_workboard</code> → review-response-workboard.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 122 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 123 行</summary><pre class="doc-body">---
 name: design-review-response-workboard-planning
 description: "Plans priority, dependencies, evidence gaps, target locations, and next actions for every canonical atomic comment."
 metadata:
@@ -230650,6 +231042,7 @@ Execute exactly one ResearchSpec capability node.
 
 ## Procedure
 
+
 # Review Response Workboard Planning
 
 Build the canonical atomic workboard: priority, dependencies, evidence gaps, target locations, and next actions for every atomic comment. Planning is a user-reviewable semantic artifact, not a script output.
@@ -230672,7 +231065,7 @@ Build the canonical atomic workboard: priority, dependencies, evidence gaps, tar
 6. Write `workflow_pending_user_confirmations`, run `scripts/gate_and_render_workspace.py --artifact-root &lt;workspace&gt;`, and present `08-atomic-comment-workboard.md` and `06-thread-to-atomic-mapping.md`.
 7. Keep the confirmation request open until the user explicitly accepts the workboard.
 
-Review the workboard with the user in dialogue or through the board handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and embed it in `review-workspace/revision-master.html`. The board confirmation binds the whole candidate board, so filtering the page view never narrows it. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes, and commit the processing receipt with the semantic write in the same task transaction. Obtain the graph Gate confirmation separately in dialogue.
+Review the workboard with the user in dialogue or through the board handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session with the original package template as the asset. Give the page URL and fixed result and history paths; keep the prepared embedded HTML for offline use and all handoff files in the task directory. The board confirmation binds the whole candidate board, so filtering the page view never narrows it. Keep each comment's source text, evidence gap, target location, priority, and next action visible; apply accepted changes through the existing SQLite write recipes, and commit the processing receipt with the semantic write in the same task transaction. The receiving service writes only review results, not the database or task sources. Obtain the graph Gate confirmation separately in dialogue.
 
 ## Completion Criteria
 
@@ -232716,7 +233109,7 @@ Revision Master 提取工件（Extraction Artifact）
   "view.final_checklist.working_copy_table": "Working Manuscript 审计状态"
 }
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1449 行</summary><div class="doc-meta">sha256 <code>9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1503 行</summary><div class="doc-meta">sha256 <code>f9cd4fdcaf2a1febe331c98e515d41627dd25505196b5b73d6472f9015cf319b</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
   &lt;meta charset="utf-8"&gt;
@@ -232838,7 +233231,9 @@ Revision Master 提取工件（Extraction Artifact）
     &lt;span id="workflow" class="badge" hidden&gt;&lt;/span&gt;
     &lt;span class="spacer"&gt;&lt;/span&gt;
     &lt;label class="file-button" for="file"&gt;导入工作区 JSON&lt;input id="file" type="file" accept="application/json,.json"&gt;&lt;/label&gt;
-    &lt;button id="export" class="primary" type="button" disabled&gt;导出审阅结果&lt;/button&gt;
+    &lt;span id="session-status" class="subtle"&gt;&lt;/span&gt;
+    &lt;button id="download" type="button" disabled&gt;下载备用结果&lt;/button&gt;
+    &lt;button id="export" class="primary" type="button" disabled&gt;提交审阅结果&lt;/button&gt;
   &lt;/header&gt;
   &lt;p id="banner" class="banner" hidden&gt;&lt;/p&gt;
   &lt;section id="welcome" class="welcome"&gt;
@@ -233400,6 +233795,9 @@ Revision Master 提取工件（Extraction Artifact）
   var collapsedGroups = {};
   var toastTimer = null;
   var saveTimer = null;
+  var sessionBridge = window.researchspecReviewSession || null;
+  var submitting = false;
+  var retryResult = null;
 
   function setText(node, value){ node.textContent = value === undefined || value === null ? '' : String(value); }
   function el(tag, className, textValue){ var node = document.createElement(tag); if (className) node.className = className; if (textValue !== undefined) node.textContent = textValue; return node; }
@@ -233414,11 +233812,12 @@ Revision Master 提取工件（Extraction Artifact）
 
   function save(){
     if (!STATE) return;
+    retryResult = null;
     clearTimeout(saveTimer);
     var payload = JSON.stringify({ workspace_id: STATE.workspace.workspace_id, snapshot_id: STATE.workspace.snapshot_id, export_revision: STATE.export_revision, overall_note: STATE.overall_note, decisions: STATE.decisions, comments: STATE.comments });
     saveTimer = setTimeout(function(){
       if (storageSet(storageKey(), payload)) { setText($('save-status'), '草稿已保存在此浏览器（非正式状态）'); $('banner').hidden = true; }
-      else { setText($('save-status'), '浏览器未允许保存草稿'); setText($('banner'), '浏览器无法保存本地草稿：关闭页面前请先用“导出审阅结果”保存完整快照。'); $('banner').hidden = false; }
+      else { setText($('save-status'), '浏览器未允许保存草稿'); setText($('banner'), '浏览器无法保存本地草稿：关闭页面前请先提交到本地会话，或用“下载备用结果”保存完整快照。'); $('banner').hidden = false; }
     }, 150);
   }
 
@@ -233472,7 +233871,9 @@ Revision Master 提取工件（Extraction Artifact）
   function openWorkspace(){
     $('welcome').hidden = true;
     $('layout').hidden = false;
-    $('export').disabled = false;
+    $('download').disabled = false;
+    $('export').disabled = !sessionBridge;
+    setText($('session-status'), sessionBridge ? '本地会话 · ' + sessionBridge.resultPath : '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。');
     $('clear').hidden = false;
     setText($('adapter'), STATE.workspace.adapter);
     $('adapter').hidden = false;
@@ -233816,7 +234217,7 @@ Revision Master 提取工件（Extraction Artifact）
   function captureSelection(){
     if (!STATE) return;
     var selection = getSelection();
-    if (!selection || selection.isCollapsed || selection.rangeCount === 0) return;
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) { clearPending(); return; }
     var range = selection.getRangeAt(0);
     var startNode = range.startContainer.nodeType === 1 ? range.startContainer : range.startContainer.parentElement;
     var endNode = range.endContainer.nodeType === 1 ? range.endContainer : range.endContainer.parentElement;
@@ -234097,24 +234498,56 @@ Revision Master 提取工件（Extraction Artifact）
     setTimeout(function(){ URL.revokeObjectURL(url); }, 0);
   }
 
-  function exportResult(){
+  function prepareResult(){
     if (!STATE) return;
     var empty = STATE.comments.find(function(comment){ return !comment.body.trim(); });
-    if (empty) { notify('请先填写每条批注的正文，再导出。'); activate(empty.comment_id, true); return; }
-    STATE.export_revision = STATE.export_revision + 1;
+    if (empty) { notify('请先填写每条批注的正文，再提交或下载。'); activate(empty.comment_id, true); return null; }
     var result;
     try {
-      result = buildResult(STATE.workspace, STATE, new Date().toISOString());
+      result = buildResult(STATE.workspace, Object.assign({}, STATE, { export_revision: STATE.export_revision + 1 }), new Date().toISOString());
       validateResultAgainstWorkspace(result, STATE.workspace);
-    } catch (error) { notify('导出的结果未通过校验：' + error.message); return; }
+    } catch (error) { notify('结果未通过校验：' + error.message); return null; }
+    return result;
+  }
+
+  function acceptResult(result){
+    STATE.export_revision = result.export_revision;
     save();
-    download(result, STATE.workspace.workspace_id + '-review-result-r' + STATE.export_revision + '.json');
     renderStatus();
-    notify('已导出完整结果（第 ' + STATE.export_revision + ' 次）；草稿保持可编辑，可继续修改并再次导出。');
+  }
+
+  function downloadResult(){
+    var result = prepareResult();
+    if (!result) return;
+    download(result, STATE.workspace.workspace_id + '-review-result-r' + result.export_revision + '.json');
+    acceptResult(result);
+    notify('已发起备用下载（第 ' + result.export_revision + ' 次）；无法确认文件是否已保存。');
+  }
+
+  async function submitResult(){
+    if (!sessionBridge || submitting) return;
+    var result = retryResult || prepareResult();
+    if (!result) return;
+    retryResult = result;
+    submitting = true;
+    $('export').disabled = $('download').disabled = true;
+    try {
+      var receipt = await sessionBridge.submit(result);
+      if (!receipt || typeof receipt.result_path !== 'string' || !receipt.result_path) throw new Error('本地会话未返回 result_path。');
+      acceptResult(result);
+      notify('已提交完整结果（第 ' + result.export_revision + ' 次）；结果文件：' + receipt.result_path);
+    } catch (error) {
+      notify('提交失败，草稿仍保留；可重试。' + (error &amp;&amp; error.message ? ' ' + error.message : ''));
+    } finally {
+      submitting = false;
+      $('download').disabled = !STATE;
+      $('export').disabled = !sessionBridge;
+    }
   }
 
   function toggleOverlapOnOutsideClick(event){
     if (!event.target.closest('#overlap-menu,mark')) $('overlap-menu').hidden = true;
+    if (pending &amp;&amp; !event.target.closest('#selection-action, [data-text-target]')) clearPending();
   }
 
   function handleWholeBlockHotkey(event){
@@ -234142,6 +234575,10 @@ Revision Master 提取工件（Extraction Artifact）
   $('paper').addEventListener('keyup', function(event){ if (event.shiftKey &amp;&amp; event.key.indexOf('Arrow') === 0) captureSelection(); });
   $('paper-scroll').addEventListener('scroll', updateCurrentSection, { passive: true });
   $('selection-action').addEventListener('pointerdown', function(event){ event.preventDefault(); });
+  $('selection-action').addEventListener('blur', function(){
+    var selection = getSelection();
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) clearPending();
+  });
   $('selection-action').addEventListener('click', function(){ if (pending) addText(pending.blockId, pending.start, pending.end); });
   $('search').addEventListener('input', function(){ forcedId = null; renderCards(); });
   $('origin-filter').addEventListener('change', function(){ forcedId = null; renderCards(); });
@@ -234157,10 +234594,20 @@ Revision Master 提取工件（Extraction Artifact）
     renderAll(false);
     notify('本地草稿已清除。');
   });
-  $('export').addEventListener('click', exportResult);
+  $('download').addEventListener('click', downloadResult);
+  $('export').addEventListener('click', submitResult);
   $('legacy-close').addEventListener('click', function(){ $('legacy-dialog').close(); });
   document.addEventListener('keydown', handleWholeBlockHotkey);
   document.addEventListener('click', toggleOverlapOnOutsideClick);
+  document.addEventListener('selectionchange', function(){
+    var selection = getSelection();
+    if ((!selection || selection.isCollapsed || selection.rangeCount === 0) &amp;&amp; document.activeElement !== $('selection-action')) clearPending();
+  });
+  if (!sessionBridge) setText($('session-status'), '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。');
+  else {
+    document.querySelector('label[for="file"]').hidden = true;
+    importWorkspace(sessionBridge.workspace);
+  }
   &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
@@ -235677,7 +236124,7 @@ CREATE TABLE IF NOT EXISTS workbench_scope_receipts (
 CREATE INDEX IF NOT EXISTS workbench_feedback_receipts_identity
     ON workbench_feedback_receipts (snapshot_id, feedback_id);
 </pre></details>
-<details class="sub"><summary>knowledge <code>workbench-README.md</code> · <code>workbench/README.md</code> · 195 行</summary><div class="doc-meta">sha256 <code>2cf0158564583e0d43d6dd68fa3e5064c828d1f8005ac4cda6cf2169e2b2568d</code> · license MIT</div><pre class="doc-body"># Revision Master Review Workbench Runtime
+<details class="sub"><summary>knowledge <code>workbench-README.md</code> · <code>workbench/README.md</code> · 233 行</summary><div class="doc-meta">sha256 <code>22810a6fb031720b7ddac6d0a9a3d46c616ea6c7f78fc128a17c9c731df0f44b</code> · license MIT</div><pre class="doc-body"># Revision Master Review Workbench Runtime
 
 This directory holds the project-owned, standard-library-only resources that
 back the interactive revision-master review workbench. They are delivered
@@ -235737,7 +236184,7 @@ Read-only preparation never initializes, migrates, repairs, or renders the
 database, and never reads another task. Capture, document/block assembly,
 anchors, and the frozen HTML remain outside this module.
 
-## Preparing the HTML
+## Preparing the session
 
 Use the exported `researchspec/review-workspace` API from the installed package.
 The context file must contain `task_id`, the exact `node:&lt;run&gt;/&lt;node&gt;[@&lt;round&gt;]`
@@ -235747,7 +236194,7 @@ values from the current graph instructions. Never infer the round from SQLite.
 
 ```javascript
 import { prepareRevisionMasterReview, readRevisionMasterProjection,
-  validateRevisionMasterResult } from 'researchspec/review-workspace';
+  startReviewSession, validateRevisionMasterResult } from 'researchspec/review-workspace';
 import { readFile } from 'node:fs/promises';
 
 const context = JSON.parse(await readFile(contextPath, 'utf8'));
@@ -235764,11 +236211,20 @@ const ready = await prepareRevisionMasterReview({
   templatePath: packageHtmlPath,
   nextStep: '导出结果交回 Agent，正式关口在对话中确认',
 });
-// Deliver ready.htmlPath; independently retain ready.workspacePath and sources/.
+const session = await startReviewSession({
+  projectRoot: taskRoot,
+  workspacePath: ready.workspacePath,
+  assetPath: packageHtmlPath,
+});
+// Give the user session.url and show session.resultPath.
+// Keep ready.htmlPath as the offline backup.
+// Independently retain ready.workspacePath and the captured sources.
+const receipt = await session.waitForResult(); // Optional; default timeout is 10 minutes.
 const checked = validateRevisionMasterResult(
-  JSON.parse(await readFile(returnedResultPath, 'utf8')),
+  JSON.parse(await readFile(receipt.history_path, 'utf8')),
   JSON.parse(await readFile(ready.workspacePath, 'utf8')),
 );
+await session.close(); // The main Agent decides when the review session ends.
 ```
 
 The variables above are Agent-resolved task and installed-package paths.
@@ -235776,7 +236232,35 @@ The variables above are Agent-resolved task and installed-package paths.
 `blocks` may come from an independently authorized frozen render. Without a
 render, captured source remains readable. The preparation API captures sources,
 rechecks the SQL projection and file contents, and publishes a fresh workspace
-and HTML only after validation. Do not open the unprepared package template.
+and HTML only after validation. Pass the original package template as the
+session `assetPath`; the server embeds the retained workspace itself. Use
+`ready.htmlPath` only for the offline fallback and do not deliver the original
+template directly.
+
+Normal delivery uses the loopback session URL, with no manual JSON import. The
+page keeps drafts in browser-local state and posts an explicit export to the
+session. The receiver validates `workspace.json`, atomically publishes
+`result.json` beside it, and retains every complete submission as
+`results/&lt;submission-id&gt;.json`. Wait for a receipt and validate its immutable
+`history_path`; `result.json` is only the mutable latest copy. `waitForResult`
+can resume with `after`, accepts `timeoutMs` and an `AbortSignal`, and observes
+submissions already committed in the current service. After a restart, read
+the retained files directly. Waiting never applies feedback. Reopening the same
+snapshot reuses its `review-session.json` origin to preserve drafts; report an
+occupied port instead of changing it.
+
+The installed instructions expose the real session tool as
+`review_workspace.session_tool_path`. An Agent can instead run:
+
+```bash
+node &lt;session_tool_path&gt; --project-root ROOT --workspace WORKSPACE_JSON \
+  --asset HTML [--wait]
+```
+
+`--wait` prints successful receipt events and leaves the service running; the
+main Agent decides when to close it. The prepared HTML also opens offline with
+its explicit backup download. A failed submission stays retryable and never
+switches to download automatically.
 
 ## Checking a returned result
 
@@ -235791,7 +236275,8 @@ differs from the snapshot context.
 
 ```bash
 uv run --project="$HOME/.ar" --locked -- python &lt;package&gt;/workbench/review_workbench.py accept \
-  --db &lt;task&gt;/revision-master.db --project-root &lt;task&gt; --result &lt;task&gt;/result.json --snapshot &lt;task&gt;/snapshot.json \
+  --db &lt;task&gt;/revision-master.db --project-root &lt;task&gt; \
+  --result &lt;review&gt;/results/&lt;submission-id&gt;.json --snapshot &lt;task&gt;/snapshot.json \
   --trusted &lt;task&gt;/retained-snapshot.json --context &lt;task&gt;/workbench-context.json \
   --accept-feedback f1 --accept-feedback f2 --write &lt;task&gt;/semantic_write.py:apply
 ```
@@ -235872,7 +236357,7 @@ path to regenerate derived views and prepare the next snapshot. Formal Gate
 verdicts and Decision choices remain separate dialogue steps through
 ResearchSpec.
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-revision-master.html</code> · <code>review-workspace/revision-master.html</code> · 503 行</summary><div class="doc-meta">sha256 <code>992386d99129f2f847f1d31a829c3615d74bff722e3de8e59978158215a18dac</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-revision-master.html</code> · <code>review-workspace/revision-master.html</code> · 534 行</summary><div class="doc-meta">sha256 <code>e7b4137520a6efb28ba17ee13acf97ce2adcd748f68887cc8aca45dbc7df5a7f</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
 &lt;meta charset="utf-8"&gt;
@@ -235903,7 +236388,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
-&lt;header&gt;&lt;div&gt;&lt;div class="eyebrow"&gt;论文修订 · 工件台账&lt;/div&gt;&lt;h1 id="title"&gt;论文修订工作台&lt;/h1&gt;&lt;div id="identity" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="header-meta"&gt;&lt;span id="counts" class="tag"&gt;&lt;/span&gt;&lt;button class="primary" id="export"&gt;导出审阅结果&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
+&lt;header&gt;&lt;div&gt;&lt;div class="eyebrow"&gt;论文修订 · 工件台账&lt;/div&gt;&lt;h1 id="title"&gt;论文修订工作台&lt;/h1&gt;&lt;div id="identity" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="header-meta"&gt;&lt;span id="counts" class="tag"&gt;&lt;/span&gt;&lt;span id="session-status" class="small muted"&gt;&lt;/span&gt;&lt;button id="download" type="button" disabled&gt;下载备用结果&lt;/button&gt;&lt;button class="primary" id="export" type="button" disabled&gt;提交审阅结果&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;nav id="stages" aria-label="审阅阶段"&gt;&lt;/nav&gt;
 &lt;div id="notice"&gt;&lt;div&gt;&lt;div class="statline" id="scope-description"&gt;&lt;/div&gt;&lt;div id="context" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;p id="message" class="small" role="status" aria-live="polite"&gt;&lt;/p&gt;&lt;p id="storage-status" class="small" role="status"&gt;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;div class="workspace"&gt;
@@ -235916,10 +236401,14 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
 (() =&gt; {
   'use strict';
   const $ = id =&gt; document.getElementById(id);
+  const sessionBridge = window.researchspecReviewSession || null;
   let w;
   try { w = JSON.parse($('revision-master-data').textContent); }
   catch { $('message').textContent = '请打开 Agent 已准备好的审阅 HTML。'; $('export').disabled = true; return; }
   if (w.schema_version !== 'revision-master-review-workspace.v1') { $('message').textContent = '审阅件格式无法识别。'; $('export').disabled = true; return; }
+  $('download').disabled = false;
+  $('export').disabled = !sessionBridge;
+  $('session-status').textContent = sessionBridge ? `本地会话 · ${sessionBridge.resultPath}` : '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。';
   const b = w.business, stageNames = {coverage:'意见覆盖',board:'整体工作板',strategy:'当前策略',round:'本轮改稿与回复'};
   const stateNames = {todo:'待处理',blocked:'阻断',ready:'可审阅',in_progress:'处理中',done:'完成',yes:'是',no:'否',high:'高',medium:'中',low:'低',covered:'已覆盖',uncovered:'未覆盖',primary:'主要',supporting:'支持',duplicate_filtered:'重复来源',completed:'完成',draft:'草案',pending:'待处理',conflict:'需核对',accepted:'已接收'};
   const labels = {comment_id:'意见',thread_id:'原始条目',reviewer_id:'审稿人',canonical_summary:'意见摘要',required_action:'所需行动',original_text:'原文',normalized_summary:'整理摘要',source_type:'来源类型',source_document_id:'原始文档',source_kind:'文档类型',source_label:'来源',source_path:'源文件',span_role:'来源作用',start_offset:'原文起点',end_offset:'原文终点',span_text:'原文片段',excerpt_text:'引文',note:'说明',coverage_status:'覆盖状态',segment_text:'覆盖片段',status:'状态',priority:'优先级',evidence_gap:'证据缺口',user_confirmation_needed:'需要用户确认',next_action:'下一步',target_location:'稿件位置',location_role:'位置作用',manuscript_claim_or_section:'论点或章节',existing_evidence:'现有证据',gap_summary:'缺口',dependency_comment_id:'依赖意见',proposed_stance:'拟定立场',stance_rationale:'立场理由',manuscript_change:'稿件修改',expected_response_letter_effect:'回复预期',required_material:'所需材料',available_now:'当前可用',gap_note:'缺口说明',message:'待核对事项',category:'类别',content_text:'候选措辞',rationale:'理由',target_scope_note:'适用范围',draft_text:'回复草案',request_summary:'补材建议',request_recommendation:'接收建议',round_id:'轮次',file_path:'材料文件',concern_summary:'材料事项',decision:'接收判断',decision_rationale:'判断理由',planned_usage_note:'使用计划',manuscript_execution_items_done:'稿件草案完成',response_draft_done:'回复完成',evidence_gap_closed:'证据缺口关闭',user_strategy_confirmed:'内部策略确认',one_to_one_link_checked:'对应已核对',export_ready:'导出就绪',plan_action_id:'计划行动',execution_category:'行动类别',title:'行动',objective:'目标',suggested_change:'修改建议',evidence_requirement:'证据要求',depends_on_plan_action_id:'依赖行动',log_id:'修改日志',operator_role:'执行者',summary:'摘要',change_note:'修改说明',response_note:'回复说明',created_at:'记录时间',target_file:'目标文件',target_locator:'位置',change_type:'修改类型',change_summary:'修改摘要',evidence_source:'证据来源',expected_response_use:'回复用途',relative_path:'文件',change_kind:'文件变化',diff_excerpt:'变化摘要',before_excerpt:'修改前',after_excerpt:'修改后',snapshot_sha256:'冻结文件标识',last_audited_sha256:'已核对文件标识',current_sha256:'当前文件标识',last_log_id:'最近日志',variant_label:'措辞版本',variant_text:'候选措辞',response_resolution_kind:'回复方式',original_comment:'原始意见',modification_scope:'修改范围',key_revision_excerpt:'修改引文',response_explanation:'回复解释',latex_excerpt:'LaTeX 引文',latex_response_text:'LaTeX 回复',artifact_name:'交付件',artifact_status:'记录状态',output_path:'交付路径',profile_target:'风格对象',profile_summary:'风格摘要',anti_ai_focus:'措辞关注点',rule_type:'规则类别',rule_text:'规则',main_entry:'稿件入口',project_shape:'稿件结构',high_risk_areas:'高风险范围',section_title:'章节',purpose_in_manuscript:'章节用途',key_files_or_locations:'文件位置',core_claim:'主要论点',main_evidence:'主要证据',supporting_section_ids:'支持章节',risk_level:'风险',link_note:'关联说明',response_role:'回复作用',patch_set_id:'交付修改组',artifact_kind:'交付类型',source_root:'原稿目录',output_root:'交付目录',operation:'操作',anchor_text:'定位引文',marked_text:'标记稿',clean_text:'净稿',notes:'说明'};
@@ -235928,11 +236417,12 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
   const id = () =&gt; crypto.randomUUID();
   const empty = () =&gt; Object.fromEntries(categories.map(key =&gt; [key, []]));
   const key = `revision-master:${w.workspace_id}:${w.snapshot_id}`;
-  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage;
+  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage, retryResult = null;
   let selected = w.context.active_comment_id ? `comment:${w.context.active_comment_id}` : (b.atomic_comments[0] ? `comment:${b.atomic_comments[0].comment_id}` : 'scope:coverage');
   let atomListOpen = false, selectedThread = rowsForInitialThread();
   function rowsForInitialThread() { return b.raw_thread_atomic_links.find(row =&gt; selected === 'comment:'+row.comment_id)?.thread_id || b.raw_review_threads[0]?.thread_id || null; }
   let reading = {mode:'related',document_id:null,start:0}, selectionAnchor = null, coverageDocumentId = null;
+  const clearSelection = () =&gt; { selectionAnchor = null; $('selection-tools').hidden = true; };
   const docs = new Map(w.documents.map(doc =&gt; [doc.document_id,doc]));
   const blocks = new Map(w.documents.flatMap(doc =&gt; doc.blocks.map(block =&gt; [block.id,block])));
   const scopes = new Map(w.scopes.map(scope =&gt; [scope.scope_id,scope]));
@@ -235956,6 +236446,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     return typeof entry.feedback_id === 'string' &amp;&amp; typeof entry.note === 'string' &amp;&amp; scope &amp;&amp; (entry.target_id === `scope:${scope.scope_id}` || scope.target_ids.includes(entry.target_id));
   }
   function save() {
+    retryResult = null;
     removeBlockedConfirmations();
     try { localStorage.setItem(key,JSON.stringify(draft)); }
     catch { $('storage-status').textContent = '草稿未能保存到浏览器；请导出当前反馈以保留。'; }
@@ -236233,7 +236724,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     parent.append(grid);
   }
   function renderReading() {
-    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); selectionAnchor = null; $('selection-tools').hidden = true;
+    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); clearSelection();
     mode.append(button('查看相关片段',() =&gt; { reading.mode = 'related'; renderReading(); }));
     if (reading.mode === 'document') {
       const doc = docs.get(reading.document_id), ranges = sectionRanges(doc);
@@ -236318,15 +236809,18 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     if (!note) { tell('先在“独立批注”中填写内容，再选择批注范围。'); $('annotation-note').focus(); return; }
     draft.feedback.annotations.push({...entry(targetForFeedback(),note),anchor}); $('annotation-note').value = ''; save(); renderReading(); tell('已保存独立批注。');
   }
+  document.addEventListener('keydown',event =&gt; { if (event.key === 'Escape') { clearSelection(); window.getSelection()?.removeAllRanges(); } });
+  $('add-selection').addEventListener('pointerdown',event =&gt; event.preventDefault());
+  $('add-selection').addEventListener('blur',() =&gt; { const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) clearSelection(); });
   document.addEventListener('selectionchange',() =&gt; {
-    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) return;
+    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) { if (document.activeElement !== $('add-selection')) clearSelection(); return; }
     const range = selection.getRangeAt(0), element = node =&gt; node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
     const startNode = element(range.startContainer)?.closest('[data-block-id]'), endNode = element(range.endContainer)?.closest('[data-block-id]');
-    if (!startNode || startNode !== endNode) { selectionAnchor = null; $('selection-tools').hidden = true; if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
+    if (!startNode || startNode !== endNode) { clearSelection(); if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
     const block = blocks.get(startNode.dataset.blockId); if (block.kind === 'image') return;
     const preceding = document.createRange(); preceding.selectNodeContents(startNode); preceding.setEnd(range.startContainer,range.startOffset);
     const start = preceding.toString().length, quote = range.toString(), end = start+quote.length;
-    if (!quote || block.text.slice(start,end) !== quote) { selectionAnchor = null; $('selection-tools').hidden = true; return; }
+    if (!quote || block.text.slice(start,end) !== quote) { clearSelection(); return; }
     selectionAnchor = {kind:'text',snapshot_id:w.snapshot_id,block_id:block.id,start,end,exact_quote:quote,prefix:block.text.slice(Math.max(0,start-24),start),suffix:block.text.slice(end,end+24)};
     $('selection-quote').textContent = `选中：${quote.slice(0,80)} `; $('selection-tools').hidden = false;
   });
@@ -236351,15 +236845,37 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
   $('focus-request').addEventListener('click',() =&gt; { if (selected.startsWith('comment:')) { put('focus_requests',entry(selected,`请评估切换执行焦点到 ${selected.slice(8)}`)); tell('已记录焦点请求；当前执行焦点未改变。'); } });
   $('target').addEventListener('change',loadRequest);
   for (const filter of ['search','reviewer','status']) $(filter).addEventListener(filter === 'search' ? 'input' : 'change',renderObjects);
-  function exportResult() {
-    removeBlockedConfirmations();
-    const feedback = structuredClone(draft.feedback), result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
+  function prepareResult() {
+    const feedback = structuredClone(draft.feedback);
+    feedback.confirmations = feedback.confirmations.filter(row =&gt; { const scope = scopes.get(row.scope_id); return scope &amp;&amp; !confirmationBlocked(scope); });
+    const result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
     const entries = categories.flatMap(category =&gt; feedback[category]);
-    if (entries.some(row =&gt; !validEntry(row)) || new Set(entries.map(row =&gt; row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return; }
-    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return; } }
-    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() =&gt; URL.revokeObjectURL(url),1000); draft.export_revision = result.export_revision; save(); tell('已导出完整结果，请交回 Agent。');
+    if (entries.some(row =&gt; !validEntry(row)) || new Set(entries.map(row =&gt; row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return null; }
+    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return null; } }
+    return result;
   }
-  $('export').addEventListener('click',exportResult);
+  function acceptResult(result) { draft.export_revision = result.export_revision; save(); }
+  function downloadResult() {
+    const result = prepareResult(); if (!result) return;
+    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() =&gt; URL.revokeObjectURL(url),1000); acceptResult(result); tell('已发起备用下载；无法确认文件是否已保存。');
+  }
+  let submitting = false;
+  async function submitResult() {
+    if (!sessionBridge || submitting) return;
+    const result = retryResult || prepareResult(); if (!result) return;
+    retryResult = result; submitting = true; $('export').disabled = $('download').disabled = true; $('export').textContent = '提交中…';
+    try {
+      const receipt = await sessionBridge.submit(result);
+      if (!receipt || typeof receipt.result_path !== 'string' || !receipt.result_path) throw new Error('本地会话未返回 result_path。');
+      acceptResult(result); tell(`已提交完整结果；结果文件：${receipt.result_path}`);
+    } catch (error) {
+      tell('提交失败，草稿仍保留；可重试。' + (error?.message ? ' ' + error.message : ''));
+    } finally {
+      submitting = false; $('download').disabled = false; $('export').disabled = !sessionBridge; $('export').textContent = '提交审阅结果';
+    }
+  }
+  $('download').addEventListener('click',downloadResult);
+  $('export').addEventListener('click',submitResult);
   function renderStages() {
     $('stages').replaceChildren();
     const stages = {coverage:['01 · 核对审稿意见','原文、拆分与遗漏'],board:['02 · 安排修订工作','优先级、证据与位置'],strategy:['03 · 确认逐项策略','修改动作与所需材料'],round:['04 · 核对修改和回复','稿件改动与回复覆盖']};
@@ -236391,7 +236907,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     <div><strong>inputs</strong> <code>review_response_workspace</code> ← review-response-workspace.v1</div>
     <div><strong>outputs</strong> <code>working_manuscript</code> → manuscript-draft.v1 · <code>response_markdown</code> → response-letter.v1 · <code>response_latex</code> → response-letter-latex.v1 · <code>round_summary</code> → review-response-round.v1</div>
   </div>
-  <details class="sub"><summary>指令 SKILL.md · 147 行</summary><pre class="doc-body">---
+  <details class="sub"><summary>指令 SKILL.md · 148 行</summary><pre class="doc-body">---
 name: generation-review-response-round
 description: "Executes one complete strategy/draft round plus final interactive manuscript revision, semantic revision logging, response-letter coverage, and export."
 metadata:
@@ -236477,6 +236993,7 @@ Execute exactly one ResearchSpec capability node.
 
 ## Procedure
 
+
 # Review Response Round
 
 Execute one complete revision-response round: author and confirm comment-scoped strategy and drafts, then perform final interactive manuscript revision, semantic revision logging, response-letter coverage, and export. The graph engine owns round continuation; this node returns control after one full round.
@@ -236491,7 +237008,7 @@ Execute one complete revision-response round: author and confirm comment-scoped 
    - explicitly set `workflow_state.active_comment_id`; never switch silently;
    - write `strategy_cards` with `proposed_stance` and `stance_rationale`;
    - write at least one `strategy_card_actions`, plus target locations, evidence items, pending confirmations, and supplement suggestion/intake rows when needed;
-   - proactively prepare the current-strategy handoff using `workbench/README.md` and the package's `review-workspace/revision-master.html`, or review the same candidate in dialogue; ask for per-comment confirmation before writing manuscript and response drafts, binding the current active strategy candidate and its linked sources, evidence, and locations; a pending material blocker or substantive adjustment keeps that scope pending;
+   - proactively prepare the current-strategy handoff using `workbench/README.md` and start its retained loopback session with the original `review-workspace/revision-master.html` package template as the asset, or review the same candidate in dialogue; ask for per-comment confirmation before writing manuscript and response drafts, binding the current active strategy candidate and its linked sources, evidence, and locations; a pending material blocker or substantive adjustment keeps that scope pending;
    - after confirmation, write `strategy_action_manuscript_execution_items` and `comment_response_drafts`; keep reviewer/editor excerpts in the source language and all normalized strategy/draft text in the working language;
    - mark a comment complete only when strategy, evidence judgment, manuscript draft, response draft, and one-to-one correspondence checks all pass.
 2. Keep comment-scoped blockers local. Use global blockers only for true stage-level blockers.
@@ -236509,9 +237026,9 @@ Execute one complete revision-response round: author and confirm comment-scoped 
 7. Export final deliverables with `scripts/export_manuscript_variants.py` where the script supports the confirmed target; optional `latexdiff` is advisory only and must never block completion.
 8. Ask the user when a change would alter the main line, core claims, or conclusions; when a closing strategy needs authorization; or when a response-only resolution is ambiguous.
 
-For the final interactive pass, review the current `working_manuscript` and open workboard items with the user in dialogue or through the round handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and embed it in `review-workspace/revision-master.html`. The round view shows the frozen before/after excerpt, revision log, and thread-organized reply for every related location, plus actual delivery-file status and pending formal controls; a round seen marker is separate from feedback and never counts as confirmation. Apply accepted edits to `working_manuscript` and commit them through the existing semantic revision log scripts. Keep the per-comment confirmation and evidence boundaries intact.
+For the final interactive pass, review the current `working_manuscript` and open workboard items with the user in dialogue or through the round handoff: assemble the frozen `revision-master-review-workspace.v1` snapshot with the package's read-only `workbench/review_workbench.py` projection (follow `workbench/README.md`) and start its retained loopback session with the original package template as the asset; keep the prepared embedded HTML for offline use. Give the page URL and fixed result and history paths; every workspace, result, history, and session file remains in the task directory, and no manual import is needed. The round view shows the frozen before/after excerpt, revision log, and thread-organized reply for every related location, plus actual delivery-file status and pending formal controls; a round seen marker is separate from feedback and never counts as confirmation. Apply accepted edits to `working_manuscript` and commit them through the existing semantic revision log scripts. Keep the per-comment confirmation and evidence boundaries intact.
 
-When a returned `revision-master-review-result.v1` is processed, validate it against the retained snapshot and recheck each scope's current database dependencies before writing, commit the processing receipt with the same semantic write in one task transaction, and regenerate the derived views. Keep pending or conflicting items traceable in the next handoff; recheck actual files, logs, and receipts after an interrupted manuscript write before retrying, without replaying blindly. Removing an earlier annotation never reverses an applied effect; an explicit request is required.
+When a committed `history_path` containing `revision-master-review-result.v1` is processed, validate it against the retained snapshot and recheck each scope's current database dependencies before writing, commit the processing receipt with the same semantic write in one task transaction, and regenerate the derived views. Keep pending or conflicting items traceable in the next handoff; recheck actual files, logs, and receipts after an interrupted manuscript write before retrying, without replaying blindly. Removing an earlier annotation never reverses an applied effect; an explicit request is required. All revision outputs remain task-local.
 
 ## Round Completion
 
@@ -238729,7 +239246,7 @@ Stage 6 必须持续刷新并展示：
   "view.final_checklist.working_copy_table": "Working Manuscript 审计状态"
 }
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1449 行</summary><div class="doc-meta">sha256 <code>9f52387ccb0fc0ebe3fc6cdd778f16d5c878f4ea500859e115e516d02ae0bffc</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-index.html</code> · <code>review-workspace/index.html</code> · 1503 行</summary><div class="doc-meta">sha256 <code>f9cd4fdcaf2a1febe331c98e515d41627dd25505196b5b73d6472f9015cf319b</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
   &lt;meta charset="utf-8"&gt;
@@ -238851,7 +239368,9 @@ Stage 6 必须持续刷新并展示：
     &lt;span id="workflow" class="badge" hidden&gt;&lt;/span&gt;
     &lt;span class="spacer"&gt;&lt;/span&gt;
     &lt;label class="file-button" for="file"&gt;导入工作区 JSON&lt;input id="file" type="file" accept="application/json,.json"&gt;&lt;/label&gt;
-    &lt;button id="export" class="primary" type="button" disabled&gt;导出审阅结果&lt;/button&gt;
+    &lt;span id="session-status" class="subtle"&gt;&lt;/span&gt;
+    &lt;button id="download" type="button" disabled&gt;下载备用结果&lt;/button&gt;
+    &lt;button id="export" class="primary" type="button" disabled&gt;提交审阅结果&lt;/button&gt;
   &lt;/header&gt;
   &lt;p id="banner" class="banner" hidden&gt;&lt;/p&gt;
   &lt;section id="welcome" class="welcome"&gt;
@@ -239413,6 +239932,9 @@ Stage 6 必须持续刷新并展示：
   var collapsedGroups = {};
   var toastTimer = null;
   var saveTimer = null;
+  var sessionBridge = window.researchspecReviewSession || null;
+  var submitting = false;
+  var retryResult = null;
 
   function setText(node, value){ node.textContent = value === undefined || value === null ? '' : String(value); }
   function el(tag, className, textValue){ var node = document.createElement(tag); if (className) node.className = className; if (textValue !== undefined) node.textContent = textValue; return node; }
@@ -239427,11 +239949,12 @@ Stage 6 必须持续刷新并展示：
 
   function save(){
     if (!STATE) return;
+    retryResult = null;
     clearTimeout(saveTimer);
     var payload = JSON.stringify({ workspace_id: STATE.workspace.workspace_id, snapshot_id: STATE.workspace.snapshot_id, export_revision: STATE.export_revision, overall_note: STATE.overall_note, decisions: STATE.decisions, comments: STATE.comments });
     saveTimer = setTimeout(function(){
       if (storageSet(storageKey(), payload)) { setText($('save-status'), '草稿已保存在此浏览器（非正式状态）'); $('banner').hidden = true; }
-      else { setText($('save-status'), '浏览器未允许保存草稿'); setText($('banner'), '浏览器无法保存本地草稿：关闭页面前请先用“导出审阅结果”保存完整快照。'); $('banner').hidden = false; }
+      else { setText($('save-status'), '浏览器未允许保存草稿'); setText($('banner'), '浏览器无法保存本地草稿：关闭页面前请先提交到本地会话，或用“下载备用结果”保存完整快照。'); $('banner').hidden = false; }
     }, 150);
   }
 
@@ -239485,7 +240008,9 @@ Stage 6 必须持续刷新并展示：
   function openWorkspace(){
     $('welcome').hidden = true;
     $('layout').hidden = false;
-    $('export').disabled = false;
+    $('download').disabled = false;
+    $('export').disabled = !sessionBridge;
+    setText($('session-status'), sessionBridge ? '本地会话 · ' + sessionBridge.resultPath : '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。');
     $('clear').hidden = false;
     setText($('adapter'), STATE.workspace.adapter);
     $('adapter').hidden = false;
@@ -239829,7 +240354,7 @@ Stage 6 必须持续刷新并展示：
   function captureSelection(){
     if (!STATE) return;
     var selection = getSelection();
-    if (!selection || selection.isCollapsed || selection.rangeCount === 0) return;
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) { clearPending(); return; }
     var range = selection.getRangeAt(0);
     var startNode = range.startContainer.nodeType === 1 ? range.startContainer : range.startContainer.parentElement;
     var endNode = range.endContainer.nodeType === 1 ? range.endContainer : range.endContainer.parentElement;
@@ -240110,24 +240635,56 @@ Stage 6 必须持续刷新并展示：
     setTimeout(function(){ URL.revokeObjectURL(url); }, 0);
   }
 
-  function exportResult(){
+  function prepareResult(){
     if (!STATE) return;
     var empty = STATE.comments.find(function(comment){ return !comment.body.trim(); });
-    if (empty) { notify('请先填写每条批注的正文，再导出。'); activate(empty.comment_id, true); return; }
-    STATE.export_revision = STATE.export_revision + 1;
+    if (empty) { notify('请先填写每条批注的正文，再提交或下载。'); activate(empty.comment_id, true); return null; }
     var result;
     try {
-      result = buildResult(STATE.workspace, STATE, new Date().toISOString());
+      result = buildResult(STATE.workspace, Object.assign({}, STATE, { export_revision: STATE.export_revision + 1 }), new Date().toISOString());
       validateResultAgainstWorkspace(result, STATE.workspace);
-    } catch (error) { notify('导出的结果未通过校验：' + error.message); return; }
+    } catch (error) { notify('结果未通过校验：' + error.message); return null; }
+    return result;
+  }
+
+  function acceptResult(result){
+    STATE.export_revision = result.export_revision;
     save();
-    download(result, STATE.workspace.workspace_id + '-review-result-r' + STATE.export_revision + '.json');
     renderStatus();
-    notify('已导出完整结果（第 ' + STATE.export_revision + ' 次）；草稿保持可编辑，可继续修改并再次导出。');
+  }
+
+  function downloadResult(){
+    var result = prepareResult();
+    if (!result) return;
+    download(result, STATE.workspace.workspace_id + '-review-result-r' + result.export_revision + '.json');
+    acceptResult(result);
+    notify('已发起备用下载（第 ' + result.export_revision + ' 次）；无法确认文件是否已保存。');
+  }
+
+  async function submitResult(){
+    if (!sessionBridge || submitting) return;
+    var result = retryResult || prepareResult();
+    if (!result) return;
+    retryResult = result;
+    submitting = true;
+    $('export').disabled = $('download').disabled = true;
+    try {
+      var receipt = await sessionBridge.submit(result);
+      if (!receipt || typeof receipt.result_path !== 'string' || !receipt.result_path) throw new Error('本地会话未返回 result_path。');
+      acceptResult(result);
+      notify('已提交完整结果（第 ' + result.export_revision + ' 次）；结果文件：' + receipt.result_path);
+    } catch (error) {
+      notify('提交失败，草稿仍保留；可重试。' + (error &amp;&amp; error.message ? ' ' + error.message : ''));
+    } finally {
+      submitting = false;
+      $('download').disabled = !STATE;
+      $('export').disabled = !sessionBridge;
+    }
   }
 
   function toggleOverlapOnOutsideClick(event){
     if (!event.target.closest('#overlap-menu,mark')) $('overlap-menu').hidden = true;
+    if (pending &amp;&amp; !event.target.closest('#selection-action, [data-text-target]')) clearPending();
   }
 
   function handleWholeBlockHotkey(event){
@@ -240155,6 +240712,10 @@ Stage 6 必须持续刷新并展示：
   $('paper').addEventListener('keyup', function(event){ if (event.shiftKey &amp;&amp; event.key.indexOf('Arrow') === 0) captureSelection(); });
   $('paper-scroll').addEventListener('scroll', updateCurrentSection, { passive: true });
   $('selection-action').addEventListener('pointerdown', function(event){ event.preventDefault(); });
+  $('selection-action').addEventListener('blur', function(){
+    var selection = getSelection();
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) clearPending();
+  });
   $('selection-action').addEventListener('click', function(){ if (pending) addText(pending.blockId, pending.start, pending.end); });
   $('search').addEventListener('input', function(){ forcedId = null; renderCards(); });
   $('origin-filter').addEventListener('change', function(){ forcedId = null; renderCards(); });
@@ -240170,10 +240731,20 @@ Stage 6 必须持续刷新并展示：
     renderAll(false);
     notify('本地草稿已清除。');
   });
-  $('export').addEventListener('click', exportResult);
+  $('download').addEventListener('click', downloadResult);
+  $('export').addEventListener('click', submitResult);
   $('legacy-close').addEventListener('click', function(){ $('legacy-dialog').close(); });
   document.addEventListener('keydown', handleWholeBlockHotkey);
   document.addEventListener('click', toggleOverlapOnOutsideClick);
+  document.addEventListener('selectionchange', function(){
+    var selection = getSelection();
+    if ((!selection || selection.isCollapsed || selection.rangeCount === 0) &amp;&amp; document.activeElement !== $('selection-action')) clearPending();
+  });
+  if (!sessionBridge) setText($('session-status'), '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。');
+  else {
+    document.querySelector('label[for="file"]').hidden = true;
+    importWorkspace(sessionBridge.workspace);
+  }
   &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
@@ -241690,7 +242261,7 @@ CREATE TABLE IF NOT EXISTS workbench_scope_receipts (
 CREATE INDEX IF NOT EXISTS workbench_feedback_receipts_identity
     ON workbench_feedback_receipts (snapshot_id, feedback_id);
 </pre></details>
-<details class="sub"><summary>knowledge <code>workbench-README.md</code> · <code>workbench/README.md</code> · 195 行</summary><div class="doc-meta">sha256 <code>2cf0158564583e0d43d6dd68fa3e5064c828d1f8005ac4cda6cf2169e2b2568d</code> · license MIT</div><pre class="doc-body"># Revision Master Review Workbench Runtime
+<details class="sub"><summary>knowledge <code>workbench-README.md</code> · <code>workbench/README.md</code> · 233 行</summary><div class="doc-meta">sha256 <code>22810a6fb031720b7ddac6d0a9a3d46c616ea6c7f78fc128a17c9c731df0f44b</code> · license MIT</div><pre class="doc-body"># Revision Master Review Workbench Runtime
 
 This directory holds the project-owned, standard-library-only resources that
 back the interactive revision-master review workbench. They are delivered
@@ -241750,7 +242321,7 @@ Read-only preparation never initializes, migrates, repairs, or renders the
 database, and never reads another task. Capture, document/block assembly,
 anchors, and the frozen HTML remain outside this module.
 
-## Preparing the HTML
+## Preparing the session
 
 Use the exported `researchspec/review-workspace` API from the installed package.
 The context file must contain `task_id`, the exact `node:&lt;run&gt;/&lt;node&gt;[@&lt;round&gt;]`
@@ -241760,7 +242331,7 @@ values from the current graph instructions. Never infer the round from SQLite.
 
 ```javascript
 import { prepareRevisionMasterReview, readRevisionMasterProjection,
-  validateRevisionMasterResult } from 'researchspec/review-workspace';
+  startReviewSession, validateRevisionMasterResult } from 'researchspec/review-workspace';
 import { readFile } from 'node:fs/promises';
 
 const context = JSON.parse(await readFile(contextPath, 'utf8'));
@@ -241777,11 +242348,20 @@ const ready = await prepareRevisionMasterReview({
   templatePath: packageHtmlPath,
   nextStep: '导出结果交回 Agent，正式关口在对话中确认',
 });
-// Deliver ready.htmlPath; independently retain ready.workspacePath and sources/.
+const session = await startReviewSession({
+  projectRoot: taskRoot,
+  workspacePath: ready.workspacePath,
+  assetPath: packageHtmlPath,
+});
+// Give the user session.url and show session.resultPath.
+// Keep ready.htmlPath as the offline backup.
+// Independently retain ready.workspacePath and the captured sources.
+const receipt = await session.waitForResult(); // Optional; default timeout is 10 minutes.
 const checked = validateRevisionMasterResult(
-  JSON.parse(await readFile(returnedResultPath, 'utf8')),
+  JSON.parse(await readFile(receipt.history_path, 'utf8')),
   JSON.parse(await readFile(ready.workspacePath, 'utf8')),
 );
+await session.close(); // The main Agent decides when the review session ends.
 ```
 
 The variables above are Agent-resolved task and installed-package paths.
@@ -241789,7 +242369,35 @@ The variables above are Agent-resolved task and installed-package paths.
 `blocks` may come from an independently authorized frozen render. Without a
 render, captured source remains readable. The preparation API captures sources,
 rechecks the SQL projection and file contents, and publishes a fresh workspace
-and HTML only after validation. Do not open the unprepared package template.
+and HTML only after validation. Pass the original package template as the
+session `assetPath`; the server embeds the retained workspace itself. Use
+`ready.htmlPath` only for the offline fallback and do not deliver the original
+template directly.
+
+Normal delivery uses the loopback session URL, with no manual JSON import. The
+page keeps drafts in browser-local state and posts an explicit export to the
+session. The receiver validates `workspace.json`, atomically publishes
+`result.json` beside it, and retains every complete submission as
+`results/&lt;submission-id&gt;.json`. Wait for a receipt and validate its immutable
+`history_path`; `result.json` is only the mutable latest copy. `waitForResult`
+can resume with `after`, accepts `timeoutMs` and an `AbortSignal`, and observes
+submissions already committed in the current service. After a restart, read
+the retained files directly. Waiting never applies feedback. Reopening the same
+snapshot reuses its `review-session.json` origin to preserve drafts; report an
+occupied port instead of changing it.
+
+The installed instructions expose the real session tool as
+`review_workspace.session_tool_path`. An Agent can instead run:
+
+```bash
+node &lt;session_tool_path&gt; --project-root ROOT --workspace WORKSPACE_JSON \
+  --asset HTML [--wait]
+```
+
+`--wait` prints successful receipt events and leaves the service running; the
+main Agent decides when to close it. The prepared HTML also opens offline with
+its explicit backup download. A failed submission stays retryable and never
+switches to download automatically.
 
 ## Checking a returned result
 
@@ -241804,7 +242412,8 @@ differs from the snapshot context.
 
 ```bash
 uv run --project="$HOME/.ar" --locked -- python &lt;package&gt;/workbench/review_workbench.py accept \
-  --db &lt;task&gt;/revision-master.db --project-root &lt;task&gt; --result &lt;task&gt;/result.json --snapshot &lt;task&gt;/snapshot.json \
+  --db &lt;task&gt;/revision-master.db --project-root &lt;task&gt; \
+  --result &lt;review&gt;/results/&lt;submission-id&gt;.json --snapshot &lt;task&gt;/snapshot.json \
   --trusted &lt;task&gt;/retained-snapshot.json --context &lt;task&gt;/workbench-context.json \
   --accept-feedback f1 --accept-feedback f2 --write &lt;task&gt;/semantic_write.py:apply
 ```
@@ -241885,7 +242494,7 @@ path to regenerate derived views and prepare the next snapshot. Formal Gate
 verdicts and Decision choices remain separate dialogue steps through
 ResearchSpec.
 </pre></details>
-<details class="sub"><summary>knowledge <code>review-workspace-revision-master.html</code> · <code>review-workspace/revision-master.html</code> · 503 行</summary><div class="doc-meta">sha256 <code>992386d99129f2f847f1d31a829c3615d74bff722e3de8e59978158215a18dac</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
+<details class="sub"><summary>knowledge <code>review-workspace-revision-master.html</code> · <code>review-workspace/revision-master.html</code> · 534 行</summary><div class="doc-meta">sha256 <code>e7b4137520a6efb28ba17ee13acf97ce2adcd748f68887cc8aca45dbc7df5a7f</code> · license MIT</div><pre class="doc-body">&lt;!doctype html&gt;
 &lt;html lang="zh-CN"&gt;
 &lt;head&gt;
 &lt;meta charset="utf-8"&gt;
@@ -241916,7 +242525,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
-&lt;header&gt;&lt;div&gt;&lt;div class="eyebrow"&gt;论文修订 · 工件台账&lt;/div&gt;&lt;h1 id="title"&gt;论文修订工作台&lt;/h1&gt;&lt;div id="identity" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="header-meta"&gt;&lt;span id="counts" class="tag"&gt;&lt;/span&gt;&lt;button class="primary" id="export"&gt;导出审阅结果&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
+&lt;header&gt;&lt;div&gt;&lt;div class="eyebrow"&gt;论文修订 · 工件台账&lt;/div&gt;&lt;h1 id="title"&gt;论文修订工作台&lt;/h1&gt;&lt;div id="identity" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="header-meta"&gt;&lt;span id="counts" class="tag"&gt;&lt;/span&gt;&lt;span id="session-status" class="small muted"&gt;&lt;/span&gt;&lt;button id="download" type="button" disabled&gt;下载备用结果&lt;/button&gt;&lt;button class="primary" id="export" type="button" disabled&gt;提交审阅结果&lt;/button&gt;&lt;/div&gt;&lt;/header&gt;
 &lt;nav id="stages" aria-label="审阅阶段"&gt;&lt;/nav&gt;
 &lt;div id="notice"&gt;&lt;div&gt;&lt;div class="statline" id="scope-description"&gt;&lt;/div&gt;&lt;div id="context" class="small muted"&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;p id="message" class="small" role="status" aria-live="polite"&gt;&lt;/p&gt;&lt;p id="storage-status" class="small" role="status"&gt;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;div class="workspace"&gt;
@@ -241929,10 +242538,14 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
 (() =&gt; {
   'use strict';
   const $ = id =&gt; document.getElementById(id);
+  const sessionBridge = window.researchspecReviewSession || null;
   let w;
   try { w = JSON.parse($('revision-master-data').textContent); }
   catch { $('message').textContent = '请打开 Agent 已准备好的审阅 HTML。'; $('export').disabled = true; return; }
   if (w.schema_version !== 'revision-master-review-workspace.v1') { $('message').textContent = '审阅件格式无法识别。'; $('export').disabled = true; return; }
+  $('download').disabled = false;
+  $('export').disabled = !sessionBridge;
+  $('session-status').textContent = sessionBridge ? `本地会话 · ${sessionBridge.resultPath}` : '未连接本地会话；请使用备用下载，或由 Agent 重新打开会话。';
   const b = w.business, stageNames = {coverage:'意见覆盖',board:'整体工作板',strategy:'当前策略',round:'本轮改稿与回复'};
   const stateNames = {todo:'待处理',blocked:'阻断',ready:'可审阅',in_progress:'处理中',done:'完成',yes:'是',no:'否',high:'高',medium:'中',low:'低',covered:'已覆盖',uncovered:'未覆盖',primary:'主要',supporting:'支持',duplicate_filtered:'重复来源',completed:'完成',draft:'草案',pending:'待处理',conflict:'需核对',accepted:'已接收'};
   const labels = {comment_id:'意见',thread_id:'原始条目',reviewer_id:'审稿人',canonical_summary:'意见摘要',required_action:'所需行动',original_text:'原文',normalized_summary:'整理摘要',source_type:'来源类型',source_document_id:'原始文档',source_kind:'文档类型',source_label:'来源',source_path:'源文件',span_role:'来源作用',start_offset:'原文起点',end_offset:'原文终点',span_text:'原文片段',excerpt_text:'引文',note:'说明',coverage_status:'覆盖状态',segment_text:'覆盖片段',status:'状态',priority:'优先级',evidence_gap:'证据缺口',user_confirmation_needed:'需要用户确认',next_action:'下一步',target_location:'稿件位置',location_role:'位置作用',manuscript_claim_or_section:'论点或章节',existing_evidence:'现有证据',gap_summary:'缺口',dependency_comment_id:'依赖意见',proposed_stance:'拟定立场',stance_rationale:'立场理由',manuscript_change:'稿件修改',expected_response_letter_effect:'回复预期',required_material:'所需材料',available_now:'当前可用',gap_note:'缺口说明',message:'待核对事项',category:'类别',content_text:'候选措辞',rationale:'理由',target_scope_note:'适用范围',draft_text:'回复草案',request_summary:'补材建议',request_recommendation:'接收建议',round_id:'轮次',file_path:'材料文件',concern_summary:'材料事项',decision:'接收判断',decision_rationale:'判断理由',planned_usage_note:'使用计划',manuscript_execution_items_done:'稿件草案完成',response_draft_done:'回复完成',evidence_gap_closed:'证据缺口关闭',user_strategy_confirmed:'内部策略确认',one_to_one_link_checked:'对应已核对',export_ready:'导出就绪',plan_action_id:'计划行动',execution_category:'行动类别',title:'行动',objective:'目标',suggested_change:'修改建议',evidence_requirement:'证据要求',depends_on_plan_action_id:'依赖行动',log_id:'修改日志',operator_role:'执行者',summary:'摘要',change_note:'修改说明',response_note:'回复说明',created_at:'记录时间',target_file:'目标文件',target_locator:'位置',change_type:'修改类型',change_summary:'修改摘要',evidence_source:'证据来源',expected_response_use:'回复用途',relative_path:'文件',change_kind:'文件变化',diff_excerpt:'变化摘要',before_excerpt:'修改前',after_excerpt:'修改后',snapshot_sha256:'冻结文件标识',last_audited_sha256:'已核对文件标识',current_sha256:'当前文件标识',last_log_id:'最近日志',variant_label:'措辞版本',variant_text:'候选措辞',response_resolution_kind:'回复方式',original_comment:'原始意见',modification_scope:'修改范围',key_revision_excerpt:'修改引文',response_explanation:'回复解释',latex_excerpt:'LaTeX 引文',latex_response_text:'LaTeX 回复',artifact_name:'交付件',artifact_status:'记录状态',output_path:'交付路径',profile_target:'风格对象',profile_summary:'风格摘要',anti_ai_focus:'措辞关注点',rule_type:'规则类别',rule_text:'规则',main_entry:'稿件入口',project_shape:'稿件结构',high_risk_areas:'高风险范围',section_title:'章节',purpose_in_manuscript:'章节用途',key_files_or_locations:'文件位置',core_claim:'主要论点',main_evidence:'主要证据',supporting_section_ids:'支持章节',risk_level:'风险',link_note:'关联说明',response_role:'回复作用',patch_set_id:'交付修改组',artifact_kind:'交付类型',source_root:'原稿目录',output_root:'交付目录',operation:'操作',anchor_text:'定位引文',marked_text:'标记稿',clean_text:'净稿',notes:'说明'};
@@ -241941,11 +242554,12 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
   const id = () =&gt; crypto.randomUUID();
   const empty = () =&gt; Object.fromEntries(categories.map(key =&gt; [key, []]));
   const key = `revision-master:${w.workspace_id}:${w.snapshot_id}`;
-  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage;
+  let draft = {draft_id:id(),export_revision:0,feedback:empty()}, stage = w.context.stage, retryResult = null;
   let selected = w.context.active_comment_id ? `comment:${w.context.active_comment_id}` : (b.atomic_comments[0] ? `comment:${b.atomic_comments[0].comment_id}` : 'scope:coverage');
   let atomListOpen = false, selectedThread = rowsForInitialThread();
   function rowsForInitialThread() { return b.raw_thread_atomic_links.find(row =&gt; selected === 'comment:'+row.comment_id)?.thread_id || b.raw_review_threads[0]?.thread_id || null; }
   let reading = {mode:'related',document_id:null,start:0}, selectionAnchor = null, coverageDocumentId = null;
+  const clearSelection = () =&gt; { selectionAnchor = null; $('selection-tools').hidden = true; };
   const docs = new Map(w.documents.map(doc =&gt; [doc.document_id,doc]));
   const blocks = new Map(w.documents.flatMap(doc =&gt; doc.blocks.map(block =&gt; [block.id,block])));
   const scopes = new Map(w.scopes.map(scope =&gt; [scope.scope_id,scope]));
@@ -241969,6 +242583,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     return typeof entry.feedback_id === 'string' &amp;&amp; typeof entry.note === 'string' &amp;&amp; scope &amp;&amp; (entry.target_id === `scope:${scope.scope_id}` || scope.target_ids.includes(entry.target_id));
   }
   function save() {
+    retryResult = null;
     removeBlockedConfirmations();
     try { localStorage.setItem(key,JSON.stringify(draft)); }
     catch { $('storage-status').textContent = '草稿未能保存到浏览器；请导出当前反馈以保留。'; }
@@ -242246,7 +242861,7 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     parent.append(grid);
   }
   function renderReading() {
-    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); selectionAnchor = null; $('selection-tools').hidden = true;
+    const parent = $('reading'), mode = $('reading-mode'); parent.replaceChildren(); mode.replaceChildren(); clearSelection();
     mode.append(button('查看相关片段',() =&gt; { reading.mode = 'related'; renderReading(); }));
     if (reading.mode === 'document') {
       const doc = docs.get(reading.document_id), ranges = sectionRanges(doc);
@@ -242331,15 +242946,18 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
     if (!note) { tell('先在“独立批注”中填写内容，再选择批注范围。'); $('annotation-note').focus(); return; }
     draft.feedback.annotations.push({...entry(targetForFeedback(),note),anchor}); $('annotation-note').value = ''; save(); renderReading(); tell('已保存独立批注。');
   }
+  document.addEventListener('keydown',event =&gt; { if (event.key === 'Escape') { clearSelection(); window.getSelection()?.removeAllRanges(); } });
+  $('add-selection').addEventListener('pointerdown',event =&gt; event.preventDefault());
+  $('add-selection').addEventListener('blur',() =&gt; { const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) clearSelection(); });
   document.addEventListener('selectionchange',() =&gt; {
-    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) return;
+    const selection = window.getSelection(); if (!selection || selection.isCollapsed || !selection.rangeCount) { if (document.activeElement !== $('add-selection')) clearSelection(); return; }
     const range = selection.getRangeAt(0), element = node =&gt; node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
     const startNode = element(range.startContainer)?.closest('[data-block-id]'), endNode = element(range.endContainer)?.closest('[data-block-id]');
-    if (!startNode || startNode !== endNode) { selectionAnchor = null; $('selection-tools').hidden = true; if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
+    if (!startNode || startNode !== endNode) { clearSelection(); if (startNode || endNode) tell('跨区块选区请分别批注。'); return; }
     const block = blocks.get(startNode.dataset.blockId); if (block.kind === 'image') return;
     const preceding = document.createRange(); preceding.selectNodeContents(startNode); preceding.setEnd(range.startContainer,range.startOffset);
     const start = preceding.toString().length, quote = range.toString(), end = start+quote.length;
-    if (!quote || block.text.slice(start,end) !== quote) { selectionAnchor = null; $('selection-tools').hidden = true; return; }
+    if (!quote || block.text.slice(start,end) !== quote) { clearSelection(); return; }
     selectionAnchor = {kind:'text',snapshot_id:w.snapshot_id,block_id:block.id,start,end,exact_quote:quote,prefix:block.text.slice(Math.max(0,start-24),start),suffix:block.text.slice(end,end+24)};
     $('selection-quote').textContent = `选中：${quote.slice(0,80)} `; $('selection-tools').hidden = false;
   });
@@ -242364,15 +242982,37 @@ input{font:inherit;border:1px solid #bfcfcd;border-radius:8px;padding:.55rem .75
   $('focus-request').addEventListener('click',() =&gt; { if (selected.startsWith('comment:')) { put('focus_requests',entry(selected,`请评估切换执行焦点到 ${selected.slice(8)}`)); tell('已记录焦点请求；当前执行焦点未改变。'); } });
   $('target').addEventListener('change',loadRequest);
   for (const filter of ['search','reviewer','status']) $(filter).addEventListener(filter === 'search' ? 'input' : 'change',renderObjects);
-  function exportResult() {
-    removeBlockedConfirmations();
-    const feedback = structuredClone(draft.feedback), result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
+  function prepareResult() {
+    const feedback = structuredClone(draft.feedback);
+    feedback.confirmations = feedback.confirmations.filter(row =&gt; { const scope = scopes.get(row.scope_id); return scope &amp;&amp; !confirmationBlocked(scope); });
+    const result = {schema_version:'revision-master-review-result.v1',workspace:w,snapshot_id:w.snapshot_id,result_id:id(),draft_id:draft.draft_id,export_revision:draft.export_revision+1,exported_at:new Date().toISOString(),feedback};
     const entries = categories.flatMap(category =&gt; feedback[category]);
-    if (entries.some(row =&gt; !validEntry(row)) || new Set(entries.map(row =&gt; row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return; }
-    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return; } }
-    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() =&gt; URL.revokeObjectURL(url),1000); draft.export_revision = result.export_revision; save(); tell('已导出完整结果，请交回 Agent。');
+    if (entries.some(row =&gt; !validEntry(row)) || new Set(entries.map(row =&gt; row.feedback_id)).size !== entries.length) { tell('反馈引用无法核对，请交回 Agent 检查。'); return null; }
+    for (const row of feedback.annotations) if (row.anchor) { const block = blocks.get(row.anchor.block_id); if (!block || row.anchor.snapshot_id !== w.snapshot_id || (row.anchor.kind === 'text' ? block.text.slice(row.anchor.start,row.anchor.end) !== row.anchor.exact_quote : block.text !== row.anchor.exact_quote)) { tell('批注锚点无法核对，请交回 Agent。'); return null; } }
+    return result;
   }
-  $('export').addEventListener('click',exportResult);
+  function acceptResult(result) { draft.export_revision = result.export_revision; save(); }
+  function downloadResult() {
+    const result = prepareResult(); if (!result) return;
+    const url = URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'})), anchor = el('a'); anchor.href = url; anchor.download = `revision-master-${w.snapshot_id}-${result.export_revision}.json`; document.body.append(anchor); anchor.click(); anchor.remove(); setTimeout(() =&gt; URL.revokeObjectURL(url),1000); acceptResult(result); tell('已发起备用下载；无法确认文件是否已保存。');
+  }
+  let submitting = false;
+  async function submitResult() {
+    if (!sessionBridge || submitting) return;
+    const result = retryResult || prepareResult(); if (!result) return;
+    retryResult = result; submitting = true; $('export').disabled = $('download').disabled = true; $('export').textContent = '提交中…';
+    try {
+      const receipt = await sessionBridge.submit(result);
+      if (!receipt || typeof receipt.result_path !== 'string' || !receipt.result_path) throw new Error('本地会话未返回 result_path。');
+      acceptResult(result); tell(`已提交完整结果；结果文件：${receipt.result_path}`);
+    } catch (error) {
+      tell('提交失败，草稿仍保留；可重试。' + (error?.message ? ' ' + error.message : ''));
+    } finally {
+      submitting = false; $('download').disabled = false; $('export').disabled = !sessionBridge; $('export').textContent = '提交审阅结果';
+    }
+  }
+  $('download').addEventListener('click',downloadResult);
+  $('export').addEventListener('click',submitResult);
   function renderStages() {
     $('stages').replaceChildren();
     const stages = {coverage:['01 · 核对审稿意见','原文、拆分与遗漏'],board:['02 · 安排修订工作','优先级、证据与位置'],strategy:['03 · 确认逐项策略','修改动作与所需材料'],round:['04 · 核对修改和回复','稿件改动与回复覆盖']};

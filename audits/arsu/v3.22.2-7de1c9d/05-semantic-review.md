@@ -120,6 +120,14 @@ paper-humanizer 的 `snapshot-84eb2ed` 更新了聚合核心能力目录中的�
 
 PH-KP-04 与 paper-humanizer delivery assets 分别承载原始守则证据和常驻建议，未投影到 capability knowledge_refs。所有核心 capability 与 profiles 字节不变；聚合上游、120 件 ARS extraction 和模式语义不变。重生成聚合审阅工件仅同步提取库存与来源清单。宿主协议与配置所有权的语义审阅见 paper-humanizer 当前 own-vendor 锚点，不新增 ARSU 节点或流程权威。
 
+## 本地审阅结果交接聚合复核（2026-10-23）
+
+本轮聚合变化来自 own-vendor 的 paper-humanizer 与 revision-master 审阅件及其 Procedure 交接指令；逐包 adapted/preserved 判定和原文引文见两个当前 own-vendor 锚点的本地结果文件交接复核。ARS 上游、120 件 extraction、38 个 ARS capability 与所有 graph profile 均无 diff；原 reviewer calibration、resume hash 重放等缺口保持先前结论。
+
+四个 ARS Skill 的既有 mode 承载路径继续由 unchanged extraction、capability 与 profile 字节确定：deep-research 的 discovery/问题界定、academic-paper 的写作、academic-paper-reviewer 的审阅、academic-pipeline 的完整性检查。本次传输没有改变其输入输出、控制节点或来源契约。聚合工件同步当前受维护包及 registry 身份；静态文本命中不能证明语义运行。
+
+共享接收端只保存可信冻结快照对应的结果文件；wait 只返回成功落盘通知，不调用 Agent 或模型，不变更稿件、SQLite、handoff 或 graph。正式 Gate/Decision 的人工确认和 CLI 权威不变。原 v1 恢复页保持原字节。
+
 ## 结论
 
 declared-fit-with-notes。本轮发布版的语言配置、摘要统一规则、中文引文修复、缩略语advisory隔离、真实授权与指令/数据边界已进入现有承载路径。继承的calibration缺口、ledger运行时排除及未执行确定性缩略语检查明确披露；静态operational标签不能证明这些功能有运行证据。

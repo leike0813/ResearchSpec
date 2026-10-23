@@ -67,6 +67,7 @@ Execute exactly one ResearchSpec capability node.
 
 ## Procedure
 
+
 # Review Response Manuscript Analysis
 
 Build a full manuscript structure understanding that can support later reviewer-thread and atomic-comment mapping. This node performs analysis only; it does not draft responses or edit the manuscript.

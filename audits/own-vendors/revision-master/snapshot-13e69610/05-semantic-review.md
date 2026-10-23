@@ -111,6 +111,22 @@ paper-humanizer 增量锚点更新了共用维护 catalog 和 Skill，因此刷�
 
 paper-humanizer 声明独立 delivery assets 后，共用 catalog / own-vendor Skill 的维护身份更新。revision-master 未声明 delivery assets，其上游、extraction、五个 capability 包、registry subset 和 parity slice 保持原字节；不承接 writing-hook runtime。只刷新共享维护记录，原生产语义判定保持。
 
+## 本地结果文件交接复核（2026-10-23）
+
+对照 RM-CAP-03 的“让用户确认原始审稿意见已被充分覆盖”、RM-CAP-04 的“形成一次用户可审阅、可确认的 planning 结果”和 RM-CAP-05/06 的“Agent-authored revision action log”。上述 extraction 与 SQL/脚本语义未变。
+
+| 承载 | 判定 | 本次核对证据 |
+|---|---|---|
+| transform-review-response-comment-atomization | adapted | procedure 的 coverage handoff 与生成 SKILL 使用保留的快照启动会话；coverage confirmation 仍绑定全部映射与来源关系。 |
+| design-review-response-workboard-planning | adapted | board handoff 保留整块工作板确认、过滤不缩小范围和原 SQLite 写入 recipe；接收端仅写建议性结果文件。 |
+| generation-review-response-round | adapted | strategy 与 round handoff 由同一冻结工作台接收；seen、内部策略确认与正式 Decision 仍分开，语义写入与成功处理记录仍同事务。 |
+| intake 与 manuscript-analysis | preserved | 作者源 procedure、SQL、脚本和输入输出均未改；统一重生成仅对齐生成器输出空白。 |
+| 三包 workbench/README.md 与 revision-master.html | adapted | 指南给出原始包模板、trusted workspace.json、session API、history_path 校验和可选等待；同源提交桥不授予数据库/稿件/捕获文件写入权。 |
+
+每次结果、历史、端口记录都在所属 task 目录内；重试不会重放已经成功的旧提交为最新结果。既有反馈去重与 per-scope dependency 检查继续由包内语义运行时承担。受影响 SKILL 的流程编排扫描无命中，graph profiles、receipt DDL 与 Python 工具保持原字节。
+
+验证：两种结果契约、并发、重试、写入失败、等待和端口恢复的 Node 测试通过；真实 Chrome 禁下载仍能提交，取消选区和重新批注正常。相关 35 项测试通过，完整验证见本 change 报告。
+
 ## 结论
 
 declared-fit-with-notes。新增独立工作台保留五个能力的业务义务与流程权威；未发现阻塞性语义 gap。生产页的人工操作验收仍按本 change 的任务 7.3 等待用户复核，自动检查不替代该项。SQLite 事务仅覆盖数据库语义和 receipt，物理稿件编辑的中断恢复仍需要核对实际文件与日志。
