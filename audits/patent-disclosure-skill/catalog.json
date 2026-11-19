@@ -14,6 +14,7 @@
   },
   "authoring_root": "authoring/patent-disclosure-skill",
   "generated_root": "skills/capabilities",
+  "original_capability_ids": ["analysis-paper-patent-comparison"],
   "profile_root": "skills/arsu/profiles",
   "source_definitions": "src/vendor-converters/patent-disclosure-skill/capabilities.ts",
   "graph_definitions": "src/arsu-converter/workflow/graph-profiles/patent.ts",

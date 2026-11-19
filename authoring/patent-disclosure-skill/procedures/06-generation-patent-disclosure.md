@@ -29,6 +29,12 @@
 
    第五章的 5.1 / 5.2 是下游申请阶段取独权与从属树的依据，划分要站得住：删掉 5.1
    任一特征方案就不成立，删掉 5.2 只影响优选。
+   论文是本案主披露来源时，在案件索引的 `files` 中按角色读取 `paper_evidence`，把
+   3.3 手段、3.5 参数、5.1 / 5.2 特征和实施例逐条对到证据记录；每条关键特征要么指到
+   一条记录，要么标 `未决` 并写清缺什么，没有记录的限定不写成已确认的必要特征。正文
+   不复制证据表，附件里把 5.1 / 5.2 的措辞写准。单点实测可写成实施例数据，更宽范围
+   没有来源依据就留作待确认问题。补编或特征措辞变化时写新版本附件，旧版保留，索引
+   指向当前版本。
 4. 按类型产出结构化材料（见下节）。
 5. 出图与 Word：
 
@@ -73,6 +79,8 @@ python tools/patent_files.py create --project-root <root> --kind disclosure \
 
    实用新型再加 `--file structure_schema=…` 与 `--file lineart=…`；外观设计再加
    `--file appearance_schema=…`、`--file photo=…` 与 `--file lineart=…`。
+   论文是主披露来源时，再加 `--file paper_evidence=<当前证据附件>`；论文只作背景时
+   不登记。
 
 ## 按类型必须产出
 
@@ -113,4 +121,4 @@ python tools/patent_files.py create --project-root <root> --kind disclosure \
 
 ## 完成
 
-输出 `disclosure_bundle`（`disclosure-bundle.v1`，`kind: disclosure`），含交底书 md / docx、按类型要求的 schema、`figure_plan`、入文线稿或视图、公式图，以及 `limitations` 与本版修订说明。
+输出 `disclosure_bundle`（`disclosure-bundle.v1`，`kind: disclosure`），含交底书 md / docx、按类型要求的 schema、`figure_plan`、入文线稿或视图、公式图，以及 `limitations` 与本版修订说明。有证据附件时一并汇报证据条数、`未决` 条数与本版采用的附件版本。

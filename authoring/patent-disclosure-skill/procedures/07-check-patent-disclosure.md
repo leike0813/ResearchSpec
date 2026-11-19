@@ -36,6 +36,10 @@ python tools/design_lineart_gate.py --case-dir <交底目录> --check
    - 实用新型：`structure.yaml` 的部件与连接关系是否覆盖正文，`figure_plan` 与入文线稿
      是否逐图对应；
    - 外观设计：视图是否齐备，`appearance.yaml` 的造型 / 图案 / 色彩要点是否都在正文。
+   若索引带 `paper_evidence`，另读附件，把 5.1 / 5.2 特征逐条对到证据标识、来源、定位
+   与支撑类型，并把原始证据支持与逻辑 / 结构问题分开报告。重点标出单点值被扩成范围、
+   `解释` 被写成观察、定位不可核对和补编缺失；定位不可核对记 `not_checked`，其余检查
+   照常。论文是主披露来源却无附件时报告缺失证据，不自行补写；论文仅作背景时跳过。
 5. 逐条记录 `findings`：位置、问题、依据、建议改法。不在交付物上直接改。
 6. 写 `disclosure_review`（普通文件）：`status` 取 `pass` / `issues` / `not_checked`，
    外加 `findings[]` 与 `unresolved[]`。

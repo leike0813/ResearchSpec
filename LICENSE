@@ -6,7 +6,8 @@ ResearchSpec is distributed under multiple licenses. A single SPDX identifier wo
 
 Unless identified below as ARSU-derived material, ResearchSpec-authored source code, tests, documentation, Companion Skills, and command adapters are licensed under the MIT License, copyright 2026 ResearchSpec contributors. The complete text is in `LICENSES/MIT.txt`.
 
-Fixed patent capabilities under `skills/capabilities/*patent*/**` adapt MIT
+The standalone paper–patent comparison Procedure is original ResearchSpec MIT
+material. The eighteen vendor-derived fixed patent capabilities adapt MIT
 material by handsomestWei, copyright 2026, and include the upstream license.
 Bundled Mermaid and Three.js resources retain their own MIT notices. The seven
 patent and research/patent composition profiles are ResearchSpec-authored MIT

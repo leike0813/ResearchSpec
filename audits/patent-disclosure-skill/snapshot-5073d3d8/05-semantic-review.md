@@ -7,7 +7,39 @@ trees, registry subsets, source decisions and maintained files. Approval here
 concerns the reviewed fixed capability distribution; it supplies no runtime
 human Gate verdict or legal conclusion.
 
-## This review round
+## Paper evidence and standalone comparison
+
+The registry adds one ResearchSpec-authored MIT Procedure to the eighteen
+vendor-derived stages. Normal offline discovery selected the standalone
+comparison for a request about a paper and a patent and the claim-chart
+Procedure for an Excel claim chart. Exact activation resolved both supplied
+files, identified an absent patent path on a second invocation, and accepted
+the delivered Markdown report through standalone material inspection.
+
+In an original thermometer fixture the report traced common-trigger sampling
+to the paper's section 2 and patent claim 1, distinguished a 2 K threshold
+from 1 K, and found ice-point calibration only in section 3 and rejected-pair
+logging only in patent paragraph 12. It recorded the unread figure and
+separated the known filing date from the unknown paper publication date.
+These observations check one semantic execution of the Procedure.
+
+The paper-backed drafting walkthrough used a single 8 ms measurement with
+a proposed 4–12 ms range. The source record kept the generalization open.
+A later record cited supplement table S2 for a new duplicate-frame filter.
+The ordinary-file index tool accepted the attachment through case, disclosure
+and application and validated the revised application index while the earlier
+index still resolved its original attachment. Source checks are conditional on
+the paper supplying the technical disclosure. An ordinary disclosure can cite
+background papers without creating this record.
+
+The claim-chart and OA exporters matched their previous source bytes. Separate
+offline exports retained the feature row, cited paragraph 0012, common evidence
+sheets and the scene-specific sheets 路径备忘 and 驳回映射. The seven graph
+definitions retain their existing bindings and formal controls. The common
+index contract documents the optional attachment in each derived package.
+The project-authored comparison has its own license and uses neither exporter.
+
+## Earlier profile-ownership review
 
 The round repaired output ownership only. `scripts/patent-disclosure-skill-maintenance.mjs`
 no longer calls the ARSU profile emitter during `artifacts`, so patent
@@ -24,7 +56,7 @@ all of which are bound again below. Because the generation path changed, this
 round re-derived its conclusions from the current packages, profiles and
 definitions rather than carrying the previous approval forward.
 
-## What this round checked directly
+## Profile-ownership checks
 
 - Every audited capability ships a package and a registry row; all eighteen do.
 - Every `tools/`, `references/` and `scripts/` path named in a patent `SKILL.md`

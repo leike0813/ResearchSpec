@@ -178,6 +178,12 @@ python tools/material_gate.py --case-dir <交底目录>
    与入文图。
 3. 写 `application_plan.yaml`：独权取交底 5.1 的必要技术特征，从属树取 5.2，按
    `preferred_param` / `branch` / `system_map` / `embodiment` 分层。
+   索引带 `paper_evidence` 时，读当前附件，把拟入权项的限定对到证据标识与权项号；只有
+   有支持的限定才进正式权项。使用解释性依据时，逐条说明原文如何支持该限定；
+   仍需外推或确认的部分留在问题清单。
+   `未决` 不得进正式权项，收窄到已支持事实或退回问人。权项映射变化时写新版本附件，
+   旧版保留。主论文案件缺附件时，只用获准读取的原件重建；未能核实的限定留待确认。
+   普通交底和仅作背景的论文沿用常规成文步骤。
 4. 排附图计划：
 
 ```bash
@@ -210,7 +216,7 @@ python tools/patent_files.py create --project-root <root> --kind application \
 ```
 
 `--file` 只收**普通文件**，不登记目录：每张图单独用 `figure_N=<路径>` 登记一次，
-图有几张写几条。
+图有几张写几条。有证据附件时再加 `--file paper_evidence=<当前附件>`；没有就不加。
 
 ## 硬约束
 

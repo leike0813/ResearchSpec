@@ -44,6 +44,10 @@ void test("candidate cards carry declared manifest roles and routing intents", a
   const literature = procedureCard(required("discovery-literature-search-screening"));
   assert.deepEqual(literature.inputs, ["rq_brief", "methodology_blueprint"]);
   assert.deepEqual(literature.outputs, ["annotated_bibliography"]);
+  const comparison = procedureCard(required("analysis-paper-patent-comparison"));
+  assert.deepEqual(comparison.inputs, ["paper_source", "patent_source"]);
+  assert.deepEqual(comparison.outputs, ["comparison_report"]);
+  assert.deepEqual(comparison.profiles, []);
   const routed = required("deep-research");
   assert.ok((routed.intents?.length ?? 0) > 0, "routing intents come from ARSU skills and routes");
   assert.ok((routed.intents ?? []).includes("synthesize scholarly evidence"));
@@ -79,6 +83,8 @@ void test("bilingual natural requests reach suitable candidates without Agent tr
       "design-review-response-workboard-planning",
     ]],
     ["专利文献阅读", ["analysis-patent-reading", "transform-patent-research-evidence"]],
+    ["比较这篇论文和这件专利的技术异同", ["analysis-paper-patent-comparison"]],
+    ["按权利要求制作 Excel 对照表", ["analysis-patent-claim-chart"]],
     ["历史档案研究", [
       "plugin-historical-research",
       "plugin-historical-source-analysis",

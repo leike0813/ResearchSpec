@@ -126,7 +126,7 @@ Patent Disclosure Skill
 - Source: https://github.com/handsomestWei/patent-disclosure-skill
 - Revision: 5073d3d837a5d139ef2bc763c9dd46bb9605df84
 - Copyright: 2026 handsomestWei
-- License: MIT, preserved in each patent package's LICENSE.
+- License: MIT, preserved in each derived patent package's LICENSE.
 
 ResearchSpec adapts the nine businesses into eighteen fixed semantic stages,
 configured local tools and graph-owned workflow control. Root routing,

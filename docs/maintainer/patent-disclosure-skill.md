@@ -27,6 +27,11 @@ membership. Adapted tools and reviewed resources live in
 `authoring/patent-disclosure-skill/`. Identical source tools have one maintained
 source and independent package copies. Business variants remain distinct.
 
+The standalone `analysis-paper-patent-comparison` package is authored directly
+under `skills/capabilities/` with original MIT provenance. Register its manifest
+hash in the fixed registry. The maintenance catalog includes it in the reviewed
+package trees separately from the eighteen upstream-derived stages.
+
 `scripts/patent-source-audit.mjs` records source hashes, dispositions, resources
 and authored knowledge derivation. Capability extraction preserves upstream
 business instructions as provenance; generated Procedures implement the

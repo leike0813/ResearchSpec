@@ -204,7 +204,7 @@ The fixed base user-visible Agent surface is exactly one Skill:
 `researchspec-navigate`. Its generated `references/cli-handbook.md` and
 `references/arsu-routes.md` provide progressive CLI and ARSU route detail from
 their canonical renderers. ARSU Skills, the other three Companion workflows, the
-65 bundled core capabilities, and all registered plugin extensions are hidden
+66 bundled core capabilities, and all registered plugin extensions are hidden
 Procedures discovered from their existing registries and loaded on demand with
 `list procedures`, `show procedure:<id>`, and
 `instructions procedure:<id>`. The Procedure catalog is runtime-derived and is
@@ -667,6 +667,13 @@ dependencies. Maintain this source through
 `scripts/patent-disclosure-skill-maintenance.mjs` and
 `.agents/skills/patent-disclosure-skill-maintenance/SKILL.md`; the dedicated
 snapshot-5073d3d8 anchor binds the complete semantically reviewed output tree.
+
+Paper-backed drafting carries a versioned `paper_evidence` attachment when
+the paper is the principal technical disclosure. The independently authored
+`analysis-paper-patent-comparison` fixed Procedure compares a supplied paper
+and patent directly and returns a Markdown report. Its canonical source is
+its package in `skills/capabilities/`; the patent maintenance catalog binds
+its reviewed tree alongside the derived packages.
 
 `audits/own-vendors/catalog.json` is the unified maintenance catalog for
 user-owned upstream vendors (currently `paper-humanizer` and

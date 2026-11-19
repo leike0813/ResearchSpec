@@ -8,10 +8,10 @@
     "knowledge_refs_referenced": 1
   },
   "summary": {
-    "total": 65,
-    "operational": 65,
-    "avg_section_coverage": 0.9645970963594281,
-    "avg_rule_coverage": 0.9696014303157159,
+    "total": 66,
+    "operational": 66,
+    "avg_section_coverage": 0.9651335039903458,
+    "avg_rule_coverage": 0.9700620147048717,
     "below_section_threshold": [],
     "below_rule_threshold": [],
     "output_missing": [],
@@ -67,6 +67,26 @@
         "Collaboration with Other Agents",
         "bibliography_agent"
       ],
+      "uncovered_rules": [],
+      "output_format_preserved": true,
+      "flow_sections_retained": []
+    },
+    {
+      "capability_id": "analysis-paper-patent-comparison",
+      "maturity": "operational",
+      "skill_lines": 40,
+      "knowledge_refs": 1,
+      "knowledge_artifacts": 0,
+      "knowledge_coverage": 1,
+      "knowledge_refs_referenced": 1,
+      "knowledge_refs_unreferenced": [],
+      "upstream_sections": 0,
+      "covered_sections": 0,
+      "section_coverage": 1,
+      "upstream_rules": 0,
+      "covered_rules": 0,
+      "rule_coverage": 1,
+      "uncovered_sections": [],
       "uncovered_rules": [],
       "output_format_preserved": true,
       "flow_sections_retained": []
@@ -390,7 +410,7 @@
     {
       "capability_id": "check-patent-application",
       "maturity": "operational",
-      "skill_lines": 225,
+      "skill_lines": 229,
       "knowledge_refs": 24,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,
@@ -410,7 +430,7 @@
     {
       "capability_id": "check-patent-disclosure",
       "maturity": "operational",
-      "skill_lines": 253,
+      "skill_lines": 257,
       "knowledge_refs": 35,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,
@@ -430,7 +450,7 @@
     {
       "capability_id": "check-patent-docket",
       "maturity": "operational",
-      "skill_lines": 202,
+      "skill_lines": 205,
       "knowledge_refs": 12,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,
@@ -691,7 +711,7 @@
     {
       "capability_id": "design-patent-intake",
       "maturity": "operational",
-      "skill_lines": 216,
+      "skill_lines": 224,
       "knowledge_refs": 13,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,
@@ -711,7 +731,7 @@
     {
       "capability_id": "design-patent-invention-mining",
       "maturity": "operational",
-      "skill_lines": 148,
+      "skill_lines": 149,
       "knowledge_refs": 8,
       "knowledge_artifacts": 2,
       "knowledge_coverage": 1,
@@ -1080,7 +1100,7 @@
     {
       "capability_id": "generation-patent-application",
       "maturity": "operational",
-      "skill_lines": 237,
+      "skill_lines": 243,
       "knowledge_refs": 18,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,
@@ -1100,7 +1120,7 @@
     {
       "capability_id": "generation-patent-disclosure",
       "maturity": "operational",
-      "skill_lines": 328,
+      "skill_lines": 336,
       "knowledge_refs": 42,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,
@@ -1343,7 +1363,7 @@
     {
       "capability_id": "transform-patent-docket-revision",
       "maturity": "operational",
-      "skill_lines": 217,
+      "skill_lines": 221,
       "knowledge_refs": 12,
       "knowledge_artifacts": 3,
       "knowledge_coverage": 1,

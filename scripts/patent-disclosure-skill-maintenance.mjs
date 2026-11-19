@@ -20,8 +20,14 @@ const anchorPath = (catalog, anchor = catalog.anchor_id) => {
 export function collectState(root, anchor) {
   const catalog = read(root, catalogPath);
   const audit = read(root, catalog.source_audit);
-  const packageIds = audit.capabilities.map((entry) => entry.capability_id).sort();
+  const packageIds = [...audit.capabilities.map((entry) => entry.capability_id), ...catalog.original_capability_ids].sort();
   const registry = read(root, `${catalog.generated_root}/registry.json`);
+  for (const id of catalog.original_capability_ids) {
+    const entry = registry.capabilities.find((row) => row.capability_id === id);
+    if (entry?.source_path !== id || entry.manifest_sha256 !== fileSha(path.join(root, catalog.generated_root, id, "manifest.yaml"))) {
+      throw new Error(`Original patent capability registry entry missing or stale: ${id}`);
+    }
+  }
   const packageRows = packageIds.map((id) => ({ capability_id: id, tree_sha256: treeSha(path.join(root, catalog.generated_root, id)) }));
   const profileRows = catalog.profile_ids.map((id) => ({ profile_id: id, sha256: fileSha(path.join(root, catalog.profile_root, `${id}.yaml`)) }));
   const profileRegistry = read(root, `${catalog.profile_root}/registry.json`);

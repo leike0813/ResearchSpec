@@ -1,0 +1,36 @@
+schema_version: "1"
+capability_id: analysis-paper-patent-comparison
+title: 论文与专利双向技术比较 (Paper–Patent Comparison)
+description: 比较给定论文与专利的技术异同，定位各自独有、改名和范围不同的特征，分列日期与证据限制。Use for a bilateral technical comparison of a paper and a patent.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: llm
+inputs:
+  - role: paper_source
+    schema_ref: paper-source.v1
+    required: true
+    source_policy: handoff
+  - role: patent_source
+    schema_ref: patent-source.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: comparison_report
+    schema_ref: paper-patent-comparison-report.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs: [paper_source, patent_source]
+    outputs: []
+    error_codes: [output_roles_invalid]
+knowledge_refs:
+  - knowledge_id: project-license
+    path: LICENSE
+    content_hash: 9f7327802473c8d61fef40b99b44ec49657aa1dfc30e00c3b89a6aa8a61a2fd8
+    license: MIT
+gate_policy: none
+provenance:
+  origin: original
+license: MIT

@@ -30,6 +30,9 @@ python tools/patent_files.py validate --project-root <root> <out>/application.r<
    - deferred 要写明为什么这次不做；
    - open 保留原样。
    处置口径细则见 `knowledge/pd-kp-09-docket-rounds.md`。
+   索引带 `paper_evidence` 时，核对新索引引用的是本轮采用的附件版本，旧证据附件与上一
+   轮交付仍在；原始支持类 issue 未获证据或限定收窄时保持 `open`，不能拿申请内部一致性
+   当作原始支持已解决。普通既有交底或论文仅作背景时没有附件，跳过。
 3. 交叉核对本轮修订说明里声明的改动与实际文件是否对得上。对不上就是 `issues`。
 4. 写 `docket_review`（普通文件）：`status`、逐条 issue 处置、残留条目与文件路径、
    缺的技术事实，以及给人的建议——可以收口了 / 还有阻塞项需要问人 / 建议再来一轮。

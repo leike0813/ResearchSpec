@@ -68,7 +68,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: contracts-patent-file-index.v1.md
     path: contracts/patent-file-index.v1.md
-    content_hash: 50a575de941636f02f86e0c459a5aa635897f24d811e995b2f2ab954e18a33ee
+    content_hash: 71560ac1cd62bb2c61c374e6e9786739af1fa8d6fa9af5b55bfad6f232c560f7
     license: MIT
   - knowledge_id: contracts-patent-role-schemas.v1.md
     path: contracts/patent-role-schemas.v1.md

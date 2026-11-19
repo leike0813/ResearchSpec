@@ -11,6 +11,11 @@ paths, output locations, profile IDs and external-resource decisions. Typed
 capability definitions own stage IDs, roles and resource membership. The vendor
 checkout is input; maintain adaptations in the authoring tree.
 
+For entries in `original_capability_ids`, edit the original package under
+`skills/capabilities/` and update its manifest digest in the fixed registry
+when the manifest changes. Review those package trees alongside the generated
+stages. The upstream extraction inventory covers the vendor-derived stages.
+
 ## Required inputs and output
 
 Input is an explicitly selected upstream revision or a requested change to

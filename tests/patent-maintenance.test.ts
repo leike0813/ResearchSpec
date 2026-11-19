@@ -22,10 +22,9 @@ void test("patent baseline rejects unfinished review and detects reviewed tool d
   try {
     const catalog = JSON.parse(await readFile("audits/patent-disclosure-skill/catalog.json", "utf8")) as {
       upstream: { path: string }; authoring_root: string; generated_root: string; profile_root: string;
-      profile_ids: string[]; source_audit: string; anchor_id: string;
+      profile_ids: string[]; original_capability_ids: string[]; source_audit: string; anchor_id: string;
     };
-    // Keep one package/profile in this maintenance fixture; all source bytes and
-    // maintenance files are real. The test observes freezing and drift rejection.
+    // Exercise one derived stage, original packages and one profile using their shipped bytes.
     const audit = JSON.parse(await readFile(catalog.source_audit, "utf8")) as { capabilities: Array<{ capability_id: string }> };
     const selected = audit.capabilities[0];
     assert.ok(selected);
@@ -38,6 +37,7 @@ void test("patent baseline rejects unfinished review and detects reviewed tool d
       ".agents/skills/patent-disclosure-skill-maintenance/SKILL.md", catalog.authoring_root,
       "docs/user/patent-workflows.md", "docs/maintainer/patent-disclosure-skill.md", "NOTICE", "LICENSE",
       `${catalog.generated_root}/${selected.capability_id}`, `${catalog.generated_root}/registry.json`,
+      ...catalog.original_capability_ids.map((id) => `${catalog.generated_root}/${id}`),
       `${catalog.profile_root}/${profile}.yaml`, `${catalog.profile_root}/registry.json`,
     ];
     for (const relative of paths) {

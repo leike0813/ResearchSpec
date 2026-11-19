@@ -1,5 +1,5 @@
 # Ingestion
 
-Authoring tree: 82ed6d88d7a975d3692e594cb603d3880633c4fb4443d292e4ecc69794eb8616.
+Authoring tree: 55be3991d5a9eb8d253b0487f8768c793ed6c223c9a646489a797a67e2dd4dc7.
 
 Source extractions bind upstream byte hashes; curated knowledge records authored derivation.

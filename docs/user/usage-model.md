@@ -159,12 +159,13 @@ route 或 profile 摘要、可选入口节点、前置条件、边界输出、Ga
 
 固定用户可见 Agent 表面只有 `researchspec-navigate`。它的 `SKILL.md` 包含可独立执行的完整控制
 流程，并按需读取同目录下由 canonical renderer 生成的 `references/cli-handbook.md` 与
-`references/arsu-routes.md`。四个 ARSU 工作流、其余三个 Companion、65 个 core capability 和
+`references/arsu-routes.md`。四个 ARSU 工作流、其余三个 Companion、66 个 core capability 和
 plugin extensions 都属于隐藏 Procedure inventory；它们从已有 registry 即时派生，不投影进宿主
 Skill catalog。可选 Zotero Adapter 仍增加七个显式 Skills。
 
 专利工作使用相同入口和权限模型。固定能力覆盖交底、申请、docket、检索、阅读、对照表、地图、
-审查意见答复和政策研究，不需要 plugin consent。五个专利 profile 可以独立运行；
+审查意见答复和政策研究。独立的论文与专利双向比较可直接接收两份原件。这些任务均无需
+plugin consent。五个专利 profile 可以独立运行；
 `research-to-patent` 与 `patent-informed-paper` 将其与学术研究、论文写作组合。普通文件索引承载
 材料与交付，Obsidian 和本地地图是可选投影。默认中国管辖区，docket 三轮预算在入口摘要中说明；
 每轮继续/结束 Decision 以及所有正式 Gates 仍分别确认。具体入口和依赖见[专利任务](patent-workflows.md)。
