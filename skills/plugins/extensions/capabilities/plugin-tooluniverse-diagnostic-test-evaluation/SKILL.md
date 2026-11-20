@@ -57,7 +57,7 @@ ROC_analysis(csv_path="scores.csv", cutoff=0.6)        # or a CSV (cols: label, 
 The bundled script is the equivalent CLI form:
 
 ```bash
-python skills/tooluniverse-diagnostic-test-evaluation/scripts/roc_analysis.py --input scores.csv
+python scripts/roc_analysis.py --input scores.csv
 # scores.csv columns: label (1=disease, 0=healthy), score (continuous biomarker)
 ```
 

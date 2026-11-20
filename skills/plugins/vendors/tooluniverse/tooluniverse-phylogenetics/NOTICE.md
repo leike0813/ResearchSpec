@@ -1,5 +1,5 @@
 # Notice
 
-This Skill is adapted by ResearchSpec from ToolUniverse (https://github.com/mims-harvard/ToolUniverse) release v1.5.4, revision 8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06.
+This Skill is adapted by ResearchSpec from ToolUniverse (https://github.com/mims-harvard/ToolUniverse) release v1.5.10, revision 6b50abef032a702554e2b34a4f592ee674f12f8f.
 
 Source path: `skills/tooluniverse-phylogenetics`. The adaptation normalizes packaging and ResearchSpec authority boundaries; upstream scientific and runtime requirements remain attributable to ToolUniverse.

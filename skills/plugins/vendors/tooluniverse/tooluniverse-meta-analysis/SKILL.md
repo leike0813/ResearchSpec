@@ -15,7 +15,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -65,7 +65,7 @@ The pooling step needs an **effect size on an additive scale** and its **standar
 The helper script does these conversions — prefer it over hand math:
 
 ```bash
-python skills/tooluniverse-meta-analysis/scripts/meta_analysis.py --input studies.csv
+python scripts/meta_analysis.py --input studies.csv
 # studies.csv columns (use the set that matches your data):
 #   name, or, ci_low, ci_high            (ratio + CI)
 #   name, beta, se                       (already on log/linear scale)
@@ -127,5 +127,5 @@ The script prints a text forest plot (per-study effect, CI, weight%, and the poo
 
 ## Related skills
 - `tooluniverse-literature-deep-research` — find and grade the studies to feed in.
-- `tooluniverse-statistical-modeling` — single-study regression, Cox, ORs (see `references/cox_regression.md` for HR extraction).
+- `tooluniverse-statistical-modeling` — single-study regression, Cox, ORs (see `../tooluniverse-statistical-modeling/references/cox_regression.md` for HR extraction).
 - `tooluniverse-gwas-study-explorer` / `tooluniverse-gwas-finemapping` — GWAS-specific multi-cohort analysis.

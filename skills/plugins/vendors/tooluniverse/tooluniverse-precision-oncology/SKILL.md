@@ -12,7 +12,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.5.4
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -23,6 +23,10 @@ metadata:
 Detailed searches return `reports`, `count`, `total_available`, and `truncated`; `count` is one page, never the total. Use `medicinalproduct` and at most 100 reports per request. For a reaction-specific search use `FAERS_search_reports_by_drug_and_reaction` with `reactionmeddrapt`; drug-only searches use `FAERS_search_adverse_event_reports`. Serious-only searches require `serious='Yes'`.
 
 Count tools return `results` with `term/count` rows; read `total_reports_matching_query` for the report denominator and preserve null as unknown. Reaction-row sums can double-count reports. Counts are spontaneous reporting frequencies, not incidence, causal proof, or population risk. Obtain PRR/ROR/IC through `FAERS_calculate_disproportionality`, not count rows. Analytics retain `drug_name`/`adverse_event`. Death-criterion counts do not establish that the drug caused a death; page-level serious or death counts are explicitly partial and cannot form a whole-query rate.
+
+## COSMIC evidence coverage
+
+Check `status` before using `data.results`. Use `metadata.result_set_complete` and `metadata.truncated` to report coverage. COSMIC provides a non-pageable record window. A result count describes retrieved mutation records and cannot estimate patient prevalence.
 
 # Precision Oncology Treatment Advisor
 

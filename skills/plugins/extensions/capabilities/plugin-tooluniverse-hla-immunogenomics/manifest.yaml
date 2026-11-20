@@ -50,5 +50,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-hla-immunogenomics/SKILL.md
-      sha256: d83c2b890bb2e0a2e961bbf91cf05b0b6e639ae7fe0502bf5a12ff753cb35d2f
+      sha256: 3d6dd49cbaf527653b8792d86e7046136e71cac33a1a672b44d0f862c43a87e9
 license: Apache-2.0

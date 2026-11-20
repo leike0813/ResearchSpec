@@ -54,7 +54,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-population-genetics/SKILL.md
-      sha256: f75b9c8e3651e258f7898c32e06efbf14426e0f68a0ebdcf5eb2359df78637c2
+      sha256: e48c019c4fb7c9946887814f9ea01fb5367d68e6c056c44e97e8d154fa14ba50
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-population-genetics/scripts/popgen_calculator.py
       sha256: 1abed9034d11bb64d69326c783c572c9324095aa14096210a19fdf59dbabb9a0
 license: Apache-2.0

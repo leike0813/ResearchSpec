@@ -103,7 +103,7 @@ Match drug targets to new disease genes, assess mechanistic fit, check contraind
 
 ```python
 from tooluniverse import ToolUniverse
-tu = ToolUniverse(use_cache=True)
+tu = ToolUniverse()
 tu.load_tools()
 
 # Step 1: Get GWAS associations (use disease_trait not trait; no p_value_threshold param)
@@ -169,7 +169,7 @@ drugs = tu.tools.DGIdb_get_drug_gene_interactions(genes=["TCF7L2"])
 
 | Signal Quality | Criteria | Drug Discovery Value |
 |---------------|---------|---------------------|
-| **Gold standard** | Genome-wide significant (p < 5e-8), replicated across ancestries, L2G > 0.5, eQTL colocalized | Highest priority — genetic causality established |
+| **Gold standard** | Genome-wide significant (p < 5e-8), replicated across ancestries, L2G > 0.5, eQTL colocalized | Highest hypothesis priority — convergent evidence with residual uncertainty |
 | **Strong** | Genome-wide significant, L2G > 0.3, biological plausibility | High priority — pursue with functional validation |
 | **Moderate** | Suggestive (p < 1e-5), or significant but no fine-mapping | Medium — needs additional evidence before investment |
 | **Weak** | Single study, no replication, low L2G, no functional support | Low — hypothesis generating only |

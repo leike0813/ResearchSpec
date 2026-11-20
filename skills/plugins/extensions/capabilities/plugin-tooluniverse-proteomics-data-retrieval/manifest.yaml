@@ -1,11 +1,14 @@
 schema_version: "1"
 capability_id: plugin-tooluniverse-proteomics-data-retrieval
 title: Proteomics Data Retrieval
-description: Find and retrieve proteomics datasets from MassIVE and
-  ProteomeXchange. Search by species, keyword, or accession; retrieve detailed
-  metadata (instruments, publications, species, PTMs studied). Use for locating
-  public proteomics datasets to reanalyze, comparing instrument/protocol
-  coverage across studies, and pre-download dataset evaluation.
+description: Find and retrieve proteomics datasets from MassIVE,
+  ProteomeXchange, PRIDE Archive, and the NCI Proteomics Data Commons (PDC).
+  Search by species, keyword, accession, or protein; retrieve detailed metadata
+  (instruments, publications, species, PTMs studied), real file-download URLs
+  (PRIDE), or quantitative abundance matrices with clinical linkage (PDC/CPTAC).
+  Use for locating public proteomics datasets to reanalyze, comparing
+  instrument/protocol coverage across studies, pre-download dataset evaluation,
+  and finding every dataset that identified a specific protein.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -50,5 +53,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-proteomics-data-retrieval/SKILL.md
-      sha256: 1d83b59f5e227867bba90e0073f6c24a37598f34e85d9ee7400d2cdc135baadc
+      sha256: 0be1a9e2f467baf77ab3eeabb6c2a6b2ab93a374eab1d1a8095020a4a31661ad
 license: Apache-2.0

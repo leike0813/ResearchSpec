@@ -13,7 +13,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.5.4
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -176,6 +176,10 @@ User Query (drug name or SMILES)
 **Verdict**: PASS if Lipinski <= 1 violation and no PAINS alerts; WARN if 2 violations; FAIL if 3+ violations or PAINS+.
 
 **Fallback**: If ADMETAI import fails (missing `tooluniverse[ml]`), rely on SwissADME alone. SwissADME provides all Lipinski descriptors independently.
+
+**Local TDC oracle scoring (no ML extra, no PubChem round-trip needed)**: `TDC_predict_oracle_score(smiles=..., oracle=...)` computes drug-likeness/property scores locally via the PyTDC package straight from a SMILES string — useful when `tooluniverse[ml]` isn't installed or as a fast independent cross-check. Six oracles: `QED` (drug-likeness 0-1), `SA` (synthetic accessibility 1=easy to 10=hard), `LogP`, and three target-binding-likelihood oracles (`GSK3B`, `JNK3`, `DRD2`) useful for early candidate triage against those specific targets. **Verified live and cross-checked**: `TDC_predict_oracle_score(smiles="CC(=O)Oc1ccccc1C(=O)O", oracle="SA")` and the independent `Chem_sa_score(smiles=...)` tool both returned **1.580** for aspirin — same underlying RDKit SA_Score algorithm, two separate wrapper tools; either is fine to cite, don't report both as independent corroborating evidence since they're the same computation.
+
+`TDC_load_dataset(problem=..., name=...)` / `TDC_list_datasets(problem=...)` give access to TDC's ADME/Tox/HTS benchmark datasets — relevant if validating a custom prediction model against a public benchmark, not part of a single-compound ADMET profile. **`TDC_list_datasets` works** (verified live: `problem="ADME"` → 27 real dataset names). **`TDC_load_dataset` is currently broken** — verified live and reproduced on two different datasets (`Caco2_Wang`, `hERG`): it downloads successfully but the loader then receives an HTML error page instead of data and raises `Please report this error to contact@tdcommons.ai`. Don't build a workflow around it; use `TDC_list_datasets` for discovery and note the load failure if a user specifically needs a dataset pulled.
 
 ---
 

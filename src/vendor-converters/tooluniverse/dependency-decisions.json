@@ -1,5 +1,17 @@
 [
   {
+    "from": "tooluniverse-acmg-variant-classification",
+    "to": "tooluniverse-variant-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-acmg-variant-classification/SKILL.md",
+        "line": 184,
+        "text": "**Cross-validation example, verified live**: TP53 chr17:7674220 C>T (GRCh38, the same variant used elsewhere in `tooluniverse-variant-analysis` for the GeneBe/ClinGen cross-check) returns `classification=\"Pathogenic\"` with `PS3+PM1+PM2+PP3+PP5` active — concordant with GeneBe's independent \"Pathogenic\" call on the same variant. Two independently-implemented ACMG classifiers agreeing is exactly the kind of corroboration worth citing in a report; if they disagree, treat it as a reason to re-examine your manual criteria, not a reason to silently prefer one tool's answer."
+      }
+    ]
+  },
+  {
     "from": "tooluniverse-adverse-event-detection",
     "to": "tooluniverse-pharmacovigilance",
     "relation": "routing",
@@ -19,7 +31,7 @@
       {
         "path": "skills/tooluniverse-adverse-outcome-pathway/SKILL.md",
         "line": 3,
-        "text": "description: Map environmental and industrial chemicals to adverse outcome pathways (AOPs) — molecular initiating event to organ-level toxicity. Uses AOPWiki, GHS classification, IARC carcinogen status, and LD50 data. Use for environmental/industrial chemical risk assessment, regulatory-grade hazard characterization, and AOP stressor mapping. Distinct from drug-safety analysis (use tooluniverse-ph"
+        "text": "description: Map environmental and industrial chemicals to adverse outcome pathways (AOPs) — molecular initiating event to organ-level toxicity. Uses AOPWiki, GHS classification, IARC carcinogen status, and LD50 data. Use for environmental/industrial chemical risk assessment, regulatory-grade hazard characterization, and AOP stressor mapping. Distinct from drug-safety analysis (use tooluniverse-pharmacovigilance for drugs)."
       }
     ]
   },
@@ -71,8 +83,8 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-antibody-engineering/SKILL.md",
-        "line": 255,
-        "text": "1. Assess codon optimization for CHO, identify rare codons -- `CodonUsage_get_optimal_codons(taxid=<Cricetulus griseus NCBI taxid>)` gives the CHO-preferred codon per amino acid to compare against; resolve the taxid first if not already known rather than assuming one. `CodonUsage_get_table` (same taxid) additionally gives per-codon usage frequency, needed to flag which codons in the actual sequenc"
+        "line": 256,
+        "text": "1. Assess codon optimization for CHO, identify rare codons -- `CodonUsage_get_optimal_codons(taxid=<Cricetulus griseus NCBI taxid>)` gives the CHO-preferred codon per amino acid to compare against; resolve the taxid first if not already known rather than assuming one. `CodonUsage_get_table` (same taxid) additionally gives per-codon usage frequency, needed to flag which codons in the actual sequence are rare in CHO specifically -- human codon-usage tables (e.g. from tooluniverse-sequence-analysis) are the wrong reference here, rare-in-human is not the same set as rare-in-CHO"
       }
     ]
   },
@@ -95,7 +107,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-cancer-genomics-tcga/SKILL.md",
-        "line": 325,
+        "line": 326,
         "text": "See `tooluniverse-data-wrangling` skill for pagination, error handling, and format parsing patterns."
       }
     ]
@@ -133,6 +145,18 @@
         "path": "skills/tooluniverse-cancer-genomics-tcga/SKILL.md",
         "line": 32,
         "text": "- Rare disease gene discovery -> Use `tooluniverse-rare-disease-genomics`"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-cancer-variant-interpretation",
+    "to": "tooluniverse-variant-analysis",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-cancer-variant-interpretation/SKILL.md",
+        "line": 204,
+        "text": "Complements CIViC/cBioPortal with structured, computed consequence prediction (VEP/SIFT/PolyPhen/AlphaMissense) plus a dedicated cancer-hotspot lookup — use it to establish *in silico* pathogenicity and hotspot status before or alongside the curated clinical-evidence search, not instead of it. Requires **GRCh37/hg19** coordinates (convert first if you only have GRCh38, e.g. via NCBI Variation Services in `tooluniverse-variant-analysis`)."
       }
     ]
   },
@@ -192,7 +216,7 @@
       {
         "path": "skills/tooluniverse-clinical-risk-scoring/SKILL.md",
         "line": 3,
-        "text": "description: Compute and interpret validated bedside clinical risk scores and pretest probabilities for an INDIVIDUAL patient — pick the right score for the scenario, gather inputs, run the deterministic calculator tool, and read the result against an interpretation table. Covers CHA2DS2-VASc (AF stroke risk), HAS-BLED (bleeding on anticoagulation), CURB-65 (pneumonia severity / admit decision), q"
+        "text": "description: Compute and interpret validated bedside clinical risk scores and pretest probabilities for an INDIVIDUAL patient — pick the right score for the scenario, gather inputs, run the deterministic calculator tool, and read the result against an interpretation table. Covers CHA2DS2-VASc (AF stroke risk), HAS-BLED (bleeding on anticoagulation), CURB-65 (pneumonia severity / admit decision), qSOFA (sepsis screen), Child-Pugh + MELD-Na (cirrhosis severity / transplant priority), Wells DVT and Wells PE (VTE pretest probability), ASCVD (10-year cardiovascular risk / statin decision), and eGFR CKD-EPI (kidney function / drug dosing). Use when asked things like \"stroke risk for this AF patient\", \"should this patient be anticoagulated\", \"pneumonia severity — admit or not?\", \"sepsis screen this patient\", \"DVT/PE pretest probability\", \"10-year cardiovascular risk\", \"cirrhosis severity / MELD score\", or \"eGFR / kidney function\". Pairs CHA2DS2-VASc with HAS-BLED to weigh anticoagulation. NOT for polygenic/genetic risk (use tooluniverse-polygenic-risk-score), NOT for population-level epidemiology/incidence (use tooluniverse-epidemiological-analysis), and NOT for diagnostic test sensitivity/specificity/likelihood-ratio math (use tooluniverse-diagnostic-test-evaluation)."
       }
     ]
   },
@@ -204,7 +228,7 @@
       {
         "path": "skills/tooluniverse-clinical-risk-scoring/SKILL.md",
         "line": 3,
-        "text": "description: Compute and interpret validated bedside clinical risk scores and pretest probabilities for an INDIVIDUAL patient — pick the right score for the scenario, gather inputs, run the deterministic calculator tool, and read the result against an interpretation table. Covers CHA2DS2-VASc (AF stroke risk), HAS-BLED (bleeding on anticoagulation), CURB-65 (pneumonia severity / admit decision), q"
+        "text": "description: Compute and interpret validated bedside clinical risk scores and pretest probabilities for an INDIVIDUAL patient — pick the right score for the scenario, gather inputs, run the deterministic calculator tool, and read the result against an interpretation table. Covers CHA2DS2-VASc (AF stroke risk), HAS-BLED (bleeding on anticoagulation), CURB-65 (pneumonia severity / admit decision), qSOFA (sepsis screen), Child-Pugh + MELD-Na (cirrhosis severity / transplant priority), Wells DVT and Wells PE (VTE pretest probability), ASCVD (10-year cardiovascular risk / statin decision), and eGFR CKD-EPI (kidney function / drug dosing). Use when asked things like \"stroke risk for this AF patient\", \"should this patient be anticoagulated\", \"pneumonia severity — admit or not?\", \"sepsis screen this patient\", \"DVT/PE pretest probability\", \"10-year cardiovascular risk\", \"cirrhosis severity / MELD score\", or \"eGFR / kidney function\". Pairs CHA2DS2-VASc with HAS-BLED to weigh anticoagulation. NOT for polygenic/genetic risk (use tooluniverse-polygenic-risk-score), NOT for population-level epidemiology/incidence (use tooluniverse-epidemiological-analysis), and NOT for diagnostic test sensitivity/specificity/likelihood-ratio math (use tooluniverse-diagnostic-test-evaluation)."
       }
     ]
   },
@@ -216,7 +240,7 @@
       {
         "path": "skills/tooluniverse-clinical-risk-scoring/SKILL.md",
         "line": 3,
-        "text": "description: Compute and interpret validated bedside clinical risk scores and pretest probabilities for an INDIVIDUAL patient — pick the right score for the scenario, gather inputs, run the deterministic calculator tool, and read the result against an interpretation table. Covers CHA2DS2-VASc (AF stroke risk), HAS-BLED (bleeding on anticoagulation), CURB-65 (pneumonia severity / admit decision), q"
+        "text": "description: Compute and interpret validated bedside clinical risk scores and pretest probabilities for an INDIVIDUAL patient — pick the right score for the scenario, gather inputs, run the deterministic calculator tool, and read the result against an interpretation table. Covers CHA2DS2-VASc (AF stroke risk), HAS-BLED (bleeding on anticoagulation), CURB-65 (pneumonia severity / admit decision), qSOFA (sepsis screen), Child-Pugh + MELD-Na (cirrhosis severity / transplant priority), Wells DVT and Wells PE (VTE pretest probability), ASCVD (10-year cardiovascular risk / statin decision), and eGFR CKD-EPI (kidney function / drug dosing). Use when asked things like \"stroke risk for this AF patient\", \"should this patient be anticoagulated\", \"pneumonia severity — admit or not?\", \"sepsis screen this patient\", \"DVT/PE pretest probability\", \"10-year cardiovascular risk\", \"cirrhosis severity / MELD score\", or \"eGFR / kidney function\". Pairs CHA2DS2-VASc with HAS-BLED to weigh anticoagulation. NOT for polygenic/genetic risk (use tooluniverse-polygenic-risk-score), NOT for population-level epidemiology/incidence (use tooluniverse-epidemiological-analysis), and NOT for diagnostic test sensitivity/specificity/likelihood-ratio math (use tooluniverse-diagnostic-test-evaluation)."
       }
     ]
   },
@@ -227,7 +251,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
-        "line": 252,
+        "line": 257,
         "text": "See `tooluniverse-data-wrangling` skill for pagination, error handling, and bulk download patterns."
       }
     ]
@@ -239,7 +263,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
-        "line": 209,
+        "line": 214,
         "text": "- **tooluniverse-disease-research**: Deep dive on disease biology"
       }
     ]
@@ -251,7 +275,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
-        "line": 208,
+        "line": 213,
         "text": "- **tooluniverse-drug-research**: Investigate mechanism, preclinical data"
       }
     ]
@@ -263,7 +287,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
-        "line": 211,
+        "line": 216,
         "text": "- **tooluniverse-pharmacovigilance**: Post-market safety for comparator drugs"
       }
     ]
@@ -275,7 +299,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
-        "line": 212,
+        "line": 217,
         "text": "- **tooluniverse-precision-oncology**: Biomarker biology, resistance mechanisms"
       }
     ]
@@ -287,7 +311,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-clinical-trial-design/SKILL.md",
-        "line": 210,
+        "line": 215,
         "text": "- **tooluniverse-target-research**: Validate drug target, essentiality"
       }
     ]
@@ -347,8 +371,20 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-comparative-genomics/SKILL.md",
-        "line": 150,
-        "text": "**Genome-assembly context for a comparison species**: When a species' ortholog calls look incomplete or you need the underlying reference assembly, use `NCBIDatasets_list_genomes_by_taxon` (params `taxon` as tax_id, `limit`, `reference_only`) to find the reference genome, `NCBIDatasets_get_genome_assembly` (param `accession`) for assembly metrics (contiguity/N50/completeness — a fragmented assembl"
+        "line": 252,
+        "text": "**Genome-assembly context for a comparison species**: When a species' ortholog calls look incomplete or you need the underlying reference assembly, use `NCBIDatasets_list_genomes_by_taxon` (params `taxon` as tax_id, `limit`, `reference_only`) to find the reference genome, `NCBIDatasets_get_genome_assembly` (param `accession`) for assembly metrics (contiguity/N50/completeness — a fragmented assembly can cause spurious \"missing ortholog\" calls), and `NCBIDatasets_get_sequence_reports` (param `accession`) for the chromosome/scaffold replicon map. For a full assembly-QC workflow on microbial genomes, see the `tooluniverse-microbial-genome-characterization` skill."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-comparative-genomics",
+    "to": "tooluniverse-sequence-retrieval",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-comparative-genomics/SKILL.md",
+        "line": 119,
+        "text": "If you only have a gene symbol, `OMA_resolve_xref(search=...)` can look it up, but **it does substring/fuzzy matching across all cross-reference databases (STRING, RefSeq, UniProt, etc.), not an exact gene-symbol match** — verified live: searching `search=\"TP53\"` returns entries like `1109443.G4TP53` (a STRING ID for an unrelated fungal protein) and `29760.D7TP53` (*Vitis vinifera*) purely because \"TP53\" is a substring of the cross-reference string, not because they are TP53 orthologs. **Always filter the results**: keep only entries with `seq_match: \"exact\"` AND `source` starting with `UniProtKB` AND a `species_name` matching what you expect, before trusting an `oma_id`/`entry_nr` from this tool. For a well-known human gene, it is faster and safer to resolve the UniProt accession first (`tooluniverse-sequence-retrieval` / `UniProt_search`) and skip `OMA_resolve_xref` entirely."
       }
     ]
   },
@@ -479,11 +515,6 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-dose-response/SKILL.md",
-        "line": 3,
-        "text": "description: Dose-response / concentration-response curve fitting — IC50, EC50, Hill slope, Emax/Emin efficacy, and relative potency from paired concentration vs response data (enzyme/cell assays, drug screening, agonist/antagonist pharmacology). Fits the 4-parameter logistic (Hill sigmoidal) model. Use when you have concentrations + responses and need a potency value, to compare two compounds' po"
-      },
-      {
-        "path": "skills/tooluniverse-dose-response/SKILL.md",
         "line": 76,
         "text": "- `tooluniverse-image-analysis` — dose-response on image-derived measurements (.tif, colony, fluorescence)."
       }
@@ -506,11 +537,6 @@
     "to": "tooluniverse-statistical-modeling",
     "relation": "related",
     "evidence": [
-      {
-        "path": "skills/tooluniverse-dose-response/SKILL.md",
-        "line": 3,
-        "text": "description: Dose-response / concentration-response curve fitting — IC50, EC50, Hill slope, Emax/Emin efficacy, and relative potency from paired concentration vs response data (enzyme/cell assays, drug screening, agonist/antagonist pharmacology). Fits the 4-parameter logistic (Hill sigmoidal) model. Use when you have concentrations + responses and need a potency value, to compare two compounds' po"
-      },
       {
         "path": "skills/tooluniverse-dose-response/SKILL.md",
         "line": 78,
@@ -627,13 +653,25 @@
     ]
   },
   {
+    "from": "tooluniverse-drug-repurposing",
+    "to": "tooluniverse-rnaseq-deseq2",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-drug-repurposing/SKILL.md",
+        "line": 206,
+        "text": "**Workflow**: derive the disease's up/down gene sets first (e.g. from a published DE analysis, GEO dataset, or this repo's own `tooluniverse-rnaseq-deseq2` output) → `L1000FWD_sig_search(up_genes=disease_up, down_genes=disease_down, mode=\"reverse\")` → each hit returns `combined_scores`/`pvals`/`qvals` — rank by score, and treat a top reversal hit as an E4 (Computational) candidate needing the same target-validation and dose-feasibility scrutiny as any other strategy, not a shortcut past it. Cross-check any promising hit against `LINCS_search_signatures(drug_name=<hit>)` to see its signature directly rather than trusting the connectivity score alone."
+      }
+    ]
+  },
+  {
     "from": "tooluniverse-drug-research",
     "to": "tooluniverse-drug-drug-interaction",
     "relation": "required",
     "evidence": [
       {
         "path": "skills/tooluniverse-drug-research/SKILL.md",
-        "line": 234,
+        "line": 241,
         "text": "For drug interaction checking, run: `python3 skills/tooluniverse-drug-drug-interaction/scripts/pharmacology_ref.py --type interaction --drug1 X --drug2 Y`"
       }
     ]
@@ -741,7 +779,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-enzyme-kinetics/SKILL.md",
-        "line": 88,
+        "line": 100,
         "text": "- `tooluniverse-dose-response` — IC50/EC50 (the Hill/4PL sibling for concentration-response)."
       }
     ]
@@ -753,7 +791,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-enzyme-kinetics/SKILL.md",
-        "line": 89,
+        "line": 101,
         "text": "- `tooluniverse-statistical-modeling` — general nonlinear regression and model comparison."
       }
     ]
@@ -763,11 +801,6 @@
     "to": "tooluniverse-epigenomics",
     "relation": "routing",
     "evidence": [
-      {
-        "path": "skills/tooluniverse-epigenomics-chromatin/SKILL.md",
-        "line": 2,
-        "text": "name: tooluniverse-epigenomics-chromatin"
-      },
       {
         "path": "skills/tooluniverse-epigenomics-chromatin/SKILL.md",
         "line": 3,
@@ -828,11 +861,6 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-fastq-qc/SKILL.md",
-        "line": 3,
-        "text": "description: FASTQ quality control and adapter/quality-trimming decisions with local NGS tools — run FastQC on raw reads, summarize a project with MultiQC, interpret per-base sequence quality, per-base N content, adapter content, overrepresented sequences, sequence duplication and GC content, and decide whether (and how) to trim with fastp / Cutadapt before downstream analysis. seqkit for read cou"
-      },
-      {
-        "path": "skills/tooluniverse-fastq-qc/SKILL.md",
         "line": 39,
         "text": "- Differential expression / DEG / fold-change analysis -> `tooluniverse-rnaseq-deseq2`"
       }
@@ -843,11 +871,6 @@
     "to": "tooluniverse-sequence-analysis",
     "relation": "related",
     "evidence": [
-      {
-        "path": "skills/tooluniverse-fastq-qc/SKILL.md",
-        "line": 3,
-        "text": "description: FASTQ quality control and adapter/quality-trimming decisions with local NGS tools — run FastQC on raw reads, summarize a project with MultiQC, interpret per-base sequence quality, per-base N content, adapter content, overrepresented sequences, sequence duplication and GC content, and decide whether (and how) to trim with fastp / Cutadapt before downstream analysis. seqkit for read cou"
-      },
       {
         "path": "skills/tooluniverse-fastq-qc/SKILL.md",
         "line": 40,
@@ -874,11 +897,6 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-fastq-qc/SKILL.md",
-        "line": 3,
-        "text": "description: FASTQ quality control and adapter/quality-trimming decisions with local NGS tools — run FastQC on raw reads, summarize a project with MultiQC, interpret per-base sequence quality, per-base N content, adapter content, overrepresented sequences, sequence duplication and GC content, and decide whether (and how) to trim with fastp / Cutadapt before downstream analysis. seqkit for read cou"
-      },
-      {
-        "path": "skills/tooluniverse-fastq-qc/SKILL.md",
         "line": 41,
         "text": "- Variant calling, VCF, VAF, mutation analysis -> `tooluniverse-variant-analysis`"
       }
@@ -903,7 +921,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-gene-disease-association/SKILL.md",
-        "line": 213,
+        "line": 248,
         "text": "For comprehensive disease reports: [tooluniverse-disease-research](../tooluniverse-disease-research/SKILL.md)"
       }
     ]
@@ -915,7 +933,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-gene-disease-association/SKILL.md",
-        "line": 216,
+        "line": 251,
         "text": "For drug-target validation: [tooluniverse-drug-target-validation](../tooluniverse-drug-target-validation/SKILL.md)"
       }
     ]
@@ -927,8 +945,20 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-gene-disease-association/SKILL.md",
-        "line": 214,
+        "line": 249,
         "text": "For rare disease diagnosis: [tooluniverse-rare-disease-diagnosis](../tooluniverse-rare-disease-diagnosis/SKILL.md)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gene-disease-association",
+    "to": "tooluniverse-variant-analysis",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gene-disease-association/SKILL.md",
+        "line": 128,
+        "text": "does work; see `tooluniverse-variant-analysis`'s \"Ensembl Phenotype"
       }
     ]
   },
@@ -939,7 +969,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-gene-disease-association/SKILL.md",
-        "line": 215,
+        "line": 250,
         "text": "For variant interpretation: [tooluniverse-variant-interpretation](../tooluniverse-variant-interpretation/SKILL.md)"
       }
     ]
@@ -968,7 +998,7 @@
       },
       {
         "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
-        "line": 453,
+        "line": 493,
         "text": "For disease characterization: [tooluniverse-multiomic-disease-characterization](../tooluniverse-multiomic-disease-characterization/SKILL.md)"
       }
     ]
@@ -985,7 +1015,7 @@
       },
       {
         "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
-        "line": 452,
+        "line": 492,
         "text": "For network-level analysis: [tooluniverse-network-pharmacology](../tooluniverse-network-pharmacology/SKILL.md)"
       }
     ]
@@ -1002,7 +1032,7 @@
       },
       {
         "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
-        "line": 455,
+        "line": 495,
         "text": "For protein interactions: [tooluniverse-protein-interactions](../tooluniverse-protein-interactions/SKILL.md)"
       }
     ]
@@ -1019,8 +1049,20 @@
       },
       {
         "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
-        "line": 454,
+        "line": 494,
         "text": "For spatial omics: [tooluniverse-spatial-omics-analysis](../tooluniverse-spatial-omics-analysis/SKILL.md)"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-gene-enrichment",
+    "to": "tooluniverse-variant-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-gene-enrichment/SKILL.md",
+        "line": 410,
+        "text": "| `gProfiler_annotate_snps` | snp_list (comma-sep rsIDs, ~200 max), organism | Genomic coordinates, mapped gene(s), variant consequence | Feeds a GWAS/variant hit list into gene-level enrichment (map SNPs -> genes -> `gProfiler_enrichment` or `gseapy`); verified live: rs429358 -> APOE (chr19:44908684, missense_variant), consistent with this rsID's known coordinates used elsewhere in ToolUniverse (`tooluniverse-variant-analysis`) |"
       }
     ]
   },
@@ -1103,7 +1145,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-gwas-trait-to-gene/SKILL.md",
-        "line": 238,
+        "line": 239,
         "text": "See `tooluniverse-data-wrangling` skill for pagination, bulk download, and format parsing patterns."
       }
     ]
@@ -1139,7 +1181,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-immune-repertoire-analysis/SKILL.md",
-        "line": 119,
+        "line": 124,
         "text": "- `tooluniverse-rnaseq-deseq2` - Bulk RNA-seq analysis"
       }
     ]
@@ -1151,7 +1193,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-immune-repertoire-analysis/SKILL.md",
-        "line": 118,
+        "line": 123,
         "text": "- `tooluniverse-single-cell` - Single-cell transcriptomics"
       }
     ]
@@ -1163,7 +1205,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-immune-repertoire-analysis/SKILL.md",
-        "line": 120,
+        "line": 125,
         "text": "- `tooluniverse-variant-analysis` - Somatic hypermutation analysis (BCR)"
       }
     ]
@@ -1176,7 +1218,7 @@
       {
         "path": "skills/tooluniverse-infectious-disease/SKILL.md",
         "line": 138,
-        "text": "**Genome assembly availability and QC**: After classifying the pathogen, use `NCBIDatasets_list_genomes_by_taxon` (params `taxon` as tax_id, `limit`, `reference_only`) to find the reference genome, `NCBIDatasets_get_genome_assembly` (param `accession`, e.g. \"GCF_000005845.2\") for assembly metrics (length, N50, GC%, contig/chromosome counts), and `NCBIDatasets_get_sequence_reports` (param `accessio"
+        "text": "**Genome assembly availability and QC**: After classifying the pathogen, use `NCBIDatasets_list_genomes_by_taxon` (params `taxon` as tax_id, `limit`, `reference_only`) to find the reference genome, `NCBIDatasets_get_genome_assembly` (param `accession`, e.g. \"GCF_000005845.2\") for assembly metrics (length, N50, GC%, contig/chromosome counts), and `NCBIDatasets_get_sequence_reports` (param `accession`) to map replicons (chromosomes/plasmids with RefSeq/GenBank accessions). For the full assembly-QC-to-characterization workflow, see the `tooluniverse-microbial-genome-characterization` skill."
       }
     ]
   },
@@ -1197,12 +1239,12 @@
       },
       {
         "path": "skills/tooluniverse-inorganic-physical-chemistry/SKILL.md",
-        "line": 41,
+        "line": 57,
         "text": "3. Use `python3 skills/tooluniverse-organic-chemistry/scripts/chemistry_facts.py point_groups` for point group lookup"
       },
       {
         "path": "skills/tooluniverse-inorganic-physical-chemistry/SKILL.md",
-        "line": 81,
+        "line": 97,
         "text": "- **For peak counting**: Draw the structure, identify all symmetry operations, group equivalent H atoms. Use `python3 skills/tooluniverse-organic-chemistry/scripts/chemistry_facts.py` for reference data."
       }
     ]
@@ -1214,7 +1256,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-kegg-disease-drug/SKILL.md",
-        "line": 157,
+        "line": 160,
         "text": "- **Drug safety**: Use `tooluniverse-adverse-event-detection` for FAERS data"
       }
     ]
@@ -1226,7 +1268,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-kegg-disease-drug/SKILL.md",
-        "line": 156,
+        "line": 159,
         "text": "- **Clinical variants**: Use `tooluniverse-cancer-variant-interpretation` for CIViC/ClinVar"
       }
     ]
@@ -1238,7 +1280,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-kegg-disease-drug/SKILL.md",
-        "line": 155,
+        "line": 158,
         "text": "- **Drug mechanisms**: Use `tooluniverse-drug-mechanism-research` for ChEMBL/DailyMed MOA"
       }
     ]
@@ -1250,7 +1292,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-kegg-disease-drug/SKILL.md",
-        "line": 154,
+        "line": 157,
         "text": "- **Pathway details**: Use `tooluniverse-systems-biology` for Reactome/WikiPathways cross-ref"
       }
     ]
@@ -1374,7 +1416,7 @@
       {
         "path": "skills/tooluniverse-meta-analysis/SKILL.md",
         "line": 113,
-        "text": "- `tooluniverse-statistical-modeling` — single-study regression, Cox, ORs (see `references/cox_regression.md` for HR extraction)."
+        "text": "- `tooluniverse-statistical-modeling` — single-study regression, Cox, ORs (see `../tooluniverse-statistical-modeling/references/cox_regression.md` for HR extraction)."
       }
     ]
   },
@@ -1385,8 +1427,20 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-metabolomics-analysis/SKILL.md",
-        "line": 150,
+        "line": 173,
         "text": "| `tooluniverse-gene-enrichment` | Pathway enrichment | Phase 6 |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-metabolomics-analysis",
+    "to": "tooluniverse-metabolomics",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-metabolomics-analysis/SKILL.md",
+        "line": 133,
+        "text": "Verified live (MassBank Europe API, `tu test`/`tu run`, all 5 tools, 11/11 examples pass): a real search for `\"glucose\"` returns spectra for glucose and its biological derivatives (e.g. glucose-6-phosphate, `MSBNK-Antwerp_Univ-METOX_P100333_9EE2`, formula `C6H13O9P`, mass 260.0297, with `CAS`/`CHEBI`/`KEGG`/`PUBCHEM`/`INCHIKEY` cross-references) — search results are not limited to the exact queried compound, so check each candidate's `formula`/`mass` before treating a hit as a confirmed match. Note this is genuinely different from `tooluniverse-metabolomics`'s HMDB-based lookup: use MassBank when identity is unknown and you only have a spectrum; use `tooluniverse-metabolomics`/HMDB once a name or ID is already suspected and you want pathway/biological context instead."
       }
     ]
   },
@@ -1397,7 +1451,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-metabolomics-analysis/SKILL.md",
-        "line": 153,
+        "line": 176,
         "text": "| `tooluniverse-multi-omics-integration` | Comprehensive integration | Phase 7 |"
       }
     ]
@@ -1409,7 +1463,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-metabolomics-analysis/SKILL.md",
-        "line": 152,
+        "line": 175,
         "text": "| `tooluniverse-proteomics-analysis` | Protein levels for integration | Phase 7 |"
       }
     ]
@@ -1421,7 +1475,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-metabolomics-analysis/SKILL.md",
-        "line": 151,
+        "line": 174,
         "text": "| `tooluniverse-rnaseq-deseq2` | Enzyme expression for integration | Phase 7 |"
       }
     ]
@@ -1431,11 +1485,6 @@
     "to": "tooluniverse-comparative-genomics",
     "relation": "related",
     "evidence": [
-      {
-        "path": "skills/tooluniverse-microbial-genome-characterization/SKILL.md",
-        "line": 3,
-        "text": "description: Genome-ASSEMBLY discovery, QC, and replicon mapping for any organism (bacteria, archaea, fungi, and beyond) using NCBI Datasets. Resolves an organism name or taxid to assemblies, picks the reference/representative or best-quality assembly, pulls assembly QC metrics (total length, contig/scaffold N50, contig count, GC%, assembly level, RefSeq category), enumerates chromosomes and plasm"
-      },
       {
         "path": "skills/tooluniverse-microbial-genome-characterization/SKILL.md",
         "line": 34,
@@ -1448,11 +1497,6 @@
     "to": "tooluniverse-plant-genomics",
     "relation": "related",
     "evidence": [
-      {
-        "path": "skills/tooluniverse-microbial-genome-characterization/SKILL.md",
-        "line": 3,
-        "text": "description: Genome-ASSEMBLY discovery, QC, and replicon mapping for any organism (bacteria, archaea, fungi, and beyond) using NCBI Datasets. Resolves an organism name or taxid to assemblies, picks the reference/representative or best-quality assembly, pulls assembly QC metrics (total length, contig/scaffold N50, contig count, GC%, assembly level, RefSeq category), enumerates chromosomes and plasm"
-      },
       {
         "path": "skills/tooluniverse-microbial-genome-characterization/SKILL.md",
         "line": 35,
@@ -1468,7 +1512,7 @@
       {
         "path": "skills/tooluniverse-microbiome-research/SKILL.md",
         "line": 3,
-        "text": "description: Microbiome research using MGnify, GTDB, ENA, OLS (ENVO biomes), and EuropePMC. Covers study discovery, taxonomic profiling, host-microbe interaction analysis, and biome-by-condition queries. Use for microbiome study selection, organism-environment associations, and clinical-microbiome literature review. Distinct from analytical workflow (use tooluniverse-metagenomics-analysis for that"
+        "text": "description: Microbiome research using MGnify, GTDB, ENA, OLS (ENVO biomes), EuropePMC, BacDive (strain phenotypes), MediaDive (growth media recipes), and GMrepo (gut microbiome disease-association counts). Covers study discovery, taxonomic profiling, host-microbe interaction analysis, biome-by-condition queries, strain culturing requirements, and phenotype/disease prevalence lookups. Use for microbiome study selection, organism-environment associations, clinical-microbiome literature review, and \"how do I grow this organism\" / \"how prevalent is this species in condition X\" questions. Distinct from analytical workflow (use tooluniverse-metagenomics-analysis for that)."
       }
     ]
   },
@@ -1480,7 +1524,31 @@
       {
         "path": "skills/tooluniverse-model-organism-genetics/SKILL.md",
         "line": 14,
-        "text": "**Not for**: human variant interpretation (`tooluniverse-variant-analysis`), drug target validation (`tooluniverse-drug-target-validation`), human disease characterization (`tooluniverse-multiomic-disease-characterization`)."
+        "text": "**Not for**: human variant interpretation (`tooluniverse-variant-analysis`), drug target validation (`tooluniverse-drug-target-validation`), human disease characterization (`tooluniverse-multiomic-disease-characterization`), pathogen outbreak/drug-repurposing intelligence once a VEuPathDB target gene is identified (`tooluniverse-infectious-disease`)."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-model-organism-genetics",
+    "to": "tooluniverse-gene-disease-association",
+    "relation": "routing",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-model-organism-genetics/SKILL.md",
+        "line": 124,
+        "text": "Use these as a **fallback/supplement**, not a replacement for Phases 1-2b: MGI/IMPC give you curated, structured, statistically-scored data; HumanMine/MouseMine give you fast free-text triage across a wider net of sources when you're not sure what you're looking for yet. For dedicated human-disease-association work (not just \"does this gene show up near this disease term\"), hand off to `tooluniverse-gene-disease-association`'s DisGeNET/OpenTargets/Monarch pipeline instead of treating a HumanMine disease-facet hit as a real association."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-model-organism-genetics",
+    "to": "tooluniverse-infectious-disease",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-model-organism-genetics/SKILL.md",
+        "line": 14,
+        "text": "**Not for**: human variant interpretation (`tooluniverse-variant-analysis`), drug target validation (`tooluniverse-drug-target-validation`), human disease characterization (`tooluniverse-multiomic-disease-characterization`), pathogen outbreak/drug-repurposing intelligence once a VEuPathDB target gene is identified (`tooluniverse-infectious-disease`)."
       }
     ]
   },
@@ -1492,7 +1560,7 @@
       {
         "path": "skills/tooluniverse-model-organism-genetics/SKILL.md",
         "line": 14,
-        "text": "**Not for**: human variant interpretation (`tooluniverse-variant-analysis`), drug target validation (`tooluniverse-drug-target-validation`), human disease characterization (`tooluniverse-multiomic-disease-characterization`)."
+        "text": "**Not for**: human variant interpretation (`tooluniverse-variant-analysis`), drug target validation (`tooluniverse-drug-target-validation`), human disease characterization (`tooluniverse-multiomic-disease-characterization`), pathogen outbreak/drug-repurposing intelligence once a VEuPathDB target gene is identified (`tooluniverse-infectious-disease`)."
       }
     ]
   },
@@ -1504,7 +1572,7 @@
       {
         "path": "skills/tooluniverse-model-organism-genetics/SKILL.md",
         "line": 14,
-        "text": "**Not for**: human variant interpretation (`tooluniverse-variant-analysis`), drug target validation (`tooluniverse-drug-target-validation`), human disease characterization (`tooluniverse-multiomic-disease-characterization`)."
+        "text": "**Not for**: human variant interpretation (`tooluniverse-variant-analysis`), drug target validation (`tooluniverse-drug-target-validation`), human disease characterization (`tooluniverse-multiomic-disease-characterization`), pathogen outbreak/drug-repurposing intelligence once a VEuPathDB target gene is identified (`tooluniverse-infectious-disease`)."
       }
     ]
   },
@@ -1513,11 +1581,6 @@
     "to": "tooluniverse-primer-design",
     "relation": "required",
     "evidence": [
-      {
-        "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
-        "line": 3,
-        "text": "description: Molecular cloning, in both directions. DESIGN — Gibson Assembly (overlap design for seamless multi-fragment joining) and Golden Gate Assembly (Type IIS / BsaI / BbsI / Esp3I / BsmBI / SapI design with unique 4-bp fusion overhangs). ANALYSIS — work out what an existing reaction produces: given input plasmid sequences and an enzyme, digest them, join the fragments by their overhangs, an"
-      },
       {
         "path": "skills/tooluniverse-molecular-cloning/SKILL.md",
         "line": 29,
@@ -1698,12 +1761,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-natural-product-dereplication/SKILL.md",
-        "line": 3,
-        "text": "description: Dereplicate a putative natural product and assign its chemical taxonomy. Use to answer \"is [compound] a known natural product\", \"what microbe/organism produces [compound]\", \"what chemical class is [compound]\", \"dereplicate this metabolite (by formula/exact mass/InChIKey/SMILES)\", or \"classify this molecule into ChemOnt\". Searches NPAtlas for known microbial natural products (producing"
-      },
-      {
-        "path": "skills/tooluniverse-natural-product-dereplication/SKILL.md",
-        "line": 157,
+        "line": 167,
         "text": "- General drug/compound **identity & ADMET**, properties, bioassays → **tooluniverse-chemical-compound-retrieval** / **tooluniverse-small-molecule-discovery**."
       }
     ]
@@ -1715,12 +1773,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-natural-product-dereplication/SKILL.md",
-        "line": 3,
-        "text": "description: Dereplicate a putative natural product and assign its chemical taxonomy. Use to answer \"is [compound] a known natural product\", \"what microbe/organism produces [compound]\", \"what chemical class is [compound]\", \"dereplicate this metabolite (by formula/exact mass/InChIKey/SMILES)\", or \"classify this molecule into ChemOnt\". Searches NPAtlas for known microbial natural products (producing"
-      },
-      {
-        "path": "skills/tooluniverse-natural-product-dereplication/SKILL.md",
-        "line": 158,
+        "line": 168,
         "text": "- Metabolomics **pathway/enrichment** analysis → **tooluniverse-metabolomics** skills."
       }
     ]
@@ -1732,12 +1785,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-natural-product-dereplication/SKILL.md",
-        "line": 3,
-        "text": "description: Dereplicate a putative natural product and assign its chemical taxonomy. Use to answer \"is [compound] a known natural product\", \"what microbe/organism produces [compound]\", \"what chemical class is [compound]\", \"dereplicate this metabolite (by formula/exact mass/InChIKey/SMILES)\", or \"classify this molecule into ChemOnt\". Searches NPAtlas for known microbial natural products (producing"
-      },
-      {
-        "path": "skills/tooluniverse-natural-product-dereplication/SKILL.md",
-        "line": 157,
+        "line": 167,
         "text": "- General drug/compound **identity & ADMET**, properties, bioassays → **tooluniverse-chemical-compound-retrieval** / **tooluniverse-small-molecule-discovery**."
       }
     ]
@@ -1908,11 +1956,6 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-pharmacokinetics/SKILL.md",
-        "line": 3,
-        "text": "description: Pharmacokinetic (PK) analysis of concentration-time data — non-compartmental analysis (NCA) for Cmax, Tmax, AUC (0-t and 0-∞), terminal half-life, clearance (CL), volume of distribution (Vd), MRT, and absolute bioavailability (F). Also one-compartment fitting. Use when you have plasma/serum drug concentrations over time after a dose and need PK parameters, or to compute bioavailabilit"
-      },
-      {
-        "path": "skills/tooluniverse-pharmacokinetics/SKILL.md",
         "line": 17,
         "text": "This is **measured-data** PK. For predicting ADMET properties from a chemical structure, use `tooluniverse-admet-prediction`."
       },
@@ -1954,11 +1997,6 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-phewas/SKILL.md",
-        "line": 3,
-        "text": "description: Cross-ancestry / cross-biobank phenome-wide association (PheWAS) and replication. Given ONE variant (rsID) or ONE gene, look up every phenotype it associates with across European/UK (UKB-TOPMed), Finnish (FinnGen), Japanese (BioBank Japan), and Taiwanese (TPMI) biobanks, plus exome-wide gene-burden PheWAS (Genebass), then judge whether an association replicates across ancestries or is"
-      },
-      {
-        "path": "skills/tooluniverse-phewas/SKILL.md",
         "line": 100,
         "text": "- **No automatic meta-analysis.** This skill compares biobanks qualitatively (replication, direction, power). For a formal cross-ancestry meta-analysis or fine-mapping, hand off to dedicated tooling (`tooluniverse-mendelian-randomization`, `tooluniverse-gwas-finemapping`)."
       }
@@ -1972,7 +2010,7 @@
       {
         "path": "skills/tooluniverse-phewas/SKILL.md",
         "line": 3,
-        "text": "description: Cross-ancestry / cross-biobank phenome-wide association (PheWAS) and replication. Given ONE variant (rsID) or ONE gene, look up every phenotype it associates with across European/UK (UKB-TOPMed), Finnish (FinnGen), Japanese (BioBank Japan), and Taiwanese (TPMI) biobanks, plus exome-wide gene-burden PheWAS (Genebass), then judge whether an association replicates across ancestries or is"
+        "text": "description: Cross-ancestry / cross-biobank phenome-wide association (PheWAS) and replication. Given ONE variant (rsID) or ONE gene, look up every phenotype it associates with across European/UK (UKB-TOPMed), Finnish (FinnGen), Japanese (BioBank Japan), and Taiwanese (TPMI) biobanks, plus exome-wide gene-burden PheWAS (Genebass), then judge whether an association replicates across ancestries or is population-specific. Use whenever the user asks \"what else is this variant/gene associated with\", \"does this association replicate in other ancestries / biobanks\", \"is this effect East-Asian-specific\", \"pleiotropy of rsXXX\", \"phenome scan\", or wants to compare effect sizes/allele frequencies of a variant across populations. NOT for the forward direction (trait → which SNPs: use the gwas-* skills), NOT for fine-mapping a locus (use tooluniverse-gwas-finemapping), and NOT for single-SNP mechanism tracing in one population (use tooluniverse-gwas-snp-interpretation)."
       }
     ]
   },
@@ -2029,11 +2067,6 @@
     "to": "tooluniverse-population-genetics",
     "relation": "routing",
     "evidence": [
-      {
-        "path": "skills/tooluniverse-population-genetics-1000genomes/SKILL.md",
-        "line": 2,
-        "text": "name: tooluniverse-population-genetics-1000genomes"
-      },
       {
         "path": "skills/tooluniverse-population-genetics-1000genomes/SKILL.md",
         "line": 28,
@@ -2288,6 +2321,18 @@
     ]
   },
   {
+    "from": "tooluniverse-protein-modification-analysis",
+    "to": "tooluniverse-variant-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-protein-modification-analysis/SKILL.md",
+        "line": 100,
+        "text": "**Protein-level variant lookup (distinct from Phase 1-4 PTM tools, not duplicative of `tooluniverse-variant-analysis`'s SPDI/HGVS/rsID *notation conversion*):**"
+      }
+    ]
+  },
+  {
     "from": "tooluniverse-protein-sae-variant-interpretation",
     "to": "tooluniverse-cancer-variant-interpretation",
     "relation": "related",
@@ -2409,6 +2454,18 @@
   },
   {
     "from": "tooluniverse-proteomics-analysis",
+    "to": "tooluniverse-proteomics-data-retrieval",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-proteomics-analysis/SKILL.md",
+        "line": 67,
+        "text": "| `tooluniverse-proteomics-data-retrieval` | Find a public cancer-proteomics study/quant matrix (PDC/CPTAC) to reanalyze | Phase 1 (input) |"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-proteomics-analysis",
     "to": "tooluniverse-rnaseq-deseq2",
     "relation": "related",
     "evidence": [
@@ -2438,7 +2495,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-proteomics-data-retrieval/SKILL.md",
-        "line": 287,
+        "line": 367,
         "text": "| `tooluniverse-multi-omics-integration` | Discover proteomics datasets for cross-omics integration |"
       }
     ]
@@ -2450,7 +2507,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-proteomics-data-retrieval/SKILL.md",
-        "line": 286,
+        "line": 366,
         "text": "| `tooluniverse-protein-modification-analysis` | Find PTM-specific datasets to complement iPTMnet annotations |"
       }
     ]
@@ -2462,7 +2519,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-proteomics-data-retrieval/SKILL.md",
-        "line": 285,
+        "line": 365,
         "text": "| `tooluniverse-proteomics-analysis` | Use retrieved datasets as input for MS data analysis |"
       }
     ]
@@ -2535,7 +2592,7 @@
       {
         "path": "skills/tooluniverse-rare-disease-genomics/SKILL.md",
         "line": 42,
-        "text": "- Synonymous / intronic: usually benign unless at splice junction -- but \"usually\" is doing real work: a *deep* intronic variant can still be pathogenic by creating a cryptic splice site far from the canonical boundary, which consequence filtering alone won't flag. If a deep intronic or otherwise unannotated variant survives Steps 1-2 (rare, correct inheritance, phenotype match) despite a bland co"
+        "text": "- Synonymous / intronic: usually benign unless at splice junction -- but \"usually\" is doing real work: a *deep* intronic variant can still be pathogenic by creating a cryptic splice site far from the canonical boundary, which consequence filtering alone won't flag. If a deep intronic or otherwise unannotated variant survives Steps 1-2 (rare, correct inheritance, phenotype match) despite a bland consequence label, don't dismiss it yet -- see `tooluniverse-regulatory-variant-analysis` for a direct sequence-based check on whether it actually disrupts splicing, expression, or another regulatory readout."
       }
     ]
   },
@@ -2583,12 +2640,7 @@
       {
         "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
         "line": 167,
-        "text": "AlphaGenome isn't the only sequence-prediction model in ToolUniverse, just the broadest and the one this phase defaults to. If it's unavailable (no key) or a specific case calls for something else — a published, self-hostable model instead of a hosted API, or a question specifically about chromatin accessibility rather than a broad multi-modality readout — see `tooluniverse-regulatory-genomics` fo"
-      },
-      {
-        "path": "skills/tooluniverse-regulatory-variant-analysis/SKILL.md",
-        "line": 192,
-        "text": "- **AlphaGenome tools aren't in your toolset**: `ALPHA_GENOME_API_KEY` isn't configured. Skip Phases 0.5 and 4.5 and run Phases 1-4 as a standalone pipeline — do not block the analysis waiting on a key that may never be provided. If a sequence-model prediction still matters for the case, `tooluniverse-regulatory-genomics` covers self-hostable alternatives (Enformer, Borzoi, ChromBPNet) that don't "
+        "text": "AlphaGenome isn't the only sequence-prediction model in ToolUniverse, just the broadest and the one this phase defaults to. If it's unavailable (no key) or a specific case calls for something else — a published, self-hostable model instead of a hosted API, or a question specifically about chromatin accessibility rather than a broad multi-modality readout — see `tooluniverse-regulatory-genomics` for Enformer, Borzoi, ChromBPNet, and Evo 2, which cover the same kind of ground with different tradeoffs."
       }
     ]
   },
@@ -2668,6 +2720,18 @@
     ]
   },
   {
+    "from": "tooluniverse-sequence-retrieval",
+    "to": "tooluniverse-data-integration-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-sequence-retrieval/SKILL.md",
+        "line": 287,
+        "text": "This complements `tooluniverse-data-integration-analysis`'s multi-database"
+      }
+    ]
+  },
+  {
     "from": "tooluniverse-single-cell",
     "to": "tooluniverse-gene-enrichment",
     "relation": "related",
@@ -2710,7 +2774,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-spatial-transcriptomics/SKILL.md",
-        "line": 324,
+        "line": 328,
         "text": "See `tooluniverse-data-wrangling` skill for format cookbook and bulk download patterns."
       }
     ]
@@ -2770,13 +2834,85 @@
   },
   {
     "from": "tooluniverse-systems-biology",
+    "to": "tooluniverse-chemical-compound-retrieval",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-systems-biology/SKILL.md",
+        "line": 299,
+        "text": "Cross-reference a Rhea `chebi_id` against `tooluniverse-chemical-compound-retrieval`'s PubChem/ChEBI tools for"
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-systems-biology",
     "to": "tooluniverse-computational-biophysics",
     "relation": "required",
     "evidence": [
       {
         "path": "skills/tooluniverse-systems-biology/SKILL.md",
-        "line": 194,
+        "line": 196,
         "text": "To determine Km and Vmax from data: use Lineweaver-Burk (1/v vs 1/[S]), Eadie-Hofstee (v vs v/[S]), or nonlinear regression (preferred — avoids distortion from reciprocal transforms). See `enzyme_kinetics.py` in `skills/tooluniverse-computational-biophysics/scripts/`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-systems-biology",
+    "to": "tooluniverse-gene-enrichment",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-systems-biology/SKILL.md",
+        "line": 342,
+        "text": "`GOAPI_get_term`, `GOAPI_get_gene_functions`, `GOAPI_get_genes_by_function` (`go_api_tools.json`) hit the GO API directly. **Overlap note**: this is a *different* tool family from `GO_get_annotations_for_gene` / `GO_get_term_by_id` / `GO_get_term_details` (`gene_ontology_tools.json`), which several other skills — `tooluniverse-target-research`, `tooluniverse-gene-enrichment`, `tooluniverse-structural-variant-analysis` — already document for the same purpose. Prefer those existing tools if you're already using them elsewhere in a workflow; reach for GOAPI when its CURIE-based gene addressing (below) or its reverse \"genes by function\" lookup is specifically what you need."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-systems-biology",
+    "to": "tooluniverse-protein-interactions",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-systems-biology/SKILL.md",
+        "line": 357,
+        "text": "`INDRA_get_statements`, `INDRA_get_evidence_count`, `INDRA_get_statement_by_hash` (`indra_tools.json`) — genuinely new. INDRA text-mines causal relationships (Activation/Inhibition/Phosphorylation/Complex/etc.) directly from PubMed abstracts and assembles them with evidence counts — this is **automated extraction with variable precision**, not manually curated causal edges like SIGNOR's (documented in `tooluniverse-protein-interactions`). Treat an INDRA statement as a literature-mining lead to verify, not a confirmed mechanism, especially when `evidence_shown` is low relative to `total_evidence`."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-systems-biology",
+    "to": "tooluniverse-spatial-omics-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-systems-biology/SKILL.md",
+        "line": 365,
+        "text": "`ReactomeInteractors_get_protein_interactors`, `ReactomeInteractors_get_entity_pathways`, `ReactomeInteractors_search_entity` (`reactome_interactors_tools.json`) — **all 3 tools currently return HTTP 521 on every call**, confirmed both via `tu test`/`tu run` and an independent direct `curl` to Reactome's own interactors endpoint (`reactome.org/ContentService/interactors/...`), which also returned 521. This is Reactome's interactors service being unreachable at the origin, not a ToolUniverse bug — it may be transient, so don't assume it's permanently gone, but **do not fabricate protein-interactor or entity-pathway results from this family** if you hit the same error; report it as \"ReactomeInteractors service currently unreachable (HTTP 521)\" and fall back to `STRING_functional_enrichment`, `intact_get_interactions`, or (for causal edges) SIGNOR/INDRA above instead. Note this is a *different* tool family from the already-documented `Reactome_map_uniprot_to_pathways`/`Reactome_get_pathway_reactions` (Phase 2, above) and from `Reactome_get_interactor` (singular, in `reactome_tools.json`, used by `tooluniverse-spatial-omics-analysis`) — three separate Reactome-branded tool families exist in the registry; this section covers only the `ReactomeInteractors_*` one."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-systems-biology",
+    "to": "tooluniverse-structural-variant-analysis",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-systems-biology/SKILL.md",
+        "line": 342,
+        "text": "`GOAPI_get_term`, `GOAPI_get_gene_functions`, `GOAPI_get_genes_by_function` (`go_api_tools.json`) hit the GO API directly. **Overlap note**: this is a *different* tool family from `GO_get_annotations_for_gene` / `GO_get_term_by_id` / `GO_get_term_details` (`gene_ontology_tools.json`), which several other skills — `tooluniverse-target-research`, `tooluniverse-gene-enrichment`, `tooluniverse-structural-variant-analysis` — already document for the same purpose. Prefer those existing tools if you're already using them elsewhere in a workflow; reach for GOAPI when its CURIE-based gene addressing (below) or its reverse \"genes by function\" lookup is specifically what you need."
+      }
+    ]
+  },
+  {
+    "from": "tooluniverse-systems-biology",
+    "to": "tooluniverse-target-research",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-systems-biology/SKILL.md",
+        "line": 342,
+        "text": "`GOAPI_get_term`, `GOAPI_get_gene_functions`, `GOAPI_get_genes_by_function` (`go_api_tools.json`) hit the GO API directly. **Overlap note**: this is a *different* tool family from `GO_get_annotations_for_gene` / `GO_get_term_by_id` / `GO_get_term_details` (`gene_ontology_tools.json`), which several other skills — `tooluniverse-target-research`, `tooluniverse-gene-enrichment`, `tooluniverse-structural-variant-analysis` — already document for the same purpose. Prefer those existing tools if you're already using them elsewhere in a workflow; reach for GOAPI when its CURIE-based gene addressing (below) or its reverse \"genes by function\" lookup is specifically what you need."
       }
     ]
   },
@@ -2805,6 +2941,18 @@
     ]
   },
   {
+    "from": "tooluniverse-variant-analysis",
+    "to": "tooluniverse-gene-disease-association",
+    "relation": "related",
+    "evidence": [
+      {
+        "path": "skills/tooluniverse-variant-analysis/SKILL.md",
+        "line": 480,
+        "text": "`tooluniverse-gene-disease-association`'s Phase 4/Phase 5)."
+      }
+    ]
+  },
+  {
     "from": "tooluniverse-variant-functional-annotation",
     "to": "tooluniverse-variant-interpretation",
     "relation": "routing",
@@ -2828,7 +2976,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-variant-interpretation/SKILL.md",
-        "line": 367,
+        "line": 369,
         "text": "For amino acid properties at variant position, run: `python3 skills/tooluniverse-sequence-analysis/scripts/amino_acids.py --type amino_acid --code X`"
       }
     ]
@@ -2891,7 +3039,7 @@
     "evidence": [
       {
         "path": "skills/tooluniverse-variant-to-mechanism/SKILL.md",
-        "line": 367,
+        "line": 368,
         "text": "See `tooluniverse-data-wrangling` skill for API patterns and error handling."
       }
     ]

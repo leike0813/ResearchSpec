@@ -52,5 +52,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-aging-senescence/SKILL.md
-      sha256: 2676ca662f225391c80302608ce4e116a235e6445fd1c5d3b32f85e7be79e1c3
+      sha256: 8bad0cdc7ae1ec2a845af0e0fbefc80325eb46c938e187361b4a73eac47bb8eb
 license: Apache-2.0

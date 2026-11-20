@@ -47,7 +47,7 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-examples.md
     path: EXAMPLES.md
-    content_hash: e72926cf1ed0371331719138af8dc86e62b1346eca3e1beca02554e3d037b167
+    content_hash: b61b09ba7e96ada8bc75a789ec6fced80e380076250619757850441556c11ba0
     license: Apache-2.0
   - knowledge_id: tu-report-template.md
     path: REPORT_TEMPLATE.md
@@ -59,26 +59,26 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-tools-reference.md
     path: TOOLS_REFERENCE.md
-    content_hash: 6431ad03a85924e356b7f1408fd0e19e9a76bb8472712709e92b80ce47fbf4be
+    content_hash: d96bf418ec8a924826553da2706865b4f85eec3d6e128097ee17e3752d0cf715
     license: Apache-2.0
   - knowledge_id: tu-tool-usage-details.md
     path: tool_usage_details.md
-    content_hash: 86650f6e7a39fdcabb4aa3225be451f0dbb89f2e7b76e8e1369f8599aa08be30
+    content_hash: c63c7263487503c41fbdb4267d4e6c9ea698734b172a15a776a7dcc6748837fa
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/SKILL.md
-      sha256: 62487c8d7ae8a2130091804f00a86241100ff0a55d0c492ba7576a580ba518fc
+      sha256: 3fb70d6b0508f325e175504587238ee1a6dde03759fe697fd55b9c381b6b1554
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/EXAMPLES.md
-      sha256: e72926cf1ed0371331719138af8dc86e62b1346eca3e1beca02554e3d037b167
+      sha256: b61b09ba7e96ada8bc75a789ec6fced80e380076250619757850441556c11ba0
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/REPORT_TEMPLATE.md
       sha256: c468f5a2a0b3645e14299ea4aaad50ef57990f049bde87f98dcea7d0b206bd2c
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/RESEARCH_PROTOCOL.md
       sha256: f1be3964593c29f11d7cea40663f8029fdf1c84a69f5e8413806d4f05e0601dc
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/TOOLS_REFERENCE.md
-      sha256: 6431ad03a85924e356b7f1408fd0e19e9a76bb8472712709e92b80ce47fbf4be
+      sha256: d96bf418ec8a924826553da2706865b4f85eec3d6e128097ee17e3752d0cf715
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-disease-research/tool_usage_details.md
-      sha256: 86650f6e7a39fdcabb4aa3225be451f0dbb89f2e7b76e8e1369f8599aa08be30
+      sha256: c63c7263487503c41fbdb4267d4e6c9ea698734b172a15a776a7dcc6748837fa
 license: Apache-2.0

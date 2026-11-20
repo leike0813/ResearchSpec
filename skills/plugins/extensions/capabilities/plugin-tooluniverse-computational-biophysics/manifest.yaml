@@ -87,7 +87,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/SKILL.md
-      sha256: b94cc65c834a52ae98488ddc75256bad41ffb2fc61a7b347421faa76eaf109d5
+      sha256: 411481ae3206defa399d50e9e4e61224555a357a740e83ffa3cf62d1fc8e9681
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/burn_fluids.py
       sha256: 5a3c572d7686ce0e2d1409978118172944d6e795b4812b37256f922aacab4f9d
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-computational-biophysics/scripts/env_risk_assessment.py

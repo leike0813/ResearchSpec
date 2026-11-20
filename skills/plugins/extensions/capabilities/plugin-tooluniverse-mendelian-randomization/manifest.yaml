@@ -48,5 +48,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-mendelian-randomization/SKILL.md
-      sha256: fb7107a44215272160a2bbcb8244ad3b7c330863ed59fbd9e5813cbfed8d5971
+      sha256: 03dc321515cd2b3dfff534e8ef1a06088af99a74e596581c7e02ff50fc881387
 license: Apache-2.0

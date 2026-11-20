@@ -12,6 +12,10 @@ metadata:
 
 > **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, or receipts. Use the ResearchSpec CLI for authoritative mutations.
 
+## COSMIC evidence coverage
+
+Check `status` before using `data.results`. Use `metadata.result_set_complete` and `metadata.truncated` to report coverage. COSMIC provides a non-pageable record window. A result count describes retrieved mutation records and cannot estimate patient prevalence.
+
 # Functional Genomics Screen Interpretation
 
 Pipeline for validating and prioritizing hits from genetic screens (CRISPR-KO, CRISPRi, shRNA) by integrating essentiality (DepMap), constraint (gnomAD), pathways (Reactome, STRING), druggability (DGIdb), and clinical evidence (CIViC, COSMIC).
@@ -80,7 +84,7 @@ Chronos < -0.5 ≈ dependency, < -1.0 strongly essential. Fallback if you can't 
 ### Phase 4: Clinical Evidence
 
 - `civic_search_evidence_items(molecular_profile=gene)` -- NOT `query`
-- `COSMIC_get_mutations_by_gene(gene_name=...)` -- somatic mutation frequency
+- `COSMIC_get_mutations_by_gene(gene=...)` -- somatic mutation frequency
 
 ### Phase 6: Prioritized Report
 

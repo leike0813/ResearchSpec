@@ -12,7 +12,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -26,7 +26,7 @@ Not all guidelines carry equal weight. Evaluate sources in this order:
 
 1. **NICE and WHO** — Evidence-graded, regularly updated, rigorous systematic review process. NICE guidelines include explicit recommendation strength (e.g., "offer" vs "consider").
 2. **Society guidelines (AHA, ADA, NCCN, SIGN)** — Expert-consensus panels within a specialty. May lag behind the latest evidence by 1-3 years. Strong within their domain but narrower scope.
-3. **Aggregator databases (GIN, TRIP, OpenAlex)** — Index guidelines from multiple societies. Good for breadth and discovery, but you must verify the original source.
+3. **Aggregator databases (TRIP, OpenAlex)** — Index guidelines from multiple societies. Good for breadth and discovery, but you must verify the original source.
 4. **Literature databases (PubMed, EuropePMC)** — Return guideline-related publications, not curated guideline text. Useful as a fallback, not a primary source.
 
 **Always check publication date.** A 2015 guideline may be superseded by a 2024 update. When presenting results, include the year prominently and note if newer guidance may exist.
@@ -40,14 +40,14 @@ When analysis requires computation (statistics, data processing, scoring, enrich
 
 ### Step 1: Start Narrow, Then Broaden
 
-1. Search the **condition name + "guideline"** in NICE, TRIP, and GIN simultaneously (parallel calls).
+1. Search the **condition name + "guideline"** in NICE, TRIP, and EuropePMC simultaneously (parallel calls).
 2. If the question targets a specialty, add the society tool: AHA for cardiology, ADA for diabetes, NCCN for oncology, CPIC for pharmacogenomics.
 3. If initial searches return nothing, broaden to the disease category (e.g., "heart failure" instead of "HFpEF with SGLT2 inhibitors").
 4. If society-specific tools fail, fall back to PubMed/EuropePMC with `[condition] guideline [year]`.
 
 ### Step 2: Search at Least 3 Sources
 
-Always query a minimum of 3 databases to catch guidelines that one source may miss. Prioritize: **NICE > GIN > TRIP > Society-specific > Literature databases**.
+Always query a minimum of 3 databases to catch guidelines that one source may miss. Prioritize: **NICE > TRIP > Society-specific > Literature databases**.
 
 ### Step 3: Retrieve Full Text When Available
 
@@ -127,18 +127,17 @@ Guidelines give **population-level recommendations**. When presenting findings:
 
 | Tool | Key Parameters | Notes |
 |------|---------------|-------|
-| `NICE_Clinical_Guidelines_Search` | `query`, `limit` (both required) | Best general source; returns list directly |
-| `GIN_Guidelines_Search` | `query`, `limit` (both required) | Best multi-society aggregator |
+| `NICE_Clinical_Guidelines_Search` | `query`, `limit` (both required) | Best general source |
 | `TRIP_Database_Guidelines_Search` | `query`, `limit`, `search_type='guidelines'` (all required) | Must include search_type |
 | `WHO_Guidelines_Search` | `query`, `limit` | Limited topic filtering; may return unrelated WHO docs |
 | `CMA_Guidelines_Search` | `query`, `limit` | Canadian guidelines |
 | `SIGN_search_guidelines` | `query` (NOT `q`), `limit` | Scottish/UK |
 | `CTFPHC_search_guidelines` | `query` (NOT `q`), `limit` | Canadian prevention |
 | `OpenAlex_Guidelines_Search` | `query`, `limit`, optional `year_from`/`year_to` | Academic publications |
-| `EuropePMC_Guidelines_Search` | `query`, `limit` | Loosely relevant; use for discovery |
-| `PubMed_Guidelines_Search` | `query`, `limit`, optional `api_key` | Literature fallback |
+| `EuropePMC_Guidelines_Search` | `query`, `limit` | Records typed or titled as guidelines, with full abstracts |
+| `PubMed_Guidelines_Search` | `query`, `limit` | Literature fallback; reads `NCBI_API_KEY` from the environment |
 
-All general search tools return **lists directly** — access as `result[0]['title']`.
+NICE, TRIP, WHO, OpenAlex, EuropePMC and PubMed return `{status, data, metadata}`: rows are in `result['data']` and the match count in `result['metadata']['total']`; an empty `data` with `status: success` means the source has nothing on the query. CMA, SIGN and CTFPHC return lists directly.
 
 ### Society-Specific Tools
 
@@ -179,6 +178,14 @@ All CPIC tools return **dict-wrapped**: use `r.get('data', [])`.
 - `CPIC_search_gene_drug_pairs` requires PostgREST syntax: `genesymbol='eq.CYP2D6'`
 - Deduplicate recommendations by phenotype before presenting (many duplicate records per allele combo)
 
+### Personalized Prevention Recommendations (ODPHP MyHealthfinder)
+
+For "what preventive care/screenings does this patient need" (as opposed to "what does the guideline for condition X say"), `odphp_myhealthfinder` returns a curated, plain-language recommendation list sourced from USPSTF + CDC ACIP + HRSA for a specific demographic — verified live: a 45-year-old woman query returned 28 real recommendations (screenings, immunizations, counseling topics) each traceable back to its issuing body. This complements rather than replaces guideline lookup: use it to get the checklist for a patient profile, then pull the full guideline (NICE/USPSTF/etc. above) for the clinical detail behind any specific item.
+
+**All 5 parameters are required (pass explicit values, not omitted, even when not applicable)**: `lang` ("en"/"es"), `age` (integer), `sex` ("Male"/"Female"), `pregnant` ("Yes"/"No"/pass "No" if not applicable), `strip_html` (bool). `odphp_itemlist(lang=..., type=...)` and `odphp_topicsearch(lang=..., topicId=..., categoryId=..., keyword=..., strip_html=...)` support browsing/filtering the same content by topic or keyword instead of by demographic profile.
+
+**`odphp_outlink_fetch` caveat, verified live**: this tool fetches a URL referenced by a MyHealthfinder result for more detail, but the health.gov API v3 endpoints it can be pointed at are being retired (a canned example URL returned HTTP 410 Gone live) — check the returned `status` field before treating a fetch as successful, and prefer the current v4 MyHealthfinder response content over following an old outlink.
+
 ### Full-Text Retrieval
 
 | Source | Tool | Input |
@@ -204,9 +211,9 @@ All CPIC tools return **dict-wrapped**: use `r.get('data', [])`.
 
 ## Fallback Strategy
 
-- NICE returns empty -> try TRIP or GIN
+- NICE returns empty -> try TRIP or EuropePMC
 - ADA returns 0 results -> broaden terms (`'pharmacologic approaches'` not `'metformin first-line'`)
-- WHO returns irrelevant results -> skip WHO, use GIN or EuropePMC
+- WHO returns irrelevant results -> skip WHO, use EuropePMC or OpenAlex
 - CPIC returns no recommendations -> present gene-drug pairs with CPIC levels as proxy
 - TRIP returns 403/gated PDFs -> note limited access, try alternative sources
 
@@ -242,7 +249,7 @@ All CPIC tools return **dict-wrapped**: use `r.get('data', [])`.
 
 ## Known Limitations
 
-- **WHO_Guidelines_Search**: Unreliable topic filtering; supplement with GIN for international guidelines.
+- **WHO_Guidelines_Search**: Unreliable topic filtering; supplement with EuropePMC or OpenAlex for international guidelines.
 - **NCI_search_cancer_resources**: Research tool catalog, NOT clinical guidelines.
 - **NICE_Guideline_Full_Text**: Overview page only; sub-pages may need direct URL.
 - **SIGN**: No full-text tool; PDFs only.

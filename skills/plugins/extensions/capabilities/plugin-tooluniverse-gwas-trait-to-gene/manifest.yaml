@@ -54,7 +54,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-trait-to-gene/SKILL.md
-      sha256: 22911491be90491f50766034a7af79a6ca2b2a8a1d3ec4ef1b0c2ed1e4f2d3c1
+      sha256: 60b8ce91f7807ba617ea27454f5759fbbbcd2090f7717ba4d11f9cf22e7dca86
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-trait-to-gene/python_implementation.py
       sha256: 94ad4982be5eb2a2df004901a9560bf74cf8b0b8f48a5b0833acf21d911ca02e
 license: Apache-2.0

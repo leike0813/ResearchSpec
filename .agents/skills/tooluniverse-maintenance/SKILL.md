@@ -56,7 +56,7 @@ audits/tooluniverse/<anchor>/
 2. 确定分析范围：
    - 首锚点：全部 top-level Skills、130 个 candidate/admitted Skills、所有
      cross-skill edges 与 `skill-audit.json` 的 admission/依赖决策。
-   - 增量：`git -C vendor/tooluniverse diff <old>..<new> --stat`，单独检查 130 个 vendor-bundle `SKILL.md`、348 个 reviewed 资源文件
+   - 增量：`git -C vendor/tooluniverse diff <old>..<new> --stat`，单独检查 130 个 vendor-bundle `SKILL.md` 及上一锚点列出的 reviewed 资源
      （scripts/references/examples/templates/data）与审计事实。
 3. 分类影响：
    - raw Skill 程序变化 -> 对应 extension `SKILL.md` 与 required brief fields。
@@ -76,6 +76,7 @@ audits/tooluniverse/<anchor>/
      Skill；保留已准入集合，除非本轮另有明确准入决定。
    - 每个已准入 Skill 的 `source_release / source_revision` 标识其内容来源；
      直接变化或本轮语义适配的 Skill 使用目标身份，未受影响 Skill 保留原身份。
+     需要保留上一份审定内容时，在新审计记录中填写等于该内容来源的 `projection_source_revision`，并保留完整子模块历史供转换读取。
    - 更新 `dependency-decisions.json` 的全部候选引用和真实证据行；仅 reviewed
      required 关系产生安装依赖。
    - 在 `src/vendor-converters/tooluniverse/semantic-adaptations.ts` 维护必要的

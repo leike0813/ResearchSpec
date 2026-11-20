@@ -50,5 +50,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-functional-genomics-screens/SKILL.md
-      sha256: 6ffccdcd0848ea5fa9e97cf8aed0a9262879078c7b2d31acc236d95065381504
+      sha256: a63b6392715cb76980cfb9e0f08119fbe2aa984ae8871f2fcd45226db1b147d4
 license: Apache-2.0

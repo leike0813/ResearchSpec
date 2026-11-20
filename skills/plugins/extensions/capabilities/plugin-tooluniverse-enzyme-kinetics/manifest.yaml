@@ -57,7 +57,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-enzyme-kinetics/SKILL.md
-      sha256: 381f4d17fac4f282fc2f05ca9c2d31a26e84a9d8feac193381af83e3c0caca1e
+      sha256: 81051fdbc5032e932c27d74cf0c6071a3f6714f94e7c2b4fcdef7aae292ede50
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-enzyme-kinetics/scripts/fit_michaelis_menten.py
       sha256: 8f352d94d1257d4a9dcff24ca2d4e3d084a02c815022a164c35130923b39ef1b
 license: Apache-2.0

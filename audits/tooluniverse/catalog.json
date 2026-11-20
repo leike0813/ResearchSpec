@@ -6,11 +6,12 @@
   "upstream_root": "vendor/tooluniverse",
   "generated_root": "skills/plugins/vendors/tooluniverse",
   "extension_root": "skills/plugins/extensions",
-  "release": "v1.5.4",
-  "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
-  "anchor_id": "v1.5.4-8ec5d4b",
-  "audit_file": "audits/tooluniverse/v1.5.4-8ec5d4b/skill-audit.json",
-  "audit_report": "audits/tooluniverse/v1.5.4-8ec5d4b/report.md",
+  "release": "v1.5.10",
+  "revision": "6b50abef032a702554e2b34a4f592ee674f12f8f",
+  "anchor_id": "v1.5.10-6b50abe",
+  "created_at": "2026-11-20T12:52:32+08:00",
+  "audit_file": "audits/tooluniverse/v1.5.10-6b50abe/skill-audit.json",
+  "audit_report": "audits/tooluniverse/v1.5.10-6b50abe/report.md",
   "extension_domains": [
     "analytical-chemistry",
     "biochemistry-and-cell-biology",
@@ -1194,6 +1195,10 @@
         {
           "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/troubleshooting.md",
           "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/references/troubleshooting.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/upstream-details.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-gene-enrichment/references/upstream-details.md"
         },
         {
           "source": "skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/scripts/condition_enrichment_screen.py",
@@ -3349,6 +3354,10 @@
         {
           "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/upstream-details.md",
           "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/references/upstream-details.md"
+        },
+        {
+          "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/variant_notation_conversion.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-tooluniverse-variant-analysis/references/variant_notation_conversion.md"
         },
         {
           "source": "skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/vcf_filtering.md",

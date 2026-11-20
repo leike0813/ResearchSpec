@@ -48,14 +48,14 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-tools-reference.md
     path: TOOLS_REFERENCE.md
-    content_hash: b13e82b06ba69598b050932541fd29e88dd35728151c1e6a2ff80d9f2751c04d
+    content_hash: 6dc5cd18a190f108aa05a028177a51aae5ecd03683ee04a15ee3a5607ffaf76f
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-guidelines/SKILL.md
-      sha256: 4786e0e6c81953de542cb3db353f9db9b1241e0b5c2589008797084efe4a330c
+      sha256: bb25091efb71d81ee9415afbb1c7b1172f4bece5223cd9bbe0e460784c8ea587
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-guidelines/TOOLS_REFERENCE.md
-      sha256: b13e82b06ba69598b050932541fd29e88dd35728151c1e6a2ff80d9f2751c04d
+      sha256: 6dc5cd18a190f108aa05a028177a51aae5ecd03683ee04a15ee3a5607ffaf76f
 license: Apache-2.0

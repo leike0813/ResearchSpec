@@ -112,10 +112,8 @@ Complete reference of 225+ ToolUniverse tools for target research, organized by 
 |------|------------|---------|
 | `drugbank_get_targets_by_drug_name_or_drugbank_id` | `query`, `exact_match`, `limit` | Drug targets |
 | `drugbank_get_drug_name_and_description_by_target_name` | `target_name` | Drugs for target |
-| `GtoPdb_search_targets` | `target_id` | GtoPdb target info |
-| `GtoPdb_search_targets` | `family_id` | List targets |
-| `GtoPdb_search_ligands` | `target_id` | Target-ligand interactions |
-| `GtoPdb_get_interactions` | `query` | Interaction search |
+| `GtoPdb_search_targets` | `gene_symbol` or `type` | Target records |
+| `GtoPdb_get_interactions` | `gene_symbol` or `targetId`, `limit`, `offset` | Target-ligand interaction records. Check `has_more` and `next_offset` for coverage. |
 
 ### STITCH
 
@@ -232,8 +230,8 @@ Experimental binding affinity data (Ki, IC50, Kd) for target-ligand pairs.
 
 | Tool | Parameters | Returns |
 |------|------------|---------|
-| `BindingDB_get_ligands_by_uniprot` | `uniprot`, `affinity_cutoff` | Ligands with affinities |
-| `BindingDB_get_ligands_by_uniprots` | `uniprots`, `affinity_cutoff` | Multi-target ligands |
+| `BindingDB_get_ligands_by_uniprot` | `uniprot_id`, `affinity_cutoff` | Ligands with affinities |
+| `BindingDB_get_ligands_by_uniprots` | `uniprot_ids` (comma-separated string), `affinity_cutoff` | Multi-target ligands |
 | `BindingDB_get_ligands_by_pdb` | `pdb_ids`, `affinity_cutoff`, `sequence_identity` | Structure-based ligands |
 | `BindingDB_get_targets_by_compound` | `smiles`, `similarity_cutoff` | Polypharmacology |
 
@@ -241,7 +239,7 @@ Experimental binding affinity data (Ki, IC50, Kd) for target-ligand pairs.
 ```python
 # Get ligands for EGFR
 ligands = tu.tools.BindingDB_get_ligands_by_uniprot(
-    uniprot="P00533",
+    uniprot_id="P00533",
     affinity_cutoff=100  # Only potent ligands <100 nM
 )
 # Returns: SMILES, affinity_type (Ki/IC50/Kd), affinity value, PMID
@@ -642,8 +640,8 @@ actives = tu.tools.PubChem_get_assay_active_compounds(aid=504526)
 | `gwas_get_studies_for_trait` | `trait` | Studies for trait |
 | `gwas_search_associations` | `query` | GWAS associations |
 | `gwas_get_associations_for_trait` | `trait` | Associations for trait |
-| `GtoPdb_search_diseases` | - | GtoPdb diseases |
-| `GtoPdb_search_diseases` | `disease_id` | Disease details |
+| `OpenTargets_get_associated_targets_by_disease_efoId` | `efoId` | Ranked target associations with evidence; the former GtoPdb disease tools are retired |
+
 | `Reactome_get_diseases` | - | Reactome diseases |
 | `OSL_get_efo_id_by_disease_name` | `disease_name` | EFO ID lookup |
 

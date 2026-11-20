@@ -18,11 +18,11 @@ This is a condensed example. Actual reports are much more detailed.
 
 ## Executive Summary
 
-Alzheimer's disease is a progressive neurodegenerative disorder characterized by 
-cognitive decline and memory impairment. Research has identified 245+ associated 
-genes with APOE, APP, and PSEN1/2 showing strongest associations. Currently, 2 
-disease-modifying therapies (aducanumab, lecanemab) are FDA-approved, with 120+ 
-active clinical trials. The disease affects approximately 6.5 million Americans, 
+Alzheimer's disease is a progressive neurodegenerative disorder characterized by
+cognitive decline and memory impairment. Research has identified 245+ associated
+genes with APOE, APP, and PSEN1/2 showing strongest associations. Currently, 2
+disease-modifying therapies (aducanumab, lecanemab) are FDA-approved, with 120+
+active clinical trials. The disease affects approximately 6.5 million Americans,
 with research activity increasing 20% annually.
 
 ---
@@ -63,7 +63,7 @@ with research activity increasing 20% annually.
 | Familial Alzheimer disease | EFO:0005244 |
 | Sporadic Alzheimer disease | EFO:0005245 |
 
-**Sources Used**: OSL_get_efo_id_by_disease_name, ols_get_efo_term, ols_get_efo_term_children, 
+**Sources Used**: OSL_get_efo_id_by_disease_name, ols_get_efo_term, ols_get_efo_term_children,
 umls_search_concepts, umls_get_concept_details, icd_search_codes, snomed_search_concepts
 
 ---
@@ -108,7 +108,7 @@ umls_search_concepts, umls_get_concept_details, icd_search_codes, snomed_search_
 - Biomarker confirmation (amyloid PET, CSF biomarkers)
 - MRI showing characteristic atrophy
 
-**Sources Used**: OpenTargets_get_associated_phenotypes_by_disease_efoId, 
+**Sources Used**: OpenTargets_get_associated_phenotypes_by_disease_efoId,
 MedlinePlus_get_genetics_condition_by_name, MedlinePlus_search_topics_by_keyword,
 get_HPO_ID_by_phenotype, PubMed_search_articles
 
@@ -163,8 +163,8 @@ get_HPO_ID_by_phenotype, PubMed_search_articles
 
 **Total pathogenic variants**: 487 [Source: ClinVar_search_variants]
 
-**Sources Used**: OpenTargets_get_associated_targets_by_disease_efoId, 
-OpenTargets_target_disease_evidence, gwas_get_associations_for_trait, 
+**Sources Used**: OpenTargets_get_associated_targets_by_disease_efoId,
+OpenTargets_target_disease_evidence, gwas_get_associations_for_trait,
 gwas_get_variants_for_trait, gwas_get_studies_for_trait, ClinVar_search_variants,
 ClinVar_get_variant_details, ClinVar_get_clinical_significance
 
@@ -215,10 +215,10 @@ ClinVar_get_variant_details, ClinVar_get_clinical_significance
 
 [Source: get_clinical_trial_descriptions, extract_clinical_trial_outcomes]
 
-**Sources Used**: OpenTargets_get_associated_drugs_by_disease_efoId, 
+**Sources Used**: OpenTargets_get_associated_drugs_by_disease_efoId,
 OpenTargets_get_drug_chembId_by_generic_name, OpenTargets_get_drug_mechanisms_of_action_by_chemblId,
 search_clinical_trials, get_clinical_trial_descriptions, get_clinical_trial_outcome_measures,
-extract_clinical_trial_outcomes, GtoPdb_search_diseases, GtoPdb_search_diseases
+extract_clinical_trial_outcomes, historical GtoPdb disease endpoint (retired; example only)
 
 ---
 
@@ -243,7 +243,7 @@ extract_clinical_trial_outcomes, GtoPdb_search_diseases, GtoPdb_search_diseases
 - Key interactions: APP-PSEN1, APP-BACE1, APOE-CLU
 
 ### Expression Patterns
-[Source: gtex_get_expression_by_gene, HPA_get_protein_expression]
+[Source: GTEx_get_expression_summary, HPA_get_comprehensive_gene_details_by_ensembl_id]
 
 | Gene | Highest Expression Tissue | TPM | Source |
 |------|--------------------------|-----|--------|
@@ -251,9 +251,9 @@ extract_clinical_trial_outcomes, GtoPdb_search_diseases, GtoPdb_search_diseases
 | APOE | Brain - Frontal Cortex | 892.1 | GTEx |
 | PSEN1 | Brain - Hippocampus | 45.2 | GTEx |
 
-**Sources Used**: Reactome_get_diseases, Reactome_map_uniprot_to_pathways, 
+**Sources Used**: Reactome_get_diseases, Reactome_map_uniprot_to_pathways,
 Reactome_get_pathway, Reactome_get_pathway_reactions, humanbase_ppi_analysis,
-gtex_get_expression_by_gene, HPA_get_protein_expression, geo_search_datasets
+GTEx_get_expression_summary, HPA_get_comprehensive_gene_details_by_ensembl_id, geo_search_datasets
 
 ---
 
@@ -300,7 +300,7 @@ gtex_get_expression_by_gene, HPA_get_protein_expression, geo_search_datasets
 5. University College London
 
 **Sources Used**: PubMed_search_articles, PubMed_get_article, PubMed_get_related,
-PubMed_get_cited_by, OpenTargets_get_publications_by_disease_efoId, 
+PubMed_get_cited_by, OpenTargets_get_publications_by_disease_efoId,
 openalex_search_works, europe_pmc_search_abstracts, semantic_scholar_search_papers
 
 ---
@@ -331,7 +331,8 @@ openalex_search_works, europe_pmc_search_abstracts, semantic_scholar_search_pape
 ## 9. Pharmacological Targets
 
 ### Druggable Targets
-[Source: GtoPdb_search_diseases, GtoPdb_search_diseases]
+
+This historical report illustrates formatting. For current disease-target evidence, use the Open Targets disease-target associations tool and report the sources actually retrieved.
 
 | Target | Type | Drugs | Source |
 |--------|------|-------|--------|
@@ -341,7 +342,7 @@ openalex_search_works, europe_pmc_search_abstracts, semantic_scholar_search_pape
 | BACE1 | Enzyme | (pipeline) | GtoPdb |
 | Tau | Protein | (pipeline) | GtoPdb |
 
-**Sources Used**: GtoPdb_search_diseases, GtoPdb_search_diseases, GtoPdb_search_targets,
+**Sources Used**: historical GtoPdb disease endpoint (retired; example only), GtoPdb_search_targets,
 GtoPdb_search_targets, GtoPdb_get_interactions
 
 ---
@@ -369,7 +370,7 @@ GtoPdb_search_targets, GtoPdb_get_interactions
 | Infusion reactions | 26.4% | 7.4% | ClinicalTrials.gov |
 | Headache | 11.1% | 8.1% | ClinicalTrials.gov |
 
-**Sources Used**: OpenTargets_get_drug_warnings_by_chemblId, 
+**Sources Used**: OpenTargets_get_drug_warnings_by_chemblId,
 OpenTargets_get_drug_blackbox_status_by_chembl_ID, extract_clinical_trial_adverse_events,
 FAERS_count_reactions_by_drug_event
 
@@ -398,11 +399,11 @@ FAERS_count_reactions_by_drug_event
 | 15 | search_clinical_trials | condition="Alzheimer disease", pageSize=50 | 4 | 50 |
 | 16 | Reactome_map_uniprot_to_pathways | id="P05067" (APP) | 5 | 12 |
 | 17 | humanbase_ppi_analysis | gene_list=["APP","PSEN1","APOE","TREM2"], tissue="brain" | 5 | 45 |
-| 18 | gtex_get_expression_by_gene | gene="APP" | 5 | 54 |
+| 18 | GTEx_get_expression_summary | gene_symbol="APP" | 5 | 54 |
 | 19 | PubMed_search_articles | query="Alzheimer disease", limit=100 | 6 | 100 |
 | 20 | openalex_search_works | query="Alzheimer disease", limit=50 | 6 | 50 |
 | 21 | OpenTargets_get_similar_entities_by_disease_efoId | efoId="EFO_0000249", size=20 | 7 | 15 |
-| 22 | GtoPdb_search_diseases | name="Alzheimer" | 9 | 1 |
+| 22 | Historical GtoPdb disease endpoint (retired) | Historical example | 9 | 1 |
 | 23 | OpenTargets_get_drug_warnings_by_chemblId | chemblId="CHEMBL4650319" | 10 | 2 |
 | 24 | extract_clinical_trial_adverse_events | nct_ids=["NCT03887455"] | 10 | 8 |
 
@@ -496,7 +497,7 @@ When comparing diseases, maintain citations for each:
 
 ### DO: Include tool name with every data point
 ```markdown
-The disease affects 6.5 million Americans [Source: PubMed_search_articles, 
+The disease affects 6.5 million Americans [Source: PubMed_search_articles,
 query="Alzheimer disease epidemiology prevalence"]
 ```
 

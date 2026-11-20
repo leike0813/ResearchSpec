@@ -11,7 +11,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.5.4
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -170,6 +170,8 @@ A poor metabolizer has reduced or absent enzyme activity. What that means clinic
 This active-vs-prodrug distinction determines the direction of clinical concern. Get it right before interpreting any metabolizer phenotype.
 
 **Star allele reasoning**: Don't memorize allele tables. The logic is always: allele function status (normal / decreased / no function) → diplotype → predicted enzyme activity → phenotype (UM/NM/IM/PM) → clinical recommendation. Use `CPIC_get_alleles(genesymbol=...)` to look up function status for any specific allele.
+
+**PharmVar — the nomenclature authority behind star alleles**: `CPIC_get_alleles` gives CPIC's own clinical-function re-curation, but PharmVar (Pharmacogene Variation Consortium) is the body that actually *defines* what a star allele is — its constituent variants, haplotype structure, and activity score — for CYP2D6, CYP2C9, CYP2C19, CYP2B6, DPYD, and others. `PharmVar_list_genes()` (no params) lists all curated pharmacogenes with allele counts; `PharmVar_get_alleles(gene=...)` returns the full allele definition set for one gene. Reach for PharmVar when you need the authoritative variant-level definition of an allele (e.g. confirming exactly which SNPs constitute CYP2D6\*17) rather than just its CPIC-assigned function label, or when CPIC's own curation seems to disagree with what the allele nomenclature actually specifies. This is distinct from `StarAlleles_search` (in `tooluniverse-clinical-terminology-lookup`), which is a fast autocomplete/typeahead lookup, not a source of allele definitions. **Requires `PHARMVAR_API_KEY`** (register at https://www.pharmvar.org/) — both tools declare `required_api_keys` correctly, so they're cleanly absent from `tu list` without one rather than failing at call time; parameter documentation above is schema-derived since no key was available to verify live in this environment.
 
 ---
 

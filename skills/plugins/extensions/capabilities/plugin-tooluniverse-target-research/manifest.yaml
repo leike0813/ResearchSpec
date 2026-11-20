@@ -51,15 +51,15 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-examples.md
     path: EXAMPLES.md
-    content_hash: bd316514673addc9c3a363fd4b40555bd1cd717accedc12b1ef162409e20a0c9
+    content_hash: 6d19f3682de7a0be31af0dadea56f47d98e28f2fef039d446706ded308f693db
     license: Apache-2.0
   - knowledge_id: tu-implementation.md
     path: IMPLEMENTATION.md
-    content_hash: 1423041516c0f7a3572e7a9bfe6420b4774c32a2d015046d03755daca5a430fd
+    content_hash: 112e335428395b59744295a2e25d30262a9f9f5a892b00b54dd05bc99a31b419
     license: Apache-2.0
   - knowledge_id: tu-reference.md
     path: REFERENCE.md
-    content_hash: 934f62682cb8d310ef9d390f5ba172b68c4d55512ea6aca81a93991f097333d6
+    content_hash: 9fad4617a3e82ae012befa615979ede200a34b147870be79a571b44aeed76aa2
     license: Apache-2.0
   - knowledge_id: tu-report-format.md
     path: REPORT_FORMAT.md
@@ -70,15 +70,15 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/SKILL.md
-      sha256: 52e417501712de32715b50ef8331cbf4ca339bf25b5d8d0ae377ff2cc6caf0e2
+      sha256: 13029105cd970142ffddf2f98a4e61180fb86b2c86e861e441e084955de96a99
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/EVIDENCE_GRADING.md
       sha256: 2d37cdff015566635d9c4b5137ef91144f1c37e08081a78b3cd3a227857ca5bf
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/EXAMPLES.md
-      sha256: bd316514673addc9c3a363fd4b40555bd1cd717accedc12b1ef162409e20a0c9
+      sha256: 6d19f3682de7a0be31af0dadea56f47d98e28f2fef039d446706ded308f693db
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/IMPLEMENTATION.md
-      sha256: 1423041516c0f7a3572e7a9bfe6420b4774c32a2d015046d03755daca5a430fd
+      sha256: 112e335428395b59744295a2e25d30262a9f9f5a892b00b54dd05bc99a31b419
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/REFERENCE.md
-      sha256: 934f62682cb8d310ef9d390f5ba172b68c4d55512ea6aca81a93991f097333d6
+      sha256: 9fad4617a3e82ae012befa615979ede200a34b147870be79a571b44aeed76aa2
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-target-research/REPORT_FORMAT.md
       sha256: 2dd5db75e5f4253f72fe7d2c897dee9c9da7ab733609e5929f63ecb2b88c95d1
 license: Apache-2.0

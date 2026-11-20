@@ -63,11 +63,11 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-references-marker-identification.md
     path: references/marker_identification.md
-    content_hash: 05ef433aed2d0a05b4dfdf29bac391fe7e7bd96e0eb35198d1721d17a0e6886e
+    content_hash: 79f546be53e7153be1f2a6fe0f47bf3260947db6ca25c215ca336fb85aa342c3
     license: Apache-2.0
   - knowledge_id: tu-references-scanpy-workflow.md
     path: references/scanpy_workflow.md
-    content_hash: 0dc0cbeb311d48a1494eb247baa89bc8ed3e5a2e3ccf8cd97d2c05b56bd4b785
+    content_hash: c03dcecd75988f1a7322a006fd35af8cc427a73553dc265964587dc8bc8e1d34
     license: Apache-2.0
   - knowledge_id: tu-references-scrna-qc.md
     path: references/scrna_qc.md
@@ -99,14 +99,14 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-scripts-scrna-qc.py
     path: scripts/scrna_qc.py
-    content_hash: 18e70a5eb9ba450914dd1d9e856085a4575f85341953d61f37aba56caa4a137d
+    content_hash: 65f9a1396b746f4c6ff98ec279c51c54b411c66f2e28e663e01979b68a2c137d
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/SKILL.md
-      sha256: 3410bc8850c6e999fc835c08d0e7e4845236a6259c30d49a94be4c40d2e25918
+      sha256: 2b539453e1ec4f3fb5dffbc4307e50738dc5e909ba120c5f233c797deca52b47
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/analysis_patterns.md
       sha256: 8c6e5aaf1f34d94b2b9db6a201ec16db718db57022825d2553f5d7e72a028310
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/cell_communication.md
@@ -114,9 +114,9 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/clustering_guide.md
       sha256: 32eb30036fec3637998c8f27cafda12e5fedccc131b6b6cde1568bf5dd58b91d
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/marker_identification.md
-      sha256: 05ef433aed2d0a05b4dfdf29bac391fe7e7bd96e0eb35198d1721d17a0e6886e
+      sha256: 79f546be53e7153be1f2a6fe0f47bf3260947db6ca25c215ca336fb85aa342c3
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/scanpy_workflow.md
-      sha256: 0dc0cbeb311d48a1494eb247baa89bc8ed3e5a2e3ccf8cd97d2c05b56bd4b785
+      sha256: c03dcecd75988f1a7322a006fd35af8cc427a73553dc265964587dc8bc8e1d34
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/scrna_qc.md
       sha256: 6472be72eaad5a7dd6b1ffe390521da4bf6f0bad0141535b0fdea813e69e1365
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/references/seurat_workflow.md
@@ -132,5 +132,5 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/scripts/qc_metrics.py
       sha256: d8b9ba92a4eed99f3997b83915a3aa89ec773ccadfc0dcc71e28d54b67cc3e7b
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-single-cell/scripts/scrna_qc.py
-      sha256: 18e70a5eb9ba450914dd1d9e856085a4575f85341953d61f37aba56caa4a137d
+      sha256: 65f9a1396b746f4c6ff98ec279c51c54b411c66f2e28e663e01979b68a2c137d
 license: Apache-2.0

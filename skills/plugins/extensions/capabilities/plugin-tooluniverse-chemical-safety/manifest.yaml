@@ -67,7 +67,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-chemical-safety/SKILL.md
-      sha256: eb4bf5b9315a2896afbd27e6ec8430ca15fdd472f80c97a48e62ec81e5b33876
+      sha256: 259476328be3ced1cdeceadbf778623243a6dc13bf3dcca7903d0a58bcd35c0c
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-chemical-safety/evidence-grading.md
       sha256: 8770384ef9792364c6f375f08522fd9e2a64d9d918498b82a1784fd3e2c3a4ae
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-chemical-safety/phase-details.md

@@ -98,7 +98,7 @@ Sanity targets for biological scogs trees: median saturation ~0.4–0.7, median 
 When the data folder has `*.busco.zip` files + `target_orthologs.txt`, use the bundled script — do NOT enumerate `single_copy_busco_sequences/*.faa` across all zips manually:
 
 ```bash
-python skills/tooluniverse-phylogenetics/scripts/busco_target_orthologs.py \
+python scripts/busco_target_orthologs.py \
   --data-folder /path/to/data
 ```
 
@@ -219,33 +219,33 @@ When running PhyKIT on multiple gene trees/alignments, **use the bundled batch s
 
 ```bash
 # Treeness across all trees
-python skills/tooluniverse-phylogenetics/scripts/phykit_batch.py \
+python scripts/phykit_batch.py \
   --dir scogs_fungi --function treeness --ext .treefile --stat median
 
 # Saturation with paired alignment+tree
-python skills/tooluniverse-phylogenetics/scripts/phykit_batch.py \
+python scripts/phykit_batch.py \
   --dir alignments --function saturation --tree-dir trees \
   --ext .fa --tree-ext .treefile --stat median
 
 # Long branch score (mean per tree, then median across trees)
-python skills/tooluniverse-phylogenetics/scripts/phykit_batch.py \
+python scripts/phykit_batch.py \
   --dir trees --function long_branch_score --ext .treefile \
   --per-tree-stat mean --stat median
 
 # DVMC
-python skills/tooluniverse-phylogenetics/scripts/phykit_batch.py \
+python scripts/phykit_batch.py \
   --dir trees --function dvmc --ext .treefile --stat all
 
 # Gap percentage across all alignments
-python skills/tooluniverse-phylogenetics/scripts/phykit_batch.py \
+python scripts/phykit_batch.py \
   --dir alignments --function gap_percentage --ext .fa
 
 # Evolutionary rate (median across trees)
-python skills/tooluniverse-phylogenetics/scripts/phykit_batch.py \
+python scripts/phykit_batch.py \
   --dir trees --function evolutionary_rate --ext .treefile --stat median
 
 # Mean patristic distance per tree, then mean across trees
-python skills/tooluniverse-phylogenetics/scripts/phykit_batch.py \
+python scripts/phykit_batch.py \
   --dir trees --function patristic_distances --ext .treefile --stat mean
 ```
 

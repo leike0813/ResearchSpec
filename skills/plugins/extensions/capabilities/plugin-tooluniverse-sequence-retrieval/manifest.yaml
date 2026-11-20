@@ -58,7 +58,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-retrieval/SKILL.md
-      sha256: 9f91711762d7af863cbb7d8b6797e3004d7f73f78f39f419cd8a29f58c17e060
+      sha256: 259636bc89e80a4c528aed310e481123bc23d2ca86031466b1425a0fa3075c66
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-retrieval/CHECKLIST.md
       sha256: 0008163bcbb2a65d896bd9db85b0348ae1641698d02fa3b2290b96efe481d689
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-sequence-retrieval/examples.md

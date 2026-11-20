@@ -87,7 +87,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-references-upstream-details.md
     path: references/upstream-details.md
-    content_hash: dd82469226cd2b696ef63fa2091a9f7b6f1c1692b784996c6883f45581435cb6
+    content_hash: 038aa473203db025075fdddd0ce8acb9ce7955ac3525cee3aa661e86719c8d6f
     license: Apache-2.0
   - knowledge_id: tu-scripts-expression-anova.py
     path: scripts/expression_anova.py
@@ -111,7 +111,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-scripts-prepare-ae-cohort.py
     path: scripts/prepare_ae_cohort.py
-    content_hash: d518994a16d3cb5c439b003d37a6c1f3adab4048ae001d8ae782b4a79ab4bcfa
+    content_hash: eada62af2d4741d02b205cd8e75853359ca4f0b81f2108ba6be098649f97a151
     license: Apache-2.0
   - knowledge_id: tu-scripts-r-natural-spline-regression.py
     path: scripts/r_natural_spline_regression.py
@@ -134,7 +134,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/SKILL.md
-      sha256: 0a5698d8de655e8b9a85996be1e6361fa2594ef494dd312e1da49f2efc831dbc
+      sha256: a721f28a9421eb8f743af328c53f237ed9cde820657be4dd872b9b3002dcb4c9
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/EXAMPLES.md
       sha256: dea9ee15740bd35639fce36c607fb8bbd186e245535566e8d7874c53002b0be3
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/QUICK_START.md
@@ -156,7 +156,7 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/troubleshooting.md
       sha256: 1735ff55448aaeb8854e4006bd3e6f1b736b0838adb9c7d79f438503cd9d37df
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/references/upstream-details.md
-      sha256: dd82469226cd2b696ef63fa2091a9f7b6f1c1692b784996c6883f45581435cb6
+      sha256: 038aa473203db025075fdddd0ce8acb9ce7955ac3525cee3aa661e86719c8d6f
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/expression_anova.py
       sha256: 30a84cd2599210ed9d789601ad2d8e225326154dd1a8831d915d95d34872c482
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/format_statistical_output.py
@@ -168,7 +168,7 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/power_analysis.py
       sha256: c2f515fbdbe38572519c503784b217f1cd6ab626adc3f185c8da8e454d330b59
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/prepare_ae_cohort.py
-      sha256: d518994a16d3cb5c439b003d37a6c1f3adab4048ae001d8ae782b4a79ab4bcfa
+      sha256: eada62af2d4741d02b205cd8e75853359ca4f0b81f2108ba6be098649f97a151
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/r_natural_spline_regression.py
       sha256: 6ccd1f344c412fa908d60a69a13e3f82d9ddd8402cffbdaa72300fe15fd26f12
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-statistical-modeling/scripts/sdtm_ordinal_logistic.py

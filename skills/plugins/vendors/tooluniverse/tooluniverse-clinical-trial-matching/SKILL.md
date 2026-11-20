@@ -15,7 +15,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -32,7 +32,7 @@ Transform patient molecular profiles and clinical characteristics into prioritiz
 
 ## Molecular Matching Priority
 
-Match patients to trials by molecular profile FIRST (specific mutations), then by disease stage, then by prior treatments. A patient with EGFR L858R should match to EGFR-targeted trials regardless of other factors.
+Use the molecular profile to identify potentially relevant trials. Evaluate all required inclusion and exclusion criteria. Carry missing information as unresolved and leave eligibility confirmation to the responsible clinical team.
 4. **Evidence-graded** - Every recommendation has an evidence tier (T1-T4)
 5. **Quantitative scoring** - Trial Match Score (0-100) for every trial
 6. **Eligibility-aware** - Parse and evaluate inclusion/exclusion criteria

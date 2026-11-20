@@ -90,13 +90,13 @@ Six phases; the scripts automate 1–4 (and the Phase-5 dry run). **Full detail 
 | **3** Cross-species | Resolve "binds in A not B": align the ortholog interface across human / assay / source species | `EnsemblCompara`, `Alliance`, `UniProt`, `EBI_msa_align` |
 | **4** Narrow + rank | Score on sequence × phenotype × pharmacology × cross-species → shortlist ≤15 | (intersection logic) |
 | **5** Structural confirm *(optional, key-gated)* | Co-fold top candidates, rank by interface ipTM; or academic-free ClusPro docking | `NvidiaNIM_boltz2`/`…`, `ClusPro_submit_peptide_docking` |
-| **6** Report | Ranked shortlist with evidence tiers + wet-lab plan | (inline report) |
+| **6** Report | Ranked shortlist with evidence tiers + wet-lab plan | (ranked report) |
 
 **Core intersection rule:** the real target is where **phenotype-plausible** (Route 2D) meets **sequence/structure-plausible** (Routes 2A–2C). A name-level guess ("it's a GLP-1 analog so it's GLP1R") is exactly what produces off-target errors — never assert a target the union of routes didn't surface.
 
 ---
 
-## Output format — ranked shortlist report (return inline, no extra files)
+## Output format — ranked shortlist report
 
 1. **Peptide characterization** — length, MW, pI, GRAVY, instability, PROSITE/ELM signature, non-canonical/cyclic flag, fold confidence (if run).
 2. **Ranked candidate table** — one row per candidate target: gene + accession · target class · evidence tier · routes that surfaced it · OpenTargets phenotype score · known-pharmacology note (GtoPdb peptide ligands?) · cross-species status (`ortholog_one2one`? interface % identity in the assay species?).
@@ -109,6 +109,26 @@ Six phases; the scripts automate 1–4 (and the Phase-5 dry run). **Full detail 
 - **Tier 3 (weak/hypothesis):** single-route only (deep paralog, or a phenotype-only hit not corroborated by sequence/structure).
 
 ---
+
+## Peptide Bioactivity Property Databases (supplementary characterization)
+
+Separate from target deorphanization itself, ToolUniverse has 7 small, single-property peptide databases. None of them tell you what a peptide's *target* is — they each answer a narrower "does this peptide have property X" question, useful as supplementary evidence once a peptide is on your radar (e.g. flagging a candidate as also hemolytic/toxic before recommending it, or checking measured half-life before a stability claim). Query the one matching the property you actually need — searching all 7 for every peptide is wasted effort.
+
+| Database | Tools | Property covered | Search fields |
+|---|---|---|---|
+| **DBAASP** | `DBAASP_search_peptides`, `DBAASP_get_peptide` | Antimicrobial activity — per-target MIC values, terminus modifications, structure | `sequence`, `name`, `target_species`, `target_group`, `kingdom`, `uniprot`, `dbaasp_id` |
+| **AMPSphere** | `AMPSphere_search_amps`, `AMPSphere_get_family`, `AMPSphere_get_amp_distributions`, `AMPSphere_get_amp_features` | Antimicrobial peptides predicted from 863K+ prokaryotic metagenomic smORFs — family clustering, geographic/ecological distribution, physicochemical features (MW, pI, charge, molar extinction) | `habitat`, `family`, `microbial_source`, `pep_length_interval`, `mw_interval`, `charge_interval`, or a specific `accession` |
+| **ConoServer** | `ConoServer_search_conopeptides`, `ConoServer_get_conopeptide` | Cone-snail venom peptides (conotoxins) — sequence, PTMs, cysteine framework, gene superfamily, pharmacological family | `name`, `sequence`, `pharmacological_family`, `gene_superfamily`, `cysteine_framework`, `organism`, or `conoserver_id` |
+| **Hemolytik 2.0** | `Hemolytik2_search_peptides` | Experimentally validated hemolytic/toxic activity | `dataType` in `{nature, source, seq}` + `dataValue` — **no name-based search**; use `seq` for a sequence/substring query |
+| **CancerPPD 2.0** | `CancerPPD2_search_peptides` | Experimentally validated anticancer activity, by cancer type / cell line | `dataType` in `{cancer_type, cell_line, seq}` + `dataValue` |
+| **TumorHoPe 2** | `TumorHope2_search_peptides` | Tumor-homing peptides used in drug delivery | `source`, `target_tumor`, `name_source`, `conjugate` (all optional filters) |
+| **PEPlife 2.0** | `PEPlife2_search_peptides` | Experimentally measured half-life / proteolytic stability | `dataType` in `{lin_cyc, org, seq}` + `dataValue` — **no name-based search**, same pattern as Hemolytik2 |
+
+**Verified live behavior worth knowing before you rely on these:**
+- Hemolytik2 and PEPlife2 both reject a `name`/`dataType` value outside their fixed enum (`{nature, source, seq}` and `{lin_cyc, org, seq}` respectively) — there is no cross-database "search by peptide name" here except DBAASP, ConoServer, and TumorHope2's `name_source`. If you only have a name, search DBAASP/TumorHope2 first, or search by `seq` if you have the sequence.
+- The `seq` filter on Hemolytik2/PEPlife2/CancerPPD2 is a **loose substring/fragment match**, not an exact-sequence lookup — querying a well-known peptide's full sequence can return unrelated peptides that merely share a short subsequence. Always check the returned `seq` field actually matches before treating a hit as the peptide you queried.
+- **`ConoServer_search_conopeptides` was found live-broken at the time of writing** — the underlying bulk XML download (`conoserver.org/download/conoserver_protein.xml.gz`) returned HTTP 403 on every attempt (3/3 in `tu test`, repeated manual retries also failed), and `ConoServer_get_conopeptide` (which loads the same bulk file) also failed on manual retry after passing once under `tu test`'s cached run. Treat ConoServer as **currently unreliable** — check its live status with a cheap call before depending on it, and do not fabricate a conopeptide record if it 403s.
+- The other 6 databases (DBAASP, AMPSphere, Hemolytik2, CancerPPD2, TumorHope2, PEPlife2) were confirmed live and working at the time of writing.
 
 ## Validation & test set
 

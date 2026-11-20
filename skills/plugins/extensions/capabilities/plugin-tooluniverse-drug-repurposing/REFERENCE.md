@@ -11,26 +11,28 @@ Detailed tool documentation and API reference for drug repurposing workflows.
 disease_info = tu.tools.OpenTargets_get_disease_id_description_by_name(
     diseaseName="Alzheimer's disease"
 )
-# Returns: {'data': {'id': 'EFO_0000249', 'name': '...', 'description': '...'}}
+# Returns: {'data': {'search': {'hits': [{'id': 'MONDO_0004975', 'name': '...', 'description': '...'}]}}}
+# disease_id = result['data']['search']['hits'][0]['id']
 ```
 **Use**: Initial disease lookup, get EFO ID for further queries
 
 #### OpenTargets_get_associated_targets_by_disease_efoId
 ```python
 targets = tu.tools.OpenTargets_get_associated_targets_by_disease_efoId(
-    efoId="EFO_0000249",
-    limit=20
+    efoId="MONDO_0004975",
+    size=20  # number of top-scored targets to return (default 50); `index` pages beyond that
 )
-# Returns: List of targets with association scores
+# Returns: data.disease.associatedTargets.rows[] -> {'target': {'id': 'ENSG...', 'approvedSymbol': '...'}, 'score': 0.75}
+# plus .count (total), .returned, .truncated
 ```
 **Use**: Find proteins/genes associated with disease (repurposing targets)
 
-#### OpenTargets_get_diseases_by_target_ensemblId
+#### OpenTargets_get_diseases_phenotypes_by_target_ensembl
 ```python
-diseases = tu.tools.OpenTargets_get_diseases_by_target_ensemblId(
+diseases = tu.tools.OpenTargets_get_diseases_phenotypes_by_target_ensembl(
     ensemblId="ENSG00000012048"
 )
-# Returns: Diseases associated with gene/protein
+# Returns: data.target.associatedDiseases.rows[] -> {score, disease: {id, name}, datasourceScores}
 ```
 **Use**: Reverse lookup - find diseases for drug targets (compound-based repurposing)
 
@@ -41,16 +43,16 @@ diseases = tu.tools.OpenTargets_get_diseases_by_target_ensemblId(
 #### drugbank_get_drug_name_and_description_by_target_name
 ```python
 drugs = tu.tools.drugbank_get_drug_name_and_description_by_target_name(
-    target_name="BACE1"
+    query="Beta-secretase 1"  # protein NAME -- gene symbols like "BACE1" return 0 matches
 )
-# Returns: List of drugs targeting specified protein
+# Returns: data.results[] of drugs targeting the specified protein (+ total_matches)
 ```
 **Use**: Primary tool for finding drugs by target (target-based repurposing)
 
 #### drugbank_get_drug_name_and_description_by_indication
 ```python
 drugs = tu.tools.drugbank_get_drug_name_and_description_by_indication(
-    indication="hypertension"
+    query="hypertension"
 )
 # Returns: Drugs approved for specified indication
 ```
@@ -100,7 +102,7 @@ mechanisms = tu.tools.ChEMBL_get_drug_mechanisms(
 #### drugbank_get_drug_basic_info_by_drug_name_or_id
 ```python
 info = tu.tools.drugbank_get_drug_basic_info_by_drug_name_or_id(
-    drug_name_or_drugbank_id="metformin"
+    query="metformin"
 )
 # Returns: Basic drug info including approval status, groups, description
 ```
@@ -109,7 +111,7 @@ info = tu.tools.drugbank_get_drug_basic_info_by_drug_name_or_id(
 #### drugbank_get_indications_by_drug_name_or_drugbank_id
 ```python
 indications = tu.tools.drugbank_get_indications_by_drug_name_or_drugbank_id(
-    drug_name_or_drugbank_id="aspirin"
+    query="aspirin"
 )
 # Returns: List of approved indications
 ```
@@ -118,7 +120,7 @@ indications = tu.tools.drugbank_get_indications_by_drug_name_or_drugbank_id(
 #### drugbank_get_targets_by_drug_name_or_drugbank_id
 ```python
 targets = tu.tools.drugbank_get_targets_by_drug_name_or_drugbank_id(
-    drug_name_or_drugbank_id="imatinib"
+    query="imatinib"
 )
 # Returns: Drug targets with accessions
 ```
@@ -127,7 +129,7 @@ targets = tu.tools.drugbank_get_targets_by_drug_name_or_drugbank_id(
 #### drugbank_get_pharmacology_by_drug_name_or_drugbank_id
 ```python
 pharmacology = tu.tools.drugbank_get_pharmacology_by_drug_name_or_drugbank_id(
-    drug_name_or_drugbank_id="warfarin"
+    query="warfarin"
 )
 # Returns: Mechanism of action, pharmacodynamics, pharmacokinetics
 ```
@@ -136,7 +138,7 @@ pharmacology = tu.tools.drugbank_get_pharmacology_by_drug_name_or_drugbank_id(
 #### drugbank_get_pathways_reactions_by_drug_or_id
 ```python
 pathways = tu.tools.drugbank_get_pathways_reactions_by_drug_or_id(
-    drug_name_or_drugbank_id="statins"
+    query="statins"
 )
 # Returns: Affected pathways and reactions
 ```
@@ -145,7 +147,7 @@ pathways = tu.tools.drugbank_get_pathways_reactions_by_drug_or_id(
 #### drugbank_get_drug_name_and_description_by_pathway_name
 ```python
 drugs = tu.tools.drugbank_get_drug_name_and_description_by_pathway_name(
-    pathway_name="cholesterol biosynthesis"
+    query="cholesterol biosynthesis"
 )
 # Returns: Drugs affecting specified pathway
 ```
@@ -154,7 +156,7 @@ drugs = tu.tools.drugbank_get_drug_name_and_description_by_pathway_name(
 #### drugbank_get_drug_desc_pharmacology_by_moa
 ```python
 drugs = tu.tools.drugbank_get_drug_desc_pharmacology_by_moa(
-    mechanism_of_action="receptor antagonist"
+    query="receptor antagonist"
 )
 # Returns: Drugs with specified mechanism
 ```
@@ -185,7 +187,7 @@ precautions = tu.tools.FDA_get_precautions_by_drug_name(
 #### drugbank_get_drug_interactions_by_drug_name_or_id
 ```python
 interactions = tu.tools.drugbank_get_drug_interactions_by_drug_name_or_id(
-    drug_name_or_id="warfarin"
+    query="warfarin"
 )
 # Returns: Drug-drug interactions
 ```
@@ -195,12 +197,13 @@ interactions = tu.tools.drugbank_get_drug_interactions_by_drug_name_or_id(
 ```python
 reports = tu.tools.FAERS_search_reports_by_drug_and_reaction(
     medicinalproduct="LIPITOR",
-    reactionmeddrapt="myalgia",
+    reactionmeddrapt="MYALGIA",   # MedDRA preferred term; both args are required
     limit=100
 )
-# Returns: Adverse event reports
+# Returns: {'reports': [...], 'count': <this page>, 'total_available': <all matches>, 'truncated': bool}
+# limit is capped at 100 -- read total_available for the true number of matching reports
 ```
-**Use**: Real-world safety data, specific adverse events
+**Use**: Real-world safety data, specific adverse events (for a drug's whole reaction profile, use `FAERS_count_reactions_by_drug_event`)
 
 #### FAERS_count_reactions_by_drug_event
 ```python
@@ -255,10 +258,10 @@ properties = tu.tools.PubChem_get_compound_properties_by_CID(
 ```python
 similar = tu.tools.PubChem_search_compounds_by_similarity(
     smiles="CC(=O)Oc1ccccc1C(=O)O",
-    threshold=85,
-    limit=50
+    threshold=0.85,   # Tanimoto similarity, 0-1 scale
+    max_results=50
 )
-# Returns: Structurally similar compounds
+# Returns: data.IdentifierList.CID -- a list of similar compound CIDs (no per-compound scores)
 ```
 **Use**: Structure-based repurposing - find approved drug analogs
 
@@ -274,9 +277,10 @@ bioactivity = tu.tools.PubChem_get_compound_bioactivity(
 #### ChEMBL_search_activities
 ```python
 bioactivity = tu.tools.ChEMBL_search_activities(
-    chembl_id="CHEMBL25"
+    molecule_chembl_id="CHEMBL25",
+    limit=25
 )
-# Returns: Detailed bioactivity data (IC50, EC50, etc.)
+# Returns: data.activities[] -- bioactivity records (standard_type, standard_value, ...)
 ```
 **Use**: Quantitative activity data for target validation
 
@@ -289,7 +293,8 @@ bioactivity = tu.tools.ChEMBL_search_activities(
 admet = tu.tools.ADMETAI_predict_physicochemical_properties(
     smiles="CC(C)Cc1ccc(cc1)C(C)C(O)=O"
 )
-# Returns: Absorption, distribution, metabolism, excretion, toxicity predictions
+# Returns: {smiles: {'molecular_weight': ..., 'logP': ..., 'hydrogen_bond_acceptors': ..., <property>_drugbank_approved_percentile: ...}}
+# (physicochemical properties only; use ADMETAI_predict_toxicity for toxicity endpoints)
 ```
 **Use**: Predict drug-like properties for candidates, filter early
 
@@ -394,10 +399,10 @@ Recommended limits by tool:
 - Real-time safety alerts
 
 ```python
-# Enable caching globally
-tu = ToolUniverse(use_cache=True)
-
-# Or per-call
+# The result cache is enabled by default (env TOOLUNIVERSE_CACHE_ENABLED, default true);
+# each call opts in with `use_cache=True`. It is a framework option on tools.X(...),
+# not a tool argument, and NOT a ToolUniverse() constructor argument.
+tu = ToolUniverse()
 result = tu.tools.ADMETAI_predict_physicochemical_properties(smiles="...", use_cache=True)
 ```
 
@@ -416,28 +421,31 @@ result = tu.tools.ADMETAI_predict_physicochemical_properties(smiles="...", use_c
 ```
 
 ### OpenTargets Target Object
+One row of `OpenTargets_get_associated_targets_by_disease_efoId(...)['data']['disease']['associatedTargets']['rows']`
+(verified live; there is no gene name, UniProt ID, or data-source list in the row):
 ```python
 {
-    'gene_symbol': 'APP',
-    'gene_name': 'Amyloid Precursor Protein',
-    'ensembl_id': 'ENSG00000142192',
-    'uniprot_id': 'P05067',
-    'score': 0.95,           # Association score (0-1)
-    'data_sources': [...]    # Evidence sources
+    'target': {'id': 'ENSG00000142192', 'approvedSymbol': 'APP'},
+    'score': 0.87            # Association score (0-1)
 }
 ```
+For a UniProt accession, call `OpenTargets_get_target_info_by_ensemblID(ensemblId=...)` and read `proteinIds`.
 
 ### DrugBank Drug Object
+One entry of `drugbank_get_drug_basic_info_by_drug_name_or_id(query=...)['data']['results']`
+(verified live; other fields such as indication, mechanism of action, and targets come from the
+separate `drugbank_*` tools, not from this record):
 ```python
 {
     'drugbank_id': 'DB00945',
-    'name': 'Aspirin',
+    'drug_name': 'Acetylsalicylic acid',
     'description': '...',
-    'groups': ['approved', 'vet_approved'],
-    'indication': '...',
-    'pharmacodynamics': '...',
-    'mechanism_of_action': '...',
-    'targets': [...]
+    'approval_groups': 'approved | vet_approved',   # ' | '-separated string, not a list
+    'drug_type': 'small molecule',
+    'brand_names': '10 Person ANSI | 217 | ...',    # ' | '-separated string
+    'synonyms': '2-Acetoxybenzenecarboxylic acid | ...',   # ' | '-separated string
+    'cas_number': '50-78-2',
+    'unii': 'R16CO5Y76E'
 }
 ```
 
@@ -469,9 +477,15 @@ targets = ['APP', 'APOE', 'MAPT', 'PSEN1', 'PSEN2']
 
 all_drugs = []
 for target in targets:
-    drugs = tu.tools.DGIdb_get_drug_gene_interactions(gene_name=target)
-    if drugs and 'data' in drugs:
-        all_drugs.extend([{**d, 'target': target} for d in drugs['data']])
+    result = tu.tools.DGIdb_get_drug_gene_interactions(gene_name=target)
+    # data: {genes: {nodes: [{name, interactions: [{drug: {name, conceptId}, interactionTypes, sources}]}]}}
+    for node in (result.get('data') or {}).get('genes', {}).get('nodes', []):
+        for interaction in node['interactions']:
+            all_drugs.append({
+                'drug_name': interaction['drug']['name'],
+                'interaction_types': interaction['interactionTypes'],
+                'target': target,
+            })
 
 # Deduplicate by drug name
 unique_drugs = {d['drug_name']: d for d in all_drugs}.values()
@@ -485,21 +499,25 @@ target = "ABL1"
 
 # Check DrugBank
 db_targets = tu.tools.drugbank_get_targets_by_drug_name_or_drugbank_id(
-    drug_name_or_drugbank_id=drug
+    query=drug
 )
-db_confirms = any(t['gene_symbol'] == target for t in db_targets.get('data', []))
+# DrugBank returns data.results[]; each drug row has targets[] with protein names (no gene symbols)
+db_rows = db_targets.get('data', {}).get('results', [])
+db_confirms = any(target.lower() in t['name'].lower()
+                  for row in db_rows for t in row.get('targets', []))
 
 # Check DGIdb
 dgidb = tu.tools.DGIdb_get_drug_gene_interactions(gene_name=target)
-dgidb_confirms = any(d['drug_name'].lower() == drug.lower() 
+dgidb_confirms = any(d['drug_name'].lower() == drug.lower()
                      for d in dgidb.get('data', []))
 
 # Check ChEMBL
 chembl_drugs = tu.tools.ChEMBL_search_drugs(query=drug, limit=1)
-if chembl_drugs and 'data' in chembl_drugs:
-    chembl_id = chembl_drugs['data'][0]['molecule_chembl_id']
+molecules = (chembl_drugs or {}).get('data', {}).get('molecules', [])
+if molecules:
+    chembl_id = molecules[0]['molecule_chembl_id']
     mechanisms = tu.tools.ChEMBL_get_drug_mechanisms(chembl_id=chembl_id)
-    chembl_confirms = any(target in str(m) for m in mechanisms.get('data', []))
+    chembl_confirms = any(target in str(m) for m in mechanisms.get('data', {}).get('mechanisms', []))
 
 validation_score = sum([db_confirms, dgidb_confirms, chembl_confirms])
 print(f"Validation: {validation_score}/3 databases confirm {drug}-{target} interaction")
@@ -525,17 +543,14 @@ deaths = tu.tools.FAERS_count_death_related_by_drug(
     medicinalproduct=drug
 )
 
-# Calculate safety score
+# Compare reports matching the same drug filters, with and without the death criterion.
 total_reports = all_reactions.get('total_reports_matching_query')
-death_count = next((r['count'] for r in deaths.get('results', []) if str(r.get('term', '')).startswith('death criterion met')), 0)
-death_ratio = death_count / total_reports if total_reports else None  # reported-death share, not a fatality risk
-
-if death_ratio > 0.01:  # >1% death reports
-    print(f"⚠️ HIGH RISK: {death_ratio*100:.2f}% death ratio")
-elif death_ratio > 0.001:
-    print(f"⚠️ MODERATE RISK: {death_ratio*100:.2f}% death ratio")
+death_count = deaths.get('total_reports_matching_query')
+if total_reports and death_count is not None and 0 <= death_count <= total_reports:
+    print(f'Share of matching reports with a death criterion: {death_count / total_reports:.2%}')
 else:
-    print(f"✓ ACCEPTABLE RISK: {death_ratio*100:.2f}% death ratio")
+    print('Report share unavailable; record missing or inconsistent totals.')
+# This descriptive share supplies no patient-level risk or causal inference.
 ```
 
 ### Pattern 4: Literature Evidence Scoring
@@ -552,9 +567,9 @@ pmc = tu.tools.EuropePMC_search_articles(query=query, limit=100)
 trials = tu.tools.search_clinical_trials(condition=disease, intervention=drug)
 
 # Count evidence types
-review_count = sum(1 for p in pubmed.get('data', []) 
+review_count = sum(1 for p in pubmed.get('data', [])
                    if 'review' in p.get('title', '').lower())
-rct_count = sum(1 for p in pubmed.get('data', []) 
+rct_count = sum(1 for p in pubmed.get('data', [])
                 if 'randomized' in p.get('title', '').lower())
 trial_count = len(trials.get('data', []))
 

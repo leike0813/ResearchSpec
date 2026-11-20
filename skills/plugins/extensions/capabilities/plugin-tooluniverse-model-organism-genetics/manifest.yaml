@@ -2,8 +2,12 @@ schema_version: "1"
 capability_id: plugin-tooluniverse-model-organism-genetics
 title: Model Organism Genetics Pipeline
 description: Cross-species genetic analysis using model organism databases (MGI
-  mouse, ZFIN zebrafish, FlyBase fruit fly, WormBase worm, SGD yeast, RGD rat,
-  GBIF taxonomy). Maps human genes to orthologs, retrieves
+  mouse, IMPC systematic knockout phenotyping, ZFIN zebrafish, FlyBase fruit
+  fly, WormBase worm, SGD budding yeast plus protein-domain/PTM/literature
+  detail, PomBase fission yeast, RGD rat, GeneNetwork systems-genetics/eQTL
+  panels, HumanMine/MouseMine cross-species data-warehouse search, GBIF
+  taxonomy) plus VEuPathDB for eukaryotic pathogens (Plasmodium, Toxoplasma,
+  fungi, vectors). Maps human genes to orthologs, retrieves
   phenotype/expression/functional data, assesses gene function conservation, and
   identifies the best animal model for studying a human gene or disease.
 maturity: operational
@@ -50,5 +54,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-model-organism-genetics/SKILL.md
-      sha256: 6e93b54b460e19f21e1165e9a80124957a21547b4a0d999fb731a70ad54c375a
+      sha256: 087c42e6e2fd6a03c4db11b6c229ba63805d8fb5bbef424019ffd27fdf140761
 license: Apache-2.0

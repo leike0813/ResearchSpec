@@ -4,8 +4,8 @@
     "vendor_id": "tooluniverse",
     "name": "ToolUniverse",
     "repository_url": "https://github.com/mims-harvard/ToolUniverse",
-    "release": "v1.5.4",
-    "revision": "8ec5d4be77c9e0ce0037eac6fdd4e914f1544b06",
+    "release": "v1.5.10",
+    "revision": "6b50abef032a702554e2b34a4f592ee674f12f8f",
     "license": "Apache-2.0",
     "converter_version": "1",
     "skills": [

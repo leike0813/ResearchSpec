@@ -51,5 +51,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-functional-annotation/SKILL.md
-      sha256: cdd4f8244d83ad4cf8512c88e1f68fd52e8f1c0a08e5e30e83c967d200094b47
+      sha256: 21d8f081ad7f592ff52a79d572a43bb9ac859ab84c1514b9c67f1e593ec85569
 license: Apache-2.0

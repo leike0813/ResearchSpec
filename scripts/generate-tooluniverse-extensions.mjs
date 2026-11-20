@@ -345,6 +345,7 @@ function generate() {
     release: policy.release,
     revision: policy.revision,
     anchor_id: policy.anchor_id,
+    created_at: policy.created_at,
     audit_file: policy.audit_file,
     audit_report: policy.audit_report,
     extension_domains: [...domainAssignments().keys()].sort(),

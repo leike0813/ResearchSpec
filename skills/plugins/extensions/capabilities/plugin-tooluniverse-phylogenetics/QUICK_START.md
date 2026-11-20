@@ -15,13 +15,13 @@ shot. Avoids the timeouts that come from re-running per-group batches.
 ```bash
 # parsimony_informative %, RCV, gap_percentage: ~2s for 500 alignments
 # (Biopython, no subprocess fork-per-file)
-python skills/tooluniverse-phylogenetics/scripts/scogs_paired_compare.py \
+python scripts/scogs_paired_compare.py \
     --data-folder "$DATA_PATH" --metric parsimony_informative
 
 # Long branch score / patristic distances: choose per-tree summary
-python skills/tooluniverse-phylogenetics/scripts/scogs_paired_compare.py \
+python scripts/scogs_paired_compare.py \
     --data-folder "$DATA_PATH" --metric long_branch_score --per-tree-stat mean
-python skills/tooluniverse-phylogenetics/scripts/scogs_paired_compare.py \
+python scripts/scogs_paired_compare.py \
     --data-folder "$DATA_PATH" --metric long_branch_score --per-tree-stat median
 ```
 

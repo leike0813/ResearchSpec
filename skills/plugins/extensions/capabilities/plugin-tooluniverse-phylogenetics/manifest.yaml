@@ -50,7 +50,7 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-quick-start.md
     path: QUICK_START.md
-    content_hash: daaed23778ab1b4af1b514a80ba279c7401fa1203bb9dfbd79bd9ec88a25e785
+    content_hash: b538aa82ffa5fa3f47f36b3445b843260851f1ff12bd5333a34427b05a6d7104
     license: Apache-2.0
   - knowledge_id: tu-references-parsimony-analysis.md
     path: references/parsimony_analysis.md
@@ -70,7 +70,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-references-upstream-details.md
     path: references/upstream-details.md
-    content_hash: 07061c284ae90dc2238cd3316a87ceb565750666460f066bcdbb49d3dcd1612f
+    content_hash: 69947da37bde5e9e0b7dad33b1397d512ac360308e662098a2f28a888be93ea7
     license: Apache-2.0
   - knowledge_id: tu-scripts-busco-target-orthologs.py
     path: scripts/busco_target_orthologs.py
@@ -101,9 +101,9 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/SKILL.md
-      sha256: 5313280eb9c060d1930dd48ca64b6786c986e51796336309db8555a6556749ef
+      sha256: 87cc3038c941ab15870719a12c78b1a974c738f7041aea22c3c0c1161c5ee2df
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/QUICK_START.md
-      sha256: daaed23778ab1b4af1b514a80ba279c7401fa1203bb9dfbd79bd9ec88a25e785
+      sha256: b538aa82ffa5fa3f47f36b3445b843260851f1ff12bd5333a34427b05a6d7104
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/parsimony_analysis.md
       sha256: f7191aaa4679dd0908a9a817137924438130acdf77c298902a48aa75a56ccdf9
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/sequence_alignment.md
@@ -113,7 +113,7 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/troubleshooting.md
       sha256: 79d00d3b104c7b92566f0c2591632e77ea82c71c2bafb819c075fbcb12db5e6d
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/references/upstream-details.md
-      sha256: 07061c284ae90dc2238cd3316a87ceb565750666460f066bcdbb49d3dcd1612f
+      sha256: 69947da37bde5e9e0b7dad33b1397d512ac360308e662098a2f28a888be93ea7
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/busco_target_orthologs.py
       sha256: b8d40841af3b4307be1a8ba056b3187885cc681547820323a33c368bebd00ef7
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-phylogenetics/scripts/format_alignment.py

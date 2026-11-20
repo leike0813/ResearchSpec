@@ -1,12 +1,15 @@
 schema_version: "1"
 capability_id: plugin-tooluniverse-protein-structure-retrieval
 title: Protein Structure Data Retrieval
-description: Protein structure retrieval from RCSB PDB, PDBe, and AlphaFold with
-  disambiguation, quality assessment (resolution, R-factor, pLDDT), and
-  metadata. Distinguishes high-quality experimental (X-ray under 2 Angstrom) vs
-  predicted vs medium-quality structures. Use for fetching protein structures,
-  structure-quality comparison, and selecting structures for drug design or
-  modeling.
+description: Protein structure retrieval from RCSB PDB, PDBe, AlphaFold,
+  SWISS-MODEL, 3D-Beacons (cross-provider structure aggregator), and PDB-REDO
+  (re-refined X-ray structures), with disambiguation, quality assessment
+  (resolution, R-factor, pLDDT, coverage), and metadata. Distinguishes
+  high-quality experimental (X-ray under 2 Angstrom) vs predicted vs
+  homology-model vs medium-quality structures. Use for fetching protein
+  structures, structure-quality comparison, batch model-availability checks
+  across a gene list, checking every structure provider at once, and selecting
+  structures for drug design or modeling.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -52,16 +55,16 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-examples.md
     path: examples.md
-    content_hash: ed3e209161f712911051c38bce1509b354b7a9df2537b157bd77f4b3a303faea
+    content_hash: ea9c3395ff23a90b2105452427fc39e9f78226f3fcf6c7c12d1db6d6c0be51b3
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-structure-retrieval/SKILL.md
-      sha256: bc82b5a982f55384259e1759d319a10e1bb41afa9fe3bdcdd803cb02622d0a75
+      sha256: 66791c64360ed4fd503ac0885ff9e69b2f77250375ab9db4fdb9a78e46647f4e
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-structure-retrieval/CHECKLIST.md
       sha256: 6ba202e0ea1749b11478a348e5aff3a4f23ea650850c7154fe1c4ed9f8586d25
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-structure-retrieval/examples.md
-      sha256: ed3e209161f712911051c38bce1509b354b7a9df2537b157bd77f4b3a303faea
+      sha256: ea9c3395ff23a90b2105452427fc39e9f78226f3fcf6c7c12d1db6d6c0be51b3
 license: Apache-2.0

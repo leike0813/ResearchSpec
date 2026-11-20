@@ -51,5 +51,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-to-mechanism/SKILL.md
-      sha256: 5b766b0cdca821914297cdd44e5781169ada11cf07cc44f1d3951e8f807f17ec
+      sha256: 53fd5df2c9054947449c413bce258ff5090bbcf23b670a1970fb0b5e04962986
 license: Apache-2.0

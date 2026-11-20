@@ -356,12 +356,12 @@ result = tu.tools.FDA_OrangeBook_get_approval_history(
 ### Patent & Exclusivity
 | Tool | Purpose | Key Output |
 |------|---------|------------|
-| `FDA_OrangeBook_get_patent_info` | Get patent information | Patent guidance, download URL |
-| `FDA_OrangeBook_get_exclusivity` | Get exclusivity periods | Exclusivity types, expiry dates |
+| `FDA_OrangeBook_get_patent_info` | Get patent information | `products[].patents` with patent numbers and expiration dates |
+| `FDA_OrangeBook_get_exclusivity` | Get exclusivity periods | `products[].exclusivity` with codes and expiration dates |
 
 **Example**:
 ```python
-# Patent info (guidance + download URL)
+# Inspect the success status and each matched product's patent list.
 patents = tu.tools.FDA_OrangeBook_get_patent_info(
     operation="get_patent_info",
     brand_name="ADVIL"

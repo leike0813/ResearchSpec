@@ -13,7 +13,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -64,7 +64,7 @@ ROC_analysis(csv_path="scores.csv", cutoff=0.6)        # or a CSV (cols: label, 
 The bundled script is the equivalent CLI form:
 
 ```bash
-python skills/tooluniverse-diagnostic-test-evaluation/scripts/roc_analysis.py --input scores.csv
+python scripts/roc_analysis.py --input scores.csv
 # scores.csv columns: label (1=disease, 0=healthy), score (continuous biomarker)
 ```
 

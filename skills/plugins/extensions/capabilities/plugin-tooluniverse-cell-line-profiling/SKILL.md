@@ -12,6 +12,10 @@ metadata:
 
 > **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, or receipts. Use the ResearchSpec CLI for authoritative mutations.
 
+## COSMIC evidence coverage
+
+Check `status` before using `data.results`. Use `metadata.result_set_complete` and `metadata.truncated` to report coverage. COSMIC provides a non-pageable record window. A result count describes retrieved mutation records and cannot estimate patient prevalence.
+
 # Cancer Cell Line Profiling and Selection
 
 Comprehensive profiling of cancer cell lines for experimental model selection. Transforms a query (cancer type, gene, or cell line name) into an actionable report covering identity verification, molecular features, gene dependencies, drug sensitivities, and druggable targets.
@@ -53,8 +57,8 @@ Apply for: cell line selection by cancer type/gene, cell line profiling, gene de
 | `cellosaurus_search_cell_lines` | `q` (required), `size` | Solr syntax: `id:HeLa`, `ox:9606 AND char:cancer` |
 | `cellosaurus_get_cell_line_info` | `accession` (required, CVCL_ format) | Full cell line record |
 | `cellosaurus_query_converter` | `query` (required) | Natural language to Solr syntax |
-| `COSMIC_search_mutations` | `terms` OR `query`, `max_results` | Search "BRAF V600E" or gene name |
-| `COSMIC_get_mutations_by_gene` | `gene` OR `gene_name`, `max_results` | All mutations for a gene |
+| `COSMIC_search_mutations` | `terms`, `max_results` | Search "BRAF V600E" or gene name |
+| `COSMIC_get_mutations_by_gene` | `gene`, `max_results` | Accessible mutation records for a gene |
 | `PharmacoDB_get_cell_line` | `operation="get_cell_line"`, `cell_name` | Cell line metadata + datasets |
 | `PharmacoDB_get_experiments` | `operation="get_experiments"`, `compound_name`, `cell_line_name`, `dataset_name`, `per_page` | Drug response data (IC50, AAC, EC50) |
 | `PharmacoDB_get_biomarker_assoc` | `operation="get_biomarker_associations"`, `compound_name`, `tissue_name`, `mdata_type`, `per_page` | Gene-drug sensitivity correlations |
@@ -142,7 +146,7 @@ Phase 5: Target Druggability & Recommendations
 
 **OUTPUT**: Gene validation + mutation status per cell line.
 
-**Per-cell-line Chronos scores** (what the API can't give you): use the bundled script `scripts/depmap_gene_dependency.py`. It pulls the current DepMap Public release (CRISPRGeneEffect.csv + Model.csv) once via the public download index, caches it, and answers the dependency question directly:
+**Per-cell-line Chronos scores** (what the API can't give you): use the bundled script `scripts/depmap_gene_dependency.py`. It pulls the current DepMap Public release (CRISPRGeneEffect.csv + Model.csv) once via the public download index, caches it, and answers the dependency question directly: NOTE (2026-09-21): DepMap's download index now answers with a bot-check page instead of the file list; the script reports that (exit 2) rather than bypassing it. Download `CRISPRGeneEffect.csv` and `Model.csv` from https://depmap.org/portal/download/all/ in a browser and put them in the cache directory (`$DEPMAP_CACHE_DIR`, default `<tmp>/depmap_cache`); cached files are used without contacting DepMap.
 
 ```bash
 # Cell lines most dependent on a gene (optionally within a lineage)

@@ -54,7 +54,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-finemapping/SKILL.md
-      sha256: 1fbed80ea1936e30300758f601695a6e894b4a7ca8bc84e60797ce9288f9b98b
+      sha256: c3404938b0f23f3f18cc1331d078e72cacb7a34002778677a6cbf9675c4eefb0
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-finemapping/python_implementation.py
       sha256: ca4ade48f544599538eb76d4ce123c7ef332bd0ba74a9263c77b89b00f0d6e25
 license: Apache-2.0

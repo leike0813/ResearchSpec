@@ -14,7 +14,7 @@ metadata:
 
 # Cancer Genomics / TCGA Analysis
 
-**TCGA analysis starts with: what cancer type? what data type?** Build your cohort FIRST (GDC filters), then analyze. Don't query mutations without defining the cohort — pan-cancer counts from `GDC_get_mutation_frequency` are uninformative without cancer-type context. A mutation frequency of 10% in one cancer type may be 0.5% in another; always specify `project_id`. Survival analysis (Kaplan-Meier) is hypothesis-generating in retrospective TCGA data — always report sample size and p-value, and note that TCGA cohorts are not treatment-stratified.
+**TCGA analysis starts with: what cancer type? what data type?** Build your cohort FIRST (GDC filters), then analyze. Don't query mutations without defining the cohort — pan-cancer counts from `GDC_get_mutation_frequency` are uninformative without cancer-type context. A mutation frequency of 10% in one cancer type may be 0.5% in another; always specify `project_id`. Survival analysis (Kaplan-Meier) is hypothesis-generating in retrospective TCGA data — report sample size and any p-value from a valid, separately performed test, and note that TCGA cohorts are not treatment-stratified.
 
 **LOOK UP DON'T GUESS**: never assume TCGA project IDs, NCIt codes, or gene coordinates — use `GDC_list_projects` to confirm project IDs and `Progenetix_list_filtering_terms` for NCIt codes.
 
@@ -166,16 +166,17 @@ result = tu.tools.Progenetix_cnv_search(
 ## Phase 5: Survival Analysis
 
 **GDC_get_survival**: `project_id` (string REQUIRED, e.g., "TCGA-BRCA"), `gene_symbol` (string, optional -- filters to mutated cases).
-Returns `{status, data: {donors: [{id, time, censored, survivalEstimate}], overallStats: {pValue}}}`.
-- Each donor has `time` (days), `censored` (bool: False=death event, True=censored), and `survivalEstimate`.
-- `overallStats.pValue`: log-rank p-value (present when `gene_symbol` splits cohort).
-- Without `gene_symbol`: returns full-cohort survival curve.
-- With `gene_symbol`: returns survival split by mutation status (mutated vs. wild-type).
+Returns `{status, data: {project_id, gene_symbol, total_donors, alive_censored, deceased, max_follow_up_days, median_follow_up_days, donors: [{id, submitter_id, project_id, time, censored, survivalEstimate}], note}}`.
+- `donors` holds only the first 50 donors (`note` says so); `total_donors`, `alive_censored`, `deceased` and the follow-up days summarise the whole cohort.
+- Each donor has `time` (days), `censored` (bool: True=alive/censored, False=death event) and `survivalEstimate` (Kaplan-Meier estimate).
+- The tool returns **no log-rank p-value** and no mutated-vs-wild-type split. With `gene_symbol` it restricts the cohort to cases GDC associates with that gene (TCGA-BRCA + TP53: 708 of 1,076 donors), A full-cohort query overlaps the gene-restricted cohort. A comparison requires disjoint, documented groups and complete individual follow-up data.
 
 ```python
-# Survival for TCGA-BRCA split by TP53 mutation
+# Survival summary for TCGA-BRCA restricted to TP53 (verified 2026-09-21)
 surv = tu.tools.GDC_get_survival(project_id="TCGA-BRCA", gene_symbol="TP53")
-pval = surv["data"]["overallStats"]["pValue"]
+info = surv["data"]
+print(info["total_donors"], info["deceased"], info["median_follow_up_days"])
+first_50 = info["donors"]  # [{'time': 1, 'censored': True, 'survivalEstimate': 0.998, ...}, ...]
 ```
 
 ---
@@ -227,7 +228,7 @@ result = tu.tools.OncoKB_annotate_variant(
    -> Specific amino acid changes in lung adenocarcinoma
 
 3. GDC_get_survival(project_id="TCGA-LUAD", gene_symbol="KRAS")
-   -> Survival split by KRAS mutation status + p-value
+   -> Descriptive survival summary for the gene-restricted cohort. A mutation-status comparison requires separate data and analysis.
 
 4. OncoKB_annotate_variant(gene="KRAS", variant="G12C", tumor_type="LUAD")
    -> Clinical significance + approved therapies (sotorasib)

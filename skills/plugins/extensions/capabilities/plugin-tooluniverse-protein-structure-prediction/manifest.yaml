@@ -50,5 +50,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-structure-prediction/SKILL.md
-      sha256: ee5d1a76f05e40b6c35fd3400fc43aa6e715d8416abcd76efc38337c0e6cf89a
+      sha256: 23e17f5422153e736202d4bfc869749e10d62ce7f311fa9d0d490ed2e3e45439
 license: Apache-2.0

@@ -296,22 +296,23 @@ discovery and installation. A selected domain that becomes empty is unavailable
 recovery state until it is safely uninstalled or repopulated.
 
 `vendor/tooluniverse` is the maintainer-only pinned input for the ToolUniverse
-vendor converter. Production admission is controlled by the v1.5.4 audit and
+vendor converter. Production admission is controlled by the v1.5.10 audit and
 converter policies: 130 reviewed research Skills are generated into an isolated
 vendor bundle and assigned by the source-neutral catalog to 28 ANZSRC Group
-domains and two non-empty tool domains. The complete 185-Skill audit excludes
-55 surfaces, including three business candidates awaiting separate admission.
+domains and two non-empty tool domains. The complete 229-Skill audit excludes
+99 surfaces, including 20 business candidates awaiting separate admission.
 Reviewed tool-contract adaptations live in
 `src/vendor-converters/tooluniverse/semantic-adaptations.ts`; unchanged Skills
 retain their audited source release and revision so incremental regeneration
-preserves their bytes. Neither the source
-checkout nor generated admission authorizes dependency installation, script
-execution, credential setup, MCP configuration, or workflow writes.
+preserves their bytes. An explicit retained projection revision keeps earlier
+reviewed content when the upstream delta cannot be distributed.
+Keep dependency installation, script execution, credentials, MCP configuration,
+and workflow writes within their existing authorization boundaries.
 
-All 130 reviewed ToolUniverse Skills also project one-to-one into the new
-plugin extension mode as `plugin-tooluniverse-*` capabilities and profiles.
+All 130 reviewed ToolUniverse Skills project one-to-one into
+`plugin-tooluniverse-*` capabilities and profiles.
 `scripts/generate-tooluniverse-extensions.mjs` is the deterministic generator:
-it preserves each reviewed `SKILL.md` body, copies all 348 non-standard
+it preserves each reviewed `SKILL.md` body, copies all reviewed non-standard
 resources at their original relative paths as SHA-256 knowledge refs, and binds
 every package to `validate_tooluniverse_brief.py` with the six generic evidence
 fields. Packages with `.py` resources are `execution_type: mixed`; the rest are
@@ -324,9 +325,8 @@ SSOT. `scripts/tooluniverse-maintenance.mjs` and
 `.agents/skills/tooluniverse-maintenance/SKILL.md` provide catalog-driven
 `artifacts / records / baseline / check / diff` anchors and the Agent semantic
 review gate; `artifacts` regenerates the 130 packages first. The current anchor
-is `v1.5.4-8ec5d4b` under `audits/tooluniverse/v1.5.4-8ec5d4b/`. Future updates must follow the
-maintenance Skill before regenerating any `plugin-tooluniverse-*` package or
-profile.
+is `v1.5.10-6b50abe`. Follow the maintenance Skill before regenerating any
+`plugin-tooluniverse-*` package or profile.
 
 `vendor/scientific-agent-skills` is the maintainer-only pinned input for the
 Scientific Agent Skills v2.70.0 converter. Its immutable audit covers all 167

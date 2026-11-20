@@ -75,7 +75,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/SKILL.md
-      sha256: 847ac728ada86e3b772a6dbca5decf98c30c9e1ed1dc2b45e33dbd08830ea978
+      sha256: 1b899d98cfb9bc30933c0f8ae847c953730f0d0deb59c21267514b4542b10a8e
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/EXAMPLES.md
       sha256: 0648b424a2ccf848643b4e1d2288b920d57da7db02d0ed7846a9af6d409d09fe
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gwas-drug-discovery/PROCEDURES.md

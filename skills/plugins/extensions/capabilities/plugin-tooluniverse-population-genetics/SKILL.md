@@ -337,7 +337,7 @@ Duplex sequencing (unique molecular identifiers + double-strand consensus) detec
 
 ## Bundled Computation Script
 
-**Script**: `skills/tooluniverse-population-genetics/scripts/popgen_calculator.py`
+**Script**: `scripts/popgen_calculator.py`
 
 **Preferred**: Use ToolUniverse tools (via MCP/SDK) instead of the script when possible:
 - `PopGen_hwe_test` tool -- HWE chi-square test. Fallback: `popgen_calculator.py --type hwe`

@@ -1,8 +1,23 @@
 # tooluniverse-statistical-modeling detailed guidance
 
+## Completeness Checklist
+
+Before finalizing any statistical analysis:
+
+- [ ] **Outcome variable identified**: Verified which column is the actual outcome
+- [ ] **Data validated**: N, missing values, variable types confirmed
+- [ ] **Multi-feature data identified**: If multiple features, use per-feature approach
+- [ ] **Model appropriate**: Outcome type matches model family
+- [ ] **Assumptions checked**: Relevant diagnostics performed
+- [ ] **Effect sizes reported**: OR/HR/Cohen's d with CIs
+- [ ] **P-values reported**: With appropriate correction if needed
+- [ ] **Model fit assessed**: R-squared, AIC/BIC, concordance
+- [ ] **Results interpreted**: Plain-language interpretation
+- [ ] **Precision correct**: Numbers rounded appropriately
+
 ## Bundled Scripts
 
-These ready-to-run scripts live in `skills/tooluniverse-statistical-modeling/scripts/`.
+These ready-to-run scripts live in `scripts/`.
 Use them via the Bash tool — they are the deterministic answer for the recurring
 question patterns documented above.
 
@@ -137,11 +152,11 @@ These conventions are validated best practices. Apply when the dataset/question 
 ### MANDATORY: Use bundled script for expression ANOVA / fold change
 For per-gene ANOVA or median log2FC questions, use the bundled script:
 ```bash
-python skills/tooluniverse-statistical-modeling/scripts/expression_anova.py \
+python scripts/expression_anova.py \
   --counts counts.csv --meta meta.csv --group-col cell_type \
   --exclude-groups PBMC --mode anova
 
-python skills/tooluniverse-statistical-modeling/scripts/expression_anova.py \
+python scripts/expression_anova.py \
   --counts counts.csv --meta meta.csv --group-col cell_type \
   --group-a CD14 --group-b CD19 --mode fold_change
 ```
@@ -190,12 +205,12 @@ When asked for "median log2 fold change between group A and group B":
 **Bundled script** for both ANOVA and fold change:
 ```bash
 # Per-gene ANOVA across cell types
-python skills/tooluniverse-statistical-modeling/scripts/expression_anova.py \
+python scripts/expression_anova.py \
   --counts counts.csv --meta meta.csv --group-col cell_type \
   --exclude-groups PBMC --mode anova
 
 # Per-gene log2FC between two groups
-python skills/tooluniverse-statistical-modeling/scripts/expression_anova.py \
+python scripts/expression_anova.py \
   --counts counts.csv --meta meta.csv --group-col cell_type \
   --group-a CD14 --group-b CD19 --mode fold_change
 ```
@@ -211,7 +226,7 @@ When fitting models on strain co-culture frequency data:
 
 3. **R vs Python splines**: R's `ns()` (from the `splines` package) and Python's `patsy.cr()` or `scipy BSpline` produce DIFFERENT knot placements and boundary conditions. If the question references R's `lm(y ~ ns(x, df=4))`, use the bundled wrapper which runs R via Rscript:
    ```bash
-   python skills/tooluniverse-statistical-modeling/scripts/r_natural_spline_regression.py \
+   python scripts/r_natural_spline_regression.py \
      --csv data.csv --y-col Area --x-col Frequency \
      --df 4 --workdir /tmp/spline_run
    ```
@@ -223,7 +238,7 @@ When fitting models on strain co-culture frequency data:
 
 5. **Best of {quadratic, cubic, natural-spline}**: When the question asks for the "best fitting model among quadratic, cubic and natural spline" or the "maximum colony area at the optimal frequency", use the comparison wrapper which fits all three in R and ranks them:
    ```bash
-   python skills/tooluniverse-statistical-modeling/scripts/spline_model_compare.py \
+   python scripts/spline_model_compare.py \
      --csv data.csv --y-col Area --x-col Frequency \
      --ns-df 4 --workdir /tmp/spline_cmp
    ```

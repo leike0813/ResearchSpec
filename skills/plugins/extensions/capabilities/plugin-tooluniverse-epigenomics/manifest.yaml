@@ -52,11 +52,11 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-code-reference.md
     path: CODE_REFERENCE.md
-    content_hash: 7a41969f2bb1703ce53f8f51ea59f6144d3bb49699cc1466086d15808d2c3b7f
+    content_hash: 3789fb57cad982e4442f53cef41be3795fb14b5c3d80e9d92e772ccab7a48de6
     license: Apache-2.0
   - knowledge_id: tu-quick-start.md
     path: QUICK_START.md
-    content_hash: a7c9ccace00495429b667648be604ef3158cbb8659427d094a6c72df2bdc9c0f
+    content_hash: 52c5020a2780bec53195490d3a66004bca29deeb13720badf80f83219de17e3e
     license: Apache-2.0
   - knowledge_id: tu-tools-reference.md
     path: TOOLS_REFERENCE.md
@@ -71,13 +71,13 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/SKILL.md
-      sha256: 8d3799ff158b0e813b8ea66ed71496bef10de4c25f102773f8593e2bc8a50e81
+      sha256: af21debb8dd827b2fe0e8b30fb850a32dcbd65ec26bd41ad7607f9aa66aa6b14
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/ANALYSIS_PROCEDURES.md
       sha256: 8abe6bc40f468324bd7225a1ab54b9e42032ea59364accbc48127a497102918f
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/CODE_REFERENCE.md
-      sha256: 7a41969f2bb1703ce53f8f51ea59f6144d3bb49699cc1466086d15808d2c3b7f
+      sha256: 3789fb57cad982e4442f53cef41be3795fb14b5c3d80e9d92e772ccab7a48de6
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/QUICK_START.md
-      sha256: a7c9ccace00495429b667648be604ef3158cbb8659427d094a6c72df2bdc9c0f
+      sha256: 52c5020a2780bec53195490d3a66004bca29deeb13720badf80f83219de17e3e
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/TOOLS_REFERENCE.md
       sha256: 34fe411f34ae0b73e0500ca1e3d0aef306d1ed6d71f33023355a0298695510c4
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-epigenomics/scripts/methylation_density.py

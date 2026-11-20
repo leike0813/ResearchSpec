@@ -37,11 +37,12 @@ label = tu.tools.DailyMed_get_spl_by_setid(setid=setid)
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
 | `FAERS_count_reactions_by_drug_event` | AE counts for drug | `medicinalproduct`, `limit` |
-| `FAERS_search_reports_by_drug_and_reaction` | Detailed event data | `medicinalproduct`, `reactionmeddrapt` |
-| `FAERS_search_adverse_event_reports` | Search all reports | `medicinalproduct` |
+| `FAERS_search_reports_by_drug_and_reaction` | Reports for a drug + specific reaction | `medicinalproduct`, `reactionmeddrapt` |
+| `FAERS_search_adverse_event_reports` | Search all reports for a drug | `medicinalproduct`, `limit` |
+| `FAERS_calculate_disproportionality` | PRR / ROR / IC signal metrics | `drug_name`, `adverse_event` |
 | `FAERS_stratify_by_demographics` | Patient demographics | `drug_name`, `reaction` |
 
-**Parameter Note**: Use `drug_name` not `drug`.
+**Parameter Note**: The `FAERS_count_*` and `FAERS_search_*` tools take `medicinalproduct` (not `drug_name` or `drug`); the analysis tools (`FAERS_calculate_disproportionality`, `FAERS_stratify_by_demographics`) take `drug_name`.
 
 **Example - Get adverse events**:
 ```python
@@ -50,12 +51,21 @@ events = tu.tools.FAERS_count_reactions_by_drug_event(
     medicinalproduct="metformin",
     limit=50
 )
+# Returns: results[] of {term, count}, e.g. {"term": "NAUSEA", "count": 31807}
 
 # Get details for specific event
 details = tu.tools.FAERS_search_reports_by_drug_and_reaction(
     medicinalproduct="metformin",
     reactionmeddrapt="Lactic acidosis"
 )
+# Returns: reports[] (patient, drug, reaction details per case)
+
+# Signal strength for a drug-event pair
+signal = tu.tools.FAERS_calculate_disproportionality(
+    drug_name="metformin",
+    adverse_event="Lactic acidosis"
+)
+# Returns: data.metrics.PRR.value / ROR.value / IC.value and data.signal_detection
 ```
 
 ### OpenFDA Tools (Alternative)
@@ -76,7 +86,7 @@ details = tu.tools.FAERS_search_reports_by_drug_and_reaction(
 def extract_safety_sections(tu, setid):
     """Extract all safety-relevant sections from label."""
     label = tu.tools.DailyMed_get_spl_by_setid(setid=setid)
-    
+
     return {
         'boxed_warning': label.get('boxed_warning'),
         'contraindications': label.get('contraindications'),
@@ -97,7 +107,7 @@ def extract_safety_sections(tu, setid):
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
 | `PharmGKB_search_drugs` | Search drug annotations | `query` |
-| `PharmGKB_get_clinical_annotations` | Clinical PGx data | `drug_id` |
+| `PharmGKB_get_clinical_annotations` | Clinical PGx data (one annotation) | `annotation_id` |
 | `PharmGKB_get_drug_details` | PGx labeling | `drug_id` |
 | `PharmGKB_search_variants` | Relevant variants | `drug_id` |
 
@@ -106,9 +116,12 @@ def extract_safety_sections(tu, setid):
 # Search for drug
 pgx = tu.tools.PharmGKB_search_drugs(query="warfarin")
 
-# Get clinical annotations
-annotations = tu.tools.PharmGKB_get_clinical_annotations(
-    drug_id=pgx[0]['id']
+# Drug record (pgx['data'][0]['id'] == "PA451906" for warfarin)
+drug = tu.tools.PharmGKB_get_drug_details(drug_id=pgx['data'][0]['id'])
+
+# Clinical annotations are fetched by annotation ID (lookup by drug or gene is not supported by the API)
+annotation = tu.tools.PharmGKB_get_clinical_annotations(
+    annotation_id="1183618159"
 )
 ```
 
@@ -127,26 +140,26 @@ annotations = tu.tools.PharmGKB_get_clinical_annotations(
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `search_clinical_trials` | Search trials | `intervention`, `phase`, `status` |
+| `search_clinical_trials` | Search trials | `intervention`, `condition`, `query_term`, `overall_status` (list) |
 | `ClinicalTrials_get_study` | Get trial details | `nct_id` |
-| `get_clinical_trial_outcome_measures` | Get posted results | `nct_id` |
+| `get_clinical_trial_outcome_measures` | Get posted results | `nct_ids` (list), `outcome_measures` |
 
 **Example - Get trial safety data**:
 ```python
 # Search completed phase 3 trials
+# There is no phase parameter: filter phase with an Essie expression in query_term
 trials = tu.tools.search_clinical_trials(
     intervention="metformin",
-    phase="Phase 3",
-    status="Completed",
+    query_term="AREA[Phase]PHASE3",
+    overall_status=["COMPLETED"],
     pageSize=20
 )
 
-# Get results for trials with posted data
-for trial in trials:
-    if trial.get('has_results'):
-        results = tu.tools.get_clinical_trial_outcome_measures(
-            nct_id=trial['nct_id']
-        )
+# Fetch outcome measures for the returned trials
+for trial in trials['data']['studies']:
+    results = tu.tools.get_clinical_trial_outcome_measures(
+        nct_ids=[trial['NCT ID']]
+    )
 ```
 
 ---
@@ -157,17 +170,20 @@ for trial in trials:
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `kegg_search_pathway` | Search pathways | `query` |
+| `kegg_search_pathway` | Search pathways | `keyword` |
 | `kegg_get_gene_info` | Get gene details | `gene_id` |
-| `kegg_find_genes` | Find genes by keyword | `query`, `database` |
+| `kegg_find_genes` | Find genes by keyword | `keyword`, `organism` |
 
 **Example - Get drug metabolism pathways**:
 ```python
 # Search for drug metabolism
-pathways = tu.tools.kegg_search_pathway(query="drug metabolism")
+pathways = tu.tools.kegg_search_pathway(keyword="drug metabolism")
+# Returns: data[] of {pathway_id: "map00982", description: ...}
 
-# Get genes in pathway
-genes = tu.tools.KEGG_get_pathway_genes(pathway_id=pathways[0]['pathway_id'])
+# Get genes in pathway (needs the organism-specific ID, hsaNNNNN, not the mapNNNNN reference ID)
+pathway_id = "hsa" + pathways['data'][0]['pathway_id'][3:]
+genes = tu.tools.KEGG_get_pathway_genes(pathway_id=pathway_id)
+# Returns: data.genes[] such as "hsa:10720"
 ```
 
 ### Reactome Tools
@@ -202,7 +218,7 @@ papers = tu.tools.PubMed_search_articles(
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `EuropePMC_search_articles` | Search preprints (bioRxiv/medRxiv) | `query`, `source='PPR'`, `pageSize` |
+| `EuropePMC_search_articles` | Search preprints (bioRxiv/medRxiv) | `query` (prefix `SRC:PPR AND` for preprints only), `limit` |
 | `BioRxiv_get_preprint` | Get preprint by DOI | `doi` |
 
 **⚠️ Preprints are NOT peer-reviewed but may contain emerging safety signals!**
@@ -211,16 +227,14 @@ papers = tu.tools.PubMed_search_articles(
 ```python
 # EuropePMC for mechanism insights
 preprints = tu.tools.EuropePMC_search_articles(
-    query="metformin toxicity mechanism",
-    source="PPR",  # PPR = Preprints only
-    pageSize=15
+    query="SRC:PPR AND metformin toxicity mechanism",  # SRC:PPR = preprints only
+    limit=15
 )
 
 # MedRxiv for real-world safety data (via EuropePMC)
 clinical_preprints = tu.tools.EuropePMC_search_articles(
-    query="metformin real-world safety",
-    source="PPR",
-    pageSize=15
+    query="SRC:PPR AND metformin real-world safety",
+    limit=15
 )
 ```
 
@@ -250,22 +264,22 @@ papers = tu.tools.openalex_search_works(
 def calculate_prr(a, b, c, d):
     """
     Calculate Proportional Reporting Ratio.
-    
+
     a = reports of drug X with event Y
     b = reports of drug X with all other events
     c = reports of event Y with all other drugs
     d = reports of all other drug-event pairs
-    
+
     PRR = (a/(a+b)) / (c/(c+d))
     """
     prr = (a / (a + b)) / (c / (c + d))
-    
+
     # 95% CI using Rothman formula
     import math
     se = math.sqrt(1/a - 1/(a+b) + 1/c - 1/(c+d))
     ci_lower = math.exp(math.log(prr) - 1.96 * se)
     ci_upper = math.exp(math.log(prr) + 1.96 * se)
-    
+
     return {
         'prr': prr,
         'ci_lower': ci_lower,
@@ -280,11 +294,11 @@ def calculate_prr(a, b, c, d):
 def detect_signal(prr, ci_lower, n_cases):
     """
     Apply signal detection criteria.
-    
+
     WHO-UMC criteria: PRR ≥2, Chi-squared ≥4, N ≥3
     """
     is_signal = prr >= 2 and ci_lower >= 1 and n_cases >= 3
-    
+
     if prr > 10:
         tier = 'T1'  # Critical
     elif prr > 3:
@@ -293,7 +307,7 @@ def detect_signal(prr, ci_lower, n_cases):
         tier = 'T3'  # Mild
     else:
         tier = 'T4'  # Known/expected
-    
+
     return {
         'is_signal': is_signal,
         'tier': tier
@@ -309,33 +323,33 @@ def detect_signal(prr, ci_lower, n_cases):
 ```python
 def generate_safety_profile(tu, drug_name):
     """Generate comprehensive safety profile for a drug."""
-    
+
     # Phase 1: Identify drug
     dailymed = tu.tools.DailyMed_search_spls(drug_name=drug_name)
     chembl = tu.tools.ChEMBL_search_drugs(query=drug_name)
-    
+
     # Phase 2: FAERS events
     events = tu.tools.FAERS_count_reactions_by_drug_event(
         medicinalproduct=drug_name,
         limit=50
     )
-    
+
     # Phase 3: Label warnings
     if dailymed:
         label = tu.tools.DailyMed_get_spl_by_setid(
             setid=dailymed[0]['setid']
         )
-    
+
     # Phase 4: Pharmacogenomics
     pgx = tu.tools.PharmGKB_search_drugs(query=drug_name)
-    
+
     # Phase 5: Clinical trials
     trials = tu.tools.search_clinical_trials(
         intervention=drug_name,
-        phase="Phase 3",
-        status="Completed"
+        query_term="AREA[Phase]PHASE3",
+        overall_status=["COMPLETED"]
     )
-    
+
     return {
         'identification': {'dailymed': dailymed, 'chembl': chembl},
         'adverse_events': events,
@@ -350,7 +364,7 @@ def generate_safety_profile(tu, drug_name):
 ```python
 def compare_drug_safety(tu, drug_a, drug_b):
     """Compare safety profiles of two drugs."""
-    
+
     # Get events for both drugs
     events_a = tu.tools.FAERS_count_reactions_by_drug_event(
         medicinalproduct=drug_a, limit=30
@@ -358,23 +372,22 @@ def compare_drug_safety(tu, drug_a, drug_b):
     events_b = tu.tools.FAERS_count_reactions_by_drug_event(
         medicinalproduct=drug_b, limit=30
     )
-    
-    # Find common events
-    events_a_dict = {e['term']: e for e in events_a.get('results', [])}
-    events_b_dict = {e['term']: e for e in events_b.get('results', [])}
-    
+
+    # Find common events (results[] items are {term, count})
+    events_a_dict = {e['term']: e for e in events_a.get('results', [])['results']}
+    events_b_dict = {e['term']: e for e in events_b.get('results', [])['results']}
+
     common_events = set(events_a_dict.keys()) & set(events_b_dict.keys())
-    
+
     comparison = []
     for event in common_events:
         comparison.append({
             'event': event,
-            'drug_a_prr': tu.tools.FAERS_calculate_disproportionality(operation='calculate_disproportionality', drug_name=drug_a, adverse_event=event).get('metrics', {}).get('PRR', {}).get('value'),
             'drug_a_count': events_a_dict[event].get('count'),
-            'drug_b_prr': tu.tools.FAERS_calculate_disproportionality(operation='calculate_disproportionality', drug_name=drug_b, adverse_event=event).get('metrics', {}).get('PRR', {}).get('value'),
             'drug_b_count': events_b_dict[event].get('count')
+            # PRR is not in the count results: call FAERS_calculate_disproportionality per drug/event
         })
-    
+
     return comparison
 ```
 
@@ -429,7 +442,7 @@ def detect_emerging_signals(tu, drug_name, threshold_prr=3.0):
 | Primary | Fallback 1 | Fallback 2 |
 |---------|------------|------------|
 | `PubMed_search_articles` | `openalex_search_works` | `SemanticScholar_search_papers` |
-| `EuropePMC_search_articles` (source='PPR') | `web_search` (site:medrxiv.org) | Skip preprints |
+| `EuropePMC_search_articles` (`SRC:PPR` query) | `web_search` (site:medrxiv.org) | Skip preprints |
 
 ---
 
@@ -439,15 +452,18 @@ def detect_emerging_signals(tu, drug_name, threshold_prr=3.0):
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `AdverseEventICDMapper` | Map AE text to ICD-10 | `text` |
+| `AdverseEventICDMapper` | Map AE text to ICD-10 (LLM-backed agentic tool) | `source_text` |
 
 **Example**:
 ```python
 # Map adverse event to ICD-10
 mapping = tu.tools.AdverseEventICDMapper(
-    text="Patient developed severe hepatotoxicity with jaundice"
+    source_text="Patient developed severe hepatotoxicity with jaundice"
 )
-# Returns: [{"adverse_event": "hepatotoxicity", "icd10cm_code": "K71.9", ...}]
+# Returns a text string (per its return_schema: type string) listing each adverse event with its
+# ICD-10-CM code, not a list of dicts. It is an LLM-backed AgenticTool, so it needs an LLM
+# backend configured; not live-run when this snippet was checked (argument name taken from the
+# tool schema and its own test_example).
 ```
 
 ---
@@ -456,7 +472,7 @@ mapping = tu.tools.AdverseEventICDMapper(
 
 | Tool | Wrong | Correct |
 |------|-------|---------|
-| `FAERS_count_reactions_by_drug_event` | `drug="metformin"` | `drug_name="metformin"` |
+| `FAERS_count_reactions_by_drug_event` | `drug="metformin"` / `drug_name="metformin"` | `medicinalproduct="metformin"` |
 | `DailyMed_search_spls` | `name="aspirin"` | `drug_name="aspirin"` |
 | `PharmGKB_search_drugs` | `drug="warfarin"` | `query="warfarin"` |
 | `OpenFDA_search_drug_events` | `drug_name="X"` | `search="patient.drug.medicinalproduct:X"` |

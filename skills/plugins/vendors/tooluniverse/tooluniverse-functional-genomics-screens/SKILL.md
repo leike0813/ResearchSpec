@@ -11,11 +11,15 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
 > **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, or receipts. Use the ResearchSpec CLI for authoritative mutations.
+
+## COSMIC evidence coverage
+
+Check `status` before using `data.results`. Use `metadata.result_set_complete` and `metadata.truncated` to report coverage. COSMIC provides a non-pageable record window. A result count describes retrieved mutation records and cannot estimate patient prevalence.
 
 # Functional Genomics Screen Interpretation
 
@@ -85,7 +89,7 @@ Chronos < -0.5 ≈ dependency, < -1.0 strongly essential. Fallback if you can't 
 ### Phase 4: Clinical Evidence
 
 - `civic_search_evidence_items(molecular_profile=gene)` -- NOT `query`
-- `COSMIC_get_mutations_by_gene(gene_name=...)` -- somatic mutation frequency
+- `COSMIC_get_mutations_by_gene(gene=...)` -- somatic mutation frequency
 
 ### Phase 6: Prioritized Report
 

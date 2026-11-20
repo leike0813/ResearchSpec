@@ -50,5 +50,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-lipidomics/SKILL.md
-      sha256: 83f29e45cf1feaa2bfe61e59f1263f8b36b14cc642038b2d2acd35f5c66ad820
+      sha256: 7052f71feecc4ee2f9c98805b74ee0b2bbeea851af6d29a31e660a5eecdc0c34
 license: Apache-2.0

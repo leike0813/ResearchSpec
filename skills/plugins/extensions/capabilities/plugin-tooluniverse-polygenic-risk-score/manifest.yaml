@@ -58,7 +58,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-polygenic-risk-score/SKILL.md
-      sha256: bf837b2ee0e6c92012baa17544663d16cbbf2aedda824d8d7a33a7e45b5d48c2
+      sha256: 5a543fb6ea96f54f6b0e33450529a16ca42af991849d772bd6a29e5ae5c2d6ed
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-polygenic-risk-score/check_data.py
       sha256: cbac8cee1d0949e8a87c8dabab3cda934b2635d0f54d21e0befff492aa5af067
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-polygenic-risk-score/python_implementation.py

@@ -6,6 +6,21 @@ import { adaptReviewedContent } from "../src/vendor-converters/tooluniverse/sema
 const adapt = (content: string, skillId = "tooluniverse-pharmacovigilance", relativePath = "TOOLS_REFERENCE.md"): string =>
   adaptReviewedContent(skillId, relativePath, content);
 
+void test("amends retired routes and distinguishes partial evidence from a complete result", () => {
+  const targetReference = [
+    "| `GtoPdb_search_diseases` | - | GtoPdb diseases |",
+    "| `GtoPdb_search_diseases` | `disease_id` | Disease details |",
+  ].join("\n");
+  const updated = adapt(targetReference, "tooluniverse-target-research", "REFERENCE.md");
+  assert.match(updated, /OpenTargets_get_associated_targets_by_disease_efoId/);
+  assert.doesNotMatch(updated, /GtoPdb_search_diseases/);
+  assert.equal(adapt(updated, "tooluniverse-target-research", "REFERENCE.md"), updated);
+
+  const cosmic = adapt("---\nname: skill\n---\n\nCOSMIC_get_mutations_by_gene(gene_name=gene)\n", "tooluniverse-functional-genomics-screens", "SKILL.md");
+  assert.match(cosmic, /COSMIC_get_mutations_by_gene\(gene=gene\)/);
+  assert.match(cosmic, /metadata\.result_set_complete/);
+});
+
 void test("rewrites legacy FAERS search and count parameters and clamps search limits", () => {
   const search = adapt('tu.tools.FAERS_search_reports_by_drug_and_reaction(drug_name="LIPITOR", reaction="myalgia", limit=1000)');
   assert.match(search, /FAERS_search_reports_by_drug_and_reaction\(medicinalproduct="LIPITOR", reactionmeddrapt="myalgia", limit=100\)/);

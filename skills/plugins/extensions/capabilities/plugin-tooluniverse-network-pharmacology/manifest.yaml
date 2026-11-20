@@ -47,11 +47,11 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-analysis-procedures.md
     path: ANALYSIS_PROCEDURES.md
-    content_hash: 7108c7ce19270de89e26d44204fa68e50c928227b92a1be295c72f7bcd4813af
+    content_hash: 4b78e370c82620832fa567d7e1e2a4226f8102171eae67bddf849b10fdc26d75
     license: Apache-2.0
   - knowledge_id: tu-quick-start.md
     path: QUICK_START.md
-    content_hash: a66fffedfb004996b474cc2b42b7ff08d5cd6aa4dd9edd84a323b4b6d70a2065
+    content_hash: 449f5488b3a25cfc24f8183f69a90ea540cf3d547e66469d8a62e41a3de77cdd
     license: Apache-2.0
   - knowledge_id: tu-report-template.md
     path: REPORT_TEMPLATE.md
@@ -63,7 +63,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-tool-reference.md
     path: TOOL_REFERENCE.md
-    content_hash: af2c8f5043657873f058cfdc6146fa398d3a2bbbc362e16fe45123d0af04221a
+    content_hash: e23f907f79285927940a664661625ae7277f702d8291852c54519a56d09f1811
     license: Apache-2.0
   - knowledge_id: tu-use-patterns.md
     path: USE_PATTERNS.md
@@ -78,17 +78,17 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/SKILL.md
-      sha256: 2c1b8e035a76052899ea5dcf8f5edcfca53392fef496ff52907b3a6c4882c2f1
+      sha256: 7bf1fbf2a2a67abc87ceedbc4b9d92615e20cf851e82c5287b0ef6e3824806b5
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/ANALYSIS_PROCEDURES.md
-      sha256: 7108c7ce19270de89e26d44204fa68e50c928227b92a1be295c72f7bcd4813af
+      sha256: 4b78e370c82620832fa567d7e1e2a4226f8102171eae67bddf849b10fdc26d75
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/QUICK_START.md
-      sha256: a66fffedfb004996b474cc2b42b7ff08d5cd6aa4dd9edd84a323b4b6d70a2065
+      sha256: 449f5488b3a25cfc24f8183f69a90ea540cf3d547e66469d8a62e41a3de77cdd
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/REPORT_TEMPLATE.md
       sha256: 38405f0c5f60ecab59c79b55c5cd900440162191dea2958961e292614e9dd50c
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/SCORING_REFERENCE.md
       sha256: 2be238e5f97e632f70986ea6869ae6a50009bec39467f40aeb91594d3e255098
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/TOOL_REFERENCE.md
-      sha256: af2c8f5043657873f058cfdc6146fa398d3a2bbbc362e16fe45123d0af04221a
+      sha256: e23f907f79285927940a664661625ae7277f702d8291852c54519a56d09f1811
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/USE_PATTERNS.md
       sha256: af5ad4a737787699b95d18fae15db1039b0504d5e42705ab676a88d22c228891
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-network-pharmacology/scripts/network_proximity.py

@@ -49,14 +49,14 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-scripts-depmap-gene-dependency.py
     path: scripts/depmap_gene_dependency.py
-    content_hash: 57c3f84627d1dc6cba694b76729eb408bb227ea2658098da968ee3ee5e80685c
+    content_hash: e0439ed7bc461af30861f61913bae3e4bc28e660ae6119d02ea9cfaeb4f18854
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cell-line-profiling/SKILL.md
-      sha256: c0c043a3f31260eb22443a93a3dbcee677b20d2c9610e4be37150e6c17d4a877
+      sha256: 0dc2150af8b7a3f7a709e0fd0646770ea1439afcd24eb4c0ce45fff6e3814c81
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cell-line-profiling/scripts/depmap_gene_dependency.py
-      sha256: 57c3f84627d1dc6cba694b76729eb408bb227ea2658098da968ee3ee5e80685c
+      sha256: e0439ed7bc461af30861f61913bae3e4bc28e660ae6119d02ea9cfaeb4f18854
 license: Apache-2.0

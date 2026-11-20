@@ -50,5 +50,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-drug-mechanism-research/SKILL.md
-      sha256: afd181e1e57ec114a503c68e8c2bdccafb562494ea0a08aafc8d0c5b55f3bbd9
+      sha256: a872868d27a93916f59a8b897593f93e253adb882f1a8542eed320b10df42fa0
 license: Apache-2.0

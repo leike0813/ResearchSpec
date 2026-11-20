@@ -12,7 +12,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -169,7 +169,7 @@ Multiple-choice questions in biophysics, pharmacology, and clinical medicine are
 
 ### `mc_analyzer.py` — Automated MC Scaffold
 
-Located in `skills/tooluniverse-computational-biophysics/scripts/mc_analyzer.py`.
+Located in `scripts/mc_analyzer.py`.
 
 ```
 # Analysis mode: systematic elimination
@@ -185,7 +185,7 @@ Analysis mode scans reasoning for elimination signals, reports survivor count. V
 
 ## 6. Bundled Scripts
 
-These ready-to-run scripts live in `skills/tooluniverse-computational-biophysics/scripts/`.
+These ready-to-run scripts live in `scripts/`.
 Use them via the Bash tool instead of computing by hand — they include verification steps and handle edge cases.
 
 ### `epidemiology.py` — Epidemiology calculations (5 types via `--type`)

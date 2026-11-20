@@ -80,21 +80,7 @@ def search_trials_alternative(tu, condition, intervention=None, limit=10):
 
 ### Deduplication
 
-```python
-def deduplicate_trials(trial_lists):
-    """Merge and deduplicate trials from multiple searches."""
-    seen_ncts = set()
-    unique_trials = []
-
-    for trials in trial_lists:
-        for trial in trials:
-            nct = trial.get('NCT ID') or trial.get('nctId', '')
-            if nct and nct not in seen_ncts:
-                seen_ncts.add(nct)
-                unique_trials.append(trial)
-
-    return unique_trials
-```
+Deduplicate within each registry by its own trial ID: NCT ID for ClinicalTrials.gov, CT number for CTIS, and ISRCTN ID for ISRCTN. Retain ID-less records for review. Combine cross-registrations only when a registry cross-reference or documented protocol match establishes that they describe the same trial.
 
 ## Batch Trial Detail Retrieval (Phase 3)
 

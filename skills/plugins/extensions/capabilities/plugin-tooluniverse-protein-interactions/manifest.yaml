@@ -3,9 +3,11 @@ capability_id: plugin-tooluniverse-protein-interactions
 title: Protein Interaction Network Analysis
 description: Protein-protein interaction (PPI) network analysis — STRING
   (predicted + experimental), BioGRID (curated), SASBDB (small-angle
-  scattering). Distinguishes physical interactions (binding) from functional
-  associations (co-expression, co-regulation). Use for interactome queries,
-  complex partner identification, and pathway-level interaction analysis.
+  scattering), Complex Portal (curated complex membership and stoichiometry,
+  includes CORUM data). Distinguishes physical interactions (binding) from
+  functional associations (co-expression, co-regulation). Use for interactome
+  queries, complex partner identification, curated complex composition lookup,
+  and pathway-level interaction analysis.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -74,7 +76,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/SKILL.md
-      sha256: 6a90244bae1b6931f2d5f93329300157bd76c88818edebe1531b834717568d99
+      sha256: 07026d55a41db689fd90c8e3ee97c8899da69ca0730e7f8b97b6651bd7480156
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/DESCRIPTION_UPDATE_COMPLETE.md
       sha256: b531ce92b7a944a7b336a1818a720d4d659bb98c91b4cdce49e63175d4b2f873
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-protein-interactions/DOMAIN_ANALYSIS.md

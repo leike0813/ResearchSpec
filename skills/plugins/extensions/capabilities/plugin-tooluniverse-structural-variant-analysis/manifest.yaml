@@ -49,7 +49,7 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-analysis-procedures.md
     path: ANALYSIS_PROCEDURES.md
-    content_hash: 5e5e3ea428274694e75606ae722cdbfdbd7238aba0a6d0d73934562338515994
+    content_hash: 1a2a36aa8588fc5912dbca534cb1d5650cbb7e19fdb999b5cde41f30fe36421c
     license: Apache-2.0
   - knowledge_id: tu-classification-guide.md
     path: CLASSIFICATION_GUIDE.md
@@ -68,9 +68,9 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/SKILL.md
-      sha256: 569623909c8e180996deeed581f081b4ff9e553b10e251e1d076326c743af97c
+      sha256: bf29356bbfbf3e4871fa3bcf1f688ede7def61d7d657131abed4042408e4b9d1
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/ANALYSIS_PROCEDURES.md
-      sha256: 5e5e3ea428274694e75606ae722cdbfdbd7238aba0a6d0d73934562338515994
+      sha256: 1a2a36aa8588fc5912dbca534cb1d5650cbb7e19fdb999b5cde41f30fe36421c
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/CLASSIFICATION_GUIDE.md
       sha256: 82f2c87db2725aa3bcd87150e3ce2f4f77d7230ae8aa10c396bdb98405af8495
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-structural-variant-analysis/EXAMPLES.md

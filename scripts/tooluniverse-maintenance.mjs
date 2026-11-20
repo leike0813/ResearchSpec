@@ -19,7 +19,6 @@ import {
 } from "./lib/vendor-maintenance.mjs";
 
 const ROOT = process.cwd();
-const ANCHOR_CREATED_AT = "2026-09-30T00:00:00+08:00";
 const CATALOG_PATH = path.join(ROOT, "audits", "tooluniverse", "catalog.json");
 const AUDIT_README = path.join(ROOT, "audits", "tooluniverse", "README.md");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "tooluniverse-maintenance", "SKILL.md");
@@ -253,7 +252,7 @@ function currentState(anchorId) {
     schema_version: "1",
     vendor_id: data.vendor_id,
     anchor_id: anchorId,
-    created_at: ANCHOR_CREATED_AT,
+    created_at: data.created_at,
     upstream: {
       root: data.upstream_root,
       release: upstream.release,
@@ -482,7 +481,7 @@ const commands = createMaintenanceCommands({
   vendorLabel: "ToolUniverse",
   scriptName: "tooluniverse-maintenance.mjs",
   regeneratePackages,
-  anchorCreatedAt: ANCHOR_CREATED_AT,
+  anchorCreatedAt: catalog().created_at,
 });
 
 try {

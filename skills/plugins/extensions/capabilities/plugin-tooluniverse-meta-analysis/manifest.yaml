@@ -58,7 +58,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-meta-analysis/SKILL.md
-      sha256: 34640be849717773b203eb89ae8263c7f29001575ee580e7102f812a9f362f03
+      sha256: bd364c3caeac52344eaa7f1ce822c5721da23cb688bc9328d759bbeed9e6736a
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-meta-analysis/scripts/meta_analysis.py
       sha256: 3cae56a80bbf0cb67d1598f4995fb8d8a496cf62e9ccf8861ad5cddaa57f7564
 license: Apache-2.0

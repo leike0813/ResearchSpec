@@ -55,7 +55,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-matching-algorithms.md
     path: MATCHING_ALGORITHMS.md
-    content_hash: 74dd357032fd071367ed179c0f9e728cf69b929ff97dd2a3bca1166d478761ce
+    content_hash: 9f424989be09ea6884565fd7be342b31739e2d54258702abf3b78f286866eafd
     license: Apache-2.0
   - knowledge_id: tu-quick-start.md
     path: QUICK_START.md
@@ -75,18 +75,18 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-trial-search-patterns.md
     path: TRIAL_SEARCH_PATTERNS.md
-    content_hash: 0c5576ad4e9556e23789559a3449177930f90a166cff22d03fd7eb1187f4b738
+    content_hash: 89bbe46255bebea78a4a48ad24258201f1e5c8e16930d9e62b643395fd9b27f2
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/SKILL.md
-      sha256: 947f50caa9cd568e19cf90ef069256503eb6874885013876c88f1aa6d56f176d
+      sha256: c287289e0f057dffba546ed87fc0c79a171a8dc43871bdaaeed25caa0d2b37de
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/EXAMPLES.md
       sha256: 71f4b74aa9c7807c0188f372c2f5d7fc2afe23710cbf1adeb7c8db4d4f06ff4b
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/MATCHING_ALGORITHMS.md
-      sha256: 74dd357032fd071367ed179c0f9e728cf69b929ff97dd2a3bca1166d478761ce
+      sha256: 9f424989be09ea6884565fd7be342b31739e2d54258702abf3b78f286866eafd
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/QUICK_START.md
       sha256: 548be4c3bbe7f43f4ec3b500e230eea9ffc4b27bcf246b4ed4c491388ba9d279
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/REPORT_TEMPLATE.md
@@ -96,5 +96,5 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/TOOLS_REFERENCE.md
       sha256: 05a01841629de14a6d90c42d7148291bbf4f631c6bcdc748f5c5ae4d45f552bb
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-clinical-trial-matching/TRIAL_SEARCH_PATTERNS.md
-      sha256: 0c5576ad4e9556e23789559a3449177930f90a166cff22d03fd7eb1187f4b738
+      sha256: 89bbe46255bebea78a4a48ad24258201f1e5c8e16930d9e62b643395fd9b27f2
 license: Apache-2.0

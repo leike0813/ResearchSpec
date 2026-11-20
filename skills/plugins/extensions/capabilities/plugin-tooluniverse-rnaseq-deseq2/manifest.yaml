@@ -110,7 +110,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-scripts-multi-strain-venn.py
     path: scripts/multi_strain_venn.py
-    content_hash: a26def64917d808e9dae618f107e191df00f4b9a600600baaa185bef012184ff
+    content_hash: 26e763e0b02b051d8f4f0b8db352001e6fc8d8abba7aff9ab97d2b4aa1b6d1cd
     license: Apache-2.0
   - knowledge_id: tu-scripts-one-way-anova-f.py
     path: scripts/one_way_anova_f.py
@@ -122,7 +122,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-scripts-r-deseq2-wrapper.py
     path: scripts/r_deseq2_wrapper.py
-    content_hash: 0073201274e796a66f8ffa599db9a1e98c59f3694a0c7f565c0cadd096cc2385
+    content_hash: 3ee1c9f0c10e7fe70add7076b5e18d4f38b31d43d027d2106204a9ba2eb895cb
     license: Apache-2.0
   - knowledge_id: tu-scripts-r-edger-limma-wrapper.py
     path: scripts/r_edger_limma_wrapper.py
@@ -133,7 +133,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/SKILL.md
-      sha256: a2f566ce675047d8b31f322d32718f38a3037ab807ac660a2727da745deafda4
+      sha256: 7bca22aa78fa5f10bb6e5cc8b89f491f4d15e70cd860e846e03e49fd73e487ea
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/data_loading.md
       sha256: 297e7f9d9b802ea7d572e439eb1ed0dab18b31dee495f36a01b21b3d802cc2c0
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/references/dispersion_analysis.md
@@ -165,13 +165,13 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/load_count_matrix.py
       sha256: c96edd4ee34e446e33e9276edc0a4326b03e80aef45065cd36bf2730588d35e3
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/multi_strain_venn.py
-      sha256: a26def64917d808e9dae618f107e191df00f4b9a600600baaa185bef012184ff
+      sha256: 26e763e0b02b051d8f4f0b8db352001e6fc8d8abba7aff9ab97d2b4aa1b6d1cd
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/one_way_anova_f.py
       sha256: ff969ed192b086df2404f3a2e20351cb474c28f7350ecb590815b5101d7e4b1c
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/pca_variance.py
       sha256: 1a6c36fa5a2eda939e6b0cddd7cacbc2084c7c7bd54a859210b49c2a5e3b78fd
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/r_deseq2_wrapper.py
-      sha256: 0073201274e796a66f8ffa599db9a1e98c59f3694a0c7f565c0cadd096cc2385
+      sha256: 3ee1c9f0c10e7fe70add7076b5e18d4f38b31d43d027d2106204a9ba2eb895cb
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-rnaseq-deseq2/scripts/r_edger_limma_wrapper.py
       sha256: bacbfd23cc96afe4d2b1f58c3a525ec24415b412d589cc9a9d35d6592335c831
 license: Apache-2.0

@@ -180,17 +180,17 @@ Call `DailyMed_get_spl_by_setid(setid=set_id, sections=[...])` in batches:
 **Objective**: Real-world safety signals + DDI guidance + dose modifications.
 
 **FAERS Chain**:
-1. `FAERS_count_reactions_by_drug_event(medicinalproduct)` -> Top 20 AEs [T1]
-2. `FAERS_count_seriousness_by_drug_event(medicinalproduct)` -> Serious ratio [T1]
-3. `FAERS_count_outcomes_by_drug_event(medicinalproduct)` -> Outcomes [T1]
-4. `FAERS_count_death_related_by_drug(medicinalproduct)` -> Fatal count [T1]
-5. `FAERS_count_patient_age_distribution(medicinalproduct)` -> Age groups [T1]
+1. `FAERS_count_reactions_by_drug_event(medicinalproduct)` -> Top 20 AEs [Descriptive spontaneous reporting evidence]
+2. `FAERS_count_seriousness_by_drug_event(medicinalproduct)` -> Serious ratio [Descriptive spontaneous reporting evidence]
+3. `FAERS_count_outcomes_by_drug_event(medicinalproduct)` -> Outcomes [Descriptive spontaneous reporting evidence]
+4. `FAERS_count_death_related_by_drug(medicinalproduct)` -> Reports meeting the death criterion [Descriptive spontaneous reporting evidence]
+5. `FAERS_count_patient_age_distribution(medicinalproduct)` -> Age groups [Descriptive spontaneous reporting evidence]
 
 **DDI & Dose Modification Chain**:
 6. `DailyMed_get_spl_by_setid(setid, sections=["drug_interactions"])` -> DDI table [T1]
 7. `DailyMed_get_spl_by_setid(setid, sections=["dosage_and_administration", "warnings_and_cautions"])` -> Dose mods [T1]
 8. `DailyMed_get_spl_by_setid(setid)` -> Drug-food interactions (search for grapefruit, alcohol, food, meal) [T1]
-9. `search_clinical_trials(intervention="[drug] AND combination")` -> Approved combos [T1]
+9. `search_clinical_trials(intervention="[drug] AND combination")` -> Investigated combinations; confirm approvals in indication-specific regulator records
 
 **CRITICAL FAERS Requirements**:
 - Include date window (e.g., "Reports from 2004-2026")

@@ -18,7 +18,7 @@ metadata:
 
 Each criterion (PS, PM, PP for pathogenic; BS, BP for benign) contributes a weighted piece of evidence for or against pathogenicity. The classification is the COMBINATION of all activated criteria, not any single criterion. Do not overweight a single finding.
 
-The hierarchy is: PVS1 (very strong) > PS (strong) > PM (moderate) > PP (supporting). On the benign side: BA1 (stand-alone) > BS (strong) > BP (supporting). A frameshift in a LOF-intolerant gene (PVS1) plus a ClinVar expert-panel pathogenic entry (PS1) is pathogenic. A single PP criterion alone is not. The combination rule is what matters.
+The hierarchy is: PVS1 (very strong) > PS (strong) > PM (moderate) > PP (supporting). On the benign side: BA1 (stand-alone) > BS (strong) > BP (supporting). Assess PVS1 separately. PS1 requires an established pathogenic variant with the same amino acid change. ClinVar review status describes confidence in an assertion and does not establish PS1 by itself. A single PP criterion alone is not. The combination rule is what matters.
 
 Two common errors to avoid: (1) seeing a "Pathogenic" ClinVar entry and stopping — that is PP5 (supporting) unless it has expert-panel review, not automatic confirmation; (2) dismissing a variant because one predictor says "tolerated" — discordant predictors mean neither PP3 nor BP4 applies, which is neutral evidence, not benign evidence.
 
@@ -178,6 +178,20 @@ PubMed_search_articles(query="BRCA2 c.5946delT segregation family", limit=5)
 Criteria requiring clinical data (PS2, PS4, PM3, PM6, BS4, BP2, BP5) cannot be assessed automatically. Document as "Not Assessed" unless the user provides clinical context.
 
 PM4 (protein length change in non-repeat region) and BP3 (in-frame indel in repeat) can be partially assessed from variant type. BP7 (synonymous, no splice impact) is assessable via SpliceAI < 0.1.
+
+---
+
+## Automated Cross-Check (InterVar)
+
+Everything in Phases 0-6 is a manual, cited, criterion-by-criterion assessment — that is this skill's core value and should remain the primary output. `InterVar_classify_variant` runs the equivalent ACMG/AMP 2015 rubric server-side from bare genomic coordinates and returns a classification plus all 28 criteria's activation status in one call. Use it as a fast independent cross-check on your own manual verdict, never as a substitute for it — the manual process cites its sources per criterion; InterVar does not.
+
+| Tool | Key Parameters | Response Key Fields |
+|------|---------------|-------------------|
+| `InterVar_classify_variant` | `chrom`, `pos`, `ref`, `alt` (GRCh37/hg19 by default; pass `build="hg38"` for GRCh38), all REQUIRED | `data.classification`, `data.active_criteria[]` (e.g. `["PS3","PM1","PM2","PP3","PP5"]`), `data.criteria_detail.<CODE>.active` (bool) for all 28 codes |
+
+**Cross-validation example, verified live**: TP53 chr17:7674220 C>T (GRCh38, the same variant used elsewhere in `tooluniverse-variant-analysis` for the GeneBe/ClinGen cross-check) returns `classification="Pathogenic"` with `PS3+PM1+PM2+PP3+PP5` active — concordant with GeneBe's independent "Pathogenic" call on the same variant. Two independently-implemented ACMG classifiers agreeing is exactly the kind of corroboration worth citing in a report; if they disagree, treat it as a reason to re-examine your manual criteria, not a reason to silently prefer one tool's answer.
+
+**Known data-quality issue, verified live, not a guess**: the tool's own JSON `description` field claims its first worked example (`chrom="17", pos=41245466, ref="G", alt="A"`, labeled "BRCA1 c.5266dupC") classifies as "Likely Pathogenic with PM2+PP3+PP5." The live API actually returns `classification="Benign"` with `BA1+BP4+BP6+BP7+BS1+BS2` active. This is expected, not a bug in the tool: `c.5266dupC` is a single-base duplication (an insertion), which cannot be represented as a `ref="G"`/`alt="A"` substitution — the example's own coordinates don't encode the frameshift its label claims, so the "Benign" result is InterVar correctly classifying the SNV it was actually given, not misclassifying BRCA1 c.5266dupC. Never trust a tool's documented worked example without re-verifying live; always pass your own correctly-encoded variant.
 
 ---
 

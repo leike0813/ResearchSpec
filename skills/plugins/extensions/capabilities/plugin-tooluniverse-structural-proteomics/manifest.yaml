@@ -3,10 +3,16 @@ capability_id: plugin-tooluniverse-structural-proteomics
 title: Structural Proteomics for Drug Target Validation
 description: Structural biology plus proteomics integration for drug target
   validation. Combines PDB experimental structures, AlphaFold predictions,
-  GPCRdb, SAbDab antibody structures, ProteinsPlus binding-site prediction, and
-  BindingDB ligand-affinity data. Use for druggability assessment, binding-site
+  GPCRdb, SAbDab antibody structures, ProteinsPlus binding-site prediction,
+  BindingDB ligand-affinity data, BMRB NMR data, CATH/InterPro fold
+  classification, intrinsic-disorder prediction (MobiDB/DisProt/IUPred3),
+  membrane-protein topology (OPM/TopDB/PDBTM/ChannelsDB), enzyme catalytic-site
+  data (M-CSA), PDBe ligand/compound chemistry, and MD simulation trajectory
+  metadata (MDDB). Use for druggability assessment, binding-site
   characterization, ligand-pocket analysis, structural-confidence scoring
-  (resolution, pLDDT), and antibody-target interface analysis.
+  (resolution, pLDDT), antibody-target interface analysis, disordered-region
+  assessment, membrane-protein topology, catalytic-mechanism lookup, and finding
+  published MD simulations for a target.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -51,5 +57,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-structural-proteomics/SKILL.md
-      sha256: 3a37698603c429c1468ebc06a26662d1c72b01592743ee345c810980869f1042
+      sha256: 65c6faccbd841c9e51ac26210bf98e4b8846cea61eaae1b86152d250df3f87ad
 license: Apache-2.0

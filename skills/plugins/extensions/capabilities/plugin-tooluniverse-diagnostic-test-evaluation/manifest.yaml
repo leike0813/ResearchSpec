@@ -56,7 +56,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-diagnostic-test-evaluation/SKILL.md
-      sha256: bcf0fe0f8b568700ee6067fdd20f49ce5616d34a3769a3bba2a861b4e382163b
+      sha256: 21440e91bc2ec13d3b3c11b0e2d4b5c67ddc9fcb4f32734c8dcdd4e95a6c1661
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-diagnostic-test-evaluation/scripts/roc_analysis.py
       sha256: 13e49efa3c0334c9906bfc4600130f22bf5a4fc1d711326ae9f30b4552b7078a
 license: Apache-2.0

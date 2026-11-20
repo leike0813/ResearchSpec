@@ -47,7 +47,7 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-quick-start.md
     path: QUICK_START.md
-    content_hash: 80cf831c162184bc6cb158109097ff591e9952f53b24c9f0c2c220693792e203
+    content_hash: eb70e82f03baff92f26a05caea34430a94c080dd8d82a089eb07ed1d890f4655
     license: Apache-2.0
   - knowledge_id: tu-diabetes-analysis.py
     path: diabetes_analysis.py
@@ -94,9 +94,9 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/SKILL.md
-      sha256: 76193482ea9d1bb98ef83685a0285c1d6744da7671614bf73dcf81edae067774
+      sha256: 9f7df52da5ff5db6e0205f497c6f6ce01602c41492f394d2dca6d133234d7af3
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/QUICK_START.md
-      sha256: 80cf831c162184bc6cb158109097ff591e9952f53b24c9f0c2c220693792e203
+      sha256: eb70e82f03baff92f26a05caea34430a94c080dd8d82a089eb07ed1d890f4655
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/diabetes_analysis.py
       sha256: 9edb0c55f1b5cf5a9c2e2df731d00a1a8af9db6810581785dfaa745188fb97e5
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics/example1_metabolites.md

@@ -29,9 +29,10 @@ tax = tu.tools.NCBIDatasets_suggest_taxonomy(query="SARS-CoV-2")
 ```python
 # Search for viral proteins
 proteins = tu.tools.UniProt_search(
-    query="organism:2697049",  # SARS-CoV-2 TaxID
-    reviewed=True
+    query="organism:2697049 AND reviewed:true",  # SARS-CoV-2 TaxID; "reviewed" is a query field, not a parameter
+    limit=25
 )
+# Results: proteins['data']['results'] -> [{accession, id, protein_name, gene_names, organism, length}]
 ```
 
 ---
@@ -42,7 +43,7 @@ proteins = tu.tools.UniProt_search(
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `ChEMBL_search_targets` | Search targets | `query`, `organism` |
+| `ChEMBL_search_targets` | Search targets | `pref_name__contains`, `organism`, `target_type` |
 | `ChEMBL_get_target_activities` | Get bioactivity | `target_chembl_id` |
 | `ChEMBL_search_drugs` | Search drugs | `query`, `max_phase` |
 
@@ -91,10 +92,10 @@ structure = tu.tools.NvidiaNIM_alphafold2(
 def assess_structure_quality(structure_result):
     """Assess structure quality for docking."""
     plddt = structure_result.get('plddt', [])
-    
+
     mean_plddt = np.mean(plddt)
     high_conf = sum(1 for p in plddt if p > 90) / len(plddt)
-    
+
     return {
         'mean_plddt': mean_plddt,
         'high_confidence_fraction': high_conf,
@@ -148,16 +149,16 @@ result = tu.tools.NvidiaNIM_diffdock(
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `kegg_search_pathway` | Search pathways | `query` |
+| `kegg_search_pathway` | Search pathways | `keyword` |
 | `KEGG_get_pathway_genes` | Get genes in pathway | `pathway_id` |
 | `kegg_get_gene_info` | Get gene details | `gene_id` |
-| `kegg_find_genes` | Find genes by keyword | `query`, `database` |
+| `kegg_find_genes` | Find genes by keyword | `keyword`, `organism` |
 
 **Example - Pathogen metabolism pathways**:
 ```python
 # Search for viral replication pathways
 pathways = tu.tools.kegg_search_pathway(
-    query="coronavirus replication"
+    keyword="coronavirus replication"
 )
 
 # Get essential genes
@@ -207,8 +208,8 @@ papers = tu.tools.PubMed_search_articles(
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `EuropePMC_search_articles` | Search preprints (bioRxiv, medRxiv) | `query`, `source='PPR'`, `pageSize` |
-| `ArXiv_search_papers` | Physics/ML preprints | `query`, `category` |
+| `EuropePMC_search_articles` | Search preprints (bioRxiv, medRxiv) | `query` (prefix `SRC:PPR AND` for preprints only), `limit` |
+| `ArXiv_search_papers` | Physics/ML preprints | `query`, `limit` |
 | `BioRxiv_get_preprint` | Get preprint by DOI | `doi`, `server='biorxiv'` |
 | `MedRxiv_get_preprint` | Get preprint by DOI | `doi`, `server='medrxiv'` |
 
@@ -218,9 +219,8 @@ papers = tu.tools.PubMed_search_articles(
 ```python
 # Search for newest preprint findings
 preprints = tu.tools.EuropePMC_search_articles(
-    query=f"{pathogen_name} mechanism resistance",
-    source="PPR",  # PPR = Preprints (bioRxiv, medRxiv, etc.)
-    pageSize=20
+    query=f"SRC:PPR AND {pathogen_name} mechanism resistance",  # SRC:PPR = Preprints (bioRxiv, medRxiv, etc.)
+    limit=20
 )
 
 # If you have a specific DOI, retrieve full metadata:
@@ -230,13 +230,12 @@ if doi_from_search.startswith('10.1101/'):
 # Alternative: Use web search for bioRxiv
 web_results = tu.tools.web_search(
     query=f"{pathogen_name} clinical trial effectiveness",
-    limit=20
+    max_results=20
 )
 
 # Computational papers
 arxiv = tu.tools.ArXiv_search_papers(
     query=f"{pathogen_name} drug discovery",
-    category="q-bio",
     limit=10
 )
 ```
@@ -289,17 +288,16 @@ trials = tu.tools.search_clinical_trials(
 ```python
 def analyze_outbreak(tu, pathogen_name):
     """Complete outbreak intelligence workflow."""
-    
+
     # Phase 1: Identify pathogen
     taxonomy = tu.tools.NCBIDatasets_suggest_taxonomy(query=pathogen_name)
     taxid = taxonomy['taxid']
-    
+
     # Phase 2: Get target proteins
     proteins = tu.tools.UniProt_search(
-        query=f"organism:{taxid}",
-        reviewed=True
-    )
-    
+        query=f"organism:{taxid} AND reviewed:true"
+    )['data']['results']
+
     # Phase 3: Predict structures for top targets
     structures = {}
     for protein in proteins[:3]:  # Top 3 targets
@@ -307,14 +305,14 @@ def analyze_outbreak(tu, pathogen_name):
             accession=protein['accession']
         )
         struct = tu.tools.NvidiaNIM_alphafold2(sequence=seq)
-        structures[protein['name']] = struct
-    
+        structures[protein['protein_name']] = struct
+
     # Phase 4: Find repurposing candidates
     candidates = tu.tools.ChEMBL_search_drugs(
         query=f"{pathogen_name} OR broad spectrum antiviral",
         max_phase=4
     )
-    
+
     # Dock top candidates
     docking_results = []
     for drug in candidates[:20]:
@@ -327,19 +325,19 @@ def analyze_outbreak(tu, pathogen_name):
             'drug': drug,
             'score': result['poses'][0]['confidence']
         })
-    
+
     # Phase 5: Literature search
     papers = tu.tools.PubMed_search_articles(
         query=f"{pathogen_name} treatment",
         limit=50
     )
-    
+
     return {
         'taxonomy': taxonomy,
         'targets': proteins,
         'structures': structures,
-        'drug_candidates': sorted(docking_results, 
-                                  key=lambda x: x['score'], 
+        'drug_candidates': sorted(docking_results,
+                                  key=lambda x: x['score'],
                                   reverse=True),
         'literature': papers
     }
@@ -350,10 +348,10 @@ def analyze_outbreak(tu, pathogen_name):
 ```python
 def rapid_drug_screen(tu, target_sequence, drug_smiles_list):
     """Rapid docking screen for drug repurposing."""
-    
+
     # Quick structure prediction
     structure = tu.tools.NvidiaNIM_esmfold(sequence=target_sequence)
-    
+
     # Dock all candidates
     results = []
     for smiles in drug_smiles_list:
@@ -366,7 +364,7 @@ def rapid_drug_screen(tu, target_sequence, drug_smiles_list):
             'smiles': smiles,
             'score': docking['poses'][0]['confidence']
         })
-    
+
     return sorted(results, key=lambda x: x['score'], reverse=True)
 ```
 
@@ -375,34 +373,38 @@ def rapid_drug_screen(tu, target_sequence, drug_smiles_list):
 ```python
 def transfer_knowledge(tu, novel_pathogen, reference_pathogen):
     """Transfer drug knowledge from related pathogen."""
-    
+
     # Get drugs approved for reference pathogen
     ref_drugs = tu.tools.ChEMBL_search_drugs(
         query=reference_pathogen,
         max_phase=4
     )
-    
+
     # Get target from novel pathogen
     novel_proteins = tu.tools.UniProt_search(
         query=f"organism:{novel_pathogen}"
-    )
-    
+    )['data']['results']
+
     # Find homologous targets
     homologs = []
     for protein in novel_proteins:
         # BLAST against reference
+        # No organism parameter: database is one of 'nr', 'swissprot', 'pdb'; filter hits by
+        # organism from hit_def afterwards. NCBI remote BLAST takes 5-30 minutes per query.
         blast = tu.tools.BLAST_protein_search(
             sequence=protein['sequence'],
-            database="refseq_protein",
-            organism=reference_pathogen
+            database="swissprot"
         )
-        if blast and blast[0]['identity'] > 70:
+        # Per the tool's return_schema: alignments[].hsps[] with identities and align_length
+        # (return shape not run live here because of the 5-30 minute runtime)
+        best = blast['alignments'][0]['hsps'][0] if blast.get('alignments') else None
+        if best and 100 * best['identities'] / best['align_length'] > 70:
             homologs.append({
                 'novel_target': protein,
-                'reference_homolog': blast[0],
-                'identity': blast[0]['identity']
+                'reference_homolog': blast['alignments'][0]['hit_def'],
+                'identity': 100 * best['identities'] / best['align_length']
             })
-    
+
     # Match drugs to homologous targets
     candidates = []
     for drug in ref_drugs:
@@ -413,7 +415,7 @@ def transfer_knowledge(tu, novel_pathogen, reference_pathogen):
                     'target_homology': homolog['identity'],
                     'expected_activity': 'High' if homolog['identity'] > 90 else 'Medium'
                 })
-    
+
     return candidates
 ```
 
@@ -452,7 +454,7 @@ def transfer_knowledge(tu, novel_pathogen, reference_pathogen):
 | Primary | Fallback 1 | Fallback 2 |
 |---------|------------|------------|
 | `PubMed_search_articles` | `openalex_search_works` | Google Scholar |
-| `EuropePMC_search_articles` (source='PPR') | `web_search` (site:biorxiv.org) | ArXiv q-bio |
+| `EuropePMC_search_articles` (`SRC:PPR` query) | `web_search` (site:biorxiv.org) | ArXiv q-bio |
 | `openalex_search_works` | `SemanticScholar_search_papers` | Manual citation |
 
 ---
@@ -463,7 +465,7 @@ def transfer_knowledge(tu, novel_pathogen, reference_pathogen):
 |------|-------|---------|
 | `NCBIDatasets_suggest_taxonomy` | `name="virus"` | `query="virus"` |
 | `UniProt_search` | `name="protease"` | `query="protease"` |
-| `ChEMBL_search_targets` | `target="Mpro"` | `query="Mpro"` |
+| `ChEMBL_search_targets` | `query="Mpro"` (no `query` parameter) | `pref_name__contains="3C-like proteinase"` (matches target names, not gene symbols) |
 | `NvidiaNIM_diffdock` | `protein_file=path` | `protein=content` |
 | `NvidiaNIM_alphafold2` | `seq="MVLS..."` | `sequence="MVLS..."` |
 
@@ -475,7 +477,7 @@ def transfer_knowledge(tu, novel_pathogen, reference_pathogen):
 
 **Rate limits**: 40 RPM (1.5 second minimum between calls)
 
-**Async operations**: 
+**Async operations**:
 - AlphaFold2 may return 202, requiring polling
 - ESMFold is synchronous (faster for rapid screening)
 

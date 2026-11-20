@@ -12,7 +12,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -192,7 +192,7 @@ expression = tu.tools.GTEx_get_median_gene_expression(gene_symbol="TCF7L2")
 ```python
 # Get credible sets and L2G predictions
 credible = tu.tools.OpenTargets_get_variant_credible_sets(
-    variant_id="10_112998590_C_T"  # chr_pos_ref_alt format
+    variantId="10_112998590_C_T"  # chr_pos_ref_alt format
 )
 # Returns: credible set membership, L2G scores for causal genes
 # L2G > 0.5: high confidence causal gene
@@ -217,7 +217,7 @@ gene_info = tu.tools.MyGene_query_genes(
 
 The nearest gene is often NOT the causal gene for non-coding variants. Regulatory elements can act over hundreds of kilobases, skipping intervening genes entirely. Before looking at tools, reason about which gene is the likely target:
 
-- **eQTL in disease-relevant tissue is the strongest evidence.** If a variant is an eQTL for Gene X in pancreas and the trait is diabetes, that is a direct mechanistic link. An eQTL in an unrelated tissue is weaker but still informative.
+- **Tissue-relevant eQTL evidence** can prioritize a candidate target gene. Check colocalization and independent evidence before inferring a causal mechanism.
 - **L2G scores integrate multiple signals** (distance, chromatin interaction, eQTL) into a single prediction. L2G > 0.5 is high confidence, but it is a computational prediction, not experimental proof. Combine it with eQTL data -- when both agree, confidence is high.
 - **Proximity alone is unreliable.** Many GWAS loci have the causal gene 2-3 genes away from the lead SNP. Never default to "nearest gene" without checking eQTL and L2G.
 - **When multiple candidate genes have evidence**, present all of them ranked by strength. The answer may genuinely be uncertain.
@@ -233,9 +233,10 @@ Once target gene(s) identified, characterize molecular function.
 ppi = tu.tools.STRING_get_interaction_partners(
     identifiers="TCF7L2", species=9606, required_score=700)
 
-# STRING functional enrichment (GO, KEGG, Reactome)
-enrichment = tu.tools.STRING_get_functional_enrichment(
-    identifiers="TCF7L2", species=9606)
+# STRING functional enrichment (GO, KEGG, Reactome) — needs a gene SET,
+# newline-separated; results are in data["enrichments"]
+enrichment = tu.tools.STRING_get_enrichment(
+    identifiers="TCF7L2\nCTNNB1\nAPC\nLEF1", species=9606)
 
 # Reactome pathway enrichment — space-separated STRING, NOT array
 reactome = tu.tools.ReactomeAnalysis_pathway_enrichment(
@@ -273,7 +274,7 @@ disgenet = tu.tools.DisGeNET_search_gene(gene="TCF7L2", limit=20)
 
 # OpenTargets GWAS studies — use MONDO IDs, NOT EFO
 ot_gwas = tu.tools.OpenTargets_search_gwas_studies_by_disease(
-    diseaseIds=["MONDO_0005148"], size=20)
+    diseaseIds=["MONDO_0005148"])
 ```
 
 ---

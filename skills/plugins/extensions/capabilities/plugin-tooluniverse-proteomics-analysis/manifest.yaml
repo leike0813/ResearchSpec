@@ -47,7 +47,7 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-code-reference.md
     path: CODE_REFERENCE.md
-    content_hash: 8c037cfb23a1f6ca5136b5c50a1f1ece9f8b3904a96c5a8e0f7a3338034ad685
+    content_hash: b81f875f3c07f6e494a1543e2df8017dcfa03b0a42eaa1cf8b9f1a412fa948d3
     license: Apache-2.0
   - knowledge_id: tu-phase-details.md
     path: PHASE_DETAILS.md
@@ -62,9 +62,9 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-proteomics-analysis/SKILL.md
-      sha256: a19dcc0abfef6e72f32b2206a8db6a5c7b7602c688edde18072b1468effedf18
+      sha256: 24931cebc1d1c355f9b63c274f13d6308c1f422546ddeffd688bf81eb941f06e
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-proteomics-analysis/CODE_REFERENCE.md
-      sha256: 8c037cfb23a1f6ca5136b5c50a1f1ece9f8b3904a96c5a8e0f7a3338034ad685
+      sha256: b81f875f3c07f6e494a1543e2df8017dcfa03b0a42eaa1cf8b9f1a412fa948d3
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-proteomics-analysis/PHASE_DETAILS.md
       sha256: 26c008250181b52d3a8da5f82697501f9c35a04853b61707f7e627edd08b427b
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-proteomics-analysis/REPORT_TEMPLATE.md

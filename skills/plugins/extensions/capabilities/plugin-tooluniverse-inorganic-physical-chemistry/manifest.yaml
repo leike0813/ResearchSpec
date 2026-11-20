@@ -54,7 +54,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-inorganic-physical-chemistry/SKILL.md
-      sha256: 00e42a3fb996109096a2fe6b8c0d3ce11711567eeb58c7fc69e596dcb6cbfa90
+      sha256: 96b24f9b59ff042d2d1db972d4387b35cb7085df1b863ab7f448945bd3388d89
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-inorganic-physical-chemistry/scripts/equilibrium_solver.py
       sha256: be64607ccac5b292aad81b56784ba7f1dd506f7b63940e972e8faafe12fa604b
 license: Apache-2.0

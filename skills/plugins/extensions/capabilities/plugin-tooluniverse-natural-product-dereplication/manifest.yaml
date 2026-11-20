@@ -57,5 +57,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-natural-product-dereplication/SKILL.md
-      sha256: 7b16e9c9c92e7ce8eb821525a7584ac189e9e48dd85ba203d5c9518b55f7d1d7
+      sha256: 54528263cfc63d90efd052934f069e3a476b3c47780b9716e18c60e66d17cd55
 license: Apache-2.0

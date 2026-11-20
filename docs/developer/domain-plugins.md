@@ -36,7 +36,7 @@ vendor converter ──► vendor bundle/Skills ◄── source-neutral domain 
 - A **central assembler** validates all isolated vendor bundles against the source-neutral domain catalog and is the only writer of `skills/plugins/registry.json`.
 - The same Skill may be a direct member of several domains. Its bytes and global Skill ID remain unique.
 
-ToolUniverse v1.5.4 contributes 130 admitted Skills. Scientific Agent Skills
+ToolUniverse v1.5.10 contributes 130 admitted Skills. Scientific Agent Skills
 v2.70.0 contributes 56 reviewed, vendor-prefixed Skills after complete admission
 decisions for all 167 audit records and finding-level decisions for the retained
 42-entry manual-security catalog (historical targets plus current high/critical

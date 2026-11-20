@@ -3,14 +3,16 @@ capability_id: plugin-tooluniverse-regulatory-genomics
 title: Regulatory Genomics Research Skill
 description: Transcription factor binding, cis-regulatory elements (cCREs),
   chromatin accessibility, and regulatory annotation using JASPAR (motifs),
-  ENCODE (cCREs, ChIP-seq), RegulomeDB (regulatory variant scoring), UCSC — plus
-  sequence-based deep-learning prediction of regulatory activity and non-coding
-  variant effects (AlphaGenome, Enformer, Borzoi, ChromBPNet, Evo 2). Use for
-  regulatory element annotation, TF-binding-site prediction, regulatory-region
-  functional impact assessment, and predicting how a non-coding variant or a raw
-  DNA sequence affects expression/chromatin/accessibility. Use this whenever a
-  user asks what regulates a gene, whether a SNP hits a regulatory element, or
-  to predict a non-coding variant's functional effect from sequence.
+  UniBind, ENCODE (cCREs, ChIP-seq), RegulomeDB (regulatory variant scoring),
+  UCSC, and the Ensembl Regulatory Build (motif instances, evolutionarily
+  constrained elements, TF binding matrices) — plus sequence-based deep-learning
+  prediction of regulatory activity and non-coding variant effects (AlphaGenome,
+  Enformer, Borzoi, ChromBPNet, Evo 2). Use for regulatory element annotation,
+  TF-binding-site prediction, regulatory-region functional impact assessment,
+  and predicting how a non-coding variant or a raw DNA sequence affects
+  expression/chromatin/accessibility. Use this whenever a user asks what
+  regulates a gene, whether a SNP hits a regulatory element, or to predict a
+  non-coding variant's functional effect from sequence.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -55,5 +57,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-regulatory-genomics/SKILL.md
-      sha256: fca2dbddb8c63ea0db65b20280e8693e887bf7073671f72093872f91839f67b9
+      sha256: 55a6310c4211b8782b2d58ce21151d384d6a1cbcb8e6323f6b567145d6067180
 license: Apache-2.0

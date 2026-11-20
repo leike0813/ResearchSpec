@@ -2,10 +2,12 @@ schema_version: "1"
 capability_id: plugin-tooluniverse-gene-disease-association
 title: Gene-Disease Association Analysis
 description: Gene-disease association analysis across DisGeNET, OpenTargets,
-  Monarch, OMIM, GenCC, Orphanet. Cross-references multiple sources for
-  evidence-graded association reports with concordance scoring (5/5 sources
-  agree → strong, 1/5 → weak). Use for 'which diseases is gene X associated
-  with' or 'which genes cause disease Y' queries with quantitative confidence.
+  Monarch, OMIM, GenCC, Orphanet, Gene2Phenotype (G2P). Cross-references
+  multiple sources for evidence-graded association reports with concordance
+  scoring (5/5 sources agree → strong, 1/5 → weak). Use for 'which diseases is
+  gene X associated with' or 'which genes cause disease Y' queries with
+  quantitative confidence, including clinical-panel-based curation
+  (developmental disorders, cancer, cardiac, skeletal, eye, skin panels).
 maturity: operational
 class: analysis
 node_kind: producer
@@ -50,5 +52,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-disease-association/SKILL.md
-      sha256: fe4716b2579a2637caec1b67924d49c6db16f62dfc7ad3f8ef7c735d07b2e333
+      sha256: 4da64de955563a5985c682bef9c2e6f3c673d901f360fd600c47dcba7eefb6d8
 license: Apache-2.0

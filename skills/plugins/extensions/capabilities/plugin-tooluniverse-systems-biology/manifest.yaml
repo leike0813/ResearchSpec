@@ -70,7 +70,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/SKILL.md
-      sha256: 1d3d28c28ca842408b83e5c7ae0cd853fef3bfcd972a0713b13f768dda2eb5f2
+      sha256: 23b6f48379238d9d094cdcda46fb5e0c90b2b28dc0c26a60d763484b740b5e2f
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/python_implementation.py
       sha256: 822d0429c5c0c4b8289a36bdd3d46c75774899b769a650128259494b7ae71a54
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-systems-biology/test1_genelist.md

@@ -79,7 +79,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/SKILL.md
-      sha256: 7f6f9d72d3d137b4b5ceabf7c7ef13c7e634a3422f25cc3e74eb1c8c8938fbcc
+      sha256: cd28e221053d00f23fb038196c073192f64640205d6e696ebb08c7ae6f8e1a1d
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/chemistry_facts.py
       sha256: cbd327bf9829d0547e3ef5ef8ba2a09a1096cbfa207786dc286f91c17514ac99
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-organic-chemistry/scripts/crystal_validator.py

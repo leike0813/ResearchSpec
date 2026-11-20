@@ -51,16 +51,16 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-examples.md
     path: examples.md
-    content_hash: 6c2498a4e6ab3864a9e0131f7443a769b622ba5d4a371cadee7f9acc8b9667b7
+    content_hash: 5fc7219e108b899349324feaea51df14881eeebd56920b56e5a8033eb0324092
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-expression-data-retrieval/SKILL.md
-      sha256: da757cf475d49c33141f6840c3f69c87e492dc44865eba96779a736fe7d44502
+      sha256: 69e1fe4450e7f6f61564e34014cd08e10becd157e3e88378a89aa9e0b1b5c306
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-expression-data-retrieval/CHECKLIST.md
       sha256: b4fa47750713f7cece39fa56b5f0c1d2bcd17cf7ddc5f0644777c3f43afc537d
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-expression-data-retrieval/examples.md
-      sha256: 6c2498a4e6ab3864a9e0131f7443a769b622ba5d4a371cadee7f9acc8b9667b7
+      sha256: 5fc7219e108b899349324feaea51df14881eeebd56920b56e5a8033eb0324092
 license: Apache-2.0

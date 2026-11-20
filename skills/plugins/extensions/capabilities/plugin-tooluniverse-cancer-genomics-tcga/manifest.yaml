@@ -51,5 +51,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-genomics-tcga/SKILL.md
-      sha256: fab4d477f7fdca7e21dbb9629928486f774126132320f251834dd7dcb56f614d
+      sha256: c80cd1f8e5a1eaabd1c4a45c393f89069064070ef19a6225c036106ce48ed25f
 license: Apache-2.0

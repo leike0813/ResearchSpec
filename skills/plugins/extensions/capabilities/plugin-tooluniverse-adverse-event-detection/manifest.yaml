@@ -48,7 +48,7 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-phase-details.md
     path: PHASE_DETAILS.md
-    content_hash: d5da1640ceb2954ffea80fb636a8602f67b0f22a7aa578460fa681828f4c3488
+    content_hash: 98d3c123543f1bb6e2804e740a16b5658cc28af7e9bfcc810292cf583d7989da
     license: Apache-2.0
   - knowledge_id: tu-quick-start.md
     path: QUICK_START.md
@@ -67,9 +67,9 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/SKILL.md
-      sha256: 07c498d83e5492a8c65e8eab8de38969cd81c781be8257734da517c9acddd6cf
+      sha256: 5f118246455788cf9f772d51ab1cabd1f33f3ea7ae32d0fa686d9090121c62f3
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/PHASE_DETAILS.md
-      sha256: d5da1640ceb2954ffea80fb636a8602f67b0f22a7aa578460fa681828f4c3488
+      sha256: 98d3c123543f1bb6e2804e740a16b5658cc28af7e9bfcc810292cf583d7989da
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/QUICK_START.md
       sha256: c1432630f527fe0a65dbf50cfad38a8ec595df59b35945748c1740e91e5ef750
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-adverse-event-detection/REPORT_TEMPLATE.md

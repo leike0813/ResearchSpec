@@ -11,7 +11,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -151,6 +151,8 @@ Classify via NCBI Taxonomy (query param). Identify related pathogens with existi
 **Genome assembly availability and QC**: After classifying the pathogen, use `NCBIDatasets_list_genomes_by_taxon` (params `taxon` as tax_id, `limit`, `reference_only`) to find the reference genome, `NCBIDatasets_get_genome_assembly` (param `accession`, e.g. "GCF_000005845.2") for assembly metrics (length, N50, GC%, contig/chromosome counts), and `NCBIDatasets_get_sequence_reports` (param `accession`) to map replicons (chromosomes/plasmids with RefSeq/GenBank accessions). For the full assembly-QC-to-characterization workflow, see the `tooluniverse-microbial-genome-characterization` skill.
 
 **Open pathogen genomic surveillance**: For the priority pathogens covered by Pathoplexus (west-nile, ebola-zaire, ebola-sudan, cchf, mpox), use `Pathoplexus_count_sequences` (params `organism`, `group_by` e.g. `geoLocCountry` or lineage) to gauge sequencing volume and geographic/lineage spread, and `Pathoplexus_get_mutations` (params `organism`, `min_proportion` e.g. 0.95) to pull characteristic high-prevalence mutations for the circulating population. Use early to quantify outbreak footprint and flag conserved mutations before target selection.
+
+**Phylogenetic context via Nextstrain**: For a tree-level view of how a pathogen is evolving and spreading (not just mutation counts), use `Nextstrain_list_datasets` (optional `pathogen` filter, e.g. `'mpox'`, `'ebola'`, `'flu'`, `'dengue'`, `'zika'`; pass `datasets_per_pathogen=0` to see every clade/lineage-level dataset rather than just the first 10) and `Nextstrain_get_dataset` (param `dataset`, e.g. `'mpox/clade-IIb'`) for a build's sequence count, last-update date, and available phylogenetic colorings (clade, lineage, region, host, etc.). Verified live: Nextstrain's mpox datasets list `Pathoplexus` in their own `data_provenance` alongside GenBank — the two tools draw from overlapping submissions, so cross-check mutation-level findings from Pathoplexus against the corresponding Nextstrain build's `updated` date and `num_sequences` to judge how current and well-powered the phylogenetic picture is.
 
 **Knowledge transfer principle**: Drugs effective against related pathogens are the highest-priority repurposing candidates. A protease inhibitor for SARS-CoV-1 is immediately relevant to SARS-CoV-2. Look up the related pathogen's approved drugs in ChEMBL before generating candidates from first principles.
 

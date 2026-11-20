@@ -60,11 +60,11 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-references-segmentation.md
     path: references/segmentation.md
-    content_hash: 784289359a4986951a25256d24da140458419ecc99829edfab2825540409fcfe
+    content_hash: 1a5675db816e574af8d334dc7e4c84776fa50d029e2739e7440ac2e0cdc2c45a
     license: Apache-2.0
   - knowledge_id: tu-references-statistical-analysis.md
     path: references/statistical_analysis.md
-    content_hash: 1f88d392c86f1e7af48dd0dbccdc5c77a3429dbf901a05140cb616719c9a42de
+    content_hash: 7b86dc07dbfe8398b9197112b034c1bc284dcce2506d9405d96b754c7dd2fe58
     license: Apache-2.0
   - knowledge_id: tu-references-troubleshooting.md
     path: references/troubleshooting.md
@@ -87,7 +87,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/SKILL.md
-      sha256: c483d790d76a9855e7db637f8c73faa6c9410a7ca60313d2b4ce4a605dd84164
+      sha256: 9671c76b8368b579e3818ed532d9be230a6362a40ae1d5ba4f408321d51c0ec2
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/cell_counting.md
       sha256: c2a44a411401c50c37b1ff9f661055c82f28901aded6ecbf302cbb3761beccc9
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/fluorescence_analysis.md
@@ -95,9 +95,9 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/image_processing.md
       sha256: da2f6986e78ae92518ad6a976dfa073f2b33295b4d4a5e2fe977960f871540bf
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/segmentation.md
-      sha256: 784289359a4986951a25256d24da140458419ecc99829edfab2825540409fcfe
+      sha256: 1a5675db816e574af8d334dc7e4c84776fa50d029e2739e7440ac2e0cdc2c45a
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/statistical_analysis.md
-      sha256: 1f88d392c86f1e7af48dd0dbccdc5c77a3429dbf901a05140cb616719c9a42de
+      sha256: 7b86dc07dbfe8398b9197112b034c1bc284dcce2506d9405d96b754c7dd2fe58
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/references/troubleshooting.md
       sha256: 34a5d8860437c6c49a03c43c36675dbadf1207fd5caa9ca4c3968d045265f507
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-image-analysis/scripts/batch_process.py

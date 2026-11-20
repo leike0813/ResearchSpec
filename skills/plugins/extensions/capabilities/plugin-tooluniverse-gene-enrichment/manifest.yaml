@@ -3,9 +3,11 @@ capability_id: plugin-tooluniverse-gene-enrichment
 title: Gene Enrichment and Pathway Analysis
 description: Gene-set enrichment analysis — GO (Biological Process, Molecular
   Function, Cellular Component), KEGG, Reactome pathway enrichment via
-  clusterProfiler, gseapy, ORA, GSEA. Use for interpreting DEG lists, screen hit
-  lists, or any gene-list-to-pathways query. Includes simplify-cutoff handling
-  and union-vs-total denominator conventions for percent-DE questions.
+  clusterProfiler, gseapy, ORA, GSEA, plus g:Profiler for enrichment/ID
+  conversion/ortholog mapping/SNP-to-gene annotation. Use for interpreting DEG
+  lists, screen hit lists, or any gene-list-to-pathways query. Includes
+  simplify-cutoff handling and union-vs-total denominator conventions for
+  percent-DE questions.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -65,6 +67,10 @@ knowledge_refs:
     path: references/troubleshooting.md
     content_hash: f7e32b840b901ee1c95f0a059e803e156ebc441acf767ffbe8390be0d81173fd
     license: Apache-2.0
+  - knowledge_id: tu-references-upstream-details.md
+    path: references/upstream-details.md
+    content_hash: 100c7b23178d1542cbcc243270b49e412a1796498b6bc534e106e7f2f0a7d76f
+    license: Apache-2.0
   - knowledge_id: tu-scripts-condition-enrichment-screen.py
     path: scripts/condition_enrichment_screen.py
     content_hash: 929ced13889e34d7170331ad98f51031453b6b81773be5126477b84f6a18fddc
@@ -86,7 +92,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/SKILL.md
-      sha256: 718cb1f35bd418eccbc118703f948dcd858adca6be886b06eed6d949fddc06b4
+      sha256: 6c0302a124d92e574c6bfcc5b30793f1b5800812e50be51080b4e87011b62cf4
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/enrichr_guide.md
       sha256: 18841df9d7bbaf568f75863661156b88c71b25729fd1e9e54fc388cb5fc09494
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/gsea_workflow.md
@@ -97,6 +103,8 @@ provenance:
       sha256: 8bb4946e535f8bf923118e830b6bd3cf56d91c51a0cab0cc412deb534bb577aa
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/troubleshooting.md
       sha256: f7e32b840b901ee1c95f0a059e803e156ebc441acf767ffbe8390be0d81173fd
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/references/upstream-details.md
+      sha256: 100c7b23178d1542cbcc243270b49e412a1796498b6bc534e106e7f2f0a7d76f
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/scripts/condition_enrichment_screen.py
       sha256: 929ced13889e34d7170331ad98f51031453b6b81773be5126477b84f6a18fddc
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-gene-enrichment/scripts/enrichgo_runner.py

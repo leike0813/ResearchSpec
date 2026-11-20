@@ -18,6 +18,10 @@ Detailed searches return `reports`, `count`, `total_available`, and `truncated`;
 
 Count tools return `results` with `term/count` rows; read `total_reports_matching_query` for the report denominator and preserve null as unknown. Reaction-row sums can double-count reports. Counts are spontaneous reporting frequencies, not incidence, causal proof, or population risk. Obtain PRR/ROR/IC through `FAERS_calculate_disproportionality`, not count rows. Analytics retain `drug_name`/`adverse_event`. Death-criterion counts do not establish that the drug caused a death; page-level serious or death counts are explicitly partial and cannot form a whole-query rate.
 
+## COSMIC evidence coverage
+
+Check `status` before using `data.results`. Use `metadata.result_set_complete` and `metadata.truncated` to report coverage. COSMIC provides a non-pageable record window. A result count describes retrieved mutation records and cannot estimate patient prevalence.
+
 # Precision Oncology Treatment Advisor
 
 Provide actionable treatment recommendations for cancer patients based on their molecular profile using CIViC, ClinVar, OpenTargets, ClinicalTrials.gov, and structure-based analysis.

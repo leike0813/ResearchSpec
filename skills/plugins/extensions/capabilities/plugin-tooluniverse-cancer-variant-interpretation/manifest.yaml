@@ -49,11 +49,11 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-analysis-details.md
     path: ANALYSIS_DETAILS.md
-    content_hash: 8fa83047e114c14d5588335efe8d15dec2a8eadae62260853822a6b7485db107
+    content_hash: d4780e985eee4144f5b61b0338263c2124e8c237b4a6a19cd1fdfb88a682d5cc
     license: Apache-2.0
   - knowledge_id: tu-examples.md
     path: EXAMPLES.md
-    content_hash: 69736d1a865a0bf6a4014f0779ff2954b4c3a9ea2f60fe4338e4aa42cb53af2c
+    content_hash: 1c87abf32c74ced2812102d414d9426d3bc86f3bc4637074b8025da057ad9a0c
     license: Apache-2.0
   - knowledge_id: tu-input-parsing.md
     path: INPUT_PARSING.md
@@ -61,7 +61,7 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-quick-start.md
     path: QUICK_START.md
-    content_hash: e5ef98a8005954910aa7c6485b3dc0234f81295f2e2db145b2df5c3ff0b2bf20
+    content_hash: 6e04aa812a788d7a746edf5697f0dd5401be36a4b5d1f4b3fffcb1de2d6188d7
     license: Apache-2.0
   - knowledge_id: tu-report-template.md
     path: REPORT_TEMPLATE.md
@@ -73,26 +73,26 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-tools-reference.md
     path: TOOLS_REFERENCE.md
-    content_hash: 679bcc8d8bfa37d33b03cd0882048f1228ef3cd27e5ec5241d6e3a81b8c02af3
+    content_hash: d83a5b474709b5c49061d3225a760ac6bbefc22985f75271f6f2805a8c565658
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/SKILL.md
-      sha256: 784627ee73e5bfb4bbb074d997d6c40d553029deee76e44621b6f8eca6a51ef4
+      sha256: 93f73fdcc93fc9fb5a0c13d71bb94a7f44c8c1df367019715aa18ab334375323
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/ANALYSIS_DETAILS.md
-      sha256: 8fa83047e114c14d5588335efe8d15dec2a8eadae62260853822a6b7485db107
+      sha256: d4780e985eee4144f5b61b0338263c2124e8c237b4a6a19cd1fdfb88a682d5cc
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/EXAMPLES.md
-      sha256: 69736d1a865a0bf6a4014f0779ff2954b4c3a9ea2f60fe4338e4aa42cb53af2c
+      sha256: 1c87abf32c74ced2812102d414d9426d3bc86f3bc4637074b8025da057ad9a0c
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/INPUT_PARSING.md
       sha256: 2b4469eddb784db3f3948b63d53d015ed77936c900cbd96f276994d6c158cba9
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/QUICK_START.md
-      sha256: e5ef98a8005954910aa7c6485b3dc0234f81295f2e2db145b2df5c3ff0b2bf20
+      sha256: 6e04aa812a788d7a746edf5697f0dd5401be36a4b5d1f4b3fffcb1de2d6188d7
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/REPORT_TEMPLATE.md
       sha256: ae95893355e162c9bc73e019da6c6bd3e8c58e0ca58bae77a6f16909878c920e
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/SCORING_TABLES.md
       sha256: 03d34f66e86077377ed0acd2da9d8727adfb71d1db10390b1a30cb56466ed594
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-cancer-variant-interpretation/TOOLS_REFERENCE.md
-      sha256: 679bcc8d8bfa37d33b03cd0882048f1228ef3cd27e5ec5241d6e3a81b8c02af3
+      sha256: d83a5b474709b5c49061d3225a760ac6bbefc22985f75271f6f2805a8c565658
 license: Apache-2.0

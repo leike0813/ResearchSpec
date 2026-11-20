@@ -11,7 +11,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.3.1
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -342,7 +342,7 @@ Duplex sequencing (unique molecular identifiers + double-strand consensus) detec
 
 ## Bundled Computation Script
 
-**Script**: `skills/tooluniverse-population-genetics/scripts/popgen_calculator.py`
+**Script**: `scripts/popgen_calculator.py`
 
 **Preferred**: Use ToolUniverse tools (via MCP/SDK) instead of the script when possible:
 - `PopGen_hwe_test` tool -- HWE chi-square test. Fallback: `popgen_calculator.py --type hwe`

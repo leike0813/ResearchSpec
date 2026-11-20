@@ -12,7 +12,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.5.4
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -46,23 +46,7 @@ Start with the signal: What adverse event was reported more than expected? (PRR 
 2. **Timing consistent?** Acute reactions (within hours/days) suggest immune or direct pharmacologic mechanism. Delayed reactions (weeks/months) suggest cumulative toxicity or idiosyncratic response. Check FAERS time-to-onset distribution.
 3. **Could confounders explain it?** Patients taking this drug likely have the underlying disease — compare against background rate in that population, not the general population. Class-wide signals (appearing for all drugs in the class) suggest mechanism-based rather than molecule-specific toxicity.
 
-**Causality Assessment — Naranjo Algorithm Reasoning**:
-When determining whether an adverse event is drug-caused (not just associated), apply these steps systematically. LOOK UP DON'T GUESS — search FAERS and FDA labels for each criterion:
-1. **Prior reports?** Are there previous conclusive reports of this reaction? Check FDA label (`FDA_get_adverse_reactions_by_drug_name`) and literature (`PubMed_search_articles`). Yes = +1.
-2. **Temporal relationship?** Did the AE appear after drug administration? Onset within expected pharmacokinetic window (1-5 half-lives) = +2. Use `FAERS_stratify_by_demographics` for time-to-onset data.
-3. **Dechallenge?** Did the AE improve when the drug was stopped? Positive dechallenge = +1. Look for rechallenge/dechallenge case reports in literature.
-4. **Rechallenge?** Did the AE reappear when the drug was restarted? Positive rechallenge = +2 (strongest single piece of evidence for causality).
-5. **Alternative causes?** Could the underlying disease, concomitant drugs, or other factors explain the AE? Check `drugbank_get_drug_interactions_by_drug_name_or_id` for interacting drugs.
-6. **Dose-response?** Did the reaction worsen with higher doses or improve with lower doses? Dose-dependent AEs suggest on-target toxicity.
-7. **Drug level confirmation?** Was the drug detected in body fluids at toxic concentrations?
-- Score: Definite (>=9), Probable (5-8), Possible (1-4), Doubtful (<=0).
-- Even without individual patient data, you can estimate causality from aggregate FAERS signals + label evidence + mechanistic plausibility.
-
-**Reference files** (in this directory):
-- `PHASE_DETAILS.md` - Detailed tool calls, code examples, and output templates per phase
-- `REPORT_TEMPLATE.md` - Full report template and completeness checklist
-- `TOOL_REFERENCE.md` - Tool parameter reference and fallback chains
-- `QUICK_START.md` - Quick examples and common drug names
+**Case-level causality**: A Naranjo assessment requires documented facts about an individual case. Leave absent observations unknown. Aggregate reports, drug labels, and mechanistic plausibility can support signal follow-up. Use case records with documented event timing for time-to-onset analysis and avoid deriving it from demographic strata.
 
 ---
 

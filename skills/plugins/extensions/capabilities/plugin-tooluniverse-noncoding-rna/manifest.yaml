@@ -50,5 +50,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-noncoding-rna/SKILL.md
-      sha256: 950693f7aedc38b85161aa68eabb06ddb282395b42cb96f0ef51b6c83a4dbcf2
+      sha256: 8bfd0dee62fa1febf5c8dcff2a057810b5de82729e576a6509b0281d78ca100f
 license: Apache-2.0

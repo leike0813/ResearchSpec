@@ -48,7 +48,7 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-analysis-details.md
     path: ANALYSIS_DETAILS.md
-    content_hash: e81321b40741afa69b75aa996bdb191673b5462c504f08cfaf8c0d3c0e9c8aa4
+    content_hash: f5cc86fab1380b6c04d5aac61a43a60b72c2b27f273327b55f971183aa263603
     license: Apache-2.0
   - knowledge_id: tu-examples.md
     path: EXAMPLES.md
@@ -56,11 +56,11 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-fallback-patch.md
     path: FALLBACK_PATCH.md
-    content_hash: 6bc80d5ab5c9a7c281f65fd476d930845fd221957b1b080f862925adbf458df4
+    content_hash: 55bbf8b7ca78b691a4ccb01bea87f307ed07109ca133e2e65707cf207f1c8ba3
     license: Apache-2.0
   - knowledge_id: tu-quick-start.md
     path: QUICK_START.md
-    content_hash: 3f70b07c0ca9722310a5504008a018173e93654afc2d2473322511a9293ad13e
+    content_hash: b5493590dcab0af954a0c1e1f6a5832fa5d68577972ce4b76868a84e07121e02
     license: Apache-2.0
   - knowledge_id: tu-use-cases.md
     path: USE_CASES.md
@@ -83,15 +83,15 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/SKILL.md
-      sha256: a7f549aa2f6b42bfac3efb3ee858bb45a18053c53999ad1215d700efe1374ec3
+      sha256: 9860fcd664305de2df7c1de055db0c534fc621c1076d297d42e70059eae027d1
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/ANALYSIS_DETAILS.md
-      sha256: e81321b40741afa69b75aa996bdb191673b5462c504f08cfaf8c0d3c0e9c8aa4
+      sha256: f5cc86fab1380b6c04d5aac61a43a60b72c2b27f273327b55f971183aa263603
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/EXAMPLES.md
       sha256: 8041a7d9f3ea8fda89de20fa46b9f848b05a5a4500e141deb641b062c7edae8a
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/FALLBACK_PATCH.md
-      sha256: 6bc80d5ab5c9a7c281f65fd476d930845fd221957b1b080f862925adbf458df4
+      sha256: 55bbf8b7ca78b691a4ccb01bea87f307ed07109ca133e2e65707cf207f1c8ba3
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/QUICK_START.md
-      sha256: 3f70b07c0ca9722310a5504008a018173e93654afc2d2473322511a9293ad13e
+      sha256: b5493590dcab0af954a0c1e1f6a5832fa5d68577972ce4b76868a84e07121e02
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/USE_CASES.md
       sha256: 3968f2a25ec4863f1bd60a37de0654f14d1d43f6a4830b5d2dfef3c69c8ef4dc
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-crispr-screen-analysis/scripts/CEGv2_core_essential.txt

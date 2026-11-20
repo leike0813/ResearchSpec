@@ -96,6 +96,23 @@ Work backward from product to starting materials by identifying how key bonds we
    - New C-O bonds: epoxidation, hydration, oxidation
    - New C-N bonds: reductive amination, Gabriel synthesis, amide coupling
 
+### ML-Based Reaction/Retrosynthesis Prediction (Cross-Check, Not a Replacement)
+
+`RXNChemistry_predict_reaction` (forward prediction: reactants → most likely
+product, IBM RXN for Chemistry ML model) and `RXNChemistry_predict_retrosynthesis`
+(target → candidate synthetic routes) can cross-check a from-first-principles
+answer, especially for reactions outside the named-reaction decision tree above.
+**Reason through the mechanism first per the steps in this skill** — these are a
+sanity check on a proposed product/route, not a substitute for understanding
+*why* it forms.
+
+**Requires `RXN4CHEMISTRY_API_KEY`** — verified live: with no key set, neither
+tool appears in `tu list`/loads at all (the same intentional key-gating pattern
+as Addgene/USPTO elsewhere in ToolUniverse); set the key to enable, don't treat
+their absence as a bug. Both operations are asynchronous (poll via
+`poll_interval`/`max_wait_time` params) since the underlying model runs as a
+queued job, not a synchronous API call.
+
 ### Product Prediction Strategy (Stepwise)
 
 1. **Reactive sites**: Mark every nucleophilic and electrophilic center in all reactants
@@ -204,7 +221,7 @@ Ask: what is the mechanism?
 
 ## 4. Bundled Scripts
 
-These ready-to-run scripts live in `skills/tooluniverse-organic-chemistry/scripts/`.
+These ready-to-run scripts live in `scripts/`.
 Use them via the Bash tool instead of computing by hand — they validate inputs and print verification lines.
 
 ### `chemistry_facts.py` — Chemical and physical facts reference

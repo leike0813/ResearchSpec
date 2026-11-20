@@ -41,7 +41,7 @@ ResearchSpec SHALL maintain one versioned machine audit record for every top-lev
 Every ToolUniverse audit record SHALL carry validated ANZSRC Field metadata or an explicit unclassified reason, while production domain membership SHALL be maintained independently by the source-neutral domain catalog.
 
 #### Scenario: Field classification is complete
-- **WHEN** any of the 185 audited upstream Skills is validated
+- **WHEN** a top-level Skill at the pinned ToolUniverse revision is validated
 - **THEN** it SHALL have a valid primary Field and distinct optional additional Fields or a concise unclassified reason
 - **AND** its resource and cross-Skill evidence SHALL remain derived from files below its source root
 

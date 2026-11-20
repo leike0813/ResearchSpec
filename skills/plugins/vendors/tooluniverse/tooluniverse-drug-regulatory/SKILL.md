@@ -12,7 +12,7 @@ compatibility: Requires ToolUniverse-compatible retrieval tools and any local
   executes scripts or installs dependencies.
 metadata:
   vendor: tooluniverse
-  vendor-release: v1.5.4
+  vendor-release: v1.5.10
   researchspec-role: semantic-helper
 ---
 
@@ -94,8 +94,8 @@ Phase 8: Literature & Approval     -- PubMed_search_articles, OpenFDA_get_approv
 ## Phase 1: Substance Identification (FDAGSRS)
 
 **FDAGSRS_search_substances**: `query` (string REQUIRED -- drug name, UNII, InChIKey, or formula), `substance_class` (string, optional: "chemical"/"protein"/"nucleic acid"/"polymer"/"mixture"), `limit` (int, 1-50, default 10).
-Returns `{status, data: {substances: [{unii, name, substance_class, status, cross_references: [{type, value}]}]}}`.
-- `cross_references` contains DrugBank IDs, WHO-ATC codes, CAS numbers, CFR citations.
+Returns `{status, data: [{uuid, unii, name, substanceClass, status, formula, smiles, synonyms, xrefs}], metadata: {query, total, returned, substance_class_filter}}` (`data` is a list).
+- `xrefs` (dict) holds the substance's cross-references (DrugBank IDs, ATC codes, CAS numbers ...).
 - Use to get the official UNII identifier before calling `FDAGSRS_get_substance`.
 
 **FDAGSRS_get_substance**: `unii` (string REQUIRED, 10-char FDA UNII code).
@@ -109,7 +109,7 @@ Returns `{status, data: {smiles, formula, inchikey, molfile, molecular_weight, s
 ```python
 # Full substance lookup workflow
 search = tu.tools.FDAGSRS_search_substances(query="semaglutide")
-unii = search["data"]["substances"][0]["unii"]
+unii = search["data"][0]["unii"]
 full = tu.tools.FDAGSRS_get_substance(unii=unii)
 ```
 
@@ -118,24 +118,25 @@ full = tu.tools.FDAGSRS_get_substance(unii=unii)
 ## Phase 2: Drug Classification (RxClass)
 
 **RxClass_get_drug_classes**: `drug_name` (string, drug name), `rxcui` (string, RxNorm RXCUI -- alternative to drug_name), `rela_source` (string, optional: "ATC"/"FDASPL"/"MESH"/"VA"), `limit` (int, default 20).
-Returns `{status, data: {classes: [{class_id, class_name, class_type, rela}]}}`.
+Returns `{status, data: [{classId, className, classType, rxcui, drugName, tty, rela, relaSource}], metadata}` (`data` is a list).
 - Returns ALL classification systems unless `rela_source` filters to one.
 - `class_type` values: "ATC1-4", "EPC" (FDA Established Pharmacologic Class), "MoA", "VA", "MESH".
 - Use to find a drug's ATC code, pharmacological class, mechanism of action label.
 
 **RxClass_find_classes**: `query` (string REQUIRED, keyword e.g., "beta blocker"), `class_type` (string, optional: "ATC1-4"/"EPC"/"MoA"), `limit` (int, default 20).
-Returns matching drug classes with class IDs.
+Returns `{status, data: [{classId, className, classType}]}` (a list; `classType` shows the system: ATC1-4, EPC, MOA, DISPOS ...).
 - Use when you need to find a class ID before calling `RxClass_get_class_members`.
 
 **RxClass_get_class_members**: `class_id` (string REQUIRED, e.g., "M01AE"), `rela_source` (string, optional: "ATC"/"FDASPL"), `ttys` (string, optional: "IN" for ingredients), `limit` (int, default 50).
-Returns all drug ingredients in the class with RXCUIs and names.
+Returns `{status, data: [{rxcui, name, tty}]}`.
+- `rela_source` must match the class system: the default `ATC` only lists members of ATC codes (e.g. `A02BC`). For EPC/MoA class IDs such as `N0000175525` pass `rela_source="DAILYMED"` (or `"FDASPL"`); with the default it returns an empty list.
 - `ttys="IN"` restricts to active ingredient-level entries (recommended).
 
 ```python
 # Find all proton pump inhibitors
 classes = tu.tools.RxClass_find_classes(query="proton pump inhibitor", class_type="EPC")
-class_id = classes["data"]["classes"][0]["class_id"]
-members = tu.tools.RxClass_get_class_members(class_id=class_id, ttys="IN")
+class_id = classes["data"][0]["classId"]  # N0000175525 (EPC class)
+members = tu.tools.RxClass_get_class_members(class_id=class_id, rela_source="DAILYMED", ttys="IN")
 ```
 
 ---
@@ -171,10 +172,10 @@ result = tu.tools.FDA_OrangeBook_check_generic_availability(brand_name="LIPITOR"
 ## Phase 4: Patent & Exclusivity
 
 **FDA_OrangeBook_get_patent_info**: `application_number` (string), `brand_name` (string).
-Returns patent information. Note: Full patent numbers and expiration dates require Orange Book data files.
+On success, `products[].patents` lists patent numbers and expiration dates by matched application product. Record source and product identity.
 
 **FDA_OrangeBook_get_exclusivity**: `application_number` (string), `brand_name` (string).
-Returns `{status, data: {exclusivities: [{exclusivity_code, exclusivity_date, description}]}}`.
+On success, `products[].exclusivity` lists `code` and `expiration_date` by matched application product. Check for retrieval errors, no matching product, and matched products with no listed entries separately.
 - `exclusivity_code` values: "NCE" (New Chemical Entity, 5 years), "ODE" (Orphan Drug, 7 years), "PED" (Pediatric, 6 months), "NP" (New Product), "M" (new formulation).
 
 ---

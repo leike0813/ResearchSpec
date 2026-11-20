@@ -53,7 +53,7 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-references-phases.md
     path: references/phases.md
-    content_hash: ace193b813a94d19cff4c5ba8c88bb008360ad6ca91ac17a95295dbe19a5dc06
+    content_hash: b9c29a78a8a85c740a87a44a65299d032b3d4ebc4c1cc8a7713948aead71267e
     license: Apache-2.0
   - knowledge_id: tu-scripts-cofold-screen.py
     path: scripts/cofold_screen.py
@@ -68,9 +68,9 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-peptide-target-deorphanization/SKILL.md
-      sha256: 3a1457f0b46ba9ddc52b60695cdee3c26606ea8bd895b20a116cf7933ce8ffca
+      sha256: 84c0ab37209148059104150d9b7e4690bde61cacee8e205ca5cd9071afa32266
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-peptide-target-deorphanization/references/phases.md
-      sha256: ace193b813a94d19cff4c5ba8c88bb008360ad6ca91ac17a95295dbe19a5dc06
+      sha256: b9c29a78a8a85c740a87a44a65299d032b3d4ebc4c1cc8a7713948aead71267e
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-peptide-target-deorphanization/scripts/cofold_screen.py
       sha256: 8673e751f84f6b2da26dc42536480fb601464c8f4a0b987b33f8135e84af2324
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-peptide-target-deorphanization/scripts/deorphanize_peptide.py

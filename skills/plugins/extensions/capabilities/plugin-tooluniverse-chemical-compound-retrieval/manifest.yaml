@@ -53,16 +53,16 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-examples.md
     path: examples.md
-    content_hash: 87e7f2e95faca1b4d1417b7e4d69fdec3c89e5b80415441a214a1ea1eabb2fa3
+    content_hash: 8a0fac7ec9fc68ec30195bebd4ca7c103a2567071f8b5f745e61594398bf4186
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-chemical-compound-retrieval/SKILL.md
-      sha256: 3b344a5abc263785a733fe45cebe902742517da3c53599b7e43726048e831800
+      sha256: e8cdd72bcb5a9267d78da24156e8c9b8351066242294436290c248dc9c1bdccd
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-chemical-compound-retrieval/CHECKLIST.md
       sha256: d84f139445773f8664b6df41a7dff339ab5745158d1c88cbad611b09b0c73bef
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-chemical-compound-retrieval/examples.md
-      sha256: 87e7f2e95faca1b4d1417b7e4d69fdec3c89e5b80415441a214a1ea1eabb2fa3
+      sha256: 8a0fac7ec9fc68ec30195bebd4ca7c103a2567071f8b5f745e61594398bf4186
 license: Apache-2.0

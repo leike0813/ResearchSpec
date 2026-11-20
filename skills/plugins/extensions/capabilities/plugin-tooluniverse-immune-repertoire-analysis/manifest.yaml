@@ -48,7 +48,7 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-analysis-details.md
     path: ANALYSIS_DETAILS.md
-    content_hash: 73953b3c4364d082142e22e7839dbaaee729967aa39dfa872726dd58e59959a9
+    content_hash: 65bf3d99e2c7d24384b23174cb9743eff559172df3faca8911ffc863fd446d54
     license: Apache-2.0
   - knowledge_id: tu-use-cases.md
     path: USE_CASES.md
@@ -59,9 +59,9 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-immune-repertoire-analysis/SKILL.md
-      sha256: a26e8cb886d0909fff660df374c02355acd0ef513689a0056341bf236f232a3e
+      sha256: 120510ce61d3d3e24a0896d44b500cc7bb6b6ae379471b75d297823bf289c5b4
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-immune-repertoire-analysis/ANALYSIS_DETAILS.md
-      sha256: 73953b3c4364d082142e22e7839dbaaee729967aa39dfa872726dd58e59959a9
+      sha256: 65bf3d99e2c7d24384b23174cb9743eff559172df3faca8911ffc863fd446d54
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-immune-repertoire-analysis/USE_CASES.md
       sha256: 3ad8891932cb263a6501ed1cb71545081e18c96bdf4e1959fd7e561c7b339e56
 license: Apache-2.0

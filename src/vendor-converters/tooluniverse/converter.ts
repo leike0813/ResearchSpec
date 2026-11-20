@@ -29,6 +29,7 @@ interface AuditSkill {
   cross_skill_references: string[];
   source_release: string;
   source_revision: string;
+  projection_source_revision?: string;
 }
 
 interface Audit {
@@ -129,7 +130,10 @@ async function generateBundle(outputRoot: string, sourceRoot: string, audit: Aud
     const sourceSkillRoot = path.join(sourceRoot, skill.source_path);
     const outputSkillRoot = path.join(outputRoot, "vendors", VENDOR_ID, skill.skill_id);
     await mkdir(outputSkillRoot, { recursive: true });
-    const sourceEntry = await readFile(path.join(sourceSkillRoot, "SKILL.md"), "utf8");
+    const retained = skill.projection_source_revision === undefined
+      ? undefined
+      : await retainedSkillFiles(sourceRoot, skill.source_path, skill.projection_source_revision);
+    const sourceEntry = retained?.get("SKILL.md")?.toString("utf8") ?? await readFile(path.join(sourceSkillRoot, "SKILL.md"), "utf8");
     const adapted = adaptSkillEntry(skill.skill_id, adaptReviewedContent(skill.skill_id, "SKILL.md", sourceEntry), skill.source_release);
     await writeText(path.join(outputSkillRoot, "SKILL.md"), adapted.entry);
     fileDispositions.push(included(`${skill.source_path}/SKILL.md`, `vendors/${VENDOR_ID}/${skill.skill_id}/SKILL.md`, adapted.entry, "normalized Open Agent Skill entry"));
@@ -138,16 +142,17 @@ async function generateBundle(outputRoot: string, sourceRoot: string, audit: Aud
       await writeText(detailPath, adapted.details);
       fileDispositions.push(included(`${skill.source_path}/SKILL.md#progressive-disclosure`, `vendors/${VENDOR_ID}/${skill.skill_id}/references/upstream-details.md`, adapted.details, "progressive disclosure extraction"));
     }
-    for (const sourceFile of await walkFiles(sourceSkillRoot)) {
-      const relative = posix(path.relative(sourceSkillRoot, sourceFile));
+    const sourceFiles = retained ? [...retained.keys()] : (await walkFiles(sourceSkillRoot)).map((file) => posix(path.relative(sourceSkillRoot, file)));
+    for (const relative of sourceFiles) {
       if (relative === "SKILL.md") continue;
       const exclusion = resourceExclusion(relative);
       if (exclusion) { fileDispositions.push({ source_path: `${skill.source_path}/${relative}`, disposition: "excluded", reason: exclusion }); continue; }
       const target = path.join(outputSkillRoot, relative);
       await mkdir(path.dirname(target), { recursive: true });
-      const bytes = await readFile(sourceFile);
+      const sourceFile = path.join(sourceSkillRoot, relative);
+      const bytes = retained?.get(relative) ?? await readFile(sourceFile);
       const content = /\.(md|py)$/.test(relative) ? Buffer.from(adaptReviewedContent(skill.skill_id, relative, bytes.toString("utf8"))) : bytes;
-      if (content.equals(bytes)) await cp(sourceFile, target);
+      if (!retained && content.equals(bytes)) await cp(sourceFile, target);
       else await writeFile(target, content);
       fileDispositions.push({ source_path: `${skill.source_path}/${relative}`, output_path: `vendors/${VENDOR_ID}/${skill.skill_id}/${relative}`, disposition: "included", reason: content.equals(bytes) ? "reviewed runtime resource" : "reviewed tool-contract adaptation", sha256: sha256(content) });
     }
@@ -186,11 +191,25 @@ async function generateBundle(outputRoot: string, sourceRoot: string, audit: Aud
   return manifest;
 }
 
+async function retainedSkillFiles(sourceRoot: string, skillPath: string, revision: string): Promise<Map<string, Buffer>> {
+  const { stdout } = await execFileAsync("git", ["-C", sourceRoot, "ls-tree", "-rz", revision, "--", skillPath]);
+  const files = new Map<string, Buffer>();
+  for (const entry of stdout.split("\0").filter(Boolean)) {
+    const match = /^100(?:644|755) blob ([a-f0-9]{40})\t(.+)$/.exec(entry);
+    if (!match) throw new Error(`Unsupported retained ToolUniverse file: ${entry}`);
+    const { stdout: bytes } = await execFileAsync("git", ["-C", sourceRoot, "cat-file", "blob", match[1]], { encoding: "buffer", maxBuffer: 32 * 1024 * 1024 });
+    files.set(path.posix.relative(skillPath, match[2]), bytes);
+  }
+  if (!files.has("SKILL.md")) throw new Error(`Missing retained ToolUniverse Skill entry: ${skillPath}`);
+  return files;
+}
+
 function validateAuditAndPolicies(audit: Audit, decisions: DependencyDecision[]): void {
   if (audit.summary.top_level_skills !== audit.skills.length || audit.summary.candidate_skills !== 130 || audit.summary.excluded_skills !== audit.skills.length - 130) throw new Error("ToolUniverse audit inventory does not match the reviewed admission policy.");
   const candidates = new Set(audit.skills.filter((skill) => skill.scope_disposition === "candidate").map((skill) => skill.skill_id));
   for (const skill of audit.skills.filter((item) => item.scope_disposition === "candidate")) {
     if (!skill.source_release || !/^[a-f0-9]{40}$/.test(skill.source_revision)) throw new Error(`Missing audited source identity for ${skill.skill_id}`);
+    if (skill.projection_source_revision !== undefined && skill.projection_source_revision !== skill.source_revision) throw new Error(`Retained projection differs from the audited source identity for ${skill.skill_id}`);
   }
   const expectedEdges = new Set(audit.skills.filter((skill) => skill.scope_disposition === "candidate").flatMap((skill) => skill.cross_skill_references.filter((target) => candidates.has(target)).map((target) => `${skill.skill_id}\0${target}`)));
   const actualEdges = new Set(decisions.map((item) => `${item.from}\0${item.to}`));
@@ -242,6 +261,7 @@ const DESCRIPTION_OVERRIDES: Record<string, string> = {
   "tooluniverse-clinical-risk-scoring": "Compute and interpret established bedside clinical risk scores from supplied patient variables, report the deterministic result and limitations, and distinguish individual clinical scoring from genetic risk, epidemiology, and diagnostic-test evaluation.",
   "tooluniverse-mendelian-randomization": "Design and interpret Mendelian randomization analyses using genetic instruments, harmonized exposure and outcome effects, sensitivity analyses, pleiotropy checks, and appropriately bounded causal language.",
   "tooluniverse-product-safety-surveillance": "Investigate product safety signals across regulatory reports, recalls, adverse events, and literature with traceable evidence, uncertainty, and explicit separation from clinical diagnosis or treatment advice.",
+  "tooluniverse-variant-analysis": "Parse and annotate VCFs, classify and filter variants, compare mutation profiles across samples, and calculate coding-subset variant fractions. Resolve variant notation and genomic coordinates across reference assemblies and transcripts. Cross-check archive cohorts, allele frequencies, clinical annotations, principal transcripts, linkage disequilibrium, and feature overlaps with their source and evidence limits.",
 };
 
 function resourceExclusion(relative: string): string | undefined {

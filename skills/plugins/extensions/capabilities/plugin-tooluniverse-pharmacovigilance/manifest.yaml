@@ -3,9 +3,10 @@ capability_id: plugin-tooluniverse-pharmacovigilance
 title: Pharmacovigilance Safety Analyzer
 description: Drug safety and adverse event analysis — FAERS spontaneous-report
   mining, FDA black-box warnings, signal detection (PRR, ROR, IC), risk factors
-  by demographic/comorbidity, and label change tracking. Use for post-market
-  safety surveillance, AE signal investigation, drug-AE association strength
-  scoring, and pharmacovigilance reports.
+  by demographic/comorbidity, label change tracking, and SIDER curated
+  label-derived side-effect frequencies. Use for post-market safety
+  surveillance, AE signal investigation, drug-AE association strength scoring,
+  "what side effects does drug X have" questions, and pharmacovigilance reports.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -67,14 +68,14 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-tools-reference.md
     path: TOOLS_REFERENCE.md
-    content_hash: bfc739cb98ba3557583a166144dd576f2ce6f79bdaf57627dc34f09c07b6f058
+    content_hash: eb33fe35e47167d311538d2d4f4550f4ad0d7c5b200f3037276f99de18287da4
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/SKILL.md
-      sha256: a696594a568a81e8be23c7a485ccbec8ec530118a473181fe47005c836683cdb
+      sha256: b72c2f7118d3e47534ca4544921b5ecd9daec3d82b011590e2c0972595c4b01b
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/CHECKLIST.md
       sha256: d6a7ad024110c4860be6d8bab8339cc0a547214a429f5891517dfbf33bae27ee
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/EXAMPLES.md
@@ -86,5 +87,5 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/SIGNAL_DETECTION.md
       sha256: 1b48206aaac055b16ac0d433d7d09b8a7aeee8434098c970fcbdb36d1c9864a2
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-pharmacovigilance/TOOLS_REFERENCE.md
-      sha256: bfc739cb98ba3557583a166144dd576f2ce6f79bdaf57627dc34f09c07b6f058
+      sha256: eb33fe35e47167d311538d2d4f4550f4ad0d7c5b200f3037276f99de18287da4
 license: Apache-2.0

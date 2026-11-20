@@ -58,7 +58,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics-analysis/SKILL.md
-      sha256: 1c548f7336321942c50ce9cd92a561e260612f5d0b9e705a3a99c35fb2f35e85
+      sha256: 2d1dbb659bcae04a40a97a4e753be1a40c4e33f36d51a8dd445da7c9624b4b49
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics-analysis/code_examples.md
       sha256: 3ab493bc9524617720562503afbfbe10b1076dc50f1772139a0f5b6db905e72b
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-metabolomics-analysis/report_template.md

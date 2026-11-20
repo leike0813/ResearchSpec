@@ -51,5 +51,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-acmg-variant-classification/SKILL.md
-      sha256: 411182a42185315186ace3673b8da893aaaf035222394f064b6750ff00a08584
+      sha256: a7416fea6d03380b704d9ffbca5b208be4ab4253919861ec073fdb65857acf6a
 license: Apache-2.0

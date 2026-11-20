@@ -50,14 +50,14 @@ validators:
 knowledge_refs:
   - knowledge_id: tu-scripts-fit-dose-response.py
     path: scripts/fit_dose_response.py
-    content_hash: 820d197149b872d95cc9f56ecf2e1ba09bfc0a4bd4dc3d0f943909550d983606
+    content_hash: f8f9216b350f5d9636c07cabaf655f792cf299b919239fefdcad861e56d5d64e
     license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-dose-response/SKILL.md
-      sha256: 55a625ff4e9c7d7d0e68ba69151497d6091be6ab7a5b7e5895d9fd8ad57f8096
+      sha256: 1864d66fef067cda370bb8472566a206aa9ca6d5d4e699d601ad4b84d461bd2b
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-dose-response/scripts/fit_dose_response.py
-      sha256: 820d197149b872d95cc9f56ecf2e1ba09bfc0a4bd4dc3d0f943909550d983606
+      sha256: f8f9216b350f5d9636c07cabaf655f792cf299b919239fefdcad861e56d5d64e
 license: Apache-2.0

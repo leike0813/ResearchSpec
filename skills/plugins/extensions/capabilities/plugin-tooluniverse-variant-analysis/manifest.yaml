@@ -1,11 +1,12 @@
 schema_version: "1"
 capability_id: plugin-tooluniverse-variant-analysis
 title: Variant Analysis and Annotation
-description: VCF and variant analysis — parsing, annotation, classification
-  (synonymous, missense, frameshift, stop_gained), VAF filtering, coding vs
-  non-coding categorization, multi-condition variant comparison. Use for VCF
-  parsing, variant fraction calculations (denominator = coding subset only, NOT
-  all variants), and per-sample mutation profiling.
+description: Parse and annotate VCFs, classify and filter variants, compare
+  mutation profiles across samples, and calculate coding-subset variant
+  fractions. Resolve variant notation and genomic coordinates across reference
+  assemblies and transcripts. Cross-check archive cohorts, allele frequencies,
+  clinical annotations, principal transcripts, linkage disequilibrium, and
+  feature overlaps with their source and evidence limits.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -67,7 +68,11 @@ knowledge_refs:
     license: Apache-2.0
   - knowledge_id: tu-references-upstream-details.md
     path: references/upstream-details.md
-    content_hash: 275e875750b8cb0e74d46fdb7d07e2cb4fd38cd6a5ee1866b7a0edbb3f2bad7d
+    content_hash: 78281b36bfa67101530132ac19a63066b8a792d2a4015809ff861cf93dbaa5e3
+    license: Apache-2.0
+  - knowledge_id: tu-references-variant-notation-conversion.md
+    path: references/variant_notation_conversion.md
+    content_hash: 96a0156c4a1ddf5afceec400768aebdf4752944efe57a50a4396349964c1b869
     license: Apache-2.0
   - knowledge_id: tu-references-vcf-filtering.md
     path: references/vcf_filtering.md
@@ -102,7 +107,7 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/SKILL.md
-      sha256: 1b8952d1794fb2c76c748416a9c78ef1234f8be4c65ff4ae290113e86abc0e10
+      sha256: bcc1f0691739ad4943a19181b810ca9cec46c983f4fd5b18b2af633640d3738d
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/QUICK_START.md
       sha256: 4d5cd1e82721b90575f63e096cf4d66c30553c012afb47422589cdd0be08c0d8
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/python_implementation.py
@@ -114,7 +119,9 @@ provenance:
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/sv_cnv_analysis.md
       sha256: 03d6a5e2480873ba3140d738cf632cf743b539a8a98445ad6728a9a07e1b6e41
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/upstream-details.md
-      sha256: 275e875750b8cb0e74d46fdb7d07e2cb4fd38cd6a5ee1866b7a0edbb3f2bad7d
+      sha256: 78281b36bfa67101530132ac19a63066b8a792d2a4015809ff861cf93dbaa5e3
+    - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/variant_notation_conversion.md
+      sha256: 96a0156c4a1ddf5afceec400768aebdf4752944efe57a50a4396349964c1b869
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/references/vcf_filtering.md
       sha256: c24c310e68e3d9e903629e6ed99264a3f43da0b70ae28b2f41bb05f8b04f5f7b
     - path: skills/plugins/vendors/tooluniverse/tooluniverse-variant-analysis/scripts/annotate_variants.py
