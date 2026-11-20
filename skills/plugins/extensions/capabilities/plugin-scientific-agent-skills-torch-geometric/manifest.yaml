@@ -1,10 +1,10 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-torch-geometric
 title: PyTorch Geometric (PyG)
-description: PyTorch Geometric (PyG) for graph neural networks — node/link/graph
-  classification, message passing (GCN, GAT, GraphSAGE, GIN), heterogeneous
-  graphs, neighbor sampling, and custom datasets. Use when working with
-  torch_geometric, not for general NetworkX analytics or non-graph PyTorch
+description: Supports PyTorch Geometric (PyG) graph neural networks —
+  node/link/graph classification, message passing (GCN, GAT, GraphSAGE, GIN),
+  heterogeneous graphs, neighbor sampling, and custom datasets. Use when working
+  with torch_geometric, not for general NetworkX analytics or non-graph PyTorch
   models.
 maturity: operational
 class: analysis
@@ -47,44 +47,50 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-custom-datasets.md
     path: references/custom_datasets.md
-    content_hash: 48700ef231c9d727f34d5ef4daf5b087fec1238c91e4a2051f51d85137a85f7b
+    content_hash: f15cc9bcefd152de2911e773e1870a54deab26cd7e61511ba32b9c798f6e88a1
     license: MIT
   - knowledge_id: sas-references-explainability.md
     path: references/explainability.md
-    content_hash: 1e4dbbc1a6bd08503d04c6570be84f105bb2a3aae7b1a4d67b991d44f86c388b
+    content_hash: a0034a96a592dd3d4f56341b19ed3c0153e40065a56d23d42c241cb779396510
     license: MIT
   - knowledge_id: sas-references-heterogeneous.md
     path: references/heterogeneous.md
-    content_hash: 57d19d123de25fc93c4cf03483797089709efd233f9aa36e0c4a72e41eb0ce7a
+    content_hash: 1d955ed7d1b98df468e7009dd0c1ada550fed50af02cd101052b83dd1d26af9f
     license: MIT
   - knowledge_id: sas-references-link-prediction.md
     path: references/link_prediction.md
-    content_hash: c66a29c15cedcecf7615f691cab14a5871d474aec082ddbb22313d6d9848fcdc
+    content_hash: 2e8ae7873868915416061fa7fbe32d0db3337e568490cc833738af24414f29ac
     license: MIT
   - knowledge_id: sas-references-message-passing.md
     path: references/message_passing.md
-    content_hash: 9a4fa90b74841dc531a576247caa32d158d862951c8a7199543eb180b0241954
+    content_hash: 623248481516df52e603820303a3fd115a43eb0278ccd99c253f1e891001493e
+    license: MIT
+  - knowledge_id: sas-references-review.md
+    path: references/review.md
+    content_hash: caeecac05a54d87f30276b15a6a196a82736c00bf4ba5682ac940d17bb962bad
     license: MIT
   - knowledge_id: sas-references-scaling.md
     path: references/scaling.md
-    content_hash: 990b4a8deb097cf028da17a55764e7ec0bd00f1d0db9bb9abd94b8fbda316e7c
+    content_hash: 69680934b72104c20108e7747027a151451528b6a0ebc3102e60471a868c6213
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/SKILL.md
-      sha256: 15c2992c37b8f08854cb3d989d8ef9f815cd5d0aff027b16f2f0cf70355da133
+      sha256: 62f65fa0980849d064c19863218d4ae746834ba84138cd3995150e4d2dfa0dc9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/custom_datasets.md
-      sha256: 48700ef231c9d727f34d5ef4daf5b087fec1238c91e4a2051f51d85137a85f7b
+      sha256: f15cc9bcefd152de2911e773e1870a54deab26cd7e61511ba32b9c798f6e88a1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/explainability.md
-      sha256: 1e4dbbc1a6bd08503d04c6570be84f105bb2a3aae7b1a4d67b991d44f86c388b
+      sha256: a0034a96a592dd3d4f56341b19ed3c0153e40065a56d23d42c241cb779396510
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/heterogeneous.md
-      sha256: 57d19d123de25fc93c4cf03483797089709efd233f9aa36e0c4a72e41eb0ce7a
+      sha256: 1d955ed7d1b98df468e7009dd0c1ada550fed50af02cd101052b83dd1d26af9f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/link_prediction.md
-      sha256: c66a29c15cedcecf7615f691cab14a5871d474aec082ddbb22313d6d9848fcdc
+      sha256: 2e8ae7873868915416061fa7fbe32d0db3337e568490cc833738af24414f29ac
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/message_passing.md
-      sha256: 9a4fa90b74841dc531a576247caa32d158d862951c8a7199543eb180b0241954
+      sha256: 623248481516df52e603820303a3fd115a43eb0278ccd99c253f1e891001493e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/review.md
+      sha256: caeecac05a54d87f30276b15a6a196a82736c00bf4ba5682ac940d17bb962bad
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/scaling.md
-      sha256: 990b4a8deb097cf028da17a55764e7ec0bd00f1d0db9bb9abd94b8fbda316e7c
+      sha256: 69680934b72104c20108e7747027a151451528b6a0ebc3102e60471a868c6213
 license: MIT

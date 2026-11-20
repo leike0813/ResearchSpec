@@ -1,12 +1,12 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-scikit-learn
 title: Scikit-learn
-description: Machine learning in Python with scikit-learn. Use when working with
-  supervised learning (classification, regression), unsupervised learning
-  (clustering, dimensionality reduction), model evaluation, hyperparameter
-  tuning, preprocessing, or building ML pipelines. Provides comprehensive
-  reference documentation for algorithms, preprocessing techniques, pipelines,
-  and best practices.
+description: Supports machine learning in Python with scikit-learn. Applies when
+  working with supervised learning (classification, regression), unsupervised
+  learning (clustering, dimensionality reduction), model evaluation,
+  hyperparameter tuning, preprocessing, or building ML pipelines. Provides
+  comprehensive reference documentation for algorithms, preprocessing
+  techniques, pipelines, and best practices.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -48,68 +48,68 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-common-workflows.md
     path: references/common_workflows.md
-    content_hash: 46622a76232e595eafa8b568c4f52ee11479e24482ff36a1b6a1590cc3d95931
-    license: MIT
+    content_hash: dfe19c80358acb5f418a21cea4de3b7e83733481441f3c76d0a2ead4420261de
+    license: BSD-3-Clause
   - knowledge_id: sas-references-core-capabilities.md
     path: references/core_capabilities.md
-    content_hash: 071aa20353e1ab33c3d20a6e2f81c43ef5847142bdabd8fa3658fd424e098b13
-    license: MIT
+    content_hash: c869d9c207fcfc345207d397021a289f3820492ddf0fcd0b3a56a336bd0e1453
+    license: BSD-3-Clause
   - knowledge_id: sas-references-model-evaluation.md
     path: references/model_evaluation.md
-    content_hash: 95825afc97206a6588c7fd1f9358e2b130bbbbe6ae5f1032923ee7dbaf6c11e5
-    license: MIT
+    content_hash: e6f581c0ce2abffaac2f0bafc1a7bfbe86ec18f8969c6e9b91cc732a12a5fea5
+    license: BSD-3-Clause
   - knowledge_id: sas-references-pipelines-and-composition.md
     path: references/pipelines_and_composition.md
-    content_hash: c856b5b21e03b1cf5e4094211a831b69f1ff1d8ecd7b0174ca3a28674aec0033
-    license: MIT
+    content_hash: a1810cd67dc9141d962fa1972e11b06be6bd437213e10a563e5ec4256fb274a9
+    license: BSD-3-Clause
   - knowledge_id: sas-references-preprocessing.md
     path: references/preprocessing.md
-    content_hash: e510e9f984e29162f950500edca082fe8d647c7bdb4ac066c295eb5eead8a2e1
-    license: MIT
+    content_hash: 098506f0ca83e57d0c7cccd166164d025552ad7310b79d1010f5ff34e1cc4818
+    license: BSD-3-Clause
   - knowledge_id: sas-references-quick-reference.md
     path: references/quick_reference.md
-    content_hash: c34ef2f24089f22e80a1ca7794b2c089ce9fc07e6286206140c99f56fa30990e
-    license: MIT
+    content_hash: 5401b75fdaa10bf393b024f3c559631011c7be233d2313da37a3f27d7389659a
+    license: BSD-3-Clause
   - knowledge_id: sas-references-supervised-learning.md
     path: references/supervised_learning.md
-    content_hash: f257bc6e165777baf81ffdc55c2f6e36bc770a94fb42d3b9b6ed844c3a7f8c83
-    license: MIT
+    content_hash: d4e5911d175c3a349dd42e33c984b05cdafce230f264b6774996d0eeef36608a
+    license: BSD-3-Clause
   - knowledge_id: sas-references-unsupervised-learning.md
     path: references/unsupervised_learning.md
-    content_hash: a1f2a140c20e20f20de9c24a3be2ccacece1f192a1745c5f70a0c5e3cb972850
-    license: MIT
+    content_hash: cb476ef499fe35ee2c0416fdc31abad42384ac0110f6d3932901e99b039ae1b1
+    license: BSD-3-Clause
   - knowledge_id: sas-scripts-classification-pipeline.py
     path: scripts/classification_pipeline.py
-    content_hash: 0879a3643690c4e8245a9e57ebac631751a1178d0b4c31b0bde87ce0c38992d0
-    license: MIT
+    content_hash: 46abbb2b11095147cc31314405910b211c313d142f2480599f8508d47e5809f3
+    license: BSD-3-Clause
   - knowledge_id: sas-scripts-clustering-analysis.py
     path: scripts/clustering_analysis.py
-    content_hash: aec71c7f1abfbc218eaa7ce000a85a726bef4d7b777038179aa4b44e96ca4d78
-    license: MIT
+    content_hash: 5d1f962a70e049907a39a75cd7a130000a5d3e3de5a4fa4889d07f007c052a17
+    license: BSD-3-Clause
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/SKILL.md
-      sha256: e05ed4a1d5868fd1857a471019570c5a7d23cbf645b7e8ab192923dc765d0db9
+      sha256: 35094bce949efb948ac6532b2e544844f9794527231282ca7ac844347927a61c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/common_workflows.md
-      sha256: 46622a76232e595eafa8b568c4f52ee11479e24482ff36a1b6a1590cc3d95931
+      sha256: dfe19c80358acb5f418a21cea4de3b7e83733481441f3c76d0a2ead4420261de
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/core_capabilities.md
-      sha256: 071aa20353e1ab33c3d20a6e2f81c43ef5847142bdabd8fa3658fd424e098b13
+      sha256: c869d9c207fcfc345207d397021a289f3820492ddf0fcd0b3a56a336bd0e1453
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/model_evaluation.md
-      sha256: 95825afc97206a6588c7fd1f9358e2b130bbbbe6ae5f1032923ee7dbaf6c11e5
+      sha256: e6f581c0ce2abffaac2f0bafc1a7bfbe86ec18f8969c6e9b91cc732a12a5fea5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/pipelines_and_composition.md
-      sha256: c856b5b21e03b1cf5e4094211a831b69f1ff1d8ecd7b0174ca3a28674aec0033
+      sha256: a1810cd67dc9141d962fa1972e11b06be6bd437213e10a563e5ec4256fb274a9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/preprocessing.md
-      sha256: e510e9f984e29162f950500edca082fe8d647c7bdb4ac066c295eb5eead8a2e1
+      sha256: 098506f0ca83e57d0c7cccd166164d025552ad7310b79d1010f5ff34e1cc4818
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/quick_reference.md
-      sha256: c34ef2f24089f22e80a1ca7794b2c089ce9fc07e6286206140c99f56fa30990e
+      sha256: 5401b75fdaa10bf393b024f3c559631011c7be233d2313da37a3f27d7389659a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/supervised_learning.md
-      sha256: f257bc6e165777baf81ffdc55c2f6e36bc770a94fb42d3b9b6ed844c3a7f8c83
+      sha256: d4e5911d175c3a349dd42e33c984b05cdafce230f264b6774996d0eeef36608a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/references/unsupervised_learning.md
-      sha256: a1f2a140c20e20f20de9c24a3be2ccacece1f192a1745c5f70a0c5e3cb972850
+      sha256: cb476ef499fe35ee2c0416fdc31abad42384ac0110f6d3932901e99b039ae1b1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/scripts/classification_pipeline.py
-      sha256: 0879a3643690c4e8245a9e57ebac631751a1178d0b4c31b0bde87ce0c38992d0
+      sha256: 46abbb2b11095147cc31314405910b211c313d142f2480599f8508d47e5809f3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scikit-learn/scripts/clustering_analysis.py
-      sha256: aec71c7f1abfbc218eaa7ce000a85a726bef4d7b777038179aa4b44e96ca4d78
-license: MIT
+      sha256: 5d1f962a70e049907a39a75cd7a130000a5d3e3de5a4fa4889d07f007c052a17
+license: BSD-3-Clause

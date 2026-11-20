@@ -1,13 +1,8 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-pacsomatic
-title: pacsomatic
-description: Operator toolkit for nf-core/pacsomatic matched tumor-normal
-  workflows from BAM inputs. Use this skill when the user needs to validate run
-  inputs, generate pacsomatic-compliant samplesheets, prepare reproducible
-  Nextflow launch artifacts, run locally or submit to schedulers
-  (LSF/Slurm/PBS/SGE), and triage execution failures. Triggers on requests to
-  run pacsomatic, prepare launch commands/scripts, perform dry-run checks, or
-  troubleshoot pipeline startup and scheduler submission errors.
+title: Matched-Sample Analysis Planning
+description: Prepares an advisory input and output verification brief for a
+  user-provisioned local matched-sample analysis workflow.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -49,32 +44,26 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-config.yaml
     path: config.yaml
-    content_hash: 689203b8480b3a0f5ae2c45f165fd073573053026d16f0f57a02df18a00f5e82
-    license: MIT
-  - knowledge_id: sas-references-agent-playbook.md
-    path: references/agent-playbook.md
-    content_hash: 6fb51b68ed75d66b66a187fc9484b59bb8449d50a74dce726875b0a710c37b38
+    content_hash: c8a88b938fee1f4ddae7c01ee49426fb1c168b71e22dddc2bb85b96bfe1bd3c5
     license: MIT
   - knowledge_id: sas-references-config-and-output.md
     path: references/config-and-output.md
-    content_hash: 12fe249658b2cc42851f8c14f4cc39efdef0105bc38f44aeac9bb8ab12e3307f
+    content_hash: 6a8e29b8b1337834d438ee9db1c21da06274c3f5205ba57d02d4e7e1775c8b5e
     license: MIT
   - knowledge_id: sas-references-pacsomatic-guide.md
     path: references/pacsomatic_guide.md
-    content_hash: 0393be1cdc3c16710ab550856546aa0d71126ebc577dcddf25bcb28b1a34d139
+    content_hash: 1e274439b7ee61ad15a81e72bd60549fd1c416bd6cca9d7442b3a79907b9bca5
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/SKILL.md
-      sha256: 4cf64e2121f153f18b1fa50f0f223ab5e8e4c416fb4cad44eabebe0d42b3acc5
+      sha256: fdf24e9c10ba794eda8b6860ab447807ec78300d85e2fef67f5cfc5254abff6d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/config.yaml
-      sha256: 689203b8480b3a0f5ae2c45f165fd073573053026d16f0f57a02df18a00f5e82
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/references/agent-playbook.md
-      sha256: 6fb51b68ed75d66b66a187fc9484b59bb8449d50a74dce726875b0a710c37b38
+      sha256: c8a88b938fee1f4ddae7c01ee49426fb1c168b71e22dddc2bb85b96bfe1bd3c5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/references/config-and-output.md
-      sha256: 12fe249658b2cc42851f8c14f4cc39efdef0105bc38f44aeac9bb8ab12e3307f
+      sha256: 6a8e29b8b1337834d438ee9db1c21da06274c3f5205ba57d02d4e7e1775c8b5e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/references/pacsomatic_guide.md
-      sha256: 0393be1cdc3c16710ab550856546aa0d71126ebc577dcddf25bcb28b1a34d139
+      sha256: 1e274439b7ee61ad15a81e72bd60549fd1c416bd6cca9d7442b3a79907b9bca5
 license: MIT

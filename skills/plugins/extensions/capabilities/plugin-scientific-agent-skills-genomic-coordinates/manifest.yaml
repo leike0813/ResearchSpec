@@ -1,19 +1,19 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-genomic-coordinates
 title: Genomic Coordinates
-description: Convert genomic intervals between coordinate conventions, normalise
-  and compare variant representations, and detect assembly or contig-naming
-  mismatches before they corrupt an analysis. Use whenever coordinates cross a
-  format, tool, or assembly boundary - converting between BED, GFF/GTF, VCF,
-  SAM/BAM, WIG, PSL, genePred, Picard interval_list, or region strings;
-  reconciling 0-based half-open with 1-based inclusive; left-aligning or
-  trimming indels; checking whether two variant records describe the same
-  change; mapping genomic to transcript, CDS, or protein positions; auditing a
-  BED/GTF/VCF for convention violations; or diagnosing GRCh37 vs hg19 vs GRCh38
-  vs T2T, chr-prefix, and liftover problems. Triggers include "off by one",
-  "0-based", "1-based", "half-open", "coordinate system", "left-align",
-  "normalize variant", "bcftools norm", "chr prefix", "wrong genome build",
-  "liftover", "REF mismatch", and "HGVS".
+description: Converts genomic intervals between coordinate conventions,
+  normalises and compares variant representations, and detects assembly or
+  contig-naming mismatches before they corrupt an analysis. Used whenever
+  coordinates cross a format, tool, or assembly boundary - converting between
+  BED, GFF/GTF, VCF, SAM/BAM, WIG, PSL, genePred, Picard interval_list, or
+  region strings; reconciling 0-based half-open with 1-based inclusive;
+  left-aligning or trimming indels; checking whether two variant records
+  describe the same change; mapping genomic to transcript, CDS, or protein
+  positions; auditing a BED/GTF/VCF for convention violations; or diagnosing
+  GRCh37 vs hg19 vs GRCh38 vs T2T, chr-prefix, and liftover problems. Triggers
+  include "off by one", "0-based", "1-based", "half-open", "coordinate system",
+  "left-align", "normalize variant", "bcftools norm", "chr prefix", "wrong
+  genome build", "liftover", "REF mismatch", and "HGVS".
 maturity: operational
 class: analysis
 node_kind: producer
@@ -55,62 +55,62 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-format-conventions.md
     path: references/format-conventions.md
-    content_hash: bc501b01e57a03591e735d2592d38e2815a63a6079a1144b0baa4afc0bc0bba2
+    content_hash: d51bd8ab5156055f94c9e9bae02cd65fd1dd4e289c7c39dc9b445367f56de79d
     license: MIT
   - knowledge_id: sas-references-reference-builds.md
     path: references/reference-builds.md
-    content_hash: 27eee0f7050941a3ebf33373d0c84098b6220c6df2fe44e6b926521910c3b8cc
+    content_hash: 4c114bbb18b2c01b99f89ddd7b792a69090d39473d45df1cdff054ef6773be43
     license: MIT
   - knowledge_id: sas-references-transcript-coordinates.md
     path: references/transcript-coordinates.md
-    content_hash: 400ee336e6f0c78187b0e77522187b150e8d8a2601539e07eaf4edad0c7f20b8
+    content_hash: 5a4d68fa2bce75c945b933cf980ddb1c91f6279dfded64afa4e1f700173836ac
     license: MIT
   - knowledge_id: sas-references-variant-representation.md
     path: references/variant-representation.md
-    content_hash: 633f496a63d6a3d432fcf4999f7049ee9947c545087490df96ca35b976042c29
+    content_hash: 98656413c9f412a3c0749b6f2309762318593d3d670e6a1f39b90259998fa34a
     license: MIT
   - knowledge_id: sas-scripts--common.py
     path: scripts/_common.py
-    content_hash: c06e0f36e180849f59ca91346e19d88dfd997d96a65c667a216a01c08854c647
+    content_hash: a777f11f9377c3db892af41012ad2fe12b33bae45f031ec1accae02fe4c24fc5
     license: MIT
   - knowledge_id: sas-scripts-audit-intervals.py
     path: scripts/audit_intervals.py
-    content_hash: e9e8bf64e0dca3bdccbde6185d0711311c27c081537f24728dfe443fe0ffd750
+    content_hash: fe28ca2f17546e4c11c9578d24fdb02db12cc2f9719a41d36e0358b9c1b3278a
     license: MIT
   - knowledge_id: sas-scripts-check-contigs.py
     path: scripts/check_contigs.py
-    content_hash: cf1e700572954611c37a6590bed3c9061bbf045551b61b581f3432e45446a386
+    content_hash: 5f224c4d3e44281c8bb51c8a5bd2a921f2dab2c1714d5f5d11361a9f2d4cbb32
     license: MIT
   - knowledge_id: sas-scripts-convert-coords.py
     path: scripts/convert_coords.py
-    content_hash: 6bfd8600d14a7cf0bb22b0524ebe6cd0855157c0ce68fb66eb2408ea96696fb3
+    content_hash: 190019868cd9ee2dc139ee838ae926ba2cd68dafc5f32b729769776d4201c6d2
     license: MIT
   - knowledge_id: sas-scripts-normalize-variant.py
     path: scripts/normalize_variant.py
-    content_hash: 6250b8eff0ae9e33bef2a58f90f0dae2c88fe3079d75958bccb1271773e8efcd
+    content_hash: c3652412549726b45bf954710ccf18b319c135092ef94768ecba20abfd9cd590
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-genomic-coordinates/SKILL.md
-      sha256: c11e1178e6610cdd06d3e3b8a0907c0df3f10f1d3559472ab45ccce67a2077a1
+      sha256: 8d514e090f66d8f4a2712fd7c17a30c1dc9b3189fc7c0473584f75823edfa605
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-genomic-coordinates/references/format-conventions.md
-      sha256: bc501b01e57a03591e735d2592d38e2815a63a6079a1144b0baa4afc0bc0bba2
+      sha256: d51bd8ab5156055f94c9e9bae02cd65fd1dd4e289c7c39dc9b445367f56de79d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-genomic-coordinates/references/reference-builds.md
-      sha256: 27eee0f7050941a3ebf33373d0c84098b6220c6df2fe44e6b926521910c3b8cc
+      sha256: 4c114bbb18b2c01b99f89ddd7b792a69090d39473d45df1cdff054ef6773be43
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-genomic-coordinates/references/transcript-coordinates.md
-      sha256: 400ee336e6f0c78187b0e77522187b150e8d8a2601539e07eaf4edad0c7f20b8
+      sha256: 5a4d68fa2bce75c945b933cf980ddb1c91f6279dfded64afa4e1f700173836ac
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-genomic-coordinates/references/variant-representation.md
-      sha256: 633f496a63d6a3d432fcf4999f7049ee9947c545087490df96ca35b976042c29
+      sha256: 98656413c9f412a3c0749b6f2309762318593d3d670e6a1f39b90259998fa34a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-genomic-coordinates/scripts/_common.py
-      sha256: c06e0f36e180849f59ca91346e19d88dfd997d96a65c667a216a01c08854c647
+      sha256: a777f11f9377c3db892af41012ad2fe12b33bae45f031ec1accae02fe4c24fc5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-genomic-coordinates/scripts/audit_intervals.py
-      sha256: e9e8bf64e0dca3bdccbde6185d0711311c27c081537f24728dfe443fe0ffd750
+      sha256: fe28ca2f17546e4c11c9578d24fdb02db12cc2f9719a41d36e0358b9c1b3278a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-genomic-coordinates/scripts/check_contigs.py
-      sha256: cf1e700572954611c37a6590bed3c9061bbf045551b61b581f3432e45446a386
+      sha256: 5f224c4d3e44281c8bb51c8a5bd2a921f2dab2c1714d5f5d11361a9f2d4cbb32
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-genomic-coordinates/scripts/convert_coords.py
-      sha256: 6bfd8600d14a7cf0bb22b0524ebe6cd0855157c0ce68fb66eb2408ea96696fb3
+      sha256: 190019868cd9ee2dc139ee838ae926ba2cd68dafc5f32b729769776d4201c6d2
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-genomic-coordinates/scripts/normalize_variant.py
-      sha256: 6250b8eff0ae9e33bef2a58f90f0dae2c88fe3079d75958bccb1271773e8efcd
+      sha256: c3652412549726b45bf954710ccf18b319c135092ef94768ecba20abfd9cd590
 license: MIT

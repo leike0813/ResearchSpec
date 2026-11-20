@@ -1,11 +1,11 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-timesfm-forecasting
 title: TimesFM Forecasting
-description: Zero-shot time series forecasting with Google's TimesFM foundation
-  model. Use for any univariate time series (sales, sensors, energy, vitals,
-  weather) without training a custom model. Supports CSV/DataFrame/array inputs
-  with point forecasts and prediction intervals. Includes a preflight system
-  checker script to verify RAM/GPU before first use.
+description: Performs zero-shot time-series forecasting with Google's TimesFM,
+  including regular-grid CSV preparation, quantile forecasts, XReg covariates,
+  and held-out evaluation. Uses the Apache-licensed TimesFM 2.5 checkpoint by
+  default and documents the distinct TimesFM 3.0 multivariate API and
+  weight-license requirements.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -47,188 +47,128 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-examples-anomaly-detection-detect-anomalies.py
     path: examples/anomaly-detection/detect_anomalies.py
-    content_hash: 2320b725adfaf4e45c40a34bd253ce56020c911bb804ceeeb1b9704f5fb61ffb
-    license: MIT
-  - knowledge_id: sas-examples-anomaly-detection-output-anomaly-detection.json
-    path: examples/anomaly-detection/output/anomaly_detection.json
-    content_hash: f657f299b1bc0205cd242822bddaac92dc2b08c6a71dc19215cf98294a2dbdbc
-    license: MIT
-  - knowledge_id: sas-examples-anomaly-detection-output-anomaly-detection.png
-    path: examples/anomaly-detection/output/anomaly_detection.png
-    content_hash: c4b30e01bb01847c0eabf8367f28cd16368fd28e450c38c1cc089abb18672276
-    license: MIT
+    content_hash: b72da2b712f0615d6441cd7544886a0cac9265aec87d07d8249e8ac901fd8159
+    license: Apache-2.0
   - knowledge_id: sas-examples-covariates-forecasting-demo-covariates.py
     path: examples/covariates-forecasting/demo_covariates.py
-    content_hash: 2f9d005a4feb3c796c802ec4b5cfbca90c75cc892621a068c5dc5a251676b3a1
-    license: MIT
-  - knowledge_id: sas-examples-covariates-forecasting-output-covariates-data.png
-    path: examples/covariates-forecasting/output/covariates_data.png
-    content_hash: 24682a190ecae753d5531bce9841040709a64abb044bfb372bab34a6c7c17070
-    license: MIT
-  - knowledge_id: sas-examples-covariates-forecasting-output-covariates-metadata.json
-    path: examples/covariates-forecasting/output/covariates_metadata.json
-    content_hash: 0a0ece6fdf551000673ee1f763895b88e18dbee05471a44e71e9388593477006
-    license: MIT
-  - knowledge_id: sas-examples-covariates-forecasting-output-sales-with-covariates.csv
-    path: examples/covariates-forecasting/output/sales_with_covariates.csv
-    content_hash: 765621c852fd31ce7803012fd100973f20a1be796d492092df2f0ecb884a9f1c
-    license: MIT
+    content_hash: 58a1a831a9f06ce63f8940fca87ec2c1557ad6251660ec957598db5138b83de2
+    license: Apache-2.0
   - knowledge_id: sas-examples-global-temperature-readme.md
     path: examples/global-temperature/README.md
-    content_hash: 944076d47548b7ecc79701a09537b79e26a7a03b7d91db0548977c1a854846d0
-    license: MIT
+    content_hash: 85d4dc8a83b6710bb0849b194340ae925df004ae14621a6369e9f0b68262a651
+    license: Apache-2.0
   - knowledge_id: sas-examples-global-temperature-generate-animation-data.py
     path: examples/global-temperature/generate_animation_data.py
-    content_hash: 457850385191763131554bd035b13a23e2b5a78fea03ae2e9e39a274bed5eaf2
-    license: MIT
+    content_hash: 68aedbe20bcdb6ae737a88f36e0152b115acd62955fe95735c0b0f19511738ea
+    license: Apache-2.0
   - knowledge_id: sas-examples-global-temperature-generate-gif.py
     path: examples/global-temperature/generate_gif.py
-    content_hash: 5ec2d4323044468c3eb1ad42e5f4e5c5148273564c445b7b19807763f7d4c455
-    license: MIT
+    content_hash: 0e5d0d0cdc3c41e90ac442db307b534b933301bee635b2a0dd0fc14898c2c355
+    license: Apache-2.0
   - knowledge_id: sas-examples-global-temperature-generate-html.py
     path: examples/global-temperature/generate_html.py
-    content_hash: 43ba538c8d7d1632c24f9b014daf3a488483d3fe5bdb2cfec2b44f8eda6ffcf0
-    license: MIT
-  - knowledge_id: sas-examples-global-temperature-output-animation-data.json
-    path: examples/global-temperature/output/animation_data.json
-    content_hash: d54662e5e1d8cba1be036e397a64df5a868db2d807b82560423302e096f1f060
-    license: MIT
-  - knowledge_id: sas-examples-global-temperature-output-forecast-animation.gif
-    path: examples/global-temperature/output/forecast_animation.gif
-    content_hash: ca9bbbe3206a0c2c7da26e154a6a5661490f97a024ccb7a833f26fd96bd0e51b
-    license: MIT
-  - knowledge_id: sas-examples-global-temperature-output-forecast-output.csv
-    path: examples/global-temperature/output/forecast_output.csv
-    content_hash: 64ae6a900cdf76152de2aac7a5f068c342fc8f1d8fee7ed33ae68c37d11d2840
-    license: MIT
-  - knowledge_id: sas-examples-global-temperature-output-forecast-output.json
-    path: examples/global-temperature/output/forecast_output.json
-    content_hash: 4cfbede705b0abd82a6e8622dd93c89d5e7ae3563ac486fffe9c9736682f7aad
-    license: MIT
-  - knowledge_id: sas-examples-global-temperature-output-forecast-visualization.png
-    path: examples/global-temperature/output/forecast_visualization.png
-    content_hash: d4b03c857b444842550fb711ee9951f0e5f159d52bbedebe4e8bbfe2d18bc2f5
-    license: MIT
-  - knowledge_id: sas-examples-global-temperature-output-interactive-forecast.html
-    path: examples/global-temperature/output/interactive_forecast.html
-    content_hash: 8ddfaf1ee3b089048e5b421160a601fb1ad355c7bfff9d8d94f6b3fb367f9658
-    license: MIT
+    content_hash: f4f6004450e0808c9bda4187fc0ffbb1f997425c366389350b596376197983f1
+    license: Apache-2.0
   - knowledge_id: sas-examples-global-temperature-run-example.sh
     path: examples/global-temperature/run_example.sh
-    content_hash: d305541a6477d592ccc3c2320fd52524f5501838c281eacd0760621dbb7b5c32
-    license: MIT
+    content_hash: e4dca4db1f6f7d9f172d26d7232b0d967e93fef28389b4ae204a6278ca051aff
+    license: Apache-2.0
   - knowledge_id: sas-examples-global-temperature-run-forecast.py
     path: examples/global-temperature/run_forecast.py
-    content_hash: 66fead15854d9b8f91c1281be60589f3bfbe51dbeb15289d2c9965919a00c2f1
-    license: MIT
+    content_hash: e365895dbe5c13f19caeac7eca029c79344e47ae65fc6d840f45a1af3edb2204
+    license: Apache-2.0
   - knowledge_id: sas-examples-global-temperature-temperature-anomaly.csv
     path: examples/global-temperature/temperature_anomaly.csv
     content_hash: 3a32b67453575fe786983efb9cad4c491b69ee69903cd9d36b58eb04204161a7
-    license: MIT
+    license: Apache-2.0
   - knowledge_id: sas-examples-global-temperature-visualize-forecast.py
     path: examples/global-temperature/visualize_forecast.py
-    content_hash: f8ab85d7d680bdfad7cafd6a25d0c78c72e4a7d96637975251fe5a361c76ebae
-    license: MIT
+    content_hash: fe718aff95b212d5a1472a8462d1806cb72041b6e852ab06710d0b8c617ab7f9
+    license: Apache-2.0
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
-    content_hash: 69942b90d4b9979746955087cde76e3e6403f2a36e7680e4fca96ce37a3c0faf
-    license: MIT
+    content_hash: e56d8921fa04b2312b49cf52ecd8814bbf4a9016a46ceab7f8aad3e6774d639e
+    license: Apache-2.0
   - knowledge_id: sas-references-data-preparation.md
     path: references/data_preparation.md
-    content_hash: d7f1209ff1134b71e8f65d3627461a9e81f7daabd3addd93b229fb2f8813526c
-    license: MIT
+    content_hash: 3bb3910e541f5d81307e2f41b3d4f1f991c34af431d974dbeaacb99db8cdeb94
+    license: Apache-2.0
   - knowledge_id: sas-references-examples-and-validation.md
     path: references/examples_and_validation.md
-    content_hash: 17bb0ade20f4edfb1b2a95c944df1f8bff203b2f0d5b7472d4c8876a3f603a62
-    license: MIT
+    content_hash: 8f2a1c53328d59b7ed95351eaec556e4a0d907df2fed61de66890d671b042fd9
+    license: Apache-2.0
   - knowledge_id: sas-references-output-and-config.md
     path: references/output_and_config.md
-    content_hash: 04c82850a31e095b5aa4673c4a79eb60945a963ade741b6a47be795b6b4497b8
-    license: MIT
+    content_hash: 3f261ac97ca9ec4b1c1ccf6f688010a2ee5603ee2eae80dfa33399f13d26a908
+    license: Apache-2.0
   - knowledge_id: sas-references-performance-tuning.md
     path: references/performance_tuning.md
-    content_hash: ea64143ae97a90263bdddb70eb7f0d73e244b9f4399fcfda4540d96702324b6d
-    license: MIT
+    content_hash: 59a622f82572937e055c2306298e0b4f67da5ba7df6f9825797ef86c87de61b2
+    license: Apache-2.0
   - knowledge_id: sas-references-system-requirements.md
     path: references/system_requirements.md
-    content_hash: a299f03a37e408a9ef461290394f4475cb661be0739db1df6bc9bfaf8771998a
-    license: MIT
+    content_hash: cd0d4612452062cc49c07594b79ab08a26c43ea9b68cd5ec60a6f698eb362d72
+    license: Apache-2.0
+  - knowledge_id: sas-references-timesfm3.md
+    path: references/timesfm3.md
+    content_hash: 9c43ae9428a6022195c4bed1ca6a9d6189f69360b10b68bb203fc40865f7fb00
+    license: Apache-2.0
   - knowledge_id: sas-references-workflows.md
     path: references/workflows.md
-    content_hash: 166e59df894e8df90296f7719e73f3bbe9097c36da136fbe3f507af9270e8542
-    license: MIT
+    content_hash: fc702f51534461c7c1225287102366a1926cc2ee5e875205ddcfa875c615e5f7
+    license: Apache-2.0
   - knowledge_id: sas-scripts-check-system.py
     path: scripts/check_system.py
-    content_hash: 1ddc967b105522390e706a5ab83c6de9f173e276d11a96382cf954011031284a
-    license: MIT
+    content_hash: 3fabbf00a3882bd73fd8a2c65e4c161386ea995e2dd322690f1e1f149a1fb590
+    license: Apache-2.0
   - knowledge_id: sas-scripts-forecast-csv.py
     path: scripts/forecast_csv.py
-    content_hash: b72119e1e43ed514e83e86064a73f11ffb9b39475f620f222b5fd2842ac273ad
-    license: MIT
+    content_hash: 1f2969934ea6273a83fdc33fbf3e2e3e34b3fa416421977ea35c5ef669dd0b9b
+    license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/SKILL.md
-      sha256: 9d9734ff7a54c5f2cd7408e9024599644eff202990558860f49eeebbc522a4a0
+      sha256: b1058e7c07452beabb6c7a123da6cefb55ccbf286b703328bea5ec5f9ac1ebbd
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/detect_anomalies.py
-      sha256: 2320b725adfaf4e45c40a34bd253ce56020c911bb804ceeeb1b9704f5fb61ffb
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.json
-      sha256: f657f299b1bc0205cd242822bddaac92dc2b08c6a71dc19215cf98294a2dbdbc
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.png
-      sha256: c4b30e01bb01847c0eabf8367f28cd16368fd28e450c38c1cc089abb18672276
+      sha256: b72da2b712f0615d6441cd7544886a0cac9265aec87d07d8249e8ac901fd8159
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/demo_covariates.py
-      sha256: 2f9d005a4feb3c796c802ec4b5cfbca90c75cc892621a068c5dc5a251676b3a1
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/covariates_data.png
-      sha256: 24682a190ecae753d5531bce9841040709a64abb044bfb372bab34a6c7c17070
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/covariates_metadata.json
-      sha256: 0a0ece6fdf551000673ee1f763895b88e18dbee05471a44e71e9388593477006
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/sales_with_covariates.csv
-      sha256: 765621c852fd31ce7803012fd100973f20a1be796d492092df2f0ecb884a9f1c
+      sha256: 58a1a831a9f06ce63f8940fca87ec2c1557ad6251660ec957598db5138b83de2
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/README.md
-      sha256: 944076d47548b7ecc79701a09537b79e26a7a03b7d91db0548977c1a854846d0
+      sha256: 85d4dc8a83b6710bb0849b194340ae925df004ae14621a6369e9f0b68262a651
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/generate_animation_data.py
-      sha256: 457850385191763131554bd035b13a23e2b5a78fea03ae2e9e39a274bed5eaf2
+      sha256: 68aedbe20bcdb6ae737a88f36e0152b115acd62955fe95735c0b0f19511738ea
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/generate_gif.py
-      sha256: 5ec2d4323044468c3eb1ad42e5f4e5c5148273564c445b7b19807763f7d4c455
+      sha256: 0e5d0d0cdc3c41e90ac442db307b534b933301bee635b2a0dd0fc14898c2c355
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/generate_html.py
-      sha256: 43ba538c8d7d1632c24f9b014daf3a488483d3fe5bdb2cfec2b44f8eda6ffcf0
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/animation_data.json
-      sha256: d54662e5e1d8cba1be036e397a64df5a868db2d807b82560423302e096f1f060
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_animation.gif
-      sha256: ca9bbbe3206a0c2c7da26e154a6a5661490f97a024ccb7a833f26fd96bd0e51b
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_output.csv
-      sha256: 64ae6a900cdf76152de2aac7a5f068c342fc8f1d8fee7ed33ae68c37d11d2840
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_output.json
-      sha256: 4cfbede705b0abd82a6e8622dd93c89d5e7ae3563ac486fffe9c9736682f7aad
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_visualization.png
-      sha256: d4b03c857b444842550fb711ee9951f0e5f159d52bbedebe4e8bbfe2d18bc2f5
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/interactive_forecast.html
-      sha256: 8ddfaf1ee3b089048e5b421160a601fb1ad355c7bfff9d8d94f6b3fb367f9658
+      sha256: f4f6004450e0808c9bda4187fc0ffbb1f997425c366389350b596376197983f1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/run_example.sh
-      sha256: d305541a6477d592ccc3c2320fd52524f5501838c281eacd0760621dbb7b5c32
+      sha256: e4dca4db1f6f7d9f172d26d7232b0d967e93fef28389b4ae204a6278ca051aff
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/run_forecast.py
-      sha256: 66fead15854d9b8f91c1281be60589f3bfbe51dbeb15289d2c9965919a00c2f1
+      sha256: e365895dbe5c13f19caeac7eca029c79344e47ae65fc6d840f45a1af3edb2204
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/temperature_anomaly.csv
       sha256: 3a32b67453575fe786983efb9cad4c491b69ee69903cd9d36b58eb04204161a7
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/visualize_forecast.py
-      sha256: f8ab85d7d680bdfad7cafd6a25d0c78c72e4a7d96637975251fe5a361c76ebae
+      sha256: fe718aff95b212d5a1472a8462d1806cb72041b6e852ab06710d0b8c617ab7f9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/api_reference.md
-      sha256: 69942b90d4b9979746955087cde76e3e6403f2a36e7680e4fca96ce37a3c0faf
+      sha256: e56d8921fa04b2312b49cf52ecd8814bbf4a9016a46ceab7f8aad3e6774d639e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/data_preparation.md
-      sha256: d7f1209ff1134b71e8f65d3627461a9e81f7daabd3addd93b229fb2f8813526c
+      sha256: 3bb3910e541f5d81307e2f41b3d4f1f991c34af431d974dbeaacb99db8cdeb94
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/examples_and_validation.md
-      sha256: 17bb0ade20f4edfb1b2a95c944df1f8bff203b2f0d5b7472d4c8876a3f603a62
+      sha256: 8f2a1c53328d59b7ed95351eaec556e4a0d907df2fed61de66890d671b042fd9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/output_and_config.md
-      sha256: 04c82850a31e095b5aa4673c4a79eb60945a963ade741b6a47be795b6b4497b8
+      sha256: 3f261ac97ca9ec4b1c1ccf6f688010a2ee5603ee2eae80dfa33399f13d26a908
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/performance_tuning.md
-      sha256: ea64143ae97a90263bdddb70eb7f0d73e244b9f4399fcfda4540d96702324b6d
+      sha256: 59a622f82572937e055c2306298e0b4f67da5ba7df6f9825797ef86c87de61b2
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/system_requirements.md
-      sha256: a299f03a37e408a9ef461290394f4475cb661be0739db1df6bc9bfaf8771998a
+      sha256: cd0d4612452062cc49c07594b79ab08a26c43ea9b68cd5ec60a6f698eb362d72
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/timesfm3.md
+      sha256: 9c43ae9428a6022195c4bed1ca6a9d6189f69360b10b68bb203fc40865f7fb00
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/workflows.md
-      sha256: 166e59df894e8df90296f7719e73f3bbe9097c36da136fbe3f507af9270e8542
+      sha256: fc702f51534461c7c1225287102366a1926cc2ee5e875205ddcfa875c615e5f7
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/scripts/check_system.py
-      sha256: 1ddc967b105522390e706a5ab83c6de9f173e276d11a96382cf954011031284a
+      sha256: 3fabbf00a3882bd73fd8a2c65e4c161386ea995e2dd322690f1e1f149a1fb590
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/scripts/forecast_csv.py
-      sha256: b72119e1e43ed514e83e86064a73f11ffb9b39475f620f222b5fd2842ac273ad
-license: MIT
+      sha256: 1f2969934ea6273a83fdc33fbf3e2e3e34b3fa416421977ea35c5ef669dd0b9b
+license: Apache-2.0

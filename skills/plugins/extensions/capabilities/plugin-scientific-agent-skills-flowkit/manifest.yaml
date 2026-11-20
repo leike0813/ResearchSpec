@@ -1,0 +1,73 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-flowkit
+title: FlowKit
+description: Analyzes flow cytometry data with FlowKit, including spillover
+  compensation, logicle and biexponential transforms, hierarchical gating,
+  GatingML strategies, and supported FlowJo 10 workspaces. Use for reproducible
+  gate counts, population percentages, gated fluorescence summaries, or
+  reproducing a FlowJo analysis in Python. For FCS metadata inspection or
+  file-format repair alone, use FlowIO.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-compensation-and-gating.md
+    path: references/compensation-and-gating.md
+    content_hash: d9a84ff2a42a3148c8e90e50a8b39fbfd8a30e52852edb98103f66cc21db80f0
+    license: MIT
+  - knowledge_id: sas-references-workspaces-and-results.md
+    path: references/workspaces-and-results.md
+    content_hash: c864c2a5ff1c953e0374b6e44f162da59710c81edce50168547862d1fe034b7c
+    license: MIT
+  - knowledge_id: sas-scripts-analyze-gates.py
+    path: scripts/analyze_gates.py
+    content_hash: b186ca0b7c17bda61471dace814bbb60af001a06f66dacb801fb21f1bbf689f8
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-flowkit/SKILL.md
+      sha256: 546bdafe9d377ec8398411c3dad34d3dfd8479183374f0f8203e5fe93cce864e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-flowkit/references/compensation-and-gating.md
+      sha256: d9a84ff2a42a3148c8e90e50a8b39fbfd8a30e52852edb98103f66cc21db80f0
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-flowkit/references/workspaces-and-results.md
+      sha256: c864c2a5ff1c953e0374b6e44f162da59710c81edce50168547862d1fe034b7c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-flowkit/scripts/analyze_gates.py
+      sha256: b186ca0b7c17bda61471dace814bbb60af001a06f66dacb801fb21f1bbf689f8
+license: MIT

@@ -46,62 +46,62 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-data-maskers.md
     path: references/data-maskers.md
-    content_hash: 78e17ba406456e8011d8679274bef37b7776f4e3df666b25e64b1749b43d7982
+    content_hash: fe586f1d7aac5c799437506c2353dc7c0b4916a09c10ea714b22db49aaa12f12
     license: MIT
   - knowledge_id: sas-references-explainers.md
     path: references/explainers.md
-    content_hash: 08894d631c9c57f55a50c08fc87d9146b6cc309e6fad463e69041b642ba5c070
+    content_hash: d173b54e0ee1d5c5e627609967000926fd6036e8efba282534f68857d9cdefca
     license: MIT
   - knowledge_id: sas-references-migration.md
     path: references/migration.md
-    content_hash: 95dff2096d3d263f0fcb0ac6b6ebf9f668f626ee7ab4ef0b7897edfd4b9ad305
+    content_hash: 81278c5d30634b1e2f16bf7b6b703b2b968bfa01636bd7eecae2201baa76e721
     license: MIT
   - knowledge_id: sas-references-modalities.md
     path: references/modalities.md
-    content_hash: 4c9dbd964cf03d45396767ccac4851c2a96dabca0ebb50a3f88cc300260b9044
+    content_hash: dd19dc010438ed9dca06bce06d3820d617c2fa5740bf0ac86706081ae2ade518
     license: MIT
   - knowledge_id: sas-references-plots.md
     path: references/plots.md
-    content_hash: a0fac565709d5becf560a9c4f998ef949471a9dda02fe375340b9643638af395
+    content_hash: 634067fd6d2c951ac4db35a182109f8313be501b6fcd04e0d99e7957f77d3ec2
     license: MIT
   - knowledge_id: sas-references-theory.md
     path: references/theory.md
-    content_hash: bbe0067c7f1e864aa70990ec3089606509e50d1a87152aaaffc72f3b109b94a7
+    content_hash: 103d0f50131649c63d6c0895a723d28f5fc175cb5ef923adec0655adc7a136dd
     license: MIT
   - knowledge_id: sas-references-troubleshooting.md
     path: references/troubleshooting.md
-    content_hash: 045d0bbedb98c227ce76675a225d4b7628b5b7d511ce437b95a707a8ff53f587
+    content_hash: 92ddecfa7a40e30274b812f14abd0ae2e1ec9ab6f14d1a93e77cb15208e754f8
     license: MIT
   - knowledge_id: sas-references-workflows.md
     path: references/workflows.md
-    content_hash: 8406a3a92cd8dd5fd07f7abd87b6554aef2b796917b1bd0d5a61d3f72a39e388
+    content_hash: d227b27899216451daa89b145c6f9e0f4850efacba687d0db00a06921743132e
     license: MIT
   - knowledge_id: sas-scripts-tabular-report.py
     path: scripts/tabular_report.py
-    content_hash: 1faf1c554207d8cb0561dc7ea96cd143df6ce5ddfc2322af89f25f38e3bad8a2
+    content_hash: 06161aefd48914406f41ad8b26389853537235c5577a962a29fb4a246013214e
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/SKILL.md
-      sha256: a17950feb5b63ad357060c1bf95a6cdb4409cb53b2c77a0ea2bd6fa450aecaf0
+      sha256: 9c78cbf50d5f1981c4e8da6fc203a1124bf61f7cfbe448de11e3b0043aa65fc6
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/data-maskers.md
-      sha256: 78e17ba406456e8011d8679274bef37b7776f4e3df666b25e64b1749b43d7982
+      sha256: fe586f1d7aac5c799437506c2353dc7c0b4916a09c10ea714b22db49aaa12f12
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/explainers.md
-      sha256: 08894d631c9c57f55a50c08fc87d9146b6cc309e6fad463e69041b642ba5c070
+      sha256: d173b54e0ee1d5c5e627609967000926fd6036e8efba282534f68857d9cdefca
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/migration.md
-      sha256: 95dff2096d3d263f0fcb0ac6b6ebf9f668f626ee7ab4ef0b7897edfd4b9ad305
+      sha256: 81278c5d30634b1e2f16bf7b6b703b2b968bfa01636bd7eecae2201baa76e721
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/modalities.md
-      sha256: 4c9dbd964cf03d45396767ccac4851c2a96dabca0ebb50a3f88cc300260b9044
+      sha256: dd19dc010438ed9dca06bce06d3820d617c2fa5740bf0ac86706081ae2ade518
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/plots.md
-      sha256: a0fac565709d5becf560a9c4f998ef949471a9dda02fe375340b9643638af395
+      sha256: 634067fd6d2c951ac4db35a182109f8313be501b6fcd04e0d99e7957f77d3ec2
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/theory.md
-      sha256: bbe0067c7f1e864aa70990ec3089606509e50d1a87152aaaffc72f3b109b94a7
+      sha256: 103d0f50131649c63d6c0895a723d28f5fc175cb5ef923adec0655adc7a136dd
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/troubleshooting.md
-      sha256: 045d0bbedb98c227ce76675a225d4b7628b5b7d511ce437b95a707a8ff53f587
+      sha256: 92ddecfa7a40e30274b812f14abd0ae2e1ec9ab6f14d1a93e77cb15208e754f8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/references/workflows.md
-      sha256: 8406a3a92cd8dd5fd07f7abd87b6554aef2b796917b1bd0d5a61d3f72a39e388
+      sha256: d227b27899216451daa89b145c6f9e0f4850efacba687d0db00a06921743132e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-shap/scripts/tabular_report.py
-      sha256: 1faf1c554207d8cb0561dc7ea96cd143df6ce5ddfc2322af89f25f38e3bad8a2
+      sha256: 06161aefd48914406f41ad8b26389853537235c5577a962a29fb4a246013214e
 license: MIT

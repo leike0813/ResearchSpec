@@ -1,11 +1,11 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-analytical-method-validation
 title: Analytical Method Validation
-description: Plan, execute, and document validation, verification, and transfer
-  of analytical procedures under the governing framework - ICH Q2(R2) and Q14,
-  USP <1220>/<1225>/<1226>, ICH M10 bioanalytical, CLSI EP, or ISO/IEC 17025.
-  Use for HPLC, LC-MS/MS, GC, CE, ICP-MS, dissolution, qNMR, qPCR, NIR, and
-  ligand binding or cell-based assays whenever the question is whether a
+description: Plans, executes, and documents validation, verification, and
+  transfer of analytical procedures under the governing framework - ICH Q2(R2)
+  and Q14, USP <1220>/<1225>/<1226>, ICH M10 bioanalytical, CLSI EP, or ISO/IEC
+  17025. Use for HPLC, LC-MS/MS, GC, CE, ICP-MS, dissolution, qNMR, qPCR, NIR,
+  and ligand binding or cell-based assays whenever the question is whether a
   procedure is fit for its intended purpose. Triggers include "method
   validation", "analytical method validation", "AMV", "validation protocol",
   "acceptance criteria", "linearity", "reportable range", "accuracy and
@@ -56,104 +56,104 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-assets-validation-protocol-template.md
     path: assets/validation-protocol-template.md
-    content_hash: 5b1d613ec3c32cdb36d48ce6e55986f313aeedda3fdccbde435126c8bba5ae8d
+    content_hash: c157c47eb77e136b40904f6323988ccf662dad6b60811d330323b189c232fc5f
     license: MIT
   - knowledge_id: sas-assets-validation-report-template.md
     path: assets/validation-report-template.md
-    content_hash: ae81ac9943cc6a06d8bf581a32f8d78745ed6ec9dbf9b9c6d51a416bbc9bcfa1
+    content_hash: f0519fb2abd9d0315f0b6cba76527659ab500f9a311f268d66452f7798e574e0
     license: MIT
   - knowledge_id: sas-references-compendial-and-clsi.md
     path: references/compendial-and-clsi.md
-    content_hash: 8825d6390cc96fe28437c83548811a1ae0dddbdc534c263d5d20e92951c7108d
+    content_hash: f3bfe0e15892966b3c4db43c542b32af89455f755529f1f13a04c15421013230
     license: MIT
   - knowledge_id: sas-references-framework-selection.md
     path: references/framework-selection.md
-    content_hash: 05b07ce6206bdddee9225fa410d333232b7618bfaf99cf237d80ae3dffcd9564
+    content_hash: ad7a9d07c6c66d68464ed759bd9a646df8db06fca2897478825e0de12d341945
     license: MIT
   - knowledge_id: sas-references-ich-m10-bioanalytical.md
     path: references/ich-m10-bioanalytical.md
-    content_hash: bb25701919290249ac63674dbf07a9f14b8dee7d8f3fcc266abd5b34325548ce
+    content_hash: 695367208b8b4883879b364f57df9bc73f17cb98181a093d43880c0453764c4a
     license: MIT
   - knowledge_id: sas-references-ich-q2r2.md
     path: references/ich-q2r2.md
-    content_hash: 255797c9cd0326250f3f20b59b827d71f174d89253359226b2e5917d160ef94d
+    content_hash: 9871db11c76e1c74e191f28a44e3047a67663d487384188b4f0b228f886ad34b
     license: MIT
   - knowledge_id: sas-references-source-ledger.md
     path: references/source-ledger.md
-    content_hash: 79b326dc761642a7d4312cd92b70fca908039db43c58209d0d44514f38137a9b
+    content_hash: fd5605e03d4203df8caffa7ba3464147a65c3ee5f8a7056bdcc8a2d2beb2fca6
     license: MIT
   - knowledge_id: sas-references-statistics.md
     path: references/statistics.md
-    content_hash: 973a3eb2eef2ceda3024f0afcccfd160b8d8ee923288521421a533bc262b2c7b
+    content_hash: 0f8f33bc0c363e0fe7088ea718fe8928bd1bdd4afef1646f927cca317915d453
     license: MIT
   - knowledge_id: sas-scripts--catalog.py
     path: scripts/_catalog.py
-    content_hash: dd750f2f283c238875e1927cf4f08f9dc21ff9c2acacf8c5316a49a30887b857
+    content_hash: c597f14d44eceb997b7f12a5035e81669c3ad3ded1e487796f58d4392efef8ed
     license: MIT
   - knowledge_id: sas-scripts--common.py
     path: scripts/_common.py
-    content_hash: a251b81f6240ac61b4f2ff2be9c644bf41ccca39e4ad462d9abd740c36b2f4ee
+    content_hash: c801e568b409acf7a510069b3697e6a74bf372adcfa7dcfb27b442a670580b26
     license: MIT
   - knowledge_id: sas-scripts-check-accuracy-precision.py
     path: scripts/check_accuracy_precision.py
-    content_hash: 05b4751505bccf3953762b569aecf8371208173aa216fe3501c84ceb56d453df
+    content_hash: 1d24ee3f5a81d0bc40d30009f6ea7dab7422455eaf9adef6e4d0f5a1f5cd88a7
     license: MIT
   - knowledge_id: sas-scripts-check-bioanalytical-run.py
     path: scripts/check_bioanalytical_run.py
-    content_hash: c16398b2ee77bddebbfbf84f1c9abe9a9045be40a7c9108972e3ca16f3d26751
+    content_hash: e754fc8407e5e6b003c96e25db577a1e88b6dcebc0c47f188e299cc13dfbc18c
     license: MIT
   - knowledge_id: sas-scripts-check-detection-limits.py
     path: scripts/check_detection_limits.py
-    content_hash: 58e4387324b1884e7963f4b006fa4405da4d5f1ad587efdbba43f695d1ddb4ca
+    content_hash: 78178d76499005497f7b05a2a8ca6b948c151860ad34195e0f3701f0b2f4d402
     license: MIT
   - knowledge_id: sas-scripts-check-response.py
     path: scripts/check_response.py
-    content_hash: 068fe65932f389c1aba56689e5924eb57016421fcfaee0f024344b6e3ecbbeb5
+    content_hash: fa732cb35a6652a5ffa08208271180d51160f73e89307883251da670f9aaac1d
     license: MIT
   - knowledge_id: sas-scripts-compare-methods.py
     path: scripts/compare_methods.py
-    content_hash: 54f5a7cdbccac073128a7df8a5519b04d0e215498f7542cba8a93832d6a09f1b
+    content_hash: d3f51cd0a31fbcc9e4259f791e1a9c515ba42f0d4090348962387cdf91f0fead
     license: MIT
   - knowledge_id: sas-scripts-plan-validation.py
     path: scripts/plan_validation.py
-    content_hash: 8c47e921d13a0e521669790a820be2f1caf0492538229615104aef4e7c389fe0
+    content_hash: e2d95299d6a4e1eaf57de9e96dfd5dae82596e5f239b14b19e0e35cc0dcf01b3
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/SKILL.md
-      sha256: 6335f54f1e020d4b4c62ceab75f4d25220f94312b9decd04001d74b376445ba4
+      sha256: 0d7b74e63a0a10f96c7914eba894fc1464890bf28a951e99e8d5b188e6b50ad8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/assets/validation-protocol-template.md
-      sha256: 5b1d613ec3c32cdb36d48ce6e55986f313aeedda3fdccbde435126c8bba5ae8d
+      sha256: c157c47eb77e136b40904f6323988ccf662dad6b60811d330323b189c232fc5f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/assets/validation-report-template.md
-      sha256: ae81ac9943cc6a06d8bf581a32f8d78745ed6ec9dbf9b9c6d51a416bbc9bcfa1
+      sha256: f0519fb2abd9d0315f0b6cba76527659ab500f9a311f268d66452f7798e574e0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/references/compendial-and-clsi.md
-      sha256: 8825d6390cc96fe28437c83548811a1ae0dddbdc534c263d5d20e92951c7108d
+      sha256: f3bfe0e15892966b3c4db43c542b32af89455f755529f1f13a04c15421013230
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/references/framework-selection.md
-      sha256: 05b07ce6206bdddee9225fa410d333232b7618bfaf99cf237d80ae3dffcd9564
+      sha256: ad7a9d07c6c66d68464ed759bd9a646df8db06fca2897478825e0de12d341945
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/references/ich-m10-bioanalytical.md
-      sha256: bb25701919290249ac63674dbf07a9f14b8dee7d8f3fcc266abd5b34325548ce
+      sha256: 695367208b8b4883879b364f57df9bc73f17cb98181a093d43880c0453764c4a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/references/ich-q2r2.md
-      sha256: 255797c9cd0326250f3f20b59b827d71f174d89253359226b2e5917d160ef94d
+      sha256: 9871db11c76e1c74e191f28a44e3047a67663d487384188b4f0b228f886ad34b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/references/source-ledger.md
-      sha256: 79b326dc761642a7d4312cd92b70fca908039db43c58209d0d44514f38137a9b
+      sha256: fd5605e03d4203df8caffa7ba3464147a65c3ee5f8a7056bdcc8a2d2beb2fca6
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/references/statistics.md
-      sha256: 973a3eb2eef2ceda3024f0afcccfd160b8d8ee923288521421a533bc262b2c7b
+      sha256: 0f8f33bc0c363e0fe7088ea718fe8928bd1bdd4afef1646f927cca317915d453
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/scripts/_catalog.py
-      sha256: dd750f2f283c238875e1927cf4f08f9dc21ff9c2acacf8c5316a49a30887b857
+      sha256: c597f14d44eceb997b7f12a5035e81669c3ad3ded1e487796f58d4392efef8ed
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/scripts/_common.py
-      sha256: a251b81f6240ac61b4f2ff2be9c644bf41ccca39e4ad462d9abd740c36b2f4ee
+      sha256: c801e568b409acf7a510069b3697e6a74bf372adcfa7dcfb27b442a670580b26
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/scripts/check_accuracy_precision.py
-      sha256: 05b4751505bccf3953762b569aecf8371208173aa216fe3501c84ceb56d453df
+      sha256: 1d24ee3f5a81d0bc40d30009f6ea7dab7422455eaf9adef6e4d0f5a1f5cd88a7
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/scripts/check_bioanalytical_run.py
-      sha256: c16398b2ee77bddebbfbf84f1c9abe9a9045be40a7c9108972e3ca16f3d26751
+      sha256: e754fc8407e5e6b003c96e25db577a1e88b6dcebc0c47f188e299cc13dfbc18c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/scripts/check_detection_limits.py
-      sha256: 58e4387324b1884e7963f4b006fa4405da4d5f1ad587efdbba43f695d1ddb4ca
+      sha256: 78178d76499005497f7b05a2a8ca6b948c151860ad34195e0f3701f0b2f4d402
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/scripts/check_response.py
-      sha256: 068fe65932f389c1aba56689e5924eb57016421fcfaee0f024344b6e3ecbbeb5
+      sha256: fa732cb35a6652a5ffa08208271180d51160f73e89307883251da670f9aaac1d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/scripts/compare_methods.py
-      sha256: 54f5a7cdbccac073128a7df8a5519b04d0e215498f7542cba8a93832d6a09f1b
+      sha256: d3f51cd0a31fbcc9e4259f791e1a9c515ba42f0d4090348962387cdf91f0fead
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-analytical-method-validation/scripts/plan_validation.py
-      sha256: 8c47e921d13a0e521669790a820be2f1caf0492538229615104aef4e7c389fe0
+      sha256: e2d95299d6a4e1eaf57de9e96dfd5dae82596e5f239b14b19e0e35cc0dcf01b3
 license: MIT

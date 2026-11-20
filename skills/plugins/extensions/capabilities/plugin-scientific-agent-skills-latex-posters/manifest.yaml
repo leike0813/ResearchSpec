@@ -1,11 +1,9 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-latex-posters
 title: LaTeX Research Posters
-description: Create professional research posters in LaTeX using beamerposter,
-  tikzposter, or baposter. Support for conference presentations, academic
-  posters, and scientific communication. Includes layout design, color schemes,
-  multi-column formats, figure integration, and poster-specific best practices
-  for visual communication.
+description: Plans and verifies LaTeX research posters with editable templates,
+  source-checked figures, user-provisioned local PDF tools, and a final
+  publication review.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -47,92 +45,86 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-assets-baposter-template.tex
     path: assets/baposter_template.tex
-    content_hash: 2caa29d36e3269e84b1fb7a74a39814c7b7c8747573c46023fe2243cfe4ae45e
+    content_hash: 05d52aa0bcc7d704525a3c09edb72c478f3ed5de29e1d8d751c046aa69649045
     license: MIT
   - knowledge_id: sas-assets-beamerposter-template.tex
     path: assets/beamerposter_template.tex
-    content_hash: dc4bf4f9c344238e523492345c5108076b69f582a30b9534123bd1f23893c382
+    content_hash: 79df337979df21b20c6852ada7860a6fe186d7189550bfe831db9a27513c0dbb
     license: MIT
   - knowledge_id: sas-assets-poster-quality-checklist.md
     path: assets/poster_quality_checklist.md
-    content_hash: 1f2d89a68410b197f8d656cc29c3b798a7de83328ebf4c9dc042df4d71e67275
+    content_hash: 1d6fb4875798aa349180e07919e0dd2ad8b8cb8357a0fb5106e9914bdd0ea4db
     license: MIT
   - knowledge_id: sas-assets-tikzposter-template.tex
     path: assets/tikzposter_template.tex
-    content_hash: 1f58c0ebe3281ed85fbc87f03632312028205a1bd585e35a7f4058515c58dda6
+    content_hash: 39ef6e3dc99240481e56a439d23d438f84a264b53933d5b8d3c713d5bf918d04
     license: MIT
   - knowledge_id: sas-references-readme.md
     path: references/README.md
-    content_hash: 90f2c05757aa87043e59bfd057b1b685b0cfa1f63f89be42c920eae6ede33936
-    license: MIT
-  - knowledge_id: sas-references-ai-graphics-for-posters.md
-    path: references/ai_graphics_for_posters.md
-    content_hash: cc5c4319e28511e58be236de1a8041cc0471eddd3cdd4f1e661695a6879f7fe7
+    content_hash: c468139388159d4333d1118504d46df1518c6f9ae5051309f7207e24aa4d44ac
     license: MIT
   - knowledge_id: sas-references-compilation-and-quality-control.md
     path: references/compilation_and_quality_control.md
-    content_hash: b059bb5bbe041ca7229bd2d3909904a0e19865f50f9c79763c13225ccf7bad5f
+    content_hash: 2fdeabd760c2e56ee26be771a373cb5809655831a5a82d60010bbe3a22993fc6
     license: MIT
   - knowledge_id: sas-references-latex-poster-packages.md
     path: references/latex_poster_packages.md
-    content_hash: 75a1be24675df874f17cbea891bcfd3fc16f17e29275dd3c62d79eb9a1e1f87b
+    content_hash: d120828344c56093a5c71fe91d821c38e3768dcfd9e149c5412c6ff0af71eda6
     license: MIT
   - knowledge_id: sas-references-latex-poster-reference.md
     path: references/latex_poster_reference.md
-    content_hash: cb5c034726d3f2a479ebf16eb830394df55085cb0f12446be5832f1e9153ea4f
+    content_hash: beef5f9e5d931d43ebf41233e42413f07bf2bb235b19cc952e52e23227595ee1
     license: MIT
   - knowledge_id: sas-references-poster-content-guide.md
     path: references/poster_content_guide.md
-    content_hash: 2af1cbfa45878041de15459ccbac49f85f810d045ed5231a011bee5f54641b26
+    content_hash: 047f27c34c6a31673ce96dd0a08ca0ac8934ee7d4374da4b244782690e96d224
     license: MIT
   - knowledge_id: sas-references-poster-design-principles.md
     path: references/poster_design_principles.md
-    content_hash: 6c3618133764687a19f30f563805bbf13996f818ba267cfbd5bbc908b9f7102b
+    content_hash: 53a1e16ddf7eb3f1e9e5cb47af02327b3ed21986334f8c7f7a3bb612da0324ad
     license: MIT
   - knowledge_id: sas-references-poster-layout-design.md
     path: references/poster_layout_design.md
-    content_hash: f674c0fe352321b9bc0eb2be09d95379714a6b77624689ba100da4898c4f20df
+    content_hash: c7ef85b5620ea58cdf985bca99313a41a2cb762437209dad6333e0dd15fe018e
     license: MIT
   - knowledge_id: sas-references-poster-patterns-and-presentation.md
     path: references/poster_patterns_and_presentation.md
-    content_hash: 8b42305d892c1c4cb80f9c183d44922b1a6f3a0dd0b8536a3ec7860aa2d0eae4
+    content_hash: b465767303ddcd4d2e720dd82722bcafbb6d4948e9b614307cd3608b23e3f593
     license: MIT
   - knowledge_id: sas-scripts-review-poster.sh
     path: scripts/review_poster.sh
-    content_hash: db1fcfcda80c0ae1be5ceb075ec9e7f00df6908aa1bc395c029f8dfcb97f43a9
+    content_hash: 4bb2956a7920c58c5bdd9a20c3bd402c7b72432a7dbfeebe4d82f78250234bff
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/SKILL.md
-      sha256: 71c8834a732400133ae3ca263b3f5c6f093df43bdcf076dea41da37bb5f56f4b
+      sha256: 8871b2ab1baca56646b620cacfe7f8184ddaff5d665f6463f4fe780fd46552ea
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/assets/baposter_template.tex
-      sha256: 2caa29d36e3269e84b1fb7a74a39814c7b7c8747573c46023fe2243cfe4ae45e
+      sha256: 05d52aa0bcc7d704525a3c09edb72c478f3ed5de29e1d8d751c046aa69649045
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/assets/beamerposter_template.tex
-      sha256: dc4bf4f9c344238e523492345c5108076b69f582a30b9534123bd1f23893c382
+      sha256: 79df337979df21b20c6852ada7860a6fe186d7189550bfe831db9a27513c0dbb
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/assets/poster_quality_checklist.md
-      sha256: 1f2d89a68410b197f8d656cc29c3b798a7de83328ebf4c9dc042df4d71e67275
+      sha256: 1d6fb4875798aa349180e07919e0dd2ad8b8cb8357a0fb5106e9914bdd0ea4db
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/assets/tikzposter_template.tex
-      sha256: 1f58c0ebe3281ed85fbc87f03632312028205a1bd585e35a7f4058515c58dda6
+      sha256: 39ef6e3dc99240481e56a439d23d438f84a264b53933d5b8d3c713d5bf918d04
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/README.md
-      sha256: 90f2c05757aa87043e59bfd057b1b685b0cfa1f63f89be42c920eae6ede33936
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/ai_graphics_for_posters.md
-      sha256: cc5c4319e28511e58be236de1a8041cc0471eddd3cdd4f1e661695a6879f7fe7
+      sha256: c468139388159d4333d1118504d46df1518c6f9ae5051309f7207e24aa4d44ac
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/compilation_and_quality_control.md
-      sha256: b059bb5bbe041ca7229bd2d3909904a0e19865f50f9c79763c13225ccf7bad5f
+      sha256: 2fdeabd760c2e56ee26be771a373cb5809655831a5a82d60010bbe3a22993fc6
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/latex_poster_packages.md
-      sha256: 75a1be24675df874f17cbea891bcfd3fc16f17e29275dd3c62d79eb9a1e1f87b
+      sha256: d120828344c56093a5c71fe91d821c38e3768dcfd9e149c5412c6ff0af71eda6
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/latex_poster_reference.md
-      sha256: cb5c034726d3f2a479ebf16eb830394df55085cb0f12446be5832f1e9153ea4f
+      sha256: beef5f9e5d931d43ebf41233e42413f07bf2bb235b19cc952e52e23227595ee1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/poster_content_guide.md
-      sha256: 2af1cbfa45878041de15459ccbac49f85f810d045ed5231a011bee5f54641b26
+      sha256: 047f27c34c6a31673ce96dd0a08ca0ac8934ee7d4374da4b244782690e96d224
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/poster_design_principles.md
-      sha256: 6c3618133764687a19f30f563805bbf13996f818ba267cfbd5bbc908b9f7102b
+      sha256: 53a1e16ddf7eb3f1e9e5cb47af02327b3ed21986334f8c7f7a3bb612da0324ad
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/poster_layout_design.md
-      sha256: f674c0fe352321b9bc0eb2be09d95379714a6b77624689ba100da4898c4f20df
+      sha256: c7ef85b5620ea58cdf985bca99313a41a2cb762437209dad6333e0dd15fe018e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/poster_patterns_and_presentation.md
-      sha256: 8b42305d892c1c4cb80f9c183d44922b1a6f3a0dd0b8536a3ec7860aa2d0eae4
+      sha256: b465767303ddcd4d2e720dd82722bcafbb6d4948e9b614307cd3608b23e3f593
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/scripts/review_poster.sh
-      sha256: db1fcfcda80c0ae1be5ceb075ec9e7f00df6908aa1bc395c029f8dfcb97f43a9
+      sha256: 4bb2956a7920c58c5bdd9a20c3bd402c7b72432a7dbfeebe4d82f78250234bff
 license: MIT

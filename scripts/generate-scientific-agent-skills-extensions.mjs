@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync as writeBytes } from "node:fs";
+import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, realpathSync, unlinkSync, writeFileSync as writeBytes } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
@@ -19,6 +19,32 @@ const STANDARD_FILES = new Set(["SKILL.md", "LICENSE", "NOTICE.md"]);
 function writeFileSync(file, content) {
   const bytes = Buffer.isBuffer(content) ? content : Buffer.from(content);
   if (!existsSync(file) || !readFileSync(file).equals(bytes)) writeBytes(file, bytes);
+}
+
+function removeRetiredToolFiles(previousExtensions, nextExtensions) {
+  const nextTargets = new Set(nextExtensions.flatMap((extension) => extension.tool_files.map((file) => path.resolve(ROOT, file.target))));
+  const capabilitiesRoot = path.join(EXT_ROOT, "capabilities");
+  const physicalRoot = realpathSync(ROOT);
+  for (const extension of previousExtensions) {
+    if (!extension.capability_id.startsWith("plugin-scientific-agent-skills-") || path.basename(extension.capability_id) !== extension.capability_id) continue;
+    const packageRoot = path.join(capabilitiesRoot, extension.capability_id);
+    const physicalPackageRoot = path.join(physicalRoot, path.relative(ROOT, packageRoot));
+    for (const file of extension.tool_files ?? []) {
+      const target = path.resolve(ROOT, file.target);
+      const relative = path.relative(packageRoot, target);
+      if (!relative || relative === ".." || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) continue;
+      if (nextTargets.has(target)) continue;
+      let entry;
+      try { entry = lstatSync(target); } catch (error) {
+        if (error.code === "ENOENT") continue;
+        throw error;
+      }
+      if (!entry.isFile() && !entry.isSymbolicLink()) continue;
+      const expectedParent = path.dirname(path.join(physicalPackageRoot, relative));
+      if (realpathSync(path.dirname(target)) !== expectedParent) continue;
+      unlinkSync(target);
+    }
+  }
 }
 
 function sha256(value) { return createHash("sha256").update(value).digest("hex"); }
@@ -64,7 +90,7 @@ function extensionSkill(extId, rawText, frontmatter, hasScripts, resourceLines, 
     : "\n- No packaged knowledge files; all execution rules are in this SKILL.";
   const execution = hasScripts
     ? "Run any packaged script only through the host Agent's configured Python runtime; ResearchSpec never executes packaged resources."
-    : "All operations follow the reviewed procedure below; no packaged script exists.";
+    : "Follow the reviewed procedure and its resource guidance. ResearchSpec never executes packaged resources.";
   return `---
 name: ${extId}
 description: ${JSON.stringify(description)}
@@ -255,13 +281,15 @@ function generate() {
   for (const rawSkillId of rawIds) {
     const extId = extensionId(rawSkillId);
     const license = licenses.get(rawSkillId);
-    if (license !== "MIT") throw new Error(`Scientific Agent Skills license is missing or inconsistent for ${rawSkillId}`);
+    if (typeof license !== "string" || !license.trim()) throw new Error(`Scientific Agent Skills license is missing for ${rawSkillId}`);
     const rawSkillRoot = path.join(VENDOR_ROOT, rawSkillId);
     const packageRoot = path.join(EXT_ROOT, "capabilities", extId);
     mkdirSync(path.join(packageRoot, "validators"), { recursive: true });
     const rawSkillPath = path.join(rawSkillRoot, "SKILL.md");
     const rawSkillText = readFileSync(rawSkillPath, "utf8");
     const frontmatter = skillFrontmatter(rawSkillText);
+    if (frontmatter.license !== undefined && frontmatter.license !== license) throw new Error(`Scientific Agent Skills license is inconsistent for ${rawSkillId}`);
+    for (const file of ["LICENSE", "NOTICE.md"]) writeFileSync(path.join(packageRoot, file), readFileSync(path.join(rawSkillRoot, file)));
     const extras = readdirSync(rawSkillRoot, { withFileTypes: true })
       .filter((entry) => entry.isFile() && !STANDARD_FILES.has(entry.name))
       .map((entry) => entry.name)
@@ -355,8 +383,6 @@ function generate() {
     profiles: profileEntries,
     domains: [...domains.values()].sort((a, b) => a.domain_id.localeCompare(b.domain_id)),
   };
-  writeFileSync(REGISTRY_PATH, `${JSON.stringify(nextRegistry, null, 2)}\n`);
-
   const catalog = {
     schema_version: "1",
     vendor_id: "scientific-agent-skills",
@@ -374,6 +400,8 @@ function generate() {
     extensions: catalogExtensions,
   };
   mkdirSync(path.dirname(CATALOG_PATH), { recursive: true });
+  writeFileSync(REGISTRY_PATH, `${JSON.stringify(nextRegistry, null, 2)}\n`);
+  removeRetiredToolFiles(previous?.extensions ?? [], catalogExtensions);
   writeFileSync(CATALOG_PATH, `${JSON.stringify(catalog, null, 2)}\n`);
   process.stdout.write(`generated ${catalogExtensions.length} Scientific Agent Skills extension capabilities, ${capabilityEntries.length} total registry capabilities\n`);
 }

@@ -1,0 +1,6378 @@
+{
+  "schema_version": "1",
+  "revision": "526ebce143bc326f44471554e33d66a19c840360",
+  "skills": [
+    {
+      "skill_id": "13c-metabolic-flux",
+      "source_path": "skills/13c-metabolic-flux",
+      "entry_object_id": "66081586c20b2e042496bee48a4921cf617e7716",
+      "documented_categories": [
+        "Systems Biology & Kinetic Modeling"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 16,
+        "bytes": 82505,
+        "references": 2,
+        "scripts": 3,
+        "assets": 10,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 16,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "adaptyv",
+      "source_path": "skills/adaptyv",
+      "entry_object_id": "da6ae7d3eb08602cf2c02535de7921b9cf790712",
+      "documented_categories": [
+        "Protein Engineering & Design"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 2,
+        "bytes": 34027,
+        "references": 1,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 2,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "c7d2c46bbd3a7354c92d337cf21788a1255a0264b33cee7fa2b0030f65ae26eb"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "aeon",
+      "source_path": "skills/aeon",
+      "entry_object_id": "2a08747d404a77c7dd7d46ce3e3688d998f36882",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 12,
+        "bytes": 85048,
+        "references": 11,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 12,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "49a56e4ee7a7a087c37d545eea2e818d375369f532242124b37c304083345f42"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "alphagenome",
+      "source_path": "skills/alphagenome",
+      "entry_object_id": "87117aa6afef6ce92b08120bf7c928f8208d1c8b",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 8,
+        "bytes": 120387,
+        "references": 3,
+        "scripts": 4,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "76a7426e27ecd81a4f188706d24ec8d115c8dc3fb758d2acbdf902846f6a4eb6"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "analytical-method-validation",
+      "source_path": "skills/analytical-method-validation",
+      "entry_object_id": "27f59e7e543d076b55c930c13f776a8612bd7cde",
+      "documented_categories": [
+        "Regulatory & Standards Evidence Preparation"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 17,
+        "bytes": 223925,
+        "references": 6,
+        "scripts": 8,
+        "assets": 2,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 17,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "76e81616b799b7f3b5dfd1a27ca6da9ce380f0623da2f09ef7e8b87cfecc86d7"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "anndata",
+      "source_path": "skills/anndata",
+      "entry_object_id": "c07814b8785967d62a172692fb5d3a948c3bb12e",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 6,
+        "bytes": 83814,
+        "references": 5,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 6,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "42828f20699d591c73105658c7f3250c2df5090c0e81660ec3ea38b4c30d5e4c"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "arbor",
+      "source_path": "skills/arbor",
+      "entry_object_id": "2625b4351b6380d6398a43752c280d70d560d0fe",
+      "documented_categories": [
+        "Autonomous Research & Optimization Frameworks"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 6,
+        "bytes": 63493,
+        "references": 4,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 6,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "e8142585f762411c179901a5c9e715696851764243d38d2b2dd83397b1f010a6"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "arboreto",
+      "source_path": "skills/arboreto",
+      "entry_object_id": "c4863e6fc542c2b21f22234a97ae74d801bd5375",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 5,
+        "bytes": 30388,
+        "references": 3,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 5,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "a87ed1ca5acd91336696f7956be5fc13fc5b4919062e9af69e6057825fcedcad"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "astropy",
+      "source_path": "skills/astropy",
+      "entry_object_id": "4fea5000c63c3b2c4884c070a63f16eb85f13f66",
+      "documented_categories": [
+        "Materials Science & Chemistry"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 9,
+        "bytes": 91096,
+        "references": 8,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "df1e62a846d055563aa03e728d2da2b706f86dfa9f461a35f8ee8d330c061fe5"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "autoskill",
+      "source_path": "skills/autoskill",
+      "entry_object_id": "a9eb95dd53035439fa8ef91d90b8522b441f5baa",
+      "documented_categories": [
+        "Tool Discovery & Computational Resources"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 16,
+        "bytes": 60787,
+        "references": 3,
+        "scripts": 10,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 11,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "critical",
+        "finding_count": 7,
+        "report_content_hash": "3b88601c476a54112be524496b85808ddf5e8ef1bd0dfa65803eac0f53f036f5"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "benchling-integration",
+      "source_path": "skills/benchling-integration",
+      "entry_object_id": "fa9539266a9ea41d24bea882da1aeaad4efd0df1",
+      "documented_categories": [
+        "Laboratory Information Management Systems (LIMS) & R&D Platforms"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 6,
+        "bytes": 56441,
+        "references": 5,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 6,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "1c44579adb267ca0dd2f5329111bd5b0c434825a799c2e0925dd0677f74758e9"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "bgpt-paper-search",
+      "source_path": "skills/bgpt-paper-search",
+      "entry_object_id": "a9c13151600fd910db786b79b08d4c2ebe4cab75",
+      "documented_categories": [
+        "Scientific Communication & Publishing"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 1,
+        "bytes": 7903,
+        "references": 0,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 1,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "1f3d6fb8a89849d1f00b54f0f2edfebedbc3585a5c8ecf9e7feb872d0bdbacb1"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "bids",
+      "source_path": "skills/bids",
+      "entry_object_id": "0436279f5822fa8b5fec1a137eca4bbcdb6aec32",
+      "documented_categories": [
+        "Neuroscience & Electrophysiology"
+      ],
+      "license_header": "https://creativecommons.org/licenses/by/4.0/",
+      "resources": {
+        "files": 8,
+        "bytes": 931777,
+        "references": 6,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "6b0ecb901c7cd4ae7dbc0cb351584c780323eb9fe90a4c536923fa4408033c8b"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "biopython",
+      "source_path": "skills/biopython",
+      "entry_object_id": "0394ffc8a5a03a06c32999ab5fbe3fdc5aa8c185",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "Biopython License Agreement",
+      "resources": {
+        "files": 9,
+        "bytes": 114317,
+        "references": 8,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "medium",
+        "finding_count": 6,
+        "report_content_hash": "4ae8fc9f44024c15de37e210bbd4179dd5d04ae31da150d19a4c86275bb941ba"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "bioservices",
+      "source_path": "skills/bioservices",
+      "entry_object_id": "f7e598612df1d81d665d54cfaf25007113ed95ee",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "GPLv3 license",
+      "resources": {
+        "files": 8,
+        "bytes": 91395,
+        "references": 3,
+        "scripts": 4,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "19e0185d17a0436abd0801a643bbef3e7c4c9e2a5f0d52f5a24d981d48e21c40"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "bulk-rnaseq",
+      "source_path": "skills/bulk-rnaseq",
+      "entry_object_id": "6ff6d3c7c585dd3d1859166cefe5383d304941d6",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 8,
+        "bytes": 72269,
+        "references": 4,
+        "scripts": 3,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "52e72724ce46173ab228d3c7e31fda63ecf943cbef82076701550d90f7b67307"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "cantera",
+      "source_path": "skills/cantera",
+      "entry_object_id": "8c004860ef2cdf04ed4e43d654a134a1ec57b68a",
+      "documented_categories": [
+        "Engineering & Simulation"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 4,
+        "bytes": 23034,
+        "references": 1,
+        "scripts": 1,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 4,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "cellprofiler",
+      "source_path": "skills/cellprofiler",
+      "entry_object_id": "e68a8b4e77871fa31887e90d5d16e4b2e775d971",
+      "documented_categories": [
+        "Microscopy, Medical Imaging & Digital Pathology"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 4,
+        "bytes": 32356,
+        "references": 1,
+        "scripts": 1,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 4,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "cellxgene-census",
+      "source_path": "skills/cellxgene-census",
+      "entry_object_id": "e0caaab56be37dce020cf3c28a4b98061013e827",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 5,
+        "bytes": 55568,
+        "references": 4,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 4,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "96fb5bd13a242f871b720c52c447b72ea30f9e14e6e41017f53ab021db711589"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "cirq",
+      "source_path": "skills/cirq",
+      "entry_object_id": "d83e8bfeb78ba10828f4327c629b41f357b573fc",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "Apache-2.0 license",
+      "resources": {
+        "files": 8,
+        "bytes": 74659,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "fb0da7315d048d757296e9afc60b774527fc987f4fab918e97ebf283514563d9"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "citation-management",
+      "source_path": "skills/citation-management",
+      "entry_object_id": "b63b589d4d423969a63e032e62c2b74969147c1c",
+      "documented_categories": [
+        "Scientific Communication & Publishing"
+      ],
+      "license_header": "MIT License",
+      "resources": {
+        "files": 22,
+        "bytes": 299964,
+        "references": 11,
+        "scripts": 8,
+        "assets": 2,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 19,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "critical",
+        "finding_count": 6,
+        "report_content_hash": "af92fb76b9425e1b9b4150ce51ea9d7d1e4d3cb77748ceb61d66ea5e0ff26220"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "clinical-decision-support",
+      "source_path": "skills/clinical-decision-support",
+      "entry_object_id": "23622c2917d8a944af861687b068f55d1a09d27d",
+      "documented_categories": [
+        "Clinical Documentation & Decision Support"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 28,
+        "bytes": 205799,
+        "references": 12,
+        "scripts": 8,
+        "assets": 7,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 18,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "d2409f81ff9e7872a7b2683459c998912834971b7cfa9569d2d30bb55bdce7f5"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "clinical-reports",
+      "source_path": "skills/clinical-reports",
+      "entry_object_id": "0d8e48e786764da375823906c1ca34f13b660701",
+      "documented_categories": [
+        "Clinical Documentation & Decision Support"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 36,
+        "bytes": 202579,
+        "references": 11,
+        "scripts": 9,
+        "assets": 15,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 19,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "bf17a6a673b5e71df6b83da3e90d75b0dcecf5839c00f8fedd59da815ced43ea"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "cobrapy",
+      "source_path": "skills/cobrapy",
+      "entry_object_id": "fe0f307cde6f81f4a263d5ed998265f60e94fe4c",
+      "documented_categories": [
+        "Materials Science & Chemistry"
+      ],
+      "license_header": "GPL-2.0 license",
+      "resources": {
+        "files": 3,
+        "bytes": 44129,
+        "references": 2,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 3,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "4487e58633ed880530d2e21e893324627e2686327bdc45e7ab8eabf7c40f343c"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "consciousness-council",
+      "source_path": "skills/consciousness-council",
+      "entry_object_id": "bbb11c23221ed1d65f3194e9d0ff2202967657e1",
+      "documented_categories": [
+        "Decision & Scenario Analysis"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 2,
+        "bytes": 20543,
+        "references": 1,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 2,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "9193c15d07dfbce70533697c127474f4d7a953fb637f7f833562c2ca2896591f"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "dask",
+      "source_path": "skills/dask",
+      "entry_object_id": "db2f8e7b31a219cb40ea2af2d56cfa4e4f6b3072",
+      "documented_categories": [
+        "Data Analysis & Visualization"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 8,
+        "bytes": 96885,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "976d730c8cde7c023701edd9f0cd78c6a068de0008a891ceae8a90c21b692c76"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "database-lookup",
+      "source_path": "skills/database-lookup",
+      "entry_object_id": "f5f3d4921ed5a0a205f07e643fbaf48fc39521f6",
+      "documented_categories": [
+        "Scientific Databases & Data Access"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 83,
+        "bytes": 406610,
+        "references": 82,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 83,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 2,
+        "report_content_hash": "df872bf498d5b9b25df5217c86198d8ca58f25dac9e4f92483f5b2bdc667e419"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "datalad",
+      "source_path": "skills/datalad",
+      "entry_object_id": "7f54f85b7bedc05794a704c0ebc90683cc41b5f1",
+      "documented_categories": [
+        "Data Management & Infrastructure"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 4,
+        "bytes": 52406,
+        "references": 3,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 4,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "44d3646a06ceb1b89f359e743ef49fd1ef4732adbf2af5f934c3e200df35b3c9"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "datamol",
+      "source_path": "skills/datamol",
+      "entry_object_id": "4dfa8686f63bdc9492dc94a56476ddd95a0c3da2",
+      "documented_categories": [
+        "Cheminformatics & Drug Discovery"
+      ],
+      "license_header": "Apache-2.0 license",
+      "resources": {
+        "files": 10,
+        "bytes": 56170,
+        "references": 9,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 9,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "068f3484cf8e8ae37c95e3d8171b4965dd25c35f6839d6580b0c54a16443499c"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "deepchem",
+      "source_path": "skills/deepchem",
+      "entry_object_id": "be31f697f99831a587da25e892e21221ec654cad",
+      "documented_categories": [
+        "Cheminformatics & Drug Discovery"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 10,
+        "bytes": 70968,
+        "references": 5,
+        "scripts": 4,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 2,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "75873940a5a1ae4858158045a946850c05bb126eea218239ed5d8b5180360eb6"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "deepspot-m",
+      "source_path": "skills/deepspot-m",
+      "entry_object_id": "629487ca20bc9993aa83956d2e9b0f28090f8fc5",
+      "documented_categories": [
+        "Microscopy, Medical Imaging & Digital Pathology"
+      ],
+      "license_header": "PolyForm-Noncommercial-1.0.0",
+      "resources": {
+        "files": 3,
+        "bytes": 28196,
+        "references": 2,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 3,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "81646cb7df05cfb9528dd13b3de08a0278cf1b00abd7697f8563126cfbc1f7b9"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "deeptools",
+      "source_path": "skills/deeptools",
+      "entry_object_id": "6d5a7d7a527e3bdb4ab2b2335d2ffd4ec346cfa2",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "BSD license",
+      "resources": {
+        "files": 10,
+        "bytes": 107881,
+        "references": 6,
+        "scripts": 2,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 9,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "d3ae2d11b074f1ac37df77c7fb15e386f2944288d102c37f8afb4d9e69ea1a17"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "depmap",
+      "source_path": "skills/depmap",
+      "entry_object_id": "646ee21e9c87d217cf199a139e9851a5b176da19",
+      "documented_categories": [
+        "Scientific Databases & Data Access"
+      ],
+      "license_header": "CC-BY-4.0",
+      "resources": {
+        "files": 3,
+        "bytes": 33289,
+        "references": 1,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 2,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "0b1ee49cfc525fd2b5e5a5ad9d13ee0722b99bad034a9bb533d5308f9cf93b10"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "dhdna-profiler",
+      "source_path": "skills/dhdna-profiler",
+      "entry_object_id": "ef30a1b1527abb6f14512019db491e4aa166a06f",
+      "documented_categories": [
+        "Decision & Scenario Analysis"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 2,
+        "bytes": 15786,
+        "references": 1,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 2,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "d94326debf475ddd75ebcd48a19e379470c08120c442ea2c09ca2cf3bd1b1a8c"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "diffdock",
+      "source_path": "skills/diffdock",
+      "entry_object_id": "a4c6e9c243878274345d234e189b91889812de03",
+      "documented_categories": [
+        "Cheminformatics & Drug Discovery"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 9,
+        "bytes": 60834,
+        "references": 3,
+        "scripts": 3,
+        "assets": 2,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "165fb025b98f3640e583cf71099139f9c69d4c85d037c864059d4c77f7c9ed46"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "dnanexus-integration",
+      "source_path": "skills/dnanexus-integration",
+      "entry_object_id": "aa8ddd97235cbe11cea7554807a436f23676af9c",
+      "documented_categories": [
+        "Cloud Platforms for Genomics & Biomedical Data"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 12,
+        "bytes": 158002,
+        "references": 9,
+        "scripts": 2,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 12,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "medium",
+        "finding_count": 1,
+        "report_content_hash": "66f84919013a42157b705b3c2d8eb3aaf8a516f9d3c78b06c00459cb31bb1a49"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "esm",
+      "source_path": "skills/esm",
+      "entry_object_id": "378c008e0cee28ce8445cced64ded88e98679d0b",
+      "documented_categories": [
+        "Protein Engineering & Design"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 8,
+        "bytes": 54551,
+        "references": 6,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 2,
+        "M": 6,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 2,
+        "report_content_hash": "57de6fb356bd773d61bcb3e0230b8a6e23d0f1fbd7877d91f6729b2d84300dba"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "etetoolkit",
+      "source_path": "skills/etetoolkit",
+      "entry_object_id": "b43a4a889808234612f52c3670fd7bdd8a7cce07",
+      "documented_categories": [
+        "Phylogenetics & Evolutionary Biology"
+      ],
+      "license_header": "GPL-3.0-or-later",
+      "resources": {
+        "files": 9,
+        "bytes": 119379,
+        "references": 6,
+        "scripts": 2,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "c40496a31a8575a51b4f5ccbd7e8ec5934d9997cfb5bdef82dd0fe43e73564c4"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "exa-search",
+      "source_path": "skills/exa-search",
+      "entry_object_id": "3f9ba4d45b1281832e89236416be1c4da367d911",
+      "documented_categories": [
+        "Web Search & Information Retrieval"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 5,
+        "bytes": 27558,
+        "references": 2,
+        "scripts": 2,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 5,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "215e3f52646bee0925893ad187fd0be289c34f7e85a78cf2d138921f46b77173"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "experimental-design",
+      "source_path": "skills/experimental-design",
+      "entry_object_id": "ee14f9ed795c791ac80e3ea946858d97d09c3e50",
+      "documented_categories": [
+        "Analysis & Methodology"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 7,
+        "bytes": 66897,
+        "references": 4,
+        "scripts": 2,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "b50e0c75014f02ba2b724ad2064e6ced4c0e820f00451b9c8463b75b56b80fbd"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "exploratory-data-analysis",
+      "source_path": "skills/exploratory-data-analysis",
+      "entry_object_id": "c461f99dea057872298ce6f04e7c090a83d80d01",
+      "documented_categories": [
+        "Analysis & Methodology"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 21,
+        "bytes": 210866,
+        "references": 6,
+        "scripts": 13,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 14,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "a7bf9cb0ac4e372f8561b8a59b260bc39b3a3752d2acff653ed9643cb825b81a"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "fictiv",
+      "source_path": "skills/fictiv",
+      "entry_object_id": "5fc90aaaccaf6804578685bb5b131c46b09b84e0",
+      "documented_categories": [
+        "Engineering & Simulation"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 10,
+        "bytes": 129714,
+        "references": 6,
+        "scripts": 3,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "flowio",
+      "source_path": "skills/flowio",
+      "entry_object_id": "6cbf727e8d05c422d94a07df7613149941b1dc86",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 7,
+        "bytes": 81385,
+        "references": 5,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "1322e4d6d4d40378555185ad9b88ce05ac9ef83e9bb5b60df788640ec0eb8593"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "flowkit",
+      "source_path": "skills/flowkit",
+      "entry_object_id": "29d2f2488ea9ec16b3bb8919432d636c5bb4290a",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 4,
+        "bytes": 28909,
+        "references": 2,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 4,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "fluidsim",
+      "source_path": "skills/fluidsim",
+      "entry_object_id": "28ae0813b2a35438612cb5e748a7860e21f4a51c",
+      "documented_categories": [
+        "Engineering & Simulation"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 17,
+        "bytes": 206988,
+        "references": 6,
+        "scripts": 10,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 13,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "372071ba41eff94d4e7f171b8dc633d0c4ec50c0becec73cacc11157b5610656"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "folklore-variant-evidence",
+      "source_path": "skills/folklore-variant-evidence",
+      "entry_object_id": "84f3fd02fab81f0aea248b7f8fce4b74e606c609",
+      "documented_categories": [
+        "Scientific Databases & Data Access"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 2,
+        "bytes": 24582,
+        "references": 1,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 2,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "c668ccf494ef7825126b1ef462e4ad767970b17c439ebbc8dff781d8494ba14d"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "generate-image",
+      "source_path": "skills/generate-image",
+      "entry_object_id": "7389c55a049c9dd6ef62fccbe89f23786a3d11ef",
+      "documented_categories": [
+        "Scientific Communication & Publishing"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 3,
+        "bytes": 65494,
+        "references": 1,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 3,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "0d9aa085bea8e0aa046ee2b76933570c889c0267f4bc919c487ba17912b37390"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "geniml",
+      "source_path": "skills/geniml",
+      "entry_object_id": "ddfa31aaa72764cf6cc3c5dec62f927ef974bcbf",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 14,
+        "bytes": 172382,
+        "references": 5,
+        "scripts": 8,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 10,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "b53d36fe00af985a9e6370b58687996ae549d3690a47b31cee1abdcc856153c6"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "genomic-coordinates",
+      "source_path": "skills/genomic-coordinates",
+      "entry_object_id": "582ef692616a7ac5c4765ea96b1504d80b91616f",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 10,
+        "bytes": 121634,
+        "references": 4,
+        "scripts": 5,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 10,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "2dcf36b1649ae20a199ff2bcbc8554387a304a33b3dcc75e88a1a665c26ee6b4"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "genomic-intelligence",
+      "source_path": "skills/genomic-intelligence",
+      "entry_object_id": "a895ee654c6fe5b4d99ef49e2e7b3da405a5a610",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 6,
+        "bytes": 62615,
+        "references": 5,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 5,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "medium",
+        "finding_count": 2,
+        "report_content_hash": "70ca4f322c8c5b780d77f6fff27f8f7d320817496b8513a9be304067c1ffca17"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "geomaster",
+      "source_path": "skills/geomaster",
+      "entry_object_id": "aa91810c5b9be21e0d832d1358e7f700ae8ad635",
+      "documented_categories": [
+        "Data Analysis & Visualization"
+      ],
+      "license_header": "MIT License",
+      "resources": {
+        "files": 18,
+        "bytes": 150904,
+        "references": 15,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 2,
+        "M": 16,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "efafc8ca0d710b8925e997f34ac8f745b3f1ecd608347347dc8f6ad45f231bd8"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "geopandas",
+      "source_path": "skills/geopandas",
+      "entry_object_id": "c8f1aa3a3912306b8df89805c6d63c697f27f827",
+      "documented_categories": [
+        "Data Analysis & Visualization"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 14,
+        "bytes": 151576,
+        "references": 6,
+        "scripts": 7,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 11,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "2d557b8c62d1cac84857987c1face00b0c4e6f550dc39991e58b68c8643fc6a5"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "get-available-resources",
+      "source_path": "skills/get-available-resources",
+      "entry_object_id": "f81efbf4cd407dfe6a8aaa53eedc95c0bbefad86",
+      "documented_categories": [
+        "Tool Discovery & Computational Resources"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 9,
+        "bytes": 144282,
+        "references": 3,
+        "scripts": 5,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 9,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "06479c01e1a40ad65b940b0ff87e3a92a481d279464efc1e1acc99640c2b2bf5"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "gget",
+      "source_path": "skills/gget",
+      "entry_object_id": "c6a98857462d7df4f5e2fea1cf7e26c99a713464",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "BSD-2-Clause license",
+      "resources": {
+        "files": 9,
+        "bytes": 110513,
+        "references": 5,
+        "scripts": 3,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 9,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "30d98a54e266610f044c324a229ce2bb3e3b186d831c0e950f872b79c507b79b"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab",
+      "entry_object_id": "f80e48551f6d2ba683dc971e5159562c5ae2d559",
+      "documented_categories": [
+        "Laboratory Automation"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 19,
+        "bytes": 58019,
+        "references": 18,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 18,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "5adc94efe1f60153e86488fdb1294bc51c476efef38c17040a1d76535e7139cd"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "glycoengineering",
+      "source_path": "skills/glycoengineering",
+      "entry_object_id": "c9ad1e217d693ea0edf61ec4ac978d9122d0d5da",
+      "documented_categories": [
+        "Protein Engineering & Design"
+      ],
+      "license_header": "Unknown",
+      "resources": {
+        "files": 5,
+        "bytes": 34428,
+        "references": 2,
+        "scripts": 2,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 3,
+        "M": 2,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "8b006ac0fd8889264c8c9070d34ac1f09c287697fd779db94299cb2359ec1800"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "gtars",
+      "source_path": "skills/gtars",
+      "entry_object_id": "a6514dff05372acf9fd56ce14ec40c7cdf11e01b",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 15,
+        "bytes": 149877,
+        "references": 6,
+        "scripts": 8,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 12,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "a68cfb8ef4658c8eed25c856b8e59429cd9eb03c8fcd2417d745bb1c3be5393c"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "histolab",
+      "source_path": "skills/histolab",
+      "entry_object_id": "07ecf539e78c381b3633227f8e013f51cb8db6aa",
+      "documented_categories": [
+        "Microscopy, Medical Imaging & Digital Pathology"
+      ],
+      "license_header": "Apache-2.0 license",
+      "resources": {
+        "files": 8,
+        "bytes": 49308,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "high",
+        "finding_count": 2,
+        "report_content_hash": "df2a5e4d1fdd20a003f98fd9595df8ada8141109d41c75752ef3c675ccb60121"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "hugging-science",
+      "source_path": "skills/hugging-science",
+      "entry_object_id": "9ca2c59dc856c511bb2ca72c7da0f06f4f74030e",
+      "documented_categories": [
+        "Scientific Databases & Data Access"
+      ],
+      "license_header": null,
+      "resources": {
+        "files": 8,
+        "bytes": 60031,
+        "references": 6,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 3,
+        "report_content_hash": "5b0fed4d87a47ef73da43f330fd5fc3939dc64db61581b09b3d482af0aa7b3e2"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "hypogenic",
+      "source_path": "skills/hypogenic",
+      "entry_object_id": "cb9cff944a77f2ad5258e65c1cb9c0efe604287b",
+      "documented_categories": [
+        "Analysis & Methodology"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 18,
+        "bytes": 153176,
+        "references": 6,
+        "scripts": 7,
+        "assets": 4,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 10,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "4f52d98b4794921f0117f2e6f94500d2778633022b61795c80f86c10bada3aa6"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "hypothesis-generation",
+      "source_path": "skills/hypothesis-generation",
+      "entry_object_id": "cac00e1e0980402f14722af084e9305fdf965a57",
+      "documented_categories": [
+        "Analysis & Methodology"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 27,
+        "bytes": 265933,
+        "references": 10,
+        "scripts": 8,
+        "assets": 8,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 11,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "34e79f7db9259843f7ec143151ccae22d5abd06234a9d2f93211ec85e22016fe"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "imaging-data-commons",
+      "source_path": "skills/imaging-data-commons",
+      "entry_object_id": "9eefc0f2c3bc5beeb0063fd8ddf612b0876d28b6",
+      "documented_categories": [
+        "Scientific Databases & Data Access"
+      ],
+      "license_header": "This skill is provided under the MIT License. IDC data itself has individual licensing (mostly CC-BY, some CC-NC) that must be respected when using the data.",
+      "resources": {
+        "files": 15,
+        "bytes": 244587,
+        "references": 13,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 15,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "63963eaa89ed773a78163a6ed5a95c028031b93323d17216f25e9526da22c182"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "infographics",
+      "source_path": "skills/infographics",
+      "entry_object_id": "075153e7d61cefdae881364210c60cd57ebf9873",
+      "documented_categories": [
+        "Scientific Communication & Publishing"
+      ],
+      "license_header": null,
+      "resources": {
+        "files": 8,
+        "bytes": 157730,
+        "references": 5,
+        "scripts": 2,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "critical",
+        "finding_count": 3,
+        "report_content_hash": "486ffd4397b05e26cc50c4b2c02f691283418e086c5fa1d453f97ff585a97c29"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "iso-standards-readiness",
+      "source_path": "skills/iso-standards-readiness",
+      "entry_object_id": "c9dffcff25a86111f243e2bcf6450e354748a540",
+      "documented_categories": [
+        "Regulatory & Standards Evidence Preparation"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 32,
+        "bytes": 273643,
+        "references": 9,
+        "scripts": 10,
+        "assets": 12,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 15,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "987526481983613b1f52e1db8c7fddb4b7f8163b539500f648891ef7bc16a4ed"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "lab-hardware-cad",
+      "source_path": "skills/lab-hardware-cad",
+      "entry_object_id": "1d925b978826579707c226ba3fff1e337f913443",
+      "documented_categories": [
+        "Engineering & Simulation"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 13,
+        "bytes": 188115,
+        "references": 7,
+        "scripts": 4,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 12,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "8d3c8b86d822a3e297c9c3dcdb4952ffca0a71bb665142740b5969b34ce0e4a3"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "labarchive-integration",
+      "source_path": "skills/labarchive-integration",
+      "entry_object_id": "cc0fb8ad0eb2d012d01c067116d666769fb5e7f3",
+      "documented_categories": [
+        "Electronic Lab Notebooks (ELN)"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 8,
+        "bytes": 90122,
+        "references": 4,
+        "scripts": 3,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "af0e1e8f418b10d113a2bc6d003c37552ccce49e800d5c567efedd818977a12b"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "lamindb",
+      "source_path": "skills/lamindb",
+      "entry_object_id": "5ce539ad18332aa2a12e5a136d4cd921e1a3bab6",
+      "documented_categories": [
+        "Data Management & Infrastructure"
+      ],
+      "license_header": "Apache-2.0 license",
+      "resources": {
+        "files": 8,
+        "bytes": 46982,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "f80affc66aa3f9e2824756fcd19f4ef5eda59ea0a50693073ee193e648faf36d"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "latchbio-integration",
+      "source_path": "skills/latchbio-integration",
+      "entry_object_id": "da04c33b2f9f7b3fd8539c828eabfa5035c31228",
+      "documented_categories": [
+        "Workflow Platforms & Cloud Execution"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 11,
+        "bytes": 92305,
+        "references": 9,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 11,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "9ca8370deb79316c0c5d20dd47770711fd476ad26961dbfd34ba3283a9008b62"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "latex-posters",
+      "source_path": "skills/latex-posters",
+      "entry_object_id": "b4e21b6ef09013a494efbeb04c2bfdc1597a74a8",
+      "documented_categories": [
+        "Scientific Communication & Publishing"
+      ],
+      "license_header": null,
+      "resources": {
+        "files": 17,
+        "bytes": 212304,
+        "references": 9,
+        "scripts": 3,
+        "assets": 4,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 17,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "critical",
+        "finding_count": 3,
+        "report_content_hash": "d4531277cab6b7b4381c863ea56bb0affaca9ab7635d1f89ccb01593c2f71cb6"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "liteparse",
+      "source_path": "skills/liteparse",
+      "entry_object_id": "fbc0e936973baf3ccf52a3df40e825a625288c26",
+      "documented_categories": [
+        "Document Processing & Conversion"
+      ],
+      "license_header": "Apache-2.0",
+      "resources": {
+        "files": 7,
+        "bytes": 44582,
+        "references": 5,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 2,
+        "report_content_hash": "1c57b6329a0600282e979d09e676915f72e0936ef523367adde079fea551fd10"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "literature-review",
+      "source_path": "skills/literature-review",
+      "entry_object_id": "5178dce6419cee412155e7b9dd523d5b2ef703f5",
+      "documented_categories": [
+        "Analysis & Methodology"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 12,
+        "bytes": 131520,
+        "references": 5,
+        "scripts": 5,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 12,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "critical",
+        "finding_count": 4,
+        "report_content_hash": "df783facfa45eec9c00cd51a28ccf3fd0ad74fb294c405f4e322a523de559854"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "mageck",
+      "source_path": "skills/mageck",
+      "entry_object_id": "ee44ab1545ed6d81bec2afd46b7b978817d47f49",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 4,
+        "bytes": 29192,
+        "references": 2,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 4,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "marine-carbonate-chemistry",
+      "source_path": "skills/marine-carbonate-chemistry",
+      "entry_object_id": "3b46a3b83644b09f58dc5377f18f5d26d1fcb0a2",
+      "documented_categories": [
+        "Chemical Oceanography"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 4,
+        "bytes": 33085,
+        "references": 2,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 4,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "markdown-mermaid-writing",
+      "source_path": "skills/markdown-mermaid-writing",
+      "entry_object_id": "b9ba161092e8dc26584d22111bdadbee2b8f5428",
+      "documented_categories": [
+        "Document Processing & Conversion"
+      ],
+      "license_header": "Apache-2.0",
+      "resources": {
+        "files": 38,
+        "bytes": 294658,
+        "references": 27,
+        "scripts": 0,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 37,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "56b9fcc16aec96c90f4956f0b3d704438850c7deb872b1d6894d0cdadac4501a"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "market-research-reports",
+      "source_path": "skills/market-research-reports",
+      "entry_object_id": "b49b023b7a95b70d1c61e9cfa820d01ddb79ae83",
+      "documented_categories": [
+        "Scientific Communication & Publishing"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 26,
+        "bytes": 193238,
+        "references": 7,
+        "scripts": 8,
+        "assets": 10,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 12,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "f8923865f5290688eaf7a7034969c5271bea70a0997c0203f5893de97cd57900"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "markitdown",
+      "source_path": "skills/markitdown",
+      "entry_object_id": "e59db02cb8ba0809b2d72f6a423898d38e9e48d1",
+      "documented_categories": [
+        "Document Processing & Conversion"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 11,
+        "bytes": 112681,
+        "references": 7,
+        "scripts": 3,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 10,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "e5fb55d395157679604efc71c6ede4d5c3a8f3b83670a4a845b4e2251c2f8e74"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "matchms",
+      "source_path": "skills/matchms",
+      "entry_object_id": "8afbc206522754c9d4dc7663ae20f8109e759fd7",
+      "documented_categories": [
+        "Proteomics & Mass Spectrometry"
+      ],
+      "license_header": "Apache-2.0",
+      "resources": {
+        "files": 8,
+        "bytes": 103715,
+        "references": 6,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "eef42f8908e8a9f399c5a03882bc41974d206dc2515c1401b770e759c7294794"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "matlab",
+      "source_path": "skills/matlab",
+      "entry_object_id": "7d521444a2b94ff43e3fc32fcb78e023915c658e",
+      "documented_categories": [
+        "Engineering & Simulation"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 20,
+        "bytes": 170833,
+        "references": 8,
+        "scripts": 8,
+        "assets": 3,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 13,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "26d8f18f6f20c2d4ffda1fe3c99591cf3ffa087a3b05e02363eed9b496b0a79c"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "matplotlib",
+      "source_path": "skills/matplotlib",
+      "entry_object_id": "d85bd0d9aab3f9be3240a0530100481cbaa194d6",
+      "documented_categories": [
+        "Data Analysis & Visualization"
+      ],
+      "license_header": "https://github.com/matplotlib/matplotlib/tree/main/LICENSE",
+      "resources": {
+        "files": 7,
+        "bytes": 101459,
+        "references": 4,
+        "scripts": 2,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "7e7eceace3487e0ec6b060dbb1d39559e7f95b4955c7d72bf52023e3764573bf"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "medchem",
+      "source_path": "skills/medchem",
+      "entry_object_id": "fd722ce76900260947707428339841d8a10fcd08",
+      "documented_categories": [
+        "Cheminformatics & Drug Discovery"
+      ],
+      "license_header": "Apache-2.0 license",
+      "resources": {
+        "files": 4,
+        "bytes": 55058,
+        "references": 2,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 4,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "7b5110da050f94e37bd9f081a4249211e2bb18a032971c3e1e202c2a4ff2b0fd"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "modal",
+      "source_path": "skills/modal",
+      "entry_object_id": "75474c9ebd8c4db8e5871fba8cb477130142216a",
+      "documented_categories": [
+        "Data Management & Infrastructure"
+      ],
+      "license_header": "Apache-2.0",
+      "resources": {
+        "files": 13,
+        "bytes": 98196,
+        "references": 12,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 13,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "high",
+        "finding_count": 5,
+        "report_content_hash": "f8cf915abf5e7b8fd0a2ddec7b2a81a4521ac25ac2ba72be1fbaf52480f1bc81"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "molecular-dynamics",
+      "source_path": "skills/molecular-dynamics",
+      "entry_object_id": "e1a81a09291e33467dee3fda41c4581b8db7fe18",
+      "documented_categories": [
+        "Protein Engineering & Design"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 3,
+        "bytes": 33253,
+        "references": 2,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 2,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "567537497657bd993874a3b5637b9398c973b03869ae2ef27beebfa563ae8a23"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "molfeat",
+      "source_path": "skills/molfeat",
+      "entry_object_id": "8bb82b9f85afcc2343ebffc10b93cb51ce3cbf01",
+      "documented_categories": [
+        "Cheminformatics & Drug Discovery"
+      ],
+      "license_header": "Apache-2.0 license",
+      "resources": {
+        "files": 5,
+        "bytes": 32426,
+        "references": 4,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 5,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "a92c0233fdd2632a2688f150446ce570b071b3448a885dd4f64b40e30982629c"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "ncats-arax",
+      "source_path": "skills/ncats-arax",
+      "entry_object_id": "eff884528e08e31d95fbaf29c0ce8b08576341bf",
+      "documented_categories": [
+        "Scientific Databases & Data Access"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 4,
+        "bytes": 111067,
+        "references": 2,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 4,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "info",
+        "finding_count": 1,
+        "report_content_hash": "2f986e89a5c4ae5ef471d0948678993a57b1933999e4b46ca7d7c729b8b4747b"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "networkx",
+      "source_path": "skills/networkx",
+      "entry_object_id": "148367741e1b568eb9a8838931beb7786738e373",
+      "documented_categories": [
+        "Data Analysis & Visualization"
+      ],
+      "license_header": "3-clause BSD license",
+      "resources": {
+        "files": 7,
+        "bytes": 84183,
+        "references": 6,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 6,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "ab20153a4db8fd27783ab818ace80c44204e0e5931a292071369decd56ddb6af"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "neurokit2",
+      "source_path": "skills/neurokit2",
+      "entry_object_id": "3aa8fe2cad25ded70b97b6ae98cbf6303e700fe2",
+      "documented_categories": [
+        "Neuroscience & Electrophysiology"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 20,
+        "bytes": 191345,
+        "references": 12,
+        "scripts": 7,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 17,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "0f600af9a2d92de786f0c69bcd07e8d5dbed793a45e2b19572bb6e51864f30b9"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "neuropixels-analysis",
+      "source_path": "skills/neuropixels-analysis",
+      "entry_object_id": "d66b7b45838808a7ccb8ceaea355c612c77fa057",
+      "documented_categories": [
+        "Neuroscience & Electrophysiology"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 19,
+        "bytes": 143495,
+        "references": 10,
+        "scripts": 7,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 18,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 2,
+        "report_content_hash": "bb76db2193454fa774b6ccd8d801c917a57673959921d8fc91a7143db9624d81"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "nextflow",
+      "source_path": "skills/nextflow",
+      "entry_object_id": "984e3b0fc06fbad95168d363bcb87d57ca3da8d0",
+      "documented_categories": [
+        "Workflow Platforms & Cloud Execution"
+      ],
+      "license_header": "Apache-2.0",
+      "resources": {
+        "files": 8,
+        "bytes": 93348,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 3,
+        "report_content_hash": "7a801e5ec897560059b5f711953186b27551d4f5c08e06f2203b497e064a3fbd"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "nmrglue",
+      "source_path": "skills/nmrglue",
+      "entry_object_id": "87c142a5b98e4fca3a82b75bdd08a4577382aa92",
+      "documented_categories": [
+        "Cheminformatics & Drug Discovery"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 4,
+        "bytes": 25756,
+        "references": 1,
+        "scripts": 1,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 4,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "nwb-conversion",
+      "source_path": "skills/nwb-conversion",
+      "entry_object_id": "65d262c2ac32bfc2235ad8435adb8daba38281a9",
+      "documented_categories": [
+        "Neuroscience & Electrophysiology"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 5,
+        "bytes": 33884,
+        "references": 2,
+        "scripts": 1,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 5,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "omero-integration",
+      "source_path": "skills/omero-integration",
+      "entry_object_id": "62da1ebc27818607f7b07d77184969d6c59e6321",
+      "documented_categories": [
+        "Microscopy & Bio-image Data"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 15,
+        "bytes": 154851,
+        "references": 9,
+        "scripts": 5,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 13,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "760ad6135d84b676cc6242568146fb79a4b6b9fc71a25ecd9341da7eea2c9a6e"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "onekgpd",
+      "source_path": "skills/onekgpd",
+      "entry_object_id": "2045502f2be029cf9da32efbb284acde3a117925",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 6,
+        "bytes": 1134736,
+        "references": 2,
+        "scripts": 2,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 5,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "95535829792ec6de8d5ec45391ca8b01fc9cb7d64bba8fc4c15b3d316742c5e8"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "ontology-term-resolution",
+      "source_path": "skills/ontology-term-resolution",
+      "entry_object_id": "1a8604e379bac2dd15c242025ddf3c1e5816b83d",
+      "documented_categories": [
+        "Scientific Databases & Data Access"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 12,
+        "bytes": 110682,
+        "references": 4,
+        "scripts": 7,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 12,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "c863527303c0749e899cb28ee4f592d95dc8e594b568e728103207e9185893c2"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "open-notebook",
+      "source_path": "skills/open-notebook",
+      "entry_object_id": "42f99386cbbcea03f54a8bb0a83e9ebbb03df8ad",
+      "documented_categories": [
+        "Electronic Lab Notebooks (ELN)"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 9,
+        "bytes": 67551,
+        "references": 4,
+        "scripts": 4,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "medium",
+        "finding_count": 16,
+        "report_content_hash": "4e0ca81ee920f909e23f622fffa0d732be08e14523b0214cb10592cd61723870"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "openpiv",
+      "source_path": "skills/openpiv",
+      "entry_object_id": "a90338bcef844441101889530224d1d57ec61e8d",
+      "documented_categories": [
+        "Engineering & Simulation"
+      ],
+      "license_header": "BSD-3-Clause",
+      "resources": {
+        "files": 6,
+        "bytes": 53735,
+        "references": 1,
+        "scripts": 4,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 4,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "0809ec91f9825eb486c7d693206ff832e20cbdc565f6111fff6df2575ed84e1e"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "opentrons-integration",
+      "source_path": "skills/opentrons-integration",
+      "entry_object_id": "af09abc34db631ea2141942b8e2f7ca28108331e",
+      "documented_categories": [
+        "Laboratory Automation"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 16,
+        "bytes": 111042,
+        "references": 7,
+        "scripts": 6,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 13,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "8d39ca03130af205c3e134856d79915d34065f399df4e89415c8624f545cdbec"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "optimize-for-gpu",
+      "source_path": "skills/optimize-for-gpu",
+      "entry_object_id": "e146e8190fcacc78b26a491a34a9028d0a78712b",
+      "documented_categories": [
+        "Data Management & Infrastructure"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 16,
+        "bytes": 301348,
+        "references": 15,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 16,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "2e5a242579f8230c3c6a859def929bed9275350b9938b1b86468fee1570424cc"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pacsomatic",
+      "source_path": "skills/pacsomatic",
+      "entry_object_id": "c028aecd746a2afa5899815f64c1549409d311af",
+      "documented_categories": [
+        "Workflow Platforms & Cloud Execution"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 7,
+        "bytes": 58702,
+        "references": 3,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 6,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "96455a7cb2b8921aa83150a28ece21e8df18449d098bab3caa29e167fffe40be"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "paper-lookup",
+      "source_path": "skills/paper-lookup",
+      "entry_object_id": "d0b277b07be6f2688fcc2bacee1b58c971ece2f7",
+      "documented_categories": [
+        "Research Methodology & Proposal Writing"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 24,
+        "bytes": 181405,
+        "references": 18,
+        "scripts": 5,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 23,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "55c1d6b97d23f04b5c41589f6997a73f30826aefd57cf7805b6bb651df99c7ba"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "paperclip",
+      "source_path": "skills/paperclip",
+      "entry_object_id": "0fec767a06a7e1a222467c855872ac7d8a6b3cbe",
+      "documented_categories": [
+        "Research Methodology & Proposal Writing"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 7,
+        "bytes": 71225,
+        "references": 6,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "4a6ba44f97cb8edfc7d5c1f3847b661d96358f8d548cd5c26837f1f48aa2a3c8"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "paperzilla",
+      "source_path": "skills/paperzilla",
+      "entry_object_id": "027f88dd90716c309591c45ab93d1c2743950761",
+      "documented_categories": [
+        "Research Methodology & Proposal Writing"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 2,
+        "bytes": 16641,
+        "references": 1,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 1,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "7e0da7c25d7bcbe9ead5d2c56cb3de0de9a8eface5524285cf420a2e900e28da"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "parallel-web",
+      "source_path": "skills/parallel-web",
+      "entry_object_id": "4148a1750c4cca56779633362e510d382ed09f68",
+      "documented_categories": [
+        "Web Search & Information Retrieval"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 8,
+        "bytes": 40221,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "c06fb888e2e86f1fd1cf5265097bef9a46d009fd19971d639b497afb22c987be"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "pathml",
+      "source_path": "skills/pathml",
+      "entry_object_id": "b110c57d59bc9dcb89880f5d554bf8dd3b01e758",
+      "documented_categories": [
+        "Microscopy, Medical Imaging & Digital Pathology"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 13,
+        "bytes": 166391,
+        "references": 6,
+        "scripts": 6,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 13,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "454bc124432662ed15569c843046e074edec6f92a41323efd9496be9cabcad66"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "pathogen-variant-surveillance",
+      "source_path": "skills/pathogen-variant-surveillance",
+      "entry_object_id": "8a1b65361705fd70f96fd3680da858c6aab2c152",
+      "documented_categories": [
+        "Scientific Databases & Data Access"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 9,
+        "bytes": 105953,
+        "references": 3,
+        "scripts": 5,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 9,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "4990042b844ce5fd1081486a865c0f89b53c765d426f489f20d66fe2521353a6"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pathway-enrichment",
+      "source_path": "skills/pathway-enrichment",
+      "entry_object_id": "c9d3479b6edb958c17ab0c77f981bb6dfb546bc7",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 6,
+        "bytes": 64988,
+        "references": 4,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 5,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "d1c922057ea6eae88008328055922c63d08ac243ae7ad4e1c68c4b5ae5664b28"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "peer-review",
+      "source_path": "skills/peer-review",
+      "entry_object_id": "d4f3c3e3b5c19fec2518d569ded7e37ac96a964b",
+      "documented_categories": [
+        "Analysis & Methodology"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 24,
+        "bytes": 200981,
+        "references": 6,
+        "scripts": 8,
+        "assets": 9,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 9,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "49f4513a1269eb6cd3dda608d982cc7a9d4fb9ba04ec9c757116752e322d0655"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "pennylane",
+      "source_path": "skills/pennylane",
+      "entry_object_id": "75a26e2fbb3dab157069a211d8019f21487fa803",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "Apache-2.0 license",
+      "resources": {
+        "files": 8,
+        "bytes": 54449,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "bed4cfd75aeb28758cd50c1787bd5c51d8b6b0e9768b17a4b4e0f1b5970720c6"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "phylogenetics",
+      "source_path": "skills/phylogenetics",
+      "entry_object_id": "c09caa7c1918a8049318ed145916f1bf342e7c4d",
+      "documented_categories": [
+        "Phylogenetics & Evolutionary Biology"
+      ],
+      "license_header": "Unknown",
+      "resources": {
+        "files": 3,
+        "bytes": 29694,
+        "references": 1,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 3,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "medium",
+        "finding_count": 4,
+        "report_content_hash": "63770826574ff06f9d581237c22dd2b9aed7b302814cfd673566052491d1aa64"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pi-agent",
+      "source_path": "skills/pi-agent",
+      "entry_object_id": "00f81fdcd9ab784ab32e9b090c3074f39adab295",
+      "documented_categories": [
+        "Agent Frameworks"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 36,
+        "bytes": 276513,
+        "references": 35,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 35,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "68ee0c06e65fd8ec642f6f71d74274f11df3f5564893cf9aa6d64dae50efb6df"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pkpd-modeling",
+      "source_path": "skills/pkpd-modeling",
+      "entry_object_id": "e38127b040b5a67187a876cbd443a3dffeec0687",
+      "documented_categories": [
+        "Pharmacology & Pharmacometrics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 28,
+        "bytes": 282426,
+        "references": 14,
+        "scripts": 11,
+        "assets": 2,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 28,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "0b997f203cdf4df98052a4212e578e5856864e8a1610fd010743f93768df25ea"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "polars",
+      "source_path": "skills/polars",
+      "entry_object_id": "b72f1b0e334d889023f5524b99379ebe0f9821f1",
+      "documented_categories": [
+        "Data Analysis & Visualization"
+      ],
+      "license_header": "https://github.com/pola-rs/polars/blob/main/LICENSE",
+      "resources": {
+        "files": 8,
+        "bytes": 101491,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "8dd7fa3ea8ed47df4fdb1f1e3fbc5fc8f36d82ca44af1b50a7456163fc707669"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "polars-bio",
+      "source_path": "skills/polars-bio",
+      "entry_object_id": "53092285989b21e2457677df5e725eea73b5b797",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "Apache-2.0",
+      "resources": {
+        "files": 7,
+        "bytes": 53019,
+        "references": 6,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "6a57d118ca2a152b278b082447fba22d4d416e22805d54512e0cb7ccf80d1e06"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pptx-posters",
+      "source_path": "skills/pptx-posters",
+      "entry_object_id": "04a323b515537dcbcbea248b6d4c23aba36aa4f3",
+      "documented_categories": [
+        "Scientific Communication & Publishing"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 21,
+        "bytes": 253131,
+        "references": 7,
+        "scripts": 10,
+        "assets": 3,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 11,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "e599f0f810784831a0e0b300ade5020a4cffb4379c1b2bf50656feedb0557dde"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "primekg",
+      "source_path": "skills/primekg",
+      "entry_object_id": "f49ba0af63deca43653d1e6d3e0c4c39d965fa7c",
+      "documented_categories": [
+        "Scientific Databases & Data Access"
+      ],
+      "license_header": "Unknown",
+      "resources": {
+        "files": 3,
+        "bytes": 27128,
+        "references": 1,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 2,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "5bb2a84385bbc305ef2268d00082a9cb785abf03a1a0ca1f47583394aa5fb0c0"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "primer-design",
+      "source_path": "skills/primer-design",
+      "entry_object_id": "f5c795bd29b9918a7d17c3179075e8dab7fe3c4c",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 15,
+        "bytes": 126038,
+        "references": 5,
+        "scripts": 5,
+        "assets": 4,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 15,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "protocolsio-integration",
+      "source_path": "skills/protocolsio-integration",
+      "entry_object_id": "3e1ed368f3ce734e5b48ea045a7b365a9e3917c1",
+      "documented_categories": [
+        "Protocol Management & Sharing"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 15,
+        "bytes": 154680,
+        "references": 6,
+        "scripts": 7,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 12,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "83135915f1c6fe55d5c61e70330aa6cd65a5f94a353a8200058e0738f90726f9"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pufferlib",
+      "source_path": "skills/pufferlib",
+      "entry_object_id": "b3957bf3a8236e19924f88b88a71d363b65eb8e0",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 16,
+        "bytes": 145895,
+        "references": 6,
+        "scripts": 9,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 10,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "efeb8fa7c57afb7425e07898f9ebffdf811358fd55f91e6297a5b8ec08ae77da"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pybamm",
+      "source_path": "skills/pybamm",
+      "entry_object_id": "65a59a45863c4b44235430ee147de14b34320313",
+      "documented_categories": [
+        "Engineering & Simulation"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 4,
+        "bytes": 29197,
+        "references": 1,
+        "scripts": 1,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 4,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pycalphad",
+      "source_path": "skills/pycalphad",
+      "entry_object_id": "c10c2098f3386a2a4bef08e728a2b8b8b41f2667",
+      "documented_categories": [
+        "Materials Science & Chemistry"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 5,
+        "bytes": 30499,
+        "references": 1,
+        "scripts": 1,
+        "assets": 2,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 5,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pydeseq2",
+      "source_path": "skills/pydeseq2",
+      "entry_object_id": "d9499e1f7a2e728dc44cba00b4e3081e917fc97d",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 6,
+        "bytes": 55266,
+        "references": 4,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 6,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "5fd88dd70b195c3cc3714761731d335ed216be7ca777e0388d7d5c175aca14f8"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pydicom",
+      "source_path": "skills/pydicom",
+      "entry_object_id": "0838076f751c64e4669a3d5e3ab5b94847e36e58",
+      "documented_categories": [
+        "Microscopy, Medical Imaging & Digital Pathology"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 13,
+        "bytes": 186430,
+        "references": 2,
+        "scripts": 10,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 10,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "838bcceec85a1f7cb6414d73177a613d61c07da105103de00c358ad06c31927a"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pyhealth",
+      "source_path": "skills/pyhealth",
+      "entry_object_id": "5b9783f1eb09158c788af90a486544e74d720739",
+      "documented_categories": [
+        "Healthcare AI & Clinical Machine Learning"
+      ],
+      "license_header": null,
+      "resources": {
+        "files": 8,
+        "bytes": 45206,
+        "references": 6,
+        "scripts": 0,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "0407662f35456b804c8076f447aa7d861aefb0f52df3d1eaf8b2c4a6f676ca97"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pylabrobot",
+      "source_path": "skills/pylabrobot",
+      "entry_object_id": "83647870dcf0e38f0260a5d4432818753f5b3b53",
+      "documented_categories": [
+        "Laboratory Automation & Equipment Control"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 16,
+        "bytes": 119337,
+        "references": 7,
+        "scripts": 7,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 10,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "40232674b932820386488158415129562ec5ea6e1c8dd44a0f137c3e9664b6f6"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pymatgen",
+      "source_path": "skills/pymatgen",
+      "entry_object_id": "1d08398cef5cab8950679deef6ea14783a36e317",
+      "documented_categories": [
+        "Materials Science & Chemistry"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 15,
+        "bytes": 177214,
+        "references": 5,
+        "scripts": 9,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 12,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "62b06061455664f43750d68f642df7006dc3b515027f9f7873eac2d2c76d4f8c"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pymc",
+      "source_path": "skills/pymc",
+      "entry_object_id": "7fe1b3f1942fe27962162ab13193aa47dbce48b9",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "Apache License, Version 2.0",
+      "resources": {
+        "files": 10,
+        "bytes": 85435,
+        "references": 5,
+        "scripts": 2,
+        "assets": 2,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 10,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "1cbb1acaa649b516fc4fd5755273bd0beba144ab53a8571078830ff63480ebcc"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pymoo",
+      "source_path": "skills/pymoo",
+      "entry_object_id": "d9ed51c8b5f129393c43383b03ba993ec96ea2c4",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "Apache-2.0 license",
+      "resources": {
+        "files": 14,
+        "bytes": 82908,
+        "references": 8,
+        "scripts": 5,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 13,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "c25ff8a6082f68e97204bcc49e85f78ca8a1bcd42b8f2025ec4e1a5ab125a7ef"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pyopenms",
+      "source_path": "skills/pyopenms",
+      "entry_object_id": "6040f5f40ae2fbe27a76c07275c89bf1d17fe7e7",
+      "documented_categories": [
+        "Proteomics & Mass Spectrometry"
+      ],
+      "license_header": "3 clause BSD license",
+      "resources": {
+        "files": 24,
+        "bytes": 114613,
+        "references": 6,
+        "scripts": 17,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 20,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "medium",
+        "finding_count": 2,
+        "report_content_hash": "236b42651ad4645cf28a3dbef68a8e7458fc1eeee99e903d531e4e521e66e189"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pysam",
+      "source_path": "skills/pysam",
+      "entry_object_id": "d3f6d6e5383890c3c43d8aabcd5074fcde4de087",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 14,
+        "bytes": 154972,
+        "references": 9,
+        "scripts": 4,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 14,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "7dd041a87aee0a8677e3dc5f82bc28094b159748763fc9335118e85684b31b3e"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pytdc",
+      "source_path": "skills/pytdc",
+      "entry_object_id": "702017b5bcb831349af598fb75c93450aa20bb74",
+      "documented_categories": [
+        "Cheminformatics & Drug Discovery"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 11,
+        "bytes": 121961,
+        "references": 4,
+        "scripts": 6,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 9,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "e9b2a844327cdd944a190a2012e251a0fcdf8ac4a51ed19dd5e52736409be6ab"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pytorch-lightning",
+      "source_path": "skills/pytorch-lightning",
+      "entry_object_id": "c34088a4cf9d09210ee10cc4cf101bc11ae2252a",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "Apache-2.0 license",
+      "resources": {
+        "files": 11,
+        "bytes": 81105,
+        "references": 7,
+        "scripts": 3,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 11,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "eb590ca66721be8d45dbafe9c744fa60c33a017ff51577a6764e6e7b06c972c1"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "pyzotero",
+      "source_path": "skills/pyzotero",
+      "entry_object_id": "aa3e5da33f1875505f842711d755bea27fa356d2",
+      "documented_categories": [
+        "Scientific Communication & Publishing"
+      ],
+      "license_header": "MIT License",
+      "resources": {
+        "files": 15,
+        "bytes": 64997,
+        "references": 14,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 15,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "9f93bc747cf137309354fd69932b2dc05f359765f287cc40fe23858a71b81179"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "qiime2-amplicon",
+      "source_path": "skills/qiime2-amplicon",
+      "entry_object_id": "9b0847a056cf76f04f09c485ef244f02117f2fdb",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 3,
+        "bytes": 37901,
+        "references": 1,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 3,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "qiskit",
+      "source_path": "skills/qiskit",
+      "entry_object_id": "7784f0a19c9e04e5d2671a73be0d94ac7d5f8fdf",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "Apache-2.0",
+      "resources": {
+        "files": 15,
+        "bytes": 156351,
+        "references": 11,
+        "scripts": 3,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 15,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "2bf44a9b8fe9667e6fa57cd774aa37893410c062734fb7ac3250b16b3f875ce0"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "qutip",
+      "source_path": "skills/qutip",
+      "entry_object_id": "ae87536eb5e90c26d1e848cfad1f2b277c454c49",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 13,
+        "bytes": 152832,
+        "references": 5,
+        "scripts": 7,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 11,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "7bdee38ad66814e2beb009497383c242becb68103838d6a53c202a08f9cc27ab"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "rdkit",
+      "source_path": "skills/rdkit",
+      "entry_object_id": "c5cd692e59278038cc633b114ca41e5dacdc7d6b",
+      "documented_categories": [
+        "Cheminformatics & Drug Discovery"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 11,
+        "bytes": 113823,
+        "references": 6,
+        "scripts": 4,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 2,
+        "M": 9,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "8e767a40c60ceb7598137bc4c93acaa6b6fe114401bfe32a79bcf354da6c9cc5"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "relion",
+      "source_path": "skills/relion",
+      "entry_object_id": "c1fde2308f0662dfd1e2e09c0f827ff44abeb5cd",
+      "documented_categories": [
+        "Protein Engineering & Design"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 4,
+        "bytes": 38421,
+        "references": 2,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 4,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "relsa-severity-assessment",
+      "source_path": "skills/relsa-severity-assessment",
+      "entry_object_id": "57e864f610026ece40bc6867e841e1beb1c664d2",
+      "documented_categories": [
+        "Preclinical Research & Animal Welfare"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 9,
+        "bytes": 126327,
+        "references": 3,
+        "scripts": 4,
+        "assets": 1,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "d1c4ccab3e0846cad6e49571860505488f5202d2d5a89d2acfde3c10a44c21b5"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "research-grants",
+      "source_path": "skills/research-grants",
+      "entry_object_id": "2c936ee59af1bf40481e073574e93636d857ba70",
+      "documented_categories": [
+        "Research Methodology & Proposal Writing"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 16,
+        "bytes": 148658,
+        "references": 12,
+        "scripts": 0,
+        "assets": 3,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 16,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "646702fb898684e22536006d96f4807345042c71994c39442b1ee3a42de2ab07"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "research-lookup",
+      "source_path": "skills/research-lookup",
+      "entry_object_id": "a337950e3425001a2edc93a531fc420d62b65db7",
+      "documented_categories": [
+        "Research Methodology & Proposal Writing"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 5,
+        "bytes": 104475,
+        "references": 1,
+        "scripts": 2,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 4,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "critical",
+        "finding_count": 4,
+        "report_content_hash": "aac7981ddcc52f403f849215e4cb2582ab7f7bc9e61b9bde8e76bb925c2e54e0"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "rowan",
+      "source_path": "skills/rowan",
+      "entry_object_id": "b4e30e57a1a5f22f4ea9ec2b90751afcf522207b",
+      "documented_categories": [
+        "Cheminformatics & Drug Discovery"
+      ],
+      "license_header": "Proprietary (API key required)",
+      "resources": {
+        "files": 6,
+        "bytes": 52677,
+        "references": 5,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 6,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "f5fa6b10663146d2f8317b27a37b5846d71e3d3efa6501ad5e4e05b01bfe61db"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "scanpy",
+      "source_path": "skills/scanpy",
+      "entry_object_id": "8c071306c10ebaf6b23da5d4fbacdaa597e5c8a8",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "BSD-3-Clause",
+      "resources": {
+        "files": 26,
+        "bytes": 151962,
+        "references": 6,
+        "scripts": 15,
+        "assets": 4,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 20,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "8a419d2e2959b924eed29fc422433b5663af2496c7b8e4007648962618b1b56a"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "scholar-evaluation",
+      "source_path": "skills/scholar-evaluation",
+      "entry_object_id": "900bc621e6165f7ec27ba29095774fa464c4d368",
+      "documented_categories": [
+        "Research Methodology & Proposal Writing"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 19,
+        "bytes": 168672,
+        "references": 5,
+        "scripts": 8,
+        "assets": 5,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 13,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "ca306bf88cd646c066adb914f16c39ace4469674d46d959a7257b29b998df8de"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "scientific-brainstorming",
+      "source_path": "skills/scientific-brainstorming",
+      "entry_object_id": "487a1a0e31c6bf270b3e80818798bab9b4ebc0b9",
+      "documented_categories": [
+        "Analysis & Methodology"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 10,
+        "bytes": 136460,
+        "references": 5,
+        "scripts": 4,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "83f9dbeb88f50a3edc5fe5dc6c6c3924c9a86ac9353a34a76d38f86af7c1bd1f"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "scientific-critical-thinking",
+      "source_path": "skills/scientific-critical-thinking",
+      "entry_object_id": "2a2fc151b5b13e4e11ece7410f21a14d5b25e30d",
+      "documented_categories": [
+        "Analysis & Methodology"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 9,
+        "bytes": 133159,
+        "references": 8,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "992073c4f37c76e23aee1b2e09f0df988f8419accd8ac98439be11c090962938"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "scientific-schematics",
+      "source_path": "skills/scientific-schematics",
+      "entry_object_id": "5f2ff1b3f73818b05c649438e71f50961d01f2eb",
+      "documented_categories": [
+        "Scientific Communication & Publishing"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 6,
+        "bytes": 103108,
+        "references": 2,
+        "scripts": 3,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 6,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "critical",
+        "finding_count": 5,
+        "report_content_hash": "35401198891709bd0133a1531997b6e4821ec87511b9cc46dcd4c63381a8c9c1"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "scientific-slides",
+      "source_path": "skills/scientific-slides",
+      "entry_object_id": "54587177e2de11324f23f5985ff9d152fb998e03",
+      "documented_categories": [
+        "Scientific Communication & Publishing"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 24,
+        "bytes": 390383,
+        "references": 11,
+        "scripts": 7,
+        "assets": 5,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 23,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "critical",
+        "finding_count": 5,
+        "report_content_hash": "2f274e085a8aded1cdf43d247b66bb9aa248ae6eb16d6dd1ed622cf36ae115b7"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "scientific-visualization",
+      "source_path": "skills/scientific-visualization",
+      "entry_object_id": "44ea38c24fb5015535254bfd9b5ae9a856195408",
+      "documented_categories": [
+        "Analysis & Methodology"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 18,
+        "bytes": 204161,
+        "references": 5,
+        "scripts": 7,
+        "assets": 5,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 17,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "fdf4f713e1d7868bdb3c1c4a540067fbf290cd1f234e579fb2ff864e8e42a24c"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "scientific-writing",
+      "source_path": "skills/scientific-writing",
+      "entry_object_id": "446993fcd4716ae54ab74bc2a91e3bc5af5235c7",
+      "documented_categories": [
+        "Analysis & Methodology"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 31,
+        "bytes": 179722,
+        "references": 12,
+        "scripts": 9,
+        "assets": 9,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 12,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "872eb699549a970fab0897b86df31328b773d18b95e551d7502bec5c9b1836c3"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "scikit-bio",
+      "source_path": "skills/scikit-bio",
+      "entry_object_id": "31046cbe62ba3a7210f1abdd8880acb27d6b34bb",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 3,
+        "bytes": 56008,
+        "references": 2,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 2,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "e76884ba5ee7576fe8dd5f058e438560b72da36a6bac8e92f645149b443e84f9"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "scikit-learn",
+      "source_path": "skills/scikit-learn",
+      "entry_object_id": "9e26cff8bd282c523b645719c817c1415e0ddb3f",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 11,
+        "bytes": 139099,
+        "references": 8,
+        "scripts": 2,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 11,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "504945b62b1b1ad5d1a5a3d9aed982cfdbf798cf87b974ca0950f2a12dcfc898"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "scikit-survival",
+      "source_path": "skills/scikit-survival",
+      "entry_object_id": "e736ab76c0188ee3f24814ab10d209d1aa7d5f1e",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 13,
+        "bytes": 160109,
+        "references": 6,
+        "scripts": 6,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 12,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "c3c5b3eed5d72d71201ab7daca4a1eba3d0b80a802d3258d784c349560883258"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "scvelo",
+      "source_path": "skills/scvelo",
+      "entry_object_id": "c9c905d10529ff69fb547a0302c00cb16453e140",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "BSD-3-Clause",
+      "resources": {
+        "files": 3,
+        "bytes": 35131,
+        "references": 1,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 3,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "6e750228a4b6b51976bb6f093b4b96262fbb336df63541056db90c498a9f001e"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "scvi-tools",
+      "source_path": "skills/scvi-tools",
+      "entry_object_id": "9866ed884a40f643a8f2813d8b072520789aba64",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 9,
+        "bytes": 69612,
+        "references": 8,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 9,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "e4a7cdaa663455d87bd560c197ad7f8bb3f8d95d300295538681c6088011c2a1"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "seaborn",
+      "source_path": "skills/seaborn",
+      "entry_object_id": "89aafe0b2b051e017f7340b76c57e37b1d39de0a",
+      "documented_categories": [
+        "Data Analysis & Visualization"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 8,
+        "bytes": 94024,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "5789262692b0ff8309dc0edae795d2b8d5ac9df8993a3f45f54e6b31db8049cd"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "shap",
+      "source_path": "skills/shap",
+      "entry_object_id": "b04b316bc8871705dbbaef72f5f3f88c2972df1f",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 10,
+        "bytes": 140153,
+        "references": 8,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 10,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "a712f0aecaaab344e3b170b788b0dea0ad1cc57f2296f7f909824fdffd2f0147"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "simpy",
+      "source_path": "skills/simpy",
+      "entry_object_id": "951601caa5bc475d2e3eadc3f2c11e2eaf59ed0c",
+      "documented_categories": [
+        "Engineering & Simulation"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 16,
+        "bytes": 159115,
+        "references": 8,
+        "scripts": 7,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 14,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "bd55e3fbe3a419b1b3df9bb30bc3e98d5aa1b8ba0cf365306d65be191716abda"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "stable-baselines3",
+      "source_path": "skills/stable-baselines3",
+      "entry_object_id": "51a6e672466b1bc7837f361a065bf9e0e6d7dc2b",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 8,
+        "bytes": 87607,
+        "references": 4,
+        "scripts": 3,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 8,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "cfd0a6cdcc917517b4f5afecbdf7f8fcdbd6deb0deebb567f8ac8ff0db17174e"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "statistical-analysis",
+      "source_path": "skills/statistical-analysis",
+      "entry_object_id": "4ea7453a12e63f0dbc31d7a47ed41fe3ff4c4c1a",
+      "documented_categories": [
+        "Analysis & Methodology"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 7,
+        "bytes": 120509,
+        "references": 5,
+        "scripts": 1,
+        "assets": 0,
+        "tests_or_evals": 1,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "528f0623284c41d5566324c7ef2ea9451d40f8d8c4ad2b68460eb470df0855b3"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "statistical-power",
+      "source_path": "skills/statistical-power",
+      "entry_object_id": "012cc67f7794ac280ad39383add39afda7ac719a",
+      "documented_categories": [
+        "Analysis & Methodology"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 6,
+        "bytes": 78425,
+        "references": 3,
+        "scripts": 2,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 6,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "402448b4d2963f097fa97b46718f4ecf9b0288a49aa8e43b394204d58f0d3653"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "statsmodels",
+      "source_path": "skills/statsmodels",
+      "entry_object_id": "0af65089389b2602e857d503c7874154c6c9de4c",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 10,
+        "bytes": 131444,
+        "references": 9,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 9,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "b1dad62cd8168f4aeeea0ac2ef571c9dbd91987ccb511123addb971883c2f046"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "sympy",
+      "source_path": "skills/sympy",
+      "entry_object_id": "6eb0e837c3cf88c0b1a8107cfba3cbd18557d9e6",
+      "documented_categories": [
+        "Engineering & Simulation"
+      ],
+      "license_header": "https://github.com/sympy/sympy/blob/master/LICENSE",
+      "resources": {
+        "files": 8,
+        "bytes": 89107,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "0705b22c15734fbf3b869a2960dce3e1c1f3987afbef3b1064c8f8df8cea423b"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "tamarind",
+      "source_path": "skills/tamarind",
+      "entry_object_id": "86aa865aaa2aaec784a6fcf92f1ceb9c185e7b45",
+      "documented_categories": [
+        "Protein Engineering & Design"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 5,
+        "bytes": 47276,
+        "references": 4,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 5,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "medium",
+        "finding_count": 9,
+        "report_content_hash": "2cfeb95fe3cae0e78aa99978a53009c3c97331ebcdab23535d5689a3369d851f"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "tellurium",
+      "source_path": "skills/tellurium",
+      "entry_object_id": "833a8d96d580c5c354ba270a96c260383d185c41",
+      "documented_categories": [
+        "Systems Biology & Kinetic Modeling"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 5,
+        "bytes": 28719,
+        "references": 1,
+        "scripts": 1,
+        "assets": 2,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 5,
+        "M": 0,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": null,
+        "finding_count": 0,
+        "report_content_hash": null
+      },
+      "previous_disposition": null,
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "tiledbvcf",
+      "source_path": "skills/tiledbvcf",
+      "entry_object_id": "3900052a467fdb7d0a06aa48641f6f5422cf636e",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 2,
+        "bytes": 20019,
+        "references": 1,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 1,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "b8b73af87b16634a840bfa8c68de538f71adc967437901bd6504e7bf5153a361"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "timesfm-forecasting",
+      "source_path": "skills/timesfm-forecasting",
+      "entry_object_id": "dd484e3f3d9096fedf927995fe5f62e87d04da31",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "Apache-2.0 license",
+      "resources": {
+        "files": 21,
+        "bytes": 143252,
+        "references": 8,
+        "scripts": 2,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 19,
+        "D": 11
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "56826dd46b0beb88a55f9d872c84f47bc56a2f3a1cc8d3ccb6c714d8bd83a75b"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "torch-geometric",
+      "source_path": "skills/torch-geometric",
+      "entry_object_id": "49a32f3936ad133d4dd76dcd98f2eb43dec70204",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 8,
+        "bytes": 85756,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "0383037b7cda50d91540f9ca14f7e875dab69dd1ccf630d1a7509922e53e6a1a"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "torchdrug",
+      "source_path": "skills/torchdrug",
+      "entry_object_id": "46a50e09ea4a835ac8d3c32aea6faf24bcbc08cd",
+      "documented_categories": [
+        "Cheminformatics & Drug Discovery"
+      ],
+      "license_header": "Apache-2.0 license",
+      "resources": {
+        "files": 10,
+        "bytes": 77570,
+        "references": 9,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 9,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "9ce8c8b44c001e530fae7e61a99262648268b18cdd7cc390d22bf19a05d59bab"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "transformers",
+      "source_path": "skills/transformers",
+      "entry_object_id": "96348190164b67fbe2f565d48f2bb5942deb587a",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "Apache-2.0 license",
+      "resources": {
+        "files": 7,
+        "bytes": 80649,
+        "references": 6,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 6,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "4e72d4816d60b6aef48e6e25ef6e904d7000e24c2c36902e250a7bb1839fdc03"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "treatment-plans",
+      "source_path": "skills/treatment-plans",
+      "entry_object_id": "2ebb9995e3702ffca7cc92bbfbf016bdd0386d08",
+      "documented_categories": [
+        "Clinical Documentation & Decision Support"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 23,
+        "bytes": 164596,
+        "references": 8,
+        "scripts": 8,
+        "assets": 6,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 13,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "e1db4d9fcfd98f0207483e2b2d7dfd3648b010a952d9b2b0132094e31d5221f5"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "umap-learn",
+      "source_path": "skills/umap-learn",
+      "entry_object_id": "1c93bb08bf860d2eb891143942ae1c36c6f8d5e8",
+      "documented_categories": [
+        "Machine Learning & Deep Learning"
+      ],
+      "license_header": "BSD-3-Clause license",
+      "resources": {
+        "files": 2,
+        "bytes": 50078,
+        "references": 1,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 2,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "ce9b19278e1fa687b6d8d5d4d290fe86683386aadf884e28d532eb31427e6b83"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "uncertainty-and-units",
+      "source_path": "skills/uncertainty-and-units",
+      "entry_object_id": "28bcc333961e29f41681a7b7afdd01f402d54646",
+      "documented_categories": [
+        "Data Analysis & Visualization"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 15,
+        "bytes": 234572,
+        "references": 7,
+        "scripts": 7,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 14,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "e7253f6fee1212dec6fbdd8b9161c8d37647bb94dd9520cb38d264ff04e3cba0"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "usfiscaldata",
+      "source_path": "skills/usfiscaldata",
+      "entry_object_id": "a92c6cd02dc7e4bba3a57cea0653fb9c828d70da",
+      "documented_categories": [
+        "Scientific Databases & Data Access"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 9,
+        "bytes": 69967,
+        "references": 8,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 9,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "a433faca2f4b3535ce4ea40b0676f72e05c1e97e999ae2230060312a4ad5340a"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "vaex",
+      "source_path": "skills/vaex",
+      "entry_object_id": "58cccd31b9a162b204528a711f92efa3a5c4b796",
+      "documented_categories": [
+        "Data Analysis & Visualization"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 8,
+        "bytes": 52379,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "0ae33c1dec5d4007f5c95e38fab6a309c185f53f5852fd1c33e419a58c357f21"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "venue-templates",
+      "source_path": "skills/venue-templates",
+      "entry_object_id": "74e9d03ff7d3cc4029cbafadf9ab93a27cb66712",
+      "documented_categories": [
+        "Scientific Communication & Publishing"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 32,
+        "bytes": 321106,
+        "references": 12,
+        "scripts": 3,
+        "assets": 16,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 31,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "low",
+        "finding_count": 1,
+        "report_content_hash": "3a5cb2338a4118ef5fc17d0b0857329d8c58dfb967d97c6282a097d60d77ca00"
+      },
+      "previous_disposition": "admitted",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "waypoint-bio",
+      "source_path": "skills/waypoint-bio",
+      "entry_object_id": "6aa6a18feea3097049fbd00c30b09968f9f1b821",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT",
+      "resources": {
+        "files": 8,
+        "bytes": 90984,
+        "references": 5,
+        "scripts": 2,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": true,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "high",
+        "finding_count": 2,
+        "report_content_hash": "63eabea9519969b157a3b37dbc66ca772adc17eaa8a7da5a3212a6bfa995258f"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    },
+    {
+      "skill_id": "what-if-oracle",
+      "source_path": "skills/what-if-oracle",
+      "entry_object_id": "dc6b38f8dd501155017f5d23099bdc0513fe5ab9",
+      "documented_categories": [
+        "Decision & Scenario Analysis"
+      ],
+      "license_header": "CC BY-NC-SA 4.0",
+      "resources": {
+        "files": 2,
+        "bytes": 20055,
+        "references": 1,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 0,
+        "M": 2,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "9e33b9d6e2e1bc8d02b6b41f853bb3c4bd355f9b085b82d4d10465854797cb38"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": false
+    },
+    {
+      "skill_id": "zarr-python",
+      "source_path": "skills/zarr-python",
+      "entry_object_id": "780de6f9a4284409d68d91b548dace2815c8dd1c",
+      "documented_categories": [
+        "Bioinformatics & Genomics"
+      ],
+      "license_header": "MIT license",
+      "resources": {
+        "files": 8,
+        "bytes": 43680,
+        "references": 7,
+        "scripts": 0,
+        "assets": 0,
+        "tests_or_evals": 0,
+        "environment_templates": 0
+      },
+      "changed_paths": {
+        "A": 1,
+        "M": 7,
+        "D": 0
+      },
+      "entry_adaptation_indicators": {
+        "nested_metadata": false,
+        "array_allowed_tools": false,
+        "description_over_limit": false,
+        "required_environment_fields": false
+      },
+      "historical_upstream_security": {
+        "highest_severity": "none",
+        "finding_count": 0,
+        "report_content_hash": "ec8c71ddb8846d53b7fa1d9655c9736028927c5fc38f33df1cd2a07af36bb4fd"
+      },
+      "previous_disposition": "excluded",
+      "previous_manual_review": true
+    }
+  ]
+}

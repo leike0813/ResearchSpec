@@ -3,9 +3,8 @@ capability_id: plugin-scientific-agent-skills-pufferlib
 title: PufferLib
 description: Version-aware guidance for PufferLib reinforcement-learning
   environments, vectorization, policies, PuffeRL training, evaluation, and safe
-  checkpoint review. Use when adapting Gymnasium/PettingZoo environments to
-  published PufferLib 3.0.0 or working with the redesigned native 4.0 source
-  line.
+  checkpoint review. Covers the native 5.0 build and environment API, published
+  3.0.0 Gymnasium/PettingZoo adaptation, and a pinned historical 4.0 profile.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -47,23 +46,27 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-environments.md
     path: references/environments.md
-    content_hash: 92d9a9a886be49330cfc3eb8506ecd1e424205706a5e1383b19e19ea47c8d327
+    content_hash: 0defeddfae85e5517d3f25d03fc43be22455cc5c13379efea7c2f5769d58667e
     license: MIT
   - knowledge_id: sas-references-integration.md
     path: references/integration.md
-    content_hash: 82a361ab89017f8c9dca8fee22a50bc5314d9073f66dad89ec4ce40b2f74c16c
+    content_hash: 1baf88eafdb12b8d43dde7dfdc9690bf9a28ff6483f5303695a2307166620d02
+    license: MIT
+  - knowledge_id: sas-references-native-5.md
+    path: references/native-5.md
+    content_hash: 48222d65c5814bda828f274122b60896b49ba515f171277b8b208076560376d8
     license: MIT
   - knowledge_id: sas-references-policies.md
     path: references/policies.md
-    content_hash: 5106be821c5fcb5a773c0a1b530e3f150236b8bb15c95d3cbbf704533a890be1
+    content_hash: 88a2a468b647656d23306ee2cc885643d210b041b920078e84e4ef237ea3d68b
     license: MIT
   - knowledge_id: sas-references-training.md
     path: references/training.md
-    content_hash: 8fa076cb2e72d761f3b57c67cc293cd3638cda7f86166b91089ce2d703ef22b0
+    content_hash: b59e378ff3e592d553336dcff61bb9b7b988dc59407287f53e1336bd33db91f2
     license: MIT
   - knowledge_id: sas-references-vectorization.md
     path: references/vectorization.md
-    content_hash: bf17effaa95ca43a99924ce3c5c7b4a75b9793a9f99e6d353854ae5f31222ab9
+    content_hash: 8e10c7b1ef60cd52fdb7f00b7672fb477451c962602e09948e5a456adf1f2c38
     license: MIT
   - knowledge_id: sas-scripts--init-.py
     path: scripts/__init__.py
@@ -87,36 +90,38 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-inspect-checkpoint.py
     path: scripts/inspect_checkpoint.py
-    content_hash: ecc0f229309b634618c7bcec65063d3e1aac3b747f04af53013b3215f5fba1fa
+    content_hash: df2ae60bcff0f885b8dbdb03998ed6bfbf6105bd5bb2e2d56cb19bb125ab1c59
     license: MIT
   - knowledge_id: sas-scripts-repro-plan.py
     path: scripts/repro_plan.py
-    content_hash: f3af13a6b15ff4af08c689d90396147d0bf8dc0481f2d945f1bae5a0cb63801d
+    content_hash: d89d5c448db6ee48e728b74c76f5326f0e156fa163a936061913b464e7bf470c
     license: MIT
   - knowledge_id: sas-scripts-train-template.py
     path: scripts/train_template.py
-    content_hash: 1c1844c7c07e649894347c648031b6c3656c896f126a3f8d24f1e052278f66ab
+    content_hash: cdb2c3d31836aba7497c85f0e5864b3fbb935ec99db5a7096106fdf7c56b20bf
     license: MIT
   - knowledge_id: sas-scripts-validate-plan.py
     path: scripts/validate_plan.py
-    content_hash: d0cc93404fa3ae6bb0a933cccdfea77e233a9cb7807cea663a2c1529245a8b59
+    content_hash: 6ede920afb89b4ce3d29c6a8f9fda503049e58a9ae7f1fc9d11a964bec9231d3
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/SKILL.md
-      sha256: 7eebf6218f0e9efb46ed425402033f685e1be9e23ccac490c42e42665451140c
+      sha256: a97b3325d1728efaff788ebb2310813a6f31895ada2be438c7467091438e2639
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/environments.md
-      sha256: 92d9a9a886be49330cfc3eb8506ecd1e424205706a5e1383b19e19ea47c8d327
+      sha256: 0defeddfae85e5517d3f25d03fc43be22455cc5c13379efea7c2f5769d58667e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/integration.md
-      sha256: 82a361ab89017f8c9dca8fee22a50bc5314d9073f66dad89ec4ce40b2f74c16c
+      sha256: 1baf88eafdb12b8d43dde7dfdc9690bf9a28ff6483f5303695a2307166620d02
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/native-5.md
+      sha256: 48222d65c5814bda828f274122b60896b49ba515f171277b8b208076560376d8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/policies.md
-      sha256: 5106be821c5fcb5a773c0a1b530e3f150236b8bb15c95d3cbbf704533a890be1
+      sha256: 88a2a468b647656d23306ee2cc885643d210b041b920078e84e4ef237ea3d68b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/training.md
-      sha256: 8fa076cb2e72d761f3b57c67cc293cd3638cda7f86166b91089ce2d703ef22b0
+      sha256: b59e378ff3e592d553336dcff61bb9b7b988dc59407287f53e1336bd33db91f2
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/vectorization.md
-      sha256: bf17effaa95ca43a99924ce3c5c7b4a75b9793a9f99e6d353854ae5f31222ab9
+      sha256: 8e10c7b1ef60cd52fdb7f00b7672fb477451c962602e09948e5a456adf1f2c38
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/scripts/__init__.py
       sha256: 5e2a587bf7e4f8fb11154872238594d6ba21805716d7f3b974675ebe54e52bfb
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/scripts/_common.py
@@ -128,11 +133,11 @@ provenance:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/scripts/env_template.py
       sha256: 058f479e510d8f02d8bbba517c96d7a9f8fe6dfc5e32f01f333b22651204df70
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/scripts/inspect_checkpoint.py
-      sha256: ecc0f229309b634618c7bcec65063d3e1aac3b747f04af53013b3215f5fba1fa
+      sha256: df2ae60bcff0f885b8dbdb03998ed6bfbf6105bd5bb2e2d56cb19bb125ab1c59
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/scripts/repro_plan.py
-      sha256: f3af13a6b15ff4af08c689d90396147d0bf8dc0481f2d945f1bae5a0cb63801d
+      sha256: d89d5c448db6ee48e728b74c76f5326f0e156fa163a936061913b464e7bf470c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/scripts/train_template.py
-      sha256: 1c1844c7c07e649894347c648031b6c3656c896f126a3f8d24f1e052278f66ab
+      sha256: cdb2c3d31836aba7497c85f0e5864b3fbb935ec99db5a7096106fdf7c56b20bf
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/scripts/validate_plan.py
-      sha256: d0cc93404fa3ae6bb0a933cccdfea77e233a9cb7807cea663a2c1529245a8b59
+      sha256: 6ede920afb89b4ce3d29c6a8f9fda503049e58a9ae7f1fc9d11a964bec9231d3
 license: MIT

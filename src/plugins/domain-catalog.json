@@ -106,6 +106,10 @@
       "description": "ANZSRC 2020 FoR Group 3101: Biochemistry and cell biology.",
       "version": "0.1.0",
       "skills": [
+        "scientific-agent-skills-13c-metabolic-flux",
+        "scientific-agent-skills-flowkit",
+        "scientific-agent-skills-relion",
+        "scientific-agent-skills-tellurium",
         "tooluniverse-aging-senescence",
         "tooluniverse-electron-microscopy",
         "tooluniverse-enzyme-kinetics",
@@ -252,6 +256,7 @@
       "description": "ANZSRC 2020 FoR Group 3107: Microbiology.",
       "version": "0.1.0",
       "skills": [
+        "scientific-agent-skills-qiime2-amplicon",
         "tooluniverse-metagenomics-analysis",
         "tooluniverse-microbial-genome-characterization",
         "tooluniverse-microbiome-research"
@@ -399,6 +404,7 @@
       "description": "ANZSRC 2020 FoR Group 3209: Neurosciences.",
       "version": "0.1.0",
       "skills": [
+        "scientific-agent-skills-nwb-conversion",
         "tooluniverse-neuroscience"
       ]
     },
@@ -561,6 +567,7 @@
       "version": "0.1.0",
       "skills": [
         "scientific-agent-skills-analytical-method-validation",
+        "scientific-agent-skills-nmrglue",
         "tooluniverse-metabolomics"
       ]
     },
@@ -627,6 +634,7 @@
       "description": "ANZSRC 2020 FoR Group 3406: Physical chemistry.",
       "version": "0.1.0",
       "skills": [
+        "scientific-agent-skills-cantera",
         "tooluniverse-electron-microscopy",
         "tooluniverse-inorganic-physical-chemistry"
       ]
@@ -884,7 +892,9 @@
       "title": "Oceanography",
       "description": "ANZSRC 2020 FoR Group 3708: Oceanography.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "scientific-agent-skills-marine-carbonate-chemistry"
+      ]
     },
     {
       "domain_id": "physical-geography-and-environmental-geoscience",
@@ -1149,7 +1159,9 @@
       "title": "Biomedical engineering",
       "description": "ANZSRC 2020 FoR Group 4003: Biomedical engineering.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "scientific-agent-skills-cellprofiler"
+      ]
     },
     {
       "domain_id": "chemical-engineering",
@@ -1198,7 +1210,9 @@
       "title": "Electrical engineering",
       "description": "ANZSRC 2020 FoR Group 4008: Electrical engineering.",
       "version": "0.1.0",
-      "skills": []
+      "skills": [
+        "scientific-agent-skills-pybamm"
+      ]
     },
     {
       "domain_id": "electronics-sensors-and-digital-hardware",
@@ -1282,7 +1296,8 @@
         "materials-science-skills-deeptb-helper",
         "materials-science-skills-dpgen-workflow",
         "materials-science-skills-gpumd-workflow",
-        "materials-science-skills-phonopy-workflows"
+        "materials-science-skills-phonopy-workflows",
+        "scientific-agent-skills-pycalphad"
       ]
     },
     {
@@ -2412,11 +2427,15 @@
         "materials-science-skills-gpumd-workflow",
         "materials-science-skills-phonopy-workflows",
         "materials-science-skills-unimol-ops",
+        "scientific-agent-skills-13c-metabolic-flux",
+        "scientific-agent-skills-cantera",
         "scientific-agent-skills-cirq",
         "scientific-agent-skills-fluidsim",
         "scientific-agent-skills-matlab",
         "scientific-agent-skills-networkx",
         "scientific-agent-skills-pennylane",
+        "scientific-agent-skills-pybamm",
+        "scientific-agent-skills-pycalphad",
         "scientific-agent-skills-pylabrobot",
         "scientific-agent-skills-pymatgen",
         "scientific-agent-skills-pymoo",
@@ -2424,6 +2443,7 @@
         "scientific-agent-skills-qutip",
         "scientific-agent-skills-simpy",
         "scientific-agent-skills-sympy",
+        "scientific-agent-skills-tellurium",
         "tooluniverse-computational-biophysics"
       ]
     },

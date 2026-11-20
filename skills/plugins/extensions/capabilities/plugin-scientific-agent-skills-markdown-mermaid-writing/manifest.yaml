@@ -1,11 +1,11 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-markdown-mermaid-writing
 title: Markdown and Mermaid Writing
-description: Comprehensive markdown and Mermaid diagram writing skill. Use when
-  creating any scientific document, report, analysis, or visualization.
-  Establishes text-based diagrams as the default documentation standard with
-  full style guides (markdown + mermaid), 24 diagram type references, and 9
-  document templates.
+description: Writes scientific Markdown documentation and Mermaid diagrams for
+  workflows, relationships, timelines, and schemas. Provides syntax references,
+  document templates, accessibility guidance, and version-aware rendering
+  checks. Use when a user requests Markdown, Mermaid, or a text-based structural
+  diagram; quantitative scientific figures require suitable plotting tools.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -47,224 +47,230 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-assets-examples-example-research-report.md
     path: assets/examples/example-research-report.md
-    content_hash: 05a9e64bf13415f2b4e49c46c02ce48869a4a4e4922d64b752b0cbc79fbbf6e0
-    license: MIT
+    content_hash: af5844d2f8b2972d96ad85218b479367b1fa99cd718bd23be6027266079ec7de
+    license: Apache-2.0
+  - knowledge_id: sas-references-current-rendering.md
+    path: references/current-rendering.md
+    content_hash: 03b96222d08fffb254a1828f301af4ce8ebe099c9bc380ab21ad59888e0d3d51
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-architecture.md
     path: references/diagrams/architecture.md
-    content_hash: a0ce8122c68ab040abedbd072315d86528bfbbf4167506c9449e672943b46bd5
-    license: MIT
+    content_hash: b246d31c1b99d41a795d7df1c451b77f8bd1cf584561471bc3cd8874b3199376
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-block.md
     path: references/diagrams/block.md
-    content_hash: 37db54de9c926ae1b2ead4ec5c0641119d452b4ae09868df59fdfce71b244f63
-    license: MIT
+    content_hash: 02b2a095b4c8c6845c1fd9d3a3ca917113746517dcd224107f6c9c6bede8221c
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-c4.md
     path: references/diagrams/c4.md
-    content_hash: 68e7f4b491cfee954f3d7228a67c78c34cb9171448d5e487fb4fed2e5e05078c
-    license: MIT
+    content_hash: 2f815d518f8715fa2968566c88edd146f760f33db3299704ff15614ec50df2d5
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-class.md
     path: references/diagrams/class.md
-    content_hash: 1700e36fe29e5aa687cc36b091126b86bc561688befa7f9496602a2852af9c66
-    license: MIT
+    content_hash: 496286c007ab15dc5e875ff7e30ca2a2e6b69d8cf46bce4330a3e92eb9810c8b
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-complex-examples.md
     path: references/diagrams/complex_examples.md
-    content_hash: d58319e3a4e8c9518dd477841b8d56b04fea37db5bce47ee4c3926c10ca55af8
-    license: MIT
+    content_hash: 1eddefc2e1e2717ac813b3488a1355fa9585b496c5d7bc9606121924c73b3c73
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-er.md
     path: references/diagrams/er.md
-    content_hash: 86c581b8a9d6c65a245087ed82472926a5b0682214b771f3bdd59d0042c4e97e
-    license: MIT
+    content_hash: 2086906f3c002837c5508205a81acc93cc2cc6166cea96d62f3836153a71f76e
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-flowchart.md
     path: references/diagrams/flowchart.md
-    content_hash: d450c52f59682f90715c11664715fa3770611434644896fe1b7c88092719a82a
-    license: MIT
+    content_hash: be90231d635aea2645fefd86c108a3a0f819e74929e30afe5b670702265e368e
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-gantt.md
     path: references/diagrams/gantt.md
-    content_hash: b51ef540f6cae178c7d5b76cd9f6bf0229c5a2d6e995df5523cc49d3532a4128
-    license: MIT
+    content_hash: c05da4e62a02f4ae4d01995a0de4272cc04f7609408d9ecc08345b1ff6e65914
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-git-graph.md
     path: references/diagrams/git_graph.md
-    content_hash: b93d7f713867f1c30fa879378e2624c047c324947ba0e0e739ad0dc0ff663ae0
-    license: MIT
+    content_hash: 5992286cc0ac0b16020ef71fccb074eeb9b5c70d874fc08ef1b07672f550645e
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-kanban.md
     path: references/diagrams/kanban.md
-    content_hash: b682c5f71713c7655ee992f895597ad1f6e9723efc2a62af1f2ce5e7b97cf886
-    license: MIT
+    content_hash: acd582211a09ba799445a0d1fc7fb710149cd46ea71e4f17509ffce7733f142f
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-mindmap.md
     path: references/diagrams/mindmap.md
-    content_hash: 3a6dc95f7fce1e6c0842bb66e44c45a1ee6b9db017d62fc7e57f1b0f394dee8c
-    license: MIT
+    content_hash: 79bbffa9faff776f832a77d7fbe29530b3f3aa45c60e08176e621c39c824dcee
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-packet.md
     path: references/diagrams/packet.md
-    content_hash: 2f456c0514b1ae521711f976b23445ea374cd9a02db0782ad86f1ccf16054e12
-    license: MIT
+    content_hash: 6d17b2b9dcb24d78538b3d14d06a53c51a06d5b7b81a191c1c923d85f90f07d2
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-pie.md
     path: references/diagrams/pie.md
-    content_hash: 94fdb61d0240f7e201538e910329ac1f0bae76e7fa2a4fc3f944d0b33fa99d6a
-    license: MIT
+    content_hash: 5c23d5928eea6cfaf3d6cdd7fc0306403abf8a1d5394dfea2d5f64bc30bc5f99
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-quadrant.md
     path: references/diagrams/quadrant.md
-    content_hash: 861a023803e0d7e753118c5b1127ea33e984e8c48b245f5084239f0c4593dae7
-    license: MIT
+    content_hash: 14977d2d10cd6255afad2f9e6db92f21ece23cf50b0595928877a84125e340c6
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-radar.md
     path: references/diagrams/radar.md
-    content_hash: 2024c1e28e8a2458bec6ca630e1c7f055a70227dcfb2c7861f4c5f8eed31c656
-    license: MIT
+    content_hash: 37bd437a3b99782b3a2adb5cbc7a9d888e99508f25539fbad53aa2ca12a9f03d
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-requirement.md
     path: references/diagrams/requirement.md
-    content_hash: 52b77e05935296d7a50b7056b220762061e4fb32e9ee44e2af5091b864ab2397
-    license: MIT
+    content_hash: 37da70b91532bf1c71925b75c1fe5424cb1637726765f285c7ee059231916941
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-sankey.md
     path: references/diagrams/sankey.md
-    content_hash: 622a103a08da26bf3f194e52e1555513c1769d54806a22cefa6922c2d6add948
-    license: MIT
+    content_hash: 28446f926580846fe9dffd8fc19d08d69aab010793520b2b41045a5e0d5e57e3
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-sequence.md
     path: references/diagrams/sequence.md
-    content_hash: 9457d93250240dd12d97b4d7481d4626f0fb262f1673f8f2d165e7f0321cbd74
-    license: MIT
+    content_hash: 7eb7c9d4822de94a8c2e0fce23cd3c98a4eabfd72969ac1db5b774ba981ac1b0
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-state.md
     path: references/diagrams/state.md
-    content_hash: a735d97bf574bba8cd0eea3beebbe99fad91770161782e28322c9408e0a74508
-    license: MIT
+    content_hash: 6f4932b9e0f8b52eb1e364e54ce79d5051facf0706b8832d2fa1ec61b1c3d4dd
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-timeline.md
     path: references/diagrams/timeline.md
-    content_hash: 920a533f375fae3da53a30ddf7ac5538f36e55e0ead7309ed8aba05d5248e923
-    license: MIT
+    content_hash: 54989d17d5636c8cb4a32cd256f58857d63a78928d2b06a7bc204cd4bdbaca6c
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-treemap.md
     path: references/diagrams/treemap.md
-    content_hash: 45980d28bba78eb7b83dd0b68f54561f3931a5ce26d096bb3f937b041d6244d4
-    license: MIT
+    content_hash: 2a52475aa915d9173ec506c8b71500ea8e6ebea48663c742c2a9b0d0b8c2e56d
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-user-journey.md
     path: references/diagrams/user_journey.md
-    content_hash: 1c99799368a4121f84839a5eb82b75ad60e05ec6cd0f69589e2dece9d4e8aa50
-    license: MIT
+    content_hash: 3e04d3e557732cd90f841e142f43bdb70d255bc9c7b9d148a609014aca56ca0f
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-xy-chart.md
     path: references/diagrams/xy_chart.md
-    content_hash: 4df50afcedd91e0bfbcc851ddde763e4d520d2e015b5b75775b35f5d542db9be
-    license: MIT
+    content_hash: 642910cf5949017f15dfe8ecf46564e0697427072f66eebbcb33d8c0a35232c0
+    license: Apache-2.0
   - knowledge_id: sas-references-diagrams-zenuml.md
     path: references/diagrams/zenuml.md
-    content_hash: 69cfe24fd119eb3223d404dd9c07d58954cabbc70d2b3df3ecffd527f671ff2b
-    license: MIT
+    content_hash: 319efbe76fd336bc4049f20a3139e51f3d4df6be2fcea421b85e4ca8c7e6441a
+    license: Apache-2.0
   - knowledge_id: sas-references-markdown-style-guide.md
     path: references/markdown_style_guide.md
-    content_hash: 8e4f4b49339fbc125df3ce6983c4841f18b31a814a7cf866fa60568a03ed3a12
-    license: MIT
+    content_hash: ecc85928c8ebcb4bbfd46556bb37269061e6f58504dfe3ffbaf29b7788d64248
+    license: Apache-2.0
   - knowledge_id: sas-references-mermaid-style-guide.md
     path: references/mermaid_style_guide.md
-    content_hash: a67987f78f2b39c6acb2980e866a92fecdee8efe1b6297e733dc8e94fec19c3b
-    license: MIT
+    content_hash: 083ce0070bf3d8b4e64d9b946ab6eaec908168f0a3bb77926d720a4f767feaef
+    license: Apache-2.0
   - knowledge_id: sas-templates-decision-record.md
     path: templates/decision_record.md
-    content_hash: 30192e491938d799284bc76dcf7e47600896a1815bd76a55c044bff2f47a2ead
-    license: MIT
+    content_hash: da314705b15a2c4bb9fb6150222f9db5e8229da275481c4acfc9e8c7a0afdbbc
+    license: Apache-2.0
   - knowledge_id: sas-templates-how-to-guide.md
     path: templates/how_to_guide.md
-    content_hash: df0f491db8697c28914187c1375f4957644d055a512c7b6c92fec3abdadb1350
-    license: MIT
+    content_hash: 1363b28cc6edd59f68ca81efe6e8723ad43008283acad23dcda45fa0e8c30848
+    license: Apache-2.0
   - knowledge_id: sas-templates-issue.md
     path: templates/issue.md
-    content_hash: 66a7f0746f599e12208a7009d61f1296d3f9a642e430c9db4cddbe4ec8b53dc8
-    license: MIT
+    content_hash: 3ec84341c5a923f1dc9066e1c346533c7021602a6a8b17252d51dd4f40d0d1ec
+    license: Apache-2.0
   - knowledge_id: sas-templates-kanban.md
     path: templates/kanban.md
-    content_hash: 1d3e0d6f20628459bb73a63263a446d942441ced871bab4279918e2f33b82166
-    license: MIT
+    content_hash: 213df6f39e2ef3e253b98fe6c3688322bb78e88f0f89d9cdbd23933774bc21e2
+    license: Apache-2.0
   - knowledge_id: sas-templates-presentation.md
     path: templates/presentation.md
-    content_hash: 3753856520cf61d787c0ad9db640f0587dcf726df7c67a6bbf46b5c07e1b96a1
-    license: MIT
+    content_hash: 13494ab83e242fd4cb9fb3110d87a4f8aadcc8a4f520cb16acca4d8fdb8875cf
+    license: Apache-2.0
   - knowledge_id: sas-templates-project-documentation.md
     path: templates/project_documentation.md
-    content_hash: 43da7e54717f97d31cec00a5a5576d838ada34fb1fa13563c2eb11820f122a21
-    license: MIT
+    content_hash: 58da34425cabac1b859e8f43916bad215232e60ecefe031a959b729c1549f9df
+    license: Apache-2.0
   - knowledge_id: sas-templates-pull-request.md
     path: templates/pull_request.md
-    content_hash: 737981cb04acde56f9c0402445c9120c75c12270d17c30a3f9a3d95e660d22d1
-    license: MIT
+    content_hash: 18828f680999f39bdb6f7ae7c175af507dbe945363f16962ddd019958751c499
+    license: Apache-2.0
   - knowledge_id: sas-templates-research-paper.md
     path: templates/research_paper.md
-    content_hash: 5fdcf37e2596b7a8e3917f3da3db9caf90fff5301932be68f9fe639f608815ca
-    license: MIT
+    content_hash: c795783bfde5fa07ccb29159ff5129d5ea0888d827cfa50548a9101e8c177c29
+    license: Apache-2.0
   - knowledge_id: sas-templates-status-report.md
     path: templates/status_report.md
-    content_hash: 090b5af7d41a417a365e44f4cb61f6d6e903e75d3daf8ea36edd9f67ee04d5a2
-    license: MIT
+    content_hash: 2cdf785affe8831d2fa1cb6e87cf33afbb5c3cb056575aa5ecb2b8b6bfbe3152
+    license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/SKILL.md
-      sha256: b0eb3148d53e8814c6907acb7eda43ffae3ada71e741ab2ee111cc82bbfa7f8c
+      sha256: b247612318d7485b268febac7909a18ca6b6dfb044672d96c0b0379652ebfed5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/assets/examples/example-research-report.md
-      sha256: 05a9e64bf13415f2b4e49c46c02ce48869a4a4e4922d64b752b0cbc79fbbf6e0
+      sha256: af5844d2f8b2972d96ad85218b479367b1fa99cd718bd23be6027266079ec7de
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/current-rendering.md
+      sha256: 03b96222d08fffb254a1828f301af4ce8ebe099c9bc380ab21ad59888e0d3d51
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/architecture.md
-      sha256: a0ce8122c68ab040abedbd072315d86528bfbbf4167506c9449e672943b46bd5
+      sha256: b246d31c1b99d41a795d7df1c451b77f8bd1cf584561471bc3cd8874b3199376
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/block.md
-      sha256: 37db54de9c926ae1b2ead4ec5c0641119d452b4ae09868df59fdfce71b244f63
+      sha256: 02b2a095b4c8c6845c1fd9d3a3ca917113746517dcd224107f6c9c6bede8221c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/c4.md
-      sha256: 68e7f4b491cfee954f3d7228a67c78c34cb9171448d5e487fb4fed2e5e05078c
+      sha256: 2f815d518f8715fa2968566c88edd146f760f33db3299704ff15614ec50df2d5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/class.md
-      sha256: 1700e36fe29e5aa687cc36b091126b86bc561688befa7f9496602a2852af9c66
+      sha256: 496286c007ab15dc5e875ff7e30ca2a2e6b69d8cf46bce4330a3e92eb9810c8b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/complex_examples.md
-      sha256: d58319e3a4e8c9518dd477841b8d56b04fea37db5bce47ee4c3926c10ca55af8
+      sha256: 1eddefc2e1e2717ac813b3488a1355fa9585b496c5d7bc9606121924c73b3c73
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/er.md
-      sha256: 86c581b8a9d6c65a245087ed82472926a5b0682214b771f3bdd59d0042c4e97e
+      sha256: 2086906f3c002837c5508205a81acc93cc2cc6166cea96d62f3836153a71f76e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/flowchart.md
-      sha256: d450c52f59682f90715c11664715fa3770611434644896fe1b7c88092719a82a
+      sha256: be90231d635aea2645fefd86c108a3a0f819e74929e30afe5b670702265e368e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/gantt.md
-      sha256: b51ef540f6cae178c7d5b76cd9f6bf0229c5a2d6e995df5523cc49d3532a4128
+      sha256: c05da4e62a02f4ae4d01995a0de4272cc04f7609408d9ecc08345b1ff6e65914
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/git_graph.md
-      sha256: b93d7f713867f1c30fa879378e2624c047c324947ba0e0e739ad0dc0ff663ae0
+      sha256: 5992286cc0ac0b16020ef71fccb074eeb9b5c70d874fc08ef1b07672f550645e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/kanban.md
-      sha256: b682c5f71713c7655ee992f895597ad1f6e9723efc2a62af1f2ce5e7b97cf886
+      sha256: acd582211a09ba799445a0d1fc7fb710149cd46ea71e4f17509ffce7733f142f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/mindmap.md
-      sha256: 3a6dc95f7fce1e6c0842bb66e44c45a1ee6b9db017d62fc7e57f1b0f394dee8c
+      sha256: 79bbffa9faff776f832a77d7fbe29530b3f3aa45c60e08176e621c39c824dcee
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/packet.md
-      sha256: 2f456c0514b1ae521711f976b23445ea374cd9a02db0782ad86f1ccf16054e12
+      sha256: 6d17b2b9dcb24d78538b3d14d06a53c51a06d5b7b81a191c1c923d85f90f07d2
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/pie.md
-      sha256: 94fdb61d0240f7e201538e910329ac1f0bae76e7fa2a4fc3f944d0b33fa99d6a
+      sha256: 5c23d5928eea6cfaf3d6cdd7fc0306403abf8a1d5394dfea2d5f64bc30bc5f99
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/quadrant.md
-      sha256: 861a023803e0d7e753118c5b1127ea33e984e8c48b245f5084239f0c4593dae7
+      sha256: 14977d2d10cd6255afad2f9e6db92f21ece23cf50b0595928877a84125e340c6
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/radar.md
-      sha256: 2024c1e28e8a2458bec6ca630e1c7f055a70227dcfb2c7861f4c5f8eed31c656
+      sha256: 37bd437a3b99782b3a2adb5cbc7a9d888e99508f25539fbad53aa2ca12a9f03d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/requirement.md
-      sha256: 52b77e05935296d7a50b7056b220762061e4fb32e9ee44e2af5091b864ab2397
+      sha256: 37da70b91532bf1c71925b75c1fe5424cb1637726765f285c7ee059231916941
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/sankey.md
-      sha256: 622a103a08da26bf3f194e52e1555513c1769d54806a22cefa6922c2d6add948
+      sha256: 28446f926580846fe9dffd8fc19d08d69aab010793520b2b41045a5e0d5e57e3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/sequence.md
-      sha256: 9457d93250240dd12d97b4d7481d4626f0fb262f1673f8f2d165e7f0321cbd74
+      sha256: 7eb7c9d4822de94a8c2e0fce23cd3c98a4eabfd72969ac1db5b774ba981ac1b0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/state.md
-      sha256: a735d97bf574bba8cd0eea3beebbe99fad91770161782e28322c9408e0a74508
+      sha256: 6f4932b9e0f8b52eb1e364e54ce79d5051facf0706b8832d2fa1ec61b1c3d4dd
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/timeline.md
-      sha256: 920a533f375fae3da53a30ddf7ac5538f36e55e0ead7309ed8aba05d5248e923
+      sha256: 54989d17d5636c8cb4a32cd256f58857d63a78928d2b06a7bc204cd4bdbaca6c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/treemap.md
-      sha256: 45980d28bba78eb7b83dd0b68f54561f3931a5ce26d096bb3f937b041d6244d4
+      sha256: 2a52475aa915d9173ec506c8b71500ea8e6ebea48663c742c2a9b0d0b8c2e56d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/user_journey.md
-      sha256: 1c99799368a4121f84839a5eb82b75ad60e05ec6cd0f69589e2dece9d4e8aa50
+      sha256: 3e04d3e557732cd90f841e142f43bdb70d255bc9c7b9d148a609014aca56ca0f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/xy_chart.md
-      sha256: 4df50afcedd91e0bfbcc851ddde763e4d520d2e015b5b75775b35f5d542db9be
+      sha256: 642910cf5949017f15dfe8ecf46564e0697427072f66eebbcb33d8c0a35232c0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/zenuml.md
-      sha256: 69cfe24fd119eb3223d404dd9c07d58954cabbc70d2b3df3ecffd527f671ff2b
+      sha256: 319efbe76fd336bc4049f20a3139e51f3d4df6be2fcea421b85e4ca8c7e6441a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/markdown_style_guide.md
-      sha256: 8e4f4b49339fbc125df3ce6983c4841f18b31a814a7cf866fa60568a03ed3a12
+      sha256: ecc85928c8ebcb4bbfd46556bb37269061e6f58504dfe3ffbaf29b7788d64248
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/mermaid_style_guide.md
-      sha256: a67987f78f2b39c6acb2980e866a92fecdee8efe1b6297e733dc8e94fec19c3b
+      sha256: 083ce0070bf3d8b4e64d9b946ab6eaec908168f0a3bb77926d720a4f767feaef
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/decision_record.md
-      sha256: 30192e491938d799284bc76dcf7e47600896a1815bd76a55c044bff2f47a2ead
+      sha256: da314705b15a2c4bb9fb6150222f9db5e8229da275481c4acfc9e8c7a0afdbbc
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/how_to_guide.md
-      sha256: df0f491db8697c28914187c1375f4957644d055a512c7b6c92fec3abdadb1350
+      sha256: 1363b28cc6edd59f68ca81efe6e8723ad43008283acad23dcda45fa0e8c30848
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/issue.md
-      sha256: 66a7f0746f599e12208a7009d61f1296d3f9a642e430c9db4cddbe4ec8b53dc8
+      sha256: 3ec84341c5a923f1dc9066e1c346533c7021602a6a8b17252d51dd4f40d0d1ec
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/kanban.md
-      sha256: 1d3e0d6f20628459bb73a63263a446d942441ced871bab4279918e2f33b82166
+      sha256: 213df6f39e2ef3e253b98fe6c3688322bb78e88f0f89d9cdbd23933774bc21e2
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/presentation.md
-      sha256: 3753856520cf61d787c0ad9db640f0587dcf726df7c67a6bbf46b5c07e1b96a1
+      sha256: 13494ab83e242fd4cb9fb3110d87a4f8aadcc8a4f520cb16acca4d8fdb8875cf
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/project_documentation.md
-      sha256: 43da7e54717f97d31cec00a5a5576d838ada34fb1fa13563c2eb11820f122a21
+      sha256: 58da34425cabac1b859e8f43916bad215232e60ecefe031a959b729c1549f9df
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/pull_request.md
-      sha256: 737981cb04acde56f9c0402445c9120c75c12270d17c30a3f9a3d95e660d22d1
+      sha256: 18828f680999f39bdb6f7ae7c175af507dbe945363f16962ddd019958751c499
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/research_paper.md
-      sha256: 5fdcf37e2596b7a8e3917f3da3db9caf90fff5301932be68f9fe639f608815ca
+      sha256: c795783bfde5fa07ccb29159ff5129d5ea0888d827cfa50548a9101e8c177c29
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/templates/status_report.md
-      sha256: 090b5af7d41a417a365e44f4cb61f6d6e903e75d3daf8ea36edd9f67ee04d5a2
-license: MIT
+      sha256: 2cdf785affe8831d2fa1cb6e87cf33afbb5c3cb056575aa5ecb2b8b6bfbe3152
+license: Apache-2.0

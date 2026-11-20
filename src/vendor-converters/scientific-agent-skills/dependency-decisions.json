@@ -2,6 +2,17 @@
   "schema_version": "1",
   "decisions": [
     {
+      "from": "alphagenome",
+      "to": "genomic-coordinates",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/alphagenome/SKILL.md"
+      ],
+      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
+    },
+    {
       "from": "bulk-rnaseq",
       "to": "nextflow",
       "relation": "required",
@@ -44,6 +55,17 @@
         "skills/bulk-rnaseq/SKILL.md"
       ],
       "note": "The source Skill is excluded, so the relationship cannot affect installation."
+    },
+    {
+      "from": "folklore-variant-evidence",
+      "to": "genomic-coordinates",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "source-excluded",
+      "evidence": [
+        "skills/folklore-variant-evidence/SKILL.md"
+      ],
+      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
     },
     {
       "from": "literature-review",
@@ -145,6 +167,28 @@
       "note": "The source Skill is excluded, so the relationship cannot affect installation."
     },
     {
+      "from": "relsa-severity-assessment",
+      "to": "statistical-analysis",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "advisory",
+      "evidence": [
+        "skills/relsa-severity-assessment/SKILL.md"
+      ],
+      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
+    },
+    {
+      "from": "relsa-severity-assessment",
+      "to": "experimental-design",
+      "relation": "related",
+      "resolved_target": null,
+      "disposition": "advisory",
+      "evidence": [
+        "skills/relsa-severity-assessment/SKILL.md"
+      ],
+      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
+    },
+    {
       "from": "research-lookup",
       "to": "parallel-web",
       "relation": "required",
@@ -179,17 +223,6 @@
     },
     {
       "from": "scientific-slides",
-      "to": "pptx",
-      "relation": "related",
-      "resolved_target": null,
-      "disposition": "advisory",
-      "evidence": [
-        "skills/scientific-slides/SKILL.md"
-      ],
-      "note": "The source is admitted, but this non-required relation targets an excluded Skill and remains advisory only."
-    },
-    {
-      "from": "scientific-slides",
       "to": "research-lookup",
       "relation": "related",
       "resolved_target": null,
@@ -203,7 +236,7 @@
       "from": "scientific-slides",
       "to": "scientific-schematics",
       "relation": "related",
-      "resolved_target": "scientific-agent-skills-scientific-schematics",
+      "resolved_target": null,
       "disposition": "advisory",
       "evidence": [
         "skills/scientific-slides/SKILL.md"
@@ -242,50 +275,6 @@
         "skills/scientific-writing/SKILL.md"
       ],
       "note": "The source Skill is excluded, so the relationship cannot affect installation."
-    },
-    {
-      "from": "alphagenome",
-      "to": "genomic-coordinates",
-      "relation": "related",
-      "resolved_target": null,
-      "disposition": "source-excluded",
-      "evidence": [
-        "skills/alphagenome/SKILL.md"
-      ],
-      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
-    },
-    {
-      "from": "folklore-variant-evidence",
-      "to": "genomic-coordinates",
-      "relation": "related",
-      "resolved_target": null,
-      "disposition": "source-excluded",
-      "evidence": [
-        "skills/folklore-variant-evidence/SKILL.md"
-      ],
-      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
-    },
-    {
-      "from": "relsa-severity-assessment",
-      "to": "statistical-analysis",
-      "relation": "related",
-      "resolved_target": null,
-      "disposition": "advisory",
-      "evidence": [
-        "skills/relsa-severity-assessment/SKILL.md"
-      ],
-      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
-    },
-    {
-      "from": "relsa-severity-assessment",
-      "to": "experimental-design",
-      "relation": "related",
-      "resolved_target": null,
-      "disposition": "advisory",
-      "evidence": [
-        "skills/relsa-severity-assessment/SKILL.md"
-      ],
-      "note": "Reviewed sibling reference does not authorize installation or workflow routing."
     },
     {
       "from": "uncertainty-and-units",

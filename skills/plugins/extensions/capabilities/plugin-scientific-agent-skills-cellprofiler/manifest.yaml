@@ -1,0 +1,71 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-cellprofiler
+title: CellProfiler quantitative microscopy
+description: Runs reproducible CellProfiler microscopy pipelines for nuclear
+  segmentation, cell counts, and per-object fluorescence measurements. Supports
+  image/channel manifests, headless batch execution, segmentation overlays, and
+  measurement QC for 2D fluorescence assays.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-nuclei.cppipe
+    path: assets/nuclei.cppipe
+    content_hash: 9e1564f79d5a54171aad28d366ef17b88f2003dfceded1055cac521743bdb568
+    license: MIT
+  - knowledge_id: sas-references-runtime-and-qc.md
+    path: references/runtime-and-qc.md
+    content_hash: 960863799dd94485ce6105271854db899d3b1fd309c2923d3a21076fc21384b1
+    license: MIT
+  - knowledge_id: sas-scripts-nuclei-assay.py
+    path: scripts/nuclei_assay.py
+    content_hash: 2578f242515eec87a3d78926e33d2f0763094a834e3733353a92878cc5a83037
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cellprofiler/SKILL.md
+      sha256: f32b50002b86483f9de8e6f318b5f445315565f4b71e0c1972165d77499b9add
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cellprofiler/assets/nuclei.cppipe
+      sha256: 9e1564f79d5a54171aad28d366ef17b88f2003dfceded1055cac521743bdb568
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cellprofiler/references/runtime-and-qc.md
+      sha256: 960863799dd94485ce6105271854db899d3b1fd309c2923d3a21076fc21384b1
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cellprofiler/scripts/nuclei_assay.py
+      sha256: 2578f242515eec87a3d78926e33d2f0763094a834e3733353a92878cc5a83037
+license: MIT

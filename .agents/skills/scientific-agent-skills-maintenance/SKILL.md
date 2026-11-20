@@ -18,8 +18,8 @@ description: Maintain the Scientific Agent Skills plugin extension absorption pa
 
 ## 输入与前置条件
 
-- 已 pin 的 `vendor/scientific-agent-skills` 子模块（当前锚点：`v2.70.0` @
-  `d0c48af8c7b7a71ccc81fcd04c9db53b48439f9b`）。
+- 已 pin 的 `vendor/scientific-agent-skills` 子模块。当前 release、revision 和审计路径以
+  `audits/scientific-agent-skills/catalog.json` 为准。
 - 项目依赖安装完成（`pnpm install`）。
 - 子模块必须处于预期 commit 且无脏文件。
 - 生成链路可用：`pnpm check`、`pnpm lint`、`pnpm test`。
@@ -52,7 +52,7 @@ description: Maintain the Scientific Agent Skills plugin extension absorption pa
 
 ## 锚点命名
 
-`<release>-<short_revision>`，例如 `v2.70.0`。目录：
+使用发布标签作为锚点 ID，完整提交由 catalog 和 manifest 固定。目录结构：
 
 ```
 audits/scientific-agent-skills/<anchor>/
@@ -71,8 +71,8 @@ audits/scientific-agent-skills/<anchor>/
 1. 记录上游身份：
    - `git -C vendor/scientific-agent-skills describe --tags --always`
    - `git -C vendor/scientific-agent-skills rev-parse HEAD`
-   - 上游安全观察来自 `docs/security-report.json`（2026-09-28，覆盖 166/167，缺
-     `fictiv`，共 674 条 finding）；它只是观察来源，不是生产决策。
+   - 从固定提交的 `docs/security-report.json` 记录报告日期、实际扫描和复用数量、缺失条目与发现数。
+     对变更或未扫描的范围检查实际文件，生产准入以本地审查和维护者决定为准。
 2. 确定分析范围：
    - 首锚点：`skill-audit.json` 的全部上游 Skills、reviewed admitted Skills、manual-security 目录与 admission/依赖决策（数量以 catalog 为准）。
    - 增量：`git -C vendor/scientific-agent-skills diff <old>..<new> --stat`，单独检查 vendor-bundle `SKILL.md`、reviewed 资源文件
@@ -89,6 +89,7 @@ audits/scientific-agent-skills/<anchor>/
 1. 只改受影响的 extension artifact：
    - 全部 reviewed 资源必须从 `skills/plugins/vendors/scientific-agent-skills/<raw-skill>/` 按原相对路径逐字节复制。
    - 未受影响 package 一个字节都不能改。
+   - 保留上一版 catalog 的扩展资源清单直到生成结束，让生成器清理已退役的登记路径。
 2. 运行 `node scripts/scientific-agent-skills-maintenance.mjs artifacts <anchor>`：
    - 重新生成全部 reviewed package 并验证全部资源 byte-identical。
    - 生成 `artifacts/extension-review.json`。

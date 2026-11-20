@@ -1,11 +1,12 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-seaborn
 title: Seaborn Statistical Visualization
-description: Statistical visualization with pandas integration. Use for quick
-  exploration of distributions, relationships, and categorical comparisons with
-  attractive defaults. Best for box plots, violin plots, pair plots, heatmaps.
-  Built on matplotlib. For interactive plots use plotly; for publication styling
-  use scientific-visualization.
+description: Creates Seaborn statistical visualizations with pandas integration
+  for distributions, relationships, categorical comparisons, regression
+  displays, pair plots, and heatmaps. Supports function and objects interfaces
+  with explicit aggregation, uncertainty, and missing-data handling. Best suited
+  to static exploratory plots; plotly covers interactive figures and
+  scientific-visualization covers publication styling.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -47,50 +48,50 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-examples.md
     path: references/examples.md
-    content_hash: 0bf1279af53b7464824853696fa8e06c1904538eafaf1b9a1b1afc874de5d78b
-    license: MIT
+    content_hash: 9ac123a232f3aca67a71e0d8132e2b9bd60ba0adcd8871e0368aea9dfc494577
+    license: BSD-3-Clause
   - knowledge_id: sas-references-function-reference.md
     path: references/function_reference.md
-    content_hash: d6e3098f0e2eee13c4b863b96f530b8937d4477d1d0c6b3cc3e2973d27deca64
-    license: MIT
+    content_hash: 0b667b9154898ce9d6096cd6bc7af72ca9e50f8f55a7dbcc4d0c03a3f05ff08a
+    license: BSD-3-Clause
   - knowledge_id: sas-references-grids-and-levels.md
     path: references/grids_and_levels.md
-    content_hash: 2382a4504df55446ead1d8ba3495b1c4bbb010fa1ebafe5f7ee513a648332941
-    license: MIT
+    content_hash: 03831ff54cc1885934c9bb51223fded6f6ff282f23c56653b35641c8c073f27a
+    license: BSD-3-Clause
   - knowledge_id: sas-references-objects-interface.md
     path: references/objects_interface.md
-    content_hash: ab5e4c8ae7309f7842ba5b9dcb7e1a098d64db45ae456c3a41b769f7467a1a5b
-    license: MIT
+    content_hash: c3ddb1b2f97d77d9c70c1f079c99b9355b3d8c18874912522032be14d653ea17
+    license: BSD-3-Clause
   - knowledge_id: sas-references-palettes-and-theming.md
     path: references/palettes_and_theming.md
-    content_hash: a9e8fbd48256dae8226fee94b215c0e0cde766790cc4e12cb5dfbe9fb208052c
-    license: MIT
+    content_hash: d7b8767e1533c5753d2b8792bcc2edff21c28f116f6e05bb200a2b3b1a0799c5
+    license: BSD-3-Clause
   - knowledge_id: sas-references-patterns-and-troubleshooting.md
     path: references/patterns_and_troubleshooting.md
-    content_hash: 7c4d2971bdcd6daa40461f145a0c7ef9f11264e20220a8544bab176cae48cfb7
-    license: MIT
+    content_hash: 65c6afdc6551f8ec240a8b3316f2f4739a4734b59267b9c3f486ad6428458cac
+    license: BSD-3-Clause
   - knowledge_id: sas-references-plotting-functions.md
     path: references/plotting_functions.md
-    content_hash: a5177194463865a3bb92568cf66f663cf3692bc891715464defe8275a9b77480
-    license: MIT
+    content_hash: 9a3e88895a33a2d9329b365987491981a695226fb9ed97ccb91f334d28c56385
+    license: BSD-3-Clause
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/SKILL.md
-      sha256: c5b9d9f131f0f790df182377fa70202611f6932ee98ba496720bb8225a62f9ce
+      sha256: b5f2afb09abb04810e7766032d7d15e5a79a8909b4a91f124ce76d37a79f8895
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/examples.md
-      sha256: 0bf1279af53b7464824853696fa8e06c1904538eafaf1b9a1b1afc874de5d78b
+      sha256: 9ac123a232f3aca67a71e0d8132e2b9bd60ba0adcd8871e0368aea9dfc494577
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/function_reference.md
-      sha256: d6e3098f0e2eee13c4b863b96f530b8937d4477d1d0c6b3cc3e2973d27deca64
+      sha256: 0b667b9154898ce9d6096cd6bc7af72ca9e50f8f55a7dbcc4d0c03a3f05ff08a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/grids_and_levels.md
-      sha256: 2382a4504df55446ead1d8ba3495b1c4bbb010fa1ebafe5f7ee513a648332941
+      sha256: 03831ff54cc1885934c9bb51223fded6f6ff282f23c56653b35641c8c073f27a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/objects_interface.md
-      sha256: ab5e4c8ae7309f7842ba5b9dcb7e1a098d64db45ae456c3a41b769f7467a1a5b
+      sha256: c3ddb1b2f97d77d9c70c1f079c99b9355b3d8c18874912522032be14d653ea17
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/palettes_and_theming.md
-      sha256: a9e8fbd48256dae8226fee94b215c0e0cde766790cc4e12cb5dfbe9fb208052c
+      sha256: d7b8767e1533c5753d2b8792bcc2edff21c28f116f6e05bb200a2b3b1a0799c5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/patterns_and_troubleshooting.md
-      sha256: 7c4d2971bdcd6daa40461f145a0c7ef9f11264e20220a8544bab176cae48cfb7
+      sha256: 65c6afdc6551f8ec240a8b3316f2f4739a4734b59267b9c3f486ad6428458cac
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-seaborn/references/plotting_functions.md
-      sha256: a5177194463865a3bb92568cf66f663cf3692bc891715464defe8275a9b77480
-license: MIT
+      sha256: 9a3e88895a33a2d9329b365987491981a695226fb9ed97ccb91f334d28c56385
+license: BSD-3-Clause

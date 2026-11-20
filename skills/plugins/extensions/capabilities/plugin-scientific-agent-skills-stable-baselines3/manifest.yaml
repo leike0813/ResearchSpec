@@ -1,12 +1,11 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-stable-baselines3
 title: Stable Baselines3
-description: Production-ready reinforcement learning algorithms (PPO, SAC, DQN,
-  TD3, DDPG, A2C) with scikit-learn-like API. Use for standard RL experiments,
-  quick prototyping, and well-documented algorithm implementations. Best for
-  single-agent RL with Gymnasium environments. For high-performance parallel
-  training, multi-agent systems, or custom vectorized environments, use
-  pufferlib instead.
+description: Trains and evaluates single-agent reinforcement learning with
+  Stable Baselines3 (PPO, SAC, DQN, TD3, DDPG, A2C), Gymnasium custom
+  environments, vectorized rollouts, callbacks, and checkpoint normalization.
+  Applies to reproducible RL experiments, continuous control, discrete actions,
+  and SB3-Contrib recurrent or masked policies.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -48,50 +47,50 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-algorithms.md
     path: references/algorithms.md
-    content_hash: 364effdb558ed7104dcf94b7c4407ca1c34e6b3d7bc36e2b0ea0591f09e73cae
+    content_hash: e576c5d4dbdb28177291f8e52f15fe038a2950ab783a80f1e9f4249b6fc1f9f7
     license: MIT
   - knowledge_id: sas-references-callbacks.md
     path: references/callbacks.md
-    content_hash: 23aa3dd756ca40740e597bece1fd13306c59b6b3ea53440d6f010a20d821ce3b
+    content_hash: 33b2111f4fad75cb125ec21dbc41ede137fa32c324efdf988dc065aac547e4ee
     license: MIT
   - knowledge_id: sas-references-custom-environments.md
     path: references/custom_environments.md
-    content_hash: 24a30a48fbdbaf7cf226fcd0916bf4ae8c3ec25d1fbeb500c13ccfb78fb5325c
+    content_hash: 0ceef4d36ec142d29ee8311a98ac99faa9904de3c382c22d3de8031ac6e8590f
     license: MIT
   - knowledge_id: sas-references-vectorized-envs.md
     path: references/vectorized_envs.md
-    content_hash: fdcef73236c429e5297898b00403f7eb13069c8d017fdcca1ce0e066d8a90a3c
+    content_hash: 5a5e81fe25f3ed14a9f28eae82d9fbf604f548f6943bc5c61ad61135afeae0c3
     license: MIT
   - knowledge_id: sas-scripts-custom-env-template.py
     path: scripts/custom_env_template.py
-    content_hash: 10d4d2f55fef72b091d65faa409746484fa8ef9472578c6f96de551f2b37512d
+    content_hash: 1dae2d6aca61541bfd994b1b3375c3f70bb6b6418d3eedbb6f5b60eb3f97c6b7
     license: MIT
   - knowledge_id: sas-scripts-evaluate-agent.py
     path: scripts/evaluate_agent.py
-    content_hash: 16024c0322e4c70b82dae620fa7481da08a1ea6e10fd36ec203c2c32fa0da464
+    content_hash: 47bd2d49165946abcbeccdcce1790945528174de64c01009bb9064f792fc7484
     license: MIT
   - knowledge_id: sas-scripts-train-rl-agent.py
     path: scripts/train_rl_agent.py
-    content_hash: a233523c6ee778c8931bdf3ae093f1ee8865db63be40f3365328e0e6ec024892
+    content_hash: 349b8f98669424884c2210bba34185f4dfa51f1b8f96451e973c91e938ba16af
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/SKILL.md
-      sha256: e74718967941a91a940098497b47e93de7cf6c5ff8a59dfcf8648ce248b98c69
+      sha256: db976dddfe3a0f5be8af7f7a1b80940793fbfaeafe57e1691352fc569ab5777e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/references/algorithms.md
-      sha256: 364effdb558ed7104dcf94b7c4407ca1c34e6b3d7bc36e2b0ea0591f09e73cae
+      sha256: e576c5d4dbdb28177291f8e52f15fe038a2950ab783a80f1e9f4249b6fc1f9f7
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/references/callbacks.md
-      sha256: 23aa3dd756ca40740e597bece1fd13306c59b6b3ea53440d6f010a20d821ce3b
+      sha256: 33b2111f4fad75cb125ec21dbc41ede137fa32c324efdf988dc065aac547e4ee
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/references/custom_environments.md
-      sha256: 24a30a48fbdbaf7cf226fcd0916bf4ae8c3ec25d1fbeb500c13ccfb78fb5325c
+      sha256: 0ceef4d36ec142d29ee8311a98ac99faa9904de3c382c22d3de8031ac6e8590f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/references/vectorized_envs.md
-      sha256: fdcef73236c429e5297898b00403f7eb13069c8d017fdcca1ce0e066d8a90a3c
+      sha256: 5a5e81fe25f3ed14a9f28eae82d9fbf604f548f6943bc5c61ad61135afeae0c3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/scripts/custom_env_template.py
-      sha256: 10d4d2f55fef72b091d65faa409746484fa8ef9472578c6f96de551f2b37512d
+      sha256: 1dae2d6aca61541bfd994b1b3375c3f70bb6b6418d3eedbb6f5b60eb3f97c6b7
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/scripts/evaluate_agent.py
-      sha256: 16024c0322e4c70b82dae620fa7481da08a1ea6e10fd36ec203c2c32fa0da464
+      sha256: 47bd2d49165946abcbeccdcce1790945528174de64c01009bb9064f792fc7484
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-stable-baselines3/scripts/train_rl_agent.py
-      sha256: a233523c6ee778c8931bdf3ae093f1ee8865db63be40f3365328e0e6ec024892
+      sha256: 349b8f98669424884c2210bba34185f4dfa51f1b8f96451e973c91e938ba16af
 license: MIT

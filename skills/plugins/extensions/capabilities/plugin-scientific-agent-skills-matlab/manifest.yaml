@@ -1,9 +1,9 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-matlab
 title: MATLAB and GNU Octave
-description: Build, review, migrate, and safely plan MATLAB or GNU Octave
-  numerical workflows, including arrays, tabular/time data, tests, projects,
-  graphics, MAT files, and explicit Python interoperability.
+description: Builds, reviews, migrates, and plans MATLAB or GNU Octave numerical
+  workflows. Use for arrays, tabular/time data, tests, projects, graphics, MAT
+  files, and explicit Python interoperability.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -49,7 +49,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-assets-python-compatibility-r2026a.json
     path: assets/python_compatibility_r2026a.json
-    content_hash: 082306fc3a5365d25a1a16bb26ed7bea2c96d064924e0845446379489525e631
+    content_hash: 38ece6da5c000727cbe04b8a7412a99c140699e72393dc2f93d7394b1c6c03ed
     license: MIT
   - knowledge_id: sas-assets-reproducibility-manifest-template.json
     path: assets/reproducibility_manifest_template.json
@@ -57,39 +57,39 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-references-data-import-export.md
     path: references/data-import-export.md
-    content_hash: f5fceb633545564c9793ee217d9cd4ec0eb904ccd87c8b1ebf1c12ca6c363b42
+    content_hash: bd1dc1deb4b717bd6dc079653faf63a84c49d4239adff36ddc2910ef7b4d5f88
     license: MIT
   - knowledge_id: sas-references-executing-scripts.md
     path: references/executing-scripts.md
-    content_hash: 425cfa7b73b57467dba8a7891852bcacb85cf062ab858d7458b7ec8f21da4537
+    content_hash: 5172a95879d65c04631e6f4eb0a619c70c01ddfb76639e3b72311f08aa953019
     license: MIT
   - knowledge_id: sas-references-graphics-visualization.md
     path: references/graphics-visualization.md
-    content_hash: 29e02d319b67bce4236288c9721a52f7e63be5aa1c2110a02056da98bd243262
+    content_hash: 0ea6b945ee31fcdc09168430c9aae28c00ee63b79a12800a70a7aabfd3799c33
     license: MIT
   - knowledge_id: sas-references-mathematics.md
     path: references/mathematics.md
-    content_hash: a4a8c058fc1730d4d0232c18e939204f6402b8b81b8bbb9a2e1cbb249a86fa9a
+    content_hash: 04bb40d7dd604fe4fb24dea9686fc93bea658ab36abb24bfaca1c5a599b7b5d1
     license: MIT
   - knowledge_id: sas-references-matrices-arrays.md
     path: references/matrices-arrays.md
-    content_hash: 152839d9c2cea129058fda47e6fefcd4f635b8bc17e9ed0011337cfb7cb95225
+    content_hash: 54a6b56ea63093c01793c0b21c95e9d75316aca1bd476cd90d4b6573f1d5d3c8
     license: MIT
   - knowledge_id: sas-references-octave-compatibility.md
     path: references/octave-compatibility.md
-    content_hash: 99b14f913a25719ada832e0504d87950f015faee82f16de47467ec2ed2d89d96
+    content_hash: d18734d6e33065e7e18805ce95ecca40844a5723b6e618aa65fc973bad587bef
     license: MIT
   - knowledge_id: sas-references-programming.md
     path: references/programming.md
-    content_hash: 0ddc358400ee1234bf854deb7560f0edc613724ba45a36b1b60e4235e9f7a90d
+    content_hash: 51b4df60afee7fd581d3e1b710ab577cc0ae5750ad244b4d09f1db632a0f85b8
     license: MIT
   - knowledge_id: sas-references-python-integration.md
     path: references/python-integration.md
-    content_hash: 3935040ec53ea05005488e57127b79b6ff2e0cb10d934ee58d2c5cb21869a48e
+    content_hash: 558fe145f4a38b4fdfe775b007def8643517aba8bb013ae73f9d972122ba5d5b
     license: MIT
   - knowledge_id: sas-scripts--common.py
     path: scripts/_common.py
-    content_hash: 83b7c1123a582bd6d07dd828c88fa2b7f34c3cb69d0d641e9d4b3a6188fb9277
+    content_hash: efeb57fc631f5fa4bb8235821769858589999c7483fffa14408d1c0a7207ac5c
     license: MIT
   - knowledge_id: sas-scripts-generate-function-scaffold.py
     path: scripts/generate_function_scaffold.py
@@ -97,11 +97,11 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-inventory-mat-file.py
     path: scripts/inventory_mat_file.py
-    content_hash: 9dd9111d7727b847f2c25ef3bcee97bc16c3c75862e0acccc41ca6ea9e02bbe6
+    content_hash: 7eef24b9dff17c2072e41c513f5e3c330246f24ea9d069e430a3cd70f4feefa0
     license: MIT
   - knowledge_id: sas-scripts-plan-batch-command.py
     path: scripts/plan_batch_command.py
-    content_hash: 8134c0ab6a225ac4245a8a0feebce9aa338311d0a159f381ca46c0eb8d71d989
+    content_hash: 2c7ca14933f223f08620d76ad5fa3df834d4c986c267dc444d8dca2fbdf1b739
     license: MIT
   - knowledge_id: sas-scripts-plan-python-compatibility.py
     path: scripts/plan_python_compatibility.py
@@ -124,37 +124,37 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/SKILL.md
-      sha256: c05a9a07eee2cc94c19f369a606b098fa87894da8b1104eb5be2454cd8cd1663
+      sha256: f3c5a19a419402ce07e15f9b55ac220794af8a88a86cb04abd5279b7d0a9d6f5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/assets/project_manifest_template.json
       sha256: 3de6b01b3d463f5d170f19e3fd87d56477bbf65a64f98a7d237f40397026c225
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/assets/python_compatibility_r2026a.json
-      sha256: 082306fc3a5365d25a1a16bb26ed7bea2c96d064924e0845446379489525e631
+      sha256: 38ece6da5c000727cbe04b8a7412a99c140699e72393dc2f93d7394b1c6c03ed
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/assets/reproducibility_manifest_template.json
       sha256: 7f0ad44a30e7d502d92642fa1617e73fc8fb0e252a4de94dd529453f5eac287e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/data-import-export.md
-      sha256: f5fceb633545564c9793ee217d9cd4ec0eb904ccd87c8b1ebf1c12ca6c363b42
+      sha256: bd1dc1deb4b717bd6dc079653faf63a84c49d4239adff36ddc2910ef7b4d5f88
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/executing-scripts.md
-      sha256: 425cfa7b73b57467dba8a7891852bcacb85cf062ab858d7458b7ec8f21da4537
+      sha256: 5172a95879d65c04631e6f4eb0a619c70c01ddfb76639e3b72311f08aa953019
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/graphics-visualization.md
-      sha256: 29e02d319b67bce4236288c9721a52f7e63be5aa1c2110a02056da98bd243262
+      sha256: 0ea6b945ee31fcdc09168430c9aae28c00ee63b79a12800a70a7aabfd3799c33
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/mathematics.md
-      sha256: a4a8c058fc1730d4d0232c18e939204f6402b8b81b8bbb9a2e1cbb249a86fa9a
+      sha256: 04bb40d7dd604fe4fb24dea9686fc93bea658ab36abb24bfaca1c5a599b7b5d1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/matrices-arrays.md
-      sha256: 152839d9c2cea129058fda47e6fefcd4f635b8bc17e9ed0011337cfb7cb95225
+      sha256: 54a6b56ea63093c01793c0b21c95e9d75316aca1bd476cd90d4b6573f1d5d3c8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/octave-compatibility.md
-      sha256: 99b14f913a25719ada832e0504d87950f015faee82f16de47467ec2ed2d89d96
+      sha256: d18734d6e33065e7e18805ce95ecca40844a5723b6e618aa65fc973bad587bef
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/programming.md
-      sha256: 0ddc358400ee1234bf854deb7560f0edc613724ba45a36b1b60e4235e9f7a90d
+      sha256: 51b4df60afee7fd581d3e1b710ab577cc0ae5750ad244b4d09f1db632a0f85b8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/references/python-integration.md
-      sha256: 3935040ec53ea05005488e57127b79b6ff2e0cb10d934ee58d2c5cb21869a48e
+      sha256: 558fe145f4a38b4fdfe775b007def8643517aba8bb013ae73f9d972122ba5d5b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/scripts/_common.py
-      sha256: 83b7c1123a582bd6d07dd828c88fa2b7f34c3cb69d0d641e9d4b3a6188fb9277
+      sha256: efeb57fc631f5fa4bb8235821769858589999c7483fffa14408d1c0a7207ac5c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/scripts/generate_function_scaffold.py
       sha256: cbbe38eff9e4e6ce2695db478d6de45df3736b04c6ba74618434cf853539947f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/scripts/inventory_mat_file.py
-      sha256: 9dd9111d7727b847f2c25ef3bcee97bc16c3c75862e0acccc41ca6ea9e02bbe6
+      sha256: 7eef24b9dff17c2072e41c513f5e3c330246f24ea9d069e430a3cd70f4feefa0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/scripts/plan_batch_command.py
-      sha256: 8134c0ab6a225ac4245a8a0feebce9aa338311d0a159f381ca46c0eb8d71d989
+      sha256: 2c7ca14933f223f08620d76ad5fa3df834d4c986c267dc444d8dca2fbdf1b739
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/scripts/plan_python_compatibility.py
       sha256: 8da20d413fceae86f8f90db1b0925858aead825ce3aafc35bb2baeb7cece1da6
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-matlab/scripts/reproducibility_report.py

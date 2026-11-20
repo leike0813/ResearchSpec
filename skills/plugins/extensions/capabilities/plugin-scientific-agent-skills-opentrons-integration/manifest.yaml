@@ -1,7 +1,7 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-opentrons-integration
 title: Opentrons Integration
-description: Author, review, migrate, simulate, and troubleshoot official
+description: Authors, reviews, migrates, simulates, and troubleshoots official
   Opentrons Python Protocol API v2 protocols for Flex and OT-2 robots. Use for
   robot-specific liquid handling, deck and labware setup, pipettes, modules,
   runtime parameters, liquid classes, and Opentrons App analysis. Use pylabrobot
@@ -47,35 +47,35 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
-    content_hash: e66497611a3dfc45124a1478c7184a22cd0abc26092c8a6d60d4b1569b58cab4
+    content_hash: b9eb6f69448aac21280873001f7d1987025788f73bb094e8d146fa2e84fb717a
     license: MIT
   - knowledge_id: sas-references-liquid-handling.md
     path: references/liquid_handling.md
-    content_hash: 2d9e22a759098e15f295064e7221b34352f279ba1b82123763f0582a6a9e43e9
+    content_hash: 43ecc24ca569f1d838187fe2b429afa5efa8385a0dcdf4efd147f87033ef6390
     license: MIT
   - knowledge_id: sas-references-migration-api-2-19-to-2-29.md
     path: references/migration-api-2-19-to-2-29.md
-    content_hash: 8b46e6026001761f9bba2b53baf76c896832b0b3e7733c95e715482166d9cdac
+    content_hash: e86cb298aa962abfe837ef15d91ff28854814a57b8d56d3eefbee810a0038df0
     license: MIT
   - knowledge_id: sas-references-modules-and-deck.md
     path: references/modules_and_deck.md
-    content_hash: c9d0ff4d34797ac9fa93754d21d9fdbecedc019dcf646c584ff90a1456583848
+    content_hash: 1f591afa878fc53690c30de9a74ad0193b785b46b6160c92c8d22404bdf39c47
     license: MIT
   - knowledge_id: sas-references-protocol-authoring.md
     path: references/protocol_authoring.md
-    content_hash: 0119683c2e2e3e0f4cae417804c85efb393a87d1aea4965629972c48a3940a97
+    content_hash: c4df26ea1df2f6262b5cccab1aba48582cc87c16c8ac7c5462678f2c40aaca7d
     license: MIT
   - knowledge_id: sas-references-sources.md
     path: references/sources.md
-    content_hash: eff3de73abc8550dfce6135aa93d176369c0e9ad2e4bc7204e55732fdc277e8f
+    content_hash: 473c62c41d48f3dd05b23ab74b151828f30c1cb02b33d8dd7953feee62af60d4
     license: MIT
   - knowledge_id: sas-references-validation-and-operations.md
     path: references/validation_and_operations.md
-    content_hash: 1ba740f353a40f679325a183e80fac3ad03e2f4ada9d265d95052d9dca6ed73b
+    content_hash: fd10cf66e300b9f75dd0114e9224aeb211a6672ae057fa0c82654482933e5eb3
     license: MIT
   - knowledge_id: sas-requirements-flex.txt
     path: requirements-flex.txt
-    content_hash: e8973e1786a79b32ffa2a057e936827b16eacecf0f4ea10cfe3c71383ba9c685
+    content_hash: 3662419994f7633377dbcfb12b7c99093ad80159b398a8cd805b44aa0b7dded0
     license: MIT
   - knowledge_id: sas-requirements-ot2.txt
     path: requirements-ot2.txt
@@ -91,42 +91,42 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-ot2-basic-protocol-template.py
     path: scripts/ot2_basic_protocol_template.py
-    content_hash: f5aca40964c325b6c7d2631437d69f908a97e7482f47afa02e13b9c28d0ba6aa
+    content_hash: 9514eb6d4ab0a737cea93a8a0c0b8990c1a9d8fcd7d1f9f8ef250a35d65a126f
     license: MIT
   - knowledge_id: sas-scripts-pcr-setup-template.py
     path: scripts/pcr_setup_template.py
-    content_hash: 9c4d6caf2d14aa295da2347c0b0298b4b44149a5c9a3067a908cc702aeba3ee8
+    content_hash: bd1a6a55cf687a11baea88381b6be028391105917d7c5aa299abe3bf42c645bd
     license: MIT
   - knowledge_id: sas-scripts-runtime-parameters-template.py
     path: scripts/runtime_parameters_template.py
-    content_hash: e2b2f4bd5cd3f18f17505eae08fa5827df982c12df19254dfbcf6f3f3b926dbb
+    content_hash: 0deec847b4f355400a5ed149f42f85bed703932486ee71ee12d18419fd860ae7
     license: MIT
   - knowledge_id: sas-scripts-serial-dilution-template.py
     path: scripts/serial_dilution_template.py
-    content_hash: efa7b66b360cd0e6cb730e49452cb9f000c6d538aeeda64c371ba2bb13b79502
+    content_hash: b86d6a752f3d33f44a7b3b508d6729fa8234774554a037abd9d9fd0737d22586
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/SKILL.md
-      sha256: 929d2af8df4bf9f6fc91c5999a6708d49be8992fb4ea3e12c12ddfdf45a2de2a
+      sha256: 2fd74028cc3d0f6e3fbdc7566127e6c09126aef46f5c9ee55409a2a16cdad92c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/references/api_reference.md
-      sha256: e66497611a3dfc45124a1478c7184a22cd0abc26092c8a6d60d4b1569b58cab4
+      sha256: b9eb6f69448aac21280873001f7d1987025788f73bb094e8d146fa2e84fb717a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/references/liquid_handling.md
-      sha256: 2d9e22a759098e15f295064e7221b34352f279ba1b82123763f0582a6a9e43e9
+      sha256: 43ecc24ca569f1d838187fe2b429afa5efa8385a0dcdf4efd147f87033ef6390
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/references/migration-api-2-19-to-2-29.md
-      sha256: 8b46e6026001761f9bba2b53baf76c896832b0b3e7733c95e715482166d9cdac
+      sha256: e86cb298aa962abfe837ef15d91ff28854814a57b8d56d3eefbee810a0038df0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/references/modules_and_deck.md
-      sha256: c9d0ff4d34797ac9fa93754d21d9fdbecedc019dcf646c584ff90a1456583848
+      sha256: 1f591afa878fc53690c30de9a74ad0193b785b46b6160c92c8d22404bdf39c47
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/references/protocol_authoring.md
-      sha256: 0119683c2e2e3e0f4cae417804c85efb393a87d1aea4965629972c48a3940a97
+      sha256: c4df26ea1df2f6262b5cccab1aba48582cc87c16c8ac7c5462678f2c40aaca7d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/references/sources.md
-      sha256: eff3de73abc8550dfce6135aa93d176369c0e9ad2e4bc7204e55732fdc277e8f
+      sha256: 473c62c41d48f3dd05b23ab74b151828f30c1cb02b33d8dd7953feee62af60d4
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/references/validation_and_operations.md
-      sha256: 1ba740f353a40f679325a183e80fac3ad03e2f4ada9d265d95052d9dca6ed73b
+      sha256: fd10cf66e300b9f75dd0114e9224aeb211a6672ae057fa0c82654482933e5eb3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/requirements-flex.txt
-      sha256: e8973e1786a79b32ffa2a057e936827b16eacecf0f4ea10cfe3c71383ba9c685
+      sha256: 3662419994f7633377dbcfb12b7c99093ad80159b398a8cd805b44aa0b7dded0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/requirements-ot2.txt
       sha256: 95b907a29f0a2307bafb7849429e2e551fd484b846a43681d909c397e1e5d95d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/scripts/absorbance_reader_template.py
@@ -134,11 +134,11 @@ provenance:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/scripts/basic_protocol_template.py
       sha256: f95d2488c28180f3427d426bb7a8b0de80661070328813f2a3dc7af8c44ff5ce
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/scripts/ot2_basic_protocol_template.py
-      sha256: f5aca40964c325b6c7d2631437d69f908a97e7482f47afa02e13b9c28d0ba6aa
+      sha256: 9514eb6d4ab0a737cea93a8a0c0b8990c1a9d8fcd7d1f9f8ef250a35d65a126f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/scripts/pcr_setup_template.py
-      sha256: 9c4d6caf2d14aa295da2347c0b0298b4b44149a5c9a3067a908cc702aeba3ee8
+      sha256: bd1a6a55cf687a11baea88381b6be028391105917d7c5aa299abe3bf42c645bd
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/scripts/runtime_parameters_template.py
-      sha256: e2b2f4bd5cd3f18f17505eae08fa5827df982c12df19254dfbcf6f3f3b926dbb
+      sha256: 0deec847b4f355400a5ed149f42f85bed703932486ee71ee12d18419fd860ae7
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-opentrons-integration/scripts/serial_dilution_template.py
-      sha256: efa7b66b360cd0e6cb730e49452cb9f000c6d538aeeda64c371ba2bb13b79502
+      sha256: b86d6a752f3d33f44a7b3b508d6729fa8234774554a037abd9d9fd0737d22586
 license: MIT

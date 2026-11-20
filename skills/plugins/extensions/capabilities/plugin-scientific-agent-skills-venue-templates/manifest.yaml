@@ -1,9 +1,9 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-venue-templates
 title: Venue Templates
-description: Prepare journal manuscripts, conference papers, research posters,
+description: Prepares journal manuscripts, conference papers, research posters,
   and grant documents using venue-specific formatting guidance and bundled LaTeX
-  scaffolds. Use when selecting an official template, checking current page or
+  scaffolds. Supports selecting an official template, checking current page or
   anonymity rules, adapting academic writing to a venue, or inspecting a
   submission PDF.
 maturity: operational
@@ -47,188 +47,194 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-assets-examples-cell-summary-example.md
     path: assets/examples/cell_summary_example.md
-    content_hash: 0e5925d4a7f61ea65447cf73d3a66ec400aa07fadec619cb5ce1217865550f1e
+    content_hash: ec939d99d836d3f4cfd23a74c17fee238d712a42b2de4c613668de492f158b6a
     license: MIT
   - knowledge_id: sas-assets-examples-medical-structured-abstract.md
     path: assets/examples/medical_structured_abstract.md
-    content_hash: a2528599540a05ef3825b180da8fd7dbf5c1b98cc08dccf14a94d2cd55823039
+    content_hash: ace206511ac555421ad43a8adfada7b4fc49546903c3822bc6b89e5f31455697
     license: MIT
   - knowledge_id: sas-assets-examples-nature-abstract-examples.md
     path: assets/examples/nature_abstract_examples.md
-    content_hash: 05c456e9b2a60750824362bbf1fe3ed02dd8a2b9eaa5527d745269eea9e2a08f
+    content_hash: a612f01502410614472a34adcbcede740fa954a1c0c8cb1921fc423d2b7eec62
     license: MIT
   - knowledge_id: sas-assets-examples-neurips-introduction-example.md
     path: assets/examples/neurips_introduction_example.md
-    content_hash: a72a5a2c49224038f426982d11c36aa8a66e8fec4015371131aab8a68d2f5db5
+    content_hash: c1075000483674576c2685a8ac56b872b84207c4507e4f33112318edc918c910
     license: MIT
   - knowledge_id: sas-assets-grants-nih-specific-aims.tex
     path: assets/grants/nih_specific_aims.tex
-    content_hash: c5a6dcee86f39996377416c8999faf0eb6f5aca664641f7c2bef993001d6239f
+    content_hash: e6d95aabd8ba9dd709bfeb45b811b7930b6c3678779fc84c86754e356075dd7f
     license: MIT
   - knowledge_id: sas-assets-grants-nsf-proposal-template.tex
     path: assets/grants/nsf_proposal_template.tex
-    content_hash: 2728a390fa6e973a738fe13d0d2932697782f0845c26d727b4c2d5b79ebd601d
+    content_hash: 5f24239bc977c04a2e2ebe7d4441809430d4576b423b4745ce53f3a09aa97410
     license: MIT
   - knowledge_id: sas-assets-journals-elsarticle-harv.bst
     path: assets/journals/elsarticle-harv.bst
-    content_hash: f1f4e7503b7e9e225b0b4c7be370a82a34f4f9b0b7fe99c32bb5c7aa91b8da34
+    content_hash: d85a928515628a9526d1d02f076f723a4da25387286a4f656d8943600880a436
     license: MIT
   - knowledge_id: sas-assets-journals-elsarticle-num-names.bst
     path: assets/journals/elsarticle-num-names.bst
-    content_hash: e7ce499923c323d537c6d2b3860d747f261261921e3735a64b8f8234e4961cdb
+    content_hash: c6c0d83707463ac6ebed7f43a754e38b7a38b17a8e58897e8057f8af0dc35024
     license: MIT
   - knowledge_id: sas-assets-journals-elsarticle-num.bst
     path: assets/journals/elsarticle-num.bst
-    content_hash: 0db2e53b2378cbe5815e436c1afe9dcac67123a32406fa8f11fad7978808e202
+    content_hash: f04dfa2f78d0198ab8e4055b609dc0b91bdb730743cbbd549d84270f20d11394
     license: MIT
   - knowledge_id: sas-assets-journals-elsarticle-template-harv.tex
     path: assets/journals/elsarticle-template-harv.tex
-    content_hash: f38d90a86c045a026c29e0fc08dc630447047475db9f43157feb84afab17b5be
+    content_hash: b154487ec96ed096d8c114c074849c42fe91ba111315ccfea6ed2ce9a6143671
     license: MIT
   - knowledge_id: sas-assets-journals-elsarticle-template-num-names.tex
     path: assets/journals/elsarticle-template-num-names.tex
-    content_hash: 59c721067d692a5f534bade43f7b7f64fe28e64df4246012c4d9bf1b7067e504
+    content_hash: 06f9a44d39f057b9d4a7285d77176319b79a02fe1aeb08570c39ccae60a1b120
     license: MIT
   - knowledge_id: sas-assets-journals-elsarticle-template-num.tex
     path: assets/journals/elsarticle-template-num.tex
-    content_hash: cbd7247fd453f458056f59070c84b275d53b8d97cb05140bd610b5efbd0d47a8
+    content_hash: 3b02f9b8c80972bda933f281de3c96bb5147969fcebeb23fd8468ff28e33e15d
     license: MIT
   - knowledge_id: sas-assets-journals-nature-article.tex
     path: assets/journals/nature_article.tex
-    content_hash: 8d283e5325194824d558121fb41852668af2edb2574be8496e8178adbd9e9f4c
+    content_hash: 57b6f7fc332c1ff596df1440ee8c9f36f9bb24b5257ce39187af9c1f2ed8d0e6
     license: MIT
   - knowledge_id: sas-assets-journals-neurips-article.tex
     path: assets/journals/neurips_article.tex
-    content_hash: 431f087c5625219fc968faa533c45df7fa6e2497107c88f017ba14887316417f
+    content_hash: 10f5bbc3259ef3a9e56563941ef26253314bccde77adac8f690603e77eca7ea8
     license: MIT
   - knowledge_id: sas-assets-journals-plos-one.tex
     path: assets/journals/plos_one.tex
-    content_hash: bf638b38cf9e9ec4b7ae18ac37915816386ef88fd4088f09ca7a529ed6d26991
+    content_hash: 6dbecd4786ae01155e7bb163d416719efaea733a17943a36bb392ce277f11a5e
     license: MIT
   - knowledge_id: sas-assets-posters-beamerposter-academic.tex
     path: assets/posters/beamerposter_academic.tex
-    content_hash: 1b16b3ed5ff106a4f624e4a59e6c39da26bfe5cc07413802b2b82a0db16ba8c6
+    content_hash: 721558f66dd60e6d0711a361b4b5fc3ae141eda989d6b744d008951b8cb15194
     license: MIT
   - knowledge_id: sas-references-cell-press-style.md
     path: references/cell_press_style.md
-    content_hash: a57fe4c6a62d94a5ab498fc8d644a28b4dda2b97ae3cea65f4ad197e894d3341
+    content_hash: f8f30f312b2c098d9c5fc0b0cc2ab93e44c5d1f511c314171c193bd42ce2905e
     license: MIT
   - knowledge_id: sas-references-conferences-formatting.md
     path: references/conferences_formatting.md
-    content_hash: 7b813160918c6282ea5893af25bd638e607808b10524b7426f956f0f3f87a5fb
+    content_hash: 3babe847025e4d4eb4f469119739031ea9709ad48936150177eb941130d08ae7
     license: MIT
   - knowledge_id: sas-references-cs-conference-style.md
     path: references/cs_conference_style.md
-    content_hash: 34ed58ff19c0ad689ab100acb0c01a34e9dd3949c6965037435070da0df24a6a
+    content_hash: 5cca948eef8aef571f6c5eb2b3a25b338c60fbac297eec5907e5d6e32d448c96
+    license: MIT
+  - knowledge_id: sas-references-current-sources.md
+    path: references/current_sources.md
+    content_hash: 648984f031181a1e5cf431677f2095af5771f6757eb050de00b8c417053922b0
     license: MIT
   - knowledge_id: sas-references-grants-requirements.md
     path: references/grants_requirements.md
-    content_hash: 09ab9e66ee2ba0dee336fe0469da4bfce18f4087df1acc7e51ea54eb9b13fe15
+    content_hash: d08680fdcdd0c122a25b9bdf97169f081f9cdf8a8049fadd69f9c06fce9805c8
     license: MIT
   - knowledge_id: sas-references-journals-formatting.md
     path: references/journals_formatting.md
-    content_hash: 353ecd938499c30fa4ee4616aa18de0107fa06bd409df1eee671f57a8ccbeda8
+    content_hash: aa456055e03b90a01d58846939d039221dcd05b134da3a8b48dc5293e22effaf
     license: MIT
   - knowledge_id: sas-references-medical-journal-styles.md
     path: references/medical_journal_styles.md
-    content_hash: efb9f60eb0641ca959e098d4b89ad120bb8c2a28467b69f146c79646bed9cb93
+    content_hash: e27800194f8d4ca3428533c9ad20d8934b43eda2214137d6fde8b0b494047a88
     license: MIT
   - knowledge_id: sas-references-ml-conference-style.md
     path: references/ml_conference_style.md
-    content_hash: 43d69a06ddaf1f2027a1e72210429330cecd9c732805121333d337b04386f54d
+    content_hash: b8cc82fe8d78e8b96eeabeab99b2e0f964705db1a33337fe645b7ece68c99aef
     license: MIT
   - knowledge_id: sas-references-nature-science-style.md
     path: references/nature_science_style.md
-    content_hash: f983bc747203f4c7ed1d063a59a6a0cb5d83071db6bc60ea3da0740bc9404a8c
+    content_hash: 439c2ee29f44de59c4a1d5fa4fb721e2458a5c51392db61d04f765f96b3b9d1a
     license: MIT
   - knowledge_id: sas-references-posters-guidelines.md
     path: references/posters_guidelines.md
-    content_hash: f6d7aa2afa729d3ff1dadcc71ccba9c7f88e08ef02e0bcc0a777878b8530936b
+    content_hash: d0f34c6f27917c09368d3cacafdb0f61c189e3d97c0a89393992cd3a26986c11
     license: MIT
   - knowledge_id: sas-references-reviewer-expectations.md
     path: references/reviewer_expectations.md
-    content_hash: 104e341007afeec6b9f138c0b8b371a9a633c3264f148334196818e057e1fb0b
+    content_hash: 67537d2d6e8e9efe112677405fcee119a5d4e84cdbc291002e6dd4b9cb20e6ed
     license: MIT
   - knowledge_id: sas-references-venue-writing-styles.md
     path: references/venue_writing_styles.md
-    content_hash: e260b1badf97f31c0862e922455528366dd35ef3b1d2e96bed4bca99a1334049
+    content_hash: 40da3f71c383d2fcbf1755a5101ef33c0af8a5e03fe39ec58c07daa327bd1faf
     license: MIT
   - knowledge_id: sas-scripts-customize-template.py
     path: scripts/customize_template.py
-    content_hash: 8a44c5dab3237b14b8cb7b9dc2d651f176ae95e5f053576b1bd4437f5336f82a
+    content_hash: 4ccb452b44583d48845216da4688c11f436342d81f54ea59bf2c72b8f5e689cb
     license: MIT
   - knowledge_id: sas-scripts-query-template.py
     path: scripts/query_template.py
-    content_hash: 2ce3d7c43a0b631fd27a6cbee30952919a631be07e01c2ebb44090d9227fcc94
+    content_hash: 80b6de787685b723d28831fa0271ee56866f2f0e31cb33bab0c1fb484dae7c7a
     license: MIT
   - knowledge_id: sas-scripts-validate-format.py
     path: scripts/validate_format.py
-    content_hash: c05a058bc225d58c1a3c21c1c5077fc7d88ad32abc9745572e923cad774d1b79
+    content_hash: 8909d963c7308f380eee9277ee4652570e736d837505730e77e046dc94e95c91
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/SKILL.md
-      sha256: 08da72030831a4bd03a75745abb0a0790f28bc6bb280dfb07b47503ab6e23c4b
+      sha256: fc478011c8c4a67946a9d5690c9e6816af369ab69dd77234c3836f3d5f7d0d4e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/examples/cell_summary_example.md
-      sha256: 0e5925d4a7f61ea65447cf73d3a66ec400aa07fadec619cb5ce1217865550f1e
+      sha256: ec939d99d836d3f4cfd23a74c17fee238d712a42b2de4c613668de492f158b6a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/examples/medical_structured_abstract.md
-      sha256: a2528599540a05ef3825b180da8fd7dbf5c1b98cc08dccf14a94d2cd55823039
+      sha256: ace206511ac555421ad43a8adfada7b4fc49546903c3822bc6b89e5f31455697
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/examples/nature_abstract_examples.md
-      sha256: 05c456e9b2a60750824362bbf1fe3ed02dd8a2b9eaa5527d745269eea9e2a08f
+      sha256: a612f01502410614472a34adcbcede740fa954a1c0c8cb1921fc423d2b7eec62
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/examples/neurips_introduction_example.md
-      sha256: a72a5a2c49224038f426982d11c36aa8a66e8fec4015371131aab8a68d2f5db5
+      sha256: c1075000483674576c2685a8ac56b872b84207c4507e4f33112318edc918c910
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/grants/nih_specific_aims.tex
-      sha256: c5a6dcee86f39996377416c8999faf0eb6f5aca664641f7c2bef993001d6239f
+      sha256: e6d95aabd8ba9dd709bfeb45b811b7930b6c3678779fc84c86754e356075dd7f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/grants/nsf_proposal_template.tex
-      sha256: 2728a390fa6e973a738fe13d0d2932697782f0845c26d727b4c2d5b79ebd601d
+      sha256: 5f24239bc977c04a2e2ebe7d4441809430d4576b423b4745ce53f3a09aa97410
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/journals/elsarticle-harv.bst
-      sha256: f1f4e7503b7e9e225b0b4c7be370a82a34f4f9b0b7fe99c32bb5c7aa91b8da34
+      sha256: d85a928515628a9526d1d02f076f723a4da25387286a4f656d8943600880a436
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/journals/elsarticle-num-names.bst
-      sha256: e7ce499923c323d537c6d2b3860d747f261261921e3735a64b8f8234e4961cdb
+      sha256: c6c0d83707463ac6ebed7f43a754e38b7a38b17a8e58897e8057f8af0dc35024
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/journals/elsarticle-num.bst
-      sha256: 0db2e53b2378cbe5815e436c1afe9dcac67123a32406fa8f11fad7978808e202
+      sha256: f04dfa2f78d0198ab8e4055b609dc0b91bdb730743cbbd549d84270f20d11394
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/journals/elsarticle-template-harv.tex
-      sha256: f38d90a86c045a026c29e0fc08dc630447047475db9f43157feb84afab17b5be
+      sha256: b154487ec96ed096d8c114c074849c42fe91ba111315ccfea6ed2ce9a6143671
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/journals/elsarticle-template-num-names.tex
-      sha256: 59c721067d692a5f534bade43f7b7f64fe28e64df4246012c4d9bf1b7067e504
+      sha256: 06f9a44d39f057b9d4a7285d77176319b79a02fe1aeb08570c39ccae60a1b120
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/journals/elsarticle-template-num.tex
-      sha256: cbd7247fd453f458056f59070c84b275d53b8d97cb05140bd610b5efbd0d47a8
+      sha256: 3b02f9b8c80972bda933f281de3c96bb5147969fcebeb23fd8468ff28e33e15d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/journals/nature_article.tex
-      sha256: 8d283e5325194824d558121fb41852668af2edb2574be8496e8178adbd9e9f4c
+      sha256: 57b6f7fc332c1ff596df1440ee8c9f36f9bb24b5257ce39187af9c1f2ed8d0e6
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/journals/neurips_article.tex
-      sha256: 431f087c5625219fc968faa533c45df7fa6e2497107c88f017ba14887316417f
+      sha256: 10f5bbc3259ef3a9e56563941ef26253314bccde77adac8f690603e77eca7ea8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/journals/plos_one.tex
-      sha256: bf638b38cf9e9ec4b7ae18ac37915816386ef88fd4088f09ca7a529ed6d26991
+      sha256: 6dbecd4786ae01155e7bb163d416719efaea733a17943a36bb392ce277f11a5e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/assets/posters/beamerposter_academic.tex
-      sha256: 1b16b3ed5ff106a4f624e4a59e6c39da26bfe5cc07413802b2b82a0db16ba8c6
+      sha256: 721558f66dd60e6d0711a361b4b5fc3ae141eda989d6b744d008951b8cb15194
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/cell_press_style.md
-      sha256: a57fe4c6a62d94a5ab498fc8d644a28b4dda2b97ae3cea65f4ad197e894d3341
+      sha256: f8f30f312b2c098d9c5fc0b0cc2ab93e44c5d1f511c314171c193bd42ce2905e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/conferences_formatting.md
-      sha256: 7b813160918c6282ea5893af25bd638e607808b10524b7426f956f0f3f87a5fb
+      sha256: 3babe847025e4d4eb4f469119739031ea9709ad48936150177eb941130d08ae7
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/cs_conference_style.md
-      sha256: 34ed58ff19c0ad689ab100acb0c01a34e9dd3949c6965037435070da0df24a6a
+      sha256: 5cca948eef8aef571f6c5eb2b3a25b338c60fbac297eec5907e5d6e32d448c96
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/current_sources.md
+      sha256: 648984f031181a1e5cf431677f2095af5771f6757eb050de00b8c417053922b0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/grants_requirements.md
-      sha256: 09ab9e66ee2ba0dee336fe0469da4bfce18f4087df1acc7e51ea54eb9b13fe15
+      sha256: d08680fdcdd0c122a25b9bdf97169f081f9cdf8a8049fadd69f9c06fce9805c8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/journals_formatting.md
-      sha256: 353ecd938499c30fa4ee4616aa18de0107fa06bd409df1eee671f57a8ccbeda8
+      sha256: aa456055e03b90a01d58846939d039221dcd05b134da3a8b48dc5293e22effaf
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/medical_journal_styles.md
-      sha256: efb9f60eb0641ca959e098d4b89ad120bb8c2a28467b69f146c79646bed9cb93
+      sha256: e27800194f8d4ca3428533c9ad20d8934b43eda2214137d6fde8b0b494047a88
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/ml_conference_style.md
-      sha256: 43d69a06ddaf1f2027a1e72210429330cecd9c732805121333d337b04386f54d
+      sha256: b8cc82fe8d78e8b96eeabeab99b2e0f964705db1a33337fe645b7ece68c99aef
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/nature_science_style.md
-      sha256: f983bc747203f4c7ed1d063a59a6a0cb5d83071db6bc60ea3da0740bc9404a8c
+      sha256: 439c2ee29f44de59c4a1d5fa4fb721e2458a5c51392db61d04f765f96b3b9d1a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/posters_guidelines.md
-      sha256: f6d7aa2afa729d3ff1dadcc71ccba9c7f88e08ef02e0bcc0a777878b8530936b
+      sha256: d0f34c6f27917c09368d3cacafdb0f61c189e3d97c0a89393992cd3a26986c11
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/reviewer_expectations.md
-      sha256: 104e341007afeec6b9f138c0b8b371a9a633c3264f148334196818e057e1fb0b
+      sha256: 67537d2d6e8e9efe112677405fcee119a5d4e84cdbc291002e6dd4b9cb20e6ed
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/venue_writing_styles.md
-      sha256: e260b1badf97f31c0862e922455528366dd35ef3b1d2e96bed4bca99a1334049
+      sha256: 40da3f71c383d2fcbf1755a5101ef33c0af8a5e03fe39ec58c07daa327bd1faf
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/scripts/customize_template.py
-      sha256: 8a44c5dab3237b14b8cb7b9dc2d651f176ae95e5f053576b1bd4437f5336f82a
+      sha256: 4ccb452b44583d48845216da4688c11f436342d81f54ea59bf2c72b8f5e689cb
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/scripts/query_template.py
-      sha256: 2ce3d7c43a0b631fd27a6cbee30952919a631be07e01c2ebb44090d9227fcc94
+      sha256: 80b6de787685b723d28831fa0271ee56866f2f0e31cb33bab0c1fb484dae7c7a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/scripts/validate_format.py
-      sha256: c05a058bc225d58c1a3c21c1c5077fc7d88ad32abc9745572e923cad774d1b79
+      sha256: 8909d963c7308f380eee9277ee4652570e736d837505730e77e046dc94e95c91
 license: MIT

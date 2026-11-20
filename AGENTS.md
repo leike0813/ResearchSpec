@@ -329,14 +329,12 @@ is `v1.5.10-6b50abe`. Follow the maintenance Skill before regenerating any
 `plugin-tooluniverse-*` package or profile.
 
 `vendor/scientific-agent-skills` is the maintainer-only pinned input for the
-Scientific Agent Skills v2.70.0 converter. Its immutable audit covers all 167
-upstream Skills. The complete production policies admit 56 reviewed,
-vendor-prefixed Skills and exclude 111 for authority, redistribution, ARSU or
-ToolUniverse overlap, manual security, domain fit, or content-review reasons.
-The generated bundle contributes to 24 ANZSRC Group domains and all five tool
-domains. The 42-item manual security catalog is a production SSOT: 41 Skills
-are clear, 39 of them only with their approved adaptations, and
-`dhdna-profiler` remains a confirmed failure. Do not execute bundled scripts,
+Scientific Agent Skills v2.72.0 converter. Its immutable audit covers all 177
+upstream Skills. The production policies admit 68 reviewed vendor-prefixed
+Skills and exclude 109. The bundle contributes to 32 ANZSRC Group domains
+and all five tool domains. The 56-item manual security catalog records
+maintainer decisions and approved adaptations. `dhdna-profiler` remains failed
+and `autoskill` has a deferred security decision. Do not execute bundled scripts,
 install dependencies, handle Skill credentials, infer approval from upstream
 security labels, or bypass the checked-in admission, manual-review,
 dependency, resource, and
@@ -344,19 +342,17 @@ source-neutral domain decisions. External model or service use must remain
 provider-neutral, use the target Agent's user-approved configuration, and
 never expose or persist secrets through ResearchSpec.
 
-All reviewed Scientific Agent Skills also project one-to-one into the new
-plugin extension mode as `plugin-scientific-agent-skills-*` capabilities and
+All reviewed Scientific Agent Skills project one-to-one as
+`plugin-scientific-agent-skills-*` capabilities and
 profiles. `scripts/generate-scientific-agent-skills-extensions.mjs` is the
 deterministic generator: it preserves each reviewed `SKILL.md` body, copies all
-632 reviewed non-standard resources at their original relative paths as
-byte-level SHA-256 knowledge refs under MIT, and binds every package to
+664 reviewed non-standard resources at their original relative paths as
+byte-level SHA-256 knowledge refs with reviewed Skill-level licensing, and binds every package to
 `validate_scientific_brief.py` with the six generic evidence fields. Packages
-with `.py` resources are `execution_type: mixed` (33) and the rest are
-`execution_type: llm` (23). The 29 Scientific Agent Skills domain assignments
-(24 ANZSRC Group and five tool domains) are derived from the source-neutral
-domain catalog. Knowledge-ref verification is
-byte-level so reviewed binary example assets (png/gif) project and verify
-correctly; text hashes are unchanged. ResearchSpec never imports or executes
+with `.py` resources are `execution_type: mixed` (45) and the rest are
+`execution_type: llm` (23). Domain assignments derive from the source-neutral
+domain catalog. Regeneration removes retired resource paths recorded in the
+previous maintenance catalog. ResearchSpec never imports or executes
 packaged scripts, installs dependencies, or configures credentials.
 
 `audits/scientific-agent-skills/catalog.json` is the Scientific Agent Skills
@@ -364,8 +360,8 @@ extension maintenance SSOT. `scripts/scientific-agent-skills-maintenance.mjs`
 and `.agents/skills/scientific-agent-skills-maintenance/SKILL.md` provide
 catalog-driven `artifacts / records / baseline / check / diff` anchors and the
 Agent semantic review gate; `artifacts` regenerates every reviewed package
-first. The current anchor is `v2.70.0` under
-`audits/scientific-agent-skills/v2.70.0/`. Future updates must follow the
+first. The current anchor is `v2.72.0` under
+`audits/scientific-agent-skills/v2.72.0/`. Future updates must follow the
 maintenance Skill before regenerating any `plugin-scientific-agent-skills-*`
 package or profile.
 

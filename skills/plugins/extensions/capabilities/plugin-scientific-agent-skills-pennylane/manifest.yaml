@@ -1,13 +1,11 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-pennylane
 title: PennyLane
-description: Hardware-agnostic quantum ML framework with automatic
-  differentiation. Use when training quantum circuits via gradients, building
-  hybrid quantum-classical models, or needing device portability across
-  IBM/Google/Rigetti/IonQ. Best for variational algorithms (VQE, QAOA), quantum
-  neural networks, and integration with PyTorch or JAX. For hardware-specific
-  optimizations use qiskit (IBM) or cirq (Google); for open quantum systems use
-  qutip.
+description: Builds and differentiates PennyLane quantum circuits, hybrid
+  PyTorch or JAX models, molecular VQE and QAOA workflows. Use for variational
+  quantum algorithms, quantum machine learning, simulator validation, and moving
+  validated circuits to provider plugins. For hardware-specific compilation use
+  qiskit or cirq; for open-system dynamics use qutip.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -49,50 +47,50 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-advanced-features.md
     path: references/advanced_features.md
-    content_hash: 81a52e3f1f437ceef2b20e0f447627e3acad18a4e98139eb46d93f5083f860c2
-    license: MIT
+    content_hash: bead74857b00611af4ddead8c885b2bbc506855765a7296a81fb4d5ea229949d
+    license: Apache-2.0
   - knowledge_id: sas-references-devices-backends.md
     path: references/devices_backends.md
-    content_hash: 1b2da18f0343e0d99321b5c15d5834161f298d80fe8f1afe92c931e7364b9913
-    license: MIT
+    content_hash: 9c281ad3666b2c431afeaeca04943a837e3a5eb811225e2bba956327a3297cc5
+    license: Apache-2.0
   - knowledge_id: sas-references-getting-started.md
     path: references/getting_started.md
-    content_hash: acfa9ab3f9fb4e1ab8efa29ea110279546e5b247ee96183a2b4f27aef73dd714
-    license: MIT
+    content_hash: 1826575ccbe7291f30d251383308775a4e54376ce0633e3e8300e817083f0f43
+    license: Apache-2.0
   - knowledge_id: sas-references-optimization.md
     path: references/optimization.md
-    content_hash: 3863a127a04a5ff3a582390b64b05330722e8a0a7792c2f1b8f13af7d432f6c4
-    license: MIT
+    content_hash: d9311c73775f6922a06e9f097feae2dafb3dde77ee121e636dd0f80dee8054dc
+    license: Apache-2.0
   - knowledge_id: sas-references-quantum-chemistry.md
     path: references/quantum_chemistry.md
-    content_hash: 57e10e42aef2b15a7638b25420b3949aebf03d528ccd0a1f523c57b652cfe752
-    license: MIT
+    content_hash: 69f573797f9c1c32e293e54a796e2ba2e9d3cbe6752e5f2fe777203d2448b894
+    license: Apache-2.0
   - knowledge_id: sas-references-quantum-circuits.md
     path: references/quantum_circuits.md
-    content_hash: 5f2c2077c6f99732accd654dce9edeb29d92df55a64d8c0ffa2da5171d16be1a
-    license: MIT
+    content_hash: c4e6e7b8cefcb8c09a871f206c9951e12e21b2e873447ac4f187424b8a998a93
+    license: Apache-2.0
   - knowledge_id: sas-references-quantum-ml.md
     path: references/quantum_ml.md
-    content_hash: ec5a6fa56353c291e2a08ae65ffe59414021058c8b7c6d48f8035214abeac9c0
-    license: MIT
+    content_hash: cd1b55544b305b6772e701083dda55d43145e22e77b61ba1c9f1b5b741374e6c
+    license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/SKILL.md
-      sha256: 5ff255d0b6a1da52b8a07c5e31f366393d0ebc2d1df1d5c19c9e3d65eea84255
+      sha256: 8acc15e64069fac2f17f5b76848b125e89004b1ff74695a3b82613efeab99ab7
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/advanced_features.md
-      sha256: 81a52e3f1f437ceef2b20e0f447627e3acad18a4e98139eb46d93f5083f860c2
+      sha256: bead74857b00611af4ddead8c885b2bbc506855765a7296a81fb4d5ea229949d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/devices_backends.md
-      sha256: 1b2da18f0343e0d99321b5c15d5834161f298d80fe8f1afe92c931e7364b9913
+      sha256: 9c281ad3666b2c431afeaeca04943a837e3a5eb811225e2bba956327a3297cc5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/getting_started.md
-      sha256: acfa9ab3f9fb4e1ab8efa29ea110279546e5b247ee96183a2b4f27aef73dd714
+      sha256: 1826575ccbe7291f30d251383308775a4e54376ce0633e3e8300e817083f0f43
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/optimization.md
-      sha256: 3863a127a04a5ff3a582390b64b05330722e8a0a7792c2f1b8f13af7d432f6c4
+      sha256: d9311c73775f6922a06e9f097feae2dafb3dde77ee121e636dd0f80dee8054dc
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/quantum_chemistry.md
-      sha256: 57e10e42aef2b15a7638b25420b3949aebf03d528ccd0a1f523c57b652cfe752
+      sha256: 69f573797f9c1c32e293e54a796e2ba2e9d3cbe6752e5f2fe777203d2448b894
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/quantum_circuits.md
-      sha256: 5f2c2077c6f99732accd654dce9edeb29d92df55a64d8c0ffa2da5171d16be1a
+      sha256: c4e6e7b8cefcb8c09a871f206c9951e12e21b2e873447ac4f187424b8a998a93
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pennylane/references/quantum_ml.md
-      sha256: ec5a6fa56353c291e2a08ae65ffe59414021058c8b7c6d48f8035214abeac9c0
-license: MIT
+      sha256: cd1b55544b305b6772e701083dda55d43145e22e77b61ba1c9f1b5b741374e6c
+license: Apache-2.0

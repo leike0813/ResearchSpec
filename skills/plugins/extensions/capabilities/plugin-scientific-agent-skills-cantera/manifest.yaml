@@ -1,0 +1,72 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-cantera
+title: "Cantera: homogeneous ignition calculations"
+description: Runs Cantera homogeneous chemical reactors and evaluates ignition
+  delay with mechanism provenance, conservation checks, and numerical
+  refinement. Use for combustion kinetics, closed adiabatic ideal-gas
+  constant-volume or constant-pressure ignition, temperature histories, or
+  mechanism-specific ignition-delay comparisons.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-hydrogen-ignition.json
+    path: assets/hydrogen-ignition.json
+    content_hash: f26f46596235763c25efc27f6879e43d388a6fc1e58c284117b93d83cf3ca90e
+    license: MIT
+  - knowledge_id: sas-references-interpretation.md
+    path: references/interpretation.md
+    content_hash: 57919a187c1f48d23c2fe5906ce0cf69b026ed7acf92823cf615d3d529f94d4f
+    license: MIT
+  - knowledge_id: sas-scripts-ignition-delay.py
+    path: scripts/ignition_delay.py
+    content_hash: a9e8d25fec9c2159e08b85db7f146955cbe7053e7d18171e27da4b399fa7f51b
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cantera/SKILL.md
+      sha256: 74a0b0fdca57bbc83dd8a251e41842502664533fb54b38c3c3662fc20f75d007
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cantera/assets/hydrogen-ignition.json
+      sha256: f26f46596235763c25efc27f6879e43d388a6fc1e58c284117b93d83cf3ca90e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cantera/references/interpretation.md
+      sha256: 57919a187c1f48d23c2fe5906ce0cf69b026ed7acf92823cf615d3d529f94d4f
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cantera/scripts/ignition_delay.py
+      sha256: a9e8d25fec9c2159e08b85db7f146955cbe7053e7d18171e27da4b399fa7f51b
+license: MIT

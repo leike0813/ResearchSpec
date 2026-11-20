@@ -1,7 +1,7 @@
 # Materials-Science-Skills-For-LLM Extension Anchor Conversion — snapshot-fafd3ab
 
 - extension registry version: `0.7.0`
-- registry subset SHA-256: `00241f500c6ffa6804faab8ff062f86563a14f72052926de51497ed905923672`
+- registry subset SHA-256: `3ec723d0470108d73ccc23a87587f39d501901e62e4f9731329a4f4a94cc222a`
 - packages tree SHA-256: `77ded7ad197e9fe075e2abf9cbb8d17b5d6f9bd27885526f5f1ee6d16ae322c5`
 - profiles tree SHA-256: `0370d5e8bba6ac4c03cb2327272c3f9e313b39d1ee00bb525d18f9bc9e44af90`
 - capability count: 7 · mixed: 0 · llm: 7

@@ -111,7 +111,7 @@ ResearchSpec SHALL consume no upstream repository or remote plugin registry duri
 - **AND** `curated` or `converted` SHALL remain provenance only
 
 ### Requirement: Reviewed Scientific Agent Skills Vendor
-Registry Schema 1 SHALL represent the admitted Scientific Agent Skills v2.53.0 bundle as an isolated second vendor with vendor-prefixed global Skill IDs, verified Skill-level licenses, immutable provenance, and reviewed dependency arrays.
+Registry Schema 1 SHALL represent the admitted Scientific Agent Skills bundle as an isolated vendor with vendor-prefixed global Skill IDs, verified Skill-level licenses, immutable provenance, and reviewed dependency arrays.
 
 #### Scenario: Combined registry is assembled
 - **WHEN** the central assembler loads the ToolUniverse and Scientific Agent Skills bundles

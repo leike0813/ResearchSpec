@@ -1,0 +1,150 @@
+---
+name: plugin-scientific-agent-skills-nwb-conversion
+description: "Converts neuroscience acquisition data to Neurodata Without Borders files with NeuroConv and PyNWB, preserves metadata and timebases, checks evidence-based clock alignment, and produces schema validation, NWB Inspector findings and round-trip checks. Use for NWB conversion and synchronization of planar single-channel two-photon TIFF imaging plus timestamped behavioral position CSV; this skill does not perform spike sorting or claim tested support for arbitrary acquisition formats."
+metadata:
+  capability_id: plugin-scientific-agent-skills-nwb-conversion
+  node_kind: producer
+  execution_type: mixed
+  gate_policy: advisory
+  license: MIT
+---
+
+
+> **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, transitions, or receipts. Use the ResearchSpec CLI for authoritative mutations.
+
+> **Maintainer-approved curation (authoritative):**
+> - Keep data and conversion local. Accept the NWB only with a complete validation and round-trip report.
+> - Any conflicting instruction below is inapplicable. Do not install dependencies, discover or handle credentials, invoke provider-specific models or services, or transmit data merely because upstream prose requests it. Optional model or image work uses only target-Agent configured generic capabilities after explicit consent.
+
+> **Bundled scripts:** ResearchSpec distributes these reviewed inert resources but does not run them: `scripts/convert_session.py`. The target Agent must inspect requirements and side effects before execution.
+
+# Validated NWB conversion
+
+## Supported streams
+
+The executable workflow covers two explicit input streams in one session:
+
+| Input | NWB representation | Tested constraints |
+| --- | --- | --- |
+| Two-photon grayscale multi-page TIFF + frame timestamps CSV | Acquisition `TwoPhotonSeries` named `Imaging` through NeuroConv | One channel, one plane, one 2D image per page, fixed shape and dtype |
+| Calibrated position CSV (`time_s,x,y`) | Behavior `Position` / `SpatialSeries` through PyNWB | Coordinates in m, cm or mm; converted to meters without temporal resampling |
+
+Other acquisition readers require their own format-specific tests. In particular, this helper does
+not decode SpikeGLX, Open Ephys, multichannel TIFF, volumetric TIFF, compressed video, or pixel-to-world
+calibration. Do not rename an arbitrary numeric table to a supported stream.
+
+## Install the tested environment
+
+```bash
+uv venv --python 3.12 nwb-env
+uv pip install --python nwb-env/bin/python 'neuroconv[tiff]==0.10.2' pynwb==4.2.0 \
+  nwbinspector==0.7.2 roiextractors==0.10.0 tifffile==2026.9.20 \
+  zarr==2.18.7 hdmf-zarr==0.11.3
+```
+
+Keep both Zarr pins even for an HDF5-only conversion: NeuroConv 0.10.2 imports its backend
+configuration modules at startup, and the tested unconstrained Zarr 3.4.0 installation failed on
+`zarr.codec_registry`. The pinned environment ran the real conversion, PyNWB validation and
+Inspector successfully on macOS ARM64. The dependency resolver supplies NumPy and HDF5 support.
+These are compatibility pins, not claims that Zarr 2 and hdmf-zarr 0.11.3 are the latest releases.
+Current interface checks and the tested dependency exception are recorded in
+[references/upstream-review.md](references/upstream-review.md).
+
+## Workflow
+
+1. Inventory the actual inputs and acquisition metadata. Identify image plane/channel, optical
+   settings, subject/session identifiers, timezone, behavior coordinate system, units and the
+   timestamp clock for every stream. Preserve originals. Do not replace missing metadata with
+   plausible defaults from a sample config.
+2. Copy [assets/session-template.json](assets/session-template.json) beside the raw data and
+   replace the explicitly synthetic values. Paths resolve from that JSON file. Read
+   [references/input-contract.md](references/input-contract.md) for the exact CSV and metadata
+   contract and the pulse-pair variant. TIFF pixels are retained as acquired; a raw arbitrary-unit
+   intensity does not become a photon count merely by changing its unit label.
+3. Establish the common timebase from acquisition evidence. Frame timestamps must already be
+   reference-clock seconds since the timezone-aware session start. For position, provide either
+   a documented shared clock or matched synchronization pulses. The helper fits one affine clock
+   transform, checks its residual against a specified tolerance, and refuses extrapolation beyond
+   the pulse range. It never estimates synchronization from coincident-looking neural/behavioral
+   signals. Clock resets or nonlinear drift require an explicitly validated piecewise mapping.
+4. Execute the converter. Inputs must have finite, strictly increasing timestamps and matching
+   image/timestamp counts. Explicitly declare one channel and one plane; known TIFF channel/plane
+   metadata must agree. Grayscale pages alone cannot exclude undocumented interleaving.
+   The acquisition samples stay intact; only coordinate units and, when
+   evidenced, behavior timestamps are transformed.
+5. Read the `.validation.json` alongside the NWB file. Schema compliance, Inspector findings and
+   data equality answer different questions. The script exits with an error for schema failures
+   and flags critical Inspector findings for review in the report. Review all findings in context;
+   successful validation cannot establish that anatomical labels, pulse pairing or calibration
+   supplied by the user are correct.
+6. Deliver the NWB, validation JSON, original conversion config and an explanation of remaining
+   metadata gaps or Inspector findings. No upload or archive submission is part of this workflow.
+
+## Execute
+
+Run the following from the skill directory, with paths to the actual analysis files:
+
+```bash
+nwb-env/bin/python scripts/convert_session.py /path/to/session.json --output /path/to/session.nwb
+```
+
+`nwb-env` must point to the environment created above; the absolute example input paths are
+illustrative. The command requires a `.nwb` output and refuses to overwrite an existing NWB or
+validation report. Output contains source and converter checksums,
+package versions, full supplied metadata, units and clock-fit provenance in both a scratch record
+and the validation report. When adapting this command for large data, TIFF writes are iterative
+and equality checking loads one frame at a time; position CSV currently loads into memory.
+Round-trip checks also verify dtype, unit scaling, optical-channel links, subject metadata,
+position reference frame, common time origin and embedded provenance. Inspector findings requiring
+review appear in the CLI summary; exit zero alone does not mean the file is scientifically correct.
+An exception during writing or round-trip checks can leave an incomplete NWB without a report;
+retain the error and use a fresh output path after correcting the cause.
+
+The real-library test converts eight non-square uint16 images with irregular frame timing plus
+four position samples, asserts exact pixel and timestamp round trips, and checks centimeter-to-meter
+conversion. A second integration test recovers a known 1000-ppm clock drift and 50-ms offset from
+three matched pulses. Duplicate timestamps, mismatched frame counts, absent clock evidence,
+nonlinear pulse disagreement and missing timezone are rejection cases. The mapping is
+TIFF `(time,y,x)` to NWB `(time,x,y)`, explicitly checked against every transposed source page. NWB Inspector flags the short fixture
+with a critical orientation heuristic because width exceeds frame count; the report retains that
+finding and adds the exact frame/timestamp equality evidence. No transpose is performed merely to
+satisfy a longest-axis heuristic.
+
+## Primary references
+
+- [NeuroConv TIFF conversion](https://neuroconv.readthedocs.io/en/stable/conversion_examples_gallery/imaging/tiff.html)
+- [NeuroConv temporal alignment](https://neuroconv.readthedocs.io/en/stable/user_guide/temporal_alignment.html)
+- [PyNWB](https://github.com/NeurodataWithoutBorders/pynwb)
+- [NWB Inspector and its relation to schema validation](https://github.com/NeurodataWithoutBorders/nwbinspector)
+## ResearchSpec node contract
+
+Execute exactly one ResearchSpec capability node.
+
+- Input: `task_request` (plugin-task.v1).
+- Output: `research_brief` (plugin-result.v1), a JSON object at the declared output path.
+
+## Packaged knowledge
+
+
+- Load knowledge ID `sas-assets-session-template.json` from `assets/session-template.json`.
+- Load knowledge ID `sas-references-input-contract.md` from `references/input-contract.md`.
+- Load knowledge ID `sas-references-upstream-review.md` from `references/upstream-review.md`.
+- Load knowledge ID `sas-scripts-convert-session.py` from `scripts/convert_session.py`.
+
+Run any packaged script only through the host Agent's configured Python runtime; ResearchSpec never executes packaged resources.
+
+## Brief output
+
+Before submitting, write the `research_brief` JSON with these required sections:
+`scope` `source_ledger` `method_plan` `work_products` `validation_results` `conclusions`.
+
+Every section must be non-empty and evidence-backed. The declared
+`validate_scientific_brief.py --required
+scope, source_ledger, method_plan, work_products, validation_results, conclusions`
+validator rejects missing or empty sections. It never imports or executes the packaged resources.
+
+## Completion
+
+Return the declared outputs and follow the active procedure packet. In standalone
+mode, report ordinary output paths without modifying ResearchSpec workflow state.
+In graph mode, use only the packet's handoff and exact advance selector.

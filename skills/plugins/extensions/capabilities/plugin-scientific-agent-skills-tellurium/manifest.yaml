@@ -1,0 +1,79 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-tellurium
+title: Tellurium kinetic experiments
+description: Simulates biochemical kinetic models from SBML or Antimony with
+  Tellurium and libRoadRunner, checks model units, compares deterministic
+  parameter perturbations, and exports and replays SBML plus SED-ML COMBINE
+  archives. Use for reaction-network time courses, kinetic parameters,
+  concentration dynamics and reproducible simulation experiments; steady-state
+  constraint-based metabolic flux analysis belongs to cobrapy.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-experiment.json
+    path: assets/experiment.json
+    content_hash: e5e7e30c107a945647bb016a62d00096f9a5f3bc5e2877f95e3638984c08ab53
+    license: MIT
+  - knowledge_id: sas-assets-first-order.ant
+    path: assets/first-order.ant
+    content_hash: caac37179fc5465990c06ab1666b2b3b4457bd7f3e2011558ee085d7afff7dd6
+    license: MIT
+  - knowledge_id: sas-references-experiments.md
+    path: references/experiments.md
+    content_hash: 08e9a95d1f39774dc9928a74ee9f0e6f177fa7f4894dce65d9352646b2ac5ae2
+    license: MIT
+  - knowledge_id: sas-scripts-kinetic-experiment.py
+    path: scripts/kinetic_experiment.py
+    content_hash: 4f48b80db653a98520be4bcd99bd0b5087373c3286aa22eaa4658cd846bedd62
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-tellurium/SKILL.md
+      sha256: 6140f82fce30a378de51ad9b1ed68f4846defbfcce83f12a2ddb2bcea8b2fa01
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-tellurium/assets/experiment.json
+      sha256: e5e7e30c107a945647bb016a62d00096f9a5f3bc5e2877f95e3638984c08ab53
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-tellurium/assets/first-order.ant
+      sha256: caac37179fc5465990c06ab1666b2b3b4457bd7f3e2011558ee085d7afff7dd6
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-tellurium/references/experiments.md
+      sha256: 08e9a95d1f39774dc9928a74ee9f0e6f177fa7f4894dce65d9352646b2ac5ae2
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-tellurium/scripts/kinetic_experiment.py
+      sha256: 4f48b80db653a98520be4bcd99bd0b5087373c3286aa22eaa4658cd846bedd62
+license: MIT

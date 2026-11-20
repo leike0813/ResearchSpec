@@ -1,9 +1,47 @@
 {
   "schema_version": "1",
   "vendor_id": "scientific-agent-skills",
-  "release": "v2.70.0",
-  "revision": "d0c48af8c7b7a71ccc81fcd04c9db53b48439f9b",
+  "release": "v2.72.0",
+  "revision": "526ebce143bc326f44471554e33d66a19c840360",
   "decisions": [
+    {
+      "upstream_skill_id": "13c-metabolic-flux",
+      "generated_skill_id": "scientific-agent-skills-13c-metabolic-flux",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/13c-metabolic-flux/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/13c-metabolic-flux/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/13c-metabolic-flux/SKILL.md"
+        ],
+        "note": "Use local measured data and user-provisioned dependencies. Preserve the adapted example notice and report model identifiability limits."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
     {
       "upstream_skill_id": "adaptyv",
       "generated_skill_id": "scientific-agent-skills-adaptyv",
@@ -47,12 +85,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "BSD-3-Clause",
         "evidence": [
-          "LICENSE.md",
           "skills/aeon/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Scientific-Agent-Skills-BSD-3-Clause.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -275,12 +312,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "BSD-3-Clause",
         "evidence": [
-          "LICENSE.md",
           "skills/astropy/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Scientific-Agent-Skills-BSD-3-Clause.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -313,16 +349,17 @@
       "disposition": "excluded",
       "reason_codes": [
         "outside-plugin-authority",
-        "upstream-security-review-required"
+        "upstream-security-review-required",
+        "manual-security-review-deferred"
       ],
       "license": null,
       "security_review": {
-        "outcome": "passed",
+        "outcome": "not-applicable",
         "evidence": [
           "docs/security-report.json",
           "skills/autoskill/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action defer follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "not-applicable",
@@ -393,7 +430,7 @@
           "docs/security-report.json",
           "skills/bgpt-paper-search/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -430,7 +467,7 @@
           "docs/security-report.json",
           "skills/bids/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -565,6 +602,82 @@
       "domain_eligibility": "classified"
     },
     {
+      "upstream_skill_id": "cantera",
+      "generated_skill_id": "scientific-agent-skills-cantera",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/cantera/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/cantera/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/cantera/SKILL.md"
+        ],
+        "note": "Use a trusted local mechanism and a provisioned runtime. Keep untrusted executable extensions outside the procedure and preserve provenance and numerical limits."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "cellprofiler",
+      "generated_skill_id": "scientific-agent-skills-cellprofiler",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/cellprofiler/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/cellprofiler/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/cellprofiler/SKILL.md"
+        ],
+        "note": "Use a trusted, user-provisioned local application and explicit image permissions. Keep external image transfer and container provisioning outside the procedure."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
       "upstream_skill_id": "cellxgene-census",
       "generated_skill_id": "scientific-agent-skills-cellxgene-census",
       "disposition": "excluded",
@@ -578,7 +691,7 @@
           "docs/security-report.json",
           "skills/cellxgene-census/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -607,12 +720,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "Apache-2.0",
         "evidence": [
-          "LICENSE.md",
           "skills/cirq/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Apache-2.0.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -653,7 +765,7 @@
           "docs/security-report.json",
           "skills/citation-management/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -690,7 +802,7 @@
           "docs/security-report.json",
           "skills/clinical-decision-support/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -727,7 +839,7 @@
           "docs/security-report.json",
           "skills/clinical-reports/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -801,7 +913,7 @@
           "docs/security-report.json",
           "skills/consciousness-council/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -871,7 +983,7 @@
           "docs/security-report.json",
           "skills/database-lookup/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -1133,7 +1245,7 @@
           "docs/security-report.json",
           "skills/dhdna-profiler/SKILL.md"
         ],
-        "note": "The current source retains unsupported cognitive-scoring claims; the scanner reports zero findings but does not overturn the independent content failure."
+        "note": "Maintainer action fail follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -1225,39 +1337,6 @@
         ]
       },
       "domain_eligibility": "classified"
-    },
-    {
-      "upstream_skill_id": "docx",
-      "generated_skill_id": "scientific-agent-skills-docx",
-      "disposition": "excluded",
-      "reason_codes": [
-        "redistribution-prohibited"
-      ],
-      "license": null,
-      "security_review": {
-        "outcome": "not-applicable",
-        "evidence": [
-          "SECURITY.md",
-          "skills/docx/SKILL.md"
-        ],
-        "note": "The source is outside the production admission boundary."
-      },
-      "content_review": {
-        "outcome": "not-applicable",
-        "evidence": [
-          "skills/docx/SKILL.md"
-        ],
-        "note": "Content review is not applicable to an audit hard exclusion."
-      },
-      "arsu_overlap": {
-        "targets": [],
-        "evidence": []
-      },
-      "tooluniverse_overlap": {
-        "targets": [],
-        "evidence": []
-      },
-      "domain_eligibility": "none"
     },
     {
       "upstream_skill_id": "esm",
@@ -1498,7 +1577,7 @@
           "docs/security-report.json",
           "skills/flowio/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -1522,6 +1601,44 @@
       "domain_eligibility": "classified"
     },
     {
+      "upstream_skill_id": "flowkit",
+      "generated_skill_id": "scientific-agent-skills-flowkit",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/flowkit/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/flowkit/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/flowkit/SKILL.md"
+        ],
+        "note": "Keep authorized local inputs explicit and use a fresh output directory. Treat imported workspace and sample files as untrusted."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
       "upstream_skill_id": "fluidsim",
       "generated_skill_id": "scientific-agent-skills-fluidsim",
       "disposition": "admitted",
@@ -1540,7 +1657,7 @@
           "docs/security-report.json",
           "skills/fluidsim/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -1623,14 +1740,14 @@
           "SECURITY.md",
           "skills/generate-image/SKILL.md"
         ],
-        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
         "evidence": [
           "skills/generate-image/SKILL.md"
         ],
-        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+        "note": "Only the provider-neutral image brief and verification procedure are projected."
       },
       "arsu_overlap": {
         "targets": [],
@@ -1781,7 +1898,7 @@
           "docs/security-report.json",
           "skills/geomaster/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -1927,14 +2044,14 @@
           "SECURITY.md",
           "skills/ginkgo-cloud-lab/SKILL.md"
         ],
-        "note": "Static review found no unresolved Critical/High behavior; packaged resources remain inert until a target Agent explicitly uses them."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
         "evidence": [
           "skills/ginkgo-cloud-lab/SKILL.md"
         ],
-        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+        "note": "Only the advisory service comparison and evidence brief are projected. Experimental and ordering resources remain upstream."
       },
       "arsu_overlap": {
         "targets": [],
@@ -2034,7 +2151,7 @@
           "docs/security-report.json",
           "skills/histolab/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -2146,7 +2263,7 @@
           "docs/security-report.json",
           "skills/hypothesis-generation/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -2225,7 +2342,7 @@
           "docs/security-report.json",
           "skills/infographics/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -2457,7 +2574,7 @@
           "docs/security-report.json",
           "skills/latex-posters/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -2482,12 +2599,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "Apache-2.0",
         "evidence": [
-          "LICENSE.md",
           "skills/liteparse/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Apache-2.0.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -2529,7 +2645,7 @@
           "docs/security-report.json",
           "skills/literature-review/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -2553,17 +2669,98 @@
       "domain_eligibility": "none"
     },
     {
-      "upstream_skill_id": "markdown-mermaid-writing",
-      "generated_skill_id": "scientific-agent-skills-markdown-mermaid-writing",
+      "upstream_skill_id": "mageck",
+      "generated_skill_id": "scientific-agent-skills-mageck",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/mageck/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/mageck/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "The candidate is excluded for direct overlap. The upstream report has no candidate scan."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/mageck/SKILL.md"
+        ],
+        "note": "Source capability and scope reproduce an existing ToolUniverse capability."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-crispr-screen-analysis"
+        ],
+        "evidence": [
+          "skills/mageck/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "marine-carbonate-chemistry",
+      "generated_skill_id": "scientific-agent-skills-marine-carbonate-chemistry",
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
         "expression": "MIT",
         "evidence": [
           "LICENSE.md",
-          "skills/markdown-mermaid-writing/SKILL.md"
+          "skills/marine-carbonate-chemistry/SKILL.md"
         ],
         "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/marine-carbonate-chemistry/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/marine-carbonate-chemistry/SKILL.md"
+        ],
+        "note": "Use authorized local data and a fresh output directory. Record units, chemical assumptions, and uncertainty."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "markdown-mermaid-writing",
+      "generated_skill_id": "scientific-agent-skills-markdown-mermaid-writing",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "Apache-2.0",
+        "evidence": [
+          "skills/markdown-mermaid-writing/SKILL.md"
+        ],
+        "text_source": "LICENSES/Apache-2.0.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -2646,7 +2843,7 @@
           "docs/security-report.json",
           "skills/markitdown/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -2746,12 +2943,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "LicenseRef-Matplotlib",
         "evidence": [
-          "LICENSE.md",
           "skills/matplotlib/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Matplotlib.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -2821,12 +3017,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "Apache-2.0",
         "evidence": [
-          "LICENSE.md",
           "skills/modal/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Apache-2.0.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -2834,7 +3029,7 @@
           "docs/security-report.json",
           "skills/modal/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -2978,12 +3173,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "BSD-3-Clause",
         "evidence": [
-          "LICENSE.md",
           "skills/networkx/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Scientific-Agent-Skills-BSD-3-Clause.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -3118,6 +3312,82 @@
         "evidence": [
           "skills/nextflow/SKILL.md"
         ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "nmrglue",
+      "generated_skill_id": "scientific-agent-skills-nmrglue",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/nmrglue/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/nmrglue/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/nmrglue/SKILL.md"
+        ],
+        "note": "Use explicit local signals and preserve calibration. Treat imported files as untrusted and keep the upstream binary test fixture outside distribution."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "nwb-conversion",
+      "generated_skill_id": "scientific-agent-skills-nwb-conversion",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/nwb-conversion/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/nwb-conversion/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/nwb-conversion/SKILL.md"
+        ],
+        "note": "Keep data and conversion local. Accept the NWB only with a complete validation and round-trip report."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
       },
       "domain_eligibility": "classified"
     },
@@ -3395,10 +3665,10 @@
       "license": {
         "expression": "MIT",
         "evidence": [
-          "LICENSE.md",
-          "skills/pacsomatic/SKILL.md"
+          "skills/pacsomatic/SKILL.md",
+          "skills/pacsomatic/LICENSE"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "skills/pacsomatic/LICENSE"
       },
       "security_review": {
         "outcome": "passed",
@@ -3406,7 +3676,7 @@
           "docs/security-report.json",
           "skills/pacsomatic/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -3525,7 +3795,7 @@
           "docs/security-report.json",
           "skills/paperzilla/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -3567,7 +3837,7 @@
           "docs/security-report.json",
           "skills/parallel-web/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -3600,7 +3870,7 @@
           "docs/security-report.json",
           "skills/pathml/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -3706,39 +3976,6 @@
       "domain_eligibility": "classified"
     },
     {
-      "upstream_skill_id": "pdf",
-      "generated_skill_id": "scientific-agent-skills-pdf",
-      "disposition": "excluded",
-      "reason_codes": [
-        "redistribution-prohibited"
-      ],
-      "license": null,
-      "security_review": {
-        "outcome": "not-applicable",
-        "evidence": [
-          "SECURITY.md",
-          "skills/pdf/SKILL.md"
-        ],
-        "note": "The source is outside the production admission boundary."
-      },
-      "content_review": {
-        "outcome": "not-applicable",
-        "evidence": [
-          "skills/pdf/SKILL.md"
-        ],
-        "note": "Content review is not applicable to an audit hard exclusion."
-      },
-      "arsu_overlap": {
-        "targets": [],
-        "evidence": []
-      },
-      "tooluniverse_overlap": {
-        "targets": [],
-        "evidence": []
-      },
-      "domain_eligibility": "none"
-    },
-    {
       "upstream_skill_id": "peer-review",
       "generated_skill_id": "scientific-agent-skills-peer-review",
       "disposition": "excluded",
@@ -3753,7 +3990,7 @@
           "docs/security-report.json",
           "skills/peer-review/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -3782,12 +4019,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "Apache-2.0",
         "evidence": [
-          "LICENSE.md",
           "skills/pennylane/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Apache-2.0.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -4004,39 +4240,6 @@
       "domain_eligibility": "classified"
     },
     {
-      "upstream_skill_id": "pptx",
-      "generated_skill_id": "scientific-agent-skills-pptx",
-      "disposition": "excluded",
-      "reason_codes": [
-        "redistribution-prohibited"
-      ],
-      "license": null,
-      "security_review": {
-        "outcome": "not-applicable",
-        "evidence": [
-          "SECURITY.md",
-          "skills/pptx/SKILL.md"
-        ],
-        "note": "The source is outside the production admission boundary."
-      },
-      "content_review": {
-        "outcome": "not-applicable",
-        "evidence": [
-          "skills/pptx/SKILL.md"
-        ],
-        "note": "Content review is not applicable to an audit hard exclusion."
-      },
-      "arsu_overlap": {
-        "targets": [],
-        "evidence": []
-      },
-      "tooluniverse_overlap": {
-        "targets": [],
-        "evidence": []
-      },
-      "domain_eligibility": "none"
-    },
-    {
       "upstream_skill_id": "pptx-posters",
       "generated_skill_id": "scientific-agent-skills-pptx-posters",
       "disposition": "admitted",
@@ -4055,7 +4258,7 @@
           "docs/security-report.json",
           "skills/pptx-posters/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -4088,7 +4291,7 @@
           "docs/security-report.json",
           "skills/primekg/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -4107,6 +4310,50 @@
         ],
         "evidence": [
           "skills/primekg/SKILL.md"
+        ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "primer-design",
+      "generated_skill_id": "scientific-agent-skills-primer-design",
+      "disposition": "excluded",
+      "reason_codes": [
+        "tooluniverse-semantic-overlap"
+      ],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/primer-design/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "not-applicable",
+        "evidence": [
+          "skills/primer-design/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "The candidate is excluded for direct overlap. The upstream report has no candidate scan."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/primer-design/SKILL.md"
+        ],
+        "note": "Source capability and scope reproduce an existing ToolUniverse capability."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [
+          "tooluniverse-primer-design"
+        ],
+        "evidence": [
+          "skills/primer-design/SKILL.md"
         ]
       },
       "domain_eligibility": "classified"
@@ -4176,6 +4423,82 @@
           "skills/pufferlib/SKILL.md"
         ],
         "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pybamm",
+      "generated_skill_id": "scientific-agent-skills-pybamm",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pybamm/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pybamm/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pybamm/SKILL.md"
+        ],
+        "note": "Use a provisioned solver, fresh output directory and explicit assumptions. Record numerical sensitivity and any limits of the comparison with measurements."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "pycalphad",
+      "generated_skill_id": "scientific-agent-skills-pycalphad",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/pycalphad/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pycalphad/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/pycalphad/SKILL.md"
+        ],
+        "note": "Retain the hypothetical TDB attribution and scope. Use separately licensed local assessed databases for experimental conclusions."
       },
       "arsu_overlap": {
         "targets": [],
@@ -4417,12 +4740,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "Apache-2.0",
         "evidence": [
-          "LICENSE.md",
           "skills/pymoo/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Apache-2.0.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -4566,12 +4888,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "Apache-2.0",
         "evidence": [
-          "LICENSE.md",
           "skills/pytorch-lightning/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Apache-2.0.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -4637,17 +4958,54 @@
       "domain_eligibility": "classified"
     },
     {
-      "upstream_skill_id": "qiskit",
-      "generated_skill_id": "scientific-agent-skills-qiskit",
+      "upstream_skill_id": "qiime2-amplicon",
+      "generated_skill_id": "scientific-agent-skills-qiime2-amplicon",
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
         "expression": "MIT",
         "evidence": [
           "LICENSE.md",
-          "skills/qiskit/SKILL.md"
+          "skills/qiime2-amplicon/SKILL.md"
         ],
         "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/qiime2-amplicon/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/qiime2-amplicon/SKILL.md"
+        ],
+        "note": "Use authorized local data, a provisioned runtime and a fresh output location. Record classifier provenance and keep external data transfer outside the procedure."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "qiskit",
+      "generated_skill_id": "scientific-agent-skills-qiskit",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "Apache-2.0",
+        "evidence": [
+          "skills/qiskit/SKILL.md"
+        ],
+        "text_source": "LICENSES/Apache-2.0.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -4693,7 +5051,7 @@
           "docs/security-report.json",
           "skills/qutip/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -4746,6 +5104,44 @@
         "evidence": [
           "skills/rdkit/SKILL.md"
         ]
+      },
+      "domain_eligibility": "classified"
+    },
+    {
+      "upstream_skill_id": "relion",
+      "generated_skill_id": "scientific-agent-skills-relion",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/relion/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/relion/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/relion/SKILL.md"
+        ],
+        "note": "Confirm executable identity, local inputs and output location. Keep scheduler submissions and external data transfer outside the procedure."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
       },
       "domain_eligibility": "classified"
     },
@@ -4834,7 +5230,7 @@
           "docs/security-report.json",
           "skills/research-lookup/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -4945,7 +5341,7 @@
           "docs/security-report.json",
           "skills/scholar-evaluation/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -5063,7 +5459,7 @@
           "docs/security-report.json",
           "skills/scientific-schematics/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -5101,7 +5497,7 @@
           "docs/security-report.json",
           "skills/scientific-slides/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -5172,7 +5568,7 @@
           "docs/security-report.json",
           "skills/scientific-writing/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -5238,12 +5634,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "BSD-3-Clause",
         "evidence": [
-          "LICENSE.md",
           "skills/scikit-learn/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Scientific-Agent-Skills-BSD-3-Clause.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -5387,12 +5782,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "BSD-3-Clause",
         "evidence": [
-          "LICENSE.md",
           "skills/seaborn/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Scientific-Agent-Skills-BSD-3-Clause.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -5400,7 +5794,7 @@
           "docs/security-report.json",
           "skills/seaborn/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -5650,12 +6044,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "BSD-3-Clause",
         "evidence": [
-          "LICENSE.md",
           "skills/sympy/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/SymPy.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -5729,6 +6122,44 @@
       "domain_eligibility": "classified"
     },
     {
+      "upstream_skill_id": "tellurium",
+      "generated_skill_id": "scientific-agent-skills-tellurium",
+      "disposition": "admitted",
+      "reason_codes": [],
+      "license": {
+        "expression": "MIT",
+        "evidence": [
+          "LICENSE.md",
+          "skills/tellurium/SKILL.md"
+        ],
+        "text_source": "LICENSE.md"
+      },
+      "security_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/tellurium/SKILL.md",
+          "docs/security-report.json"
+        ],
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
+      },
+      "content_review": {
+        "outcome": "passed",
+        "evidence": [
+          "skills/tellurium/SKILL.md"
+        ],
+        "note": "Accept trusted local model inputs and use a fresh output directory. Keep runtime provisioning and external transfers outside the procedure."
+      },
+      "arsu_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "tooluniverse_overlap": {
+        "targets": [],
+        "evidence": []
+      },
+      "domain_eligibility": "classified"
+    },
+    {
       "upstream_skill_id": "tiledbvcf",
       "generated_skill_id": "scientific-agent-skills-tiledbvcf",
       "disposition": "excluded",
@@ -5742,7 +6173,7 @@
           "docs/security-report.json",
           "skills/tiledbvcf/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -5771,12 +6202,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "Apache-2.0",
         "evidence": [
-          "LICENSE.md",
           "skills/timesfm-forecasting/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Apache-2.0.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -5791,7 +6221,7 @@
         "evidence": [
           "skills/timesfm-forecasting/SKILL.md"
         ],
-        "note": "The capability, method boundaries, dependencies, and user-facing purpose were reviewed against the pinned entry."
+        "note": "The review distributes no weights. The TimesFM 3 reference records the separate non-commercial terms for downloaded or self-hosted weights."
       },
       "arsu_overlap": {
         "targets": [],
@@ -5884,12 +6314,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "Apache-2.0",
         "evidence": [
-          "LICENSE.md",
           "skills/transformers/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Apache-2.0.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -5897,7 +6326,7 @@
           "docs/security-report.json",
           "skills/transformers/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -5930,7 +6359,7 @@
           "docs/security-report.json",
           "skills/treatment-plans/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -5959,12 +6388,11 @@
       "disposition": "admitted",
       "reason_codes": [],
       "license": {
-        "expression": "MIT",
+        "expression": "BSD-3-Clause",
         "evidence": [
-          "LICENSE.md",
           "skills/umap-learn/SKILL.md"
         ],
-        "text_source": "LICENSE.md"
+        "text_source": "LICENSES/Scientific-Agent-Skills-BSD-3-Clause.txt"
       },
       "security_review": {
         "outcome": "passed",
@@ -5972,7 +6400,7 @@
           "docs/security-report.json",
           "skills/umap-learn/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -6043,7 +6471,7 @@
           "docs/security-report.json",
           "skills/usfiscaldata/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -6122,7 +6550,7 @@
           "docs/security-report.json",
           "skills/venue-templates/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -6162,7 +6590,7 @@
           "docs/security-report.json",
           "skills/waypoint-bio/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",
@@ -6220,39 +6648,6 @@
       "domain_eligibility": "none"
     },
     {
-      "upstream_skill_id": "xlsx",
-      "generated_skill_id": "scientific-agent-skills-xlsx",
-      "disposition": "excluded",
-      "reason_codes": [
-        "redistribution-prohibited"
-      ],
-      "license": null,
-      "security_review": {
-        "outcome": "not-applicable",
-        "evidence": [
-          "SECURITY.md",
-          "skills/xlsx/SKILL.md"
-        ],
-        "note": "The source is outside the production admission boundary."
-      },
-      "content_review": {
-        "outcome": "not-applicable",
-        "evidence": [
-          "skills/xlsx/SKILL.md"
-        ],
-        "note": "Content review is not applicable to an audit hard exclusion."
-      },
-      "arsu_overlap": {
-        "targets": [],
-        "evidence": []
-      },
-      "tooluniverse_overlap": {
-        "targets": [],
-        "evidence": []
-      },
-      "domain_eligibility": "none"
-    },
-    {
       "upstream_skill_id": "zarr-python",
       "generated_skill_id": "scientific-agent-skills-zarr-python",
       "disposition": "excluded",
@@ -6266,7 +6661,7 @@
           "docs/security-report.json",
           "skills/zarr-python/SKILL.md"
         ],
-        "note": "Current findings and changed resource tree were reviewed; retained curation and resource exclusions govern permitted target-Agent use."
+        "note": "Maintainer action clear-with-adaptation follows static review of the candidate tree. Upstream scanner observations are historical."
       },
       "content_review": {
         "outcome": "passed",

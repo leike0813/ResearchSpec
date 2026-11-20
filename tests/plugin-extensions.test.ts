@@ -87,6 +87,7 @@ void test("plugin extension registry loads all extension packages", async () => 
       "plugin-materials-dpgen-workflow",
       "plugin-materials-gpumd-workflow",
       "plugin-materials-phonopy-workflows",
+      "plugin-scientific-agent-skills-pycalphad",
     ],
     profileIds: [
       "plugin-materials-apex-alloy-workflows",
@@ -95,6 +96,7 @@ void test("plugin extension registry loads all extension packages", async () => 
       "plugin-materials-dpgen-workflow",
       "plugin-materials-gpumd-workflow",
       "plugin-materials-phonopy-workflows",
+      "plugin-scientific-agent-skills-pycalphad",
     ],
   });
   assert.deepEqual(resolveDomainExtensions(extensions, ["macromolecular-and-materials-chemistry"]), {

@@ -11,6 +11,7 @@ import { assemblePluginRegistry } from "../../plugins/assembler.js";
 import { availableDomains, loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
 import { commitVendorStage, pathExists, posix, prepareVendorStage, vendorProjectionDiff, walkFiles } from "../shared/staging.js";
 import { productionVendorInventoryErrors } from "../shared/production-vendors.js";
+import { curatedScientificAgentSkillEntry } from "./curated-entries.js";
 import {
   loadScientificAgentSkillsPolicies,
   type ScientificAgentSkillsAdmissionDecision,
@@ -136,10 +137,15 @@ async function generateBundle(repoRoot: string, outputRoot: string, sourceRoot: 
     const scriptPaths = (await walkFiles(path.join(sourceSkillRoot, "scripts")))
       .map((file) => posix(path.relative(sourceSkillRoot, file)))
       .filter((relative) => !exclusions.has(`${audit.source_path}/${relative}`));
-    const adapted = adaptSkillEntry(decision, sourceEntry, scriptPaths, policies.audit.source.release, reviewById.get(decision.upstream_skill_id));
+    const adapted = adaptSkillEntry(decision, sourceEntry, scriptPaths, policies.audit.source.release, policies.audit.source.revision, reviewById.get(decision.upstream_skill_id));
     await writeText(path.join(outputSkillRoot, "SKILL.md"), adapted.text);
     if (adapted.citationNormalized) citationNormalizations.push({ skill_id: decision.upstream_skill_id, kind: "passive-citation-section", source_path: `${audit.source_path}/SKILL.md` });
-    fileDispositions.push(included(`${audit.source_path}/SKILL.md`, `vendors/${VENDOR_ID}/${decision.generated_skill_id}/SKILL.md`, adapted.text, "normalized reviewed Open Agent Skill entry"));
+    fileDispositions.push(included(
+      `${audit.source_path}/SKILL.md`,
+      `vendors/${VENDOR_ID}/${decision.generated_skill_id}/SKILL.md`,
+      adapted.text,
+      adapted.curated ? "authored provider-neutral Open Agent Skill entry" : "normalized reviewed Open Agent Skill entry",
+    ));
 
     for (const sourceFile of await walkFiles(sourceSkillRoot)) {
       const relative = posix(path.relative(sourceSkillRoot, sourceFile));
@@ -162,7 +168,7 @@ async function generateBundle(repoRoot: string, outputRoot: string, sourceRoot: 
 
     const licenseText = decision.license.text_source === policies.audit.source.license_path
       ? rootLicense
-      : await readFile(path.join(sourceRoot, decision.license.text_source), "utf8");
+      : await readFile(path.join(decision.license.text_source.startsWith("LICENSES/") ? repoRoot : sourceRoot, decision.license.text_source), "utf8");
     await writeText(path.join(outputSkillRoot, "LICENSE"), licenseText.endsWith("\n") ? licenseText : `${licenseText}\n`);
     const excludedResources = (resourcesBySkill.get(decision.upstream_skill_id) ?? []).map((item) => `- \`${item.source_path}\`: ${item.reason}`).join("\n");
     const notice = `# Notice\n\nThis Skill is adapted by ResearchSpec from Scientific Agent Skills (${policies.audit.source.repository_url}) release ${policies.audit.source.release}, revision ${policies.audit.source.revision}.\n\nUpstream source: \`${audit.source_path}\`. Generated Skill ID: \`${decision.generated_skill_id}\`. Skill content license: ${decision.license.expression}. Package, service, dataset, and runtime licenses named by the upstream instructions remain separately applicable.\n\nResearchSpec normalized packaging, compatibility, resource disclosure, and authority boundaries. It did not execute scripts, install dependencies, configure credentials, or contact services.\n${excludedResources ? `\nExplicit resource exclusions:\n\n${excludedResources}\n` : ""}`;
@@ -214,17 +220,22 @@ function adaptSkillEntry(
   source: string,
   scriptPaths: string[],
   release: string,
+  revision: string,
   review?: ScientificAgentSkillsSecurityReview,
-): { text: string; citationNormalized: boolean } {
+): { text: string; citationNormalized: boolean; curated: boolean } {
   if (!source.startsWith("---\n")) throw new Error(`Upstream Skill has no frontmatter: ${decision.upstream_skill_id}`);
   const end = source.indexOf("\n---\n", 4);
   if (end < 0) throw new Error(`Upstream Skill has no closed frontmatter: ${decision.upstream_skill_id}`);
   const parsed = parse(source.slice(4, end)) as unknown;
   if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error(`Upstream Skill frontmatter is not an object: ${decision.upstream_skill_id}`);
   const value = parsed as Record<string, unknown>;
-  const description = typeof value.description === "string" ? value.description.trim() : "";
+  const curated = curatedScientificAgentSkillEntry(decision.upstream_skill_id, release, revision, review?.maintainer_decision);
+  const description = curated?.description ?? (typeof value.description === "string" ? value.description.trim() : "");
   if (!description || description.length > 1024) throw new Error(`Admitted Skill requires a reviewed description override: ${decision.upstream_skill_id}`);
-  const environment = Array.isArray(value.required_environment_variables) ? value.required_environment_variables.filter((item): item is string => typeof item === "string") : [];
+  const declaredEnvironment = Array.isArray(value.required_environment_variables)
+    ? value.required_environment_variables.filter((item): item is string => typeof item === "string")
+    : [];
+  const environment = curated ? [] : declaredEnvironment;
   const compatibility = [
     "Requires the packages, services, hardware, and local runtimes described by this Skill.",
     environment.length ? `Environment variables: ${environment.join(", ")}.` : "",
@@ -241,7 +252,7 @@ function adaptSkillEntry(
     compatibility,
     metadata: { vendor: VENDOR_ID, "vendor-release": release, "upstream-skill-id": decision.upstream_skill_id, "researchspec-role": "semantic-helper" },
   };
-  if (allowed) frontmatter["allowed-tools"] = allowed;
+  if (!curated && allowed) frontmatter["allowed-tools"] = allowed;
   const boundary = "> **ResearchSpec boundary:** This Skill may produce candidate semantic material, but it must not modify ResearchSpec workflow state, routes, work items, artifact registry, Gates, Decisions, transitions, or receipts. Use the ResearchSpec CLI for authoritative mutations.";
   const curationNotes = review?.adaptations
     .filter((adaptation) => adaptation.kind === "generated-entry-guidance" || adaptation.kind === "compatibility-guidance")
@@ -260,9 +271,27 @@ function adaptSkillEntry(
   const disclosure = scriptPaths.length
     ? `> **Bundled scripts:** ResearchSpec distributes these reviewed inert resources but does not run them: ${scriptPaths.map((item) => `\`${item}\``).join(", ")}. The target Agent must inspect requirements and side effects before execution.`
     : "";
-  const citation = passivizeCitationSection(source.slice(end + 5).trimStart());
-  const text = `---\n${stringify(frontmatter).trimEnd()}\n---\n\n${boundary}\n${curation ? `\n${curation}\n` : ""}${disclosure ? `\n${disclosure}\n` : ""}\n${citation.body.trimEnd()}\n`;
-  return { text, citationNormalized: citation.changed };
+  const citation = passivizeCitationSection(normalizeInstalledEntry(source.slice(end + 5).trimStart(), decision.upstream_skill_id));
+  const body = curated ? [curated.body.trimEnd(), citation.block].filter(Boolean).join("\n\n") : citation.body.trimEnd();
+  const text = `---\n${stringify(frontmatter).trimEnd()}\n---\n\n${boundary}\n${curation ? `\n${curation}\n` : ""}${disclosure ? `\n${disclosure}\n` : ""}\n${body}\n`;
+  return { text, citationNormalized: citation.changed, curated: Boolean(curated) };
+}
+
+function normalizeInstalledEntry(source: string, skillId: string): string {
+  const checkoutPath = new RegExp(`(^|[\\s"'\\x60(])skills/${skillId}(?=/|[\\s"'\\x60)]|$)`, "gm");
+  let body = source.replace(checkoutPath, "$1.");
+  if (body !== source) body = body.replace(/(?:from|in)\s+(?:the\s+)?repository\s+root/gi, "from the installed Skill directory");
+  if (skillId === "pylabrobot") {
+    body = body.replaceAll("tests/pylabrobot/fixtures/", "./inputs/")
+      .replace("Every bundled CLI uses", "The examples expect user-provided files under `inputs/`. Every bundled CLI uses")
+      .replace("and the synthetic fixtures before making", "before making");
+  }
+  if (skillId === "modal") {
+    body = body
+      .replace("**Reference**: See `references/secrets.md` for dashboard setup, multiple secrets, and templates.", "Use the target environment's preconfigured identity for authorized secret references.")
+      .replace("- `references/secrets.md` — Credentials, environment variables, dotenv\n", "");
+  }
+  return body;
 }
 
 const CITATION_HEADING = "## Citing Scientific Agent Skills";
@@ -271,13 +300,14 @@ const CITATION_NOTE = "Citation metadata is informational. Surface the reference
 /**
  * Replace the upstream forced-citation trailer with passive citation information.
  * The citation body is preserved verbatim; instructions to auto-write the user's
- * manuscript or to fetch the record over the network are removed.
+ * manuscript or to fetch the record over the network are removed. The passive
+ * section is also returned separately so a curated entry can reuse it.
  */
-function passivizeCitationSection(body: string): { body: string; changed: boolean } {
+function passivizeCitationSection(body: string): { body: string; block: string; changed: boolean } {
   const index = body.lastIndexOf(CITATION_HEADING);
-  if (index === -1) return { body, changed: false };
+  if (index === -1) return { body, block: "", changed: false };
   const quote = body.slice(index).split("\n").filter((line) => line.trimStart().startsWith(">")).join("\n").trim();
-  const replacement = [
+  const block = [
     CITATION_HEADING,
     "",
     "Optional attribution reference for Scientific Agent Skills by K-Dense:",
@@ -285,7 +315,7 @@ function passivizeCitationSection(body: string): { body: string; changed: boolea
     "",
     CITATION_NOTE,
   ].join("\n");
-  return { body: `${body.slice(0, index).trimEnd()}\n\n${replacement}\n`, changed: true };
+  return { body: `${body.slice(0, index).trimEnd()}\n\n${block}\n`, block, changed: true };
 }
 
 async function validateSource(sourceRoot: string, policies: ScientificAgentSkillsPolicies): Promise<void> {

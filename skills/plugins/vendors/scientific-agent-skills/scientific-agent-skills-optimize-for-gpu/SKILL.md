@@ -14,7 +14,7 @@ compatibility: Requires the packages, services, hardware, and local runtimes
   scripts, installs dependencies, or configures credentials.
 metadata:
   vendor: scientific-agent-skills
-  vendor-release: v2.70.0
+  vendor-release: v2.72.0
   upstream-skill-id: optimize-for-gpu
   researchspec-role: semantic-helper
 ---
@@ -26,6 +26,11 @@ metadata:
 Treat GPU acceleration as an evidence-driven optimization, not an automatic rewrite. Preserve the
 user's numerical and algorithmic contract, measure with representative data, and keep the GPU
 version only when synchronized end-to-end benchmarks show a useful improvement.
+
+Reviewed against RAPIDS 26.08, CuPy 14.2, Numba-CUDA 0.30.4, and Warp 1.17.
+The references contain illustrative GPU examples: source/API review is not execution on CUDA
+hardware. Validate them on the user's target GPU before reporting correctness or speedup.
+Do not use a moving `latest` documentation page to infer compatibility with a pinned release.
 
 ## When This Skill Applies
 
@@ -152,6 +157,13 @@ Use `%gpu_timeit` in notebooks, Nsight Systems (`nsys`) for end-to-end timelines
 Compute (`ncu`) for kernel analysis. Report both synchronized kernel/region time and realistic
 end-to-end latency; include transfer and conversion costs when production pays them.
 
+Measure peak device memory as well as time. For CuPy, distinguish live allocations
+from memory retained by its pool; a high `nvidia-smi` reading after arrays are
+released is not by itself a leak. Record the allocator and pooling policy, include
+temporary buffers and FFT caches, and leave headroom for CUDA context/library
+allocations outside the pool limit. Avoid clearing the pool inside timed repeats
+unless production does so. See [CuPy memory management](https://docs.cupy.dev/en/stable/user_guide/memory.html).
+
 ### 7. Keep, revise, or reject the port
 
 Retain the GPU path only when it passes correctness checks and improves the metric the user cares
@@ -162,7 +174,8 @@ transfers, unsupported fallback, memory pressure, launch granularity, or the alg
 
 - Provide a CPU fallback when the application requires portability; otherwise fail early with a
   clear hardware and dependency error.
-- Test numerical correctness against CPU results (GPU floating point may differ slightly due to operation ordering)
+- Test against a trusted reference with problem-specific tolerances; changed algorithms,
+  precision, reduction order, and random streams can produce more than roundoff differences.
 - GPU memory is limited — for datasets larger than GPU memory, consider chunking or using RAPIDS Dask for multi-GPU
 - Prefer the CUDA Array Interface or DLPack for supported zero-copy interchange, but verify device,
   dtype, contiguity, ownership, and stream semantics rather than assuming every conversion is free.

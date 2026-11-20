@@ -1,10 +1,10 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-pymatgen
 title: pymatgen
-description: Analyze, validate, convert, and transform materials structures and
-  computed materials data with current pymatgen APIs, including local phase
-  diagrams, symmetry sensitivity, electronic-structure I/O, and explicitly
-  bounded Materials Project queries.
+description: Analyzes, validates, converts, and transforms materials structures
+  and computed materials data with pymatgen. Use for local phase diagrams,
+  symmetry sensitivity, electronic-structure I/O, and bounded Materials Project
+  queries.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -46,27 +46,27 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-analysis-modules.md
     path: references/analysis_modules.md
-    content_hash: e1b2217eb9011c33c484030e9ea50c4bdaeeff1e379d674d11f1cb7d92ce38cc
+    content_hash: 80f2b10954eb382326f29b42e2c0ba36ecffcb7b7f7aa7baac41787417e98619
     license: MIT
   - knowledge_id: sas-references-core-classes.md
     path: references/core_classes.md
-    content_hash: 04c27c6cf9bb35b525d53ff168eb88dc2855820d36504acb99f165c358b21cbf
+    content_hash: 855b72c5860def49bda192d93b114a411493d639772bf7b4b75965ed9c6d994a
     license: MIT
   - knowledge_id: sas-references-io-formats.md
     path: references/io_formats.md
-    content_hash: 6845a53480ec9a07b932d51c8416a040ccb56ecb7d87b8aadca9f8a37da5ae1a
+    content_hash: 86a02f2c65b2bd9007b9b51a67694610cb468517a0e213b42e51c3e6ed2a310f
     license: MIT
   - knowledge_id: sas-references-materials-project-api.md
     path: references/materials_project_api.md
-    content_hash: f541c423ab1a2a6d81b1657361250d8bd5099d7373ed24a3f63ef85f468de188
+    content_hash: dd1940b0ffb25d59f49aa2c7ff2167be5542c46025b6af599425b9ff5a7300d7
     license: MIT
   - knowledge_id: sas-references-transformations-workflows.md
     path: references/transformations_workflows.md
-    content_hash: d1fb6e81f6ca424fbc643ddb51e02881196146e6e589d2c230971d600fbd1efb
+    content_hash: 2ba11b7b1f61de4af89ca216abf12b8c28ee7fa4659623914730bb9733991628
     license: MIT
   - knowledge_id: sas-scripts--common.py
     path: scripts/_common.py
-    content_hash: a4fe82a32f38da7759c55f5aae232dccc656766e7ab62dc7e2b8bcf09e98b373
+    content_hash: 8eaa46482ecd54861730808aa628b515eae633eb5414835e600917505fc98772
     license: MIT
   - knowledge_id: sas-scripts-artifact-manifest.py
     path: scripts/artifact_manifest.py
@@ -74,7 +74,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-composition-structure-validator.py
     path: scripts/composition_structure_validator.py
-    content_hash: c96d2a7a2d09006e270877fe89925719fc5ba84ebd2bb18647b15ddf96f28755
+    content_hash: cc008c188a2e864a4498df0b90acab4c02f2270e58cc5659dd2129c21f5766c9
     license: MIT
   - knowledge_id: sas-scripts-io-conversion-plan.py
     path: scripts/io_conversion_plan.py
@@ -82,19 +82,19 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-mp-query.py
     path: scripts/mp_query.py
-    content_hash: 674956444ffe2ab647a79877a27a5e4c0c993a6703a8f5b54d4c063103b7558f
+    content_hash: 7b9fc0e0ec04d63b2349d6c336bb5e390f5ab481ea669a2f43efc7f0d6d1f704
     license: MIT
   - knowledge_id: sas-scripts-phase-diagram-generator.py
     path: scripts/phase_diagram_generator.py
-    content_hash: c2e9727ed8522824f315091f477ab19ba8916baf949bb2d8ec6b815f443a337e
+    content_hash: 2deeae612bae443c643078ddecea37000aeb88b6982a39522985d93436c38208
     license: MIT
   - knowledge_id: sas-scripts-structure-analyzer.py
     path: scripts/structure_analyzer.py
-    content_hash: f5740bf53181e30f4a9c4546a32ea3d09f9b1ada76b26d7d2b96fe8233fdbfd4
+    content_hash: 1f1bccf254b80edb28f9b2925dccc72327e948d41c1fb3adef6a5e72288413b9
     license: MIT
   - knowledge_id: sas-scripts-structure-converter.py
     path: scripts/structure_converter.py
-    content_hash: f8e5fe54d8d86af94fa5efd1782406a163790103dacac1bbdcbf3b93abc79b1b
+    content_hash: eead5fd4e7c18a050c226f9ecdcc8ae97fa570d9e0269421f1142013deaf92d8
     license: MIT
   - knowledge_id: sas-scripts-symmetry-sensitivity-report.py
     path: scripts/symmetry_sensitivity_report.py
@@ -105,33 +105,33 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/SKILL.md
-      sha256: 96fac3bc0605a99f74832528723002efe1d4ac8a5a21810ac975b250fc17a3f1
+      sha256: e50522ab61cfc2be79d8878cffb771a366c0df03a0795562783419c80f160884
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/analysis_modules.md
-      sha256: e1b2217eb9011c33c484030e9ea50c4bdaeeff1e379d674d11f1cb7d92ce38cc
+      sha256: 80f2b10954eb382326f29b42e2c0ba36ecffcb7b7f7aa7baac41787417e98619
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/core_classes.md
-      sha256: 04c27c6cf9bb35b525d53ff168eb88dc2855820d36504acb99f165c358b21cbf
+      sha256: 855b72c5860def49bda192d93b114a411493d639772bf7b4b75965ed9c6d994a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/io_formats.md
-      sha256: 6845a53480ec9a07b932d51c8416a040ccb56ecb7d87b8aadca9f8a37da5ae1a
+      sha256: 86a02f2c65b2bd9007b9b51a67694610cb468517a0e213b42e51c3e6ed2a310f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/materials_project_api.md
-      sha256: f541c423ab1a2a6d81b1657361250d8bd5099d7373ed24a3f63ef85f468de188
+      sha256: dd1940b0ffb25d59f49aa2c7ff2167be5542c46025b6af599425b9ff5a7300d7
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/references/transformations_workflows.md
-      sha256: d1fb6e81f6ca424fbc643ddb51e02881196146e6e589d2c230971d600fbd1efb
+      sha256: 2ba11b7b1f61de4af89ca216abf12b8c28ee7fa4659623914730bb9733991628
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/_common.py
-      sha256: a4fe82a32f38da7759c55f5aae232dccc656766e7ab62dc7e2b8bcf09e98b373
+      sha256: 8eaa46482ecd54861730808aa628b515eae633eb5414835e600917505fc98772
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/artifact_manifest.py
       sha256: 20e64dcd2e65996312bd17a487e0eebfb8e87fc814f938cc030a972f64d6118c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/composition_structure_validator.py
-      sha256: c96d2a7a2d09006e270877fe89925719fc5ba84ebd2bb18647b15ddf96f28755
+      sha256: cc008c188a2e864a4498df0b90acab4c02f2270e58cc5659dd2129c21f5766c9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/io_conversion_plan.py
       sha256: bbaa88773984f1cc2ae170720ff18142e7d4a5114a98c83b1da905e9803605f1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/mp_query.py
-      sha256: 674956444ffe2ab647a79877a27a5e4c0c993a6703a8f5b54d4c063103b7558f
+      sha256: 7b9fc0e0ec04d63b2349d6c336bb5e390f5ab481ea669a2f43efc7f0d6d1f704
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/phase_diagram_generator.py
-      sha256: c2e9727ed8522824f315091f477ab19ba8916baf949bb2d8ec6b815f443a337e
+      sha256: 2deeae612bae443c643078ddecea37000aeb88b6982a39522985d93436c38208
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/structure_analyzer.py
-      sha256: f5740bf53181e30f4a9c4546a32ea3d09f9b1ada76b26d7d2b96fe8233fdbfd4
+      sha256: 1f1bccf254b80edb28f9b2925dccc72327e948d41c1fb3adef6a5e72288413b9
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/structure_converter.py
-      sha256: f8e5fe54d8d86af94fa5efd1782406a163790103dacac1bbdcbf3b93abc79b1b
+      sha256: eead5fd4e7c18a050c226f9ecdcc8ae97fa570d9e0269421f1142013deaf92d8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymatgen/scripts/symmetry_sensitivity_report.py
       sha256: 21a384d299e20b7e98281c8623da02a4a8e82604275c8c83454f87163652da15
 license: MIT

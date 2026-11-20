@@ -15,7 +15,7 @@ try {
   const errors = [];
 
   for (const relativePath of uniqueSorted(candidates.map((candidate) => normalizeRelativePath(candidate, "candidate path")))) {
-    if (options.paths.length === 0 && isGeneratedPreservedSkill(relativePath)) continue;
+    if (options.paths.length === 0 && isGeneratedPreservedContent(relativePath)) continue;
     const absolutePath = resolveInsideRoot(root, relativePath, "candidate path");
     const fileInfo = await statOrUndefined(absolutePath);
     if (!fileInfo?.isFile() || exemptions.has(relativePath)) continue;
@@ -152,8 +152,10 @@ function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
 }
 
-function isGeneratedPreservedSkill(relativePath) {
-  return /^skills\/plugins\/extensions\/capabilities\/plugin-(?:tooluniverse|scientific-agent-skills|education-agent-skills)-[^/]+\/SKILL\.md$/.test(relativePath);
+function isGeneratedPreservedContent(relativePath) {
+  return relativePath.startsWith("skills/plugins/vendors/scientific-agent-skills/")
+    || /^skills\/plugins\/extensions\/capabilities\/plugin-scientific-agent-skills-[^/]+\//.test(relativePath)
+    || /^skills\/plugins\/extensions\/capabilities\/plugin-(?:tooluniverse|education-agent-skills)-[^/]+\/SKILL\.md$/.test(relativePath);
 }
 
 async function statOrUndefined(target) {

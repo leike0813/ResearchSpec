@@ -114,6 +114,10 @@ export function validateScientificAgentSkillsPolicies(policies: ScientificAgentS
     const expectedId = `scientific-agent-skills-${decision.upstream_skill_id}`;
     if (decision.generated_skill_id !== expectedId) throw new Error(`Generated Skill ID must be ${expectedId}.`);
     for (const evidence of reviewEvidence(decision)) if (!safeEvidenceExists(policies.audit, audit.source_path, evidence)) throw new Error(`Decision evidence is outside the pinned source: ${decision.upstream_skill_id}:${evidence}`);
+    const licenseText = decision.license?.text_source;
+    if (licenseText && !licenseText.startsWith("LICENSES/") && !safeEvidenceExists(policies.audit, audit.source_path, licenseText)) {
+      throw new Error(`License text is outside the pinned source and reviewed license texts: ${decision.upstream_skill_id}:${licenseText}`);
+    }
     if (audit.scope_disposition === "exclude" && decision.disposition !== "excluded") throw new Error(`Audit hard exclusion cannot be admitted: ${decision.upstream_skill_id}`);
     if (decision.disposition === "admitted") {
       if (decision.reason_codes.length || !decision.license || decision.security_review.outcome !== "passed" || decision.content_review.outcome !== "passed") throw new Error(`Admitted Skill has unresolved review state: ${decision.upstream_skill_id}`);
@@ -170,7 +174,6 @@ export function validateScientificAgentSkillsPolicies(policies: ScientificAgentS
 function reviewEvidence(decision: ScientificAgentSkillsAdmissionDecision): string[] {
   return [
     ...(decision.license?.evidence ?? []),
-    decision.license?.text_source,
     ...decision.security_review.evidence,
     ...decision.content_review.evidence,
     ...decision.arsu_overlap.evidence,

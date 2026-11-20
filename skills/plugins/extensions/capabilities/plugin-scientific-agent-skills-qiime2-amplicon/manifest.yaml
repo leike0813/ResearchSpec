@@ -1,0 +1,66 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-qiime2-amplicon
+title: QIIME 2 paired-end 16S amplicons
+description: Processes paired-end 16S amplicon reads into QIIME 2 ASVs and
+  taxonomy with retained artifact provenance. Checks paired FASTQ manifests,
+  primer orientation diagnostics, predicted post-trimming overlap, sample IDs,
+  runtime versions and read retention, and guides selection of compatible
+  taxonomic classifiers.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-runtime-and-interpretation.md
+    path: references/runtime-and-interpretation.md
+    content_hash: d364d7f4ae66d3481168f71ce677e188c6135db349d498744ebf387223cd9741
+    license: MIT
+  - knowledge_id: sas-scripts-amplicon-workflow.py
+    path: scripts/amplicon_workflow.py
+    content_hash: 4f781d70594f8624af3ad71e3cdedc0f5cbcd285ed630a3277cae2fe8a94827a
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiime2-amplicon/SKILL.md
+      sha256: 947ea361f733b70027b9a10716e1a4122eb092b7ff867615d090d567d14c4416
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiime2-amplicon/references/runtime-and-interpretation.md
+      sha256: d364d7f4ae66d3481168f71ce677e188c6135db349d498744ebf387223cd9741
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiime2-amplicon/scripts/amplicon_workflow.py
+      sha256: 4f781d70594f8624af3ad71e3cdedc0f5cbcd285ed630a3277cae2fe8a94827a
+license: MIT

@@ -37,10 +37,8 @@ vendor converter ──► vendor bundle/Skills ◄── source-neutral domain 
 - The same Skill may be a direct member of several domains. Its bytes and global Skill ID remain unique.
 
 ToolUniverse v1.5.10 contributes 130 admitted Skills. Scientific Agent Skills
-v2.70.0 contributes 56 reviewed, vendor-prefixed Skills after complete admission
-decisions for all 167 audit records and finding-level decisions for the retained
-42-entry manual-security catalog (historical targets plus current high/critical
-findings). Materials-Science-Skills-For-LLM
+v2.72.0 contributes 68 reviewed vendor-prefixed Skills, with 177 audit records
+and 56 maintainer security decisions. Materials-Science-Skills-For-LLM
 `snapshot-fafd3ab` contributes seven curated Skills after resolving all twelve
 audit records and all 24 admitted source files. FinRobot `snapshot-2717499`
 contributes six neutral, capability-complete financial research Skills after
@@ -95,10 +93,10 @@ Vendor converters are repo-local maintainer tools, not a public converter ABI. T
 
 The Scientific Agent Skills converter independently:
 
-- validates the pinned v2.70.0 source and complete 167-record admission catalog;
-- admits 56 Skills with `scientific-agent-skills-` IDs and excludes 111 after authority, redistribution, overlap, manual security, content, and domain review;
-- validates the complete 42-entry manual-review SSOT, applies only approved declarative adaptations, removes platform metadata, normalizes compatibility and tool declarations, discloses bundled scripts, and copies reviewed resource trees with 19 explicit exclusions;
-- records all 28 audited relationships while allowing only admitted reviewed `required` edges to affect installation;
+- validates the pinned v2.72.0 source and complete 177-record admission catalog;
+- admits 68 Skills with `scientific-agent-skills-` IDs and excludes 109 after authority, redistribution, overlap, security, content and domain review;
+- validates the 56-entry manual-review catalog, adapts approved entries, discloses bundled scripts and copies reviewed resource trees with 45 explicit exclusions;
+- records 27 audited relationships and only permits reviewed `required` edges from admitted sources to affect installation;
 - emits its isolated tree, bundle, manifest, and report.
 
 The Materials-Science-Skills-For-LLM converter independently:
@@ -198,12 +196,14 @@ paths as knowledge refs, and binds every package to
 assignments for the 30 ToolUniverse domains are derived directly from the
 source-neutral domain catalog.
 
-The Scientific Agent Skills extensions add all 56 reviewed Skills as
+The Scientific Agent Skills extensions project all 68 reviewed Skills as
 `plugin-scientific-agent-skills-*` capabilities and profiles through
-`scripts/generate-scientific-agent-skills-extensions.mjs`. All 632 reviewed
-resources, including the TimesFM binary example assets, project as byte-level
-SHA-256 knowledge refs under MIT. Domain assignments for the 29 Scientific
-Agent Skills domains (24 ANZSRC Group and five tool domains) are derived from
+`scripts/generate-scientific-agent-skills-extensions.mjs`. All 664 reviewed
+resources project as byte-level SHA-256 knowledge refs with the reviewed
+Skill-level license. Each extension carries the license and notice from its
+reviewed raw Skill. Regeneration
+cleans up retired resources named in the previous maintenance catalog. Domain
+assignments for the 37 Scientific Agent Skills domains (32 ANZSRC Group and five tool domains) derive from
 the source-neutral domain catalog.
 
 The Education Agent Skills extensions finish the six-vendor migration: all 136

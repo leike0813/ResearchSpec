@@ -46,50 +46,56 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-coordinates.md
     path: references/coordinates.md
-    content_hash: 6bba23f1cedf55411293337c0b4158f83d2babe3aaa617e9b2b364a8f4e7bd1a
-    license: MIT
+    content_hash: 2773d6f4086c287436a4b5a4100fd74a951a1688b09cd307bd2afc2945cc27fb
+    license: BSD-3-Clause
   - knowledge_id: sas-references-cosmology.md
     path: references/cosmology.md
-    content_hash: 311751b8072ce53abcba210b5ebfaac048301ecb7314d164321fba56df93366c
-    license: MIT
+    content_hash: 71b7e19b9861147480f5a62a34e692d4caf90cfd0ab4bd1fcca765a9cbb6001f
+    license: BSD-3-Clause
   - knowledge_id: sas-references-fits.md
     path: references/fits.md
-    content_hash: aa1771bc8cb75a2f332bb1a9cfc31a859fd7b6e07a6314add673d17111b98838
-    license: MIT
+    content_hash: 27ee0335641eadc71a62551d7d58d0cb2b5b651b4b4dbbfca42a40f78be4e836
+    license: BSD-3-Clause
+  - knowledge_id: sas-references-review.md
+    path: references/review.md
+    content_hash: d508fe2c8f2969a3aecfd615088b06159b2f653c4b378f1e7bfc83d76db75986
+    license: BSD-3-Clause
   - knowledge_id: sas-references-tables.md
     path: references/tables.md
-    content_hash: abade45705a4bf6b0a9b27d6693163e26cb53d9a9750f8d57dd9a9ad57caf366
-    license: MIT
+    content_hash: b2cc2a568ca4b0d514346d1db5b2e8d704fbd181cb56dc1b1edae86fb9c06dae
+    license: BSD-3-Clause
   - knowledge_id: sas-references-time.md
     path: references/time.md
-    content_hash: fd7c3a1a922e7b72060fa702d9702239a0b552d34efbe8e1673604a749810f61
-    license: MIT
+    content_hash: 4741498365348fd65fda0ff8ddcb57572cd3e5e7d5ff96f965f6567667b8b987
+    license: BSD-3-Clause
   - knowledge_id: sas-references-units.md
     path: references/units.md
-    content_hash: ec3d108772f9c0f2242ede6b8499f846d21d53bfc1c255fb3306bdf685139a8e
-    license: MIT
+    content_hash: 1df6212fab813f85dd6788551f474a68103ee694051d89194cfe8a09e90a88b0
+    license: BSD-3-Clause
   - knowledge_id: sas-references-wcs-and-other-modules.md
     path: references/wcs_and_other_modules.md
-    content_hash: b955cd3b0c75ae9dce3b24ccea2b78e0eceee6c81b836a30d1f4edf2821eb9fc
-    license: MIT
+    content_hash: 5201dfc5450a4648a3c550cf58444f209bcff9b082ece4354e3dbf9becb13cc8
+    license: BSD-3-Clause
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/SKILL.md
-      sha256: 884b738dad5669ad10f7f467efa9bfed18c63830d1ffe996ce752786c4701389
+      sha256: d5a8d720e65b7af8ebc57d7bfa56a24f79d49c3809674ad41ee04c5854585757
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/coordinates.md
-      sha256: 6bba23f1cedf55411293337c0b4158f83d2babe3aaa617e9b2b364a8f4e7bd1a
+      sha256: 2773d6f4086c287436a4b5a4100fd74a951a1688b09cd307bd2afc2945cc27fb
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/cosmology.md
-      sha256: 311751b8072ce53abcba210b5ebfaac048301ecb7314d164321fba56df93366c
+      sha256: 71b7e19b9861147480f5a62a34e692d4caf90cfd0ab4bd1fcca765a9cbb6001f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/fits.md
-      sha256: aa1771bc8cb75a2f332bb1a9cfc31a859fd7b6e07a6314add673d17111b98838
+      sha256: 27ee0335641eadc71a62551d7d58d0cb2b5b651b4b4dbbfca42a40f78be4e836
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/review.md
+      sha256: d508fe2c8f2969a3aecfd615088b06159b2f653c4b378f1e7bfc83d76db75986
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/tables.md
-      sha256: abade45705a4bf6b0a9b27d6693163e26cb53d9a9750f8d57dd9a9ad57caf366
+      sha256: b2cc2a568ca4b0d514346d1db5b2e8d704fbd181cb56dc1b1edae86fb9c06dae
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/time.md
-      sha256: fd7c3a1a922e7b72060fa702d9702239a0b552d34efbe8e1673604a749810f61
+      sha256: 4741498365348fd65fda0ff8ddcb57572cd3e5e7d5ff96f965f6567667b8b987
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/units.md
-      sha256: ec3d108772f9c0f2242ede6b8499f846d21d53bfc1c255fb3306bdf685139a8e
+      sha256: 1df6212fab813f85dd6788551f474a68103ee694051d89194cfe8a09e90a88b0
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/wcs_and_other_modules.md
-      sha256: b955cd3b0c75ae9dce3b24ccea2b78e0eceee6c81b836a30d1f4edf2821eb9fc
-license: MIT
+      sha256: 5201dfc5450a4648a3c550cf58444f209bcff9b082ece4354e3dbf9becb13cc8
+license: BSD-3-Clause

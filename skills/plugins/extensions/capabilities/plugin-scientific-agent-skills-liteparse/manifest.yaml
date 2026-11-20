@@ -5,8 +5,8 @@ description: Local document and PDF parsing that returns spatial text with
   bounding boxes. Use for extracting text from PDFs, DOCX, Office files, and
   images; running OCR on scans; producing layout-preserved JSON for RAG;
   batch-ingesting folders of papers; or rendering pages to PNG for multimodal
-  agents. Distinguishing capabilities are per-token bounding boxes, page raster
-  output, and fully local processing with no cloud API.
+  agents. Distinguishing capabilities are spatial text boxes, Markdown, page
+  raster output, and local parsing with optional custom HTTP OCR.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -48,44 +48,44 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
-    content_hash: f9f6561f4497d5e17457f1802b19fe9f8c72523069d7143fbae68afc98e3d886
-    license: MIT
+    content_hash: 2aa143daf3423f460a73c37d36441af782819d3aeae0bcf61023f8d340364973
+    license: Apache-2.0
   - knowledge_id: sas-references-choosing-a-parser.md
     path: references/choosing_a_parser.md
-    content_hash: 58b198705dad134527ba824b7c02af8203d36c3bed334826cd5026137b982199
-    license: MIT
+    content_hash: 12a2c9259fd057b7d981e8941a94f1331a78f38c42eae6bde6d8f1f8c4f75c5a
+    license: Apache-2.0
   - knowledge_id: sas-references-cli-reference.md
     path: references/cli_reference.md
-    content_hash: b84dd0c47a8d3426603b316fae2924c9d79e9097285be45215f88b6a2a23a8f4
-    license: MIT
+    content_hash: 29ea20076e374045d6bbc2219f6c5c946cc322dc43e5c60fa6d9f83a1efce158
+    license: Apache-2.0
   - knowledge_id: sas-references-ocr-and-formats.md
     path: references/ocr_and_formats.md
-    content_hash: 1031bdac3bc536aeaf8d45b4867104dad34f894d3440757ad38a75d41a58f61d
-    license: MIT
+    content_hash: 406cefd0f561e6a42ec6f7851333edae07f39367498e8b099e05b93140e3d667
+    license: Apache-2.0
   - knowledge_id: sas-references-output-formats.md
     path: references/output_formats.md
-    content_hash: 78011bc2c40cc8f24bbfd906ab12a3328cd597c100cebb1ed4f89bd48766479c
-    license: MIT
+    content_hash: 69478a672bc8312322f6a10484be98029f7ced378b5863be3b12696f2732d97f
+    license: Apache-2.0
   - knowledge_id: sas-scripts-batch-parse-dir.py
     path: scripts/batch_parse_dir.py
-    content_hash: 6d9162557da1a4d0005fb448989040a40c9246e469a62783c525aba591c6294c
-    license: MIT
+    content_hash: e6250a342cd756eaf3da155cbfa3684f88cf8eedc476275e62466e299f726b93
+    license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/SKILL.md
-      sha256: b387042f66b55e7a8feec7e56481464fc2dd914148c2eab2f8132f23514cd0a9
+      sha256: 68acde60387745987347e920be78d9bc5ef0bd43945887785a22f060f6e2e9c8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/api_reference.md
-      sha256: f9f6561f4497d5e17457f1802b19fe9f8c72523069d7143fbae68afc98e3d886
+      sha256: 2aa143daf3423f460a73c37d36441af782819d3aeae0bcf61023f8d340364973
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/choosing_a_parser.md
-      sha256: 58b198705dad134527ba824b7c02af8203d36c3bed334826cd5026137b982199
+      sha256: 12a2c9259fd057b7d981e8941a94f1331a78f38c42eae6bde6d8f1f8c4f75c5a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/cli_reference.md
-      sha256: b84dd0c47a8d3426603b316fae2924c9d79e9097285be45215f88b6a2a23a8f4
+      sha256: 29ea20076e374045d6bbc2219f6c5c946cc322dc43e5c60fa6d9f83a1efce158
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/ocr_and_formats.md
-      sha256: 1031bdac3bc536aeaf8d45b4867104dad34f894d3440757ad38a75d41a58f61d
+      sha256: 406cefd0f561e6a42ec6f7851333edae07f39367498e8b099e05b93140e3d667
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/references/output_formats.md
-      sha256: 78011bc2c40cc8f24bbfd906ab12a3328cd597c100cebb1ed4f89bd48766479c
+      sha256: 69478a672bc8312322f6a10484be98029f7ced378b5863be3b12696f2732d97f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-liteparse/scripts/batch_parse_dir.py
-      sha256: 6d9162557da1a4d0005fb448989040a40c9246e469a62783c525aba591c6294c
-license: MIT
+      sha256: e6250a342cd756eaf3da155cbfa3684f88cf8eedc476275e62466e299f726b93
+license: Apache-2.0

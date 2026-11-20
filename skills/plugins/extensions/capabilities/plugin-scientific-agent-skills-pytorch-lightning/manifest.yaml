@@ -47,68 +47,68 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-best-practices.md
     path: references/best_practices.md
-    content_hash: 3172921ba31cd2e59d0d84b533210b852a4f8d651f06f74e2f907d28e11933ef
-    license: MIT
+    content_hash: e99b13ebdd43b702b6e1fc9732a85ea2ee153c16377c7f216a3433a0cd81d325
+    license: Apache-2.0
   - knowledge_id: sas-references-callbacks.md
     path: references/callbacks.md
-    content_hash: aa2140e7b684dfe8e3f47752dc4d9b14220a8d4c126f3f38cbbc1b6698466395
-    license: MIT
+    content_hash: 84801cfe2ba309afc8b5a3a13a2a752ae9b0cd98617771fe29551dd7201e21a3
+    license: Apache-2.0
   - knowledge_id: sas-references-data-module.md
     path: references/data_module.md
-    content_hash: a94cb2aeb0ac6e04d07d05cd8a3f96bb64d0623cfb310dfcc6d2c255b03d86f9
-    license: MIT
+    content_hash: be42f4a16a8898257834cd893f61977a6f8270828e7cae1b67dbc23a01a15549
+    license: Apache-2.0
   - knowledge_id: sas-references-distributed-training.md
     path: references/distributed_training.md
-    content_hash: 7a555a90d4257fb12e5bc063a64e6373242d29a02d8337d22a5d4cd59350acfc
-    license: MIT
+    content_hash: 0a8b2b4a9975b170750db85c334288bd48b46fd06eb5c00589b17a187d9e4591
+    license: Apache-2.0
   - knowledge_id: sas-references-lightning-module.md
     path: references/lightning_module.md
-    content_hash: 952354340eb7fa6d09fa235392ccd4eb31e023422c45068e8c780f6523363a90
-    license: MIT
+    content_hash: 0e33e3f04f8c9e25a8c03b51ec8e3d9ad3b968b5789eb36341e2f3198535d35b
+    license: Apache-2.0
   - knowledge_id: sas-references-logging.md
     path: references/logging.md
-    content_hash: 097cd018cdd0d4880dd861bd9405e68df7c392498bb28ad63afbeb9869ae8db1
-    license: MIT
+    content_hash: 624f90f1d0aaf7143de4ba90b855cb541065dbec1d8ac2ca3fb766a91e2d07d4
+    license: Apache-2.0
   - knowledge_id: sas-references-trainer.md
     path: references/trainer.md
-    content_hash: d7761218deb392bfac4f373d4238c0595b5094115bd1645ae00bff0940b54887
-    license: MIT
+    content_hash: 67eb14cbdd6ffd162264d5fa6c6ffecc63f55cfad75334f1bec90ed4c5b483f4
+    license: Apache-2.0
   - knowledge_id: sas-scripts-quick-trainer-setup.py
     path: scripts/quick_trainer_setup.py
-    content_hash: 8b9a8e926f0c2841b5dfcd49597126defe0b55132ab5c8122ab531a4506f7eb3
-    license: MIT
+    content_hash: 1b700c1dde892042252cee202fa8bcfd26b035e73eb4617362bfaa6f891126e1
+    license: Apache-2.0
   - knowledge_id: sas-scripts-template-datamodule.py
     path: scripts/template_datamodule.py
-    content_hash: 82d1601800fa17a80250b640b4df530ebd78bb852316bc75c6441b1d592c80cf
-    license: MIT
+    content_hash: 3febf10bab4bf537ea584c351181d092fcdbd1fb6914fd90bb5bd4cd80134ffe
+    license: Apache-2.0
   - knowledge_id: sas-scripts-template-lightning-module.py
     path: scripts/template_lightning_module.py
-    content_hash: 7c93eb6abfcaa938fefd4c3c5fd62fade2ad448955f54abb95e4fd2424c4de00
-    license: MIT
+    content_hash: 2053136d3bc5523661dbbfce64c4b4506415e679cc34edc60ba9242c8d3dfb71
+    license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/SKILL.md
-      sha256: 50383c315a284ed5edc7698070ae98cf4c19bf476cd6ece779fd08a9c51fd52c
+      sha256: dd7ab29a9d0e4b565b1fbd2f304a45bb9b3f56892b22a9366937a63917ad7ff1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/best_practices.md
-      sha256: 3172921ba31cd2e59d0d84b533210b852a4f8d651f06f74e2f907d28e11933ef
+      sha256: e99b13ebdd43b702b6e1fc9732a85ea2ee153c16377c7f216a3433a0cd81d325
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/callbacks.md
-      sha256: aa2140e7b684dfe8e3f47752dc4d9b14220a8d4c126f3f38cbbc1b6698466395
+      sha256: 84801cfe2ba309afc8b5a3a13a2a752ae9b0cd98617771fe29551dd7201e21a3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/data_module.md
-      sha256: a94cb2aeb0ac6e04d07d05cd8a3f96bb64d0623cfb310dfcc6d2c255b03d86f9
+      sha256: be42f4a16a8898257834cd893f61977a6f8270828e7cae1b67dbc23a01a15549
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/distributed_training.md
-      sha256: 7a555a90d4257fb12e5bc063a64e6373242d29a02d8337d22a5d4cd59350acfc
+      sha256: 0a8b2b4a9975b170750db85c334288bd48b46fd06eb5c00589b17a187d9e4591
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/lightning_module.md
-      sha256: 952354340eb7fa6d09fa235392ccd4eb31e023422c45068e8c780f6523363a90
+      sha256: 0e33e3f04f8c9e25a8c03b51ec8e3d9ad3b968b5789eb36341e2f3198535d35b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/logging.md
-      sha256: 097cd018cdd0d4880dd861bd9405e68df7c392498bb28ad63afbeb9869ae8db1
+      sha256: 624f90f1d0aaf7143de4ba90b855cb541065dbec1d8ac2ca3fb766a91e2d07d4
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/references/trainer.md
-      sha256: d7761218deb392bfac4f373d4238c0595b5094115bd1645ae00bff0940b54887
+      sha256: 67eb14cbdd6ffd162264d5fa6c6ffecc63f55cfad75334f1bec90ed4c5b483f4
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/quick_trainer_setup.py
-      sha256: 8b9a8e926f0c2841b5dfcd49597126defe0b55132ab5c8122ab531a4506f7eb3
+      sha256: 1b700c1dde892042252cee202fa8bcfd26b035e73eb4617362bfaa6f891126e1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/template_datamodule.py
-      sha256: 82d1601800fa17a80250b640b4df530ebd78bb852316bc75c6441b1d592c80cf
+      sha256: 3febf10bab4bf537ea584c351181d092fcdbd1fb6914fd90bb5bd4cd80134ffe
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pytorch-lightning/scripts/template_lightning_module.py
-      sha256: 7c93eb6abfcaa938fefd4c3c5fd62fade2ad448955f54abb95e4fd2424c4de00
-license: MIT
+      sha256: 2053136d3bc5523661dbbfce64c4b4506415e679cc34edc60ba9242c8d3dfb71
+license: Apache-2.0

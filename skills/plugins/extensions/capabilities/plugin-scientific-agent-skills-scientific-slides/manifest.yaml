@@ -1,11 +1,11 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-scientific-slides
 title: Scientific Slides
-description: Build slide decks and presentations for research talks. Use this
-  for making PowerPoint slides, conference presentations, seminar talks,
-  research presentations, thesis defense slides, or any scientific talk.
-  Provides slide structure, design templates, timing guidance, and visual
-  validation. Works with PowerPoint and LaTeX Beamer.
+description: Plans, builds, and verifies scientific presentations for
+  conferences, seminars, thesis defenses, grant briefings, journal clubs, and
+  teaching, covering story structure, timing, editable PowerPoint and Beamer
+  production, local PDF assembly and validation, accessibility, and final venue
+  checks.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -47,27 +47,27 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-assets-beamer-template-conference.tex
     path: assets/beamer_template_conference.tex
-    content_hash: e4049409c316a50c73da7c87c2818a7a2d62878d0bcebef316abe95d86ab132c
+    content_hash: 6baeb344277e60f0909b48421cd8d93f093e6733469b39426cdfcf38164cdafa
     license: MIT
   - knowledge_id: sas-assets-beamer-template-defense.tex
     path: assets/beamer_template_defense.tex
-    content_hash: ce44a4933a70a9267514eb1950bfd64b6c18299c7a96cf5955b78778ce9a7d3e
+    content_hash: 03893eaf18e9e689fefd42bcb6ffc56413d229fe980c0bd67804422ba0077f45
     license: MIT
   - knowledge_id: sas-assets-beamer-template-seminar.tex
     path: assets/beamer_template_seminar.tex
-    content_hash: 94f19ea1919edb822c57c699e1611f87e00650caab7aee53edcf94d776ab5cf7
+    content_hash: 714a3c3d29b0227100d9ecac10383471c3fb1d11cb3450c691d3955f0ef46ee3
     license: MIT
   - knowledge_id: sas-assets-powerpoint-design-guide.md
     path: assets/powerpoint_design_guide.md
-    content_hash: 91de949952b5ba67181196eadd7eea4fc7dc69301b256c41d28a74752bfdda35
+    content_hash: afacd3ac9b33311a86ebf1398bc960279b1412a77a25c3ce5429ebbf3e50d94a
     license: MIT
   - knowledge_id: sas-assets-timing-guidelines.md
     path: assets/timing_guidelines.md
-    content_hash: 0e85b73c1997000ed0c0efa0807536d3d9cf024bf043068d6564d44351e0ba83
+    content_hash: 39f4720e9d5a602d6c16af0985232fbc78d4e79598e7ed17a2bc076efc9cc195
     license: MIT
   - knowledge_id: sas-references-beamer-guide.md
     path: references/beamer_guide.md
-    content_hash: cb8a3c500ab9a3841c0e8559ad5894a4dad80fa3193589f28f5ca91e46d1c97b
+    content_hash: a57ee14a34d7b8b6bb72d19bc0b0d4ccaa172731cfc5d8dbf30fbceeb30dcbcd
     license: MIT
   - knowledge_id: sas-references-common-pitfalls.md
     path: references/common_pitfalls.md
@@ -75,94 +75,88 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-references-data-visualization-slides.md
     path: references/data_visualization_slides.md
-    content_hash: c79d5d9552d2f132dd3be1beb230c5c0da4f3f27f1ac04f7f6e571204bbab9ba
+    content_hash: ff0b437dae2cc74b9290907ade331dc69cb1365071584ef2a854f5ade3a53408
     license: MIT
   - knowledge_id: sas-references-presentation-structure.md
     path: references/presentation_structure.md
-    content_hash: deafc171b8951a43c9a8ae081158cab72fdb8dc4abc1334257ad594f454665f2
+    content_hash: 8e79965dd65ca56a7e239920867b36be1b2f626cee9e65e99e4d6efaaa883004
     license: MIT
   - knowledge_id: sas-references-presentation-workflow.md
     path: references/presentation_workflow.md
-    content_hash: 64e4e6f2b7483df1c7e629139df5dac605636ae3229f64d093f9a11aee5e4127
+    content_hash: 5e52ebfcf4b0a423dc82451fd62ec5468e8c4b66599f14d5e57ec6ece9c00700
     license: MIT
   - knowledge_id: sas-references-prompt-writing.md
     path: references/prompt_writing.md
-    content_hash: a933302ac7afd1bb1b8f76d7f4c3f445a415029611c13b1af1a22535e0adcb4a
-    license: MIT
-  - knowledge_id: sas-references-script-reference.md
-    path: references/script_reference.md
-    content_hash: b2bbd551f298e20910699bb1f98d552e10babcc8dfa1988c4cd71c7896a42d92
+    content_hash: 87341d37eac34509c88ba2a3e5e1a880915ac0576e74b12f0f6d2baa31f79f9d
     license: MIT
   - knowledge_id: sas-references-slide-capabilities.md
     path: references/slide_capabilities.md
-    content_hash: 519aba316aa1f98905f1d964fbaefb982de419ae26ddf3e9894a9069ebee5be6
+    content_hash: 1ad22713e87571cf65ac3176a84985774ad74e2a8be7e4c3396cb0877876f38b
     license: MIT
   - knowledge_id: sas-references-slide-design-principles.md
     path: references/slide_design_principles.md
-    content_hash: ee2d8f1b3ae0a849ee49e3e4d334c64ee3a1a79aee5ca28dbf43bbec822d98fa
+    content_hash: 6b50148bc161c80272b16da445dfdb87f966a32ccd3a28ff94dedc940dd6fbff
     license: MIT
   - knowledge_id: sas-references-talk-types-guide.md
     path: references/talk_types_guide.md
-    content_hash: 60f374e4e8d361e36a4c738c1e9e56b80470927e28f59e5c9f715343d7da6f6d
+    content_hash: 743274bc2664177f7a015c2531d07d516d1a7a6d6b6cb4a5ff527a3a99fac683
     license: MIT
   - knowledge_id: sas-references-visual-review-workflow.md
     path: references/visual_review_workflow.md
-    content_hash: 6d636d52fd3c6db84008fca1b96a39905539a12f28256337d6534a575c0b4632
+    content_hash: 38138ef5f10b92f6d8965906438235bbb9ff08c8839545501a00bd6b799ab581
     license: MIT
   - knowledge_id: sas-scripts-pdf-to-images.py
     path: scripts/pdf_to_images.py
-    content_hash: b572150da57890311e5dc55ed19f751c7b0f1f998cbda1e6392070f783dbd261
+    content_hash: 06ada43a0b3ff5c5f6c89dfb214a451e99ec0f23532ccb7962376b3f3e5ba610
     license: MIT
   - knowledge_id: sas-scripts-slides-to-pdf.py
     path: scripts/slides_to_pdf.py
-    content_hash: 265da6e1d722f6efb3dfd8a4acef260a54b3774a56471e73b31d771ad8a8420d
+    content_hash: a816f9269c3d1889677b92daa92e819834aafdcf600b1535304f385e178b3fdf
     license: MIT
   - knowledge_id: sas-scripts-validate-presentation.py
     path: scripts/validate_presentation.py
-    content_hash: b30aacfd6fcbfb11ea8783577dc4b969786ac7dc56f1ab6f0ca0c1ce37b7b9b1
+    content_hash: f4f8ebe14e2cc593edf60e5236bd31fcae1b686757c90cc4b18eb488cdf78646
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/SKILL.md
-      sha256: 9bd66540524d0bd45293c693a8a26eb2e298248e972247198a9847b61ad91122
+      sha256: a0be784c1e60aa7e58bb926ca82acd3a6982e0ae2febe96f8e3dd0c525354339
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/assets/beamer_template_conference.tex
-      sha256: e4049409c316a50c73da7c87c2818a7a2d62878d0bcebef316abe95d86ab132c
+      sha256: 6baeb344277e60f0909b48421cd8d93f093e6733469b39426cdfcf38164cdafa
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/assets/beamer_template_defense.tex
-      sha256: ce44a4933a70a9267514eb1950bfd64b6c18299c7a96cf5955b78778ce9a7d3e
+      sha256: 03893eaf18e9e689fefd42bcb6ffc56413d229fe980c0bd67804422ba0077f45
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/assets/beamer_template_seminar.tex
-      sha256: 94f19ea1919edb822c57c699e1611f87e00650caab7aee53edcf94d776ab5cf7
+      sha256: 714a3c3d29b0227100d9ecac10383471c3fb1d11cb3450c691d3955f0ef46ee3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/assets/powerpoint_design_guide.md
-      sha256: 91de949952b5ba67181196eadd7eea4fc7dc69301b256c41d28a74752bfdda35
+      sha256: afacd3ac9b33311a86ebf1398bc960279b1412a77a25c3ce5429ebbf3e50d94a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/assets/timing_guidelines.md
-      sha256: 0e85b73c1997000ed0c0efa0807536d3d9cf024bf043068d6564d44351e0ba83
+      sha256: 39f4720e9d5a602d6c16af0985232fbc78d4e79598e7ed17a2bc076efc9cc195
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/beamer_guide.md
-      sha256: cb8a3c500ab9a3841c0e8559ad5894a4dad80fa3193589f28f5ca91e46d1c97b
+      sha256: a57ee14a34d7b8b6bb72d19bc0b0d4ccaa172731cfc5d8dbf30fbceeb30dcbcd
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/common_pitfalls.md
       sha256: 1624aa65d42d52469a06727e6a68c5ba66cce311020f107659de7ca80654888b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/data_visualization_slides.md
-      sha256: c79d5d9552d2f132dd3be1beb230c5c0da4f3f27f1ac04f7f6e571204bbab9ba
+      sha256: ff0b437dae2cc74b9290907ade331dc69cb1365071584ef2a854f5ade3a53408
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/presentation_structure.md
-      sha256: deafc171b8951a43c9a8ae081158cab72fdb8dc4abc1334257ad594f454665f2
+      sha256: 8e79965dd65ca56a7e239920867b36be1b2f626cee9e65e99e4d6efaaa883004
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/presentation_workflow.md
-      sha256: 64e4e6f2b7483df1c7e629139df5dac605636ae3229f64d093f9a11aee5e4127
+      sha256: 5e52ebfcf4b0a423dc82451fd62ec5468e8c4b66599f14d5e57ec6ece9c00700
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/prompt_writing.md
-      sha256: a933302ac7afd1bb1b8f76d7f4c3f445a415029611c13b1af1a22535e0adcb4a
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/script_reference.md
-      sha256: b2bbd551f298e20910699bb1f98d552e10babcc8dfa1988c4cd71c7896a42d92
+      sha256: 87341d37eac34509c88ba2a3e5e1a880915ac0576e74b12f0f6d2baa31f79f9d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/slide_capabilities.md
-      sha256: 519aba316aa1f98905f1d964fbaefb982de419ae26ddf3e9894a9069ebee5be6
+      sha256: 1ad22713e87571cf65ac3176a84985774ad74e2a8be7e4c3396cb0877876f38b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/slide_design_principles.md
-      sha256: ee2d8f1b3ae0a849ee49e3e4d334c64ee3a1a79aee5ca28dbf43bbec822d98fa
+      sha256: 6b50148bc161c80272b16da445dfdb87f966a32ccd3a28ff94dedc940dd6fbff
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/talk_types_guide.md
-      sha256: 60f374e4e8d361e36a4c738c1e9e56b80470927e28f59e5c9f715343d7da6f6d
+      sha256: 743274bc2664177f7a015c2531d07d516d1a7a6d6b6cb4a5ff527a3a99fac683
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/visual_review_workflow.md
-      sha256: 6d636d52fd3c6db84008fca1b96a39905539a12f28256337d6534a575c0b4632
+      sha256: 38138ef5f10b92f6d8965906438235bbb9ff08c8839545501a00bd6b799ab581
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/scripts/pdf_to_images.py
-      sha256: b572150da57890311e5dc55ed19f751c7b0f1f998cbda1e6392070f783dbd261
+      sha256: 06ada43a0b3ff5c5f6c89dfb214a451e99ec0f23532ccb7962376b3f3e5ba610
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/scripts/slides_to_pdf.py
-      sha256: 265da6e1d722f6efb3dfd8a4acef260a54b3774a56471e73b31d771ad8a8420d
+      sha256: a816f9269c3d1889677b92daa92e819834aafdcf600b1535304f385e178b3fdf
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/scripts/validate_presentation.py
-      sha256: b30aacfd6fcbfb11ea8783577dc4b969786ac7dc56f1ab6f0ca0c1ce37b7b9b1
+      sha256: f4f8ebe14e2cc593edf60e5236bd31fcae1b686757c90cc4b18eb488cdf78646
 license: MIT

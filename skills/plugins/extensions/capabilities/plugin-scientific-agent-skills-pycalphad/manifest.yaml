@@ -1,0 +1,78 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-pycalphad
+title: "pycalphad: TDB equilibrium calculations"
+description: Computes finite-temperature CALPHAD equilibria, phase fractions,
+  and phase compositions from thermodynamic TDB databases using pycalphad. Use
+  for alloy phase stability, equilibrium temperature sweeps, tie lines,
+  lever-rule checks, or reproducible phase-fraction calculations with explicit
+  components and mole-fraction conditions.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-equilibrium.json
+    path: assets/equilibrium.json
+    content_hash: b44ad449b3946ae6becdf20bcde0e3c5e76146cc63b385f2e88a5f80f155ddf9
+    license: MIT
+  - knowledge_id: sas-assets-ideal-cu-ni.tdb
+    path: assets/ideal-cu-ni.tdb
+    content_hash: b8e45e1b89fff906f538ec5c60a57ed4e66b67cceab7eae092cab0dae0ea14a2
+    license: MIT
+  - knowledge_id: sas-references-model-and-validation.md
+    path: references/model-and-validation.md
+    content_hash: 05554407db7383be95728fb3f9af0149b1991e14caf72aa52087aa5bb933fac8
+    license: MIT
+  - knowledge_id: sas-scripts-equilibrate.py
+    path: scripts/equilibrate.py
+    content_hash: f69618d7831c35a02c287ace6ea2a26d3868a785af5b97974c7271da63031885
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pycalphad/SKILL.md
+      sha256: 8196066668a18138bc297353bbd6d29de348f68873ddd0a9a148cdbfcd2606e3
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pycalphad/assets/equilibrium.json
+      sha256: b44ad449b3946ae6becdf20bcde0e3c5e76146cc63b385f2e88a5f80f155ddf9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pycalphad/assets/ideal-cu-ni.tdb
+      sha256: b8e45e1b89fff906f538ec5c60a57ed4e66b67cceab7eae092cab0dae0ea14a2
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pycalphad/references/model-and-validation.md
+      sha256: 05554407db7383be95728fb3f9af0149b1991e14caf72aa52087aa5bb933fac8
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pycalphad/scripts/equilibrate.py
+      sha256: f69618d7831c35a02c287ace6ea2a26d3868a785af5b97974c7271da63031885
+license: MIT

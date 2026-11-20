@@ -6,22 +6,25 @@
   "upstream_root": "vendor/scientific-agent-skills",
   "generated_root": "skills/plugins/vendors/scientific-agent-skills",
   "extension_root": "skills/plugins/extensions",
-  "release": "v2.70.0",
-  "revision": "d0c48af8c7b7a71ccc81fcd04c9db53b48439f9b",
-  "anchor_id": "v2.70.0",
-  "audit_file": "audits/scientific-agent-skills/v2.70.0/skill-audit.json",
-  "audit_report": "audits/scientific-agent-skills/v2.70.0/report.md",
+  "release": "v2.72.0",
+  "revision": "526ebce143bc326f44471554e33d66a19c840360",
+  "anchor_id": "v2.72.0",
+  "audit_file": "audits/scientific-agent-skills/v2.72.0/skill-audit.json",
+  "audit_report": "audits/scientific-agent-skills/v2.72.0/report.md",
   "extension_domains": [
     "analytical-chemistry",
     "applied-mathematics",
     "artificial-intelligence",
     "astronomical-sciences",
+    "biochemistry-and-cell-biology",
     "bioinformatics-and-computational-biology",
+    "biomedical-engineering",
     "computational-modeling-and-simulation",
     "control-engineering-mechatronics-and-robotics",
     "data-management-and-data-science",
     "design",
     "distributed-computing-and-systems-software",
+    "electrical-engineering",
     "experimental-design-and-data-analysis",
     "fluid-mechanics-and-thermal-engineering",
     "geoinformatics",
@@ -32,9 +35,14 @@
     "machine-learning",
     "macromolecular-and-materials-chemistry",
     "manufacturing-engineering",
+    "materials-engineering",
     "mechanical-engineering",
+    "microbiology",
+    "neurosciences",
     "numerical-and-computational-mathematics",
+    "oceanography",
     "oncology-and-carcinogenesis",
+    "physical-chemistry",
     "quantum-physics",
     "research-computing-infrastructure",
     "scientific-visualization-and-communication",
@@ -44,9 +52,86 @@
   ],
   "extensions": [
     {
+      "capability_id": "plugin-scientific-agent-skills-13c-metabolic-flux",
+      "raw_skill_id": "scientific-agent-skills-13c-metabolic-flux",
+      "license": "MIT",
+      "execution_type": "mixed",
+      "validator": "validators/validate_scientific_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/branch-fluxes.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/assets/branch-fluxes.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/branch-identifiable.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/assets/branch-identifiable.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/branch-model.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/assets/branch-model.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/branch-unresolved.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/assets/branch-unresolved.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/mfapy-license.txt",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/assets/mfapy-license.txt"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/requirements.txt",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/assets/requirements.txt"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/tca-fluxes.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/assets/tca-fluxes.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/tca-model.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/assets/tca-model.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/tca-reference-mdv.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/assets/tca-reference-mdv.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/tca-tracer.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/assets/tca-tracer.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/references/inference.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/references/inference.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/references/input-contract.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/references/input-contract.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/scripts/_mfa_fit.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/scripts/_mfa_fit.py"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/scripts/_mfa_model.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/scripts/_mfa_model.py"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/scripts/mfa.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-13c-metabolic-flux/scripts/mfa.py"
+        }
+      ]
+    },
+    {
       "capability_id": "plugin-scientific-agent-skills-aeon",
       "raw_skill_id": "scientific-agent-skills-aeon",
-      "license": "MIT",
+      "license": "BSD-3-Clause",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -188,7 +273,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-astropy",
       "raw_skill_id": "scientific-agent-skills-astropy",
-      "license": "MIT",
+      "license": "BSD-3-Clause",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -211,6 +296,10 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/fits.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-astropy/references/fits.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/review.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-astropy/references/review.md"
         },
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-astropy/references/tables.md",
@@ -268,9 +357,67 @@
       ]
     },
     {
+      "capability_id": "plugin-scientific-agent-skills-cantera",
+      "raw_skill_id": "scientific-agent-skills-cantera",
+      "license": "MIT",
+      "execution_type": "mixed",
+      "validator": "validators/validate_scientific_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cantera/assets/hydrogen-ignition.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-cantera/assets/hydrogen-ignition.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cantera/references/interpretation.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-cantera/references/interpretation.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cantera/scripts/ignition_delay.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-cantera/scripts/ignition_delay.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-cellprofiler",
+      "raw_skill_id": "scientific-agent-skills-cellprofiler",
+      "license": "MIT",
+      "execution_type": "mixed",
+      "validator": "validators/validate_scientific_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cellprofiler/assets/nuclei.cppipe",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-cellprofiler/assets/nuclei.cppipe"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cellprofiler/references/runtime-and-qc.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-cellprofiler/references/runtime-and-qc.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cellprofiler/scripts/nuclei_assay.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-cellprofiler/scripts/nuclei_assay.py"
+        }
+      ]
+    },
+    {
       "capability_id": "plugin-scientific-agent-skills-cirq",
       "raw_skill_id": "scientific-agent-skills-cirq",
-      "license": "MIT",
+      "license": "Apache-2.0",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -297,6 +444,10 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/noise.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-cirq/references/noise.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/review.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-cirq/references/review.md"
         },
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-cirq/references/simulation.md",
@@ -334,6 +485,35 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-datalad/references/publishing.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-datalad/references/publishing.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-flowkit",
+      "raw_skill_id": "scientific-agent-skills-flowkit",
+      "license": "MIT",
+      "execution_type": "mixed",
+      "validator": "validators/validate_scientific_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-flowkit/references/compensation-and-gating.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-flowkit/references/compensation-and-gating.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-flowkit/references/workspaces-and-results.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-flowkit/references/workspaces-and-results.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-flowkit/scripts/analyze_gates.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-flowkit/scripts/analyze_gates.py"
         }
       ]
     },
@@ -385,6 +565,10 @@
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-fluidsim/scripts/_common.py"
         },
         {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/scripts/_profiles.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-fluidsim/scripts/_profiles.py"
+        },
+        {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-fluidsim/scripts/_schema.py",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-fluidsim/scripts/_schema.py"
         },
@@ -418,7 +602,7 @@
       "capability_id": "plugin-scientific-agent-skills-generate-image",
       "raw_skill_id": "scientific-agent-skills-generate-image",
       "license": "MIT",
-      "execution_type": "mixed",
+      "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
         "scope",
@@ -428,16 +612,7 @@
         "validation_results",
         "conclusions"
       ],
-      "tool_files": [
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-generate-image/references/models.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-generate-image/references/models.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-generate-image/scripts/generate_image.py",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-generate-image/scripts/generate_image.py"
-        }
-      ]
+      "tool_files": []
     },
     {
       "capability_id": "plugin-scientific-agent-skills-genomic-coordinates",
@@ -496,7 +671,7 @@
       "capability_id": "plugin-scientific-agent-skills-geomaster",
       "raw_skill_id": "scientific-agent-skills-geomaster",
       "license": "MIT",
-      "execution_type": "llm",
+      "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
         "scope",
@@ -556,6 +731,10 @@
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-geomaster/references/remote-sensing.md"
         },
         {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/review.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-geomaster/references/review.md"
+        },
+        {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/scientific-domains.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-geomaster/references/scientific-domains.md"
         },
@@ -566,6 +745,10 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/references/troubleshooting.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-geomaster/references/troubleshooting.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-geomaster/scripts/raster_workflows.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-geomaster/scripts/raster_workflows.py"
         }
       ]
     },
@@ -652,76 +835,7 @@
         "validation_results",
         "conclusions"
       ],
-      "tool_files": [
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cell-free-protein-expression-hibit.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/cell-free-protein-expression-hibit.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cell-free-protein-expression-optimization.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/cell-free-protein-expression-optimization.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cell-free-protein-expression-validation.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/cell-free-protein-expression-validation.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cfps-expression-purification-quantification.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/cfps-expression-purification-quantification.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cfps-strep-purification-thermal-shift.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/cfps-strep-purification-thermal-shift.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/cfps-strep-tag-purification-a280.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/cfps-strep-tag-purification-a280.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/echo-ms-cfps-detection.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/echo-ms-cfps-detection.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/echo-ms-method-onboarding.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/echo-ms-method-onboarding.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/ecoli-expression-purification-quantification.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/ecoli-expression-purification-quantification.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/ecoli-minibinder-expression-histag-a280.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/ecoli-minibinder-expression-histag-a280.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/ecoli-protein-expression-hibit.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/ecoli-protein-expression-hibit.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/ecoli-protein-expression-histag-a280.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/ecoli-protein-expression-histag-a280.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/fluorescent-pixel-art-generation.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/fluorescent-pixel-art-generation.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/ivt-rna-synthesis-qpcr.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/ivt-rna-synthesis-qpcr.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/minibinder-strep-tag-a280.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/minibinder-strep-tag-a280.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/pichia-protein-expression-labchip.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/pichia-protein-expression-labchip.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-ginkgo-cloud-lab/references/spr-target-onboarding.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-ginkgo-cloud-lab/references/spr-target-onboarding.md"
-        }
-      ]
+      "tool_files": []
     },
     {
       "capability_id": "plugin-scientific-agent-skills-infographics",
@@ -753,10 +867,6 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/references/infographic_types.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-infographics/references/infographic_types.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-infographics/references/iterative_refinement.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-infographics/references/iterative_refinement.md"
         }
       ]
     },
@@ -906,10 +1016,6 @@
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-latex-posters/references/README.md"
         },
         {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/ai_graphics_for_posters.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-latex-posters/references/ai_graphics_for_posters.md"
-        },
-        {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-latex-posters/references/compilation_and_quality_control.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-latex-posters/references/compilation_and_quality_control.md"
         },
@@ -946,7 +1052,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-liteparse",
       "raw_skill_id": "scientific-agent-skills-liteparse",
-      "license": "MIT",
+      "license": "Apache-2.0",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -985,9 +1091,38 @@
       ]
     },
     {
+      "capability_id": "plugin-scientific-agent-skills-marine-carbonate-chemistry",
+      "raw_skill_id": "scientific-agent-skills-marine-carbonate-chemistry",
+      "license": "MIT",
+      "execution_type": "mixed",
+      "validator": "validators/validate_scientific_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-marine-carbonate-chemistry/references/chemistry-decisions.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-marine-carbonate-chemistry/references/chemistry-decisions.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-marine-carbonate-chemistry/references/input-and-results.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-marine-carbonate-chemistry/references/input-and-results.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-marine-carbonate-chemistry/scripts/solve_carbonate.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-marine-carbonate-chemistry/scripts/solve_carbonate.py"
+        }
+      ]
+    },
+    {
       "capability_id": "plugin-scientific-agent-skills-markdown-mermaid-writing",
       "raw_skill_id": "scientific-agent-skills-markdown-mermaid-writing",
-      "license": "MIT",
+      "license": "Apache-2.0",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1002,6 +1137,10 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/assets/examples/example-research-report.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-markdown-mermaid-writing/assets/examples/example-research-report.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/current-rendering.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-markdown-mermaid-writing/references/current-rendering.md"
         },
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markdown-mermaid-writing/references/diagrams/architecture.md",
@@ -1298,7 +1437,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-matplotlib",
       "raw_skill_id": "scientific-agent-skills-matplotlib",
-      "license": "MIT",
+      "license": "LicenseRef-Matplotlib",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1339,7 +1478,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-modal",
       "raw_skill_id": "scientific-agent-skills-modal",
-      "license": "MIT",
+      "license": "Apache-2.0",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1400,7 +1539,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-networkx",
       "raw_skill_id": "scientific-agent-skills-networkx",
-      "license": "MIT",
+      "license": "BSD-3-Clause",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1429,8 +1568,74 @@
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-networkx/references/io.md"
         },
         {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-networkx/references/review.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-networkx/references/review.md"
+        },
+        {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-networkx/references/visualization.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-networkx/references/visualization.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-nmrglue",
+      "raw_skill_id": "scientific-agent-skills-nmrglue",
+      "license": "MIT",
+      "execution_type": "mixed",
+      "validator": "validators/validate_scientific_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nmrglue/assets/processing.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-nmrglue/assets/processing.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nmrglue/references/acquisition-and-validation.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-nmrglue/references/acquisition-and-validation.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nmrglue/scripts/process_1d.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-nmrglue/scripts/process_1d.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-nwb-conversion",
+      "raw_skill_id": "scientific-agent-skills-nwb-conversion",
+      "license": "MIT",
+      "execution_type": "mixed",
+      "validator": "validators/validate_scientific_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nwb-conversion/assets/session-template.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-nwb-conversion/assets/session-template.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nwb-conversion/references/input-contract.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-nwb-conversion/references/input-contract.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nwb-conversion/references/upstream-review.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-nwb-conversion/references/upstream-review.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nwb-conversion/scripts/convert_session.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-nwb-conversion/scripts/convert_session.py"
         }
       ]
     },
@@ -1525,6 +1730,10 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/examples.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-open-notebook/references/examples.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/_common.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-open-notebook/scripts/_common.py"
         },
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/chat_interaction.py",
@@ -1714,10 +1923,6 @@
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pacsomatic/config.yaml"
         },
         {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/references/agent-playbook.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pacsomatic/references/agent-playbook.md"
-        },
-        {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pacsomatic/references/config-and-output.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pacsomatic/references/config-and-output.md"
         },
@@ -1746,7 +1951,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pennylane",
       "raw_skill_id": "scientific-agent-skills-pennylane",
-      "license": "MIT",
+      "license": "Apache-2.0",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -1982,6 +2187,10 @@
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pufferlib/references/integration.md"
         },
         {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/native-5.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pufferlib/references/native-5.md"
+        },
+        {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pufferlib/references/policies.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pufferlib/references/policies.md"
         },
@@ -2032,6 +2241,68 @@
       ]
     },
     {
+      "capability_id": "plugin-scientific-agent-skills-pybamm",
+      "raw_skill_id": "scientific-agent-skills-pybamm",
+      "license": "MIT",
+      "execution_type": "mixed",
+      "validator": "validators/validate_scientific_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pybamm/assets/chen2020-protocol.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pybamm/assets/chen2020-protocol.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pybamm/references/protocol-and-comparison.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pybamm/references/protocol-and-comparison.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pybamm/scripts/simulate_battery.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pybamm/scripts/simulate_battery.py"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-pycalphad",
+      "raw_skill_id": "scientific-agent-skills-pycalphad",
+      "license": "MIT",
+      "execution_type": "mixed",
+      "validator": "validators/validate_scientific_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pycalphad/assets/equilibrium.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pycalphad/assets/equilibrium.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pycalphad/assets/ideal-cu-ni.tdb",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pycalphad/assets/ideal-cu-ni.tdb"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pycalphad/references/model-and-validation.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pycalphad/references/model-and-validation.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pycalphad/scripts/equilibrate.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pycalphad/scripts/equilibrate.py"
+        }
+      ]
+    },
+    {
       "capability_id": "plugin-scientific-agent-skills-pylabrobot",
       "raw_skill_id": "scientific-agent-skills-pylabrobot",
       "license": "MIT",
@@ -2069,6 +2340,10 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/resources.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pylabrobot/references/resources.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/review.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pylabrobot/references/review.md"
         },
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pylabrobot/references/visualization.md",
@@ -2180,7 +2455,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pymoo",
       "raw_skill_id": "scientific-agent-skills-pymoo",
-      "license": "MIT",
+      "license": "Apache-2.0",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -2199,6 +2474,10 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/constraints_mcdm.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pymoo/references/constraints_mcdm.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/lifecycle.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-pymoo/references/lifecycle.md"
         },
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/operators.md",
@@ -2245,7 +2524,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-pytorch-lightning",
       "raw_skill_id": "scientific-agent-skills-pytorch-lightning",
-      "license": "MIT",
+      "license": "Apache-2.0",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -2373,9 +2652,34 @@
       ]
     },
     {
+      "capability_id": "plugin-scientific-agent-skills-qiime2-amplicon",
+      "raw_skill_id": "scientific-agent-skills-qiime2-amplicon",
+      "license": "MIT",
+      "execution_type": "mixed",
+      "validator": "validators/validate_scientific_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiime2-amplicon/references/runtime-and-interpretation.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-qiime2-amplicon/references/runtime-and-interpretation.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qiime2-amplicon/scripts/amplicon_workflow.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-qiime2-amplicon/scripts/amplicon_workflow.py"
+        }
+      ]
+    },
+    {
       "capability_id": "plugin-scientific-agent-skills-qiskit",
       "raw_skill_id": "scientific-agent-skills-qiskit",
-      "license": "MIT",
+      "license": "Apache-2.0",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -2511,6 +2815,35 @@
       ]
     },
     {
+      "capability_id": "plugin-scientific-agent-skills-relion",
+      "raw_skill_id": "scientific-agent-skills-relion",
+      "license": "MIT",
+      "execution_type": "mixed",
+      "validator": "validators/validate_scientific_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relion/references/acquisition-and-restarts.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-relion/references/acquisition-and-restarts.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relion/references/runtime-and-validation.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-relion/references/runtime-and-validation.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relion/scripts/spa_workflow.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-relion/scripts/spa_workflow.py"
+        }
+      ]
+    },
+    {
       "capability_id": "plugin-scientific-agent-skills-relsa-severity-assessment",
       "raw_skill_id": "scientific-agent-skills-relsa-severity-assessment",
       "license": "MIT",
@@ -2577,10 +2910,6 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-schematics/references/best_practices.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-scientific-schematics/references/best_practices.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-schematics/references/iterative_refinement.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-scientific-schematics/references/iterative_refinement.md"
         }
       ]
     },
@@ -2642,10 +2971,6 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/prompt_writing.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-scientific-slides/references/prompt_writing.md"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/script_reference.md",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-scientific-slides/references/script_reference.md"
         },
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-slides/references/slide_capabilities.md",
@@ -2765,7 +3090,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-scikit-learn",
       "raw_skill_id": "scientific-agent-skills-scikit-learn",
-      "license": "MIT",
+      "license": "BSD-3-Clause",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -2822,7 +3147,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-seaborn",
       "raw_skill_id": "scientific-agent-skills-seaborn",
-      "license": "MIT",
+      "license": "BSD-3-Clause",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -3042,7 +3367,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-sympy",
       "raw_skill_id": "scientific-agent-skills-sympy",
-      "license": "MIT",
+      "license": "BSD-3-Clause",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -3077,13 +3402,50 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/physics-mechanics.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-sympy/references/physics-mechanics.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/review.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-sympy/references/review.md"
+        }
+      ]
+    },
+    {
+      "capability_id": "plugin-scientific-agent-skills-tellurium",
+      "raw_skill_id": "scientific-agent-skills-tellurium",
+      "license": "MIT",
+      "execution_type": "mixed",
+      "validator": "validators/validate_scientific_brief.py",
+      "required_brief_fields": [
+        "scope",
+        "source_ledger",
+        "method_plan",
+        "work_products",
+        "validation_results",
+        "conclusions"
+      ],
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-tellurium/assets/experiment.json",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-tellurium/assets/experiment.json"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-tellurium/assets/first-order.ant",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-tellurium/assets/first-order.ant"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-tellurium/references/experiments.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-tellurium/references/experiments.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-tellurium/scripts/kinetic_experiment.py",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-tellurium/scripts/kinetic_experiment.py"
         }
       ]
     },
     {
       "capability_id": "plugin-scientific-agent-skills-timesfm-forecasting",
       "raw_skill_id": "scientific-agent-skills-timesfm-forecasting",
-      "license": "MIT",
+      "license": "Apache-2.0",
       "execution_type": "mixed",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -3100,28 +3462,8 @@
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/detect_anomalies.py"
         },
         {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.json",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.json"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.png",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/anomaly-detection/output/anomaly_detection.png"
-        },
-        {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/demo_covariates.py",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/demo_covariates.py"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/covariates_data.png",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/covariates_data.png"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/covariates_metadata.json",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/covariates_metadata.json"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/sales_with_covariates.csv",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/covariates-forecasting/output/sales_with_covariates.csv"
         },
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/README.md",
@@ -3138,30 +3480,6 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/generate_html.py",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/global-temperature/generate_html.py"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/animation_data.json",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/animation_data.json"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_animation.gif",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_animation.gif"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_output.csv",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_output.csv"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_output.json",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_output.json"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_visualization.png",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/forecast_visualization.png"
-        },
-        {
-          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/interactive_forecast.html",
-          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/examples/global-temperature/output/interactive_forecast.html"
         },
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/examples/global-temperature/run_example.sh",
@@ -3202,6 +3520,10 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/system_requirements.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/references/system_requirements.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/timesfm3.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-timesfm-forecasting/references/timesfm3.md"
         },
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-timesfm-forecasting/references/workflows.md",
@@ -3253,6 +3575,10 @@
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-torch-geometric/references/message_passing.md"
         },
         {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/review.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-torch-geometric/references/review.md"
+        },
+        {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-torch-geometric/references/scaling.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-torch-geometric/references/scaling.md"
         }
@@ -3261,7 +3587,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-transformers",
       "raw_skill_id": "scientific-agent-skills-transformers",
-      "license": "MIT",
+      "license": "Apache-2.0",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -3286,6 +3612,10 @@
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-transformers/references/pipelines.md"
         },
         {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-transformers/references/review.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-transformers/references/review.md"
+        },
+        {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-transformers/references/tokenizers.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-transformers/references/tokenizers.md"
         },
@@ -3298,7 +3628,7 @@
     {
       "capability_id": "plugin-scientific-agent-skills-umap-learn",
       "raw_skill_id": "scientific-agent-skills-umap-learn",
-      "license": "MIT",
+      "license": "BSD-3-Clause",
       "execution_type": "llm",
       "validator": "validators/validate_scientific_brief.py",
       "required_brief_fields": [
@@ -3350,6 +3680,10 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/references/reporting-rules.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-uncertainty-and-units/references/reporting-rules.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/references/review.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-uncertainty-and-units/references/review.md"
         },
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-uncertainty-and-units/references/uncertainties-recipes.md",
@@ -3475,6 +3809,10 @@
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/cs_conference_style.md",
           "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-venue-templates/references/cs_conference_style.md"
+        },
+        {
+          "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/current_sources.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-scientific-agent-skills-venue-templates/references/current_sources.md"
         },
         {
           "source": "skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-venue-templates/references/grants_requirements.md",

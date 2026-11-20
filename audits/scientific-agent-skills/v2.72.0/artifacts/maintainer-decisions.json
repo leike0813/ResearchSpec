@@ -1,0 +1,141 @@
+{
+  "schema_version": "1",
+  "release": "v2.72.0",
+  "revision": "526ebce143bc326f44471554e33d66a19c840360",
+  "rounds": [
+    {
+      "batch": 1,
+      "review": "manual-security-round-01.md",
+      "decisions": {
+        "fluidsim": "clear-with-adaptation",
+        "geomaster": "clear-with-adaptation",
+        "infographics": "clear-with-adaptation",
+        "latex-posters": "clear-with-adaptation",
+        "markitdown": "clear-with-adaptation"
+      }
+    },
+    {
+      "batch": 2,
+      "review": "manual-security-round-02.md",
+      "decisions": {
+        "modal": "clear-with-adaptation",
+        "pacsomatic": "clear-with-adaptation",
+        "parallel-web": "clear-with-adaptation",
+        "pptx-posters": "clear-with-adaptation",
+        "qutip": "clear-with-adaptation"
+      }
+    },
+    {
+      "batch": 3,
+      "review": "manual-security-round-03.md",
+      "decisions": {
+        "scientific-schematics": "clear-with-adaptation",
+        "scientific-slides": "clear-with-adaptation",
+        "seaborn": "clear-with-adaptation",
+        "transformers": "clear-with-adaptation",
+        "umap-learn": "clear-with-adaptation"
+      }
+    },
+    {
+      "batch": 4,
+      "review": "manual-security-round-04.md",
+      "decisions": {
+        "venue-templates": "clear-with-adaptation",
+        "bgpt-paper-search": "clear-with-adaptation",
+        "bids": "clear-with-adaptation",
+        "cellxgene-census": "clear-with-adaptation",
+        "citation-management": "clear-with-adaptation"
+      }
+    },
+    {
+      "batch": 5,
+      "review": "manual-security-round-05.md",
+      "decisions": {
+        "clinical-decision-support": "clear-with-adaptation",
+        "clinical-reports": "clear-with-adaptation",
+        "consciousness-council": "clear-with-adaptation",
+        "database-lookup": "clear-with-adaptation",
+        "dhdna-profiler": "fail"
+      }
+    },
+    {
+      "batch": 6,
+      "review": "manual-security-round-06.md",
+      "decisions": {
+        "flowio": "clear-with-adaptation",
+        "histolab": "clear-with-adaptation",
+        "hypothesis-generation": "clear-with-adaptation",
+        "literature-review": "clear-with-adaptation",
+        "paperzilla": "clear-with-adaptation"
+      }
+    },
+    {
+      "batch": 7,
+      "review": "manual-security-round-07.md",
+      "decisions": {
+        "pathml": "clear-with-adaptation",
+        "peer-review": "clear-with-adaptation",
+        "primekg": "clear-with-adaptation",
+        "research-lookup": "clear-with-adaptation",
+        "scholar-evaluation": "clear-with-adaptation"
+      }
+    },
+    {
+      "batch": 8,
+      "review": "manual-security-round-08.md",
+      "decisions": {
+        "scientific-writing": "clear-with-adaptation",
+        "tiledbvcf": "clear-with-adaptation",
+        "treatment-plans": "clear-with-adaptation",
+        "usfiscaldata": "clear-with-adaptation",
+        "zarr-python": "clear-with-adaptation"
+      }
+    },
+    {
+      "batch": 9,
+      "review": "manual-security-round-09.md",
+      "decisions": {
+        "autoskill": "defer",
+        "waypoint-bio": "clear"
+      }
+    },
+    {
+      "batch": 10,
+      "review": "manual-security-supplement.md",
+      "decisions": {
+        "generate-image": "clear-with-adaptation",
+        "ginkgo-cloud-lab": "clear-with-adaptation"
+      }
+    },
+    {
+      "batch": 11,
+      "review": "manual-security-new-local.md",
+      "decisions": {
+        "marine-carbonate-chemistry": "clear-with-adaptation",
+        "nmrglue": "clear-with-adaptation",
+        "nwb-conversion": "clear-with-adaptation",
+        "pybamm": "clear-with-adaptation",
+        "pycalphad": "clear-with-adaptation"
+      }
+    },
+    {
+      "batch": 12,
+      "review": "manual-security-new-analysis.md",
+      "decisions": {
+        "flowkit": "clear-with-adaptation",
+        "cellprofiler": "clear-with-adaptation",
+        "13c-metabolic-flux": "clear-with-adaptation",
+        "cantera": "clear-with-adaptation",
+        "qiime2-amplicon": "clear-with-adaptation"
+      }
+    },
+    {
+      "batch": 13,
+      "review": "manual-security-new-analysis.md",
+      "decisions": {
+        "relion": "clear-with-adaptation",
+        "tellurium": "clear-with-adaptation"
+      }
+    }
+  ]
+}

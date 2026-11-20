@@ -1,7 +1,7 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-markitdown
 title: MarkItDown
-description: Convert heterogeneous documents and selected URIs to Markdown with
+description: Converts heterogeneous documents and selected URIs to Markdown with
   Microsoft MarkItDown for text analysis, search, and LLM/RAG ingestion. Covers
   safe local conversion, streams, Office/PDF/data formats, batch workflows,
   plugins, vision OCR, Azure extraction, and the official MCP server.
@@ -46,35 +46,35 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
-    content_hash: dde39fac60db56df1d6864e532883d36fa472648243299695cc0e6bb195a2ff9
+    content_hash: 79936dc3cc52c3954a1326e995edd43d97d1b03d3bb4d867ca861fe1a31a3f4f
     license: MIT
   - knowledge_id: sas-references-cloud-and-ocr.md
     path: references/cloud_and_ocr.md
-    content_hash: 9ef87a18f18aabe9e2ed1d6d3cf87c440614ab9ae60e5ca42513ac8a4fca5e49
+    content_hash: b6699e835f96e3a6e97d12a1a66871a68c38cbcadf9bf0e28f694d4edfadc319
     license: MIT
   - knowledge_id: sas-references-file-formats.md
     path: references/file_formats.md
-    content_hash: 1fc769efa7f35737e8ecc6e50c7c20fddb20de4753002821c12bf9a9de61f623
+    content_hash: 58cc49fa63cff5ea8fd73fc7915a43d2ab822c3b338976758a933919cf0acf7e
     license: MIT
   - knowledge_id: sas-references-mcp-and-plugins.md
     path: references/mcp_and_plugins.md
-    content_hash: 13ee15d399b8ad02df799ecbf0591c75b5d6ab89bce62d4a5856f4308bb88192
+    content_hash: 98a97fd541b1abe8edb694d8c6af73797664251d9a89c731a54ef7d216ca8e39
     license: MIT
   - knowledge_id: sas-references-migration.md
     path: references/migration.md
-    content_hash: fc73b21a5b73bc61f5eafa32d16eb8b3620c38602c59aedc9bbf593d80a441ef
+    content_hash: b2966652252d265165809f37d14db136f03ae8469dd604760a08d02f85d11de8
     license: MIT
   - knowledge_id: sas-references-security.md
     path: references/security.md
-    content_hash: cdec8dcb138870b28645780709a4c5f19224ba80981ecf8dbe4e98bac9504383
+    content_hash: 42d01ddb6fdf601647b605b485353c8080c2d22fc45429ceb6cc302636a9fd0b
     license: MIT
   - knowledge_id: sas-references-workflows.md
     path: references/workflows.md
-    content_hash: 6598e6729379fe4860d392009f5343f0afca4ae9c30ba15a9332340b1e95fbfe
+    content_hash: 06f81ea6888626acd667af314f7faa2ee45fd29c7d371049bd3ca9a876e934b6
     license: MIT
   - knowledge_id: sas-scripts-batch-convert.py
     path: scripts/batch_convert.py
-    content_hash: 4250166fc476be8793149e1ef778b619719ea87557b5287e48db5e6b53d3fd62
+    content_hash: 13e64df33ae0c66ebf1ca71e1650de98a4bc4491d429be9067991f1fb7aa9f4f
     license: MIT
   - knowledge_id: sas-scripts-convert-literature.py
     path: scripts/convert_literature.py
@@ -82,32 +82,32 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-inspect-installation.py
     path: scripts/inspect_installation.py
-    content_hash: 7821524bcf1b148f5932268ba54394831172cdecc730bbdefa6f6d07eafa4d08
+    content_hash: 4b5443c518a7d4f73bc23f0394fe3232581bcfd467f230b6c866212e20e199ce
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/SKILL.md
-      sha256: cc37dc5040f51fbb52f3adc2a20ee2f27059574d1ae7d55957f462357f37c9c9
+      sha256: 4240d5bd4071e20ca1916adefeb8230c84e4cb1f0a979e1643b20c6ef056ca71
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/references/api_reference.md
-      sha256: dde39fac60db56df1d6864e532883d36fa472648243299695cc0e6bb195a2ff9
+      sha256: 79936dc3cc52c3954a1326e995edd43d97d1b03d3bb4d867ca861fe1a31a3f4f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/references/cloud_and_ocr.md
-      sha256: 9ef87a18f18aabe9e2ed1d6d3cf87c440614ab9ae60e5ca42513ac8a4fca5e49
+      sha256: b6699e835f96e3a6e97d12a1a66871a68c38cbcadf9bf0e28f694d4edfadc319
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/references/file_formats.md
-      sha256: 1fc769efa7f35737e8ecc6e50c7c20fddb20de4753002821c12bf9a9de61f623
+      sha256: 58cc49fa63cff5ea8fd73fc7915a43d2ab822c3b338976758a933919cf0acf7e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/references/mcp_and_plugins.md
-      sha256: 13ee15d399b8ad02df799ecbf0591c75b5d6ab89bce62d4a5856f4308bb88192
+      sha256: 98a97fd541b1abe8edb694d8c6af73797664251d9a89c731a54ef7d216ca8e39
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/references/migration.md
-      sha256: fc73b21a5b73bc61f5eafa32d16eb8b3620c38602c59aedc9bbf593d80a441ef
+      sha256: b2966652252d265165809f37d14db136f03ae8469dd604760a08d02f85d11de8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/references/security.md
-      sha256: cdec8dcb138870b28645780709a4c5f19224ba80981ecf8dbe4e98bac9504383
+      sha256: 42d01ddb6fdf601647b605b485353c8080c2d22fc45429ceb6cc302636a9fd0b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/references/workflows.md
-      sha256: 6598e6729379fe4860d392009f5343f0afca4ae9c30ba15a9332340b1e95fbfe
+      sha256: 06f81ea6888626acd667af314f7faa2ee45fd29c7d371049bd3ca9a876e934b6
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/scripts/batch_convert.py
-      sha256: 4250166fc476be8793149e1ef778b619719ea87557b5287e48db5e6b53d3fd62
+      sha256: 13e64df33ae0c66ebf1ca71e1650de98a4bc4491d429be9067991f1fb7aa9f4f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/scripts/convert_literature.py
       sha256: 6c28a9b005a252bcfbab4e1a637129f7be30f9f154bb7bb5adb67cf5361b0aed
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-markitdown/scripts/inspect_installation.py
-      sha256: 7821524bcf1b148f5932268ba54394831172cdecc730bbdefa6f6d07eafa4d08
+      sha256: 4b5443c518a7d4f73bc23f0394fe3232581bcfd467f230b6c866212e20e199ce
 license: MIT

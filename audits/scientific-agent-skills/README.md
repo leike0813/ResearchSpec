@@ -7,9 +7,9 @@ suite.
   reviewed vendor bundle and the source-neutral domain catalog: upstream pin,
   the reviewed raw Skill mappings, reviewed resource files, validators, and
   required brief fields.
-- `v2.70.0/` is the current anchor. It contains the immutable upstream skill
-  audit (`skill-audit.json`, `report.md`), extension records 01–05,
-  `artifacts/extension-review.json`, and the hash-bound `manifest.json`.
+- `v2.72.0/` is the current anchor. It contains the immutable upstream skill
+  audit, extension records 01–05, the maintainer decisions and source diff,
+  the machine review and the hash-bound manifest.
 - `scripts/generate-scientific-agent-skills-extensions.mjs` regenerates the
   reviewed `plugin-scientific-agent-skills-*` packages, profiles, registry entries, and
   the catalog. `scripts/scientific-agent-skills-maintenance.mjs` provides

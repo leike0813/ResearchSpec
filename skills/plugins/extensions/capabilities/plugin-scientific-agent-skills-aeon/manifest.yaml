@@ -48,74 +48,74 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-anomaly-detection.md
     path: references/anomaly_detection.md
-    content_hash: f7121dbcfff6ed13356a5540488272ef7fbd6cee4eeb139d33bb1b8214cf573b
-    license: MIT
+    content_hash: 3ed8bde3b5d6d019fca2ea6e0ab1dd861a50cf5669deb9b4cbd185d0e21fe2fa
+    license: BSD-3-Clause
   - knowledge_id: sas-references-classification.md
     path: references/classification.md
-    content_hash: 5aea5ecf30840d0748077a9ac617ec460711ba70f8ef5df650a31f134b605067
-    license: MIT
+    content_hash: 86d7c93615f8545f1f36055a83ff885ebf56018c3a12aba96fa05dbd057e2b0c
+    license: BSD-3-Clause
   - knowledge_id: sas-references-clustering.md
     path: references/clustering.md
-    content_hash: ab2635b7d55ae727bc027c0b0f21dc65167c35b0379acbd19396db82594c2832
-    license: MIT
+    content_hash: a230dfb23d422d0b8049a33e2dbe63bb961caa0280fa03af36539868de57c550
+    license: BSD-3-Clause
   - knowledge_id: sas-references-datasets-benchmarking.md
     path: references/datasets_benchmarking.md
-    content_hash: 1830d335c9fb02fbd8cf9765f22309e81ee562fdd6f199435178ef2a18beb4ce
-    license: MIT
+    content_hash: 940899664713b7aeccc70d478db85677102d65ad036c0714e63a0a65db138936
+    license: BSD-3-Clause
   - knowledge_id: sas-references-distances.md
     path: references/distances.md
-    content_hash: 1b9a0371bad5babf386cf52405fc48b93097b05706a5c79ef6d216f94f502d04
-    license: MIT
+    content_hash: 094c4c83e372ba1fb8a54c8d21091093214170607e20963b6a4e01643f343746
+    license: BSD-3-Clause
   - knowledge_id: sas-references-forecasting.md
     path: references/forecasting.md
-    content_hash: 3ee8527837e92712306688301b0abb8c19b7bfb3f249cd1239f1039f5026477d
-    license: MIT
+    content_hash: 101b9408a2fc96d3e079144823ea4b2fac87ac30dba38f974c73d2b0a3dd6f98
+    license: BSD-3-Clause
   - knowledge_id: sas-references-networks.md
     path: references/networks.md
-    content_hash: fccccdfd172c5f1578d462d06f66187b9f4242144a59abfd8408f467d9e40e65
-    license: MIT
+    content_hash: e81dabf878d315b246ebc045e41e9d3507cd0d346e2bfffcebc8a42ac4af32b3
+    license: BSD-3-Clause
   - knowledge_id: sas-references-regression.md
     path: references/regression.md
-    content_hash: 39ccf444ec621c1e4c89fe4ba56db5d5b7b3c55bce12cd4035fd6451f734c294
-    license: MIT
+    content_hash: bd2d1b2bfd6189fddb0f878f5cf9477a55b8c9787a273c9a7f652c4d000f4d3a
+    license: BSD-3-Clause
   - knowledge_id: sas-references-segmentation.md
     path: references/segmentation.md
-    content_hash: 7495a53b149750c2fc310a545c9f9b27523626f5d38689cde34ec9585450573a
-    license: MIT
+    content_hash: 4fbb3b7547d9782038da36e74d82e113fc270ebeed93f8537d66396c6f3a0acf
+    license: BSD-3-Clause
   - knowledge_id: sas-references-similarity-search.md
     path: references/similarity_search.md
-    content_hash: 9d803e450a82dd864f7f7b8859fe7dc2d210b14369d0ae2ab8b74922446741e5
-    license: MIT
+    content_hash: 2fa8e05e2839a8302ee0c46f673454bd325bf3f86ddfc11da401fcf29f60c1d1
+    license: BSD-3-Clause
   - knowledge_id: sas-references-transformations.md
     path: references/transformations.md
-    content_hash: e7807df13949b036f30212d98b921ad6f31e0720d145ff3196f85a3584788da4
-    license: MIT
+    content_hash: a8989df3b45abed8f7d6485fcda13ec461dfa47864e4b946ac82b747e2463d1b
+    license: BSD-3-Clause
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/SKILL.md
-      sha256: b9004698dce3880741c80d225f291e43f3cfa239c07aa78e0dbc7064c4a668fb
+      sha256: 7211b09745b77db899b4b7a909002ec373e1cf128dcc254ed7ebae9352499260
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/anomaly_detection.md
-      sha256: f7121dbcfff6ed13356a5540488272ef7fbd6cee4eeb139d33bb1b8214cf573b
+      sha256: 3ed8bde3b5d6d019fca2ea6e0ab1dd861a50cf5669deb9b4cbd185d0e21fe2fa
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/classification.md
-      sha256: 5aea5ecf30840d0748077a9ac617ec460711ba70f8ef5df650a31f134b605067
+      sha256: 86d7c93615f8545f1f36055a83ff885ebf56018c3a12aba96fa05dbd057e2b0c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/clustering.md
-      sha256: ab2635b7d55ae727bc027c0b0f21dc65167c35b0379acbd19396db82594c2832
+      sha256: a230dfb23d422d0b8049a33e2dbe63bb961caa0280fa03af36539868de57c550
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/datasets_benchmarking.md
-      sha256: 1830d335c9fb02fbd8cf9765f22309e81ee562fdd6f199435178ef2a18beb4ce
+      sha256: 940899664713b7aeccc70d478db85677102d65ad036c0714e63a0a65db138936
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/distances.md
-      sha256: 1b9a0371bad5babf386cf52405fc48b93097b05706a5c79ef6d216f94f502d04
+      sha256: 094c4c83e372ba1fb8a54c8d21091093214170607e20963b6a4e01643f343746
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/forecasting.md
-      sha256: 3ee8527837e92712306688301b0abb8c19b7bfb3f249cd1239f1039f5026477d
+      sha256: 101b9408a2fc96d3e079144823ea4b2fac87ac30dba38f974c73d2b0a3dd6f98
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/networks.md
-      sha256: fccccdfd172c5f1578d462d06f66187b9f4242144a59abfd8408f467d9e40e65
+      sha256: e81dabf878d315b246ebc045e41e9d3507cd0d346e2bfffcebc8a42ac4af32b3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/regression.md
-      sha256: 39ccf444ec621c1e4c89fe4ba56db5d5b7b3c55bce12cd4035fd6451f734c294
+      sha256: bd2d1b2bfd6189fddb0f878f5cf9477a55b8c9787a273c9a7f652c4d000f4d3a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/segmentation.md
-      sha256: 7495a53b149750c2fc310a545c9f9b27523626f5d38689cde34ec9585450573a
+      sha256: 4fbb3b7547d9782038da36e74d82e113fc270ebeed93f8537d66396c6f3a0acf
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/similarity_search.md
-      sha256: 9d803e450a82dd864f7f7b8859fe7dc2d210b14369d0ae2ab8b74922446741e5
+      sha256: 2fa8e05e2839a8302ee0c46f673454bd325bf3f86ddfc11da401fcf29f60c1d1
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-aeon/references/transformations.md
-      sha256: e7807df13949b036f30212d98b921ad6f31e0720d145ff3196f85a3584788da4
-license: MIT
+      sha256: a8989df3b45abed8f7d6485fcda13ec461dfa47864e4b946ac82b747e2463d1b
+license: BSD-3-Clause

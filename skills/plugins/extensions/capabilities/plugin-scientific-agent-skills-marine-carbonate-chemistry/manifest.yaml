@@ -1,0 +1,74 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-marine-carbonate-chemistry
+title: Marine Carbonate Chemistry
+description: Solves seawater carbonate chemistry with PyCO2SYS for chemical
+  oceanography, ocean acidification, and marine carbon-cycle research. Use for
+  paired total alkalinity, dissolved inorganic carbon, pH, or seawater pCO2/fCO2
+  measurements; carbonate speciation; aragonite and calcite saturation; Revelle
+  factors; lab-to-in-situ temperature and pressure corrections; and measurement
+  uncertainty propagation. Applies to carbonate-system calculations, not general
+  aqueous speciation or air-sea gas-flux estimation.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-chemistry-decisions.md
+    path: references/chemistry-decisions.md
+    content_hash: 82ba976bf836d3d5e2cdad9a9c0caa088c48634619a56da3725fe9afd03890f9
+    license: MIT
+  - knowledge_id: sas-references-input-and-results.md
+    path: references/input-and-results.md
+    content_hash: fc4e89c16225f7fbf01299294fd0afb95f82ff3366a7d6eeee2ae4b86c9412c3
+    license: MIT
+  - knowledge_id: sas-scripts-solve-carbonate.py
+    path: scripts/solve_carbonate.py
+    content_hash: 4071c07d17d932778833fca03153fc852003b22249a0da5a3a5b398e8a957c76
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-marine-carbonate-chemistry/SKILL.md
+      sha256: 69319d9328baf7d4e33791203b2a00dfb8f432703322e963e412683272dfd776
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-marine-carbonate-chemistry/references/chemistry-decisions.md
+      sha256: 82ba976bf836d3d5e2cdad9a9c0caa088c48634619a56da3725fe9afd03890f9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-marine-carbonate-chemistry/references/input-and-results.md
+      sha256: fc4e89c16225f7fbf01299294fd0afb95f82ff3366a7d6eeee2ae4b86c9412c3
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-marine-carbonate-chemistry/scripts/solve_carbonate.py
+      sha256: 4071c07d17d932778833fca03153fc852003b22249a0da5a3a5b398e8a957c76
+license: MIT

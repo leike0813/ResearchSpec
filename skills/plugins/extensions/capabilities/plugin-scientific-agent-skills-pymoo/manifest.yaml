@@ -1,9 +1,10 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-pymoo
 title: Pymoo - Multi-Objective Optimization in Python
-description: Multi-objective optimization framework. NSGA-II, NSGA-III, MOEA/D,
-  Pareto fronts, constraint handling, benchmarks (ZDT, DTLZ), for engineering
-  design and optimization problems.
+description: Solves and validates single-, multi-, and many-objective
+  optimization with pymoo, including NSGA-II, NSGA-III, MOEA/D, constraints,
+  Pareto approximations, reference directions, and ZDT/DTLZ benchmarks for
+  engineering and research problems.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -45,80 +46,86 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-algorithms.md
     path: references/algorithms.md
-    content_hash: f9336ee3dc969233eefef228cad9413a8f9e2c693d9071e570fd828eacee7bc9
-    license: MIT
+    content_hash: c60fac31687128d0b12719a01c6a24ebe18966f3ade34b45714ffb8ae2c45020
+    license: Apache-2.0
   - knowledge_id: sas-references-constraints-mcdm.md
     path: references/constraints_mcdm.md
-    content_hash: 67d8d2538e331aa1344f4b94a2b8b600c630efbfc80171ae741bb7e117f175c2
-    license: MIT
+    content_hash: ad257ccf535479d9b90126c5e5a631bc37beaaf7295b0605d81bdccfb44e169c
+    license: Apache-2.0
+  - knowledge_id: sas-references-lifecycle.md
+    path: references/lifecycle.md
+    content_hash: 652a89b856d92557dba427e677399328a617d4598f2b4303a844256189013912
+    license: Apache-2.0
   - knowledge_id: sas-references-operators.md
     path: references/operators.md
-    content_hash: aefd3a1906fcc81afea224cba9f0ea0a23b9a2f1b3604004a03edc082799b655
-    license: MIT
+    content_hash: 6dca5b73eed994a8fdaa24be71c87299cd7d2422bdf930f24da0ebbe77357da7
+    license: Apache-2.0
   - knowledge_id: sas-references-parallelization.md
     path: references/parallelization.md
-    content_hash: c6fd4a91a3da58577b9008bb7d399f8cfc2b887d94667fa3be00571d130848ae
-    license: MIT
+    content_hash: e805bbb21a5280e1a6b079617df1a40953ced7a0d11748b28c2dbff0d6623433
+    license: Apache-2.0
   - knowledge_id: sas-references-problems.md
     path: references/problems.md
-    content_hash: 9baf6ef8ee9c4c6d67b7de5a74662534020154054f1649a716e71a59826e7338
-    license: MIT
+    content_hash: 8047432597222b4c2bfa62d922ab12c40b56d57428745fe7a74ed22b5f829102
+    license: Apache-2.0
   - knowledge_id: sas-references-quick-start-workflows.md
     path: references/quick_start_workflows.md
-    content_hash: 514fe6103176caeeaf956091b3836a81a25a32b8ef20efd2051aa859eaccedf4
-    license: MIT
+    content_hash: 5a097ef9475a33ca8a0d37c07d98bcd93212cae72d4c7d725ed5d35d4b3fb908
+    license: Apache-2.0
   - knowledge_id: sas-references-visualization.md
     path: references/visualization.md
-    content_hash: b21636950d2f69eb10d4150c0c2e47e9a70ff9da792a707293b6c176122835b0
-    license: MIT
+    content_hash: 1e799c45a7cf1fb01a7c86cf959c9561b82497921d45165326e5de66fbd2d5e4
+    license: Apache-2.0
   - knowledge_id: sas-scripts-custom-problem-example.py
     path: scripts/custom_problem_example.py
-    content_hash: 9b385850d6b05f28443a28cfb41d226cddc8296bad98436616ed62d7f5e935ac
-    license: MIT
+    content_hash: d3e20ca36e019b6de5cda28fe8f0e05ad79abcd43821f4ae6171fd6db1212b3a
+    license: Apache-2.0
   - knowledge_id: sas-scripts-decision-making-example.py
     path: scripts/decision_making_example.py
-    content_hash: 7ff21a0661ca04e5668ccd76a7342231782b07e6f7e57b9258178bf57ce09506
-    license: MIT
+    content_hash: 95b03a494d9397be16d1c41fe09de825984d880a55b49ec4e0efc29e703c948a
+    license: Apache-2.0
   - knowledge_id: sas-scripts-many-objective-example.py
     path: scripts/many_objective_example.py
-    content_hash: 4356326fe8463c948b7f9af7999ee1cc276c99ef9de70b6547159d527502e936
-    license: MIT
+    content_hash: 4f6053cb0c00c44c31ab91c72e82555936ef81bcc7c9f356b813f5def9ff426b
+    license: Apache-2.0
   - knowledge_id: sas-scripts-multi-objective-example.py
     path: scripts/multi_objective_example.py
-    content_hash: ba237064b8aac3aae49d8f40b8bd8ac78766ddcdd2d69c4e219b35837d186d92
-    license: MIT
+    content_hash: 57b9cb1a7084ab3fcbae81b41f0639af61c2b13f66f89028ab587895928709e8
+    license: Apache-2.0
   - knowledge_id: sas-scripts-single-objective-example.py
     path: scripts/single_objective_example.py
-    content_hash: a69cecea739093a152370ab53b9d2d7491a584c0ed5bfb5a236d729472b0732f
-    license: MIT
+    content_hash: 324bf358fc7049c07149b9154f201016e22d9ebe8115886f7756686c55f27582
+    license: Apache-2.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/SKILL.md
-      sha256: 3bace7702ee76a9d6527f07a49960f98e29880fc01998aa7b6d352e696d68e3f
+      sha256: 4006e76ec22bc21c7198f44f73b44ec7933be9638eb22149fc56fafdce6cec34
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/algorithms.md
-      sha256: f9336ee3dc969233eefef228cad9413a8f9e2c693d9071e570fd828eacee7bc9
+      sha256: c60fac31687128d0b12719a01c6a24ebe18966f3ade34b45714ffb8ae2c45020
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/constraints_mcdm.md
-      sha256: 67d8d2538e331aa1344f4b94a2b8b600c630efbfc80171ae741bb7e117f175c2
+      sha256: ad257ccf535479d9b90126c5e5a631bc37beaaf7295b0605d81bdccfb44e169c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/lifecycle.md
+      sha256: 652a89b856d92557dba427e677399328a617d4598f2b4303a844256189013912
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/operators.md
-      sha256: aefd3a1906fcc81afea224cba9f0ea0a23b9a2f1b3604004a03edc082799b655
+      sha256: 6dca5b73eed994a8fdaa24be71c87299cd7d2422bdf930f24da0ebbe77357da7
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/parallelization.md
-      sha256: c6fd4a91a3da58577b9008bb7d399f8cfc2b887d94667fa3be00571d130848ae
+      sha256: e805bbb21a5280e1a6b079617df1a40953ced7a0d11748b28c2dbff0d6623433
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/problems.md
-      sha256: 9baf6ef8ee9c4c6d67b7de5a74662534020154054f1649a716e71a59826e7338
+      sha256: 8047432597222b4c2bfa62d922ab12c40b56d57428745fe7a74ed22b5f829102
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/quick_start_workflows.md
-      sha256: 514fe6103176caeeaf956091b3836a81a25a32b8ef20efd2051aa859eaccedf4
+      sha256: 5a097ef9475a33ca8a0d37c07d98bcd93212cae72d4c7d725ed5d35d4b3fb908
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/references/visualization.md
-      sha256: b21636950d2f69eb10d4150c0c2e47e9a70ff9da792a707293b6c176122835b0
+      sha256: 1e799c45a7cf1fb01a7c86cf959c9561b82497921d45165326e5de66fbd2d5e4
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/scripts/custom_problem_example.py
-      sha256: 9b385850d6b05f28443a28cfb41d226cddc8296bad98436616ed62d7f5e935ac
+      sha256: d3e20ca36e019b6de5cda28fe8f0e05ad79abcd43821f4ae6171fd6db1212b3a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/scripts/decision_making_example.py
-      sha256: 7ff21a0661ca04e5668ccd76a7342231782b07e6f7e57b9258178bf57ce09506
+      sha256: 95b03a494d9397be16d1c41fe09de825984d880a55b49ec4e0efc29e703c948a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/scripts/many_objective_example.py
-      sha256: 4356326fe8463c948b7f9af7999ee1cc276c99ef9de70b6547159d527502e936
+      sha256: 4f6053cb0c00c44c31ab91c72e82555936ef81bcc7c9f356b813f5def9ff426b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/scripts/multi_objective_example.py
-      sha256: ba237064b8aac3aae49d8f40b8bd8ac78766ddcdd2d69c4e219b35837d186d92
+      sha256: 57b9cb1a7084ab3fcbae81b41f0639af61c2b13f66f89028ab587895928709e8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pymoo/scripts/single_objective_example.py
-      sha256: a69cecea739093a152370ab53b9d2d7491a584c0ed5bfb5a236d729472b0732f
-license: MIT
+      sha256: 324bf358fc7049c07149b9154f201016e22d9ebe8115886f7756686c55f27582
+license: Apache-2.0

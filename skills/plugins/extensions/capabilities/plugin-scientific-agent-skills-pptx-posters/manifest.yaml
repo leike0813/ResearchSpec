@@ -1,9 +1,9 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-pptx-posters
 title: PPTX posters
-description: Create and audit editable scientific posters in macro-free
-  PowerPoint (.pptx) from author-approved local content and assets. Use when the
-  requested deliverable is a PowerPoint research/conference poster and exact
+description: Creates and audits editable scientific posters in macro-free
+  PowerPoint (.pptx) from author-approved local content and assets. Used when
+  the requested deliverable is a PowerPoint research/conference poster and exact
   physical, printer, accessibility, provenance, and package-security checks are
   required.
 maturity: operational
@@ -47,7 +47,7 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-assets-generation-dependencies.json
     path: assets/generation_dependencies.json
-    content_hash: f18b76e1b22acbfc2624240e727d894e6ac41aa86f0c5b7d0e58a34700218d01
+    content_hash: 49a5cfa05452a2f0705564403bc2a5112715c9930d6e2bc7ccd5f6a739719a94
     license: MIT
   - knowledge_id: sas-assets-poster-manifest-template.json
     path: assets/poster_manifest_template.json
@@ -55,11 +55,11 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-assets-poster-quality-checklist.md
     path: assets/poster_quality_checklist.md
-    content_hash: 5ba7398846ab74739b27d7a8068bad7eefa1450d3ffdc65226af2206d2e70c29
+    content_hash: 80652cf483e62b806fe93a72a62350532f9b60b4bdcb91f0f5cfb5b55f9b90e3
     license: MIT
   - knowledge_id: sas-references-manifest-spec.md
     path: references/manifest_spec.md
-    content_hash: 2a825c09c3391a0e838918d88f7653fe6293fc136ac7d087c3bee681d3cc98f0
+    content_hash: e0cfd7cff23044eac88778250b405d90c82b52877eda8ad6ac3b33edb5d2d16c
     license: MIT
   - knowledge_id: sas-references-poster-content-guide.md
     path: references/poster_content_guide.md
@@ -71,7 +71,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-references-poster-layout-design.md
     path: references/poster_layout_design.md
-    content_hash: 0ef48f1b9e34b2edb2e0faba4e8c1815a5b31ed3193371975fc7e395ec06aad3
+    content_hash: 1de74eb36dad66918b625861406f0d939d6c50a2c03035f1e6c53481412310de
     license: MIT
   - knowledge_id: sas-references-pptx-security.md
     path: references/pptx_security.md
@@ -79,19 +79,19 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-references-security-validation.md
     path: references/security_validation.md
-    content_hash: 3f958506b558788b320b196b275c1c48b160278d064ee19f78471a402b644baf
+    content_hash: 7816362599697b0e01d4b01861711d6a212d1d09d358282c272d856f12632f00
     license: MIT
   - knowledge_id: sas-references-source-ledger.md
     path: references/source_ledger.md
-    content_hash: e5a047a34f49ad09e96a4e205d8713ae31cc253f103c5ac3c1e2cf2b7338f65c
+    content_hash: 95f151df546050a949b5364d145227da0030bfb97abcb40b41a4a17ca1658deb
     license: MIT
   - knowledge_id: sas-scripts--common.py
     path: scripts/_common.py
-    content_hash: 5ab02f9993a7a4e05a6409b7e3da9b77c951e3bb16e55dff16b43671a4411b96
+    content_hash: 9e3ccb3dd3ad34802a3b79f0c5b12d7c82f32fa7513bf3a7d340707f3ed0846c
     license: MIT
   - knowledge_id: sas-scripts--manifest.py
     path: scripts/_manifest.py
-    content_hash: 4b59a232f6a18b8842a403b390773adfad612f3db7a5e982c68b5eada993c43e
+    content_hash: 14188676f811c23cadaecf85ec9fc2c27f21b22ba9bd35a82480ad9f4253940c
     license: MIT
   - knowledge_id: sas-scripts--pptx.py
     path: scripts/_pptx.py
@@ -107,7 +107,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-generate-poster.py
     path: scripts/generate_poster.py
-    content_hash: 062aedd0068c870898862897e141edb4e8e0f3d0de7ff424fef6c16061557ca5
+    content_hash: b8ce6011c1a17191b62f73e2563e2b2d65f85d74a91c9b62650fa43b0f42b34c
     license: MIT
   - knowledge_id: sas-scripts-inspect-pptx.py
     path: scripts/inspect_pptx.py
@@ -119,7 +119,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-plan-export.py
     path: scripts/plan_export.py
-    content_hash: 76bee77a5f4d20a5bd2888019d226688d1feadba7c49854e7a18d9ca892c114b
+    content_hash: e428f3b29b584898508cf1571a5515155c603b5b3d5276be5c92de23a1237e86
     license: MIT
   - knowledge_id: sas-scripts-validate-manifest.py
     path: scripts/validate_manifest.py
@@ -130,31 +130,31 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/SKILL.md
-      sha256: 6ed964a68566cc3c29d00b841f14cba60cb874b299d45263dc61ce0ba410a7f0
+      sha256: ac408a654683c96295c0f998a65e0cbf2a57730d4d33ce5c5b795b1bf4c1b413
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/assets/generation_dependencies.json
-      sha256: f18b76e1b22acbfc2624240e727d894e6ac41aa86f0c5b7d0e58a34700218d01
+      sha256: 49a5cfa05452a2f0705564403bc2a5112715c9930d6e2bc7ccd5f6a739719a94
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/assets/poster_manifest_template.json
       sha256: 89a90c38b843132c303844d311a525eade912a746e800ff933513f31b6e17930
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/assets/poster_quality_checklist.md
-      sha256: 5ba7398846ab74739b27d7a8068bad7eefa1450d3ffdc65226af2206d2e70c29
+      sha256: 80652cf483e62b806fe93a72a62350532f9b60b4bdcb91f0f5cfb5b55f9b90e3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/references/manifest_spec.md
-      sha256: 2a825c09c3391a0e838918d88f7653fe6293fc136ac7d087c3bee681d3cc98f0
+      sha256: e0cfd7cff23044eac88778250b405d90c82b52877eda8ad6ac3b33edb5d2d16c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/references/poster_content_guide.md
       sha256: dea961f67f1da228da3deb873770f61780789108183450d84f93078d40884a63
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/references/poster_design_principles.md
       sha256: 7fac4022b656ad9dc529a7a9fc192b88818db7217798941fbb1a4ca3beb6ed4c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/references/poster_layout_design.md
-      sha256: 0ef48f1b9e34b2edb2e0faba4e8c1815a5b31ed3193371975fc7e395ec06aad3
+      sha256: 1de74eb36dad66918b625861406f0d939d6c50a2c03035f1e6c53481412310de
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/references/pptx_security.md
       sha256: a349556e4be4db69153a3ca6a00a1cd8212b218e5d38b0861929cb2be9fd2fed
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/references/security_validation.md
-      sha256: 3f958506b558788b320b196b275c1c48b160278d064ee19f78471a402b644baf
+      sha256: 7816362599697b0e01d4b01861711d6a212d1d09d358282c272d856f12632f00
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/references/source_ledger.md
-      sha256: e5a047a34f49ad09e96a4e205d8713ae31cc253f103c5ac3c1e2cf2b7338f65c
+      sha256: 95f151df546050a949b5364d145227da0030bfb97abcb40b41a4a17ca1658deb
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/scripts/_common.py
-      sha256: 5ab02f9993a7a4e05a6409b7e3da9b77c951e3bb16e55dff16b43671a4411b96
+      sha256: 9e3ccb3dd3ad34802a3b79f0c5b12d7c82f32fa7513bf3a7d340707f3ed0846c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/scripts/_manifest.py
-      sha256: 4b59a232f6a18b8842a403b390773adfad612f3db7a5e982c68b5eada993c43e
+      sha256: 14188676f811c23cadaecf85ec9fc2c27f21b22ba9bd35a82480ad9f4253940c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/scripts/_pptx.py
       sha256: 7c350c4aa56db63ae2789c499ad8b48a037a0847d4d0408adfe99a0054ad0394
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/scripts/check_layout.py
@@ -162,13 +162,13 @@ provenance:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/scripts/check_palette.py
       sha256: f9bfc91cfc9c95461acb6c7ade5c4cf60fa76ebf2e2cdd818ed4b9a13ced6b32
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/scripts/generate_poster.py
-      sha256: 062aedd0068c870898862897e141edb4e8e0f3d0de7ff424fef6c16061557ca5
+      sha256: b8ce6011c1a17191b62f73e2563e2b2d65f85d74a91c9b62650fa43b0f42b34c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/scripts/inspect_pptx.py
       sha256: 76b504075af984436db03b7d093cc80a373c3388c993cda7c4a2be4668aebafc
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/scripts/inventory_images.py
       sha256: 07c6df85ca9f05510224c4e976b344d46a218d1843d9f31196adae31d975ed82
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/scripts/plan_export.py
-      sha256: 76bee77a5f4d20a5bd2888019d226688d1feadba7c49854e7a18d9ca892c114b
+      sha256: e428f3b29b584898508cf1571a5515155c603b5b3d5276be5c92de23a1237e86
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pptx-posters/scripts/validate_manifest.py
       sha256: e888bc04fca0e326091e6be509fa31d9b5097127aaf42bb045aa337320237c33
 license: MIT

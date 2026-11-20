@@ -1,0 +1,14 @@
+# Scientific Agent Skills v2.72.0 new local-analysis candidates
+
+The six entries declare MIT for Skill content and have no dedicated upstream scan row. Technical review used the pinned local source. Runtime packages remain user-provisioned and external fixtures are outside the distribution. No Skill has a hard Skill dependency. The maintainer approved `clear-with-adaptation` and admission with the following constraints. [Decision record](artifacts/maintainer-decisions.json)
+
+| Skill | Inventory and risk | Required adaptation and production domain |
+| --- | --- | --- |
+| `marine-carbonate-chemistry` | Four files, including two references and one local numerical script. It reads a user-supplied CSV and rejects an existing output directory. Input units and chemical assumptions affect the results. | Use locally authorized data and a new output directory. Record units and uncertainty. Domain `oceanography`. |
+| `nmrglue` | Four files, including a settings asset, one reference and one script. Local data parsing disables pickled NPZ objects. Data size, axis calibration and manual correction influence interpretation. | Use bounded, user-approved local input. Keep the upstream binary test fixture out of the package. Domain `analytical-chemistry`. |
+| `nwb-conversion` | Five files, including two references, a session template and one script. The local imaging and behavior data can be sensitive. Conversion may leave an incomplete NWB file if verification fails. | Keep conversion local. Require the validation and round-trip report before accepting a resulting NWB file. Domain `neurosciences`. |
+| `pybamm` | Four files, including one reference, an example protocol and one local simulation tool. Solver and mesh choices affect numerical results. Runtime and measured-data files are outside the package. | Require a provisioned solver and a fresh output directory. Record numerical sensitivity and measured-data limitations. Domains `electrical-engineering` and `computational-modeling-and-simulation`. |
+| `pycalphad` | Five files, including a reference, a script and two assets. The bundled TDB is an authored hypothetical example. External assessed databases have independent license and data requirements. | Retain the included database's attribution and scope. Use a separately licensed local database for assessed results. Domains `materials-engineering` and `computational-modeling-and-simulation`. |
+| `flowkit` | Four files including two references and a local analysis script. It uses explicit FCS inputs, avoids automatic workspace file discovery and writes a new output directory. The parser sees caller-supplied files. | Keep local inputs explicit and the output path fresh. Treat imported workspace and sample data as untrusted. Domain `biochemistry-and-cell-biology`. |
+
+[Source inventory](artifacts/source-inventory.json) · [New candidate review](new-candidate-review.md)

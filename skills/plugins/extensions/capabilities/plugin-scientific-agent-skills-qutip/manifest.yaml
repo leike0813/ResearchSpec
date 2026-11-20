@@ -46,27 +46,27 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-advanced.md
     path: references/advanced.md
-    content_hash: 880b2236f1ee3abb014e6644fdb67486e2fe9b86718a981f1f2625abb2afd5dd
+    content_hash: 6bae64070a4fd32fede375195cb683e0bce83742bad1cc3f897c1af0a7f01aff
     license: MIT
   - knowledge_id: sas-references-analysis.md
     path: references/analysis.md
-    content_hash: d33cd8548db07adc3ffce52a9bf65de30767e4b811e24798a8bae7f6b8498f38
+    content_hash: 201b508d50710335baa003eb68dadf7f3fe4df33917f09eb1548ed72be1f08a5
     license: MIT
   - knowledge_id: sas-references-core-concepts.md
     path: references/core_concepts.md
-    content_hash: 907b9f55e43ccee13c9c9d2e2252d63df529b48d8f08318b05359dc06a535e43
+    content_hash: 3bc5c10f7b45faed6b00c048d623b4b1f6e35e9bd9dc99d3613c4cba0ee8005b
     license: MIT
   - knowledge_id: sas-references-time-evolution.md
     path: references/time_evolution.md
-    content_hash: f0698d03c390fc325a0bebc5c254884031da478ef6625019f354430a42b2bf1c
+    content_hash: c0fa5ea2761199d717263f35da99594c2d957efacfa188123d0c58296d43ab6e
     license: MIT
   - knowledge_id: sas-references-visualization.md
     path: references/visualization.md
-    content_hash: 70d6a642ed95ece96e67caa2776633e2292fbbcfb8b63bc2bd81a885972c193d
+    content_hash: 67d2574601532432d9b408c02ff68960e2ccce113a1d444efe6a31058e524216
     license: MIT
   - knowledge_id: sas-scripts--common.py
     path: scripts/_common.py
-    content_hash: 8519b7f7041f30e2548c3396431c556bfb7517ff148911927ee79451066e1dfb
+    content_hash: b640dffc8b93b85a4c2517c20d6c56e978d2aac51d7b51f4b32dc6e3453cf15f
     license: MIT
   - knowledge_id: sas-scripts-convergence-sweep.py
     path: scripts/convergence_sweep.py
@@ -74,15 +74,15 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-qobj-model-validator.py
     path: scripts/qobj_model_validator.py
-    content_hash: bc8a03260d1cf8b7a64d6b0ee7a9546acde24a01bc249a5fa501bffe9160ccfd
+    content_hash: a3bb7107d245a6d62a1801b32113a2c9049f5d18a6f0412857d7fed1c67af150
     license: MIT
   - knowledge_id: sas-scripts-result-audit.py
     path: scripts/result_audit.py
-    content_hash: f886933613670c655e82f7635d586a1ca4a23d222464808649b7543a30283ed4
+    content_hash: bba4e5758def41038a5ceb7ff8e8847504412b4396d7ceed2a96551b647759cd
     license: MIT
   - knowledge_id: sas-scripts-solver-config-planner.py
     path: scripts/solver_config_planner.py
-    content_hash: 3c7b7fea5d43b8d94af15db5df809e36dc54133f4d3dd8859e806fed29bbc40b
+    content_hash: cb13608330d321c904e1d0945d5a7fb655ab5c26aa7cb54979dd9f3b108db81f
     license: MIT
   - knowledge_id: sas-scripts-steady-state-spectrum-planner.py
     path: scripts/steady_state_spectrum_planner.py
@@ -90,36 +90,36 @@ knowledge_refs:
     license: MIT
   - knowledge_id: sas-scripts-two-level-simulation.py
     path: scripts/two_level_simulation.py
-    content_hash: e963c392215c7b2a471dd229d2dabf9e515f24fac2a0b124228a0bfd42651936
+    content_hash: 3e6419783c29146b95f5efbc60960f14c1d98dc63ab81b8f44ce34a0ece99f03
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/SKILL.md
-      sha256: e1c5172916480f4bfbee2e2f13c87790e69dfb97bd730b7f12009ae4b5aae3e3
+      sha256: e113aee0da78a7abab3f728ec4a1d93a06cc662f942523396b7096de834c72a3
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/advanced.md
-      sha256: 880b2236f1ee3abb014e6644fdb67486e2fe9b86718a981f1f2625abb2afd5dd
+      sha256: 6bae64070a4fd32fede375195cb683e0bce83742bad1cc3f897c1af0a7f01aff
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/analysis.md
-      sha256: d33cd8548db07adc3ffce52a9bf65de30767e4b811e24798a8bae7f6b8498f38
+      sha256: 201b508d50710335baa003eb68dadf7f3fe4df33917f09eb1548ed72be1f08a5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/core_concepts.md
-      sha256: 907b9f55e43ccee13c9c9d2e2252d63df529b48d8f08318b05359dc06a535e43
+      sha256: 3bc5c10f7b45faed6b00c048d623b4b1f6e35e9bd9dc99d3613c4cba0ee8005b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/time_evolution.md
-      sha256: f0698d03c390fc325a0bebc5c254884031da478ef6625019f354430a42b2bf1c
+      sha256: c0fa5ea2761199d717263f35da99594c2d957efacfa188123d0c58296d43ab6e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/references/visualization.md
-      sha256: 70d6a642ed95ece96e67caa2776633e2292fbbcfb8b63bc2bd81a885972c193d
+      sha256: 67d2574601532432d9b408c02ff68960e2ccce113a1d444efe6a31058e524216
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/_common.py
-      sha256: 8519b7f7041f30e2548c3396431c556bfb7517ff148911927ee79451066e1dfb
+      sha256: b640dffc8b93b85a4c2517c20d6c56e978d2aac51d7b51f4b32dc6e3453cf15f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/convergence_sweep.py
       sha256: d341087e7d208b77e4b1ae180edf50401f0d11b1612a3e3598d5c51231cc8364
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/qobj_model_validator.py
-      sha256: bc8a03260d1cf8b7a64d6b0ee7a9546acde24a01bc249a5fa501bffe9160ccfd
+      sha256: a3bb7107d245a6d62a1801b32113a2c9049f5d18a6f0412857d7fed1c67af150
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/result_audit.py
-      sha256: f886933613670c655e82f7635d586a1ca4a23d222464808649b7543a30283ed4
+      sha256: bba4e5758def41038a5ceb7ff8e8847504412b4396d7ceed2a96551b647759cd
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/solver_config_planner.py
-      sha256: 3c7b7fea5d43b8d94af15db5df809e36dc54133f4d3dd8859e806fed29bbc40b
+      sha256: cb13608330d321c904e1d0945d5a7fb655ab5c26aa7cb54979dd9f3b108db81f
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/steady_state_spectrum_planner.py
       sha256: 9fbc4016d1e636a49133d5a8ab585e70aef791a5390ef1e8e644ea9d9cd57cac
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-qutip/scripts/two_level_simulation.py
-      sha256: e963c392215c7b2a471dd229d2dabf9e515f24fac2a0b124228a0bfd42651936
+      sha256: 3e6419783c29146b95f5efbc60960f14c1d98dc63ab81b8f44ce34a0ece99f03
 license: MIT

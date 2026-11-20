@@ -1,8 +1,8 @@
 {
   "schema_version": "1",
   "vendor_id": "scientific-agent-skills",
-  "release": "v2.70.0",
-  "revision": "d0c48af8c7b7a71ccc81fcd04c9db53b48439f9b",
+  "release": "v2.72.0",
+  "revision": "526ebce143bc326f44471554e33d66a19c840360",
   "source_report": "docs/security-report.json",
   "target_reason": "static-security-review-failed",
   "reviews": [
@@ -15,10 +15,10 @@
       },
       "inventory": {
         "summary": {
-          "files": 16,
-          "bytes": 176896,
+          "files": 17,
+          "bytes": 206988,
           "references": 6,
-          "scripts": 9,
+          "scripts": 10,
           "assets": 0,
           "tests_or_evals": 0,
           "environment_templates": 0
@@ -26,27 +26,27 @@
         "files": [
           {
             "source_path": "skills/fluidsim/references/advanced_features.md",
-            "bytes": 11654
+            "bytes": 11806
           },
           {
             "source_path": "skills/fluidsim/references/installation.md",
-            "bytes": 9745
+            "bytes": 10455
           },
           {
             "source_path": "skills/fluidsim/references/output_analysis.md",
-            "bytes": 10126
+            "bytes": 11322
           },
           {
             "source_path": "skills/fluidsim/references/parameters.md",
-            "bytes": 10195
+            "bytes": 10710
           },
           {
             "source_path": "skills/fluidsim/references/simulation_workflow.md",
-            "bytes": 10893
+            "bytes": 12650
           },
           {
             "source_path": "skills/fluidsim/references/solvers.md",
-            "bytes": 7952
+            "bytes": 8324
           },
           {
             "source_path": "skills/fluidsim/scripts/__init__.py",
@@ -54,19 +54,23 @@
           },
           {
             "source_path": "skills/fluidsim/scripts/_common.py",
-            "bytes": 15595
+            "bytes": 15709
+          },
+          {
+            "source_path": "skills/fluidsim/scripts/_profiles.py",
+            "bytes": 12628
           },
           {
             "source_path": "skills/fluidsim/scripts/_schema.py",
-            "bytes": 28807
+            "bytes": 31497
           },
           {
             "source_path": "skills/fluidsim/scripts/budget_summary.py",
-            "bytes": 13373
+            "bytes": 14541
           },
           {
             "source_path": "skills/fluidsim/scripts/grid_resource_estimator.py",
-            "bytes": 9047
+            "bytes": 9695
           },
           {
             "source_path": "skills/fluidsim/scripts/output_inventory.py",
@@ -74,11 +78,11 @@
           },
           {
             "source_path": "skills/fluidsim/scripts/restart_compatibility.py",
-            "bytes": 15757
+            "bytes": 19943
           },
           {
             "source_path": "skills/fluidsim/scripts/simulation_dry_run.py",
-            "bytes": 7813
+            "bytes": 10324
           },
           {
             "source_path": "skills/fluidsim/scripts/solver_config_validator.py",
@@ -86,7 +90,7 @@
           },
           {
             "source_path": "skills/fluidsim/SKILL.md",
-            "bytes": 12560
+            "bytes": 14005
           }
         ]
       },
@@ -99,6 +103,7 @@
         "skills/fluidsim/references/solvers.md",
         "skills/fluidsim/scripts/__init__.py",
         "skills/fluidsim/scripts/_common.py",
+        "skills/fluidsim/scripts/_profiles.py",
         "skills/fluidsim/scripts/_schema.py",
         "skills/fluidsim/scripts/budget_summary.py",
         "skills/fluidsim/scripts/grid_resource_estimator.py",
@@ -138,10 +143,10 @@
       },
       "inventory": {
         "summary": {
-          "files": 16,
-          "bytes": 165516,
-          "references": 14,
-          "scripts": 0,
+          "files": 18,
+          "bytes": 150904,
+          "references": 15,
+          "scripts": 1,
           "assets": 0,
           "tests_or_evals": 0,
           "environment_templates": 0
@@ -149,67 +154,75 @@
         "files": [
           {
             "source_path": "skills/geomaster/README.md",
-            "bytes": 3390
+            "bytes": 480
           },
           {
             "source_path": "skills/geomaster/references/advanced-gis.md",
-            "bytes": 11121
+            "bytes": 7149
           },
           {
             "source_path": "skills/geomaster/references/big-data.md",
-            "bytes": 8818
+            "bytes": 7745
           },
           {
             "source_path": "skills/geomaster/references/code-examples.md",
-            "bytes": 13023
+            "bytes": 7071
           },
           {
             "source_path": "skills/geomaster/references/coordinate-systems.md",
-            "bytes": 8893
+            "bytes": 9497
           },
           {
             "source_path": "skills/geomaster/references/core-libraries.md",
-            "bytes": 6866
+            "bytes": 7748
           },
           {
             "source_path": "skills/geomaster/references/data-sources.md",
-            "bytes": 9331
+            "bytes": 9904
           },
           {
             "source_path": "skills/geomaster/references/gis-software.md",
-            "bytes": 9284
+            "bytes": 9653
           },
           {
             "source_path": "skills/geomaster/references/industry-applications.md",
-            "bytes": 13491
+            "bytes": 6631
           },
           {
             "source_path": "skills/geomaster/references/machine-learning.md",
-            "bytes": 13245
+            "bytes": 13020
           },
           {
             "source_path": "skills/geomaster/references/programming-languages.md",
-            "bytes": 11417
+            "bytes": 12022
           },
           {
             "source_path": "skills/geomaster/references/remote-sensing.md",
-            "bytes": 10474
+            "bytes": 10046
+          },
+          {
+            "source_path": "skills/geomaster/references/review.md",
+            "bytes": 6773
           },
           {
             "source_path": "skills/geomaster/references/scientific-domains.md",
-            "bytes": 11027
+            "bytes": 6593
           },
           {
             "source_path": "skills/geomaster/references/specialized-topics.md",
-            "bytes": 11114
+            "bytes": 10733
           },
           {
             "source_path": "skills/geomaster/references/troubleshooting.md",
-            "bytes": 11231
+            "bytes": 6539
+          },
+          {
+            "source_path": "skills/geomaster/scripts/raster_workflows.py",
+            "bytes": 8011
           },
           {
             "source_path": "skills/geomaster/SKILL.md",
-            "bytes": 12791
+            "bytes": 11289
           }
         ]
       },
@@ -226,9 +239,11 @@
         "skills/geomaster/references/machine-learning.md",
         "skills/geomaster/references/programming-languages.md",
         "skills/geomaster/references/remote-sensing.md",
+        "skills/geomaster/references/review.md",
         "skills/geomaster/references/scientific-domains.md",
         "skills/geomaster/references/specialized-topics.md",
         "skills/geomaster/references/troubleshooting.md",
+        "skills/geomaster/scripts/raster_workflows.py",
         "skills/geomaster/SKILL.md"
       ],
       "findings": [
@@ -239,7 +254,8 @@
           "title": "Self-promotional citation directive instructs agent to add specific paper and fetch external URL",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/geomaster/SKILL.md"
           ],
           "analysis": "当前内容实读：SKILL.md 第 369 行确含 vendor 自撰 Citing Scientific Agent Skills 段。事实成立；该段属 Skill 自带内容而非不可信输入，标为 prompt injection 属规则名过宽。",
           "residual_risk": "低：会让 Agent 改动用户产出的参考文献，属内容污染倾向而非安全入侵。"
@@ -274,7 +290,7 @@
       "inventory": {
         "summary": {
           "files": 8,
-          "bytes": 152692,
+          "bytes": 157730,
           "references": 5,
           "scripts": 2,
           "assets": 0,
@@ -284,35 +300,35 @@
         "files": [
           {
             "source_path": "skills/infographics/references/color_palettes.md",
-            "bytes": 14120
+            "bytes": 15030
           },
           {
             "source_path": "skills/infographics/references/design_principles.md",
-            "bytes": 19080
+            "bytes": 19483
           },
           {
             "source_path": "skills/infographics/references/infographic_type_catalog.md",
-            "bytes": 5015
+            "bytes": 5323
           },
           {
             "source_path": "skills/infographics/references/infographic_types.md",
-            "bytes": 28996
+            "bytes": 29323
           },
           {
             "source_path": "skills/infographics/references/iterative_refinement.md",
-            "bytes": 3304
+            "bytes": 4118
           },
           {
             "source_path": "skills/infographics/scripts/generate_infographic_ai.py",
-            "bytes": 57598
+            "bytes": 57066
           },
           {
             "source_path": "skills/infographics/scripts/generate_infographic.py",
-            "bytes": 12643
+            "bytes": 12059
           },
           {
             "source_path": "skills/infographics/SKILL.md",
-            "bytes": 11936
+            "bytes": 15328
           }
         ]
       },
@@ -336,10 +352,11 @@
           "evidence": [
             "docs/security-report.json",
             "skills/infographics/scripts/generate_infographic_ai.py",
-            "skills/infographics/scripts/generate_infographic.py"
+            "skills/infographics/scripts/generate_infographic.py",
+            "skills/infographics/SKILL.md"
           ],
-          "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
-          "residual_risk": "低–中：OPENROUTER_API_KEY 属用户机密，随显式调用发往 OpenRouter。"
+          "analysis": "The current provider utilities use a selected environment and a declared credential for external generation. This supports the credential and outbound-material surface of the historical finding.",
+          "residual_risk": "Excluded provider resources stay upstream. Any optional rendering requires separately authorized target-Agent capabilities."
         },
         {
           "finding_id": "infographics:2",
@@ -350,10 +367,11 @@
           "evidence": [
             "docs/security-report.json",
             "skills/infographics/scripts/generate_infographic_ai.py",
-            "skills/infographics/scripts/generate_infographic.py"
+            "skills/infographics/scripts/generate_infographic.py",
+            "skills/infographics/SKILL.md"
           ],
-          "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
-          "residual_risk": "低–中：chain 仅由脚本间转交同一 key 构成，未见第二目的地。"
+          "analysis": "The current provider utilities use a selected environment and a declared credential for external generation. This supports the credential and outbound-material surface of the historical finding.",
+          "residual_risk": "Excluded provider resources stay upstream. Any optional rendering requires separately authorized target-Agent capabilities."
         },
         {
           "finding_id": "infographics:3",
@@ -363,10 +381,11 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/infographics/scripts/generate_infographic_ai.py"
+            "skills/infographics/scripts/generate_infographic_ai.py",
+            "skills/infographics/SKILL.md"
           ],
-          "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
-          "residual_risk": "低–中：generate_infographic_ai.py 单点鉴权调用。"
+          "analysis": "The current provider utilities use a selected environment and a declared credential for external generation. This supports the credential and outbound-material surface of the historical finding.",
+          "residual_risk": "Excluded provider resources stay upstream. Any optional rendering requires separately authorized target-Agent capabilities."
         }
       ],
       "recommendation": "clear-with-adaptation",
@@ -391,6 +410,11 @@
           "kind": "compatibility-guidance",
           "source_path": null,
           "note": "Require explicit user consent before sending prompts, data, or images to any externally configured model; treat retrieved material as untrusted and keep cost limits under the target Agent's control."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/infographics/references/iterative_refinement.md",
+          "note": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure."
         }
       ],
       "independent_blockers": [],
@@ -409,7 +433,7 @@
       "inventory": {
         "summary": {
           "files": 17,
-          "bytes": 249123,
+          "bytes": 212304,
           "references": 9,
           "scripts": 3,
           "assets": 4,
@@ -419,71 +443,71 @@
         "files": [
           {
             "source_path": "skills/latex-posters/assets/baposter_template.tex",
-            "bytes": 7432
+            "bytes": 8030
           },
           {
             "source_path": "skills/latex-posters/assets/beamerposter_template.tex",
-            "bytes": 7652
+            "bytes": 8280
           },
           {
             "source_path": "skills/latex-posters/assets/poster_quality_checklist.md",
-            "bytes": 11172
+            "bytes": 11606
           },
           {
             "source_path": "skills/latex-posters/assets/tikzposter_template.tex",
-            "bytes": 7887
+            "bytes": 8396
           },
           {
             "source_path": "skills/latex-posters/references/ai_graphics_for_posters.md",
-            "bytes": 24490
+            "bytes": 6613
           },
           {
             "source_path": "skills/latex-posters/references/compilation_and_quality_control.md",
-            "bytes": 13888
+            "bytes": 8283
           },
           {
             "source_path": "skills/latex-posters/references/latex_poster_packages.md",
-            "bytes": 17836
+            "bytes": 19908
           },
           {
             "source_path": "skills/latex-posters/references/latex_poster_reference.md",
-            "bytes": 7384
+            "bytes": 7693
           },
           {
             "source_path": "skills/latex-posters/references/poster_content_guide.md",
-            "bytes": 20361
+            "bytes": 21156
           },
           {
             "source_path": "skills/latex-posters/references/poster_design_principles.md",
-            "bytes": 22916
+            "bytes": 22881
           },
           {
             "source_path": "skills/latex-posters/references/poster_layout_design.md",
-            "bytes": 22327
+            "bytes": 22863
           },
           {
             "source_path": "skills/latex-posters/references/poster_patterns_and_presentation.md",
-            "bytes": 2648
+            "bytes": 2998
           },
           {
             "source_path": "skills/latex-posters/references/README.md",
-            "bytes": 12516
+            "bytes": 3026
           },
           {
             "source_path": "skills/latex-posters/scripts/generate_schematic_ai.py",
-            "bytes": 38534
+            "bytes": 35684
           },
           {
             "source_path": "skills/latex-posters/scripts/generate_schematic.py",
-            "bytes": 7600
+            "bytes": 7782
           },
           {
             "source_path": "skills/latex-posters/scripts/review_poster.sh",
-            "bytes": 7939
+            "bytes": 6481
           },
           {
             "source_path": "skills/latex-posters/SKILL.md",
-            "bytes": 16541
+            "bytes": 10624
           }
         ]
       },
@@ -516,10 +540,11 @@
           "evidence": [
             "docs/security-report.json",
             "skills/latex-posters/scripts/generate_schematic_ai.py",
-            "skills/latex-posters/scripts/generate_schematic.py"
+            "skills/latex-posters/scripts/generate_schematic.py",
+            "skills/latex-posters/SKILL.md"
           ],
-          "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
-          "residual_risk": "低–中：OPENROUTER_API_KEY 随显式调用发往 OpenRouter。"
+          "analysis": "The current provider utilities use a selected environment and a declared credential for external generation. This supports the credential and outbound-material surface of the historical finding.",
+          "residual_risk": "Excluded provider resources stay upstream. Any optional rendering requires separately authorized target-Agent capabilities."
         },
         {
           "finding_id": "latex-posters:2",
@@ -530,10 +555,11 @@
           "evidence": [
             "docs/security-report.json",
             "skills/latex-posters/scripts/generate_schematic_ai.py",
-            "skills/latex-posters/scripts/generate_schematic.py"
+            "skills/latex-posters/scripts/generate_schematic.py",
+            "skills/latex-posters/SKILL.md"
           ],
-          "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
-          "residual_risk": "低–中：chain 由 generate_schematic.py 向 AI 子进程转交该 key 构成。"
+          "analysis": "The current provider utilities use a selected environment and a declared credential for external generation. This supports the credential and outbound-material surface of the historical finding.",
+          "residual_risk": "Excluded provider resources stay upstream. Any optional rendering requires separately authorized target-Agent capabilities."
         },
         {
           "finding_id": "latex-posters:3",
@@ -543,10 +569,11 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/latex-posters/scripts/generate_schematic_ai.py"
+            "skills/latex-posters/scripts/generate_schematic_ai.py",
+            "skills/latex-posters/SKILL.md"
           ],
-          "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
-          "residual_risk": "低–中：generate_schematic_ai.py 单点鉴权调用。"
+          "analysis": "The current provider utilities use a selected environment and a declared credential for external generation. This supports the credential and outbound-material surface of the historical finding.",
+          "residual_risk": "Excluded provider resources stay upstream. Any optional rendering requires separately authorized target-Agent capabilities."
         }
       ],
       "recommendation": "clear-with-adaptation",
@@ -571,6 +598,11 @@
           "kind": "compatibility-guidance",
           "source_path": null,
           "note": "Declare LaTeX and local PDF inspection tools as user-provisioned dependencies and require consent before any target-Agent external model use."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/latex-posters/references/ai_graphics_for_posters.md",
+          "note": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure."
         }
       ],
       "independent_blockers": [],
@@ -589,7 +621,7 @@
       "inventory": {
         "summary": {
           "files": 11,
-          "bytes": 103944,
+          "bytes": 112681,
           "references": 7,
           "scripts": 3,
           "assets": 0,
@@ -599,27 +631,27 @@
         "files": [
           {
             "source_path": "skills/markitdown/references/api_reference.md",
-            "bytes": 11485
+            "bytes": 11907
           },
           {
             "source_path": "skills/markitdown/references/cloud_and_ocr.md",
-            "bytes": 9684
+            "bytes": 14148
           },
           {
             "source_path": "skills/markitdown/references/file_formats.md",
-            "bytes": 10394
+            "bytes": 11736
           },
           {
             "source_path": "skills/markitdown/references/mcp_and_plugins.md",
-            "bytes": 6626
+            "bytes": 7267
           },
           {
             "source_path": "skills/markitdown/references/migration.md",
-            "bytes": 8296
+            "bytes": 9252
           },
           {
             "source_path": "skills/markitdown/references/security.md",
-            "bytes": 10065
+            "bytes": 10459
           },
           {
             "source_path": "skills/markitdown/references/workflows.md",
@@ -639,7 +671,7 @@
           },
           {
             "source_path": "skills/markitdown/SKILL.md",
-            "bytes": 11684
+            "bytes": 12202
           }
         ]
       },
@@ -664,7 +696,8 @@
           "title": "Self-promotional citation directive embedded in skill instructions",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/markitdown/SKILL.md"
           ],
           "analysis": "当前内容实读：SKILL.md 第 266 行确含 vendor 自撰 Citing Scientific Agent Skills 段。事实成立；属 Skill 自带内容而非不可信输入，标为 policy violation 属规则名过宽。",
           "residual_risk": "低：会让 Agent 改动用户产出的参考文献，属内容污染倾向而非安全入侵。"
@@ -699,7 +732,7 @@
       "inventory": {
         "summary": {
           "files": 13,
-          "bytes": 77775,
+          "bytes": 98196,
           "references": 12,
           "scripts": 0,
           "assets": 0,
@@ -709,55 +742,55 @@
         "files": [
           {
             "source_path": "skills/modal/references/api_reference.md",
-            "bytes": 6847
+            "bytes": 8692
           },
           {
             "source_path": "skills/modal/references/examples.md",
-            "bytes": 7493
+            "bytes": 10551
           },
           {
             "source_path": "skills/modal/references/functions.md",
-            "bytes": 5793
+            "bytes": 8513
           },
           {
             "source_path": "skills/modal/references/getting-started.md",
-            "bytes": 4060
+            "bytes": 4784
           },
           {
             "source_path": "skills/modal/references/gpu.md",
-            "bytes": 5068
+            "bytes": 6668
           },
           {
             "source_path": "skills/modal/references/images.md",
-            "bytes": 6681
+            "bytes": 7427
           },
           {
             "source_path": "skills/modal/references/resources.md",
-            "bytes": 2581
+            "bytes": 3237
           },
           {
             "source_path": "skills/modal/references/scaling.md",
-            "bytes": 4556
+            "bytes": 6605
           },
           {
             "source_path": "skills/modal/references/scheduled-jobs.md",
-            "bytes": 3777
+            "bytes": 4430
           },
           {
             "source_path": "skills/modal/references/secrets.md",
-            "bytes": 2874
+            "bytes": 3945
           },
           {
             "source_path": "skills/modal/references/volumes.md",
-            "bytes": 5806
+            "bytes": 6956
           },
           {
             "source_path": "skills/modal/references/web-endpoints.md",
-            "bytes": 5857
+            "bytes": 8373
           },
           {
             "source_path": "skills/modal/SKILL.md",
-            "bytes": 16382
+            "bytes": 18015
           }
         ]
       },
@@ -784,7 +817,8 @@
           "title": "Python code block uses eval/exec",
           "verdict": "false-positive",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/modal/SKILL.md"
           ],
           "analysis": "实读 references/functions.md 第 83 行（报告记 82）：self.model.eval()，PyTorch 推理模式，原行注释即写明 not Python's built-in eval()。",
           "residual_risk": "无；文档中的模型推理调用。"
@@ -796,7 +830,8 @@
           "title": "Python code block executes shell commands",
           "verdict": "false-positive",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/modal/SKILL.md"
           ],
           "analysis": "实读 references/gpu.md 第 158 行（报告记 157）：文档示例 subprocess.run([\"python\",\"train_script.py\"], check=True)，固定 argv、无 shell=True。",
           "residual_risk": "示例启动本地训练进程；无注入面。"
@@ -808,7 +843,8 @@
           "title": "Python code block executes shell commands",
           "verdict": "false-positive",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/modal/SKILL.md"
           ],
           "analysis": "实读 references/gpu.md 第 167 行（报告记 166）：subprocess.run([\"accelerate\",\"launch\",...]) 文档示例，固定 argv、无 shell。",
           "residual_risk": "示例启动本地分布式训练；无注入面。"
@@ -820,7 +856,8 @@
           "title": "Python code block sends HTTP POST request",
           "verdict": "false-positive",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/modal/SKILL.md"
           ],
           "analysis": "实读 references/scheduled-jobs.md 第 142 行（报告记 141）：健康检查示例 requests.post(os.environ[\"SLACK_URL\"], json=...)，目标是用户自配的 Slack webhook。",
           "residual_risk": "低：示例会把服务状态发往用户配置的 webhook 地址。"
@@ -832,7 +869,8 @@
           "title": "Python code block executes shell commands",
           "verdict": "false-positive",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/modal/SKILL.md"
           ],
           "analysis": "实读 references/web-endpoints.md 第 150 行（报告记 149）：subprocess.Popen([\"python\",\"-m\",\"vllm...\"]) 文档示例，固定 argv、无 shell。",
           "residual_risk": "示例启动本地 vLLM 服务；无注入面。"
@@ -873,7 +911,7 @@
       "inventory": {
         "summary": {
           "files": 7,
-          "bytes": 47986,
+          "bytes": 58702,
           "references": 3,
           "scripts": 1,
           "assets": 0,
@@ -883,7 +921,7 @@
         "files": [
           {
             "source_path": "skills/pacsomatic/config.yaml",
-            "bytes": 1058
+            "bytes": 1060
           },
           {
             "source_path": "skills/pacsomatic/LICENSE",
@@ -891,23 +929,23 @@
           },
           {
             "source_path": "skills/pacsomatic/references/agent-playbook.md",
-            "bytes": 2052
+            "bytes": 2045
           },
           {
             "source_path": "skills/pacsomatic/references/config-and-output.md",
-            "bytes": 2156
+            "bytes": 5984
           },
           {
             "source_path": "skills/pacsomatic/references/pacsomatic_guide.md",
-            "bytes": 7363
+            "bytes": 5340
           },
           {
             "source_path": "skills/pacsomatic/scripts/run_pacsomatic.py",
-            "bytes": 29233
+            "bytes": 36728
           },
           {
             "source_path": "skills/pacsomatic/SKILL.md",
-            "bytes": 5056
+            "bytes": 6477
           }
         ]
       },
@@ -938,6 +976,11 @@
           "kind": "compatibility-guidance",
           "source_path": null,
           "note": "Do not clone repositories, create environments, submit jobs, or expose raw module-load and extra-argument channels."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/pacsomatic/references/agent-playbook.md",
+          "note": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure."
         }
       ],
       "independent_blockers": [],
@@ -956,9 +999,9 @@
       },
       "inventory": {
         "summary": {
-          "files": 7,
-          "bytes": 24209,
-          "references": 6,
+          "files": 8,
+          "bytes": 40221,
+          "references": 7,
           "scripts": 0,
           "assets": 0,
           "tests_or_evals": 0,
@@ -966,36 +1009,41 @@
         },
         "files": [
           {
+            "source_path": "skills/parallel-web/references/api-contracts.md",
+            "bytes": 7725
+          },
+          {
             "source_path": "skills/parallel-web/references/data-enrichment.md",
-            "bytes": 2924
+            "bytes": 4358
           },
           {
             "source_path": "skills/parallel-web/references/deep-research.md",
-            "bytes": 3213
+            "bytes": 3939
           },
           {
             "source_path": "skills/parallel-web/references/findall.md",
-            "bytes": 2371
+            "bytes": 3094
           },
           {
             "source_path": "skills/parallel-web/references/monitor.md",
-            "bytes": 2629
+            "bytes": 4039
           },
           {
             "source_path": "skills/parallel-web/references/web-extract.md",
-            "bytes": 1960
+            "bytes": 2995
           },
           {
             "source_path": "skills/parallel-web/references/web-search.md",
-            "bytes": 3960
+            "bytes": 5191
           },
           {
             "source_path": "skills/parallel-web/SKILL.md",
-            "bytes": 7152
+            "bytes": 8880
           }
         ]
       },
       "reviewed_paths": [
+        "skills/parallel-web/references/api-contracts.md",
         "skills/parallel-web/references/data-enrichment.md",
         "skills/parallel-web/references/deep-research.md",
         "skills/parallel-web/references/findall.md",
@@ -1047,6 +1095,11 @@
           "kind": "compatibility-guidance",
           "source_path": null,
           "note": "Do not install a CLI or read, store, or forward API keys; require consent before transmitting queries, URLs, documents, or datasets."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/parallel-web/references/api-contracts.md",
+          "note": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure."
         }
       ],
       "independent_blockers": [],
@@ -1065,7 +1118,7 @@
       "inventory": {
         "summary": {
           "files": 21,
-          "bytes": 246040,
+          "bytes": 253131,
           "references": 7,
           "scripts": 10,
           "assets": 3,
@@ -1083,11 +1136,11 @@
           },
           {
             "source_path": "skills/pptx-posters/assets/poster_quality_checklist.md",
-            "bytes": 8525
+            "bytes": 8710
           },
           {
             "source_path": "skills/pptx-posters/references/manifest_spec.md",
-            "bytes": 9026
+            "bytes": 9406
           },
           {
             "source_path": "skills/pptx-posters/references/poster_content_guide.md",
@@ -1099,7 +1152,7 @@
           },
           {
             "source_path": "skills/pptx-posters/references/poster_layout_design.md",
-            "bytes": 7796
+            "bytes": 8607
           },
           {
             "source_path": "skills/pptx-posters/references/pptx_security.md",
@@ -1107,19 +1160,19 @@
           },
           {
             "source_path": "skills/pptx-posters/references/security_validation.md",
-            "bytes": 3759
+            "bytes": 4429
           },
           {
             "source_path": "skills/pptx-posters/references/source_ledger.md",
-            "bytes": 12720
+            "bytes": 14826
           },
           {
             "source_path": "skills/pptx-posters/scripts/_common.py",
-            "bytes": 13520
+            "bytes": 13542
           },
           {
             "source_path": "skills/pptx-posters/scripts/_manifest.py",
-            "bytes": 46535
+            "bytes": 46762
           },
           {
             "source_path": "skills/pptx-posters/scripts/_pptx.py",
@@ -1135,7 +1188,7 @@
           },
           {
             "source_path": "skills/pptx-posters/scripts/generate_poster.py",
-            "bytes": 15234
+            "bytes": 15401
           },
           {
             "source_path": "skills/pptx-posters/scripts/inspect_pptx.py",
@@ -1147,7 +1200,7 @@
           },
           {
             "source_path": "skills/pptx-posters/scripts/plan_export.py",
-            "bytes": 8314
+            "bytes": 9265
           },
           {
             "source_path": "skills/pptx-posters/scripts/validate_manifest.py",
@@ -1155,7 +1208,7 @@
           },
           {
             "source_path": "skills/pptx-posters/SKILL.md",
-            "bytes": 10887
+            "bytes": 12459
           }
         ]
       },
@@ -1208,7 +1261,7 @@
       "inventory": {
         "summary": {
           "files": 13,
-          "bytes": 145203,
+          "bytes": 152832,
           "references": 5,
           "scripts": 7,
           "assets": 0,
@@ -1218,23 +1271,23 @@
         "files": [
           {
             "source_path": "skills/qutip/references/advanced.md",
-            "bytes": 12974
+            "bytes": 15766
           },
           {
             "source_path": "skills/qutip/references/analysis.md",
-            "bytes": 10333
+            "bytes": 10738
           },
           {
             "source_path": "skills/qutip/references/core_concepts.md",
-            "bytes": 8519
+            "bytes": 8483
           },
           {
             "source_path": "skills/qutip/references/time_evolution.md",
-            "bytes": 12542
+            "bytes": 13786
           },
           {
             "source_path": "skills/qutip/references/visualization.md",
-            "bytes": 8771
+            "bytes": 8997
           },
           {
             "source_path": "skills/qutip/scripts/_common.py",
@@ -1246,15 +1299,15 @@
           },
           {
             "source_path": "skills/qutip/scripts/qobj_model_validator.py",
-            "bytes": 10932
+            "bytes": 10979
           },
           {
             "source_path": "skills/qutip/scripts/result_audit.py",
-            "bytes": 12043
+            "bytes": 12463
           },
           {
             "source_path": "skills/qutip/scripts/solver_config_planner.py",
-            "bytes": 10090
+            "bytes": 11165
           },
           {
             "source_path": "skills/qutip/scripts/steady_state_spectrum_planner.py",
@@ -1262,11 +1315,11 @@
           },
           {
             "source_path": "skills/qutip/scripts/two_level_simulation.py",
-            "bytes": 12724
+            "bytes": 13224
           },
           {
             "source_path": "skills/qutip/SKILL.md",
-            "bytes": 13804
+            "bytes": 14760
           }
         ]
       },
@@ -1316,7 +1369,7 @@
       "inventory": {
         "summary": {
           "files": 6,
-          "bytes": 94755,
+          "bytes": 103108,
           "references": 2,
           "scripts": 3,
           "assets": 0,
@@ -1326,27 +1379,27 @@
         "files": [
           {
             "source_path": "skills/scientific-schematics/references/best_practices.md",
-            "bytes": 16837
+            "bytes": 20486
           },
           {
             "source_path": "skills/scientific-schematics/references/iterative_refinement.md",
-            "bytes": 11170
+            "bytes": 15304
           },
           {
             "source_path": "skills/scientific-schematics/scripts/example_usage.sh",
-            "bytes": 3237
+            "bytes": 3548
           },
           {
             "source_path": "skills/scientific-schematics/scripts/generate_schematic_ai.py",
-            "bytes": 38534
+            "bytes": 35684
           },
           {
             "source_path": "skills/scientific-schematics/scripts/generate_schematic.py",
-            "bytes": 7600
+            "bytes": 7782
           },
           {
             "source_path": "skills/scientific-schematics/SKILL.md",
-            "bytes": 17377
+            "bytes": 20304
           }
         ]
       },
@@ -1368,7 +1421,8 @@
           "evidence": [
             "docs/security-report.json",
             "skills/scientific-schematics/scripts/generate_schematic_ai.py",
-            "skills/scientific-schematics/scripts/generate_schematic.py"
+            "skills/scientific-schematics/scripts/generate_schematic.py",
+            "skills/scientific-schematics/SKILL.md"
           ],
           "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
           "residual_risk": "低–中：key 随显式调用发往 OpenRouter。"
@@ -1382,7 +1436,8 @@
           "evidence": [
             "docs/security-report.json",
             "skills/scientific-schematics/scripts/generate_schematic_ai.py",
-            "skills/scientific-schematics/scripts/generate_schematic.py"
+            "skills/scientific-schematics/scripts/generate_schematic.py",
+            "skills/scientific-schematics/SKILL.md"
           ],
           "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
           "residual_risk": "低–中：chain 由 generate_schematic.py 向 AI 子进程转交该 key 构成。"
@@ -1395,7 +1450,8 @@
           "verdict": "false-positive",
           "evidence": [
             "docs/security-report.json",
-            "skills/scientific-schematics"
+            "skills/scientific-schematics",
+            "skills/scientific-schematics/SKILL.md"
           ],
           "analysis": "实读 generate_schematic.py 的 resolve_api_key：不存在硬编码密钥，函数仅从 --api-key、环境变量、再到 .env 逐级查找 OPENROUTER_API_KEY。规则名与事实不符。",
           "residual_risk": "低：函数会向上遍历父目录寻找 .env，可能读到无关 .env 中的同名键；命中项仅该单一键名。"
@@ -1408,7 +1464,8 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/scientific-schematics/scripts/generate_schematic_ai.py"
+            "skills/scientific-schematics/scripts/generate_schematic_ai.py",
+            "skills/scientific-schematics/SKILL.md"
           ],
           "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
           "residual_risk": "低–中：generate_schematic_ai.py 单点鉴权调用。"
@@ -1420,7 +1477,8 @@
           "title": "Skill body instructs the agent to insert an author self-citation and fetch an external URL",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/scientific-schematics/SKILL.md"
           ],
           "analysis": "实读 SKILL.md 第 372 行：确含 vendor 自撰 Citing Scientific Agent Skills 段。事实成立；属 Skill 自带内容而非不可信输入，标为 policy violation 属规则名过宽。",
           "residual_risk": "低：会让 Agent 改动用户产出的参考文献，属内容污染倾向而非安全入侵。"
@@ -1453,6 +1511,11 @@
           "kind": "compatibility-guidance",
           "source_path": null,
           "note": "Require consent before externally sending prompts, research content, or reference images; keep iteration and cost controls with the target Agent."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/scientific-schematics/references/iterative_refinement.md",
+          "note": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure."
         }
       ],
       "independent_blockers": [],
@@ -1471,7 +1534,7 @@
       "inventory": {
         "summary": {
           "files": 24,
-          "bytes": 384552,
+          "bytes": 390383,
           "references": 11,
           "scripts": 7,
           "assets": 5,
@@ -1481,27 +1544,27 @@
         "files": [
           {
             "source_path": "skills/scientific-slides/assets/beamer_template_conference.tex",
-            "bytes": 9983
+            "bytes": 10158
           },
           {
             "source_path": "skills/scientific-slides/assets/beamer_template_defense.tex",
-            "bytes": 26503
+            "bytes": 26686
           },
           {
             "source_path": "skills/scientific-slides/assets/beamer_template_seminar.tex",
-            "bytes": 23247
+            "bytes": 23422
           },
           {
             "source_path": "skills/scientific-slides/assets/powerpoint_design_guide.md",
-            "bytes": 19821
+            "bytes": 22025
           },
           {
             "source_path": "skills/scientific-slides/assets/timing_guidelines.md",
-            "bytes": 14723
+            "bytes": 13605
           },
           {
             "source_path": "skills/scientific-slides/references/beamer_guide.md",
-            "bytes": 19321
+            "bytes": 20245
           },
           {
             "source_path": "skills/scientific-slides/references/common_pitfalls.md",
@@ -1509,71 +1572,71 @@
           },
           {
             "source_path": "skills/scientific-slides/references/data_visualization_slides.md",
-            "bytes": 17863
+            "bytes": 18110
           },
           {
             "source_path": "skills/scientific-slides/references/presentation_structure.md",
-            "bytes": 22220
+            "bytes": 22551
           },
           {
             "source_path": "skills/scientific-slides/references/presentation_workflow.md",
-            "bytes": 7212
+            "bytes": 7586
           },
           {
             "source_path": "skills/scientific-slides/references/prompt_writing.md",
-            "bytes": 1966
+            "bytes": 2203
           },
           {
             "source_path": "skills/scientific-slides/references/script_reference.md",
-            "bytes": 4404
+            "bytes": 8434
           },
           {
             "source_path": "skills/scientific-slides/references/slide_capabilities.md",
-            "bytes": 12379
+            "bytes": 12419
           },
           {
             "source_path": "skills/scientific-slides/references/slide_design_principles.md",
-            "bytes": 23878
+            "bytes": 23986
           },
           {
             "source_path": "skills/scientific-slides/references/talk_types_guide.md",
-            "bytes": 20146
+            "bytes": 20477
           },
           {
             "source_path": "skills/scientific-slides/references/visual_review_workflow.md",
-            "bytes": 20176
+            "bytes": 20368
           },
           {
             "source_path": "skills/scientific-slides/scripts/generate_schematic_ai.py",
-            "bytes": 38534
+            "bytes": 35684
           },
           {
             "source_path": "skills/scientific-slides/scripts/generate_schematic.py",
-            "bytes": 7600
+            "bytes": 7782
           },
           {
             "source_path": "skills/scientific-slides/scripts/generate_slide_image_ai.py",
-            "bytes": 34505
+            "bytes": 33787
           },
           {
             "source_path": "skills/scientific-slides/scripts/generate_slide_image.py",
-            "bytes": 7754
+            "bytes": 7898
           },
           {
             "source_path": "skills/scientific-slides/scripts/pdf_to_images.py",
-            "bytes": 6650
+            "bytes": 6921
           },
           {
             "source_path": "skills/scientific-slides/scripts/slides_to_pdf.py",
-            "bytes": 7426
+            "bytes": 7551
           },
           {
             "source_path": "skills/scientific-slides/scripts/validate_presentation.py",
-            "bytes": 13367
+            "bytes": 13628
           },
           {
             "source_path": "skills/scientific-slides/SKILL.md",
-            "bytes": 21539
+            "bytes": 21522
           }
         ]
       },
@@ -1615,7 +1678,8 @@
             "skills/scientific-slides/scripts/generate_schematic_ai.py",
             "skills/scientific-slides/scripts/generate_slide_image_ai.py",
             "skills/scientific-slides/scripts/generate_schematic.py",
-            "skills/scientific-slides/scripts/generate_slide_image.py"
+            "skills/scientific-slides/scripts/generate_slide_image.py",
+            "skills/scientific-slides/SKILL.md"
           ],
           "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
           "residual_risk": "低–中：四个生成脚本共用同一 key→OpenRouter 通道。"
@@ -1631,7 +1695,8 @@
             "skills/scientific-slides/scripts/generate_schematic_ai.py",
             "skills/scientific-slides/scripts/generate_slide_image_ai.py",
             "skills/scientific-slides/scripts/generate_schematic.py",
-            "skills/scientific-slides/scripts/generate_slide_image.py"
+            "skills/scientific-slides/scripts/generate_slide_image.py",
+            "skills/scientific-slides/SKILL.md"
           ],
           "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
           "residual_risk": "低–中：chain 由多个 generate_*.py 互转同一 key 构成。"
@@ -1644,7 +1709,8 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/scientific-slides"
+            "skills/scientific-slides",
+            "skills/scientific-slides/SKILL.md"
           ],
           "analysis": "实读 generate_slide_image.py 第 55–80 行的 resolve_key：递归向上查找 .env 中的 OPENROUTER_API_KEY，取值后仅作为声明服务（OpenRouter）的 Bearer 头。",
           "residual_risk": "低：递归 .env 查找可能命中父目录无关 .env 的同名键，但仅读取该键且发往声明 endpoint。"
@@ -1657,7 +1723,8 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/scientific-slides/scripts/generate_schematic_ai.py"
+            "skills/scientific-slides/scripts/generate_schematic_ai.py",
+            "skills/scientific-slides/SKILL.md"
           ],
           "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
           "residual_risk": "低–中：generate_schematic_ai.py 单点鉴权调用。"
@@ -1670,7 +1737,8 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/scientific-slides/scripts/generate_slide_image_ai.py"
+            "skills/scientific-slides/scripts/generate_slide_image_ai.py",
+            "skills/scientific-slides/SKILL.md"
           ],
           "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
           "residual_risk": "低–中：generate_slide_image_ai.py 单点鉴权调用。"
@@ -1708,6 +1776,11 @@
           "kind": "compatibility-guidance",
           "source_path": null,
           "note": "Show local input/output paths and obtain confirmation before conversion or pdflatex validation; external image use requires consent."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/scientific-slides/references/script_reference.md",
+          "note": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure."
         }
       ],
       "independent_blockers": [],
@@ -1726,7 +1799,7 @@
       "inventory": {
         "summary": {
           "files": 8,
-          "bytes": 88667,
+          "bytes": 94024,
           "references": 7,
           "scripts": 0,
           "assets": 0,
@@ -1736,35 +1809,35 @@
         "files": [
           {
             "source_path": "skills/seaborn/references/examples.md",
-            "bytes": 17669
+            "bytes": 22634
           },
           {
             "source_path": "skills/seaborn/references/function_reference.md",
-            "bytes": 24881
+            "bytes": 28833
           },
           {
             "source_path": "skills/seaborn/references/grids_and_levels.md",
-            "bytes": 2520
+            "bytes": 2995
           },
           {
             "source_path": "skills/seaborn/references/objects_interface.md",
-            "bytes": 21077
+            "bytes": 11394
           },
           {
             "source_path": "skills/seaborn/references/palettes_and_theming.md",
-            "bytes": 2634
+            "bytes": 3004
           },
           {
             "source_path": "skills/seaborn/references/patterns_and_troubleshooting.md",
-            "bytes": 2925
+            "bytes": 5050
           },
           {
             "source_path": "skills/seaborn/references/plotting_functions.md",
-            "bytes": 6297
+            "bytes": 6650
           },
           {
             "source_path": "skills/seaborn/SKILL.md",
-            "bytes": 10664
+            "bytes": 13464
           }
         ]
       },
@@ -1786,7 +1859,8 @@
           "title": "Self-promotional citation directive with unverifiable arXiv reference and network fetch",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/seaborn/SKILL.md"
           ],
           "analysis": "当前内容实读：SKILL.md 第 256 行确含 vendor 自撰 Citing Scientific Agent Skills 段，含 arXiv:2609.00065 与网络抓取指示。事实成立；属 Skill 自带内容而非不可信输入。",
           "residual_risk": "低：会让 Agent 改动用户产出的参考文献；引用的 arXiv 记录需自行核验。"
@@ -1822,9 +1896,9 @@
       },
       "inventory": {
         "summary": {
-          "files": 6,
-          "bytes": 56563,
-          "references": 5,
+          "files": 7,
+          "bytes": 80649,
+          "references": 6,
           "scripts": 0,
           "assets": 0,
           "tests_or_evals": 0,
@@ -1833,27 +1907,31 @@
         "files": [
           {
             "source_path": "skills/transformers/references/generation.md",
-            "bytes": 9566
+            "bytes": 11339
           },
           {
             "source_path": "skills/transformers/references/models.md",
-            "bytes": 9283
+            "bytes": 11279
           },
           {
             "source_path": "skills/transformers/references/pipelines.md",
-            "bytes": 9081
+            "bytes": 12074
+          },
+          {
+            "source_path": "skills/transformers/references/review.md",
+            "bytes": 8332
           },
           {
             "source_path": "skills/transformers/references/tokenizers.md",
-            "bytes": 9999
+            "bytes": 11273
           },
           {
             "source_path": "skills/transformers/references/training.md",
-            "bytes": 10629
+            "bytes": 15120
           },
           {
             "source_path": "skills/transformers/SKILL.md",
-            "bytes": 8005
+            "bytes": 11232
           }
         ]
       },
@@ -1861,6 +1939,7 @@
         "skills/transformers/references/generation.md",
         "skills/transformers/references/models.md",
         "skills/transformers/references/pipelines.md",
+        "skills/transformers/references/review.md",
         "skills/transformers/references/tokenizers.md",
         "skills/transformers/references/training.md",
         "skills/transformers/SKILL.md"
@@ -1873,7 +1952,8 @@
           "title": "Self-promotional citation directive instructing agent to add author's paper to user outputs",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/transformers/SKILL.md"
           ],
           "analysis": "当前内容实读：SKILL.md 第 197 行确含 vendor 自撰 Citing Scientific Agent Skills 段。事实成立；属 Skill 自带内容而非不可信输入，标为 policy violation 属规则名过宽。",
           "residual_risk": "低：会让 Agent 改动用户产出的参考文献，属内容污染倾向而非安全入侵。"
@@ -1909,7 +1989,7 @@
       "inventory": {
         "summary": {
           "files": 2,
-          "bytes": 40013,
+          "bytes": 50078,
           "references": 1,
           "scripts": 0,
           "assets": 0,
@@ -1919,11 +1999,11 @@
         "files": [
           {
             "source_path": "skills/umap-learn/references/api_reference.md",
-            "bytes": 22507
+            "bytes": 28544
           },
           {
             "source_path": "skills/umap-learn/SKILL.md",
-            "bytes": 17506
+            "bytes": 21534
           }
         ]
       },
@@ -1939,7 +2019,8 @@
           "title": "Self-promotional citation directive with instructed network fetch of an unverifiable arXiv record",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/umap-learn/SKILL.md"
           ],
           "analysis": "当前内容实读：SKILL.md 第 474 行确含 vendor 自撰 Citing Scientific Agent Skills 段，含网络抓取指示。事实成立；属 Skill 自带内容而非不可信输入。",
           "residual_risk": "低：会让 Agent 改动用户产出的参考文献；引用的 arXiv 记录需自行核验。"
@@ -1975,9 +2056,9 @@
       },
       "inventory": {
         "summary": {
-          "files": 31,
-          "bytes": 402484,
-          "references": 11,
+          "files": 32,
+          "bytes": 321106,
+          "references": 12,
           "scripts": 3,
           "assets": 16,
           "tests_or_evals": 0,
@@ -1986,27 +2067,27 @@
         "files": [
           {
             "source_path": "skills/venue-templates/assets/examples/cell_summary_example.md",
-            "bytes": 8877
+            "bytes": 2366
           },
           {
             "source_path": "skills/venue-templates/assets/examples/medical_structured_abstract.md",
-            "bytes": 12074
+            "bytes": 3482
           },
           {
             "source_path": "skills/venue-templates/assets/examples/nature_abstract_examples.md",
-            "bytes": 8954
+            "bytes": 3167
           },
           {
             "source_path": "skills/venue-templates/assets/examples/neurips_introduction_example.md",
-            "bytes": 8779
+            "bytes": 2649
           },
           {
             "source_path": "skills/venue-templates/assets/grants/nih_specific_aims.tex",
-            "bytes": 9245
+            "bytes": 2634
           },
           {
             "source_path": "skills/venue-templates/assets/grants/nsf_proposal_template.tex",
-            "bytes": 13884
+            "bytes": 14550
           },
           {
             "source_path": "skills/venue-templates/assets/journals/elsarticle-harv.bst",
@@ -2034,79 +2115,83 @@
           },
           {
             "source_path": "skills/venue-templates/assets/journals/nature_article.tex",
-            "bytes": 6434
+            "bytes": 6661
           },
           {
             "source_path": "skills/venue-templates/assets/journals/neurips_article.tex",
-            "bytes": 9318
+            "bytes": 9685
           },
           {
             "source_path": "skills/venue-templates/assets/journals/plos_one.tex",
-            "bytes": 11907
+            "bytes": 12169
           },
           {
             "source_path": "skills/venue-templates/assets/posters/beamerposter_academic.tex",
-            "bytes": 8569
+            "bytes": 4921
           },
           {
             "source_path": "skills/venue-templates/references/cell_press_style.md",
-            "bytes": 14704
+            "bytes": 6090
           },
           {
             "source_path": "skills/venue-templates/references/conferences_formatting.md",
-            "bytes": 7785
+            "bytes": 8879
           },
           {
             "source_path": "skills/venue-templates/references/cs_conference_style.md",
-            "bytes": 16147
+            "bytes": 6442
+          },
+          {
+            "source_path": "skills/venue-templates/references/current_sources.md",
+            "bytes": 12121
           },
           {
             "source_path": "skills/venue-templates/references/grants_requirements.md",
-            "bytes": 10100
+            "bytes": 11765
           },
           {
             "source_path": "skills/venue-templates/references/journals_formatting.md",
-            "bytes": 9191
+            "bytes": 10086
           },
           {
             "source_path": "skills/venue-templates/references/medical_journal_styles.md",
-            "bytes": 16237
+            "bytes": 7847
           },
           {
             "source_path": "skills/venue-templates/references/ml_conference_style.md",
-            "bytes": 18780
+            "bytes": 6573
           },
           {
             "source_path": "skills/venue-templates/references/nature_science_style.md",
-            "bytes": 13822
+            "bytes": 5926
           },
           {
             "source_path": "skills/venue-templates/references/posters_guidelines.md",
-            "bytes": 17480
+            "bytes": 19037
           },
           {
             "source_path": "skills/venue-templates/references/reviewer_expectations.md",
-            "bytes": 16289
+            "bytes": 5372
           },
           {
             "source_path": "skills/venue-templates/references/venue_writing_styles.md",
-            "bytes": 12974
+            "bytes": 4370
           },
           {
             "source_path": "skills/venue-templates/scripts/customize_template.py",
-            "bytes": 6875
+            "bytes": 7446
           },
           {
             "source_path": "skills/venue-templates/scripts/query_template.py",
-            "bytes": 7991
+            "bytes": 8048
           },
           {
             "source_path": "skills/venue-templates/scripts/validate_format.py",
-            "bytes": 10603
+            "bytes": 11755
           },
           {
             "source_path": "skills/venue-templates/SKILL.md",
-            "bytes": 11735
+            "bytes": 13335
           }
         ]
       },
@@ -2130,6 +2215,7 @@
         "skills/venue-templates/references/cell_press_style.md",
         "skills/venue-templates/references/conferences_formatting.md",
         "skills/venue-templates/references/cs_conference_style.md",
+        "skills/venue-templates/references/current_sources.md",
         "skills/venue-templates/references/grants_requirements.md",
         "skills/venue-templates/references/journals_formatting.md",
         "skills/venue-templates/references/medical_journal_styles.md",
@@ -2151,7 +2237,8 @@
           "title": "Skill body directs the agent to insert the author's own paper into user deliverables",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/venue-templates/SKILL.md"
           ],
           "analysis": "当前内容实读：SKILL.md 第 271 行确含 vendor 自撰 Citing Scientific Agent Skills 段。事实成立；属 Skill 自带内容而非不可信输入，标为 policy violation 属规则名过宽。",
           "residual_risk": "低：会让 Agent 改动用户产出的参考文献，属内容污染倾向而非安全入侵。"
@@ -2187,7 +2274,7 @@
       "inventory": {
         "summary": {
           "files": 1,
-          "bytes": 2852,
+          "bytes": 7903,
           "references": 0,
           "scripts": 0,
           "assets": 0,
@@ -2197,7 +2284,7 @@
         "files": [
           {
             "source_path": "skills/bgpt-paper-search/SKILL.md",
-            "bytes": 2852
+            "bytes": 7903
           }
         ]
       },
@@ -2236,7 +2323,7 @@
       "inventory": {
         "summary": {
           "files": 8,
-          "bytes": 915430,
+          "bytes": 931777,
           "references": 6,
           "scripts": 1,
           "assets": 0,
@@ -2246,35 +2333,35 @@
         "files": [
           {
             "source_path": "skills/bids/references/beps.yml",
-            "bytes": 23980
+            "bytes": 25374
           },
           {
             "source_path": "skills/bids/references/bids_schema.json",
-            "bytes": 813726
+            "bytes": 825724
           },
           {
             "source_path": "skills/bids/references/bids_specification.md",
-            "bytes": 8408
+            "bytes": 9250
           },
           {
             "source_path": "skills/bids/references/conversion_tools.md",
-            "bytes": 18617
+            "bytes": 20459
           },
           {
             "source_path": "skills/bids/references/core_workflows.md",
-            "bytes": 18341
+            "bytes": 20435
           },
           {
             "source_path": "skills/bids/references/metadata_fields.md",
-            "bytes": 14588
+            "bytes": 11643
           },
           {
             "source_path": "skills/bids/scripts/update_schema.py",
-            "bytes": 2631
+            "bytes": 4048
           },
           {
             "source_path": "skills/bids/SKILL.md",
-            "bytes": 15139
+            "bytes": 14844
           }
         ]
       },
@@ -2325,9 +2412,9 @@
       },
       "inventory": {
         "summary": {
-          "files": 4,
-          "bytes": 40132,
-          "references": 3,
+          "files": 5,
+          "bytes": 55568,
+          "references": 4,
           "scripts": 0,
           "assets": 0,
           "tests_or_evals": 0,
@@ -2335,24 +2422,29 @@
         },
         "files": [
           {
+            "source_path": "skills/cellxgene-census/references/api_access.md",
+            "bytes": 5917
+          },
+          {
             "source_path": "skills/cellxgene-census/references/census_schema.md",
-            "bytes": 7910
+            "bytes": 9491
           },
           {
             "source_path": "skills/cellxgene-census/references/common_patterns.md",
-            "bytes": 11033
+            "bytes": 15522
           },
           {
             "source_path": "skills/cellxgene-census/references/core_workflow_patterns.md",
-            "bytes": 9796
+            "bytes": 10990
           },
           {
             "source_path": "skills/cellxgene-census/SKILL.md",
-            "bytes": 11393
+            "bytes": 13648
           }
         ]
       },
       "reviewed_paths": [
+        "skills/cellxgene-census/references/api_access.md",
         "skills/cellxgene-census/references/census_schema.md",
         "skills/cellxgene-census/references/common_patterns.md",
         "skills/cellxgene-census/references/core_workflow_patterns.md",
@@ -2389,9 +2481,9 @@
       },
       "inventory": {
         "summary": {
-          "files": 21,
-          "bytes": 278612,
-          "references": 10,
+          "files": 22,
+          "bytes": 299964,
+          "references": 11,
           "scripts": 8,
           "assets": 2,
           "tests_or_evals": 0,
@@ -2400,51 +2492,55 @@
         "files": [
           {
             "source_path": "skills/citation-management/assets/bibtex_template.bib",
-            "bytes": 9201
+            "bytes": 9305
           },
           {
             "source_path": "skills/citation-management/assets/citation_checklist.md",
-            "bytes": 10348
+            "bytes": 10434
+          },
+          {
+            "source_path": "skills/citation-management/references/api_contracts.md",
+            "bytes": 6712
           },
           {
             "source_path": "skills/citation-management/references/best_practices.md",
-            "bytes": 2675
+            "bytes": 2723
           },
           {
             "source_path": "skills/citation-management/references/bibtex_formatting.md",
-            "bytes": 19286
+            "bytes": 19394
           },
           {
             "source_path": "skills/citation-management/references/citation_validation.md",
-            "bytes": 18054
+            "bytes": 18996
           },
           {
             "source_path": "skills/citation-management/references/core_workflow.md",
-            "bytes": 20866
+            "bytes": 20986
           },
           {
             "source_path": "skills/citation-management/references/example_workflows.md",
-            "bytes": 3342
+            "bytes": 3382
           },
           {
             "source_path": "skills/citation-management/references/google_scholar_search.md",
-            "bytes": 17449
+            "bytes": 17993
           },
           {
             "source_path": "skills/citation-management/references/metadata_extraction.md",
-            "bytes": 19182
+            "bytes": 21419
           },
           {
             "source_path": "skills/citation-management/references/pubmed_search.md",
-            "bytes": 17735
+            "bytes": 19233
           },
           {
             "source_path": "skills/citation-management/references/script_reference.md",
-            "bytes": 6561
+            "bytes": 7536
           },
           {
             "source_path": "skills/citation-management/references/search_strategies.md",
-            "bytes": 3752
+            "bytes": 2727
           },
           {
             "source_path": "skills/citation-management/scripts/_common.py",
@@ -2452,11 +2548,11 @@
           },
           {
             "source_path": "skills/citation-management/scripts/doi_to_bibtex.py",
-            "bytes": 6299
+            "bytes": 6783
           },
           {
             "source_path": "skills/citation-management/scripts/extract_metadata.py",
-            "bytes": 26503
+            "bytes": 29650
           },
           {
             "source_path": "skills/citation-management/scripts/format_bibtex.py",
@@ -2464,29 +2560,30 @@
           },
           {
             "source_path": "skills/citation-management/scripts/search_google_scholar.py",
-            "bytes": 8609
+            "bytes": 8746
           },
           {
             "source_path": "skills/citation-management/scripts/search_openalex.py",
-            "bytes": 10599
+            "bytes": 12055
           },
           {
             "source_path": "skills/citation-management/scripts/search_pubmed.py",
-            "bytes": 13779
+            "bytes": 14912
           },
           {
             "source_path": "skills/citation-management/scripts/validate_citations.py",
-            "bytes": 26708
+            "bytes": 28361
           },
           {
             "source_path": "skills/citation-management/SKILL.md",
-            "bytes": 15677
+            "bytes": 16630
           }
         ]
       },
       "reviewed_paths": [
         "skills/citation-management/assets/bibtex_template.bib",
         "skills/citation-management/assets/citation_checklist.md",
+        "skills/citation-management/references/api_contracts.md",
         "skills/citation-management/references/best_practices.md",
         "skills/citation-management/references/bibtex_formatting.md",
         "skills/citation-management/references/citation_validation.md",
@@ -2517,7 +2614,8 @@
           "evidence": [
             "docs/security-report.json",
             "skills/citation-management/scripts/search_pubmed.py",
-            "skills/citation-management/scripts/extract_metadata.py"
+            "skills/citation-management/scripts/extract_metadata.py",
+            "skills/citation-management/SKILL.md"
           ],
           "analysis": "当前内容实读：search_pubmed.py 读取 NCBI_API_KEY / NCBI_EMAIL 并请求 eutils.ncbi.nlm.nih.gov；extract_metadata.py 读取 NCBI_API_KEY 并请求 eutils/crossref/arxiv/PMC idconv；search_openalex.py 读取 OPENALEX_EMAIL 请求 api.openalex.org；doi_to_bibtex.py 与 validate_citations.py 无 env 读取。env 与网络同现，但目的地全为声明的公开学术 API，属鉴权传输而非外泄。",
           "residual_risk": "API key/邮箱随显式调用发往声明端点；残余风险为凭据外发与第三方可用性。"
@@ -2534,7 +2632,8 @@
             "skills/citation-management/scripts/extract_metadata.py",
             "skills/citation-management/scripts/search_openalex.py",
             "skills/citation-management/scripts/validate_citations.py",
-            "skills/citation-management/scripts/doi_to_bibtex.py"
+            "skills/citation-management/scripts/doi_to_bibtex.py",
+            "skills/citation-management/SKILL.md"
           ],
           "analysis": "同上：chain 由五个脚本各自的检索请求聚合，非单点未声明通道。",
           "residual_risk": "凭据随显式调用发往声明的学术 API。"
@@ -2547,7 +2646,8 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/citation-management/scripts/extract_metadata.py"
+            "skills/citation-management/scripts/extract_metadata.py",
+            "skills/citation-management/SKILL.md"
           ],
           "analysis": "extract_metadata.py 的 NCBI_API_KEY 单点鉴权调用。",
           "residual_risk": "低：NCBI key 随显式调用发往 NCBI eutils。"
@@ -2560,7 +2660,8 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/citation-management/scripts/search_pubmed.py"
+            "skills/citation-management/scripts/search_pubmed.py",
+            "skills/citation-management/SKILL.md"
           ],
           "analysis": "search_pubmed.py 的 NCBI_API_KEY / NCBI_EMAIL 单点鉴权调用。",
           "residual_risk": "低：NCBI key 与邮箱随显式调用发往 NCBI eutils。"
@@ -2572,7 +2673,8 @@
           "title": "Skill directs agent to insert a self-promoting citation into user deliverables",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/citation-management/SKILL.md"
           ],
           "analysis": "实读 SKILL.md 第 331 行：确含 vendor 自撰 Citing Scientific Agent Skills 段。事实成立，属内容污染倾向而非安全入侵。",
           "residual_risk": "低：会改动用户产出的参考文献。"
@@ -2584,7 +2686,8 @@
           "title": "Python code block executes shell commands",
           "verdict": "false-positive",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/citation-management/SKILL.md"
           ],
           "analysis": "实读 references/core_workflow.md 第 193 行附近代码块：文档演示的正是安全写法——参数以列表传入 subprocess.run、显式 check=True、注明 no shell=True，且先以正则校验 citation_key。该块是防注入指导，不是注入面。",
           "residual_risk": "无；文档本身即缓解措施。"
@@ -2647,6 +2750,11 @@
           "kind": "compatibility-guidance",
           "source_path": null,
           "note": "Treat all external bibliographic metadata as untrusted evidence, handle no API keys, and preserve the independent ARSU overlap blocker."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/citation-management/scripts/search_openalex.py",
+          "note": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure."
         }
       ],
       "independent_blockers": [
@@ -2666,7 +2774,7 @@
       "inventory": {
         "summary": {
           "files": 28,
-          "bytes": 196024,
+          "bytes": 205799,
           "references": 12,
           "scripts": 8,
           "assets": 7,
@@ -2704,19 +2812,19 @@
           },
           {
             "source_path": "skills/clinical-decision-support/references/cohort_evaluation.md",
-            "bytes": 5291
+            "bytes": 5662
           },
           {
             "source_path": "skills/clinical-decision-support/references/decision_logic_traceability.md",
-            "bytes": 3231
+            "bytes": 3350
           },
           {
             "source_path": "skills/clinical-decision-support/references/evidence_profiles.md",
-            "bytes": 5027
+            "bytes": 5800
           },
           {
             "source_path": "skills/clinical-decision-support/references/model_biomarker_evaluation.md",
-            "bytes": 5813
+            "bytes": 6556
           },
           {
             "source_path": "skills/clinical-decision-support/references/privacy_and_disclosure.md",
@@ -2728,7 +2836,7 @@
           },
           {
             "source_path": "skills/clinical-decision-support/references/regulatory_and_governance.md",
-            "bytes": 7159
+            "bytes": 7707
           },
           {
             "source_path": "skills/clinical-decision-support/references/safety_and_scope.md",
@@ -2736,31 +2844,31 @@
           },
           {
             "source_path": "skills/clinical-decision-support/references/security_validation.md",
-            "bytes": 3098
+            "bytes": 3583
           },
           {
             "source_path": "skills/clinical-decision-support/references/sources.md",
-            "bytes": 10678
+            "bytes": 13370
           },
           {
             "source_path": "skills/clinical-decision-support/references/study_reporting.md",
-            "bytes": 6401
+            "bytes": 7541
           },
           {
             "source_path": "skills/clinical-decision-support/references/survival_analysis.md",
-            "bytes": 5718
+            "bytes": 5726
           },
           {
             "source_path": "skills/clinical-decision-support/scripts/_common.py",
-            "bytes": 7537
+            "bytes": 7737
           },
           {
             "source_path": "skills/clinical-decision-support/scripts/cohort_table_generator.py",
-            "bytes": 11390
+            "bytes": 11791
           },
           {
             "source_path": "skills/clinical-decision-support/scripts/decision_logic_traceability.py",
-            "bytes": 10929
+            "bytes": 11149
           },
           {
             "source_path": "skills/clinical-decision-support/scripts/deidentification_checklist.py",
@@ -2768,23 +2876,23 @@
           },
           {
             "source_path": "skills/clinical-decision-support/scripts/evidence_profile_check.py",
-            "bytes": 10534
+            "bytes": 10849
           },
           {
             "source_path": "skills/clinical-decision-support/scripts/model_biomarker_evaluation.py",
-            "bytes": 13691
+            "bytes": 14401
           },
           {
             "source_path": "skills/clinical-decision-support/scripts/survival_plan_validator.py",
-            "bytes": 11149
+            "bytes": 11200
           },
           {
             "source_path": "skills/clinical-decision-support/scripts/validate_cds_artifact.py",
-            "bytes": 10029
+            "bytes": 10076
           },
           {
             "source_path": "skills/clinical-decision-support/SKILL.md",
-            "bytes": 13230
+            "bytes": 14182
           }
         ]
       },
@@ -2826,7 +2934,8 @@
           "title": "Self-promotional citation directive with optional network fetch conflicts with declared no-network posture",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/clinical-decision-support/SKILL.md"
           ],
           "analysis": "当前内容实读：SKILL.md 第 240 行确含 vendor 自撰 Citing Scientific Agent Skills 段，指示 Agent 将 arXiv:2609.00065 写入用户交付物、告知用户，并在网络可用时抓取 arXiv 记录。事实成立；该段属 Skill 自带内容而非不可信输入，标为 policy violation 属规则名过宽。",
           "residual_risk": "低：会让 Agent 改动用户产出的参考文献，属内容污染倾向而非安全入侵；抓取目标是公开 arXiv 记录。"
@@ -2863,7 +2972,7 @@
       "inventory": {
         "summary": {
           "files": 36,
-          "bytes": 194236,
+          "bytes": 202579,
           "references": 11,
           "scripts": 9,
           "assets": 15,
@@ -2937,59 +3046,59 @@
           },
           {
             "source_path": "skills/clinical-reports/references/clinical_trial_reporting.md",
-            "bytes": 5154
+            "bytes": 5457
           },
           {
             "source_path": "skills/clinical-reports/references/data_presentation.md",
-            "bytes": 3715
+            "bytes": 4173
           },
           {
             "source_path": "skills/clinical-reports/references/diagnostic_reports_standards.md",
-            "bytes": 4047
+            "bytes": 4379
           },
           {
             "source_path": "skills/clinical-reports/references/medical_terminology.md",
-            "bytes": 3589
+            "bytes": 4273
           },
           {
             "source_path": "skills/clinical-reports/references/privacy_and_deidentification.md",
-            "bytes": 4635
+            "bytes": 4917
           },
           {
             "source_path": "skills/clinical-reports/references/professional_review.md",
-            "bytes": 3970
+            "bytes": 4280
           },
           {
             "source_path": "skills/clinical-reports/references/README.md",
-            "bytes": 2179
+            "bytes": 2302
           },
           {
             "source_path": "skills/clinical-reports/references/report_type_routing.md",
-            "bytes": 4304
+            "bytes": 4494
           },
           {
             "source_path": "skills/clinical-reports/references/safety_reporting.md",
-            "bytes": 6064
+            "bytes": 6971
           },
           {
             "source_path": "skills/clinical-reports/references/sources.md",
-            "bytes": 8618
+            "bytes": 11026
           },
           {
             "source_path": "skills/clinical-reports/scripts/_common.py",
-            "bytes": 9391
+            "bytes": 9679
           },
           {
             "source_path": "skills/clinical-reports/scripts/check_deidentification.py",
-            "bytes": 10755
+            "bytes": 10978
           },
           {
             "source_path": "skills/clinical-reports/scripts/consistency_checker.py",
-            "bytes": 13562
+            "bytes": 13697
           },
           {
             "source_path": "skills/clinical-reports/scripts/format_adverse_events.py",
-            "bytes": 16080
+            "bytes": 16369
           },
           {
             "source_path": "skills/clinical-reports/scripts/generate_report_template.py",
@@ -2997,23 +3106,23 @@
           },
           {
             "source_path": "skills/clinical-reports/scripts/provenance_validator.py",
-            "bytes": 9296
+            "bytes": 9399
           },
           {
             "source_path": "skills/clinical-reports/scripts/terminology_validator.py",
-            "bytes": 10255
+            "bytes": 10286
           },
           {
             "source_path": "skills/clinical-reports/scripts/validate_case_report.py",
-            "bytes": 9592
+            "bytes": 9643
           },
           {
             "source_path": "skills/clinical-reports/scripts/validate_trial_report.py",
-            "bytes": 20250
+            "bytes": 20351
           },
           {
             "source_path": "skills/clinical-reports/SKILL.md",
-            "bytes": 14756
+            "bytes": 15881
           }
         ]
       },
@@ -3063,7 +3172,8 @@
           "title": "Mandatory self-citation instruction with network fetch contradicts declared no-network scope",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/clinical-reports/SKILL.md"
           ],
           "analysis": "当前内容实读：SKILL.md 第 250 行确含 vendor 自撰 Citing Scientific Agent Skills 段，指示 Agent 将 arXiv:2609.00065 写入用户交付物、告知用户，并在网络可用时抓取 arXiv 记录。事实成立；该段属 Skill 自带内容而非不可信输入，标为 policy violation 属规则名过宽。",
           "residual_risk": "低：会让 Agent 改动用户产出的参考文献，属内容污染倾向而非安全入侵；抓取目标是公开 arXiv 记录。"
@@ -3100,7 +3210,7 @@
       "inventory": {
         "summary": {
           "files": 2,
-          "bytes": 13920,
+          "bytes": 20543,
           "references": 1,
           "scripts": 0,
           "assets": 0,
@@ -3110,11 +3220,11 @@
         "files": [
           {
             "source_path": "skills/consciousness-council/references/advanced-configurations.md",
-            "bytes": 5175
+            "bytes": 6611
           },
           {
             "source_path": "skills/consciousness-council/SKILL.md",
-            "bytes": 8745
+            "bytes": 13932
           }
         ]
       },
@@ -3152,7 +3262,7 @@
       "inventory": {
         "summary": {
           "files": 83,
-          "bytes": 393843,
+          "bytes": 406610,
           "references": 82,
           "scripts": 0,
           "assets": 0,
@@ -3162,27 +3272,27 @@
         "files": [
           {
             "source_path": "skills/database-lookup/references/addgene.md",
-            "bytes": 960
+            "bytes": 1778
           },
           {
             "source_path": "skills/database-lookup/references/alphafold.md",
-            "bytes": 2744
+            "bytes": 3002
           },
           {
             "source_path": "skills/database-lookup/references/alphavantage.md",
-            "bytes": 7718
+            "bytes": 8121
           },
           {
             "source_path": "skills/database-lookup/references/bea.md",
-            "bytes": 14212
+            "bytes": 14614
           },
           {
             "source_path": "skills/database-lookup/references/bindingdb.md",
-            "bytes": 2923
+            "bytes": 2997
           },
           {
             "source_path": "skills/database-lookup/references/biogrid.md",
-            "bytes": 3639
+            "bytes": 3885
           },
           {
             "source_path": "skills/database-lookup/references/bls.md",
@@ -3190,99 +3300,99 @@
           },
           {
             "source_path": "skills/database-lookup/references/brenda.md",
-            "bytes": 2287
+            "bytes": 2921
           },
           {
             "source_path": "skills/database-lookup/references/cbioportal.md",
-            "bytes": 7303
+            "bytes": 7588
           },
           {
             "source_path": "skills/database-lookup/references/census.md",
-            "bytes": 8748
+            "bytes": 9195
           },
           {
             "source_path": "skills/database-lookup/references/chebi.md",
-            "bytes": 3330
+            "bytes": 3596
           },
           {
             "source_path": "skills/database-lookup/references/chembl.md",
-            "bytes": 2323
+            "bytes": 2715
           },
           {
             "source_path": "skills/database-lookup/references/clinicaltrials.md",
-            "bytes": 3194
+            "bytes": 3434
           },
           {
             "source_path": "skills/database-lookup/references/clinpgx.md",
-            "bytes": 1222
+            "bytes": 1530
           },
           {
             "source_path": "skills/database-lookup/references/clinvar.md",
-            "bytes": 3180
+            "bytes": 4232
           },
           {
             "source_path": "skills/database-lookup/references/cod.md",
-            "bytes": 2780
+            "bytes": 3097
           },
           {
             "source_path": "skills/database-lookup/references/cosmic.md",
-            "bytes": 1414
+            "bytes": 1368
           },
           {
             "source_path": "skills/database-lookup/references/dailymed.md",
-            "bytes": 1725
+            "bytes": 1805
           },
           {
             "source_path": "skills/database-lookup/references/database_selection_guide.md",
-            "bytes": 10106
+            "bytes": 10276
           },
           {
             "source_path": "skills/database-lookup/references/datacommons.md",
-            "bytes": 7068
+            "bytes": 7145
           },
           {
             "source_path": "skills/database-lookup/references/dbsnp.md",
-            "bytes": 3311
+            "bytes": 3533
           },
           {
             "source_path": "skills/database-lookup/references/disgenet.md",
-            "bytes": 1460
+            "bytes": 1403
           },
           {
             "source_path": "skills/database-lookup/references/drugbank.md",
-            "bytes": 1667
+            "bytes": 1364
           },
           {
             "source_path": "skills/database-lookup/references/ecb.md",
-            "bytes": 6326
+            "bytes": 5318
           },
           {
             "source_path": "skills/database-lookup/references/emdb.md",
-            "bytes": 895
+            "bytes": 1089
           },
           {
             "source_path": "skills/database-lookup/references/ena.md",
-            "bytes": 9774
+            "bytes": 10127
           },
           {
             "source_path": "skills/database-lookup/references/encode.md",
-            "bytes": 1522
+            "bytes": 1801
           },
           {
             "source_path": "skills/database-lookup/references/ensembl.md",
-            "bytes": 14047
+            "bytes": 14337
           },
           {
             "source_path": "skills/database-lookup/references/epa.md",
-            "bytes": 6417
+            "bytes": 1902
           },
           {
             "source_path": "skills/database-lookup/references/eurostat.md",
-            "bytes": 7597
+            "bytes": 7489
           },
           {
             "source_path": "skills/database-lookup/references/fda.md",
-            "bytes": 1920
+            "bytes": 2147
           },
           {
             "source_path": "skills/database-lookup/references/federal-reserve.md",
@@ -3290,207 +3400,207 @@
           },
           {
             "source_path": "skills/database-lookup/references/fred.md",
-            "bytes": 10181
+            "bytes": 10170
           },
           {
             "source_path": "skills/database-lookup/references/gene-ontology.md",
-            "bytes": 4338
+            "bytes": 4509
           },
           {
             "source_path": "skills/database-lookup/references/geo.md",
-            "bytes": 3821
+            "bytes": 3869
           },
           {
             "source_path": "skills/database-lookup/references/gnomad.md",
-            "bytes": 2993
+            "bytes": 3574
           },
           {
             "source_path": "skills/database-lookup/references/gtex.md",
-            "bytes": 3701
+            "bytes": 4164
           },
           {
             "source_path": "skills/database-lookup/references/gwas-catalog.md",
-            "bytes": 1437
+            "bytes": 1644
           },
           {
             "source_path": "skills/database-lookup/references/hca.md",
-            "bytes": 870
+            "bytes": 1390
           },
           {
             "source_path": "skills/database-lookup/references/hpo.md",
-            "bytes": 1478
+            "bytes": 1230
           },
           {
             "source_path": "skills/database-lookup/references/human-protein-atlas.md",
-            "bytes": 1358
+            "bytes": 1226
           },
           {
             "source_path": "skills/database-lookup/references/interpro.md",
-            "bytes": 3330
+            "bytes": 3496
           },
           {
             "source_path": "skills/database-lookup/references/jaspar.md",
-            "bytes": 1474
+            "bytes": 1475
           },
           {
             "source_path": "skills/database-lookup/references/kegg.md",
-            "bytes": 2345
+            "bytes": 2592
           },
           {
             "source_path": "skills/database-lookup/references/lincs-l1000.md",
-            "bytes": 1948
+            "bytes": 2191
           },
           {
             "source_path": "skills/database-lookup/references/materials-project.md",
-            "bytes": 3395
+            "bytes": 4897
           },
           {
             "source_path": "skills/database-lookup/references/metabolomics-workbench.md",
-            "bytes": 3388
+            "bytes": 3929
           },
           {
             "source_path": "skills/database-lookup/references/monarch.md",
-            "bytes": 1449
+            "bytes": 1515
           },
           {
             "source_path": "skills/database-lookup/references/mousemine.md",
-            "bytes": 1250
+            "bytes": 1569
           },
           {
             "source_path": "skills/database-lookup/references/myvariant.md",
-            "bytes": 1550
+            "bytes": 1344
           },
           {
             "source_path": "skills/database-lookup/references/nasa-exoplanet-archive.md",
-            "bytes": 4089
+            "bytes": 4394
           },
           {
             "source_path": "skills/database-lookup/references/nasa.md",
-            "bytes": 3166
+            "bytes": 3112
           },
           {
             "source_path": "skills/database-lookup/references/ncbi-gene.md",
-            "bytes": 1608
+            "bytes": 1700
           },
           {
             "source_path": "skills/database-lookup/references/ncbi-protein.md",
-            "bytes": 2956
+            "bytes": 3298
           },
           {
             "source_path": "skills/database-lookup/references/ncbi-taxonomy.md",
-            "bytes": 3470
+            "bytes": 3738
           },
           {
             "source_path": "skills/database-lookup/references/nist.md",
-            "bytes": 3466
+            "bytes": 3683
           },
           {
             "source_path": "skills/database-lookup/references/noaa.md",
-            "bytes": 6466
+            "bytes": 6909
           },
           {
             "source_path": "skills/database-lookup/references/omim.md",
-            "bytes": 3236
+            "bytes": 3515
           },
           {
             "source_path": "skills/database-lookup/references/opentargets.md",
-            "bytes": 8947
+            "bytes": 7176
           },
           {
             "source_path": "skills/database-lookup/references/openweathermap.md",
-            "bytes": 7110
+            "bytes": 8357
           },
           {
             "source_path": "skills/database-lookup/references/pdb.md",
-            "bytes": 2905
+            "bytes": 3245
           },
           {
             "source_path": "skills/database-lookup/references/pride.md",
-            "bytes": 2292
+            "bytes": 1442
           },
           {
             "source_path": "skills/database-lookup/references/pubchem.md",
-            "bytes": 3099
+            "bytes": 3491
           },
           {
             "source_path": "skills/database-lookup/references/quickgo.md",
-            "bytes": 1361
+            "bytes": 1539
           },
           {
             "source_path": "skills/database-lookup/references/reactome.md",
-            "bytes": 2774
+            "bytes": 2964
           },
           {
             "source_path": "skills/database-lookup/references/regulomedb.md",
-            "bytes": 1866
+            "bytes": 2096
           },
           {
             "source_path": "skills/database-lookup/references/retrieval-contract.md",
-            "bytes": 7082
+            "bytes": 7414
           },
           {
             "source_path": "skills/database-lookup/references/rummageo.md",
-            "bytes": 784
+            "bytes": 1365
           },
           {
             "source_path": "skills/database-lookup/references/sdss.md",
-            "bytes": 3753
+            "bytes": 4458
           },
           {
             "source_path": "skills/database-lookup/references/sec-edgar.md",
-            "bytes": 9468
+            "bytes": 8511
           },
           {
             "source_path": "skills/database-lookup/references/simbad.md",
-            "bytes": 12424
+            "bytes": 12628
           },
           {
             "source_path": "skills/database-lookup/references/sra.md",
-            "bytes": 4484
+            "bytes": 4584
           },
           {
             "source_path": "skills/database-lookup/references/string.md",
-            "bytes": 7618
+            "bytes": 7905
           },
           {
             "source_path": "skills/database-lookup/references/tcga-gdc.md",
-            "bytes": 1821
+            "bytes": 1998
           },
           {
             "source_path": "skills/database-lookup/references/treasury.md",
-            "bytes": 6753
+            "bytes": 7335
           },
           {
             "source_path": "skills/database-lookup/references/ucsc-genome.md",
-            "bytes": 3360
+            "bytes": 3401
           },
           {
             "source_path": "skills/database-lookup/references/uniprot.md",
-            "bytes": 6503
+            "bytes": 7275
           },
           {
             "source_path": "skills/database-lookup/references/usgs.md",
-            "bytes": 9745
+            "bytes": 10134
           },
           {
             "source_path": "skills/database-lookup/references/uspto.md",
-            "bytes": 4136
+            "bytes": 4746
           },
           {
             "source_path": "skills/database-lookup/references/who.md",
-            "bytes": 8858
+            "bytes": 8890
           },
           {
             "source_path": "skills/database-lookup/references/worldbank.md",
-            "bytes": 7120
+            "bytes": 7131
           },
           {
             "source_path": "skills/database-lookup/references/zinc.md",
-            "bytes": 5482
+            "bytes": 5836
           },
           {
             "source_path": "skills/database-lookup/SKILL.md",
-            "bytes": 27358
+            "bytes": 27582
           }
         ]
       },
@@ -3585,13 +3695,14 @@
           "code": "LLM_COMMAND_INJECTION",
           "severity": "low",
           "title": "Documented use of shell curl with user-supplied identifiers in query strings",
-          "verdict": "confirmed",
+          "verdict": "not-applicable",
           "evidence": [
             "docs/security-report.json",
-            "skills/database-lookup"
+            "skills/database-lookup",
+            "skills/database-lookup/SKILL.md"
           ],
-          "analysis": "实读 SKILL.md 第 91–99 行：文档指示对 POST-only 接口（Open Targets、gnomAD、RummaGEO、GDC、SEC EDGAR）改用 shell curl，并将用户提供标识符代入查询串。这是真实的注入面（与 2.53.0 人工复核同类），但属文档描述、由用户显式执行。",
-          "residual_risk": "低：Agent 依文档拼接 curl 查询时，未受信标识符可能被解析为 shell 语法；缓解依赖调用方校验输入。"
+          "analysis": "The interpolation pattern cited in the historical report was removed from the current entry. The current instructions separate untrusted identifiers from command construction.",
+          "residual_risk": "Optional external retrieval and command permissions remain subject to user authorization."
         },
         {
           "finding_id": "database-lookup:2",
@@ -3600,7 +3711,8 @@
           "title": "Skill instructs agent to read API keys from environment and .env file",
           "verdict": "not-applicable",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/database-lookup/SKILL.md"
           ],
           "analysis": "实读 SKILL.md 第 107、115–127 行：仅要求在需要时按名查询 .env 中的指定 key，并明确不得读取或展示整个 .env。属文档化的正当凭据用法。",
           "residual_risk": "低：Agent 须严格只读取指定键名，不得打印 .env 内容。"
@@ -3637,7 +3749,7 @@
       "inventory": {
         "summary": {
           "files": 2,
-          "bytes": 14736,
+          "bytes": 15786,
           "references": 1,
           "scripts": 0,
           "assets": 0,
@@ -3647,11 +3759,11 @@
         "files": [
           {
             "source_path": "skills/dhdna-profiler/references/advanced-profiling.md",
-            "bytes": 3220
+            "bytes": 4412
           },
           {
             "source_path": "skills/dhdna-profiler/SKILL.md",
-            "bytes": 11516
+            "bytes": 11374
           }
         ]
       },
@@ -3678,7 +3790,7 @@
       "inventory": {
         "summary": {
           "files": 7,
-          "bytes": 73256,
+          "bytes": 81385,
           "references": 5,
           "scripts": 1,
           "assets": 0,
@@ -3688,31 +3800,31 @@
         "files": [
           {
             "source_path": "skills/flowio/references/api_reference.md",
-            "bytes": 11771
+            "bytes": 12539
           },
           {
             "source_path": "skills/flowio/references/fcs_semantics.md",
-            "bytes": 9878
+            "bytes": 10587
           },
           {
             "source_path": "skills/flowio/references/sources.md",
-            "bytes": 4614
+            "bytes": 5884
           },
           {
             "source_path": "skills/flowio/references/troubleshooting.md",
-            "bytes": 10967
+            "bytes": 11929
           },
           {
             "source_path": "skills/flowio/references/workflows.md",
-            "bytes": 10376
+            "bytes": 11817
           },
           {
             "source_path": "skills/flowio/scripts/inspect_fcs.py",
-            "bytes": 13735
+            "bytes": 15097
           },
           {
             "source_path": "skills/flowio/SKILL.md",
-            "bytes": 11915
+            "bytes": 13532
           }
         ]
       },
@@ -3757,7 +3869,7 @@
       "inventory": {
         "summary": {
           "files": 8,
-          "bytes": 75962,
+          "bytes": 49308,
           "references": 7,
           "scripts": 0,
           "assets": 0,
@@ -3767,35 +3879,35 @@
         "files": [
           {
             "source_path": "skills/histolab/references/core_capabilities.md",
-            "bytes": 9454
+            "bytes": 1824
           },
           {
             "source_path": "skills/histolab/references/filters_preprocessing.md",
-            "bytes": 13640
+            "bytes": 7632
           },
           {
             "source_path": "skills/histolab/references/slide_management.md",
-            "bytes": 5183
+            "bytes": 6169
           },
           {
             "source_path": "skills/histolab/references/tile_extraction.md",
-            "bytes": 11297
+            "bytes": 7726
           },
           {
             "source_path": "skills/histolab/references/tissue_masks.md",
-            "bytes": 7232
+            "bytes": 5815
           },
           {
             "source_path": "skills/histolab/references/typical_workflows.md",
-            "bytes": 4939
+            "bytes": 4756
           },
           {
             "source_path": "skills/histolab/references/visualization.md",
-            "bytes": 14027
+            "bytes": 6598
           },
           {
             "source_path": "skills/histolab/SKILL.md",
-            "bytes": 10190
+            "bytes": 8788
           }
         ]
       },
@@ -3817,7 +3929,9 @@
           "title": "Python code block uses eval/exec",
           "verdict": "false-positive",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/histolab/SKILL.md",
+            "skills/histolab/references/tile_extraction.md"
           ],
           "analysis": "实读 references/filters_preprocessing.md 第 488 行（报告记 487）：注释 # cv2.CV_64F is an OpenCV constant, not Python eval()；代码块内 cv2.Laplacian(..., cv2.CV_64F).var() 是模糊度计算，无 eval/exec 调用。",
           "residual_risk": "无；命中源于文本中的 eval 字样。"
@@ -3829,7 +3943,9 @@
           "title": "Heuristic eval/exec match in documentation code block (false-positive lead)",
           "verdict": "false-positive",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/histolab/SKILL.md",
+            "skills/histolab/references/tile_extraction.md"
           ],
           "analysis": "同一位置的复核结论：该 LOW 项是确定性分析器的前置线索，报告自身亦标注为 false-positive lead；实读确认为 OpenCV 常量。",
           "residual_risk": "无。"
@@ -3866,7 +3982,7 @@
       "inventory": {
         "summary": {
           "files": 27,
-          "bytes": 256169,
+          "bytes": 265933,
           "references": 10,
           "scripts": 8,
           "assets": 8,
@@ -3896,7 +4012,7 @@
           },
           {
             "source_path": "skills/hypothesis-generation/assets/preregistration_scaffold_template.md",
-            "bytes": 5005
+            "bytes": 5102
           },
           {
             "source_path": "skills/hypothesis-generation/assets/search_boundary_template.json",
@@ -3904,11 +4020,11 @@
           },
           {
             "source_path": "skills/hypothesis-generation/assets/source_ledger.csv",
-            "bytes": 12750
+            "bytes": 15163
           },
           {
             "source_path": "skills/hypothesis-generation/references/causal_inference_and_claims.md",
-            "bytes": 7777
+            "bytes": 7993
           },
           {
             "source_path": "skills/hypothesis-generation/references/concepts_and_workflow.md",
@@ -3916,7 +4032,7 @@
           },
           {
             "source_path": "skills/hypothesis-generation/references/ethics_safety_and_ai.md",
-            "bytes": 9891
+            "bytes": 10507
           },
           {
             "source_path": "skills/hypothesis-generation/references/experimental_design_patterns.md",
@@ -3932,23 +4048,23 @@
           },
           {
             "source_path": "skills/hypothesis-generation/references/preregistration_and_open_science.md",
-            "bytes": 6721
+            "bytes": 7751
           },
           {
             "source_path": "skills/hypothesis-generation/references/security_validation.md",
-            "bytes": 3650
+            "bytes": 4199
           },
           {
             "source_path": "skills/hypothesis-generation/references/source_ledger.md",
-            "bytes": 7410
+            "bytes": 10009
           },
           {
             "source_path": "skills/hypothesis-generation/references/tool_reference.md",
-            "bytes": 8070
+            "bytes": 8397
           },
           {
             "source_path": "skills/hypothesis-generation/scripts/_common.py",
-            "bytes": 14234
+            "bytes": 15316
           },
           {
             "source_path": "skills/hypothesis-generation/scripts/audit_evidence_ledger.py",
@@ -3964,7 +4080,7 @@
           },
           {
             "source_path": "skills/hypothesis-generation/scripts/generate_preregistration_scaffold.py",
-            "bytes": 14349
+            "bytes": 14287
           },
           {
             "source_path": "skills/hypothesis-generation/scripts/lint_causal_claims.py",
@@ -3980,7 +4096,7 @@
           },
           {
             "source_path": "skills/hypothesis-generation/SKILL.md",
-            "bytes": 15725
+            "bytes": 16622
           }
         ]
       },
@@ -4044,7 +4160,7 @@
       "inventory": {
         "summary": {
           "files": 12,
-          "bytes": 133827,
+          "bytes": 131520,
           "references": 5,
           "scripts": 5,
           "assets": 1,
@@ -4054,51 +4170,51 @@
         "files": [
           {
             "source_path": "skills/literature-review/assets/review_template.md",
-            "bytes": 12982
+            "bytes": 13769
           },
           {
             "source_path": "skills/literature-review/references/citation_styles.md",
-            "bytes": 6112
+            "bytes": 7627
           },
           {
             "source_path": "skills/literature-review/references/core_workflow.md",
-            "bytes": 9923
+            "bytes": 11876
           },
           {
             "source_path": "skills/literature-review/references/database_strategies.md",
-            "bytes": 15491
+            "bytes": 10431
           },
           {
             "source_path": "skills/literature-review/references/example_workflow.md",
-            "bytes": 2332
+            "bytes": 3078
           },
           {
             "source_path": "skills/literature-review/references/search_and_citation.md",
-            "bytes": 5698
+            "bytes": 4685
           },
           {
             "source_path": "skills/literature-review/scripts/generate_pdf.py",
-            "bytes": 5410
+            "bytes": 4990
           },
           {
             "source_path": "skills/literature-review/scripts/generate_schematic_ai.py",
-            "bytes": 38534
+            "bytes": 35684
           },
           {
             "source_path": "skills/literature-review/scripts/generate_schematic.py",
-            "bytes": 7600
+            "bytes": 7782
           },
           {
             "source_path": "skills/literature-review/scripts/search_databases.py",
-            "bytes": 9036
+            "bytes": 8769
           },
           {
             "source_path": "skills/literature-review/scripts/verify_citations.py",
-            "bytes": 7050
+            "bytes": 9960
           },
           {
             "source_path": "skills/literature-review/SKILL.md",
-            "bytes": 13659
+            "bytes": 12869
           }
         ]
       },
@@ -4126,7 +4242,8 @@
           "evidence": [
             "docs/security-report.json",
             "skills/literature-review/scripts/generate_schematic_ai.py",
-            "skills/literature-review/scripts/generate_schematic.py"
+            "skills/literature-review/scripts/generate_schematic.py",
+            "skills/literature-review/SKILL.md"
           ],
           "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
           "residual_risk": "低–中：key 随显式调用发往 OpenRouter。"
@@ -4141,7 +4258,8 @@
             "docs/security-report.json",
             "skills/literature-review/scripts/generate_schematic_ai.py",
             "skills/literature-review/scripts/generate_schematic.py",
-            "skills/literature-review/scripts/verify_citations.py"
+            "skills/literature-review/scripts/verify_citations.py",
+            "skills/literature-review/SKILL.md"
           ],
           "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
           "residual_risk": "低–中：chain 由 generate_schematic.py 向 AI 子进程转交该 key、verify_citations.py 另行联网构成。"
@@ -4154,7 +4272,8 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/literature-review/scripts/generate_schematic_ai.py"
+            "skills/literature-review/scripts/generate_schematic_ai.py",
+            "skills/literature-review/SKILL.md"
           ],
           "analysis": "当前内容实读：脚本仅从 OPENROUTER_API_KEY（env 或 .env）取 key，作为 Authorization 头 POST 到唯一声明的 endpoint https://openrouter.ai/api/v1；跨文件 chain 来自 generate_*.py 经 build_subprocess_env 把该 key 转交 AI 子进程。属对声明服务的鉴权传输，不证明外泄。",
           "residual_risk": "低–中：generate_schematic_ai.py 单点鉴权调用。"
@@ -4164,12 +4283,13 @@
           "code": "LLM_SUPPLY_CHAIN_ATTACK",
           "severity": "low",
           "title": "Documented dependency install pipes remote script directly into bash",
-          "verdict": "confirmed",
+          "verdict": "not-applicable",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/literature-review/SKILL.md"
           ],
-          "analysis": "实读 SKILL.md 第 224 行：依赖段落给出 curl -fsSL https://parallel.ai/install.sh | bash。allowed-tools 含 Bash，Agent 若照做会拉取并执行未固定版本、未校验的远端脚本。",
-          "residual_risk": "中低：安装步骤可被上游或中间人替换；缓解是固定版本或校验哈希后再执行。"
+          "analysis": "The candidate tree no longer contains the historical installer instruction. Installation guidance remains external to the workflow.",
+          "residual_risk": "Other provider-dependent resources remain excluded."
         }
       ],
       "recommendation": "clear-with-adaptation",
@@ -4211,9 +4331,9 @@
       },
       "inventory": {
         "summary": {
-          "files": 1,
-          "bytes": 3745,
-          "references": 0,
+          "files": 2,
+          "bytes": 16641,
+          "references": 1,
           "scripts": 0,
           "assets": 0,
           "tests_or_evals": 0,
@@ -4221,12 +4341,17 @@
         },
         "files": [
           {
+            "source_path": "skills/paperzilla/references/cli-contracts.md",
+            "bytes": 7339
+          },
+          {
             "source_path": "skills/paperzilla/SKILL.md",
-            "bytes": 3745
+            "bytes": 9302
           }
         ]
       },
       "reviewed_paths": [
+        "skills/paperzilla/references/cli-contracts.md",
         "skills/paperzilla/SKILL.md"
       ],
       "findings": [],
@@ -4242,6 +4367,11 @@
           "kind": "compatibility-guidance",
           "source_path": null,
           "note": "The Skill never reads, stores, or forwards credentials; browsing and export are read-only, while submitting or clearing recommendation feedback requires separate user confirmation."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/paperzilla/references/cli-contracts.md",
+          "note": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure."
         }
       ],
       "independent_blockers": [
@@ -4261,7 +4391,7 @@
       "inventory": {
         "summary": {
           "files": 13,
-          "bytes": 151781,
+          "bytes": 166391,
           "references": 6,
           "scripts": 6,
           "assets": 0,
@@ -4271,55 +4401,55 @@
         "files": [
           {
             "source_path": "skills/pathml/references/data_management.md",
-            "bytes": 11488
+            "bytes": 13560
           },
           {
             "source_path": "skills/pathml/references/graphs.md",
-            "bytes": 10536
+            "bytes": 11567
           },
           {
             "source_path": "skills/pathml/references/image_loading.md",
-            "bytes": 9838
+            "bytes": 11591
           },
           {
             "source_path": "skills/pathml/references/machine_learning.md",
-            "bytes": 12639
-          },
-          {
-            "source_path": "skills/pathml/references/multiparametric.md",
-            "bytes": 12130
-          },
-          {
-            "source_path": "skills/pathml/references/preprocessing.md",
-            "bytes": 11904
-          },
-          {
-            "source_path": "skills/pathml/scripts/_common.py",
-            "bytes": 12105
-          },
-          {
-            "source_path": "skills/pathml/scripts/image_qc.py",
-            "bytes": 11127
-          },
-          {
-            "source_path": "skills/pathml/scripts/plan_inference.py",
-            "bytes": 9691
-          },
-          {
-            "source_path": "skills/pathml/scripts/plan_pipeline.py",
-            "bytes": 9054
-          },
-          {
-            "source_path": "skills/pathml/scripts/slide_manifest.py",
             "bytes": 14065
           },
           {
+            "source_path": "skills/pathml/references/multiparametric.md",
+            "bytes": 13935
+          },
+          {
+            "source_path": "skills/pathml/references/preprocessing.md",
+            "bytes": 12260
+          },
+          {
+            "source_path": "skills/pathml/scripts/_common.py",
+            "bytes": 12692
+          },
+          {
+            "source_path": "skills/pathml/scripts/image_qc.py",
+            "bytes": 11238
+          },
+          {
+            "source_path": "skills/pathml/scripts/plan_inference.py",
+            "bytes": 9721
+          },
+          {
+            "source_path": "skills/pathml/scripts/plan_pipeline.py",
+            "bytes": 11320
+          },
+          {
+            "source_path": "skills/pathml/scripts/slide_manifest.py",
+            "bytes": 14530
+          },
+          {
             "source_path": "skills/pathml/scripts/validate_spatial_schema.py",
-            "bytes": 16044
+            "bytes": 16809
           },
           {
             "source_path": "skills/pathml/SKILL.md",
-            "bytes": 11160
+            "bytes": 13103
           }
         ]
       },
@@ -4370,7 +4500,7 @@
       "inventory": {
         "summary": {
           "files": 24,
-          "bytes": 189404,
+          "bytes": 200981,
           "references": 6,
           "scripts": 8,
           "assets": 9,
@@ -4392,7 +4522,7 @@
           },
           {
             "source_path": "skills/peer-review/assets/reporting_guidelines.json",
-            "bytes": 13446
+            "bytes": 14452
           },
           {
             "source_path": "skills/peer-review/assets/review_intake_template.json",
@@ -4404,7 +4534,7 @@
           },
           {
             "source_path": "skills/peer-review/assets/source_ledger.csv",
-            "bytes": 9147
+            "bytes": 13407
           },
           {
             "source_path": "skills/peer-review/assets/statistical_reproducibility_template.json",
@@ -4420,23 +4550,23 @@
           },
           {
             "source_path": "skills/peer-review/references/ethical_review_practice.md",
-            "bytes": 11131
+            "bytes": 12209
           },
           {
             "source_path": "skills/peer-review/references/reporting_standards.md",
-            "bytes": 14032
+            "bytes": 15438
           },
           {
             "source_path": "skills/peer-review/references/security_validation.md",
-            "bytes": 3547
+            "bytes": 4166
           },
           {
             "source_path": "skills/peer-review/references/statistical_reproducibility.md",
-            "bytes": 11712
+            "bytes": 11755
           },
           {
             "source_path": "skills/peer-review/references/tool_reference.md",
-            "bytes": 7781
+            "bytes": 9670
           },
           {
             "source_path": "skills/peer-review/scripts/_common.py",
@@ -4468,11 +4598,11 @@
           },
           {
             "source_path": "skills/peer-review/scripts/validate_review_intake.py",
-            "bytes": 14466
+            "bytes": 14486
           },
           {
             "source_path": "skills/peer-review/SKILL.md",
-            "bytes": 12597
+            "bytes": 13853
           }
         ]
       },
@@ -4532,9 +4662,9 @@
       },
       "inventory": {
         "summary": {
-          "files": 2,
-          "bytes": 9967,
-          "references": 0,
+          "files": 3,
+          "bytes": 27128,
+          "references": 1,
           "scripts": 1,
           "assets": 0,
           "tests_or_evals": 0,
@@ -4542,16 +4672,21 @@
         },
         "files": [
           {
+            "source_path": "skills/primekg/references/data-contract.md",
+            "bytes": 7665
+          },
+          {
             "source_path": "skills/primekg/scripts/query_primekg.py",
-            "bytes": 5013
+            "bytes": 9804
           },
           {
             "source_path": "skills/primekg/SKILL.md",
-            "bytes": 4954
+            "bytes": 9659
           }
         ]
       },
       "reviewed_paths": [
+        "skills/primekg/references/data-contract.md",
         "skills/primekg/scripts/query_primekg.py",
         "skills/primekg/SKILL.md"
       ],
@@ -4591,9 +4726,9 @@
       },
       "inventory": {
         "summary": {
-          "files": 4,
-          "bytes": 90859,
-          "references": 0,
+          "files": 5,
+          "bytes": 104475,
+          "references": 1,
           "scripts": 2,
           "assets": 0,
           "tests_or_evals": 0,
@@ -4602,24 +4737,29 @@
         "files": [
           {
             "source_path": "skills/research-lookup/README.md",
-            "bytes": 3573
+            "bytes": 4213
+          },
+          {
+            "source_path": "skills/research-lookup/references/api-contracts.md",
+            "bytes": 6607
           },
           {
             "source_path": "skills/research-lookup/scripts/manuscript_packet.py",
-            "bytes": 27047
+            "bytes": 28031
           },
           {
             "source_path": "skills/research-lookup/scripts/research_lookup.py",
-            "bytes": 45733
+            "bytes": 48387
           },
           {
             "source_path": "skills/research-lookup/SKILL.md",
-            "bytes": 14506
+            "bytes": 17237
           }
         ]
       },
       "reviewed_paths": [
         "skills/research-lookup/README.md",
+        "skills/research-lookup/references/api-contracts.md",
         "skills/research-lookup/scripts/manuscript_packet.py",
         "skills/research-lookup/scripts/research_lookup.py",
         "skills/research-lookup/SKILL.md"
@@ -4633,7 +4773,8 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/research-lookup/scripts/research_lookup.py"
+            "skills/research-lookup/scripts/research_lookup.py",
+            "skills/research-lookup/SKILL.md"
           ],
           "analysis": "当前内容实读：research_lookup.py 读取 PARALLEL_API_KEY / OPENROUTER_API_KEY，仅作为 Bearer 头 POST 到 api.parallel.ai/chat/completions 与 openrouter.ai/api/v1/chat/completions。属对声明服务的鉴权传输。",
           "residual_risk": "凭据随显式调用发往声明的检索服务。"
@@ -4647,7 +4788,8 @@
           "evidence": [
             "docs/security-report.json",
             "skills/research-lookup/scripts/research_lookup.py",
-            "skills/research-lookup/scripts/manuscript_packet.py"
+            "skills/research-lookup/scripts/manuscript_packet.py",
+            "skills/research-lookup/SKILL.md"
           ],
           "analysis": "chain 由 research_lookup.py 与 manuscript_packet.py 的文件交接聚合；后者自身不做 env 读取或网络请求。",
           "residual_risk": "凭据随显式调用发往声明的检索服务。"
@@ -4660,7 +4802,8 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/research-lookup/scripts/research_lookup.py"
+            "skills/research-lookup/scripts/research_lookup.py",
+            "skills/research-lookup/SKILL.md"
           ],
           "analysis": "research_lookup.py 单点鉴权调用。",
           "residual_risk": "低：PARALLEL/OPENROUTER key 随显式调用发往声明端点。"
@@ -4672,7 +4815,8 @@
           "title": "Declared API keys read from environment and sent as Authorization headers to declared endpoints",
           "verdict": "not-applicable",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/research-lookup/SKILL.md"
           ],
           "analysis": "实读同源：该 LOW 项把 env 读取 + Authorization 头判为外泄链，核实为声明 key 对声明 endpoint 的常规用法，不构成数据外泄。",
           "residual_risk": "无；仅需用户知晓查询内容会送达所选检索后端。"
@@ -4700,6 +4844,11 @@
           "kind": "compatibility-guidance",
           "source_path": null,
           "note": "The Skill handles no credentials; disclose the destination and query content and obtain consent before any external retrieval."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/research-lookup/references/api-contracts.md",
+          "note": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure."
         }
       ],
       "independent_blockers": [
@@ -4719,7 +4868,7 @@
       "inventory": {
         "summary": {
           "files": 19,
-          "bytes": 157706,
+          "bytes": 168672,
           "references": 5,
           "scripts": 8,
           "assets": 5,
@@ -4745,31 +4894,31 @@
           },
           {
             "source_path": "skills/scholar-evaluation/assets/rubric_template.json",
-            "bytes": 12111
+            "bytes": 12217
           },
           {
             "source_path": "skills/scholar-evaluation/references/evaluation_framework.md",
-            "bytes": 9735
+            "bytes": 10599
           },
           {
             "source_path": "skills/scholar-evaluation/references/local_tooling.md",
-            "bytes": 7908
+            "bytes": 9341
           },
           {
             "source_path": "skills/scholar-evaluation/references/responsible_assessment.md",
-            "bytes": 9134
+            "bytes": 9848
           },
           {
             "source_path": "skills/scholar-evaluation/references/security_validation.md",
-            "bytes": 3897
+            "bytes": 4294
           },
           {
             "source_path": "skills/scholar-evaluation/references/source_ledger.md",
-            "bytes": 12567
+            "bytes": 14146
           },
           {
             "source_path": "skills/scholar-evaluation/scripts/_common.py",
-            "bytes": 35590
+            "bytes": 36406
           },
           {
             "source_path": "skills/scholar-evaluation/scripts/calculate_scores.py",
@@ -4777,19 +4926,19 @@
           },
           {
             "source_path": "skills/scholar-evaluation/scripts/check_process.py",
-            "bytes": 8289
+            "bytes": 8327
           },
           {
             "source_path": "skills/scholar-evaluation/scripts/check_traceability.py",
-            "bytes": 9071
+            "bytes": 9118
           },
           {
             "source_path": "skills/scholar-evaluation/scripts/generate_report_scaffold.py",
-            "bytes": 8986
+            "bytes": 9657
           },
           {
             "source_path": "skills/scholar-evaluation/scripts/summarize_agreement.py",
-            "bytes": 8916
+            "bytes": 11340
           },
           {
             "source_path": "skills/scholar-evaluation/scripts/validate_rubric.py",
@@ -4797,11 +4946,11 @@
           },
           {
             "source_path": "skills/scholar-evaluation/scripts/weight_sensitivity.py",
-            "bytes": 9231
+            "bytes": 10270
           },
           {
             "source_path": "skills/scholar-evaluation/SKILL.md",
-            "bytes": 11580
+            "bytes": 12418
           }
         ]
       },
@@ -4834,7 +4983,8 @@
           "title": "Self-promotional citation directive and optional external fetch in instruction body",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/scholar-evaluation/SKILL.md"
           ],
           "analysis": "当前内容实读：SKILL.md 第 298 行确含 vendor 自撰 Citing Scientific Agent Skills 段。事实成立；属 Skill 自带内容而非不可信输入，标为 policy violation 属规则名过宽。",
           "residual_risk": "低：会让 Agent 改动用户产出的参考文献，属内容污染倾向而非安全入侵。"
@@ -4871,7 +5021,7 @@
       "inventory": {
         "summary": {
           "files": 31,
-          "bytes": 173481,
+          "bytes": 179722,
           "references": 12,
           "scripts": 9,
           "assets": 9,
@@ -4917,19 +5067,19 @@
           },
           {
             "source_path": "skills/scientific-writing/references/authorship_ai_confidentiality.md",
-            "bytes": 4496
+            "bytes": 4919
           },
           {
             "source_path": "skills/scientific-writing/references/citation_styles.md",
-            "bytes": 3777
+            "bytes": 3945
           },
           {
             "source_path": "skills/scientific-writing/references/cli_reference.md",
-            "bytes": 3558
+            "bytes": 4101
           },
           {
             "source_path": "skills/scientific-writing/references/evidence_workflow.md",
-            "bytes": 3929
+            "bytes": 5033
           },
           {
             "source_path": "skills/scientific-writing/references/figures_tables.md",
@@ -4941,7 +5091,7 @@
           },
           {
             "source_path": "skills/scientific-writing/references/journal_policies.md",
-            "bytes": 2608
+            "bytes": 3010
           },
           {
             "source_path": "skills/scientific-writing/references/professional_report_formatting.md",
@@ -4957,7 +5107,7 @@
           },
           {
             "source_path": "skills/scientific-writing/references/source_ledger.md",
-            "bytes": 10175
+            "bytes": 11473
           },
           {
             "source_path": "skills/scientific-writing/references/writing_principles.md",
@@ -4965,11 +5115,11 @@
           },
           {
             "source_path": "skills/scientific-writing/scripts/_common.py",
-            "bytes": 7670
+            "bytes": 7977
           },
           {
             "source_path": "skills/scientific-writing/scripts/audit_claims.py",
-            "bytes": 8834
+            "bytes": 10039
           },
           {
             "source_path": "skills/scientific-writing/scripts/check_consistency.py",
@@ -4993,15 +5143,15 @@
           },
           {
             "source_path": "skills/scientific-writing/scripts/validate_authorship.py",
-            "bytes": 11498
+            "bytes": 11518
           },
           {
             "source_path": "skills/scientific-writing/scripts/validate_manifest.py",
-            "bytes": 14514
+            "bytes": 14393
           },
           {
             "source_path": "skills/scientific-writing/SKILL.md",
-            "bytes": 14005
+            "bytes": 14897
           }
         ]
       },
@@ -5046,7 +5196,8 @@
           "title": "Embedded self-citation directive instructs agent to insert vendor paper into user deliverables and fetch external URL",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/scientific-writing/SKILL.md"
           ],
           "analysis": "当前内容实读：SKILL.md 第 358 行确含 vendor 自撰 Citing Scientific Agent Skills 段。事实成立；属 Skill 自带内容而非不可信输入，标为 policy violation 属规则名过宽。",
           "residual_risk": "低：会让 Agent 改动用户产出的参考文献，属内容污染倾向而非安全入侵。"
@@ -5082,9 +5233,9 @@
       },
       "inventory": {
         "summary": {
-          "files": 1,
-          "bytes": 14557,
-          "references": 0,
+          "files": 2,
+          "bytes": 20019,
+          "references": 1,
           "scripts": 0,
           "assets": 0,
           "tests_or_evals": 0,
@@ -5092,12 +5243,17 @@
         },
         "files": [
           {
+            "source_path": "skills/tiledbvcf/references/verification.md",
+            "bytes": 6119
+          },
+          {
             "source_path": "skills/tiledbvcf/SKILL.md",
-            "bytes": 14557
+            "bytes": 13900
           }
         ]
       },
       "reviewed_paths": [
+        "skills/tiledbvcf/references/verification.md",
         "skills/tiledbvcf/SKILL.md"
       ],
       "findings": [],
@@ -5132,7 +5288,7 @@
       "inventory": {
         "summary": {
           "files": 23,
-          "bytes": 154786,
+          "bytes": 164596,
           "references": 8,
           "scripts": 8,
           "assets": 6,
@@ -5166,43 +5322,43 @@
           },
           {
             "source_path": "skills/treatment-plans/references/documentation_workflow.md",
-            "bytes": 6514
+            "bytes": 7699
           },
           {
             "source_path": "skills/treatment-plans/references/privacy_governance.md",
-            "bytes": 5721
+            "bytes": 6665
           },
           {
             "source_path": "skills/treatment-plans/references/README.md",
-            "bytes": 1422
+            "bytes": 1424
           },
           {
             "source_path": "skills/treatment-plans/references/safety_scope.md",
-            "bytes": 5355
+            "bytes": 5465
           },
           {
             "source_path": "skills/treatment-plans/references/security_validation.md",
-            "bytes": 3655
+            "bytes": 5752
           },
           {
             "source_path": "skills/treatment-plans/references/shared_decision_handoff.md",
-            "bytes": 5407
+            "bytes": 5630
           },
           {
             "source_path": "skills/treatment-plans/references/source_boundaries.md",
-            "bytes": 6274
+            "bytes": 6508
           },
           {
             "source_path": "skills/treatment-plans/references/source_ledger.md",
-            "bytes": 7825
+            "bytes": 8912
           },
           {
             "source_path": "skills/treatment-plans/scripts/_common.py",
-            "bytes": 39558
+            "bytes": 41037
           },
           {
             "source_path": "skills/treatment-plans/scripts/check_completeness.py",
-            "bytes": 18545
+            "bytes": 18589
           },
           {
             "source_path": "skills/treatment-plans/scripts/check_consistency.py",
@@ -5218,7 +5374,7 @@
           },
           {
             "source_path": "skills/treatment-plans/scripts/timeline_generator.py",
-            "bytes": 8063
+            "bytes": 8615
           },
           {
             "source_path": "skills/treatment-plans/scripts/validate_traceability.py",
@@ -5226,11 +5382,11 @@
           },
           {
             "source_path": "skills/treatment-plans/scripts/validate_treatment_plan.py",
-            "bytes": 2538
+            "bytes": 2602
           },
           {
             "source_path": "skills/treatment-plans/SKILL.md",
-            "bytes": 10792
+            "bytes": 12581
           }
         ]
       },
@@ -5291,7 +5447,7 @@
       "inventory": {
         "summary": {
           "files": 9,
-          "bytes": 60401,
+          "bytes": 69967,
           "references": 8,
           "scripts": 0,
           "assets": 0,
@@ -5301,39 +5457,39 @@
         "files": [
           {
             "source_path": "skills/usfiscaldata/references/api-basics.md",
-            "bytes": 3704
+            "bytes": 3953
           },
           {
             "source_path": "skills/usfiscaldata/references/datasets-debt.md",
-            "bytes": 5333
+            "bytes": 7109
           },
           {
             "source_path": "skills/usfiscaldata/references/datasets-fiscal.md",
-            "bytes": 8867
+            "bytes": 9620
           },
           {
             "source_path": "skills/usfiscaldata/references/datasets-interest-rates.md",
-            "bytes": 6423
+            "bytes": 7024
           },
           {
             "source_path": "skills/usfiscaldata/references/datasets-securities.md",
-            "bytes": 7908
+            "bytes": 10148
           },
           {
             "source_path": "skills/usfiscaldata/references/examples.md",
-            "bytes": 9665
+            "bytes": 9702
           },
           {
             "source_path": "skills/usfiscaldata/references/parameters.md",
-            "bytes": 5465
+            "bytes": 6692
           },
           {
             "source_path": "skills/usfiscaldata/references/response-format.md",
-            "bytes": 5196
+            "bytes": 6093
           },
           {
             "source_path": "skills/usfiscaldata/SKILL.md",
-            "bytes": 7840
+            "bytes": 9626
           }
         ]
       },
@@ -5356,7 +5512,8 @@
           "title": "Embedded self-promotional citation directive in SKILL.md",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/usfiscaldata/SKILL.md"
           ],
           "analysis": "当前内容实读：SKILL.md 第 173 行确含 vendor 自撰 Citing Scientific Agent Skills 段。事实成立；属 Skill 自带内容而非不可信输入，标为 prompt injection 属规则名过宽。",
           "residual_risk": "低：会让 Agent 改动用户产出的参考文献，属内容污染倾向而非安全入侵。"
@@ -5392,9 +5549,9 @@
       },
       "inventory": {
         "summary": {
-          "files": 7,
-          "bytes": 34403,
-          "references": 6,
+          "files": 8,
+          "bytes": 43680,
+          "references": 7,
           "scripts": 0,
           "assets": 0,
           "tests_or_evals": 0,
@@ -5403,31 +5560,35 @@
         "files": [
           {
             "source_path": "skills/zarr-python/references/api_reference.md",
-            "bytes": 4898
+            "bytes": 4931
           },
           {
             "source_path": "skills/zarr-python/references/chunking_and_compression.md",
-            "bytes": 3994
+            "bytes": 4732
           },
           {
             "source_path": "skills/zarr-python/references/integration.md",
-            "bytes": 4161
+            "bytes": 6382
           },
           {
             "source_path": "skills/zarr-python/references/performance_and_patterns.md",
-            "bytes": 4990
+            "bytes": 6580
+          },
+          {
+            "source_path": "skills/zarr-python/references/review.md",
+            "bytes": 2528
           },
           {
             "source_path": "skills/zarr-python/references/storage_backends.md",
-            "bytes": 2915
+            "bytes": 5580
           },
           {
             "source_path": "skills/zarr-python/references/v3_migration.md",
-            "bytes": 4925
+            "bytes": 3993
           },
           {
             "source_path": "skills/zarr-python/SKILL.md",
-            "bytes": 8520
+            "bytes": 8954
           }
         ]
       },
@@ -5436,6 +5597,7 @@
         "skills/zarr-python/references/chunking_and_compression.md",
         "skills/zarr-python/references/integration.md",
         "skills/zarr-python/references/performance_and_patterns.md",
+        "skills/zarr-python/references/review.md",
         "skills/zarr-python/references/storage_backends.md",
         "skills/zarr-python/references/v3_migration.md",
         "skills/zarr-python/SKILL.md"
@@ -5472,9 +5634,9 @@
       },
       "inventory": {
         "summary": {
-          "files": 15,
-          "bytes": 43685,
-          "references": 2,
+          "files": 16,
+          "bytes": 60787,
+          "references": 3,
           "scripts": 10,
           "assets": 0,
           "tests_or_evals": 0,
@@ -5487,15 +5649,19 @@
           },
           {
             "source_path": "skills/autoskill/config.yaml",
-            "bytes": 2030
+            "bytes": 2172
+          },
+          {
+            "source_path": "skills/autoskill/references/api-contracts.md",
+            "bytes": 7579
           },
           {
             "source_path": "skills/autoskill/references/https-proxy.md",
-            "bytes": 1518
+            "bytes": 2222
           },
           {
             "source_path": "skills/autoskill/references/screenpipe-config.yaml",
-            "bytes": 1567
+            "bytes": 1410
           },
           {
             "source_path": "skills/autoskill/scripts/autoskill.py",
@@ -5503,7 +5669,7 @@
           },
           {
             "source_path": "skills/autoskill/scripts/backends.py",
-            "bytes": 3936
+            "bytes": 5268
           },
           {
             "source_path": "skills/autoskill/scripts/cluster.py",
@@ -5511,15 +5677,15 @@
           },
           {
             "source_path": "skills/autoskill/scripts/doctor.py",
-            "bytes": 3501
+            "bytes": 4602
           },
           {
             "source_path": "skills/autoskill/scripts/fetch_window.py",
-            "bytes": 1172
+            "bytes": 2863
           },
           {
             "source_path": "skills/autoskill/scripts/match_skills.py",
-            "bytes": 1316
+            "bytes": 1274
           },
           {
             "source_path": "skills/autoskill/scripts/promote.py",
@@ -5527,25 +5693,26 @@
           },
           {
             "source_path": "skills/autoskill/scripts/redact.py",
-            "bytes": 1634
+            "bytes": 1647
           },
           {
             "source_path": "skills/autoskill/scripts/run.py",
-            "bytes": 7370
+            "bytes": 7579
           },
           {
             "source_path": "skills/autoskill/scripts/synthesize.py",
-            "bytes": 2378
+            "bytes": 2785
           },
           {
             "source_path": "skills/autoskill/SKILL.md",
-            "bytes": 12789
+            "bytes": 16912
           }
         ]
       },
       "reviewed_paths": [
         "skills/autoskill/.gitignore",
         "skills/autoskill/config.yaml",
+        "skills/autoskill/references/api-contracts.md",
         "skills/autoskill/references/https-proxy.md",
         "skills/autoskill/references/screenpipe-config.yaml",
         "skills/autoskill/scripts/autoskill.py",
@@ -5571,7 +5738,8 @@
             "docs/security-report.json",
             "skills/autoskill/scripts/backends.py",
             "skills/autoskill/scripts/doctor.py",
-            "skills/autoskill/scripts/run.py"
+            "skills/autoskill/scripts/run.py",
+            "skills/autoskill/SKILL.md"
           ],
           "analysis": "当前内容实读：scripts/backends.py 读取 ANTHROPIC_API_KEY / FOUNDRY_API_KEY 并经 httpx 发往声明的 api.anthropic.com 与 foundry endpoint；scripts/doctor.py 读取 SCREENPIPE_TOKEN 访问本地 daemon；scripts/run.py 用 SCREENPIPE_TOKEN 访问 http://localhost:3030。env 变量与网络调用确实同现，属对声明服务的鉴权传输；同现本身不证明外泄，故不判 confirmed 外泄。",
           "residual_risk": "凭据随显式调用离开宿主；endpoint 在 backends.py 中被校验为 https 或 loopback（明文 http 仅限本机），未见未声明目的地。"
@@ -5586,7 +5754,8 @@
             "docs/security-report.json",
             "skills/autoskill/scripts/backends.py",
             "skills/autoskill/scripts/doctor.py",
-            "skills/autoskill/scripts/run.py"
+            "skills/autoskill/scripts/run.py",
+            "skills/autoskill/SKILL.md"
           ],
           "analysis": "同上：跨文件 chain 由 backends.py、doctor.py、run.py 三处 env 读取与各自网络调用聚合而成，非单点隐蔽通道。",
           "residual_risk": "凭据随显式调用离开宿主；该 skill 本已因 authority 排除。"
@@ -5599,7 +5768,8 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/autoskill/scripts/backends.py"
+            "skills/autoskill/scripts/backends.py",
+            "skills/autoskill/SKILL.md"
           ],
           "analysis": "backends.py 一处 env 读取 + 网络调用，属声明服务鉴权。",
           "residual_risk": "同上；仅该文件。"
@@ -5612,7 +5782,8 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/autoskill/scripts/doctor.py"
+            "skills/autoskill/scripts/doctor.py",
+            "skills/autoskill/SKILL.md"
           ],
           "analysis": "doctor.py 一处 env 读取（SCREENPIPE_TOKEN）+ 本地 daemon 调用，属声明服务鉴权。",
           "residual_risk": "同上；仅该文件。"
@@ -5625,7 +5796,8 @@
           "verdict": "partially-confirmed",
           "evidence": [
             "docs/security-report.json",
-            "skills/autoskill/scripts/run.py"
+            "skills/autoskill/scripts/run.py",
+            "skills/autoskill/SKILL.md"
           ],
           "analysis": "run.py 一处 env 读取（SCREENPIPE_TOKEN）+ http://localhost:3030 调用，属本机声明服务鉴权。",
           "residual_risk": "同上；仅该文件。"
@@ -5637,7 +5809,8 @@
           "title": "Screen-derived summaries plus API key sent to a user-configurable remote endpoint (foundry backend)",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/autoskill/SKILL.md"
           ],
           "analysis": "实读 scripts/backends.py：屏幕派生摘要与 API key 会发往用户可配置的远端 endpoint，属声明能力内的数据外出，而非未声明通道。",
           "residual_risk": "上传内容含屏幕派生文本，用户需自行确认所配 endpoint 可信。"
@@ -5649,14 +5822,15 @@
           "title": "Untrusted screen OCR text is interpolated into an LLM prompt whose output is written as executable SKILL.md files",
           "verdict": "partially-confirmed",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/autoskill/SKILL.md"
           ],
           "analysis": "脚本存在屏幕 OCR 文本进入 LLM prompt 的路径（规则指向 scripts/promote.py）。该结构真实存在，但本次未逐行审读 promote.py 的拼接细节，故不判 confirmed。",
           "residual_risk": "OCR/屏幕文本作为 prompt 输入存在间接注入面；未逐行确认是否有过滤或分隔防护。"
         }
       ],
-      "recommendation": "clear",
-      "maintainer_decision": "clear",
+      "recommendation": "defer",
+      "maintainer_decision": "defer",
       "adaptations": [],
       "independent_blockers": [
         "outside-plugin-authority",
@@ -5673,9 +5847,9 @@
       },
       "inventory": {
         "summary": {
-          "files": 7,
-          "bytes": 72081,
-          "references": 4,
+          "files": 8,
+          "bytes": 90984,
+          "references": 5,
           "scripts": 2,
           "assets": 0,
           "tests_or_evals": 0,
@@ -5684,31 +5858,35 @@
         "files": [
           {
             "source_path": "skills/waypoint-bio/references/cli-reference.md",
-            "bytes": 8988
+            "bytes": 10874
           },
           {
             "source_path": "skills/waypoint-bio/references/compass-benchmark.md",
-            "bytes": 6952
+            "bytes": 8107
           },
           {
             "source_path": "skills/waypoint-bio/references/data-preparation.md",
-            "bytes": 8397
+            "bytes": 11155
           },
           {
             "source_path": "skills/waypoint-bio/references/python-api.md",
-            "bytes": 8440
+            "bytes": 10681
+          },
+          {
+            "source_path": "skills/waypoint-bio/references/upstream-review.md",
+            "bytes": 5434
           },
           {
             "source_path": "skills/waypoint-bio/scripts/profiler_to_waypoint.py",
-            "bytes": 16893
+            "bytes": 18410
           },
           {
             "source_path": "skills/waypoint-bio/scripts/vocab_coverage.py",
-            "bytes": 8318
+            "bytes": 9657
           },
           {
             "source_path": "skills/waypoint-bio/SKILL.md",
-            "bytes": 14093
+            "bytes": 16666
           }
         ]
       },
@@ -5717,6 +5895,7 @@
         "skills/waypoint-bio/references/compass-benchmark.md",
         "skills/waypoint-bio/references/data-preparation.md",
         "skills/waypoint-bio/references/python-api.md",
+        "skills/waypoint-bio/references/upstream-review.md",
         "skills/waypoint-bio/scripts/profiler_to_waypoint.py",
         "skills/waypoint-bio/scripts/vocab_coverage.py",
         "skills/waypoint-bio/SKILL.md"
@@ -5729,7 +5908,8 @@
           "title": "Python code block uses eval/exec",
           "verdict": "false-positive",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/waypoint-bio/SKILL.md"
           ],
           "analysis": "实读 references/python-api.md 第 118 行（报告记 117，0-based）：model = AutoModel.from_pretrained(model_id).eval()，是 transformers 推理模式，非 Python 内置 eval/exec。",
           "residual_risk": "无：文档示例为常规 HuggingFace 推理用法。"
@@ -5741,7 +5921,8 @@
           "title": "Python code block executes shell commands",
           "verdict": "false-positive",
           "evidence": [
-            "docs/security-report.json"
+            "docs/security-report.json",
+            "skills/waypoint-bio/SKILL.md"
           ],
           "analysis": "实读 references/python-api.md 约第 203 行：subprocess.run([\"waypoint\",\"finetune\",...]) 的 CLI 示例，固定 argv 列表、无 shell=True、无用户输入拼接。",
           "residual_risk": "示例执行本地 waypoint CLI；仅在用户显式按其运行时有效，不构成注入面。"
@@ -5754,6 +5935,1064 @@
         "tooluniverse-semantic-overlap"
       ],
       "proposed_domains": []
+    },
+    {
+      "skill_id": "generate-image",
+      "batch": 9,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 3,
+          "bytes": 65494,
+          "references": 1,
+          "scripts": 1,
+          "assets": 0,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/generate-image/references/models.md",
+            "bytes": 15244
+          },
+          {
+            "source_path": "skills/generate-image/scripts/generate_image.py",
+            "bytes": 32385
+          },
+          {
+            "source_path": "skills/generate-image/SKILL.md",
+            "bytes": 17865
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/generate-image/references/models.md",
+        "skills/generate-image/scripts/generate_image.py",
+        "skills/generate-image/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Project an image brief, evidence verification and optional target-Agent generic generation with separate consent for destination, shared material and cost."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/generate-image/scripts/generate_image.py",
+          "note": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/generate-image/references/models.md",
+          "note": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "scientific-visualization-and-communication"
+      ]
+    },
+    {
+      "skill_id": "ginkgo-cloud-lab",
+      "batch": 9,
+      "upstream": {
+        "highest_severity": "low",
+        "finding_count": 1
+      },
+      "inventory": {
+        "summary": {
+          "files": 19,
+          "bytes": 58019,
+          "references": 18,
+          "scripts": 0,
+          "assets": 0,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-hibit.md",
+            "bytes": 2497
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-optimization.md",
+            "bytes": 3026
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-validation.md",
+            "bytes": 2331
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/cfps-expression-purification-quantification.md",
+            "bytes": 2895
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/cfps-strep-purification-thermal-shift.md",
+            "bytes": 3084
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/cfps-strep-tag-purification-a280.md",
+            "bytes": 2458
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/echo-ms-cfps-detection.md",
+            "bytes": 2245
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/echo-ms-method-onboarding.md",
+            "bytes": 2820
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/ecoli-expression-purification-quantification.md",
+            "bytes": 2676
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/ecoli-minibinder-expression-histag-a280.md",
+            "bytes": 2777
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/ecoli-protein-expression-hibit.md",
+            "bytes": 2427
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/ecoli-protein-expression-histag-a280.md",
+            "bytes": 2414
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/fluorescent-pixel-art-generation.md",
+            "bytes": 3305
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/ivt-rna-synthesis-qpcr.md",
+            "bytes": 2829
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/minibinder-strep-tag-a280.md",
+            "bytes": 2229
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/pichia-protein-expression-labchip.md",
+            "bytes": 2490
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/plate-reader-assay-onboarding.md",
+            "bytes": 1377
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/references/spr-target-onboarding.md",
+            "bytes": 2883
+          },
+          {
+            "source_path": "skills/ginkgo-cloud-lab/SKILL.md",
+            "bytes": 11256
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-hibit.md",
+        "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-optimization.md",
+        "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-validation.md",
+        "skills/ginkgo-cloud-lab/references/cfps-expression-purification-quantification.md",
+        "skills/ginkgo-cloud-lab/references/cfps-strep-purification-thermal-shift.md",
+        "skills/ginkgo-cloud-lab/references/cfps-strep-tag-purification-a280.md",
+        "skills/ginkgo-cloud-lab/references/echo-ms-cfps-detection.md",
+        "skills/ginkgo-cloud-lab/references/echo-ms-method-onboarding.md",
+        "skills/ginkgo-cloud-lab/references/ecoli-expression-purification-quantification.md",
+        "skills/ginkgo-cloud-lab/references/ecoli-minibinder-expression-histag-a280.md",
+        "skills/ginkgo-cloud-lab/references/ecoli-protein-expression-hibit.md",
+        "skills/ginkgo-cloud-lab/references/ecoli-protein-expression-histag-a280.md",
+        "skills/ginkgo-cloud-lab/references/fluorescent-pixel-art-generation.md",
+        "skills/ginkgo-cloud-lab/references/ivt-rna-synthesis-qpcr.md",
+        "skills/ginkgo-cloud-lab/references/minibinder-strep-tag-a280.md",
+        "skills/ginkgo-cloud-lab/references/pichia-protein-expression-labchip.md",
+        "skills/ginkgo-cloud-lab/references/plate-reader-assay-onboarding.md",
+        "skills/ginkgo-cloud-lab/references/spr-target-onboarding.md",
+        "skills/ginkgo-cloud-lab/SKILL.md"
+      ],
+      "findings": [
+        {
+          "finding_id": "ginkgo-cloud-lab:1",
+          "code": "LLM_POLICY_VIOLATION",
+          "severity": "low",
+          "title": "Self-promotional citation directive plus network fetch beyond declared Read-only tools",
+          "verdict": "partially-confirmed",
+          "evidence": [
+            "docs/security-report.json",
+            "skills/ginkgo-cloud-lab/SKILL.md"
+          ],
+          "analysis": "The source includes the vendor self-citation directive. The curated projection keeps attribution optional and omits the network fetch instruction.",
+          "residual_risk": "External transaction and sample-transfer guidance is outside the curated entry."
+        }
+      ],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Project advisory comparison, quote assumptions, permissions and evidence expectations. Keep lab operation, ordering, account access and transfer of sample or design materials outside this procedure."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-hibit.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-optimization.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-validation.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/cfps-expression-purification-quantification.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/cfps-strep-purification-thermal-shift.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/cfps-strep-tag-purification-a280.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/echo-ms-cfps-detection.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/echo-ms-method-onboarding.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/ecoli-expression-purification-quantification.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/ecoli-minibinder-expression-histag-a280.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/ecoli-protein-expression-hibit.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/ecoli-protein-expression-histag-a280.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/fluorescent-pixel-art-generation.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/ivt-rna-synthesis-qpcr.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/minibinder-strep-tag-a280.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/pichia-protein-expression-labchip.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/plate-reader-assay-onboarding.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        },
+        {
+          "kind": "resource-exclusion",
+          "source_path": "skills/ginkgo-cloud-lab/references/spr-target-onboarding.md",
+          "note": "Keep operational laboratory service guidance and ordering resources outside the advisory projection."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "control-engineering-mechatronics-and-robotics",
+        "laboratory-automation-and-informatics"
+      ]
+    },
+    {
+      "skill_id": "marine-carbonate-chemistry",
+      "batch": 9,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 4,
+          "bytes": 33085,
+          "references": 2,
+          "scripts": 1,
+          "assets": 0,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/marine-carbonate-chemistry/references/chemistry-decisions.md",
+            "bytes": 6520
+          },
+          {
+            "source_path": "skills/marine-carbonate-chemistry/references/input-and-results.md",
+            "bytes": 4827
+          },
+          {
+            "source_path": "skills/marine-carbonate-chemistry/scripts/solve_carbonate.py",
+            "bytes": 12190
+          },
+          {
+            "source_path": "skills/marine-carbonate-chemistry/SKILL.md",
+            "bytes": 9548
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/marine-carbonate-chemistry/references/chemistry-decisions.md",
+        "skills/marine-carbonate-chemistry/references/input-and-results.md",
+        "skills/marine-carbonate-chemistry/scripts/solve_carbonate.py",
+        "skills/marine-carbonate-chemistry/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Use authorized local data and a fresh output directory. Record units, chemical assumptions, and uncertainty."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "oceanography"
+      ]
+    },
+    {
+      "skill_id": "nmrglue",
+      "batch": 10,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 4,
+          "bytes": 25756,
+          "references": 1,
+          "scripts": 1,
+          "assets": 1,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/nmrglue/assets/processing.json",
+            "bytes": 364
+          },
+          {
+            "source_path": "skills/nmrglue/references/acquisition-and-validation.md",
+            "bytes": 6157
+          },
+          {
+            "source_path": "skills/nmrglue/scripts/process_1d.py",
+            "bytes": 10787
+          },
+          {
+            "source_path": "skills/nmrglue/SKILL.md",
+            "bytes": 8448
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/nmrglue/assets/processing.json",
+        "skills/nmrglue/references/acquisition-and-validation.md",
+        "skills/nmrglue/scripts/process_1d.py",
+        "skills/nmrglue/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Use explicit local signals and preserve calibration. Treat imported files as untrusted and keep the upstream binary test fixture outside distribution."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "analytical-chemistry"
+      ]
+    },
+    {
+      "skill_id": "nwb-conversion",
+      "batch": 10,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 5,
+          "bytes": 33884,
+          "references": 2,
+          "scripts": 1,
+          "assets": 1,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/nwb-conversion/assets/session-template.json",
+            "bytes": 1340
+          },
+          {
+            "source_path": "skills/nwb-conversion/references/input-contract.md",
+            "bytes": 4842
+          },
+          {
+            "source_path": "skills/nwb-conversion/references/upstream-review.md",
+            "bytes": 4023
+          },
+          {
+            "source_path": "skills/nwb-conversion/scripts/convert_session.py",
+            "bytes": 16098
+          },
+          {
+            "source_path": "skills/nwb-conversion/SKILL.md",
+            "bytes": 7581
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/nwb-conversion/assets/session-template.json",
+        "skills/nwb-conversion/references/input-contract.md",
+        "skills/nwb-conversion/references/upstream-review.md",
+        "skills/nwb-conversion/scripts/convert_session.py",
+        "skills/nwb-conversion/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Keep data and conversion local. Accept the NWB only with a complete validation and round-trip report."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "neurosciences"
+      ]
+    },
+    {
+      "skill_id": "pybamm",
+      "batch": 10,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 4,
+          "bytes": 29197,
+          "references": 1,
+          "scripts": 1,
+          "assets": 1,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/pybamm/assets/chen2020-protocol.json",
+            "bytes": 340
+          },
+          {
+            "source_path": "skills/pybamm/references/protocol-and-comparison.md",
+            "bytes": 8330
+          },
+          {
+            "source_path": "skills/pybamm/scripts/simulate_battery.py",
+            "bytes": 13242
+          },
+          {
+            "source_path": "skills/pybamm/SKILL.md",
+            "bytes": 7285
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/pybamm/assets/chen2020-protocol.json",
+        "skills/pybamm/references/protocol-and-comparison.md",
+        "skills/pybamm/scripts/simulate_battery.py",
+        "skills/pybamm/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Use a provisioned solver, fresh output directory and explicit assumptions. Record numerical sensitivity and any limits of the comparison with measurements."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "electrical-engineering",
+        "computational-modeling-and-simulation"
+      ]
+    },
+    {
+      "skill_id": "pycalphad",
+      "batch": 10,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 5,
+          "bytes": 30499,
+          "references": 1,
+          "scripts": 1,
+          "assets": 2,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/pycalphad/assets/equilibrium.json",
+            "bytes": 443
+          },
+          {
+            "source_path": "skills/pycalphad/assets/ideal-cu-ni.tdb",
+            "bytes": 702
+          },
+          {
+            "source_path": "skills/pycalphad/references/model-and-validation.md",
+            "bytes": 10048
+          },
+          {
+            "source_path": "skills/pycalphad/scripts/equilibrate.py",
+            "bytes": 11112
+          },
+          {
+            "source_path": "skills/pycalphad/SKILL.md",
+            "bytes": 8194
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/pycalphad/assets/equilibrium.json",
+        "skills/pycalphad/assets/ideal-cu-ni.tdb",
+        "skills/pycalphad/references/model-and-validation.md",
+        "skills/pycalphad/scripts/equilibrate.py",
+        "skills/pycalphad/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Retain the hypothetical TDB attribution and scope. Use separately licensed local assessed databases for experimental conclusions."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "materials-engineering",
+        "computational-modeling-and-simulation"
+      ]
+    },
+    {
+      "skill_id": "flowkit",
+      "batch": 10,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 4,
+          "bytes": 28909,
+          "references": 2,
+          "scripts": 1,
+          "assets": 0,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/flowkit/references/compensation-and-gating.md",
+            "bytes": 4878
+          },
+          {
+            "source_path": "skills/flowkit/references/workspaces-and-results.md",
+            "bytes": 6505
+          },
+          {
+            "source_path": "skills/flowkit/scripts/analyze_gates.py",
+            "bytes": 8777
+          },
+          {
+            "source_path": "skills/flowkit/SKILL.md",
+            "bytes": 8749
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/flowkit/references/compensation-and-gating.md",
+        "skills/flowkit/references/workspaces-and-results.md",
+        "skills/flowkit/scripts/analyze_gates.py",
+        "skills/flowkit/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Keep authorized local inputs explicit and use a fresh output directory. Treat imported workspace and sample files as untrusted."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "biochemistry-and-cell-biology"
+      ]
+    },
+    {
+      "skill_id": "cellprofiler",
+      "batch": 11,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 4,
+          "bytes": 32356,
+          "references": 1,
+          "scripts": 1,
+          "assets": 1,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/cellprofiler/assets/nuclei.cppipe",
+            "bytes": 5663
+          },
+          {
+            "source_path": "skills/cellprofiler/references/runtime-and-qc.md",
+            "bytes": 7703
+          },
+          {
+            "source_path": "skills/cellprofiler/scripts/nuclei_assay.py",
+            "bytes": 11283
+          },
+          {
+            "source_path": "skills/cellprofiler/SKILL.md",
+            "bytes": 7707
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/cellprofiler/assets/nuclei.cppipe",
+        "skills/cellprofiler/references/runtime-and-qc.md",
+        "skills/cellprofiler/scripts/nuclei_assay.py",
+        "skills/cellprofiler/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Use a trusted, user-provisioned local application and explicit image permissions. Keep external image transfer and container provisioning outside the procedure."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "biomedical-engineering"
+      ]
+    },
+    {
+      "skill_id": "13c-metabolic-flux",
+      "batch": 11,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 16,
+          "bytes": 82505,
+          "references": 2,
+          "scripts": 3,
+          "assets": 10,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/13c-metabolic-flux/assets/branch-fluxes.json",
+            "bytes": 69
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/assets/branch-identifiable.json",
+            "bytes": 823
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/assets/branch-model.json",
+            "bytes": 2103
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/assets/branch-unresolved.json",
+            "bytes": 978
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/assets/mfapy-license.txt",
+            "bytes": 1069
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/assets/requirements.txt",
+            "bytes": 136
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/assets/tca-fluxes.json",
+            "bytes": 114
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/assets/tca-model.json",
+            "bytes": 4215
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/assets/tca-reference-mdv.json",
+            "bytes": 2468
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/assets/tca-tracer.json",
+            "bytes": 570
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/references/inference.md",
+            "bytes": 10088
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/references/input-contract.md",
+            "bytes": 8189
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/scripts/_mfa_fit.py",
+            "bytes": 13635
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/scripts/_mfa_model.py",
+            "bytes": 20941
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/scripts/mfa.py",
+            "bytes": 4396
+          },
+          {
+            "source_path": "skills/13c-metabolic-flux/SKILL.md",
+            "bytes": 12711
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/13c-metabolic-flux/assets/branch-fluxes.json",
+        "skills/13c-metabolic-flux/assets/branch-identifiable.json",
+        "skills/13c-metabolic-flux/assets/branch-model.json",
+        "skills/13c-metabolic-flux/assets/branch-unresolved.json",
+        "skills/13c-metabolic-flux/assets/mfapy-license.txt",
+        "skills/13c-metabolic-flux/assets/requirements.txt",
+        "skills/13c-metabolic-flux/assets/tca-fluxes.json",
+        "skills/13c-metabolic-flux/assets/tca-model.json",
+        "skills/13c-metabolic-flux/assets/tca-reference-mdv.json",
+        "skills/13c-metabolic-flux/assets/tca-tracer.json",
+        "skills/13c-metabolic-flux/references/inference.md",
+        "skills/13c-metabolic-flux/references/input-contract.md",
+        "skills/13c-metabolic-flux/scripts/_mfa_fit.py",
+        "skills/13c-metabolic-flux/scripts/_mfa_model.py",
+        "skills/13c-metabolic-flux/scripts/mfa.py",
+        "skills/13c-metabolic-flux/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Use local measured data and user-provisioned dependencies. Preserve the adapted example notice and report model identifiability limits."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "biochemistry-and-cell-biology",
+        "computational-modeling-and-simulation"
+      ]
+    },
+    {
+      "skill_id": "cantera",
+      "batch": 11,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 4,
+          "bytes": 23034,
+          "references": 1,
+          "scripts": 1,
+          "assets": 1,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/cantera/assets/hydrogen-ignition.json",
+            "bytes": 416
+          },
+          {
+            "source_path": "skills/cantera/references/interpretation.md",
+            "bytes": 3273
+          },
+          {
+            "source_path": "skills/cantera/scripts/ignition_delay.py",
+            "bytes": 10719
+          },
+          {
+            "source_path": "skills/cantera/SKILL.md",
+            "bytes": 8626
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/cantera/assets/hydrogen-ignition.json",
+        "skills/cantera/references/interpretation.md",
+        "skills/cantera/scripts/ignition_delay.py",
+        "skills/cantera/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Use a trusted local mechanism and a provisioned runtime. Keep untrusted executable extensions outside the procedure and preserve provenance and numerical limits."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "physical-chemistry",
+        "computational-modeling-and-simulation"
+      ]
+    },
+    {
+      "skill_id": "qiime2-amplicon",
+      "batch": 11,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 3,
+          "bytes": 37901,
+          "references": 1,
+          "scripts": 1,
+          "assets": 0,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/qiime2-amplicon/references/runtime-and-interpretation.md",
+            "bytes": 13632
+          },
+          {
+            "source_path": "skills/qiime2-amplicon/scripts/amplicon_workflow.py",
+            "bytes": 15621
+          },
+          {
+            "source_path": "skills/qiime2-amplicon/SKILL.md",
+            "bytes": 8648
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/qiime2-amplicon/references/runtime-and-interpretation.md",
+        "skills/qiime2-amplicon/scripts/amplicon_workflow.py",
+        "skills/qiime2-amplicon/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Use authorized local data, a provisioned runtime and a fresh output location. Record classifier provenance and keep external data transfer outside the procedure."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "microbiology"
+      ]
+    },
+    {
+      "skill_id": "relion",
+      "batch": 11,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 4,
+          "bytes": 38421,
+          "references": 2,
+          "scripts": 1,
+          "assets": 0,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/relion/references/acquisition-and-restarts.md",
+            "bytes": 6113
+          },
+          {
+            "source_path": "skills/relion/references/runtime-and-validation.md",
+            "bytes": 7103
+          },
+          {
+            "source_path": "skills/relion/scripts/spa_workflow.py",
+            "bytes": 17110
+          },
+          {
+            "source_path": "skills/relion/SKILL.md",
+            "bytes": 8095
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/relion/references/acquisition-and-restarts.md",
+        "skills/relion/references/runtime-and-validation.md",
+        "skills/relion/scripts/spa_workflow.py",
+        "skills/relion/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Confirm executable identity, local inputs and output location. Keep scheduler submissions and external data transfer outside the procedure."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "biochemistry-and-cell-biology"
+      ]
+    },
+    {
+      "skill_id": "tellurium",
+      "batch": 12,
+      "upstream": {
+        "highest_severity": "none",
+        "finding_count": 0
+      },
+      "inventory": {
+        "summary": {
+          "files": 5,
+          "bytes": 28719,
+          "references": 1,
+          "scripts": 1,
+          "assets": 2,
+          "tests_or_evals": 0,
+          "environment_templates": 0
+        },
+        "files": [
+          {
+            "source_path": "skills/tellurium/assets/experiment.json",
+            "bytes": 195
+          },
+          {
+            "source_path": "skills/tellurium/assets/first-order.ant",
+            "bytes": 464
+          },
+          {
+            "source_path": "skills/tellurium/references/experiments.md",
+            "bytes": 7362
+          },
+          {
+            "source_path": "skills/tellurium/scripts/kinetic_experiment.py",
+            "bytes": 12598
+          },
+          {
+            "source_path": "skills/tellurium/SKILL.md",
+            "bytes": 8100
+          }
+        ]
+      },
+      "reviewed_paths": [
+        "skills/tellurium/assets/experiment.json",
+        "skills/tellurium/assets/first-order.ant",
+        "skills/tellurium/references/experiments.md",
+        "skills/tellurium/scripts/kinetic_experiment.py",
+        "skills/tellurium/SKILL.md"
+      ],
+      "findings": [],
+      "recommendation": "clear-with-adaptation",
+      "maintainer_decision": "clear-with-adaptation",
+      "adaptations": [
+        {
+          "kind": "generated-entry-guidance",
+          "source_path": null,
+          "note": "Accept trusted local model inputs and use a fresh output directory. Keep runtime provisioning and external transfers outside the procedure."
+        }
+      ],
+      "independent_blockers": [],
+      "proposed_domains": [
+        "biochemistry-and-cell-biology",
+        "computational-modeling-and-simulation"
+      ]
     }
   ]
 }

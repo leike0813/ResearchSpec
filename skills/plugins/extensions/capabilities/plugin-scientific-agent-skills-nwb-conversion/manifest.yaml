@@ -1,0 +1,80 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-nwb-conversion
+title: Validated NWB conversion
+description: Converts neuroscience acquisition data to Neurodata Without Borders
+  files with NeuroConv and PyNWB, preserves metadata and timebases, checks
+  evidence-based clock alignment, and produces schema validation, NWB Inspector
+  findings and round-trip checks. Use for NWB conversion and synchronization of
+  planar single-channel two-photon TIFF imaging plus timestamped behavioral
+  position CSV; this skill does not perform spike sorting or claim tested
+  support for arbitrary acquisition formats.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-session-template.json
+    path: assets/session-template.json
+    content_hash: efe7d85508eec5fe49fba5bfc5c0c6785ffe1fe2588e7b55bb2838016992c9d9
+    license: MIT
+  - knowledge_id: sas-references-input-contract.md
+    path: references/input-contract.md
+    content_hash: 9677db406ecfd6bff0c77db55bc7db41648fab87dd58f55e25ccddc5d3eb4074
+    license: MIT
+  - knowledge_id: sas-references-upstream-review.md
+    path: references/upstream-review.md
+    content_hash: 41bd3978155c6558069d56c42d706dddd81a3f6097121ca2291fc3997b28f47c
+    license: MIT
+  - knowledge_id: sas-scripts-convert-session.py
+    path: scripts/convert_session.py
+    content_hash: 8de66511b2adb49bd02e1a9a2a6c1953626a09452275b306bbf2bf8bf24453e7
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nwb-conversion/SKILL.md
+      sha256: 36f4cb05deca3b18ef3471657bb916efd4f94deb30a24a834cc44baaa29d2ac5
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nwb-conversion/assets/session-template.json
+      sha256: efe7d85508eec5fe49fba5bfc5c0c6785ffe1fe2588e7b55bb2838016992c9d9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nwb-conversion/references/input-contract.md
+      sha256: 9677db406ecfd6bff0c77db55bc7db41648fab87dd58f55e25ccddc5d3eb4074
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nwb-conversion/references/upstream-review.md
+      sha256: 41bd3978155c6558069d56c42d706dddd81a3f6097121ca2291fc3997b28f47c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nwb-conversion/scripts/convert_session.py
+      sha256: 8de66511b2adb49bd02e1a9a2a6c1953626a09452275b306bbf2bf8bf24453e7
+license: MIT

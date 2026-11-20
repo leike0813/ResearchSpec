@@ -1,11 +1,10 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-scientific-schematics
 title: Scientific Schematics and Diagrams
-description: Create publication-quality scientific diagrams using Nano Banana 2
-  AI with smart iterative refinement. Uses Gemini 3.6 Flash for quality review.
-  Only regenerates if quality is below threshold for your document type.
-  Specialized in neural network architectures, system diagrams, flowcharts,
-  biological pathways, and complex scientific visualizations.
+description: Designs scientific diagrams as verifiable specifications and
+  reviewed figures for architectures, system and data-flow diagrams,
+  study-design flowcharts, biological pathways, circuits, conceptual frameworks,
+  and other complex scientific visualizations.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -47,20 +46,14 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-best-practices.md
     path: references/best_practices.md
-    content_hash: bf8368c60e6e5db0f612501d1abf38170502d001125523b89c8fb86b6d08fd16
-    license: MIT
-  - knowledge_id: sas-references-iterative-refinement.md
-    path: references/iterative_refinement.md
-    content_hash: 843f952647c3b94bb5f733964af7a97b1e9f02f58ce5c8c77b2b992bc5467a70
+    content_hash: a991e1f2219feaffea93360c39cb5a7102c7cd8985c0c7aafc68fa617d3b8581
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-schematics/SKILL.md
-      sha256: 632af28191d15d72e5f3aca3f8fbc4e36d84c6e1dab937adf2ccf6bf58ce93e5
+      sha256: e93ef8ed365af9555a27a792e983be0b73bf585ba11b7c221df35bdeaabd8b1e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-schematics/references/best_practices.md
-      sha256: bf8368c60e6e5db0f612501d1abf38170502d001125523b89c8fb86b6d08fd16
-    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-scientific-schematics/references/iterative_refinement.md
-      sha256: 843f952647c3b94bb5f733964af7a97b1e9f02f58ce5c8c77b2b992bc5467a70
+      sha256: a991e1f2219feaffea93360c39cb5a7102c7cd8985c0c7aafc68fa617d3b8581
 license: MIT

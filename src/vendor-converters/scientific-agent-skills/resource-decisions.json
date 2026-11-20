@@ -3,6 +3,153 @@
   "default_disposition": "included",
   "decisions": [
     {
+      "upstream_skill_id": "generate-image",
+      "source_path": "skills/generate-image/references/models.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "generate-image",
+      "source_path": "skills/generate-image/scripts/generate_image.py",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-hibit.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-optimization.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/cell-free-protein-expression-validation.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/cfps-expression-purification-quantification.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/cfps-strep-purification-thermal-shift.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/cfps-strep-tag-purification-a280.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/echo-ms-cfps-detection.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/echo-ms-method-onboarding.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/ecoli-expression-purification-quantification.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/ecoli-minibinder-expression-histag-a280.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/ecoli-protein-expression-hibit.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/ecoli-protein-expression-histag-a280.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/fluorescent-pixel-art-generation.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/ivt-rna-synthesis-qpcr.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/minibinder-strep-tag-a280.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/pichia-protein-expression-labchip.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/plate-reader-assay-onboarding.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "ginkgo-cloud-lab",
+      "source_path": "skills/ginkgo-cloud-lab/references/spr-target-onboarding.md",
+      "disposition": "excluded",
+      "reason": "Keep operational laboratory service guidance and ordering resources outside the advisory projection.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "infographics",
+      "source_path": "skills/infographics/references/iterative_refinement.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure.",
+      "skill_remains_complete": true
+    },
+    {
       "upstream_skill_id": "infographics",
       "source_path": "skills/infographics/scripts/generate_infographic_ai.py",
       "disposition": "excluded",
@@ -14,6 +161,13 @@
       "source_path": "skills/infographics/scripts/generate_infographic.py",
       "disposition": "excluded",
       "reason": "Exclude the provider-bound wrapper because it copies the full process environment and forwards credentials to another script.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "latex-posters",
+      "source_path": "skills/latex-posters/references/ai_graphics_for_posters.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure.",
       "skill_remains_complete": true
     },
     {
@@ -39,9 +193,23 @@
     },
     {
       "upstream_skill_id": "pacsomatic",
+      "source_path": "skills/pacsomatic/references/agent-playbook.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "pacsomatic",
       "source_path": "skills/pacsomatic/scripts/run_pacsomatic.py",
       "disposition": "excluded",
       "reason": "Exclude host-mutating execution: cloning an arbitrary repository, creating conda/mamba environments, generating executable launch scripts and submitting jobs to schedulers.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "parallel-web",
+      "source_path": "skills/parallel-web/references/api-contracts.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure.",
       "skill_remains_complete": true
     },
     {
@@ -88,6 +256,13 @@
     },
     {
       "upstream_skill_id": "scientific-schematics",
+      "source_path": "skills/scientific-schematics/references/iterative_refinement.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "scientific-schematics",
       "source_path": "skills/scientific-schematics/scripts/example_usage.sh",
       "disposition": "excluded",
       "reason": "Exclude provider-, model-, credential-, or executable-specific material from the generic adapted Skill.",
@@ -105,6 +280,13 @@
       "source_path": "skills/scientific-schematics/scripts/generate_schematic.py",
       "disposition": "excluded",
       "reason": "Exclude provider-, model-, credential-, or executable-specific material from the generic adapted Skill.",
+      "skill_remains_complete": true
+    },
+    {
+      "upstream_skill_id": "scientific-slides",
+      "source_path": "skills/scientific-slides/references/script_reference.md",
+      "disposition": "excluded",
+      "reason": "Exclude provider-specific, credential-dependent or execution guidance outside the approved procedure.",
       "skill_remains_complete": true
     },
     {

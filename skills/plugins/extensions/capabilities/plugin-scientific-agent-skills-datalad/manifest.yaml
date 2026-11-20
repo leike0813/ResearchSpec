@@ -1,9 +1,9 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-datalad
 title: DataLad
-description: Retrieve, version, and publish scientific datasets with DataLad and
-  git-annex, and capture computational provenance with datalad run, rerun, and
-  containers-run. Use when cloning or fetching data from OpenNeuro, DANDI,
+description: Retrieves, versions, and publishes scientific datasets with DataLad
+  and git-annex, and captures computational provenance with datalad run, rerun,
+  and containers-run. Use when cloning or fetching data from OpenNeuro, DANDI,
   datasets.datalad.org, or any DataLad dataset; when a file in a dataset reads
   as a broken symlink or a small pointer instead of real data; when an analysis
   needs a machine-readable record of how each output was produced so it can be
@@ -51,26 +51,26 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-data-access.md
     path: references/data-access.md
-    content_hash: 37cb3f35c82ba9dcb3d7be051d6dd6116c7d1fc19d0d4484510578e596083e11
+    content_hash: f419bd39ca536562238d7404f0eaa4836c444d38df0cf7121befe936d529b1c7
     license: MIT
   - knowledge_id: sas-references-provenance.md
     path: references/provenance.md
-    content_hash: 402f87d448e2369cb594d9a3002ec3acf0a7477a3908dbe39afd6a2ec4fe4a16
+    content_hash: d9e56071463c5c118800ff5a800dd58ae5de38d04fc465c119ae0c690fc1c542
     license: MIT
   - knowledge_id: sas-references-publishing.md
     path: references/publishing.md
-    content_hash: 859b7f496f49b9e63815dea3a91e57b04f2f029a8a8a30a2d15e39aad4c9599d
+    content_hash: a5efdceeea8086549917e9e2b3bc526c8c7ec9f1e31a8a438c5e8ba9dd18d6cd
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-datalad/SKILL.md
-      sha256: 26b6ed36fa4a3c8e639f9cab0016fb172d02fba301b90b6291971b682c3160b5
+      sha256: 6d8ca2bccd263aa74bb0a51d63b3ac3edcf618fc7d2aa0c27fdabd1c9a4060e8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-datalad/references/data-access.md
-      sha256: 37cb3f35c82ba9dcb3d7be051d6dd6116c7d1fc19d0d4484510578e596083e11
+      sha256: f419bd39ca536562238d7404f0eaa4836c444d38df0cf7121befe936d529b1c7
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-datalad/references/provenance.md
-      sha256: 402f87d448e2369cb594d9a3002ec3acf0a7477a3908dbe39afd6a2ec4fe4a16
+      sha256: d9e56071463c5c118800ff5a800dd58ae5de38d04fc465c119ae0c690fc1c542
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-datalad/references/publishing.md
-      sha256: 859b7f496f49b9e63815dea3a91e57b04f2f029a8a8a30a2d15e39aad4c9599d
+      sha256: a5efdceeea8086549917e9e2b3bc526c8c7ec9f1e31a8a438c5e8ba9dd18d6cd
 license: MIT

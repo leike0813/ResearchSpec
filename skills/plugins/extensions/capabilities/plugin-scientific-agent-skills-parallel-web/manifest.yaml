@@ -1,11 +1,9 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-parallel-web
-title: Parallel Web Toolkit
-description: Use Parallel CLI for web search, URL extraction, deep research,
-  structured data enrichment, entity discovery, and recurring web monitoring.
-  Best for requests that explicitly need current web evidence, academic-source
-  discovery, repeated entity lookups, exhaustive reports, or ongoing change
-  tracking.
+title: Web Evidence Retrieval
+description: Selects and verifies web evidence through a user-authorized search
+  or retrieval capability while keeping source selection, coverage and
+  limitations explicit.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -50,5 +48,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-parallel-web/SKILL.md
-      sha256: 133ccda974fc0e1e30cc7388e5ccba25f4580db9aa3b9705a43833e8e4416704
+      sha256: a260d9ab43b1aa644b6503c3674fe89fd085dd9362bf5ccba018940d55bb383e
 license: MIT

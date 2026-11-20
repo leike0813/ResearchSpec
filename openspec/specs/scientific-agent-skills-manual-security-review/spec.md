@@ -1,24 +1,24 @@
 ## Purpose
 
-Define the finding-level manual security review process for the 40 Scientific Agent
-Skills v2.53.0 candidates carrying `static-security-review-failed`, including
+Define the finding-level manual security review process for the pinned Scientific Agent
+Skills inventory, including
 attack-surface inspection, evidence standards, maintainer decision workflow, and
 human-readable reporting while preserving the immutable upstream audit.
 
 ## Requirements
 
 ### Requirement: Exact Manual Security Review Inventory
-ResearchSpec SHALL maintain one finding-level manual security review record for every Scientific Agent Skills v2.70.0 production decision carrying `static-security-review-failed`, bound to the pinned vendor release and revision without modifying the immutable upstream audit.
+ResearchSpec SHALL maintain one finding-level manual security review record for every required v2.72.0 review target and bind it to the pinned release and revision.
 
 #### Scenario: Review target coverage is complete
 - **WHEN** the manual review catalog is validated
-- **THEN** the current high-severity candidates and retained approved curation targets appear once in stable order
-- **AND** no unrelated, duplicate, unknown, or differently revised Skill appears
+- **THEN** current high-severity candidates and applicable retained curation targets SHALL appear once in stable order
+- **AND** all entries SHALL resolve to a Skill at the pinned revision
 
 #### Scenario: Upstream evidence remains reproducible
-- **WHEN** ResearchSpec resolves an upstream security finding
-- **THEN** the original audit and upstream `docs/security-report.json` remain unchanged
-- **AND** the manual record cites the pinned report and actual Skill-tree evidence separately
+- **WHEN** ResearchSpec reviews a carried finding or a Skill missing from the upstream report
+- **THEN** the audit SHALL preserve the original upstream report and record its coverage
+- **AND** the manual review SHALL cite the dated report and actual pinned Skill-tree evidence separately
 
 ### Requirement: Complete Local Attack-Surface Review
 Each target review SHALL enumerate the actual pinned resource tree and SHALL inspect the entry, every executable and configuration resource, and every reachable instruction resource without executing scripts, installing dependencies, configuring credentials, or contacting services.

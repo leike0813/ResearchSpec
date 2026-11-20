@@ -4,14 +4,27 @@
     "vendor_id": "scientific-agent-skills",
     "name": "Scientific Agent Skills",
     "repository_url": "https://github.com/K-Dense-AI/scientific-agent-skills",
-    "release": "v2.70.0",
-    "revision": "d0c48af8c7b7a71ccc81fcd04c9db53b48439f9b",
+    "release": "v2.72.0",
+    "revision": "526ebce143bc326f44471554e33d66a19c840360",
     "license": "MIT",
     "converter_version": "2",
     "skills": [
       {
-        "skill_id": "scientific-agent-skills-aeon",
+        "skill_id": "scientific-agent-skills-13c-metabolic-flux",
         "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/13c-metabolic-flux"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-aeon",
+        "license": "BSD-3-Clause",
         "dependencies": [],
         "upstreams": [
           {
@@ -37,7 +50,7 @@
       },
       {
         "skill_id": "scientific-agent-skills-astropy",
-        "license": "MIT",
+        "license": "BSD-3-Clause",
         "dependencies": [],
         "upstreams": [
           {
@@ -62,8 +75,34 @@
         ]
       },
       {
-        "skill_id": "scientific-agent-skills-cirq",
+        "skill_id": "scientific-agent-skills-cantera",
         "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/cantera"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-cellprofiler",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/cellprofiler"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-cirq",
+        "license": "Apache-2.0",
         "dependencies": [],
         "upstreams": [
           {
@@ -82,6 +121,19 @@
           {
             "source_paths": [
               "skills/datalad"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-flowkit",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/flowkit"
             ],
             "adaptation": "converted"
           }
@@ -219,7 +271,7 @@
       },
       {
         "skill_id": "scientific-agent-skills-liteparse",
-        "license": "MIT",
+        "license": "Apache-2.0",
         "dependencies": [],
         "upstreams": [
           {
@@ -231,8 +283,21 @@
         ]
       },
       {
-        "skill_id": "scientific-agent-skills-markdown-mermaid-writing",
+        "skill_id": "scientific-agent-skills-marine-carbonate-chemistry",
         "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/marine-carbonate-chemistry"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-markdown-mermaid-writing",
+        "license": "Apache-2.0",
         "dependencies": [],
         "upstreams": [
           {
@@ -271,7 +336,7 @@
       },
       {
         "skill_id": "scientific-agent-skills-matplotlib",
-        "license": "MIT",
+        "license": "LicenseRef-Matplotlib",
         "dependencies": [],
         "upstreams": [
           {
@@ -284,7 +349,7 @@
       },
       {
         "skill_id": "scientific-agent-skills-modal",
-        "license": "MIT",
+        "license": "Apache-2.0",
         "dependencies": [],
         "upstreams": [
           {
@@ -297,12 +362,38 @@
       },
       {
         "skill_id": "scientific-agent-skills-networkx",
-        "license": "MIT",
+        "license": "BSD-3-Clause",
         "dependencies": [],
         "upstreams": [
           {
             "source_paths": [
               "skills/networkx"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-nmrglue",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/nmrglue"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-nwb-conversion",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/nwb-conversion"
             ],
             "adaptation": "converted"
           }
@@ -388,7 +479,7 @@
       },
       {
         "skill_id": "scientific-agent-skills-pennylane",
-        "license": "MIT",
+        "license": "Apache-2.0",
         "dependencies": [],
         "upstreams": [
           {
@@ -439,6 +530,32 @@
         ]
       },
       {
+        "skill_id": "scientific-agent-skills-pybamm",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/pybamm"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-pycalphad",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/pycalphad"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
         "skill_id": "scientific-agent-skills-pylabrobot",
         "license": "MIT",
         "dependencies": [],
@@ -466,7 +583,7 @@
       },
       {
         "skill_id": "scientific-agent-skills-pymoo",
-        "license": "MIT",
+        "license": "Apache-2.0",
         "dependencies": [],
         "upstreams": [
           {
@@ -479,7 +596,7 @@
       },
       {
         "skill_id": "scientific-agent-skills-pytorch-lightning",
-        "license": "MIT",
+        "license": "Apache-2.0",
         "dependencies": [],
         "upstreams": [
           {
@@ -504,8 +621,21 @@
         ]
       },
       {
-        "skill_id": "scientific-agent-skills-qiskit",
+        "skill_id": "scientific-agent-skills-qiime2-amplicon",
         "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/qiime2-amplicon"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-qiskit",
+        "license": "Apache-2.0",
         "dependencies": [],
         "upstreams": [
           {
@@ -524,6 +654,19 @@
           {
             "source_paths": [
               "skills/qutip"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-relion",
+        "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/relion"
             ],
             "adaptation": "converted"
           }
@@ -583,7 +726,7 @@
       },
       {
         "skill_id": "scientific-agent-skills-scikit-learn",
-        "license": "MIT",
+        "license": "BSD-3-Clause",
         "dependencies": [],
         "upstreams": [
           {
@@ -596,7 +739,7 @@
       },
       {
         "skill_id": "scientific-agent-skills-seaborn",
-        "license": "MIT",
+        "license": "BSD-3-Clause",
         "dependencies": [],
         "upstreams": [
           {
@@ -648,7 +791,7 @@
       },
       {
         "skill_id": "scientific-agent-skills-sympy",
-        "license": "MIT",
+        "license": "BSD-3-Clause",
         "dependencies": [],
         "upstreams": [
           {
@@ -660,8 +803,21 @@
         ]
       },
       {
-        "skill_id": "scientific-agent-skills-timesfm-forecasting",
+        "skill_id": "scientific-agent-skills-tellurium",
         "license": "MIT",
+        "dependencies": [],
+        "upstreams": [
+          {
+            "source_paths": [
+              "skills/tellurium"
+            ],
+            "adaptation": "converted"
+          }
+        ]
+      },
+      {
+        "skill_id": "scientific-agent-skills-timesfm-forecasting",
+        "license": "Apache-2.0",
         "dependencies": [],
         "upstreams": [
           {
@@ -687,7 +843,7 @@
       },
       {
         "skill_id": "scientific-agent-skills-transformers",
-        "license": "MIT",
+        "license": "Apache-2.0",
         "dependencies": [],
         "upstreams": [
           {
@@ -700,7 +856,7 @@
       },
       {
         "skill_id": "scientific-agent-skills-umap-learn",
-        "license": "MIT",
+        "license": "BSD-3-Clause",
         "dependencies": [],
         "upstreams": [
           {

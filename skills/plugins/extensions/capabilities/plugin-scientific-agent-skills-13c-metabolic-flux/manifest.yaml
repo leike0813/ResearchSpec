@@ -1,0 +1,147 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-13c-metabolic-flux
+title: Carbon-13 metabolic flux inference
+description: Estimates intracellular metabolic fluxes from steady-state
+  carbon-13 isotope-tracing measurements using validated atom maps, mfapy
+  isotope simulation, constrained multistart fitting, and flux-profile
+  diagnostics. Use for 13C-MFA, carbon tracing, mass isotopomer distributions
+  (MDVs/MIDs), positional isotopomers, parallel tracer experiments, and
+  determining whether labeling data constrain a pathway flux. Distinguishes
+  measured-label inference from COBRA flux balance analysis and flags
+  experiments requiring nonstationary MFA.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-branch-fluxes.json
+    path: assets/branch-fluxes.json
+    content_hash: 4bcb97f2e4bfab43ca8e964183231fee197879f9d4b80d2ec8e05f92b8d95be4
+    license: MIT
+  - knowledge_id: sas-assets-branch-identifiable.json
+    path: assets/branch-identifiable.json
+    content_hash: 9098ff048fc576046bfa13e100325e4e57e569cc46a642a539cb52584b21a469
+    license: MIT
+  - knowledge_id: sas-assets-branch-model.json
+    path: assets/branch-model.json
+    content_hash: de2c4d4fe1cbb0f8b718a35a00ab17830a67e49a89ede1244aaaee8f7181c798
+    license: MIT
+  - knowledge_id: sas-assets-branch-unresolved.json
+    path: assets/branch-unresolved.json
+    content_hash: b0e777e66033817612f0dc48527d70d7e0ccb7fa533a751db992dce0f5c65e5f
+    license: MIT
+  - knowledge_id: sas-assets-mfapy-license.txt
+    path: assets/mfapy-license.txt
+    content_hash: 645e233ceb2f6faa4d43a4c66ecd8e54ed2b7fa6a765fb6497a109b615b2e5d9
+    license: MIT
+  - knowledge_id: sas-assets-requirements.txt
+    path: assets/requirements.txt
+    content_hash: 537d5d44296de5cce4f909775e2299a589abd914b93705367587e98588bfcede
+    license: MIT
+  - knowledge_id: sas-assets-tca-fluxes.json
+    path: assets/tca-fluxes.json
+    content_hash: b362821e6cf8c14b692c4c41facd7c8aa1af87e20f0290960f0eaaddc69b1cb8
+    license: MIT
+  - knowledge_id: sas-assets-tca-model.json
+    path: assets/tca-model.json
+    content_hash: 49d98503f37865655aff81564c7705ae6fe612553c3c465675fd32360eb4b39a
+    license: MIT
+  - knowledge_id: sas-assets-tca-reference-mdv.json
+    path: assets/tca-reference-mdv.json
+    content_hash: 3b6887a77419a80a5f6f2574fc24e0a2daf480f2b13899481cd645269cebdd47
+    license: MIT
+  - knowledge_id: sas-assets-tca-tracer.json
+    path: assets/tca-tracer.json
+    content_hash: 1ca97044dba0b66e30e2189356454e43f0a263cd65758dcdbfa8c047c68a585e
+    license: MIT
+  - knowledge_id: sas-references-inference.md
+    path: references/inference.md
+    content_hash: c060f550e700521dd1300e2ca790e3e9061bbfe54c8f0cad1ad34a99f29830dd
+    license: MIT
+  - knowledge_id: sas-references-input-contract.md
+    path: references/input-contract.md
+    content_hash: d724078414ff4d97c0335bbd6a6c52e12aeec0db56da23d12f90a47fd090031f
+    license: MIT
+  - knowledge_id: sas-scripts--mfa-fit.py
+    path: scripts/_mfa_fit.py
+    content_hash: 6a7f4952d75364c62fec863268ed8e2c37088808e2fb0817c2f36c7d0703be9f
+    license: MIT
+  - knowledge_id: sas-scripts--mfa-model.py
+    path: scripts/_mfa_model.py
+    content_hash: 8be66dc18197e2173c059dd31bdce3033b6b4a64a703ddc495f51a7fb288b3ed
+    license: MIT
+  - knowledge_id: sas-scripts-mfa.py
+    path: scripts/mfa.py
+    content_hash: ddf96e627beb8580616ef7f434a24ce5dbe39bcc7f8c90e0f0d2cb1a99f1584f
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/SKILL.md
+      sha256: b509145503a14bbde6721d13acaeb71ecca386c4e7f8ea937efd2e70b92be777
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/branch-fluxes.json
+      sha256: 4bcb97f2e4bfab43ca8e964183231fee197879f9d4b80d2ec8e05f92b8d95be4
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/branch-identifiable.json
+      sha256: 9098ff048fc576046bfa13e100325e4e57e569cc46a642a539cb52584b21a469
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/branch-model.json
+      sha256: de2c4d4fe1cbb0f8b718a35a00ab17830a67e49a89ede1244aaaee8f7181c798
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/branch-unresolved.json
+      sha256: b0e777e66033817612f0dc48527d70d7e0ccb7fa533a751db992dce0f5c65e5f
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/mfapy-license.txt
+      sha256: 645e233ceb2f6faa4d43a4c66ecd8e54ed2b7fa6a765fb6497a109b615b2e5d9
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/requirements.txt
+      sha256: 537d5d44296de5cce4f909775e2299a589abd914b93705367587e98588bfcede
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/tca-fluxes.json
+      sha256: b362821e6cf8c14b692c4c41facd7c8aa1af87e20f0290960f0eaaddc69b1cb8
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/tca-model.json
+      sha256: 49d98503f37865655aff81564c7705ae6fe612553c3c465675fd32360eb4b39a
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/tca-reference-mdv.json
+      sha256: 3b6887a77419a80a5f6f2574fc24e0a2daf480f2b13899481cd645269cebdd47
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/assets/tca-tracer.json
+      sha256: 1ca97044dba0b66e30e2189356454e43f0a263cd65758dcdbfa8c047c68a585e
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/references/inference.md
+      sha256: c060f550e700521dd1300e2ca790e3e9061bbfe54c8f0cad1ad34a99f29830dd
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/references/input-contract.md
+      sha256: d724078414ff4d97c0335bbd6a6c52e12aeec0db56da23d12f90a47fd090031f
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/scripts/_mfa_fit.py
+      sha256: 6a7f4952d75364c62fec863268ed8e2c37088808e2fb0817c2f36c7d0703be9f
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/scripts/_mfa_model.py
+      sha256: 8be66dc18197e2173c059dd31bdce3033b6b4a64a703ddc495f51a7fb288b3ed
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-13c-metabolic-flux/scripts/mfa.py
+      sha256: ddf96e627beb8580616ef7f434a24ce5dbe39bcc7f8c90e0f0d2cb1a99f1584f
+license: MIT

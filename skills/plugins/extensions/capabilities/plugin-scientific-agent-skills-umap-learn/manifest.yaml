@@ -1,7 +1,7 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-umap-learn
 title: UMAP-Learn
-description: Use UMAP-learn for nonlinear dimensionality reduction, 2D/3D
+description: Applies UMAP-learn to nonlinear dimensionality reduction, 2D/3D
   embeddings, clustering preprocessing, supervised or semi-supervised UMAP,
   DensMAP, AlignedUMAP, and Parametric UMAP workflows.
 maturity: operational
@@ -45,14 +45,14 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
-    content_hash: d06e2ef8d7752c99be4a75209eb81799bb095424966c3204710c4813dbf81b86
-    license: MIT
+    content_hash: 7713fd3ed704af27890942df5d1e29f3e304636dd8b9b5767d13a6cf911323f9
+    license: BSD-3-Clause
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-umap-learn/SKILL.md
-      sha256: e355d8776f64909c5de16b98a3bc49f96edc1352d6903992748898562938142c
+      sha256: 5cd8f74d88cf40308a1bbda9e5c308428d4c08b6e92ca3442fdf8036c7b8ed0b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-umap-learn/references/api_reference.md
-      sha256: d06e2ef8d7752c99be4a75209eb81799bb095424966c3204710c4813dbf81b86
-license: MIT
+      sha256: 7713fd3ed704af27890942df5d1e29f3e304636dd8b9b5767d13a6cf911323f9
+license: BSD-3-Clause

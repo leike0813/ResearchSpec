@@ -1,13 +1,12 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-pyzotero
 title: Pyzotero
-description: Interact with Zotero reference management libraries using the
-  pyzotero Python client. Retrieve, create, update, and delete items,
-  collections, tags, and attachments via the Zotero Web API v3. Use this skill
-  when working with Zotero libraries programmatically, managing bibliographic
-  references, exporting citations, searching library contents, uploading PDF
-  attachments, or building research automation workflows that integrate with
-  Zotero.
+description: "Manages Zotero reference libraries using the pyzotero Python
+  client: retrieves, creates, updates, and deletes items, collections, tags, and
+  attachments via the Zotero Web API v3 or local API. Applies when working with
+  Zotero libraries programmatically, managing bibliographic references,
+  exporting citations, searching library contents, uploading PDF attachments, or
+  building research automation workflows that integrate with Zotero."
 maturity: operational
 class: analysis
 node_kind: producer
@@ -49,92 +48,92 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-authentication.md
     path: references/authentication.md
-    content_hash: 9c14d8f8d68fee3e8ea01c9ceb598449c9f3ef0dd171503b5063fed4dc0a0934
+    content_hash: 5a2a09a6adfad33d03f4a7e84eb16f955e4aba7fa8e29fbd81e4ee37a46bc21c
     license: MIT
   - knowledge_id: sas-references-cli.md
     path: references/cli.md
-    content_hash: 4abbcadd84157ac432c35ab043ce0d11bf874b796ecfeb850100b7799b4b74d5
+    content_hash: 2d76df610085b177d660576a7c694f3b6fcd6dba50a2e22fd86e37ef52468f88
     license: MIT
   - knowledge_id: sas-references-collections.md
     path: references/collections.md
-    content_hash: d6b72f9933a4eb5bb2d4aafdf5b4f6daebf4c03d7f0aef0c960cd8d9276e59da
+    content_hash: 79950aba56a0efbd0358b3ce662bff5c67c8aa20ecda1a371e38ec5fd5b72b7a
     license: MIT
   - knowledge_id: sas-references-error-handling.md
     path: references/error-handling.md
-    content_hash: 2be8a65f5ed7f3ade735a9fc6c78cb74ce9e92112bd5df03d52f25f30985fd32
+    content_hash: a87eda6c3fccd520a8120093fedfde0fa04aa757871c9430ba117d359bda48d8
     license: MIT
   - knowledge_id: sas-references-exports.md
     path: references/exports.md
-    content_hash: 02db73f3d15b4b2de852727816b18d90cd535e431416c2cd8b2c1c4411362124
+    content_hash: 127bd01447fb2c70956f048dc87a065761603bff522be1c4eacae3638bf3bdaf
     license: MIT
   - knowledge_id: sas-references-files-attachments.md
     path: references/files-attachments.md
-    content_hash: 585b9443d0b836b6c58903769497391b116074e04c9a82a376e8230b8a450d3a
+    content_hash: ce3f3dc28d5455938698bd6553ba7a82ff28a86070cd4ec2a43a9a6969c29136
     license: MIT
   - knowledge_id: sas-references-full-text.md
     path: references/full-text.md
-    content_hash: ee6e5380ff8b902c716582340f4063a9e7468a1eff6ea9c04a5d646a84398a39
+    content_hash: b75d3f7dbb77a52b3688824fc6f80f17888130b54eea486d56d493c4ef676d2d
     license: MIT
   - knowledge_id: sas-references-mcp.md
     path: references/mcp.md
-    content_hash: eb9803c1ac9651dc3883e2c4216ed336190627c54286104d50b3c4f2d6f9f9d0
+    content_hash: c4a7e6e7f4dc784f156662ebd9d13919e060f4cf472f184451281193ba426032
     license: MIT
   - knowledge_id: sas-references-pagination.md
     path: references/pagination.md
-    content_hash: aefc14d4b1a8d55a41fe53fb5b8bb3093848815d68b18542f316336d2359224a
+    content_hash: 386cf1d84c3021143582ff557dd640e9cbcfcd4245e4fcc32ecdf0796ee80342
     license: MIT
   - knowledge_id: sas-references-read-api.md
     path: references/read-api.md
-    content_hash: 18866a03761653d8aee715f98683849f037be8a97507f08a4a145ce68a5d0e32
+    content_hash: 4182ef44d6c4a83c2993658dfe30d23b9e7b1e5aadb32405ae514707e032e828
     license: MIT
   - knowledge_id: sas-references-saved-searches.md
     path: references/saved-searches.md
-    content_hash: 1cce1a29d4c9c73b497e26a93e5e21174148bd221dde9bd3df3e2f0e7acc0cb9
+    content_hash: 8c891c84d023fa215920c61a385c3afc8363c5b7bc48e6b1294d84936f81329e
     license: MIT
   - knowledge_id: sas-references-search-params.md
     path: references/search-params.md
-    content_hash: e31834d6ce3bcd55a58a235731b3efc539935f6b4c101cd4c37aae19b0f53756
+    content_hash: d75501f2278720f02b10f58d14d3fa347366b6144497ceea333a5fb6f6e35312
     license: MIT
   - knowledge_id: sas-references-tags.md
     path: references/tags.md
-    content_hash: 8b2d2a962d2ce796572fb725e3bdc5ab3f8a20bc749dc3a95ef78a090dfc1adc
+    content_hash: 31be953e7c8f9f3b93739d30fc4edbcf81ceb652f803a92e971a2ad74b49a20d
     license: MIT
   - knowledge_id: sas-references-write-api.md
     path: references/write-api.md
-    content_hash: 153ab5fffd8f12a9db044d7bb6b58e8a9b948063c2fba154c8fb16c87bfd761f
+    content_hash: 008ee377cf20425069169c896aaefe57a14583c82ca7625ca9d9fc1e8292a0d8
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/SKILL.md
-      sha256: 061551e37b9530ab9d8bb8a1e3d2373cc3b9237df6c646e716b1f97be10c5c2d
+      sha256: 60ec253ff317868b2a9768fd57a561fd820758ed17dddf8035e8ab81e765cdae
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/authentication.md
-      sha256: 9c14d8f8d68fee3e8ea01c9ceb598449c9f3ef0dd171503b5063fed4dc0a0934
+      sha256: 5a2a09a6adfad33d03f4a7e84eb16f955e4aba7fa8e29fbd81e4ee37a46bc21c
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/cli.md
-      sha256: 4abbcadd84157ac432c35ab043ce0d11bf874b796ecfeb850100b7799b4b74d5
+      sha256: 2d76df610085b177d660576a7c694f3b6fcd6dba50a2e22fd86e37ef52468f88
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/collections.md
-      sha256: d6b72f9933a4eb5bb2d4aafdf5b4f6daebf4c03d7f0aef0c960cd8d9276e59da
+      sha256: 79950aba56a0efbd0358b3ce662bff5c67c8aa20ecda1a371e38ec5fd5b72b7a
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/error-handling.md
-      sha256: 2be8a65f5ed7f3ade735a9fc6c78cb74ce9e92112bd5df03d52f25f30985fd32
+      sha256: a87eda6c3fccd520a8120093fedfde0fa04aa757871c9430ba117d359bda48d8
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/exports.md
-      sha256: 02db73f3d15b4b2de852727816b18d90cd535e431416c2cd8b2c1c4411362124
+      sha256: 127bd01447fb2c70956f048dc87a065761603bff522be1c4eacae3638bf3bdaf
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/files-attachments.md
-      sha256: 585b9443d0b836b6c58903769497391b116074e04c9a82a376e8230b8a450d3a
+      sha256: ce3f3dc28d5455938698bd6553ba7a82ff28a86070cd4ec2a43a9a6969c29136
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/full-text.md
-      sha256: ee6e5380ff8b902c716582340f4063a9e7468a1eff6ea9c04a5d646a84398a39
+      sha256: b75d3f7dbb77a52b3688824fc6f80f17888130b54eea486d56d493c4ef676d2d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/mcp.md
-      sha256: eb9803c1ac9651dc3883e2c4216ed336190627c54286104d50b3c4f2d6f9f9d0
+      sha256: c4a7e6e7f4dc784f156662ebd9d13919e060f4cf472f184451281193ba426032
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/pagination.md
-      sha256: aefc14d4b1a8d55a41fe53fb5b8bb3093848815d68b18542f316336d2359224a
+      sha256: 386cf1d84c3021143582ff557dd640e9cbcfcd4245e4fcc32ecdf0796ee80342
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/read-api.md
-      sha256: 18866a03761653d8aee715f98683849f037be8a97507f08a4a145ce68a5d0e32
+      sha256: 4182ef44d6c4a83c2993658dfe30d23b9e7b1e5aadb32405ae514707e032e828
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/saved-searches.md
-      sha256: 1cce1a29d4c9c73b497e26a93e5e21174148bd221dde9bd3df3e2f0e7acc0cb9
+      sha256: 8c891c84d023fa215920c61a385c3afc8363c5b7bc48e6b1294d84936f81329e
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/search-params.md
-      sha256: e31834d6ce3bcd55a58a235731b3efc539935f6b4c101cd4c37aae19b0f53756
+      sha256: d75501f2278720f02b10f58d14d3fa347366b6144497ceea333a5fb6f6e35312
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/tags.md
-      sha256: 8b2d2a962d2ce796572fb725e3bdc5ab3f8a20bc749dc3a95ef78a090dfc1adc
+      sha256: 31be953e7c8f9f3b93739d30fc4edbcf81ceb652f803a92e971a2ad74b49a20d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-pyzotero/references/write-api.md
-      sha256: 153ab5fffd8f12a9db044d7bb6b58e8a9b948063c2fba154c8fb16c87bfd761f
+      sha256: 008ee377cf20425069169c896aaefe57a14583c82ca7625ca9d9fc1e8292a0d8
 license: MIT

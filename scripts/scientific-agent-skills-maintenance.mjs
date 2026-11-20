@@ -19,7 +19,7 @@ import {
 } from "./lib/vendor-maintenance.mjs";
 
 const ROOT = process.cwd();
-const ANCHOR_CREATED_AT = "2026-09-30T00:00:00+08:00";
+const ANCHOR_CREATED_AT = "2026-11-20T00:00:00+08:00";
 const CATALOG_PATH = path.join(ROOT, "audits", "scientific-agent-skills", "catalog.json");
 const AUDIT_README = path.join(ROOT, "audits", "scientific-agent-skills", "README.md");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "scientific-agent-skills-maintenance", "SKILL.md");
@@ -118,8 +118,14 @@ function extensionRows() {
     if (manifest.capability_id !== extension.capability_id) throw new Error(`Manifest ID mismatch for ${extension.capability_id}`);
     if (manifest.execution_type !== extension.execution_type) throw new Error(`Execution type mismatch for ${extension.capability_id}`);
     const expectedLicense = licenses.get(extension.raw_skill_id);
-    if (expectedLicense !== "MIT" || extension.license !== expectedLicense || manifest.license !== expectedLicense || manifest.knowledge_refs.some((item) => item.license !== expectedLicense)) {
+    if (!expectedLicense || extension.license !== expectedLicense || manifest.license !== expectedLicense || manifest.knowledge_refs.some((item) => item.license !== expectedLicense)) {
       throw new Error(`License mismatch for ${extension.capability_id}`);
+    }
+    const rawRoot = path.join(ROOT, data.generated_root, extension.raw_skill_id);
+    for (const licenseFile of ["LICENSE", "NOTICE.md"]) {
+      if (fileSha(path.join(rawRoot, licenseFile)) !== fileSha(path.join(packageRoot, licenseFile))) {
+        throw new Error(`License file drift for ${extension.capability_id}: ${licenseFile}`);
+      }
     }
     const files = [];
     const walk = (dir) => {
@@ -322,6 +328,8 @@ function writeRecords(anchorId) {
   const admissions = new Map(json(path.join(ROOT, "src/vendor-converters/scientific-agent-skills/admission-decisions.json")).decisions.map((decision) => [decision.upstream_skill_id, decision]));
   const incrementalPath = path.join(artifactDir(anchorId), "incremental-review.json");
   const incremental = existsSync(incrementalPath) ? json(incrementalPath) : null;
+  const decisionsPath = path.join(artifactDir(anchorId), "maintainer-decisions.json");
+  const sourceInventoryPath = path.join(artifactDir(anchorId), "source-inventory.json");
 
   const analysis = `# Scientific Agent Skills Extension Anchor Analysis — ${data.release}
 
@@ -333,6 +341,8 @@ function writeRecords(anchorId) {
 - advisory vendor bundle SHA-256: \`${state.advisory.tree_sha256}\`
 
 ${incremental ? `## Incremental Source Review\n\n- Source: ${esc(incremental.from)} -> ${esc(incremental.to)}; ${incremental.source_changes.length} changed paths.\n- Added upstream Skills: ${incremental.additions.length}; removed: ${inlineCode(incremental.removed)}.\n- Added capabilities: ${inlineCode(incremental.added_capabilities)}.\n- Existing affected capabilities: ${incremental.changed_capabilities.length}; all are listed below.\n- Full source diff, additions and exclusion decisions: \`${path.relative(ROOT, incrementalPath)}\`, SHA-256 \`${fileSha(incrementalPath)}\`.\n` : ""}
+${existsSync(sourceInventoryPath) ? `- Candidate inventory: \`${path.relative(ROOT, sourceInventoryPath)}\`, SHA-256 \`${fileSha(sourceInventoryPath)}\`.\n` : ""}
+${existsSync(decisionsPath) ? `- Confirmed maintainer actions: \`${path.relative(ROOT, decisionsPath)}\`, SHA-256 \`${fileSha(decisionsPath)}\`.\n` : ""}
 ## Upstream Inventory
 
 | top-level area | files |

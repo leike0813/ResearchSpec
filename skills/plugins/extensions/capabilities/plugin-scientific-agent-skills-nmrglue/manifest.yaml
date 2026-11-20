@@ -1,0 +1,72 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-nmrglue
+title: "nmrglue: calibrated 1D FID processing"
+description: Processes calibrated one-dimensional complex NMR free-induction
+  decays with nmrglue into phased spectra, peak candidates, and signed
+  integration regions. Use for raw 1D NMR processing, ppm-axis verification,
+  apodization, Fourier transformation, manual phasing, baseline correction, or
+  reproducible spectral integration.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-assets-processing.json
+    path: assets/processing.json
+    content_hash: 127f6796efaf47a8349f1061c01f31202b34fe20fd4baba13d4f4dc8982feb1b
+    license: MIT
+  - knowledge_id: sas-references-acquisition-and-validation.md
+    path: references/acquisition-and-validation.md
+    content_hash: 0d220724cff854d39aeabdab4fa20ae7b9c73f38fe7a1aa653082985e9fae736
+    license: MIT
+  - knowledge_id: sas-scripts-process-1d.py
+    path: scripts/process_1d.py
+    content_hash: 8268bd1b0b445c373e4d105faae6485dee1b41506d09cec9cd7ba8c307e6c81d
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nmrglue/SKILL.md
+      sha256: 3a469468956fe5ebbe6e2ca84c11dca7ab907b2f4e6d05704c677d332b0222ec
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nmrglue/assets/processing.json
+      sha256: 127f6796efaf47a8349f1061c01f31202b34fe20fd4baba13d4f4dc8982feb1b
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nmrglue/references/acquisition-and-validation.md
+      sha256: 0d220724cff854d39aeabdab4fa20ae7b9c73f38fe7a1aa653082985e9fae736
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-nmrglue/scripts/process_1d.py
+      sha256: 8268bd1b0b445c373e4d105faae6485dee1b41506d09cec9cd7ba8c307e6c81d
+license: MIT

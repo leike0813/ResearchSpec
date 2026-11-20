@@ -1,15 +1,12 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-open-notebook
 title: Open Notebook
-description: Self-hosted, open-source alternative to Google NotebookLM for
-  AI-powered research and document analysis. Use when organizing research
-  materials into notebooks, ingesting diverse content sources (PDFs, videos,
-  audio, web pages, Office documents), generating AI-powered notes and
-  summaries, creating multi-speaker podcasts from research, chatting with
-  documents using context-aware AI, searching across materials with full-text
-  and vector search, or running custom content transformations. Supports 16+ AI
-  providers including OpenAI, Anthropic, Google, Ollama, Groq, and Mistral with
-  complete data privacy through self-hosting.
+description: Organizes research with the self-hosted Open Notebook alternative
+  to NotebookLM. Supports source ingestion (PDFs, web pages, audio, video, and
+  Office documents), cited document chat, text and vector search, notes, custom
+  transformations, and multi-speaker podcasts. Use when automating Open Notebook
+  through its REST API or configuring its local or cloud AI providers, including
+  OpenAI, Anthropic, Google, Ollama, Groq, and Mistral.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -51,50 +48,56 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-api-reference.md
     path: references/api_reference.md
-    content_hash: 6d368df0f9368d297c4db06ed0f78f23db9cbb488b986574fdf267cb8ec373c0
+    content_hash: fc4412ed1fd332aa7a145d38f695a5fc472c2fb7ac853e72920ee5802ad8ce71
     license: MIT
   - knowledge_id: sas-references-architecture.md
     path: references/architecture.md
-    content_hash: f491698b896af52653b6b54c928d68088ff0f69698305b7fcb97197bb7f4ecd5
+    content_hash: 11fa25e90605dd1644be25bc4894ff271e60b7b2fa7e352d84e03cabc6563f5b
     license: MIT
   - knowledge_id: sas-references-configuration.md
     path: references/configuration.md
-    content_hash: a448271bba6ae082d39d0bbafc5761a1f63b8df48a49932475b59fa774e3ee29
+    content_hash: 712e0c3a94b331c7a8e9c96bf6a9786e0493b59e0b20396c9bce528a9c3909c5
     license: MIT
   - knowledge_id: sas-references-examples.md
     path: references/examples.md
-    content_hash: b6bc527544e04b7291aa377821733089a724cee32e6e265a54d574dab0404c54
+    content_hash: ee4790482f9d12a19170609033bc217c7c575088670559a8d0e224157c8486f2
+    license: MIT
+  - knowledge_id: sas-scripts--common.py
+    path: scripts/_common.py
+    content_hash: 490bf90903022ecfa618bd80684bf35b88fd66b8c3bd1d2aae921f5fcdbbc702
     license: MIT
   - knowledge_id: sas-scripts-chat-interaction.py
     path: scripts/chat_interaction.py
-    content_hash: d3b843b69ef8969745d9762b00e6baa32be6f5572b6b80f17c8eb96f86b13cfa
+    content_hash: e51c8718c866d353f7f8f133a38acc3947a95ef116b5914e17d636c9607a4bc2
     license: MIT
   - knowledge_id: sas-scripts-notebook-management.py
     path: scripts/notebook_management.py
-    content_hash: 012815f018be883d7e09d615b483d3a424127af64d5b0a681dd39efc2d150d92
+    content_hash: b36fae39f077aeb79cdb86e0a1a7b70ec1140ee2cd5e1b23917fe267f92ed6ea
     license: MIT
   - knowledge_id: sas-scripts-source-ingestion.py
     path: scripts/source_ingestion.py
-    content_hash: 124b43bde0bab5fafc7e43916ca7d78353583b47454adfbcf74ddcc509dcdafe
+    content_hash: d51943cd35847040a5b9689c9a4d297b6a08536afeca8c1cef3f436dd41832fd
     license: MIT
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/SKILL.md
-      sha256: b3143f724bc3e65a889ae7fab184a516920ec6921bb816c1e3e9c336eb5492d3
+      sha256: 4d975a773e50f4eafd6bfb01f9c841823c6a0966af06f2eaaa6042151bff8aef
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/api_reference.md
-      sha256: 6d368df0f9368d297c4db06ed0f78f23db9cbb488b986574fdf267cb8ec373c0
+      sha256: fc4412ed1fd332aa7a145d38f695a5fc472c2fb7ac853e72920ee5802ad8ce71
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/architecture.md
-      sha256: f491698b896af52653b6b54c928d68088ff0f69698305b7fcb97197bb7f4ecd5
+      sha256: 11fa25e90605dd1644be25bc4894ff271e60b7b2fa7e352d84e03cabc6563f5b
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/configuration.md
-      sha256: a448271bba6ae082d39d0bbafc5761a1f63b8df48a49932475b59fa774e3ee29
+      sha256: 712e0c3a94b331c7a8e9c96bf6a9786e0493b59e0b20396c9bce528a9c3909c5
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/references/examples.md
-      sha256: b6bc527544e04b7291aa377821733089a724cee32e6e265a54d574dab0404c54
+      sha256: ee4790482f9d12a19170609033bc217c7c575088670559a8d0e224157c8486f2
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/_common.py
+      sha256: 490bf90903022ecfa618bd80684bf35b88fd66b8c3bd1d2aae921f5fcdbbc702
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/chat_interaction.py
-      sha256: d3b843b69ef8969745d9762b00e6baa32be6f5572b6b80f17c8eb96f86b13cfa
+      sha256: e51c8718c866d353f7f8f133a38acc3947a95ef116b5914e17d636c9607a4bc2
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/notebook_management.py
-      sha256: 012815f018be883d7e09d615b483d3a424127af64d5b0a681dd39efc2d150d92
+      sha256: b36fae39f077aeb79cdb86e0a1a7b70ec1140ee2cd5e1b23917fe267f92ed6ea
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-open-notebook/scripts/source_ingestion.py
-      sha256: 124b43bde0bab5fafc7e43916ca7d78353583b47454adfbcf74ddcc509dcdafe
+      sha256: d51943cd35847040a5b9689c9a4d297b6a08536afeca8c1cef3f436dd41832fd
 license: MIT

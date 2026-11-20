@@ -1,10 +1,11 @@
 schema_version: "1"
 capability_id: plugin-scientific-agent-skills-sympy
 title: SymPy - Symbolic Mathematics in Python
-description: Use when you need exact symbolic math in Python — algebra,
-  calculus, equation solving, symbolic linear algebra, or code generation via
-  lambdify/LaTeX. Prefer NumPy or SciPy when floating-point approximations are
-  sufficient.
+description: Performs exact symbolic mathematics with SymPy for algebra,
+  calculus, equation solving, symbolic linear algebra, physics, and lambdify or
+  LaTeX code generation. Use when a task needs symbolic results, explicit
+  assumptions, or exact arithmetic; use NumPy or SciPy for purely numerical
+  workloads.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -46,44 +47,50 @@ validators:
 knowledge_refs:
   - knowledge_id: sas-references-advanced-topics.md
     path: references/advanced-topics.md
-    content_hash: 212b3d0c3b67a45160135a4ff8d9ae89e0064cf1c68adf408a6c2af5c0d82bb9
-    license: MIT
+    content_hash: cff0c044c5d7c7f65235f35a7c0fe19e41a42c27393c9aa7f38a31f00ed28e81
+    license: BSD-3-Clause
   - knowledge_id: sas-references-code-generation-printing.md
     path: references/code-generation-printing.md
-    content_hash: 046648801a3404b9e883110e24bd4d947381be930c2ef8589fd8ca3414ef81cb
-    license: MIT
+    content_hash: 6a547f4dfd6975762d61d7effd47c9613e16d345e2e1dab89549bfc465f7e404
+    license: BSD-3-Clause
   - knowledge_id: sas-references-core-capabilities.md
     path: references/core-capabilities.md
-    content_hash: 9d7b7393e814ef833fdcbb6e63a8a6621f08c123afe39d43c2bd2e131c7782d9
-    license: MIT
+    content_hash: 2c7d55c127ccd5d4d0792892025979c421573f2662c5cededb6cbcf80ee61888
+    license: BSD-3-Clause
   - knowledge_id: sas-references-core-capabilities.md-2
     path: references/core_capabilities.md
-    content_hash: 0d342387502fe83f229564ee35c2e2e36d6f7107303b572766cd2587fab1e298
-    license: MIT
+    content_hash: 69fffa94caf62276112108bbeff5b7dd4281a5b40c07e44eea381f46f00a6011
+    license: BSD-3-Clause
   - knowledge_id: sas-references-matrices-linear-algebra.md
     path: references/matrices-linear-algebra.md
-    content_hash: f22d091d2a38957e0e820e859e172b2d535cc1eef4f98d32d4af02962bd9a73c
-    license: MIT
+    content_hash: fd64e48e917cf0a71bb0d744e8cfee345a98284256a84fb55793fe4d9783272d
+    license: BSD-3-Clause
   - knowledge_id: sas-references-physics-mechanics.md
     path: references/physics-mechanics.md
-    content_hash: e5853aa09e9bddc37134afd7469bc86b952edcbd9dd6d8a6ef9c2c24a2e0fbf3
-    license: MIT
+    content_hash: 0d015cf60861aa5fe1598a76e08d612a758f0c0895bbd1ce1dcbfbc9d4bfaf8c
+    license: BSD-3-Clause
+  - knowledge_id: sas-references-review.md
+    path: references/review.md
+    content_hash: 03d4db2d0432cf7ec3a21b2746da7b96809aa7613d17c101d16460f5ec732ab1
+    license: BSD-3-Clause
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-sympy/SKILL.md
-      sha256: 271f7c10d0a06bef8376c968e3029fec8519249d65dd578f6cafa26f31f15eee
+      sha256: 2e3163b54007a6a25fd5ff6432796a3a9eacd02496c4162b4f1e1576d608c423
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/advanced-topics.md
-      sha256: 212b3d0c3b67a45160135a4ff8d9ae89e0064cf1c68adf408a6c2af5c0d82bb9
+      sha256: cff0c044c5d7c7f65235f35a7c0fe19e41a42c27393c9aa7f38a31f00ed28e81
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/code-generation-printing.md
-      sha256: 046648801a3404b9e883110e24bd4d947381be930c2ef8589fd8ca3414ef81cb
+      sha256: 6a547f4dfd6975762d61d7effd47c9613e16d345e2e1dab89549bfc465f7e404
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/core-capabilities.md
-      sha256: 9d7b7393e814ef833fdcbb6e63a8a6621f08c123afe39d43c2bd2e131c7782d9
+      sha256: 2c7d55c127ccd5d4d0792892025979c421573f2662c5cededb6cbcf80ee61888
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/core_capabilities.md
-      sha256: 0d342387502fe83f229564ee35c2e2e36d6f7107303b572766cd2587fab1e298
+      sha256: 69fffa94caf62276112108bbeff5b7dd4281a5b40c07e44eea381f46f00a6011
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/matrices-linear-algebra.md
-      sha256: f22d091d2a38957e0e820e859e172b2d535cc1eef4f98d32d4af02962bd9a73c
+      sha256: fd64e48e917cf0a71bb0d744e8cfee345a98284256a84fb55793fe4d9783272d
     - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/physics-mechanics.md
-      sha256: e5853aa09e9bddc37134afd7469bc86b952edcbd9dd6d8a6ef9c2c24a2e0fbf3
-license: MIT
+      sha256: 0d015cf60861aa5fe1598a76e08d612a758f0c0895bbd1ce1dcbfbc9d4bfaf8c
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-sympy/references/review.md
+      sha256: 03d4db2d0432cf7ec3a21b2746da7b96809aa7613d17c101d16460f5ec732ab1
+license: BSD-3-Clause

@@ -1,0 +1,71 @@
+schema_version: "1"
+capability_id: plugin-scientific-agent-skills-relion
+title: RELION single-particle refinement
+description: Validates and executes RELION single-particle cryo-EM refinement
+  and half-map postprocessing. Supports STAR optics/acquisition checks,
+  particle-stack consistency, gold-standard half sets, soft-mask validation,
+  diagnostic Fourier shell correlation, and restart guidance.
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: research_brief
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+  - validator_id: scientific-brief-validator
+    kind: script
+    inputs:
+      - task_request
+    outputs:
+      - research_brief
+    error_codes:
+      - script_validator_failed
+    runner:
+      argv0: python3
+      args_template:
+        - validators/validate_scientific_brief.py
+        - --submission
+        - "{outputs_json}"
+        - --required
+        - scope,source_ledger,method_plan,work_products,validation_results,conclusions
+knowledge_refs:
+  - knowledge_id: sas-references-acquisition-and-restarts.md
+    path: references/acquisition-and-restarts.md
+    content_hash: 0d69ce1609182c9a5ca2758294db26de3a93022a62a63b7b973c9e2afa958b77
+    license: MIT
+  - knowledge_id: sas-references-runtime-and-validation.md
+    path: references/runtime-and-validation.md
+    content_hash: 777970158870b98a757a9e1896357d1e5d019a0b18f9939c08760f6fd85eb2be
+    license: MIT
+  - knowledge_id: sas-scripts-spa-workflow.py
+    path: scripts/spa_workflow.py
+    content_hash: 119270dd08e0afac7916657a9fd0532db4c0ae787819c14210f981afb9c85547
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relion/SKILL.md
+      sha256: 5c7588e5f61c586f4c99e12a935a52833240f0b8e9a4d00e3de60c7570ddd19a
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relion/references/acquisition-and-restarts.md
+      sha256: 0d69ce1609182c9a5ca2758294db26de3a93022a62a63b7b973c9e2afa958b77
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relion/references/runtime-and-validation.md
+      sha256: 777970158870b98a757a9e1896357d1e5d019a0b18f9939c08760f6fd85eb2be
+    - path: skills/plugins/vendors/scientific-agent-skills/scientific-agent-skills-relion/scripts/spa_workflow.py
+      sha256: 119270dd08e0afac7916657a9fd0532db4c0ae787819c14210f981afb9c85547
+license: MIT

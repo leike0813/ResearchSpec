@@ -1,6 +1,6 @@
 ---
 name: plugin-scientific-agent-skills-venue-templates
-description: "Prepare journal manuscripts, conference papers, research posters, and grant documents using venue-specific formatting guidance and bundled LaTeX scaffolds. Use when selecting an official template, checking current page or anonymity rules, adapting academic writing to a venue, or inspecting a submission PDF."
+description: "Prepares journal manuscripts, conference papers, research posters, and grant documents using venue-specific formatting guidance and bundled LaTeX scaffolds. Supports selecting an official template, checking current page or anonymity rules, adapting academic writing to a venue, or inspecting a submission PDF."
 metadata:
   capability_id: plugin-scientific-agent-skills-venue-templates
   node_kind: producer
@@ -91,7 +91,7 @@ Before editing, write a short note in the working document or task log:
 ```text
 Target: ICML 2026 main track, initial submission
 Official source: https://icml.cc/Conferences/2026/AuthorInstructions
-Checked: 2026-07-20
+Checked: 2026-10-01
 Main-text limit: 8 pages
 References/appendices: additional pages allowed in the same PDF
 Anonymity: required
@@ -123,7 +123,10 @@ Verify at least:
 - reference and supplemental-material treatment; and
 - source-package and PDF requirements.
 
-The helper can inspect page totals and embedded fonts, but it cannot prove that margins, font sizes, excluded sections, or hidden metadata comply.
+The helper counts PDF pages and reads Poppler font-embedding flags. It reports
+nonembedded fonts as failures, but cannot prove margin, font-size, excluded-section,
+or anonymity compliance. A zero exit status means no automated failure was found;
+manual and skipped inspections still require attention.
 
 ## Bundled Assets
 
@@ -149,7 +152,7 @@ The matching Elsevier `.bst` files are in `assets/journals/`.
 | `assets/grants/nsf_proposal_template.tex` | Planning scaffold for common NSF narrative components; upload components separately |
 | `assets/grants/nih_specific_aims.tex` | Writing scaffold for a one-page NIH Specific Aims attachment |
 
-Use SciENcv and agency-provided common forms where required. Do not recreate biosketch or current-support forms in LaTeX.
+Use SciENcv and agency-provided common forms where required. Do not recreate biosketch or current-support forms in LaTeX. NSF DMSPs now use the Research.gov tool under Supplement 2; the bundled narrative is only a planning aid.
 
 ### Poster scaffold
 
@@ -165,7 +168,7 @@ Use SciENcv and agency-provided common forms where required. Do not recreate bio
 2. Follow the official link for the exact year and track.
 3. Download the official author kit.
 4. Draft in the official template.
-5. Keep identifying information out of every submitted file when review is blind.
+5. Keep identifying information out of every submitted file when review is blind. Inspect supplementary archives and linked code/data in addition to the PDF: author names, notebook outputs, local paths, repository ownership, and revision history can disclose identity. Follow the venue's exact link and freeze rules; for example, ICML 2026 requires an anonymous code-repository branch that is not modified after the submission deadline.
 6. Check the paper checklist, supplement, rebuttal, and camera-ready rules separately.
 
 For NeurIPS 2026, the bundled wrapper can be copied after downloading the official style file:
@@ -205,7 +208,10 @@ Do not apply a publisher-wide template when the journal provides its own Guide f
 
 ## Helper Scripts
 
-Run scripts from the skill directory.
+Run scripts from the skill directory. Python helpers use only the standard library.
+Network access is needed to obtain current official instructions and author kits; the
+helpers themselves make no network requests. See `references/current_sources.md`
+for the 2026-10-01 source audit and executed compilation coverage.
 
 ### List bundled templates
 
@@ -228,11 +234,15 @@ python scripts/customize_template.py \
   --output my_paper.tex
 ```
 
-Review every replacement and compile before adding substantial content. User-provided text may need LaTeX escaping.
+Values are literal LaTeX source: escape text such as `&` as `\&` yourself.
+The helper replaces recognized placeholders only; it does not restructure PLOS
+per-author affiliation mappings or fill the empty fields in official Elsevier samples.
+Review every replacement and compile before adding substantial content.
 
 ### Inspect a PDF
 
-Use a verified preset:
+Use a dated initial-submission preset (grant presets apply only to the named
+narrative attachment). Later-stage allowances require an explicit limit and source:
 
 ```bash
 python scripts/validate_format.py \
@@ -254,7 +264,7 @@ python scripts/validate_format.py \
   --report validation.txt
 ```
 
-`--content-pages` must be counted according to the official rule. The script does not infer where references or appendices begin.
+`--content-pages` must be counted according to the official rule. The script does not infer where references or appendices begin. Do not combine `--venue` and `--max-pages`; use an explicit limit for a different year, track, stage, or solicitation.
 
 ## Final Compliance Checklist
 
@@ -271,7 +281,7 @@ python scripts/validate_format.py \
 
 ## Maintenance
 
-This skill was reviewed on 2026-07-20. Annual conference snapshots are labeled with their year. When updating:
+This skill was reviewed on 2026-10-01. Annual conference snapshots are labeled with their year and are not automatically the next open submission cycle. The source ledger records inaccessible current rules instead of retaining unverified numerical limits. When updating:
 
 1. replace year-specific claims only after checking official sources;
 2. avoid adding links to assets that are not bundled;
@@ -317,6 +327,7 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `sas-references-cell-press-style.md` from `references/cell_press_style.md`.
 - Load knowledge ID `sas-references-conferences-formatting.md` from `references/conferences_formatting.md`.
 - Load knowledge ID `sas-references-cs-conference-style.md` from `references/cs_conference_style.md`.
+- Load knowledge ID `sas-references-current-sources.md` from `references/current_sources.md`.
 - Load knowledge ID `sas-references-grants-requirements.md` from `references/grants_requirements.md`.
 - Load knowledge ID `sas-references-journals-formatting.md` from `references/journals_formatting.md`.
 - Load knowledge ID `sas-references-medical-journal-styles.md` from `references/medical_journal_styles.md`.
