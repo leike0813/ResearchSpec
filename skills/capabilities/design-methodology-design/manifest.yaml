@@ -54,5 +54,5 @@ provenance:
     - KP-M5-22
   upstream_sources:
     - path: authoring/ars/m1-research/capabilities/05_methodology_design.md
-      sha256: 0799efca117e19d662ca28bd692d95a6587cc88fcc19290067a023ff4136314e
+      sha256: 160f813381e39e6c2281693fd007e6c885fff857231783e5cd85f064c38f71f8
 license: CC BY-NC 4.0

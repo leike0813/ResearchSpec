@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 来源对照（source mapping）:
     - vendor/ars/deep-research/agents/editor_in_chief_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
   0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 上游全文逐字节保留。
     2. [标注] 分类学合并结论：本变体与 reviewer-variant（eic_agent）程序同构、verdict scale 相同，差异在靶标（研究报告 vs 论文）；提取阶段保留两变体全文，合并在 authoring 阶段参数化。
@@ -42,7 +43,7 @@ You MAY READ files in `phase1_*/` through `phase4_*/` (legitimate upstream conte
 
 If revision-side work is needed (incorporating your feedback into a revised draft), return control to the caller. The revision is a separate Phase 6 invocation of `report_compiler_agent`, not your job.
 
-**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer.
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a PreToolUse write-scope guard enforces the WRITE clause only when this role runs as a separately dispatched subagent of its own agent type in an install that wires the hook (the plugin install); when it runs inline in the main session (the default for most roles) or no hook runs, this fence is the enforcement layer.
 
 ## Core Principles
 1. **Rigorous but constructive**: High standards with actionable feedback

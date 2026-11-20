@@ -55,5 +55,5 @@ provenance:
     - KP-M2-09
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/02_manuscript_structure_design.md
-      sha256: 6784fe3dcb606efad3ce5b4d37f1f3df0c4c2bcb8a5e5f1f8443fd05594c99c2
+      sha256: 4a3806109cf651c8c3467d34cb13e976ec9442e30b79d674efdf202e8ff3ca86
 license: CC BY-NC 4.0

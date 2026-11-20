@@ -9,6 +9,7 @@ import { LITERATURE_ADAPTER_SKILL_IDS } from "../src/literature-adapters/catalog
 import { loadPluginExtensionRegistry } from "../src/plugins/extensions.js";
 import { loadProcedureCatalog } from "../src/procedures/catalog.js";
 import { loadCapabilityRegistry } from "../src/capabilities/registry.js";
+import { ARSU_ROUTING_CATALOG } from "../src/arsu-converter/routing/catalog.js";
 import { loadHarnessCatalog, readHarnessFile, validateHarnessSkillRoot, type HarnessFileTreeNode } from "../harness/catalog.js";
 import { createSkillHarnessServer, HARNESS_DEFAULT_HOST, renderHarnessMarkdown } from "../harness/server.js";
 import { cleanup, tempProject } from "./helpers/cli.js";
@@ -20,7 +21,7 @@ void test("harness separates visible entries from the complete hidden procedure 
   const procedureCatalog = await loadProcedureCatalog(REPO_ROOT);
   assert.equal(loaded.catalog.summary.visible_entries, 1 + LITERATURE_ADAPTER_SKILL_IDS.length);
   assert.equal(loaded.catalog.summary.procedures, procedureCatalog.size);
-  assert.equal(loaded.catalog.summary.arsu_procedures, 4);
+  assert.equal(loaded.catalog.summary.arsu_procedures, ARSU_ROUTING_CATALOG.skills.length);
   assert.equal(loaded.catalog.summary.companion_procedures, COMPANION_INTENTS.length - 1);
   const capabilities = await loadCapabilityRegistry();
   assert.equal(loaded.catalog.summary.core_procedures, capabilities.capabilities.size);

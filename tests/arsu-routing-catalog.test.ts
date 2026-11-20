@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { ARSU_ROUTING_CATALOG, getArsuRoute, getArsuSkillDefinition } from "../src/arsu-converter/routing/catalog.js";
+import { SR_SCREENING_GRAPH_PROFILE } from "../src/arsu-converter/workflow/graph-profiles/sr-screener.js";
 import {
   ARSU_SKILL_IDS,
   ArsuRoutingCatalogSchema,
@@ -22,17 +23,33 @@ const expectedRoutes = {
   "academic-paper": ["full", "outline-only", "revision", "abstract-only", "lit-review", "format-convert", "citation-check", "plan", "revision-coach", "disclosure", "rebuttal-audit"],
   "academic-paper-reviewer": ["full", "re-review", "quick", "methodology-focus", "guided", "calibration"],
   "academic-pipeline": ["end-to-end", "mid-entry"],
+  "sr-screener": ["protocol", "quick", "pilot", "ta-screen", "ft-screen", "adjudicate", "audit", "report"],
 } as const;
 
 void test("canonical routing catalog covers the locked ARSU surface", () => {
   assert.deepEqual(ARSU_ROUTING_CATALOG.skills.map((skill) => skill.skill_id), [...ARSU_SKILL_IDS]);
   const routes = ARSU_ROUTING_CATALOG.skills.flatMap((skill) => skill.routes);
-  assert.equal(routes.filter((route) => route.route_kind === "mode").length, 25);
+  assert.equal(routes.filter((route) => route.route_kind === "mode").length, 33);
   assert.equal(routes.filter((route) => route.route_kind === "entry").length, 2);
   for (const skill of ARSU_ROUTING_CATALOG.skills) {
     assert.deepEqual(skill.routes.map((route) => route.route_ref.split(":", 2)[1]), [...expectedRoutes[skill.skill_id]]);
   }
   assert.deepEqual(validateRoutingCatalogReferences(ARSU_ROUTING_CATALOG), []);
+});
+
+void test("screening ballots stay independent until both reviewers return", () => {
+  const profile = SR_SCREENING_GRAPH_PROFILE;
+  for (const group of profile.parallel_groups) {
+    const reviewers = profile.nodes.filter(node => group.node_ids.includes(node.node_id));
+    assert.equal(reviewers.length, 2);
+    assert.equal(group.join_policy, "all");
+    for (const reviewer of reviewers) {
+      assert.ok(reviewer.input_bindings.every(input => !group.node_ids.includes(input.from_node_id ?? "")));
+    }
+    assert.ok(profile.nodes.some(node => group.node_ids.every(id =>
+      node.prerequisites.includes(id) && node.input_bindings.some(input => input.from_node_id === id))));
+  }
+  assert.equal(profile.parallel_groups.length, 3);
 });
 
 void test("all routes expose current summaries without framework-owned artifact paths", () => {

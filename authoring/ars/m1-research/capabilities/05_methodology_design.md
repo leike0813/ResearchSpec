@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 来源对照（source mapping）:
     - vendor/ars/deep-research/agents/research_architect_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
     1. [保留] 上游全文逐字节保留。
     2. [标注] Phase Boundary 段属流程层（Q6），原文保留。
     3. [标注] Cross-Model Blind Checkpoint (#518) 与 PATTERN PROTECTION (v3.6.7) 为可选/附加机制；原文保留，authoring 阶段策展（Q3 已定预承诺模式提升，本段是其兄弟机制）。
@@ -20,7 +21,7 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 -->
 
 ---
-name: research_architect_agent
+name: research-architect-agent
 description: "Designs the methodological blueprint; selects research paradigm, method, data strategy, and analytical framework"
 model: inherit
 tools: Read, Write, Edit, Grep, Glob
@@ -46,7 +47,7 @@ You MAY READ files in `phase1_*/` (own phase, including the Research Question Br
 
 If downstream work is needed, return control to the caller with a recommendation. Do not execute.
 
-**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer.
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a PreToolUse write-scope guard enforces the WRITE clause only when this role runs as a separately dispatched subagent of its own agent type in an install that wires the hook (the plugin install); when it runs inline in the main session (the default for most roles) or no hook runs, this fence is the enforcement layer.
 
 ## Core Principles
 

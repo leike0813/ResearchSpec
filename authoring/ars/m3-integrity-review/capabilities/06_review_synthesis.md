@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 来源对照（source mapping）:
     - vendor/ars/academic-paper-reviewer/agents/editorial_synthesizer_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
   0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 上游全文逐字节保留。
     2. [标注] 三步骤机械协议 + forbidden-ops 是本能力的核心程序（近机械），原文保留；引用 KP-M3-04（编辑决定标准）。
@@ -49,7 +50,7 @@ You MAY READ all 5 reviewer cards from Phase 1 plus the paper draft for legitima
 
 If revision-side work is needed, return control to the caller. The revision is a separate academic-paper Phase 6 re-invocation of `draft_writer_agent`, not your job.
 
-**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer. The v3.6.2 Sprint Contract Synthesizer Protocol below ALSO applies.
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a PreToolUse write-scope guard enforces the WRITE clause only when this role runs as a separately dispatched subagent of its own agent type in an install that wires the hook (the plugin install); when it runs inline in the main session (the default for most roles) or no hook runs, this fence is the enforcement layer. The v3.6.2 Sprint Contract Synthesizer Protocol below ALSO applies.
 
 ---
 
@@ -157,6 +158,7 @@ Split each weakness bundle into atomic sub-claims and record one row per `(sub_c
 - `sub_claim_id`: `SC-<n>`, synthesizer-assigned, stable within this synthesis.
 - `parent_weakness`: short label of the bundle the sub-claim was split from (traceability back to the reviewer's original phrasing).
 - `position` ∈ `{raised, corroborated, not-mentioned, disputed}`. **`not-mentioned` is silence, NOT opposition** — a reviewer who never spoke to a sub-claim neither agrees nor dissents. `disputed` is the one conflicting position: use it when a reviewer either (a) argues the sub-claim is NOT a real problem, OR (b) agrees the problem exists but recommends an **incompatible remedy / materially different severity** than another reviewer. Both an existence conflict and an action/severity conflict are `disputed`.
+- DA rows (#1098): when an issue row of the DA reports a sub-claim that a non-DA seat raised, record it as a row with `reviewer_id` = `DA` and `position` = `raised`, with the DA row's anchor, band severity, and Confidence. A DA row never creates a sub-claim and is never counted in Step 2. `disputed` compares non-DA seats only: a non-DA row is never `disputed` because it differs from a DA row in existence, remedy, or severity, at any `agree` count. Keep such a difference visible beside the DA row; DA-CRITICAL adjudication does not change.
 - `evidence_pointer`: where in the reviewer's card the sub-claim is grounded — copy the finding's typed Evidence Anchor when the card carries one (#574 A2).
 - `severity`: TRANSPORTED, never re-derived (#574 A3) — copy the seat's explicit per-finding **Severity** tag for the parent weakness (every current-format card carries one per weakness; the DA's tables carry it as the section band). All sub-claims decomposed from one parent share the parent's transported severity — a severity difference between sub-claims means they came from different parent weaknesses, never from re-rating. If a legacy card lacks the tag, derive from context and mark the row `[SEVERITY-SOURCE: letter-fallback]` so the provenance stays visible.
 - `confidence`: the reviewer's per-finding **Confidence** (1-5) from the weakness entry (#574 A3), retained only as self-reported uncertainty/scope metadata. It never changes consensus counts, severity, decision bearing, or arbitration. A legacy card without per-finding confidence falls back to its report-level Confidence Score — mark the row `[CONFIDENCE-SOURCE: report-level]`.
@@ -188,7 +190,7 @@ Authorship (whether a sub-claim originated from a human or an AI reviewer) is **
 
 Consensus is determined across the 4 non-DA reviewers (Journal-Fit Reviewer, R1, R2, R3), **computed per `sub_claim_id` from the Step 1b inventory** (not per weakness bundle). The DA's findings are handled separately.
 
-**Counting rule.** The denominator is always **the 4 non-DA reviewers**, never "the reviewers who spoke." For each sub-claim count: `agree` = reviewers with `position ∈ {raised, corroborated}`; `conflict` = reviewers with `position = disputed`; `silent` = `not-mentioned`. A `not-mentioned` position is neither agreement nor opposition — it is NOT promoted into agreement, so a sub-claim only 1 reviewer raised is a **1/4 finding, never a consensus**. (This is the guard against a single-reviewer sub-claim being mislabeled CONSENSUS-4 just because no one contradicted it.)
+**Counting rule.** The denominator is always **the 4 non-DA reviewers**, never "the reviewers who spoke." For each sub-claim count: `agree` = reviewers with `position ∈ {raised, corroborated}`; `conflict` = reviewers with `position = disputed`; `silent` = `not-mentioned`. A Step 1b row with `reviewer_id` = `DA` is never counted in `agree`, `conflict`, or `silent`. A `not-mentioned` position is neither agreement nor opposition — it is NOT promoted into agreement, so a sub-claim only 1 reviewer raised is a **1/4 finding, never a consensus**. (This is the guard against a single-reviewer sub-claim being mislabeled CONSENSUS-4 just because no one contradicted it.)
 
 Every sub-claim in the Step 1b inventory has `agree ≥ 1` by construction — the synthesizer only creates a sub-claim from a weakness a reviewer actually `raised`/`corroborated`, so `agree = 0` rows do not exist and need no disposition. (A reviewer can only `dispute` a sub-claim that some reviewer raised.)
 
@@ -211,7 +213,7 @@ The labels are pinned to absolute counts over 4 and are **mutually exclusive**. 
 
 #### Corroborated / single-reviewer findings (below the consensus bar, `conflict = 0`)
 - `agree = 2, conflict = 0` → **corroborated finding** (two reviewers, no conflict): action-bearing only to the extent warranted by the named criterion and anchored evidence; it is NOT a CONSENSUS-3/4 label.
-- `agree = 1, conflict = 0` → **single-reviewer finding**: retained and evaluated against its named criterion and anchored evidence; it does not carry a consensus label and is not a SPLIT.
+- `agree = 1, conflict = 0` → **single-reviewer finding**: retained and evaluated against its named criterion and anchored evidence; it does not carry a consensus label and is not a SPLIT. If an issue row of the DA reports the same sub-claim, the label is instead **single-reviewer finding, DA-corroborated** (#1098). The label records that the DA also raised the sub-claim; it is not a vote. `agree` stays 1 and the denominator stays the 4 non-DA reviewers. Evaluate the finding against its named criterion and the anchored evidence of both rows. Show the seat's and the DA's transported severities side by side; a gap between them is not a `disputed` position, because the DA is not one of the 4. The label is not evidence of independent judgement: all seats can share one model, and peer-output blinding does not prove independent errors (#574 P0-3/#740).
 - These never trigger Journal-Fit Reviewer arbitration on their own (no conflict to arbitrate).
 
 #### [SPLIT]: Divided Opinion (`conflict ≥ 1 AND agree ≥ 1`)
@@ -286,7 +288,7 @@ Based on the decision matrix in `references/editorial_decision_standards.md`:
 The editorial decision is irreversible once the decision letter ships. When `ARS_CROSS_MODEL` is set AND the consent gate in `shared/cross_model_verification.md` has been passed (reviewer cards + paper metadata go to an external provider — the env var alone is not consent), run a blind disagreement check once your decision exists and before the roadmap is built. **Dispatched exception to that ordering:** when you run as a dispatched subagent the transport cannot complete inside your run, so emit the handoff block of step 2 at this point, still finish the letter and roadmap in the same run, and the dispatching layer completes the comparison after you return — post-return completion is safe here because the cross-model's drivers never enter the roadmap or the scoring matrix (sprint-contract boundary below), so nothing the check produces can change what the roadmap contains. **Where it runs:** in the standard Synthesis Protocol, after Step 4 and before Step 5; under a v3.6.2 sprint contract, as a **post-Step-3 comparison** — the mechanical three steps (build matrix → evaluate conditions → precedence) execute exactly as specified and emit `editorial_decision` first, and this check happens strictly after, never extending or re-running the contract arithmetic.
 
 1. Record your own decision in structured form first: `{decision: accept | minor_revision | major_revision | reject, drivers: [up to 3 one-sentence reasons], confidence: low | medium | high}` — all three fields, the envelope grammar rejects a bare decision; in sprint mode the decision is the emitted `editorial_decision` verbatim; the drivers name the fired condition(s) or, in standard mode, the Step 4 rationale.
-2. Prepare the cross-model input for the structured-decision prompt from `shared/cross_model_verification.md` § Blind Disagreement Checkpoints: the panel's usable reviewer cards — all `panel_size` N of them (5 in the default full-mode panel, 2 under `methodology_focus`; never a hardcoded count) — plus paper metadata. **Never include your decision, the scoring matrix outcome, or your rationale** — the cross-model decides blind (anchoring prevention). **You never execute the API call yourself (#523):** you are a fenced single-phase (Bucket A) agent — all Bash is denied at runtime by `scripts/ars_write_scope_guard.py`. When you run as a dispatched subagent, emit this input as the canonical `[CROSS-MODEL-HANDOFF v1]` envelope (`shared/cross_model_verification.md` § Cross-model handoff envelope (#527)) with `checkpoint_kind: editorial_decision`, `owner_agent: editorial_synthesizer_agent`, `expected_result: enum_comparison`, a `correlation_id` you choose, and your committed structured decision in the `owner_decision` header — the header travels outside the payload and is never forwarded to the cross-model; the dispatching layer (the session or orchestrator that invoked you) executes the transport per § Blind Disagreement Checkpoints → Transport ownership. When this role executes inline in a context that holds shell capability, that context is its own dispatching layer and runs the call directly.
+2. Prepare the cross-model input for the structured-decision prompt from `shared/cross_model_verification.md` § Blind Disagreement Checkpoints: the panel's usable reviewer cards — all `panel_size` N of them (5 in the default full-mode panel, 2 under `methodology_focus`; never a hardcoded count) — plus paper metadata. **Never include your decision, the scoring matrix outcome, or your rationale** — the cross-model decides blind (anchoring prevention). **You never execute the API call yourself (#523):** you are a single-phase (Bucket A) agent; `scripts/ars_write_scope_guard.py` denies you all Bash only when you run as a separately dispatched subagent of your own agent type in an install that wires the hook (#973), and otherwise this rule alone keeps the call out of your hands. When you run as a dispatched subagent, emit this input as the canonical `[CROSS-MODEL-HANDOFF v1]` envelope (`shared/cross_model_verification.md` § Cross-model handoff envelope (#527)) with `checkpoint_kind: editorial_decision`, `owner_agent: editorial_synthesizer_agent`, `expected_result: enum_comparison`, a `correlation_id` you choose, and your committed structured decision in the `owner_decision` header — the header travels outside the payload and is never forwarded to the cross-model; the dispatching layer (the session or orchestrator that invoked you) executes the transport per § Blind Disagreement Checkpoints → Transport ownership. When this role executes inline in a context that holds shell capability, that context is its own dispatching layer and runs the call directly.
 3. The cross-model returns `{decision: accept | minor_revision | major_revision | reject, drivers: [up to 3], confidence}` (via the dispatching layer when you were dispatched).
 4. Differing enum values = material divergence (adjacent categories, e.g. minor vs major revision, are still material; note adjacency). On divergence, add a **Cross-Model Divergence** subsection to the Decision Rationale: state both structured decisions and address each cross-model driver specifically against the reviewer cards already on file. Your decision stands unless the **user** changes it — divergence is a review trigger, never a vote, and the two decisions are never averaged. (When dispatched, the dispatching layer re-invokes you with the cross-model's structured decision to write this subsection — the enum comparison is mechanical, but the rebuttal is your judgment against the reviewer cards, never the dispatcher's.)
 5. Agreement → one line in the decision letter: `[CROSS-MODEL-CHECKPOINT: agreement — editorial-decision]`, with both structured decisions recorded (when you were dispatched and have already returned, the dispatching layer appends this — a mechanical fill from the two committed decisions; on divergence the step 4 re-invocation records it with the rebuttal).
@@ -299,7 +301,7 @@ When `ARS_CROSS_MODEL` is not set: no behavioral change.
 ### Step 5: Revision Roadmap Construction
 
 Emit `shared/contracts/revision/revision_roadmap.schema.json` with
-`schema_version: revision-roadmap/1.0`. **Roadmap items are keyed to
+`schema_version: revision-roadmap/1.1`. **Roadmap items are keyed to
 `sub_claim_id`, not weakness bundles**: a compound weakness whose sub-claims
 reached different dispositions produces separate items. Keep all items in the
 schema's deterministic `source_refs` order; severity, obligation, cost, and
@@ -316,6 +318,17 @@ For every item, keep these concepts independent:
   acceptance prediction; and
 - exact `proposed_targets[]` block ids and allowed operations from the bound
   block manifest.
+
+Set `consensus_level` from the Step 2 label of the driving sub-claim (#1100):
+`CONSENSUS-4`, `CONSENSUS-3`, `CORROBORATED` (corroborated finding, agree =
+2), `SINGLE-REVIEWER` (single-reviewer finding, agree = 1), `SPLIT`, or
+`DA-CRITICAL`. `SINGLE-VERIFIER` is only for a re-review `previously_missed`
+item. When an issue row of the DA reports the same sub-claim, copy that row
+into `corroborating_sources[]` with `reviewer: DA` and its transported
+severity, evidence anchor, and confidence. The DA row is not an independent
+judgement: it never changes `agree`, `consensus_level`, or `obligation_class`,
+and independent support is read from `consensus_level`, never from the length
+of `corroborating_sources[]`.
 
 The roadmap is reviewer-owned core only. Do not emit `author_triage`, author
 reasons, display order, work order, claim-strength authorization, or collateral
@@ -382,6 +395,12 @@ Thank you for submitting your manuscript titled "[Paper Title]" to [Journal Name
 - [CONSENSUS-3] [Consensus content]
 ...
 
+#### Below the Consensus Bar (#1100)
+- [CORROBORATED] [Seats, e.g. R1, R2] — [Finding] — [SC-n]
+- [SINGLE-REVIEWER] [Seat] — [Finding] — [SC-n]
+  - [Only when an issue row of the DA reports the same sub-claim:] DA-corroborated: the DA reports the same sub-claim. The DA is not an independent seat and does not change the count.
+[List each corroborated and single-reviewer finding that reaches the roadmap. Few seats is not low importance; the criterion and the anchored evidence decide. Write "None." under this heading when there are none.]
+
 #### Points of Disagreement
 - **[Issue]**: R[X] argues [View A]; R[Y] argues [View B].
   - **Editor's Resolution**: [Arbitration result] — [Rationale]
@@ -410,7 +429,7 @@ Thank you for submitting your manuscript titled "[Paper Title]" to [Journal Name
 
 ### Required Revisions (Must Fix)
 
-> **Ordinal contract (#576/#670):** `R<n>` follows immutable roadmap source order filtered to `obligation_class == must_fix`; author-selected display order and triage never enter the derivation. Blocks are exactly `R1..Rn`. Each Acceptance criteria value is a single-line `- **Acceptance criteria**: <text>` bullet. The machine artifact is the closed `revision-roadmap/1.0` core, not an author-editable work list.
+> **Ordinal contract (#576/#670):** `R<n>` follows immutable roadmap source order filtered to `obligation_class == must_fix`; author-selected display order and triage never enter the derivation. Blocks are exactly `R1..Rn`. Each Acceptance criteria value is a single-line `- **Acceptance criteria**: <text>` bullet. The machine artifact is the closed `revision-roadmap/1.1` core, not an author-editable work list.
 
 | Transport ref | Revision Item | Sub-Claim(s) | Severity | Evidence Anchor | Confidence | Source | Obligation class | Cost scope | Bounded consequence |
 |---|--------------|--------------|----------|-----------------|------------|--------|------------------|------------|---------------------|

@@ -27,6 +27,7 @@ import type { AnchorReplacementPlan } from "./anchors/types.js";
 import type { RuntimePolicyPlan } from "./runtime-policy/types.js";
 import { ArsuSkillIdSchema, type ArsuSkillId } from "./routing/contracts.js";
 import { projectSkillFrontmatterDescription, type SkillDescriptionProjection } from "./routing/projection.js";
+import { getArsuSkillDefinition } from "./routing/catalog.js";
 import { emitArsuSkillLicensing } from "./licensing.js";
 import { revisionPatchJsonSchema } from "./revision/contract.js";
 
@@ -276,7 +277,9 @@ async function copyTransformedFile(
     await writeUtf8(outputFile, revisionPatchJsonSchema());
     transformRule = "researchspec_revision_patch_schema_projection";
   } else if (isTextResource(sourcePath) || runtimePolicy.spans_by_source.has(sourcePath)) {
-    let text = await readUtf8(sourceFile);
+    let text = sourcePath === "sr-screener/SKILL.md"
+      ? renderScreeningEntry()
+      : await readUtf8(sourceFile);
     text = applyCombinedReplacements(text, sourcePath, `${groupName}/${outputPath}`, anchorReplacements, runtimePolicy);
     const protectedAnchors = protectAnchorBlocks(text);
     text = protectedAnchors.text;
@@ -293,7 +296,9 @@ async function copyTransformedFile(
       contractInjection = injected.result;
     }
     await writeUtf8(outputFile, text);
-    transformRule = contractInjection?.injected
+    transformRule = sourcePath === "sr-screener/SKILL.md"
+      ? "researchspec_host_neutral_screening_entry_projection"
+      : contractInjection?.injected
       ? "text_copy_with_dependency_rewrite_routing_description_and_contract_preflight"
       : "text_copy_with_dependency_rewrite";
   } else {
@@ -316,6 +321,16 @@ async function copyTransformedFile(
     contractInjection,
     routingDescription,
   };
+}
+
+function renderScreeningEntry(): string {
+  const routes = getArsuSkillDefinition("sr-screener").routes;
+  const modes = routes.map((route) => {
+    if (route.route_kind !== "mode") throw new Error(`Expected screening mode route: ${route.route_ref}`);
+    const execution = route.mode_id === "quick" ? "Standalone; does not schedule a graph node." : "Available in the sr-screener graph profile.";
+    return `- \`screening-${route.mode_id}\` (${execution}) ${route.title}: ${route.intents.join("; ")}. Produces ${route.boundary_outputs.map((item) => `\`${item.role}\``).join(", ")}.`;
+  });
+  return `---\nname: sr-screener\ndescription: Host-neutral systematic review screening workflows.\n---\n\n# Systematic review screening\n\nUse the ResearchSpec \`sr-screener\` graph profile for governed screening runs. Each route below is backed by its host-neutral procedure; continue with \`instructions procedure:<id>\` and, for profile runs, the active graph node instructions. Quick triage is standalone and does not schedule a graph node.\n\nBefore starting a full run, confirm the scope and estimated effort for protocol, pilot, title/abstract screening, exclusion QC, full-text screening and final reporting, including the human Gates. After protocol approval, the coordinator runs the screening-pilot package tool with \`prepare WORK INPUT... --config CONFIG\`, binds WORK/records.json as screening_data_identity and gives each pilot seat only its isolated packet. Confirm the batch estimate before dispatch.\n\n${modes.join("\n")}\n\nResearchSpec owns workflow state; procedures produce screening artifacts through the run handoff.\n`;
 }
 
 function protectAnchorBlocks(text: string): { text: string; blocks: string[] } {

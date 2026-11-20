@@ -27,7 +27,7 @@ validators:
 knowledge_refs:
   - knowledge_id: 7mode-failures
     path: knowledge/7mode-failures.md
-    content_hash: cbe167f22156abe44a23876c1dbf7c7262228c5455794c449e99fe7455bc8bc3
+    content_hash: 15cd5b0b2af82fef5cc805ab5a28027e44e179211d65e9cdd835a7f5138009a3
     license: CC BY-NC 4.0
   - knowledge_id: integrity-protocol
     path: knowledge/integrity-protocol.md
@@ -42,5 +42,5 @@ provenance:
     - KP-M3-09
   upstream_sources:
     - path: authoring/ars/m3-integrity-review/capabilities/01_reference_integrity_verification.md
-      sha256: e6ffe63a07e733f5d297915f82f55c1d12c15ddd5821dc9201b3f05a01dfb7e2
+      sha256: 3cf110c39e08b358bcf5748047f8866aca0031f40e6767fdbc1f26bb866b436b
 license: CC BY-NC 4.0

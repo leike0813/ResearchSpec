@@ -5,6 +5,7 @@ ResearchSpec contains material adapted from Academic Research Skills (ARS):
 - Copyright: Copyright (c) 2026 Cheng-I Wu
 - Source: https://github.com/Imbad0202/academic-research-skills
 - Vendored source: `vendor/ars`
+- Upstream sr-screener maintainer: erfanz97 (see `skills/arsu/sr-screener/NOTICE.md`).
 - License: Creative Commons Attribution-NonCommercial 4.0 International
 - License URL: https://creativecommons.org/licenses/by-nc/4.0/
 

@@ -40,7 +40,7 @@ knowledge_refs:
     license: CC BY-NC 4.0
   - knowledge_id: sprint-contract
     path: knowledge/sprint-contract.md
-    content_hash: d11895a0a936c4c860c143915feb3f0df212700baa4fbb449cd240e70424ef14
+    content_hash: 6ae712777220ca36ac6beb39009856c9f96df4c6138f002bc4a7ab418a11785e
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -51,5 +51,5 @@ provenance:
     - KP-M3-06
   upstream_sources:
     - path: authoring/ars/m3-integrity-review/capabilities/03_editorial_judgment.reviewer-variant.md
-      sha256: c5ec3150c7e7cc4c89358853d13af0bde8f211e0a735bcd8c72330d1f931943d
+      sha256: 9690e570d081bfcdef6da23fb93064af4028c9d6b766fcbcf0cf0981463d492f
 license: CC BY-NC 4.0

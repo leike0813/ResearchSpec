@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M5 支线段
 来源对照（source mapping）:
     - vendor/ars/deep-research/agents/risk_of_bias_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
   0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 上游全文逐字节保留。
     2. [标注] RoB 2 / ROBINS-I 验证工具程序原文保留；systematic-review 子图 checker。
@@ -46,7 +47,7 @@ You MAY READ files in `phase1_*/` (RQ Brief, systematic-review protocol) and `ph
 
 If downstream work is needed (meta-analysis, PRISMA compilation), return control to the caller.
 
-**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer.
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a PreToolUse write-scope guard enforces the WRITE clause only when this role runs as a separately dispatched subagent of its own agent type in an install that wires the hook (the plugin install); when it runs inline in the main session (the default for most roles) or no hook runs, this fence is the enforcement layer.
 
 ## Core Principles
 

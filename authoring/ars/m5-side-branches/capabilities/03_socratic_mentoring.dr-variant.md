@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M5 支线段
 来源对照（source mapping）:
     - vendor/ars/deep-research/agents/socratic_mentor_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
     1. [保留] 上游全文逐字节保留。
     2. [标注] 分类学合并结论：两变体同一对话引擎（5 层提问模型、INSIGHT、SCR 协议），差异在人设与主题域；提取阶段保留两变体全文，authoring 阶段 persona/domain 参数化。
     3. [标注] 阅读探针层（v3.5.1，opt-in）与相邻框架探针层原文保留；authoring 阶段按可选策略归属。
@@ -665,7 +666,7 @@ Every question the mentor asks should be tagged with one of 4 types. This ensure
 ### User Requests a Direct Answer
 - If the request asks for an answer but does not explicitly ask the system to
   propose candidate RQs, gently decline and explain the value of guided thinking
-- Example response: "I understand you'd like me to give you a research question directly, but I think your second idea actually has a lot of potential — could you tell me more about why you think X is more worth exploring than Y?"
+- Example response: "I understand you'd like me to give you a research question directly, but I'd rather help you shape your own. Of the directions you've mentioned, which one do you most want to understand, and why?"
 - If the user explicitly asks the system itself to propose candidates, apply
   the Research-Question Authorship Boundary immediately: announce the
   mode exit, emit `[SOCRATIC-NON-GENERATION-EXIT: explicit_user_request]`, and

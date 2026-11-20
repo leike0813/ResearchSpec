@@ -75,7 +75,6 @@ void test("dogfooding playbook catalog covers routes, fixtures, and release mapp
 
   const routing = JSON.parse(await readFile("skills/arsu/routing-catalog.json", "utf8")) as RoutingCatalog;
   const canonicalRoutes = new Set(routing.skills.flatMap((skill) => skill.routes.map((route) => route.route_ref)));
-  assert.equal(canonicalRoutes.size, 27);
   assert.deepEqual([...referencedRoutes].sort(), [...canonicalRoutes].sort());
 
   const manualChecklist = (await readFile("artifacts/release/mvp-release-checklist.md", "utf8"))

@@ -3,12 +3,13 @@ import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { parse as parseYaml } from "yaml";
+import { SCREENING_MODE_MAP, screeningDocPath } from "./arsu-screening-mode-map.mjs";
 
 const ROOT = process.cwd();
 const ARS = path.join(ROOT, "vendor", "ars");
 const CAPABILITIES = path.join(ROOT, "skills", "capabilities");
 const PROFILE_ROOT = path.join(ROOT, "skills", "arsu", "profiles");
-const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.22.2-7de1c9d";
+const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.24.4-23807f9";
 const OUT = process.argv[2] ? path.resolve(process.argv[2]) : path.join(ROOT, "audits", "arsu", DEFAULT_ANCHOR, "artifacts", "arsu-mode-capability-review.html");
 
 const esc = (text) => String(text ?? "")
@@ -529,6 +530,12 @@ const MODE_DEFINITIONS = [
   },
 ];
 
+MODE_DEFINITIONS.push(...SCREENING_MODE_MAP.map((entry) => ({
+  route: entry.route, skill: "sr-screener", mode: entry.mode, title: entry.title,
+  upstream: entry.upstream.map((item) => ({ rel: screeningDocPath(item), kind: item.kind.toUpperCase(), purpose: item.name })),
+  converted: { profile: "sr-screener", profileNodes: entry.nodes ?? [], capabilities: [entry.capability] },
+})));
+
 // ---------- graph profiles (converter-owned generated registry) ----------
 const profileRegistry = JSON.parse(readFileSync(path.join(PROFILE_ROOT, "registry.json"), "utf8"));
 const GRAPH_PROFILES = Object.fromEntries(profileRegistry.profiles.map((entry) => {
@@ -620,10 +627,11 @@ function capabilityCard(capId, nodeIds, relationLabel) {
 function convertedSection(def, modeId) {
   if (def.profile) {
     const profile = GRAPH_PROFILES[def.profile];
-    if (!profile) return `<p class="missing">missing profile ${def.profile}</p>`;
+    if (!profile) return (def.capabilities ?? []).map((id, i) => capabilityCard(id, [`mode-${modeId}-${i + 1}`], "mode capability")).join("\n") || `<p class="missing">missing profile ${def.profile}</p>`;
     const cards = [];
     const seen = new Set();
-    for (const node of profile.nodes) {
+    const visibleNodes = def.profileNodes === undefined ? profile.nodes : profile.nodes.filter((node) => def.profileNodes.includes(node.node_id));
+    for (const node of visibleNodes) {
       if (node.kind === "capability") {
         if (!seen.has(node.capability_id)) {
           seen.add(node.capability_id);
@@ -636,9 +644,10 @@ function convertedSection(def, modeId) {
       }
     }
     const note = def.note ? `<div class="note">${esc(def.note)}</div>` : "";
-    const flow = `<div class="profile-flow"><strong>节点顺序</strong> ${profile.nodes.map((n) => `<span class="flow-node ${n.kind}">${esc(n.node_id)}</span>`).join("<span class=\"flow-arrow\">→</span>")}</div>`;
+    const flow = `<div class="profile-flow"><strong>节点顺序</strong> ${visibleNodes.map((n) => `<span class="flow-node ${n.kind}">${esc(n.node_id)}</span>`).join("<span class=\"flow-arrow\">→</span>")}</div>`;
     const extra = (def.extraCapabilities ?? []).map((id, i) => capabilityCard(id, [`resume-extra-${i + 1}`], "mode-relevant resume guard")).join("\n");
-    return `<div class="profile-banner">Graph profile <code>${esc(def.profile)}</code> v${esc(profile.profile_version)} · ${profile.nodes.length} 个顶层节点</div>${flow}${note}${cards.join("\n")}${extra ? `<div class="profile-banner">Resume 守卫能力（附加于 profile 之外）</div>${extra}` : ""}`;
+    const standalone = (def.capabilities ?? []).filter((id) => !visibleNodes.some((node) => node.capability_id === id)).map((id, i) => capabilityCard(id, [`mode-${modeId}-${i + 1}`], "mode capability"));
+    return `<div class="profile-banner">Graph profile <code>${esc(def.profile)}</code> v${esc(profile.profile_version)} · ${visibleNodes.length} 个相关节点</div>${flow}${note}${cards.join("\n")}${standalone.join("\n")}${extra ? `<div class="profile-banner">Resume 守卫能力（附加于 profile 之外）</div>${extra}` : ""}`;
   }
   const ids = def.capabilities ?? [];
   const note = def.note ? `<div class="note">${esc(def.note)}</div>` : "";
@@ -686,8 +695,8 @@ function modePanel(def, routeInfo, index) {
 }
 
 // ---------- assemble ----------
-const skillOrder = [DEEP, PAPER, REVIEWER, PIPELINE];
-const skillTitles = { [DEEP]: "deep-research", [PAPER]: "academic-paper", [REVIEWER]: "academic-paper-reviewer", [PIPELINE]: "academic-pipeline" };
+const skillOrder = [DEEP, PAPER, REVIEWER, PIPELINE, "sr-screener"];
+const skillTitles = { [DEEP]: "deep-research", [PAPER]: "academic-paper", [REVIEWER]: "academic-paper-reviewer", [PIPELINE]: "academic-pipeline", "sr-screener": "sr-screener" };
 const tabButtons = MODE_DEFINITIONS.map((def, i) => {
   const ri = routeIndex.get(def.route) ?? {};
   return `<button class="tab skill-${def.skill}" data-panel="panel-${i}" data-skill="${esc(def.skill)}"><span class="skill-dot"></span><span class="tab-mode">${esc(def.mode)}</span><span class="tab-title">${esc(def.title)}</span></button>`;

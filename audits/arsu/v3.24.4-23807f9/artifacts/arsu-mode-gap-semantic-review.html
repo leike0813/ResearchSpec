@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARSU 语义审阅</title>
+<style>body{max-width:1200px;margin:2rem auto;padding:0 1rem;font:16px/1.7 system-ui,sans-serif;color:#243044}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccd3dc;padding:.5rem;text-align:left;vertical-align:top}pre{overflow:auto;background:#f3f5f8;padding:1rem}code{overflow-wrap:anywhere}a{color:#245da8}</style>
+</head><body><h1>ARS v3.24.4 语义审阅</h1>
+<p>本轮比较 <code>v3.22.2</code>（<code>7de1c9d</code>）与 <code>v3.24.4</code>（<code>23807f9</code>）。上游完整差异为 345 个文件（+26,056 / -1,882 行）；本次涉及 ARSU 指令和共享语义的目录（五个 Skill、<code>agents/</code>、<code>shared/</code>、<code>sr-screener/</code>）共 107 个变更文件（+6,796 / -501 行）。来源路径相对 <code>vendor/ars</code>，交付路径相对 <code>skills/capabilities</code>。extraction index 有 131 条：11 条新增、40 条 extraction SHA-256 变化、80 条未变、0 条删除。工作区另有 42 个已跟踪 authoring 文件改动（不含 index），其中两份仅更新行号/ledger 元数据，正文哈希未变；另有 11 份新 authoring 文件。逐项证据见本锚点 <code>06-incremental-update.md</code>。</p>
+<p>本次读取并复核了当前锚点 capability review、graph assessment 和 <code>04-review.md</code>。刷新后的 <code>sr-screener:quick</code> 显示 <code>screening-quick</code> 单包、306 行；assessment 为 100%（3/3）。quick 不再包含整个图。下文逐项 disposition 以当前 04 的 35 个 mode 行及两个 HTML 的锚点表为准。</p>
+<h2>筛选模式</h2>
+<table>
+<thead>
+<tr>
+<th>上游义务及出处</th>
+<th>转换承载及判断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>protocol，agents/protocol_architect_agent.md 的 “Output checklist” 要求将提议条款交团队确认。</td>
+<td>adapted。screening-protocol 产出协议正文与配置，正式图的 protocol-confirmation 由用户确认。</td>
+</tr>
+<tr>
+<td>quick，references/reviewer_roles.md 要求 “one reviewer” 明示初筛来源。</td>
+<td>preserved。screening-quick 输出单人 triage_table。它在图外可直接发现，不能构成 A/B 证据。</td>
+</tr>
+<tr>
+<td>pilot，references/quality_control.md 要求校准时检查种子、推进率、人类标签与分歧。</td>
+<td>adapted。pilot-a/b 各自生成 review_ballot，screening-pilot 对比团队标签并记录实际分母、κ 和 PABAK。试筛意见与 pilot-approval 是两份记录。</td>
+</tr>
+<tr>
+<td>ta-screen，references/decision_rules.md 的 “Full-text-only criteria never exclude here” 与 ordered exclusion codes。</td>
+<td>adapted。screening-review-ballot 逐席保留判断，screening-ta-screen 按共同协议合并，另交争议集合与盲态 QC 材料。题录无摘要不能直接等同于排除。</td>
+</tr>
+<tr>
+<td>ft-screen，decision_rules.md 要求 “One exclusion reason per report”，并用页码和章节定位。</td>
+<td>adapted。ft-a/b 对全文独立判断，screening-ft-screen 保留每份报告的排除理由；未取得的报告与已取得但无法分类的报告分别记账。</td>
+</tr>
+<tr>
+<td>adjudicate，reviewer_roles.md 要求只看争议记录与双方标签，避免用双方的理由代替重新判断。</td>
+<td>adapted。screening-adjudicate 输出 advisory，图中两阶段分别保存意见；人工覆盖须保留理由。</td>
+</tr>
+<tr>
+<td>audit，quality_control.md 规定 near miss 与共同排除项的可复现抽样，复核者重新读题录。</td>
+<td>adapted。screening-audit 只接收分配的盲态复查材料，输出记录级意见。即使样本无错也不能推断其余记录全部正确。</td>
+</tr>
+<tr>
+<td>report，reporting_and_handoff.md 要求 “Both stages mark counts as provisional”，并区分 records、reports 和 studies。</td>
+<td>adapted。screening-report 汇总决定文件，导出筛选日志、RIS、PRISMA、方法草稿和不含摘要的语料；人工核验是单独 Gate。</td>
+</tr>
+</tbody>
+</table>
+<p>以上来源路径均在 sr-screener/ 下。上游六个脚本和两个宿主工作流模板作为对照依据，ResearchSpec authoring 持有包内实现；上游原有宿主/模型调用约定没有转成 ResearchSpec 可执行接口。review-ballot 的两个席位接收隔离输入；这只保持输入隔离，不证明模型错误统计独立。</p>
+<h2>其余四个 Skill</h2>
+<table>
+<thead>
+<tr>
+<th>上游变更</th>
+<th>交付与判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deep-research 的 bibliography_agent 与 shared/references/per_source_method_weaknesses.md 区分作者承认及读者推断的局限。</td>
+<td>adapted。discovery-source-quality-grading 和 generation-report-compilation 保留来源定位与阅读范围。摘要、目录或未知范围只能支持明确披露的有限判断。</td>
+</tr>
+<tr>
+<td>academic-paper 的 citation_compliance_agent 限制 Chicago、MLA、IEEE、Vancouver 的自动纠正；citation_format_switcher 对已有 DOI 有保留要求。</td>
+<td>preserved。check-citation-format-compliance 报告发现；generation-format-rendering 按当前已确认的格式目标转换并保留来源中已有 DOI。check-citation-existence-verification 区分检得记录与证据相关性。</td>
+</tr>
+<tr>
+<td>academic-paper 的 revision_coach_agent 限定 formal research ethics review。</td>
+<td>adapted。transform-revision-roadmap-parsing 要求有权审查该研究的机构与用户本人指认；论文答辩、模拟审查和普通同行评审沿既有路径处理。</td>
+</tr>
+<tr>
+<td>academic-paper-reviewer field_analyst_agent 与 domain_reviewer_agent 要求给出覆盖受益/受损群体的席位，并限定文献覆盖日期。</td>
+<td>preserved。design-review-panel-config 明示负责席位或缺口；judgment-specialist-review 使用稿件版本日期和原文规定的缺日期情形。</td>
+</tr>
+<tr>
+<td>editorial_synthesizer_agent 的 “Below the Consensus Bar” 与 DA 来源区分。</td>
+<td>adapted。judgment-review-synthesis 使用四个非 DA 席位的固定分母。两席或一席支持与 DA 附和分别记录，不能升级共识。</td>
+</tr>
+<tr>
+<td>上游作者信的推荐文献核查与审稿判断核查是两个后置附件。</td>
+<td>adapted。judgment-editorial-judgment 保持只读附件，分开披露外部来源查询与稿件引文匹配；未执行的核查不可记为通过。</td>
+</tr>
+<tr>
+<td>academic-pipeline integrity_verification_agent 的摘要/正文一致性与实验出处规则。</td>
+<td>adapted。generation-abstract-writing 与 check-reference-integrity-verification 比较实际语言版本和正文，记录缺失的版本或实验材料。未知版本不能按旧版豁免。</td>
+</tr>
+</tbody>
+</table>
+<h2>文本锚点与适用范围</h2>
+<ul>
+<li>Reviewer 的 full、quick 两处 EIC Review Report 仅命中转换侧。上游使用 Journal-Fit Reviewer 显示名，ResearchSpec 保留 eic 的角色身份与实际交付。</li>
+<li>calibration 的 FNR、FPR、gold set 缺口继承旧锚点；AUC 一词命中也不能证明已运行冻结金标准下的校准实验。此路线继续披露 NOT_CALIBRATED。</li>
+<li>pipeline 的 Stage 1 RESEARCH 由子图承接。resume 的 reset boundary、awaiting_resume 与 consumes_hash 保持上轮的有意差异；恢复使用本地冻结图及精确 selector。</li>
+<li><code>sr-screener:protocol</code> — <code>gap:eligibility criteria</code> 与 <code>missing:inclusion and exclusion</code>：属于锚点词未命中，不构成语义缺口。<code>screening-protocol/SKILL.md</code> 声明 stage-specific eligibility rules；<code>knowledge/protocol_template.md</code> 明列 inclusion/exclusion decisions、按顺序检查 exclusion codes、TA/FT 阶段规则和确认字段；<code>knowledge/reviewer_roles.md</code> 要求按协议顺序判定并将不能明确判断的记录标成 unclear。判定 adapted/preserved：语义存在于专用 knowledge 与输出协议，机器连续词锚点不完整。 |</li>
+</ul>
+<h2>当前 04 非 preserved 项逐项 disposition</h2>
+<p>当前 04 的 35 个 mode 中，29 行没有 <code>gap / missing / converted_only / flow</code> 标记；这表示该组锚点检查未报异常，不等同于对 29 个 mode 完成逐项语义证明。本节逐条处理当前 04 标出的 11 个非 preserved 锚点：</p>
+<table>
+<thead>
+<tr>
+<th>04 route / finding</th>
+<th>disposition</th>
+<th>证据与边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>academic-paper-reviewer:full</code> — <code>converted_only:EIC Review Report</code></td>
+<td>adapted；显示名差异，不是额外输出契约</td>
+<td>上游 <code>academic-paper-reviewer/agents/eic_agent.md</code> 将该角色显示为 Journal-Fit Reviewer；HTML 转换侧命中 <code>judgment-editorial-judgment</code>。角色仍是 EIC 判断，mode 输出由 reviewer graph 的 editorial/synthesis 路径承接。</td>
+</tr>
+<tr>
+<td><code>academic-paper-reviewer:quick</code> — <code>converted_only:EIC Review Report</code></td>
+<td>adapted；同上</td>
+<td>quick 使用 <code>academic-paper-reviewer/agents/eic_agent.md</code> 的 quick 路径与 <code>judgment-editorial-judgment</code>；assessment 没有发现上游缺失交付。</td>
+</tr>
+<tr>
+<td><code>academic-paper-reviewer:calibration</code> — <code>gap:FNR</code></td>
+<td>gap；继承既有缺口</td>
+<td>当前包/图未实现基于冻结 gold set 的漏检率测量；保留 <code>NOT_CALIBRATED</code>。</td>
+</tr>
+<tr>
+<td><code>academic-paper-reviewer:calibration</code> — <code>gap:FPR</code></td>
+<td>gap；继承既有缺口</td>
+<td>当前包/图未实现基于冻结 gold set 的误报率测量；保留 <code>NOT_CALIBRATED</code>。</td>
+</tr>
+<tr>
+<td><code>academic-paper-reviewer:calibration</code> — <code>gap:gold set</code></td>
+<td>gap；继承既有缺口</td>
+<td>没有隔离且受控的 gold-set 实验和重复盲评；近似审稿节点不替代该能力。AUC 文本命中不补足缺口。</td>
+</tr>
+<tr>
+<td><code>academic-pipeline:end-to-end</code> — <code>flow:Stage 1 RESEARCH</code></td>
+<td>adapted；流程由 graph 承接</td>
+<td><code>academic-pipeline</code> profile 的 <code>research</code> 子图及 <code>research-gate</code> 承载阶段边界；不把 Stage 1 编排塞进 capability SKILL。</td>
+</tr>
+<tr>
+<td><code>academic-pipeline:resume_from_passport</code> — <code>gap:reset boundary</code></td>
+<td>adapted/removed；继承既有产品边界</td>
+<td>ARS passport hash 重放不进入 ResearchSpec；继续依据 frozen graph 和当前 run/node 状态。</td>
+</tr>
+<tr>
+<td><code>academic-pipeline:resume_from_passport</code> — <code>gap:awaiting_resume</code></td>
+<td>adapted/removed；继承既有产品边界</td>
+<td>ResearchSpec 没有该上游状态名；以 status 和精确 node instructions 判断是否可继续。</td>
+</tr>
+<tr>
+<td><code>academic-pipeline:resume_from_passport</code> — <code>gap:consumes_hash</code></td>
+<td>adapted/removed；继承既有产品边界</td>
+<td>不声明实现或消费 ARS passport hash。</td>
+</tr>
+<tr>
+<td><code>sr-screener:protocol</code> — <code>gap:eligibility criteria</code></td>
+<td>adapted/preserved；锚点误报，不是真实缺口</td>
+<td><code>screening-protocol/SKILL.md</code> 定义分阶段资格规则；<code>knowledge/protocol_template.md</code> 有 eligibility 清单、ordered exclusions、TA/FT 分段和确认记录。</td>
+</tr>
+<tr>
+<td><code>sr-screener:protocol</code> — <code>missing:inclusion and exclusion</code></td>
+<td>adapted/preserved；锚点误报，不是真实缺口</td>
+<td><code>knowledge/protocol_template.md</code> 明列 include/unclear/exclude decisions；<code>knowledge/reviewer_roles.md</code> 要求按 criteria 顺序判定及保留 unclear。</td>
+</tr>
+</tbody>
+</table>
+<p>各路线的模式范围、节点数和 package 行数以刷新后的 04-review 与两个 HTML 为准。screening quick 特别核对为 1 包/306 行；其他七个 screening mode 包含实际图中支撑其阶段的上游节点及独立 capability，不能将其行数理解为 standalone mode 只执行一个包。</p>
+<h2>本轮转换包逐项比较</h2>
+<p>按旧/新 <code>03-conversion.md</code> 的 package manifest SHA-12 比较，本轮新增 9 包、已有包 hash 变化 33 个、未变 14 个。逐包 parity 与当前 04 数值见 <code>06-incremental-update.md</code>；coverage 是机器文本指标，不等于语义验收。当前 mode 表已使用 refreshed HTML，其中 quick 是 1 包/306 行。</p>
+<table>
+<thead>
+<tr>
+<th>本轮对象</th>
+<th>审阅结论摘要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9 个新增 <code>screening-*</code> 包</td>
+<td>逐包核查输入/输出和程序边界；quick 为独立单审阅者 triage，不接完整图、不产生双审阅证据。其余 mode 对应图中的协议确认、pilot、TA/FT 双票、TA adjudication、排除审计与报告节点。上游脚本仅作来源对照；不视为包内可执行工具。逐包清单见 06。</td>
+</tr>
+<tr>
+<td>33 个既有 hash 变化包</td>
+<td>变化涉及论文 intake/摘要/引文、证据质量与综合、reviewer panel/判断、pipeline 完整性/恢复及 checker contracts。逐包 ID、parity 与判定依据见 06；hash 变化不自动说明对应上游文件均有语义变化。</td>
+</tr>
+<tr>
+<td>14 个既有 hash 未变包</td>
+<td>沿用旧锚点已审阅语义；本轮不把无 package diff 描述成重新验证。共享 registry 增长不会改变这些包的本地输入输出。完整 ID 清单见 06。</td>
+</tr>
+</tbody>
+</table>
+<h2>结论</h2>
+<p>declared-fit-with-notes。八种筛选模式均可发现。合成工作区经已安装的 CLI 完成 19 个节点、三个双席汇合和五个人工 Gate。交付包内工具通过独立试筛合票、多批次题录与全文筛选、待判续跑、排除码与证据定位、人工覆盖，以及 PRISMA、RIS、语料、方法草稿和日志五种导出。QC 的 advance 与 flag 分支、快照不匹配、缺失记录和未取得全文分别有行为用例。两次 authoring 的产物按字节一致。</p>
+<p>这些运行验证流程和数据处理。真实研究团队的筛选质量、跨模型误差独立性和期刊接收端未作实测。审稿校准仍按前表披露冻结金标准方面的缺口。</p>
+</body></html>

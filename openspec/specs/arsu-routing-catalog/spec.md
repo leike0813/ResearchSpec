@@ -1,22 +1,22 @@
 ## Purpose
 
-Define the strict, converter-owned routing catalog that describes the four ARSU
+Define the strict, converter-owned routing catalog that describes the five ARSU
 Skills, their supported operational modes and pipeline entry routes, and the
 derived Skill and command-wrapper descriptions.
 
 ## Requirements
 
 ### Requirement: Typed ARSU Routing Catalog
-ResearchSpec SHALL define one strict converter-owned routing catalog for the four ARSU Skills and their supported routes.
+ResearchSpec SHALL define a strict converter-owned catalog for the five ARSU Skills and their supported routes.
 
 #### Scenario: Catalog covers the locked route set
 - **WHEN** the canonical catalog is validated
-- **THEN** it SHALL contain `deep-research`, `academic-paper`, `academic-paper-reviewer`, and `academic-pipeline` exactly once
-- **AND** it SHALL contain 25 operational mode routes and two pipeline entry routes
+- **THEN** it SHALL contain deep-research, academic-paper, academic-paper-reviewer, academic-pipeline and sr-screener exactly once
+- **AND** its 33 operational modes SHALL include protocol, quick, pilot, ta-screen, ft-screen, adjudicate, audit and report for sr-screener
 
 #### Scenario: Pipeline entries remain distinct from modes
-- **WHEN** `academic-pipeline:end-to-end` or `academic-pipeline:mid-entry` is read
-- **THEN** its route kind SHALL be `entry` and its mode ID SHALL be null
+- **WHEN** either existing pipeline entry is read
+- **THEN** its route kind SHALL be entry with a null mode ID
 - **AND** every operational mode route SHALL have route kind `mode` and a matching non-null mode ID
 
 ### Requirement: Structured Route Facts

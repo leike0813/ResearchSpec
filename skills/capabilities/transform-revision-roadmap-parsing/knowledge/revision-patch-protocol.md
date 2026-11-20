@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M4 修订与定稿段
 来源对照（source mapping）:
     - vendor/ars/academic-paper/references/revision_patch_protocol.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
   0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 全文逐字节保留。
     2. [标注] 决策清单 M4 知识包之一（patch 协议）；脚本资产见 CAP-M4-02（ars_anchorize_draft.py / ars_apply_revision_patch.py）。
@@ -34,7 +35,7 @@ ARS 提取工件（Extraction Artifact）— M4 修订与定稿段
 |---|---|---|
 | Anchored draft | `ars_anchorize_draft.py` (in place) | every block carries `<!--block:BNNNN-->`; IDs never renumbered |
 | Block manifest | same run, sidecar | `<draft>.block-manifest.json` — `base_draft_hash` + `{block_id, old_hash, first_line_excerpt}` per block; the ONLY legitimate hash source for a patch |
-| Immutable roadmap | editorial synthesizer / confirmed standalone adapter | `revision-roadmap/1.0`, exact draft + block-manifest bindings |
+| Immutable roadmap | editorial synthesizer / confirmed standalone adapter | `revision-roadmap/1.1` (a valid `revision-roadmap/1.0` is also accepted), exact draft + block-manifest bindings |
 | Claim surface manifest | deterministic registry builder | `claim-surface-manifest/1.0`, exact Claim Intent + UTF-8 surface bindings |
 | Author adjudication | `scripts/revision_roadmap.py build-adjudication` from explicit choices | `author-adjudication/1.0`; complete choices and exact authority only |
 | Integrity correction list | issuing integrity gate | `integrity-correction-list/1.0`; correction descriptions and exact `proposed_targets` only — a proposal, never write authority |

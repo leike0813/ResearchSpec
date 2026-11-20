@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M4 修订与定稿段
 来源对照（source mapping）:
     - vendor/ars/scripts/check_v3_9_4_temporal_verification.py（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
     1. [保留] 脚本全文逐字节保留。
     2. [标注] 上游对时间验证表面（写入方铁律 + 验证器）的镜像一致性 lint；吸收后归引擎侧验证器资产（Q6）。
     3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
@@ -58,7 +59,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS = REPO_ROOT / "shared/contracts/passport"
 
 BIBLIOGRAPHY_AGENT_PATH = REPO_ROOT / "deep-research/agents/bibliography_agent.md"
-BIBLIOGRAPHY_AGENT_SHA256 = "d6dc70e8775a188b3d51ea7ee43b5a58fc5013119086166516f05cf006b15ad5"  # #738 baseline: the /ars-mark-read example now supplies required --scope; NO temporal/M6/M5 logic touched, ownership invariant intact. Previous accepted #660/#651/#548/#511 additions remain covered by the same rule.
+BIBLIOGRAPHY_AGENT_SHA256 = "7d8f93dda16738b1fd66127148003222a40dc7191918a0c05cf059653ec82dea"  # #973 baseline: the Phase Boundary enforcement sentence states the write-scope guard's actual coverage condition; NO temporal/M6/M5 logic touched, ownership invariant intact. Previous accepted #916/#738/#660/#651/#548/#511 additions remain covered by the same rule.
 
 
 def _validate(yaml_path: Path, schema_path: Path) -> list[str]:

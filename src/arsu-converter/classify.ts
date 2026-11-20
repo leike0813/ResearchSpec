@@ -35,6 +35,9 @@ const HISTORICAL_DOC_PREFIXES = ["docs/migration/", "docs/design/"] as const;
 export function classifyPath(filePath: string): Classification {
   const parts = filePath.split("/");
   const first = parts[0] ?? "";
+  if (first === "sr-screener" && (parts[1] === "scripts" || parts[1] === "templates" && parts[2] === "workflows")) {
+    return { category: "excluded", reason: "host_neutral_screening_projection" };
+  }
   const group = skillGroupFor(parts);
 
   if (group) {

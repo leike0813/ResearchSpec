@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
 import { fileSha, sha256 } from "./lib/vendor-maintenance.mjs";
 
@@ -27,17 +28,19 @@ const RECORD_FILES = ["01-analysis.md", "02-ingestion.md", "03-conversion.md", "
 function json(pathName) { return JSON.parse(readFileSync(pathName, "utf8")); }
 function esc(text) { return String(text ?? "").replaceAll("|", "\\|").replaceAll("\n", " "); }
 
-function treeSha(root, includedRoots, registryContent) {
-  const files = [];
-  const walk = (dir) => {
-    for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
-      const target = path.join(dir, entry.name);
-      if (dir === root && includedRoots && !includedRoots.has(entry.name)) continue;
-      if (entry.isDirectory()) walk(target);
-      else if (entry.isFile()) files.push(target);
-    }
-  };
-  walk(root);
+function treeSha(root, includedRoots, registryContent, trackedFiles) {
+  const files = trackedFiles ?? [];
+  if (!trackedFiles) {
+    const walk = (dir) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+        const target = path.join(dir, entry.name);
+        if (dir === root && includedRoots && !includedRoots.has(entry.name)) continue;
+        if (entry.isDirectory()) walk(target);
+        else if (entry.isFile()) files.push(target);
+      }
+    };
+    walk(root);
+  }
   return sha256(files.map((file) => `${path.relative(root, file).split(path.sep).join("/")}\0${registryContent && file === REGISTRY ? sha256(registryContent) : fileSha(file)}`).join("\n"));
 }
 
@@ -73,15 +76,9 @@ function git(cwd, args) {
 }
 
 function upstreamInventory() {
-  const files = [];
-  const walk = (dir) => {
-    for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
-      const target = path.join(dir, entry.name);
-      if (entry.isDirectory()) walk(target);
-      else if (entry.isFile()) files.push(target);
-    }
-  };
-  walk(ARS_DIR);
+  const trackedFiles = execFileSync("git", ["ls-files", "-z"], { cwd: ARS_DIR, encoding: "utf8" }).split("\0").filter(Boolean)
+    .map((rel) => path.join(ARS_DIR, rel)).filter((file) => existsSync(file) && statSync(file).isFile());
+  const files = trackedFiles;
   const byArea = new Map();
   const byExt = new Map();
   let agentFiles = 0;
@@ -96,18 +93,20 @@ function upstreamInventory() {
     if (rel.includes(`${path.sep}references${path.sep}`)) referenceFiles += 1;
     if (rel.includes(`${path.sep}templates${path.sep}`)) templateFiles += 1;
   }
-  return { total: files.length, byArea: Object.fromEntries([...byArea].sort()), byExt: Object.fromEntries([...byExt].sort()), agentFiles, referenceFiles, templateFiles, treeSha: treeSha(ARS_DIR) };
+  return { total: files.length, byArea: Object.fromEntries([...byArea].sort()), byExt: Object.fromEntries([...byExt].sort()), agentFiles, referenceFiles, templateFiles, treeSha: treeSha(ARS_DIR, undefined, undefined, files) };
 }
 
 function modeRegistryRows() {
   const text = readFileSync(path.join(ARS_DIR, "MODE_REGISTRY.md"), "utf8");
   const rows = [];
+  let skill = "";
   for (const line of text.split("\n")) {
-    const m = /^\|\s+`([^`]+)`\s+\|\s+([^|]+)\|\s+([^|]+)\|\s+([^|]+)\|\s+(.+?)\s+\|$/.exec(line.trim());
+    const heading = /^##\s+([^ (]+)\s+\(/.exec(line.trim());
+    if (heading) skill = heading[1];
+    const m = /^\|\s*`?([^`|]+?)`?\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*(.*?)\s*\|$/.exec(line.trim());
     if (!m) continue;
-    const skill = m[2].startsWith("Fidelity") ? undefined : undefined; // skill section derived below
-    void skill;
-    rows.push({ mode: m[1], spectrum: m[2].trim(), output: m[3].trim(), oversight: m[4].trim(), triggers: m[5].trim() });
+    if (!skill || m[1] === "Mode" || /^-+$/.test(m[1])) continue;
+    rows.push({ skill, mode: m[1].trim(), spectrum: m[2].trim(), output: m[3].trim(), oversight: m[4].trim(), triggers: m[5].trim() });
   }
   return rows;
 }
@@ -223,7 +222,7 @@ function writeRecords(anchorId) {
   const profiles = graphProfileRows();
   const parityPackages = parityPackageRows();
   const modesReview = assessmentRows();
-  const modeMd = modes.map((m) => `| \`${esc(m.mode)}\` | ${esc(m.spectrum)} | ${esc(m.output)} | ${esc(m.oversight)} | ${esc(m.triggers)} |`).join("\n");
+  const modeMd = modes.map((m) => `| ${esc(m.skill)} | \`${esc(m.mode)}\` | ${esc(m.spectrum)} | ${esc(m.output)} | ${esc(m.oversight)} | ${esc(m.triggers)} |`).join("\n");
   const capabilityMd = capabilities.map((c) => `| \`${c.capability_id}\` | ${esc(c.title)} | ${c.class} | ${c.node_kind} | ${c.execution_type} | ${c.gate_policy} | ${c.maturity} | ${c.inputs}/${c.outputs} | ${c.knowledge_refs} | ${c.validators} | ${c.files} | \`${c.manifest_sha256.slice(0, 12)}\` |`).join("\n");
   const profileMd = profiles.map((p) => {
     const nodes = p.nodes.map((n) => `| ${n.node_id} | ${n.kind} | ${n.capability_id ?? n.subgraph_id ?? "—"} | ${n.prerequisites || "—"} | ${n.required_gate_ids || "—"} |`).join("\n");
@@ -255,8 +254,8 @@ ${Object.entries(inventory.byExt).map(([ext, count]) => `| ${esc(ext)} | ${count
 
 ## Mode Registry (${modes.length} rows)
 
-| mode | spectrum | output | oversight | triggers |
-|---|---|---|---|---|
+| skill | mode | spectrum | output | oversight | triggers |
+|---|---|---|---|---|---|
 ${modeMd}
 
 ## Impact Mapping
@@ -553,15 +552,17 @@ function diff(oldAnchor, newAnchor) {
   }
 }
 
-const args = process.argv.slice(2);
-const command = args[0];
-const anchor = command === "diff" ? args[1] : (args[1] ?? process.env.ARSU_ANCHOR ?? "v3.22.2-7de1c9d");
-if (command === "baseline" && anchor) baseline(anchor);
-else if (command === "records" && anchor) records(anchor);
-else if (command === "artifacts" && anchor) artifacts(anchor);
-else if (command === "check" && anchor) check(anchor);
-else if (command === "diff" && args[2]) diff(anchor, args[2]);
-else {
-  process.stderr.write("usage: node scripts/arsu-maintenance.mjs <baseline|records|artifacts|check|diff> <anchor> [other-anchor]\n");
-  process.exitCode = 1;
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const args = process.argv.slice(2);
+  const command = args[0];
+  const anchor = command === "diff" ? args[1] : (args[1] ?? process.env.ARSU_ANCHOR ?? "v3.24.4-23807f9");
+  if (command === "baseline" && anchor) baseline(anchor);
+  else if (command === "records" && anchor) records(anchor);
+  else if (command === "artifacts" && anchor) artifacts(anchor);
+  else if (command === "check" && anchor) check(anchor);
+  else if (command === "diff" && args[2]) diff(anchor, args[2]);
+  else {
+    process.stderr.write("usage: node scripts/arsu-maintenance.mjs <baseline|records|artifacts|check|diff> <anchor> [other-anchor]\n");
+    process.exitCode = 1;
+  }
 }

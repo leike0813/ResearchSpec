@@ -46,6 +46,8 @@ function routeBase(input: ModeRouteInput): Omit<ArsuRouteDefinition, "route_kind
 const project = group("all_of", [stableSpec("specs/project.md")]);
 const manuscript = group("all_of", [stableSpec("specs/manuscript.yaml")]);
 const researchGoal = group("all_of", [userInput("research_goal")]);
+const screeningMaterials = (...roles: string[]) => roles.map((role) =>
+  group("any_of", [handoffRole(role), userInput(role)]));
 const researchMaterials = (fallback: RouteRef): PrerequisiteGroup => group("any_of", [
   userInput("research_materials"), handoffRole("rq_brief"), handoffRole("bibliography"),
   handoffRole("source_corpus"), handoffRole("synthesis_report"),
@@ -103,7 +105,7 @@ const rawCatalog = {
         mode({ route_ref: "academic-paper:format-convert", title: "Format conversion", intents: ["convert a Markdown source or render one QMD source to the confirmed target format"], output_types: ["formatted_manuscript"], prerequisite_groups: [manuscript, group("any_of", [userInput("manuscript_source"), handoffRole("manuscript_source")])], risk_level: "low", gate_policy: none, cost: cost("low", "single_pass") }),
         mode({ route_ref: "academic-paper:citation-check", title: "Citation check", intents: ["audit citations and references in a draft"], output_types: ["citation_audit_report"], prerequisite_groups: [manuscript, paperDraft()], risk_level: "medium", gate_policy: gate("conditional", "citation_integrity"), cost: cost("low", "single_pass") }),
         mode({ route_ref: "academic-paper:plan", title: "Guided paper planning", intents: ["plan a paper through structured dialogue"], output_types: ["chapter_plan", "insight_collection"], prerequisite_groups: [project, manuscript, researchMaterials("deep-research:socratic")], risk_level: "medium", gate_policy: none, cost: cost("variable", "iterative") }),
-        mode({ route_ref: "academic-paper:revision-coach", title: "Revision coaching", intents: ["parse reviewer comments or annotations and develop a revision strategy"], output_types: ["revision_roadmap", "response_letter_skeleton"], prerequisite_groups: [manuscript, group("any_of", [userInput("reviewer_comments"), handoffRole("review_report"), handoffRole("annotation_set")])], risk_level: "medium", gate_policy: none, cost: cost("medium", "iterative") }),
+        mode({ route_ref: "academic-paper:revision-coach", title: "Revision coaching", intents: ["parse reviewer comments or annotations and develop a revision strategy", "track formal research ethics review comments on this study"], output_types: ["revision_roadmap", "response_letter_skeleton"], prerequisite_groups: [manuscript, group("any_of", [userInput("reviewer_comments"), userInput("research_ethics_review_letter"), handoffRole("review_report"), handoffRole("annotation_set")])], risk_level: "medium", gate_policy: none, cost: cost("medium", "iterative") }),
         mode({ route_ref: "academic-paper:disclosure", title: "AI disclosure", intents: ["prepare a venue-specific AI-use disclosure"], output_types: ["ai_disclosure"], prerequisite_groups: [manuscript, paperDraft(), group("any_of", [userInput("venue_requirements"), userInput("venue_profile")])], risk_level: "medium", gate_policy: gate("conditional", "compliance"), cost: cost("low", "single_pass") }),
         mode({ route_ref: "academic-paper:rebuttal-audit", title: "Rebuttal audit", intents: ["audit an existing rebuttal against reviewer comments"], output_types: ["rebuttal_qa_report"], prerequisite_groups: [manuscript, group("any_of", [userInput("reviewer_comments"), handoffRole("review_report")]), group("any_of", [userInput("rebuttal_draft"), handoffRole("response_to_reviewers")])], risk_level: "medium", gate_policy: gate("conditional", "rebuttal_completeness"), cost: cost("low", "single_pass") }),
       ],
@@ -142,6 +144,24 @@ const rawCatalog = {
       routes: [
         entry({ route_ref: "academic-pipeline:end-to-end", title: "End-to-end pipeline", intents: ["start from a research goal and continue to a submission package"], output_types: ["submission_package", "process_summary"], prerequisite_groups: [project, researchGoal], risk_level: "high", gate_policy: gate("profile_defined", "integrity", "review", "final_integrity"), cost: cost("high", "long_horizon") }),
         entry({ route_ref: "academic-pipeline:mid-entry", title: "Mid-entry or resume", intents: ["continue the pipeline from research materials, a draft, review feedback, or annotations"], output_types: ["submission_package", "process_summary"], prerequisite_groups: [project, group("any_of", [userInput("research_materials"), handoffRole("rq_brief"), handoffRole("bibliography"), handoffRole("synthesis_report"), userInput("manuscript"), handoffRole("paper_draft"), userInput("reviewer_comments"), handoffRole("review_report"), handoffRole("annotation_set")], ["academic-pipeline:end-to-end"])], risk_level: "high", gate_policy: gate("profile_defined", "integrity", "review", "final_integrity"), cost: cost("high", "long_horizon") }),
+      ],
+    },
+    {
+      skill_id: "sr-screener",
+      title: "Systematic review screening",
+      summary: "Screen study records against confirmed eligibility criteria and trace PRISMA counts to individual decisions.",
+      intents: ["screen these abstracts", "screen full texts", "resolve screening conflicts", "系统综述文献筛选", "核对排除理由"],
+      default_route_ref: "sr-screener:protocol",
+      near_misses: [{ intent: "design a search strategy", route_ref: "deep-research:systematic-review", reason: "Search design precedes eligibility screening." }],
+      routes: [
+        mode({ route_ref: "sr-screener:protocol", title: "Screening protocol", intents: ["turn a proposal into ordered eligibility criteria"], output_types: ["screening_protocol", "screening_config"], prerequisite_groups: screeningMaterials("review_proposal"), risk_level: "high", gate_policy: gate("required", "protocol_confirmation"), cost: cost("medium", "iterative") }),
+        mode({ route_ref: "sr-screener:quick", title: "Single-reviewer triage", intents: ["screen a few abstracts against my criteria"], output_types: ["triage_table"], prerequisite_groups: screeningMaterials("eligibility_criteria", "screening_records"), risk_level: "medium", gate_policy: none, cost: cost("low", "single_pass") }),
+        mode({ route_ref: "sr-screener:pilot", title: "Pilot calibration", intents: ["calibrate screening against team labels and seeds"], output_types: ["pilot_report"], prerequisite_groups: screeningMaterials("screening_config", "screening_records", "pilot_labels"), risk_level: "high", gate_policy: gate("required", "pilot_approval"), cost: cost("medium", "iterative") }),
+        mode({ route_ref: "sr-screener:ta-screen", title: "Title and abstract screening", intents: ["independently screen database exports", "题名摘要双筛"], output_types: ["screening_log"], prerequisite_groups: screeningMaterials("screening_config", "screening_records", "pilot_report"), risk_level: "high", gate_policy: gate("required", "screening_quality"), cost: cost("high", "long_horizon") }),
+        mode({ route_ref: "sr-screener:ft-screen", title: "Full-text eligibility", intents: ["assess retrieved reports with page and section evidence"], output_types: ["full_text_decisions"], prerequisite_groups: screeningMaterials("screening_config", "screening_log", "full_text_materials"), risk_level: "high", gate_policy: gate("required", "screening_quality"), cost: cost("high", "long_horizon") }),
+        mode({ route_ref: "sr-screener:adjudicate", title: "Screening conflict adjudication", intents: ["advise on conflicting eligibility decisions"], output_types: ["adjudication_advice"], prerequisite_groups: screeningMaterials("screening_config", "screening_conflicts"), risk_level: "medium", gate_policy: none, cost: cost("medium", "single_pass") }),
+        mode({ route_ref: "sr-screener:audit", title: "Exclusion audit", intents: ["recheck near misses and sample jointly excluded studies"], output_types: ["exclusion_audit"], prerequisite_groups: screeningMaterials("screening_config", "excluded_records"), risk_level: "medium", gate_policy: none, cost: cost("medium", "iterative") }),
+        mode({ route_ref: "sr-screener:report", title: "PRISMA report and corpus", intents: ["reconcile PRISMA counts and export screening results"], output_types: ["prisma_counts", "literature_corpus"], prerequisite_groups: screeningMaterials("screening_log"), risk_level: "high", gate_policy: gate("required", "human_verification"), cost: cost("medium", "iterative") }),
       ],
     },
   ],

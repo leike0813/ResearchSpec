@@ -204,7 +204,7 @@ The fixed base user-visible Agent surface is exactly one Skill:
 `researchspec-navigate`. Its generated `references/cli-handbook.md` and
 `references/arsu-routes.md` provide progressive CLI and ARSU route detail from
 their canonical renderers. ARSU Skills, the other three Companion workflows, the
-66 bundled core capabilities, and all registered plugin extensions are hidden
+bundled core capabilities, and all registered plugin extensions are hidden
 Procedures discovered from their existing registries and loaded on demand with
 `list procedures`, `show procedure:<id>`, and
 `instructions procedure:<id>`. The Procedure catalog is runtime-derived and is
@@ -710,9 +710,9 @@ schemas are allowed only when the Skill actually uses and documents them.
 ARSU is a skill package and converter project. ResearchSpec is the framework
 layer that should eventually own it.
 
-The ARS maintenance target is `v3.22.2` at
-`7de1c9dfb7af9c02a9b57750761323f35a743aa2`; its audit lives under
-`audits/arsu/v3.22.2-7de1c9d/`. Follow `.agents/skills/arsu-maintenance/SKILL.md`
+The ARS maintenance target is `v3.24.4` at
+`23807f987024f2e038d12fd9e4e5d2a7cc228674`; its audit lives under
+`audits/arsu/v3.24.4-23807f9/`. Follow `.agents/skills/arsu-maintenance/SKILL.md`
 for incremental extraction, conversion and semantic review. ResearchSpec owns
 the current revision-patch contract; upstream revision authorization and
 role-scoped reviewer criteria are adapted without importing upstream passport,
@@ -738,6 +738,7 @@ When working on this repository, treat ARSU as the main capability payload:
 - `academic-paper`
 - `academic-paper-reviewer`
 - `academic-pipeline`
+- `sr-screener`
 - optional future ARSU skill groups, if deliberately adopted
 
 The important integration point is the contract design. ResearchSpec contracts

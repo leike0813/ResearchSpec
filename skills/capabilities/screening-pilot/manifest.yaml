@@ -1,0 +1,101 @@
+schema_version: "1"
+capability_id: screening-pilot
+title: Screening Pilot Calibration
+description: Compares independent pilot ballots with human labels, checks seeds,
+  and reports readiness evidence.
+maturity: operational
+class: verification
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: screening_data_identity
+    schema_ref: screening-data-identity.v1
+    source_policy: handoff
+    required: true
+  - role: screening_protocol
+    schema_ref: screening-protocol.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: true
+  - role: screening_config
+    schema_ref: screening-config.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: true
+  - role: pilot_records
+    schema_ref: screening-records.v1
+    source_policy: handoff
+    required: true
+  - role: pilot_labels
+    schema_ref: pilot-labels.v1
+    source_policy: handoff
+    required: true
+  - role: ballot_a
+    schema_ref: review-ballot.v1
+    source_policy: node_output
+    required: true
+  - role: ballot_b
+    schema_ref: review-ballot.v1
+    source_policy: node_output
+    required: true
+outputs:
+  - role: pilot_report
+    schema_ref: pilot-report.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - screening_data_identity
+      - screening_protocol
+      - screening_config
+      - pilot_records
+      - pilot_labels
+      - ballot_a
+      - ballot_b
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: quality-control
+    path: knowledge/quality_control.md
+    content_hash: e3af142ab64899bd4ad6771bf2d656858f9d6765f6f39bf74fc500bcbe9a9fc6
+    license: CC BY-NC 4.0
+  - knowledge_id: reviewer-roles
+    path: knowledge/reviewer_roles.md
+    content_hash: fa7e7c1743aa03c800d4727f0ee50b77a413bb1d15cb31a96f260f2cb6b396c3
+    license: CC BY-NC 4.0
+  - knowledge_id: tools-screening_common.py
+    path: tools/screening_common.py
+    content_hash: 8726b9293fc45dcd569208889201b1bee9585b8e98a4710ee927eaf912089c72
+    license: CC BY-NC 4.0
+  - knowledge_id: tools-screening_config.py
+    path: tools/screening_config.py
+    content_hash: 547e3c52fd60ad479b50dfb3c2bcfe39bbeb4c8ef669b98ea3b7db068ce4a743
+    license: CC BY-NC 4.0
+  - knowledge_id: tools-screening_import.py
+    path: tools/screening_import.py
+    content_hash: 9f1b65cf20a88f0e3790076a7e26c453ab207f17a684c8fff2ffb9784ac1f9c5
+    license: CC BY-NC 4.0
+  - knowledge_id: tools-screening_tools.py
+    path: tools/screening_tools.py
+    content_hash: 2ebb5b2795cae3897a74a17197267bfed25d93253e500115f9cd4bdf30bd11fb
+    license: CC BY-NC 4.0
+  - knowledge_id: tools-screening_export.py
+    path: tools/screening_export.py
+    content_hash: 75e8e5a1de02302e5249aa489daa4baeb1e3dc4cb93b682cd73e294c732199fe
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M1-SR-03
+    - KP-M1-SR-05
+    - KP-M1-SR-06
+  upstream_sources:
+    - path: authoring/ars/m1-research/capabilities/qc_auditor_agent.md
+      sha256: 913010222ea9ca8718068280b2e4946d229c257634977f758ed2f0ff9f8565c7
+license: CC BY-NC 4.0

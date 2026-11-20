@@ -1,0 +1,51 @@
+schema_version: "1"
+capability_id: screening-quick
+title: Single Reviewer Screening Triage
+description: Applies confirmed eligibility criteria in one explicitly labeled triage pass.
+maturity: operational
+class: verification
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: eligibility_criteria
+    schema_ref: eligibility-criteria.v1
+    source_policy: handoff
+    required: true
+  - role: screening_records
+    schema_ref: screening-records.v1
+    source_policy: handoff
+    required: true
+outputs:
+  - role: triage_table
+    schema_ref: triage-table.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - eligibility_criteria
+      - screening_records
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: decision-rules
+    path: knowledge/decision_rules.md
+    content_hash: 9f869b591c8ee02871a995021c9d05f76eb13109d2528900161f14e5c63405d7
+    license: CC BY-NC 4.0
+  - knowledge_id: reviewer-roles
+    path: knowledge/reviewer_roles.md
+    content_hash: fa7e7c1743aa03c800d4727f0ee50b77a413bb1d15cb31a96f260f2cb6b396c3
+    license: CC BY-NC 4.0
+gate_policy: none
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M1-SR-02
+    - KP-M1-SR-01
+    - KP-M1-SR-06
+  upstream_sources:
+    - path: authoring/ars/m1-research/capabilities/screening_reviewer_agent.md
+      sha256: 7411ec9df3e52b7f037797728da1b6f7f22c5fb7fe42b06661742f1136d6700f
+license: CC BY-NC 4.0

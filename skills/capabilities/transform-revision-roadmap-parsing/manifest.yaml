@@ -35,7 +35,7 @@ validators:
 knowledge_refs:
   - knowledge_id: revision-patch-protocol
     path: knowledge/revision-patch-protocol.md
-    content_hash: dcb80acc4f6bb563e9936069c4b2467fa96d2c2dfed7f4a3a1b58e6f11e4428f
+    content_hash: 2cecb99beb5f853acd1f669d702027cffb0422d29629286c3611dd74f417a135
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -45,5 +45,5 @@ provenance:
     - KP-M4-01
   upstream_sources:
     - path: authoring/ars/m4-revision-finalize/capabilities/01_revision_roadmap_parsing.md
-      sha256: d833e953034db451c5f1ad353c5a9a8e49121a463afb33979885bf8f54f330ae
+      sha256: b756343ed02628ca46efc738adcecf3150acb2a5a70b73f6cff69cf90b9b76f5
 license: CC BY-NC 4.0

@@ -98,6 +98,7 @@ First draft (incomplete structure, unformed arguments), revised draft (basic str
   1. [Focus 1]
   2. [Focus 2]
   3. [Focus 3]
+**Coverage / Stakeholder Coverage**: [main manuscript parts read or unread and why; affected stakeholder groups represented or apparently absent, with manuscript locations]
 **Will particularly care about**: [1-2 sentences]
 **Possible blind spots**: [aspects this reviewer may overlook]
 ```
@@ -107,7 +108,7 @@ First draft (incomplete structure, unformed arguments), revised draft (basic str
 1. Journal-Fit Reviewer (internal role EIC): configure expertise for the confirmed venue/track/type and supplied criteria. Without an explicit target, remain field-general. Focus on originality, contribution and reader fit.
 2. Reviewer 1 (Methodology): select an expert matching the research paradigm and methodology; quantitative -> statistics/econometrics; qualitative -> grounded theory/phenomenology; mixed -> mixed-methods design. Focus on whether the design is rigorous and data support conclusions.
 3. Reviewer 2 (Domain): select a senior researcher in the primary discipline familiar with classic literature and latest developments. Focus on literature completeness, theoretical framing, and genuine field contribution.
-4. Reviewer 3 (Cross-disciplinary/Practical): select a different angle from secondary disciplines or practical application. This is the most creative configuration, providing perspectives the author may not have considered.
+4. Reviewer 3 (Cross-disciplinary/Practical): select one specific cross-disciplinary or practical-application perspective, distinct from the other two peer reviewers; “broader” alone is not a distinct angle. Configure the card to identify its focus and manuscript location when known. Include stakeholder coverage: affected groups, whose interests or evidence are represented, and any apparent gap, without inventing stakeholder views.
 
 ### Dynamic Configuration Examples
 
@@ -157,7 +158,8 @@ Example 2 "Impact of Declining Birth Rates on Management Strategies of Taiwan's 
 - All six analysis dimensions completed, none omitted.
 - All four Reviewer Configuration Cards produced.
 - Review focus areas of the four reviewers do not overlap.
-- Reviewer 3's angle is truly different, not just "broader."
+- Reviewer 3's angle is specifically cross-disciplinary or practical and differs from the other peer reviewers; stakeholder coverage is considered and grounded in the manuscript.
+- Coverage names each main manuscript part and identifies unread or unreadable parts, the reason, and a request for a readable copy; stakeholder statements cite manuscript locations and do not invent absent voices' positions.
 - Target metadata matches the author's declaration; missing criteria remain explicit.
 - Identity descriptions are specific enough.
 

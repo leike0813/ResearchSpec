@@ -152,16 +152,21 @@ status --json
   -> 选择 entry 与 entry node
 ```
 
-Profile entry 是用户意图与能力图之间的正式接点。四个 ARSU 用户入口用 `route_ref` 绑定 routing
+Profile entry 是用户意图与能力图之间的正式接点。五个 ARSU 工作流通过 `route_ref` 绑定 routing
 catalog；独立的扩展 profile 可以直接使用自身声明的 entry。`instructions profile:...` 会返回
 route 或 profile 摘要、可选入口节点、前置条件、边界输出、Gates、Decisions 和成本提示。Agent
 不能只凭相似文件名或记忆拼装入口。
 
 固定用户可见 Agent 表面只有 `researchspec-navigate`。它的 `SKILL.md` 包含可独立执行的完整控制
 流程，并按需读取同目录下由 canonical renderer 生成的 `references/cli-handbook.md` 与
-`references/arsu-routes.md`。四个 ARSU 工作流、其余三个 Companion、66 个 core capability 和
+`references/arsu-routes.md`。五个 ARSU 工作流、其余三个 Companion、注册的 core capability 和
 plugin extensions 都属于隐藏 Procedure inventory；它们从已有 registry 即时派生，不投影进宿主
 Skill catalog。可选 Zotero Adapter 仍增加七个显式 Skills。
+
+筛选系统综述文献时，可交给 Navigate 一份研究方案、数据库导出文件或待核对的排除表。
+少量题录可以直接做单人初筛。需要双审时，先确认纳排标准，并用团队独立标注的试筛记录校准；
+两名筛选者分别判断，之后再合并、处理分歧和复查共同排除项。全文排除记录须注明页码、章节和理由。
+尚有待判记录或必需复查时，PRISMA 计数标为暂定。导出的文献集可交给写作流程。
 
 专利工作使用相同入口和权限模型。固定能力覆盖交底、申请、docket、检索、阅读、对照表、地图、
 审查意见答复和政策研究。独立的论文与专利双向比较可直接接收两份原件。这些任务均无需

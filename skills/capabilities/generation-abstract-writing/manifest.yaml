@@ -54,5 +54,5 @@ provenance:
     - KP-M2-09
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/05_abstract_writing.md
-      sha256: cadd8aaa47fce069ca4e709a6a97fc33dea93dc6c5ef3acc603469bac63f7073
+      sha256: ac22eb3c47e5251d2052ec13489798c166b0c318c24ba851a62493a299598384
 license: CC BY-NC 4.0

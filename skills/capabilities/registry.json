@@ -5,12 +5,12 @@
     {
       "capability_id": "analysis-evidence-synthesis",
       "source_path": "analysis-evidence-synthesis",
-      "manifest_sha256": "485bcc6c3cbba1b9797e8bfda922a17a231fde9fdc53f2a4da9090684e35fdb4"
+      "manifest_sha256": "0b8c1379c77ab231327ac2ffcf4be04cea062b6bd6ee6d9deb4d1e9f5bd28a8e"
     },
     {
       "capability_id": "analysis-meta-analysis",
       "source_path": "analysis-meta-analysis",
-      "manifest_sha256": "4f85ae0de97524b5bacfe0031636e9aa92aea46ff4fb096d93b8dff7bbc56595"
+      "manifest_sha256": "a58ea2599384198bd7dce8777267b3d09fb3da28271302dd162f28b784618918"
     },
     {
       "capability_id": "analysis-paper-patent-comparison",
@@ -40,22 +40,22 @@
     {
       "capability_id": "analysis-risk-of-bias-assessment",
       "source_path": "analysis-risk-of-bias-assessment",
-      "manifest_sha256": "4a9eb17c455595f866cfc427b519dc2c504bd725513424fe41271a037a390030"
+      "manifest_sha256": "83501a4db63c048318b81cd8b2df5178204f8552d71020836e995e35a3136061"
     },
     {
       "capability_id": "check-citation-existence-verification",
       "source_path": "check-citation-existence-verification",
-      "manifest_sha256": "8e4f14ce39f8ae890fd4a52c04ff768408f360e53eec39cab9de6b05f249afd6"
+      "manifest_sha256": "f6f81c30de7ccbe993ceb4a6fa0e23b32c953519dbec94d8da6a4b8992996e09"
     },
     {
       "capability_id": "check-citation-format-compliance",
       "source_path": "check-citation-format-compliance",
-      "manifest_sha256": "7a8b1818100887fef0c8a6163741bf66251cbb1c610c1938f91c5eb503dad12a"
+      "manifest_sha256": "f439349974bc2deb8c363b3c5221b0f9cf57e2732cbc6ac07b17073a1a34e03e"
     },
     {
       "capability_id": "check-citation-verification-summary",
       "source_path": "check-citation-verification-summary",
-      "manifest_sha256": "4755a27a9b9c0688906e6613f765c1a29000d5f5f7c9e551a028846b3b054aef"
+      "manifest_sha256": "1dd7b7baaa16184ed6eeb7f9eddc6ac905c0d92d9adb34657c1d45abcf71c6a9"
     },
     {
       "capability_id": "check-claim-faithfulness-audit",
@@ -70,12 +70,12 @@
     {
       "capability_id": "check-compliance-check",
       "source_path": "check-compliance-check",
-      "manifest_sha256": "ef13c2598520921558f4849da7d2bfbc472bd1f2f00ff59a88a129607ce1d10b"
+      "manifest_sha256": "feaf47efb7c20e687deb4778aba7449a71627dfb7a5968dbc5c70cd2018b1527"
     },
     {
       "capability_id": "check-contamination-signals",
       "source_path": "check-contamination-signals",
-      "manifest_sha256": "6e256b4d8f6741d0bd301e1ff1ede295d33948e12e5092ede03caa4bc3a02c75"
+      "manifest_sha256": "686f10301788fce727fe7718fbf0920d59fe956ec06225925d45a3a80e80aebf"
     },
     {
       "capability_id": "check-paper-humanization-review",
@@ -90,7 +90,7 @@
     {
       "capability_id": "check-passport-verifier",
       "source_path": "check-passport-verifier",
-      "manifest_sha256": "7f8079712fd7fad3f52eea2f5c703ef10a51c5bb5deaff74e847b387ec4e94a7"
+      "manifest_sha256": "10ce560216e976eea515f543a2dbe586e49a26bda62a2fc67ee509f27b7b081d"
     },
     {
       "capability_id": "check-patent-application",
@@ -115,32 +115,32 @@
     {
       "capability_id": "check-pdf-read-preflight",
       "source_path": "check-pdf-read-preflight",
-      "manifest_sha256": "1f60ccfba06f184cdc70713d8d75e1ec1a4108f1be621f747f95e82fbc01ca29"
+      "manifest_sha256": "9900cadaac678f8019ef47db6f85fff455878fae12d93fa4dd96ca38564c983a"
     },
     {
       "capability_id": "check-pre-submission-self-check",
       "source_path": "check-pre-submission-self-check",
-      "manifest_sha256": "e1356fe7e01e9de94d119cbaf1c80c6f89cbb43b1f84d4ab844d6aeba5d977d1"
+      "manifest_sha256": "778e8dedc12f29b636d7a46589e29e2e4c59abcbd18dc84e5719c83d72a7ab21"
     },
     {
       "capability_id": "check-reference-integrity-verification",
       "source_path": "check-reference-integrity-verification",
-      "manifest_sha256": "a2c01a2193d261d399be298df146d88e2f73e2efc55966cfb9a09e363cbf1f4d"
+      "manifest_sha256": "40a3e9dfbdcfbf59e59e7b2ca6089160c8532892c8aa777aa5665b4beae68084"
     },
     {
       "capability_id": "check-submission-package-verifier",
       "source_path": "check-submission-package-verifier",
-      "manifest_sha256": "3ee4dd46845d05d9457a49e5de4c0026659c7826bc901189f26a52455585089a"
+      "manifest_sha256": "30c4e7fe6056066b74542899fa09bb819153b66e2be2a3ea8982927d7f04087c"
     },
     {
       "capability_id": "check-temporal-integrity-verification",
       "source_path": "check-temporal-integrity-verification",
-      "manifest_sha256": "566664b38f07c3156a45e91364d69318485b2d891e02b2023ab6af92956d4911"
+      "manifest_sha256": "e0d04385aab4c1e2b67edaaab54e89774af2c21e8455f5f906f57509a55b200e"
     },
     {
       "capability_id": "check-terminal-policy-gate",
       "source_path": "check-terminal-policy-gate",
-      "manifest_sha256": "85178814a6d4339313a46cc37b1894b556c6b03ac01fdfaf83a459fe16b83c10"
+      "manifest_sha256": "6f10f8c94537512fe5d7e16920c230d1e647b653c1f65d387de1cb77534c76f4"
     },
     {
       "capability_id": "design-argument-blueprint",
@@ -150,12 +150,12 @@
     {
       "capability_id": "design-manuscript-structure-design",
       "source_path": "design-manuscript-structure-design",
-      "manifest_sha256": "8eeafa09704cb0b43ecd73be8046d8a91d56cd57df86cbd0795a2c3010f8c614"
+      "manifest_sha256": "25e223251bfbabfb015b8d3fd9157be8d69a6f56cee1e7cfe34a90aa8fb5bd96"
     },
     {
       "capability_id": "design-methodology-design",
       "source_path": "design-methodology-design",
-      "manifest_sha256": "e38674ed7ae4e8e96289f0aa0afac673f1aadd93118663492ce56ec0cab1cf9b"
+      "manifest_sha256": "0930c90fdcbc855eb58a775562c7352241d0def29ab6302a15a66859c3c564ea"
     },
     {
       "capability_id": "design-patent-intake",
@@ -175,12 +175,12 @@
     {
       "capability_id": "design-research-question-formulation",
       "source_path": "design-research-question-formulation",
-      "manifest_sha256": "e0e89711f7807cd75097c765469bf5c4aedd6b3ea813db06add744a15e95715f"
+      "manifest_sha256": "e236cdc1b966bdcddf0356f604abf354898b046be733d6cb42fee3eb1eb2bc56"
     },
     {
       "capability_id": "design-review-panel-config",
       "source_path": "design-review-panel-config",
-      "manifest_sha256": "2b53b11f7c9e42c7458bec0da1134ca07fe11c2aca2e02d0e459435ff971aaee"
+      "manifest_sha256": "8898e588549ba280a4aff2ffdc4ca0e2090c1e35a09ac026b453c4c2b2d45188"
     },
     {
       "capability_id": "design-review-response-intake",
@@ -195,7 +195,7 @@
     {
       "capability_id": "design-writing-intake",
       "source_path": "design-writing-intake",
-      "manifest_sha256": "5d00e9a6c3f3818d6e13b0d71d0620c62fe2c8a4605a173defa79341a7216a95"
+      "manifest_sha256": "ecf071369c3f0d28f3ac9ad1ca1f3a7e67b757d79dcaf02ce019951c57386039"
     },
     {
       "capability_id": "discovery-literature-monitoring",
@@ -205,7 +205,7 @@
     {
       "capability_id": "discovery-literature-search-screening",
       "source_path": "discovery-literature-search-screening",
-      "manifest_sha256": "aa5b2dcbe92197093543a2c0e6d2d23896193934ab8ebc43f66b257cd560bb65"
+      "manifest_sha256": "d5b7069e65ffc3164996491372e40c9e064100aa3f5cb1e1e5e10c74e0791cac"
     },
     {
       "capability_id": "discovery-patent-exam-policy",
@@ -220,12 +220,12 @@
     {
       "capability_id": "discovery-source-quality-grading",
       "source_path": "discovery-source-quality-grading",
-      "manifest_sha256": "9c3e45ae69c2d6615ca3618cf3558e4bda96135e6e34ff8e7c9076a22a59aad7"
+      "manifest_sha256": "730453570d3ccac97238e84b04695923b2814dc6d753e1c856ded79cb4a72b96"
     },
     {
       "capability_id": "generation-abstract-writing",
       "source_path": "generation-abstract-writing",
-      "manifest_sha256": "c79b4e4d4c6495b795ba3d9030fe37c810b1130e561bfb3f8e84f57eb6ba8da1"
+      "manifest_sha256": "b95a50816b7ec904a845180398ee4dcb67743b5f9d1885d51dd2b74e50399e54"
     },
     {
       "capability_id": "generation-figure-generation",
@@ -235,7 +235,7 @@
     {
       "capability_id": "generation-format-rendering",
       "source_path": "generation-format-rendering",
-      "manifest_sha256": "139f4f22d5fc4aac4b30034376000a82ee379dacbad486b66eae7a79c047591f"
+      "manifest_sha256": "c6367de2b76979fdff2bd35fd88a987ffde1b902e4f5c6c2df2a39f0b77bd465"
     },
     {
       "capability_id": "generation-humanization-reference",
@@ -245,7 +245,7 @@
     {
       "capability_id": "generation-manuscript-drafting",
       "source_path": "generation-manuscript-drafting",
-      "manifest_sha256": "d8cbee004bf7f8b5550e182a8292acd11c1990911f8a1766545614f3abc75c3c"
+      "manifest_sha256": "fcee584a7e1ba5ef3c859895e0ff6bb587c5e1c726c73d6b690e58530fe3ab6d"
     },
     {
       "capability_id": "generation-patent-application",
@@ -270,7 +270,7 @@
     {
       "capability_id": "generation-report-compilation",
       "source_path": "generation-report-compilation",
-      "manifest_sha256": "8636f6ae3918aa82d6e205cc3595ee9bf86fc6ff1807258145758499091361b9"
+      "manifest_sha256": "8f46c5fc0613066d32e67bb64a93c0f5c7747036f4af5358225fe5acc3548047"
     },
     {
       "capability_id": "generation-review-response-round",
@@ -280,22 +280,67 @@
     {
       "capability_id": "judgment-devils-advocate-stress-test",
       "source_path": "judgment-devils-advocate-stress-test",
-      "manifest_sha256": "43a784cef896a8e13e12a578d98a47aca6b7fa4aa057e620bb83bb88d9483485"
+      "manifest_sha256": "ae4972d22aee4795c1716e4690a683fffb594ffabda5e395a61c368ccd2439a5"
     },
     {
       "capability_id": "judgment-editorial-judgment",
       "source_path": "judgment-editorial-judgment",
-      "manifest_sha256": "5d75c7bdd3c35f3b8820d63692b513781cab0928aae71a36b0dc80470d7ebc23"
+      "manifest_sha256": "a033ffb4c83cb09da8cad5255e6c28fe7da35694dfd6cbc15f92e067048d33a6"
     },
     {
       "capability_id": "judgment-review-synthesis",
       "source_path": "judgment-review-synthesis",
-      "manifest_sha256": "fdf1370dccb499d7ebc3728798a703e19f1b1396e86c24562af7c1bbce0410e2"
+      "manifest_sha256": "44799f3b0fae40fec10edcfaf74d59ff633e4e7fbbc06fcf34e397ec905813c5"
     },
     {
       "capability_id": "judgment-specialist-review",
       "source_path": "judgment-specialist-review",
-      "manifest_sha256": "e4719c55d6ea60dc68a06057f561f53657c088fbfc933f880e94b9c77b0f9f60"
+      "manifest_sha256": "c66ecd469b7a66057a6c15f8467e5b6f1becea57bd97a6f788c44eb5d4bea6bf"
+    },
+    {
+      "capability_id": "screening-adjudicate",
+      "source_path": "screening-adjudicate",
+      "manifest_sha256": "291be19bf2002b824dbae1db5893905791e0933a8e6d2e6d0d9b035d6b388f88"
+    },
+    {
+      "capability_id": "screening-audit",
+      "source_path": "screening-audit",
+      "manifest_sha256": "77da58046cb9bfb7d8e94a87e88bb803ec6aa7bcb830940101ccb9c3a2540a42"
+    },
+    {
+      "capability_id": "screening-ft-screen",
+      "source_path": "screening-ft-screen",
+      "manifest_sha256": "f21e936217a1faa999e7b45352cfcc20c636d14089bf4dd9133895b581181718"
+    },
+    {
+      "capability_id": "screening-pilot",
+      "source_path": "screening-pilot",
+      "manifest_sha256": "ff1acb14ff34e30bdd74ee4973a6092662567760b37119412537122ebe71fed6"
+    },
+    {
+      "capability_id": "screening-protocol",
+      "source_path": "screening-protocol",
+      "manifest_sha256": "77b346680d4f80c87a7062e566cf4c5d32fc22d795154d4b5786a612ba4d9936"
+    },
+    {
+      "capability_id": "screening-quick",
+      "source_path": "screening-quick",
+      "manifest_sha256": "2bfe6c572b8b32aaf2c9961954f323788f92e52016287fcffbe287eb55c5fe2f"
+    },
+    {
+      "capability_id": "screening-report",
+      "source_path": "screening-report",
+      "manifest_sha256": "0093dd7740822f5ac3768d7ba0c472594aa7addc87a0c638b6939d1957acc62b"
+    },
+    {
+      "capability_id": "screening-review-ballot",
+      "source_path": "screening-review-ballot",
+      "manifest_sha256": "26b00393ef69439b2abc24fa4c5716505d6bc24bce4c24fa7cb9656093be3c5d"
+    },
+    {
+      "capability_id": "screening-ta-screen",
+      "source_path": "screening-ta-screen",
+      "manifest_sha256": "dd56e87ae9a55c5c4c508433ad08a0698f6cff647fd0f7b1e222afe43296a3d5"
     },
     {
       "capability_id": "transform-paper-humanization-revision",
@@ -320,17 +365,17 @@
     {
       "capability_id": "transform-revision-patching",
       "source_path": "transform-revision-patching",
-      "manifest_sha256": "56143408255ece2c5130accdcb9d6608aea8e396e663677bf267451e26e4cbf4"
+      "manifest_sha256": "fcceecad680db6de917f9aab23b7641eaaa6c3ccab2c244ef0d8c75afedd20c2"
     },
     {
       "capability_id": "transform-revision-roadmap-parsing",
       "source_path": "transform-revision-roadmap-parsing",
-      "manifest_sha256": "9b74c5bc3a5e57b736d8b5355ddf6113a2481d821e54f852b57396f1ca89d35f"
+      "manifest_sha256": "cb3cfb808a4001b9b8d13dd3f66b4dd6131ea3deb03c992c0b58c9ecea36a4fb"
     },
     {
       "capability_id": "transform-socratic-mentoring",
       "source_path": "transform-socratic-mentoring",
-      "manifest_sha256": "04a7545627819cc0167dacfd98abf82ecce9d63f01066f2eb267da70a2e403cb"
+      "manifest_sha256": "5c9effd86f994f8a00329028833bf8f94af49de8bc558d96053b5518ca2ae171"
     }
   ]
 }

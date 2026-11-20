@@ -5,7 +5,7 @@ skinparam shadowing false
 actor Researcher
 rectangle "Host Agent" as Host
 package "Semantic plane" {
-  component "4 ARSU Skills" as ARSU
+  component "ARSU Skills" as ARSU
   component "4 Companion Skills" as Companion
   component "7 Zotero Adapter Skills" as Zotero
   component "Optional domain Skills" as Plugins

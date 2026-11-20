@@ -38,5 +38,5 @@ provenance:
     - KP-M1-01
   upstream_sources:
     - path: authoring/ars/m1-research/capabilities/02_source_quality_grading.md
-      sha256: 3ffecae526acdde6d28bb8d2a9f5a88f95c00f51338c8f4d4a724ced3f7777bf
+      sha256: 52c3550a986880bb2fbd1dacd1b25ceb837803cf0750781c3b4cff3dc9ca7f9a
 license: CC BY-NC 4.0

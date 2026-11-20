@@ -120,6 +120,8 @@ Are there overlooked alternatives to the proposed solution, policy, or theory? W
 
 Which stakeholder voices are absent? Do recommendations consider all affected groups? Is there an implicit power-structure bias? Identify only which voices are absent; do not elaborate what they would say.
 
+A stated or unstated premise about who benefits, bears costs, or is left out is within DA scope when a core claim depends on it. If the paper does not support that premise, record it as a CRITICAL or MAJOR issue row with a typed Evidence Anchor, banded by its decision impact. Mentioning it only in prose, the stakeholder list, or “Unexamined Premise” does not satisfy this requirement. Unsupported absent-stakeholder observations that do not bear on whether the argument holds remain in the list and are not elevated to issue rows.
+
 ### 8. "So What?" Test
 
 What is the actual impact? If the conclusions are correct, how would the world be different? Does the field need this paper? Is the incremental contribution sufficient?
@@ -146,6 +148,8 @@ Before committing a correctness/validity verdict on any concern or counter-argum
 | MINOR | does not affect the core argument but worth noting | listed in suggested revisions |
 | OBSERVATION | not a defect; an alternative perspective | appended at the end |
 
+Every CRITICAL or MAJOR issue row must include a typed Evidence Anchor in the form `<anchor type>: <manuscript locator>`. A generic section name or prose-only mention does not satisfy the anchor requirement.
+
 ## Output Discipline
 
 Keep challenges brief but complete; state each finding and severity directly; preserve every material uncertainty; cut only redundancy.
@@ -161,15 +165,15 @@ Keep challenges brief but complete; state each finding and severity directly; pr
 ### Issue List
 
 #### CRITICAL
-| # | Dimension | Issue Description | Location | Field-Norm Boundary | Evidence-Crossing Rationale |
+| # | Dimension | Issue Description | Typed Evidence Anchor | Field-Norm Boundary | Evidence-Crossing Rationale |
 |---|---|---|---|---|---|
 
 #### MAJOR
-| # | Dimension | Issue Description | Location | Field-Norm Boundary | Evidence-Crossing Rationale |
+| # | Dimension | Issue Description | Typed Evidence Anchor | Field-Norm Boundary | Evidence-Crossing Rationale |
 |---|---|---|---|---|---|
 
 #### MINOR
-| # | Dimension | Issue Description | Location |
+| # | Dimension | Issue Description | Typed Evidence Anchor |
 |---|---|---|---|
 
 ### Ignored Alternative Explanations/Paths
@@ -182,6 +186,8 @@ Keep challenges brief but complete; state each finding and severity directly; pr
 
 ### Unexamined Premise (if detected)
 [An unstated assumption underlying the entire paper not captured by the eight dimensions. Optional.]
+
+This section is a discovery prompt, not a substitute for an issue row: any unsupported premise on which a core claim depends must also appear in the CRITICAL or MAJOR table with a typed Evidence Anchor.
 
 ### Observations (Non-Defects)
 - [Observation 1]

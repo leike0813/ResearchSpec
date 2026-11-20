@@ -40,14 +40,14 @@ function validateArsuOutput(outputRoot: string) {
   return validateArsuOutputImpl(outputRoot, FIXTURE_RUNTIME_POLICY_CATALOG);
 }
 
-void test("converter generates four ResearchSpec-compatible skill groups", async () => {
+void test("converter generates five ResearchSpec-compatible skill groups", async () => {
   const root = await tempRepoRoot();
   await makeSource(root);
 
   const result = await convertArsu({ repoRoot: root });
 
-  assert.equal(result.validation?.ok, true);
-  for (const group of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline"]) {
+  assert.equal(result.validation?.ok, true, result.validation?.errors.join("\n"));
+  for (const group of ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "sr-screener"]) {
     const skillPath = path.join(root, "skills/arsu", group, "SKILL.md");
     assert.equal(existsSync(skillPath), true);
     assert.equal((await readFile(skillPath, "utf8")).includes(RESEARCHSPEC_PREFLIGHT_MARKER), true);
@@ -123,17 +123,30 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   assert.equal(manifest.risk_findings.some((item) => item.term === "Claude Code" && !item.blocking), true);
   assert.equal(manifest.risk_findings.some((item) => item.term === "Version History" && !item.blocking), true);
   assert.equal(manifest.excluded.some((item) => item.path === ".claude/CLAUDE.md"), true);
+  assert.equal(manifest.excluded.some((item) => item.path === "sr-screener/scripts/prepare_records.py"), true);
+  assert.equal(manifest.excluded.some((item) => item.path === "sr-screener/templates/workflows/ta_screening.template.js"), true);
+  assert.equal(manifest.output_files.some((item) => item.output_path.includes("sr-screener/scripts/")), false);
+  assert.equal(manifest.output_files.some((item) => item.output_path.includes("sr-screener/templates/workflows/")), false);
+  const screeningEntry = await readFile(path.join(root, "skills/arsu/sr-screener/SKILL.md"), "utf8");
+  assert.match(screeningEntry, /ResearchSpec `sr-screener` graph profile/);
+  assert.match(screeningEntry, /instructions procedure:<id>/);
+  assert.doesNotMatch(screeningEntry, /sr-screener\/scripts\/|ta_screening\.template\.js/);
+  for (const mode of ["protocol", "quick", "pilot", "ta-screen", "ft-screen", "adjudicate", "audit", "report"]) {
+    assert.match(screeningEntry, new RegExp(`screening-${mode}`));
+  }
+  assert.match(screeningEntry, /quick.*Standalone; does not schedule a graph node/s);
+  assert.match(await readFile(path.join(root, "skills/arsu/sr-screener/NOTICE.md"), "utf8"), /erfanz97/);
   assert.equal(manifest.anchor_replacements.replaceable_anchors, 2);
   assert.equal(manifest.anchor_replacements.replaced_anchors, 2);
   assert.equal(manifest.anchor_replacements.diagnostic_anchors, 1);
   assert.equal(manifest.anchor_replacements.profile_id, "researchspec-anchor-replacement-v4");
   assert.deepEqual(
     { path: manifest.routing_catalog.path, catalog_id: manifest.routing_catalog.catalog_id, skills: manifest.routing_catalog.skill_count, modes: manifest.routing_catalog.mode_route_count, entries: manifest.routing_catalog.entry_route_count },
-    { path: "routing-catalog.json", catalog_id: "arsu-routing-v0.1", skills: 4, modes: 25, entries: 2 },
+    { path: "routing-catalog.json", catalog_id: "arsu-routing-v0.1", skills: 5, modes: 33, entries: 2 },
   );
   assert.equal(manifest.output_files.some((item) => item.output_path === "routing-catalog.json" && item.sha256 === manifest.routing_catalog.sha256), true);
-  assert.equal(manifest.output_files.filter((item) => item.output_path.endsWith("/LICENSE")).length, 4);
-  assert.equal(manifest.output_files.filter((item) => item.output_path.endsWith("/NOTICE.md")).length, 4);
+  assert.equal(manifest.output_files.filter((item) => item.output_path.endsWith("/LICENSE")).length, 5);
+  assert.equal(manifest.output_files.filter((item) => item.output_path.endsWith("/NOTICE.md")).length, 5);
   assert.equal(
     manifest.anchor_replacements.records.some((item) =>
       item.anchor_id === "STATE-001" &&
@@ -172,7 +185,7 @@ void test("converter generates four ResearchSpec-compatible skill groups", async
   const conversionReport = await readFile(path.join(root, "skills/arsu/conversion-report.md"), "utf8");
   assert.match(conversionReport, /## Routing Catalog/);
   assert.match(conversionReport, /## Preset Graph Profiles/);
-  assert.match(conversionReport, /Mode routes: 25/);
+  assert.match(conversionReport, /Mode routes: 33/);
   await cleanup(root);
 });
 
@@ -251,7 +264,7 @@ void test("converter reports missing diagnostic anchors without blocking convers
 
   const result = await convertArsu({ repoRoot: root });
 
-  assert.equal(result.validation?.ok, true);
+  assert.equal(result.validation?.ok, true, result.validation?.errors.join("\n"));
   assert.deepEqual(result.anchor_replacements?.missing_diagnostic, ["ARTIFACT-001"]);
   await cleanup(root);
 });
@@ -399,7 +412,7 @@ void test("existing generated output is protected unless force is explicit", asy
   await assert.rejects(() => convertArsu({ repoRoot: root }), /Existing generated output has drift/);
 
   const regenerated = await convertArsu({ repoRoot: root, force: true });
-  assert.equal(regenerated.validation?.ok, true);
+  assert.equal(regenerated.validation?.ok, true, regenerated.validation?.errors.join("\n"));
   assert.doesNotMatch(await readFile(skillPath, "utf8"), /Manual generated drift/);
   await cleanup(root);
 });
@@ -427,7 +440,7 @@ async function makeSourceFiles(source: string, options: { omitGroup?: string } =
     "Copyright (c) 2026 Cheng-I Wu\n\nAttribution-NonCommercial 4.0 International\n",
     "utf8",
   );
-  const groups = ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline"].filter(
+  const groups = ["deep-research", "academic-paper", "academic-paper-reviewer", "academic-pipeline", "sr-screener"].filter(
     (group) => group !== options.omitGroup,
   );
   for (const group of groups) {
@@ -463,6 +476,14 @@ async function makeSourceFiles(source: string, options: { omitGroup?: string } =
 
   if (groups.includes("academic-paper")) {
     await writeFile(path.join(source, "academic-paper/references/writing_quality_check.md"), "Writing quality\n", "utf8");
+  }
+  if (groups.includes("sr-screener")) {
+    await mkdir(path.join(source, "sr-screener/scripts"), { recursive: true });
+    await mkdir(path.join(source, "sr-screener/templates/workflows"), { recursive: true });
+    await writeFile(path.join(source, "sr-screener/SKILL.md"), "---\nname: sr-screener\ndescription: test\n---\n\nUse agents/protocol_architect_agent.md and scripts/prepare_records.py.\n", "utf8");
+    await writeFile(path.join(source, "sr-screener/agents/protocol_architect_agent.md"), "Use templates/workflows/ta_screening.template.js and scripts/prepare_records.py.\n", "utf8");
+    await writeFile(path.join(source, "sr-screener/scripts/prepare_records.py"), "raise SystemExit('must not be packaged')\n", "utf8");
+    await writeFile(path.join(source, "sr-screener/templates/workflows/ta_screening.template.js"), "throw new Error('must not be packaged');\n", "utf8");
   }
   if (groups.includes("deep-research")) {
     await writeFile(

@@ -7,8 +7,9 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
-    - vendor/ars/deep-research/agents/research_question_agent.md §FINER Guiding Questions（L154-180）
+    - vendor/ars/deep-research/agents/research_question_agent.md §FINER Guiding Questions（L161-187）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
     1. [保留] 原文逐字节保留。
     2. [标注] 属于 socratic 模式的引导工具；M5 苏格拉底引擎落地时消费。
     3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。

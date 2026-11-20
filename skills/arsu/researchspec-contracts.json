@@ -130,6 +130,36 @@
         "Use fixed Zotero task Skills through the provider-neutral handoff; Deep Research retains screening and evidence judgment."
       ],
       "full_matrix_injection": false
+    },
+    "sr-screener": {
+      "profile_id": "researchspec-preflight-v11",
+      "required_contracts": [
+        "researchspec/specs/project.md",
+        "researchspec/specs/sources.yaml",
+        "researchspec/specs/claims.yaml",
+        "researchspec/specs/manuscript.yaml",
+        "the selected researchspec/profiles/<profile-id>.yaml projection",
+        "the owning researchspec/runs/<run-id>/run.yaml, graph.yaml, handoff.md and node instance after start"
+      ],
+      "handoff_reads": [
+        "resolved input roles and safe project-relative paths returned by the eligible Node Card"
+      ],
+      "writes_allowed": [
+        "boundary deliverables at explicit project-relative paths outside researchspec/",
+        "handoff updates submitted through the ResearchSpec CLI",
+        "researchspec/changes/<change-id>/ documents for proposed high-impact semantic changes"
+      ],
+      "mutation_authorities": [
+        "ResearchSpec CLI exclusively mutates run, node, handoff, Gate, Decision, override, and transition state",
+        "the owning Agent or human authors boundary files and project change documents",
+        "stable specs may be edited directly; high-impact changes should be proposed and reviewed first"
+      ],
+      "notes": [
+        "sr-screener uses the shared current ResearchSpec file-contract preflight.",
+        "Load only Node-Card-relevant stable specs, handoff roles, parameters, and boundary files into Agent context.",
+        "Use fixed literature Adapter results only as bounded working material owned by the active ARSU producer."
+      ],
+      "full_matrix_injection": false
     }
   }
 }

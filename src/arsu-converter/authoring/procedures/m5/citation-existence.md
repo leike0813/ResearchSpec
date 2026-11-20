@@ -24,6 +24,8 @@ outcomes are allowed and reported as not_checked.
 5. `unresolvable` must never be treated as pass, and no missing source or status
    may be filled from model memory.
 
+This procedure reports the supplied lookup evidence only. A DOI string or apparent DOI format does not establish that the cited work exists or matches; report resolution as unchecked unless a resolver observation supports it. Keep DOI observations and any retraction advisory separate, and do not turn either into a manuscript verdict or terminal policy choice.
+
 ## Output Format
 
 Structured verifier findings from the script, including resolver outcomes and any

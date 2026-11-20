@@ -48,5 +48,5 @@ provenance:
     - KP-M2-07
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/04_drafting.rr-variant.md
-      sha256: 546fccee1fab315d9a43a528c50862a2d27a17db1275d2fc58e2e312733fcbfd
+      sha256: 145752dc27339127606499d28ffae333fece49658766b1eeab9335f3c8e0b034
 license: CC BY-NC 4.0

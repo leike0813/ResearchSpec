@@ -225,12 +225,12 @@ export async function handleGraphInstructions(selector: string, context: Command
           entry_id: entry.entry_id,
           entry_node_id: entryNodeId,
           ...(entry.route_ref ? { route_ref: entry.route_ref } : {}),
-          title: route?.title ?? `${profile.profile_id}: ${entry.entry_id}`,
-          prerequisites: summary?.prerequisites ?? (node.input_bindings.length > 0
+          title: entry.confirmation_summary?.title ?? route?.title ?? `${profile.profile_id}: ${entry.entry_id}`,
+          prerequisites: entry.confirmation_summary?.prerequisites ?? summary?.prerequisites ?? (node.input_bindings.length > 0
             ? `profile inputs: ${node.input_bindings.map((item) => item.role).join(", ")}`
             : "none"),
           required_input_roles: node.input_bindings.map((item) => item.role),
-          boundary_outputs: route?.boundary_outputs ?? node.expected_outputs.map((output) => ({
+          boundary_outputs: entry.confirmation_summary?.boundary_outputs ?? route?.boundary_outputs ?? node.expected_outputs.map((output) => ({
             role: output.role,
             type: output.role,
             purpose: `Profile-declared boundary output ${output.role}.`,
@@ -240,7 +240,7 @@ export async function handleGraphInstructions(selector: string, context: Command
           expected_output_roles: node.expected_outputs,
           formal_gates: profile.gates,
           decisions: profile.decisions,
-          risk_cost: summary?.risk_cost ?? "profile-defined; inspect capability packages before confirmation",
+          risk_cost: entry.confirmation_summary?.risk_cost ?? summary?.risk_cost ?? "profile-defined; inspect capability packages before confirmation",
           confirmation: "root-run confirmation authorizes the frozen graph; each formal Gate and Decision remains separately confirmed",
         };
       });

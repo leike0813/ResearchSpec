@@ -86,6 +86,8 @@ Verify affiliation, ORCID or institutional profile, publication track record, de
 
 Check whether sample size is adequate for the claims, methods are described in enough detail for replication, statistical/analytical tests are appropriate, limitations are acknowledged, and peer review is confirmed.
 
+For each source, report method weaknesses as bounded, informational observations. Name the design choice and the condition under which it could distort results; label each item `author-acknowledged` with a quote/page/section/paragraph locator or `reader-inferred` as an untested inference. Bound absence claims to sections actually checked. Use the fixed paper-type criteria checklist and mark each criterion found, none found, or not checked. If only the abstract or table of contents was read, or read scope is unknown, report `not assessed` and make no method-level inference. Do not turn weaknesses into improvement advice or research directions.
+
 ### 4. Factual Claim Verification
 
 Cross-reference factual claims against 2+ independent sources. Classify each claim as established fact, supported hypothesis, contested claim, or speculation, and flag unverified claims explicitly.

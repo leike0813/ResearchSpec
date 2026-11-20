@@ -1,7 +1,7 @@
 {
   "schema_version": "researchspec.arsu.contract-anchors.v4",
   "upstream_source": "vendor/ars",
-  "audited_commit": "7de1c9dfb7af9c02a9b57750761323f35a743aa2",
+  "audited_commit": "23807f987024f2e038d12fd9e4e5d2a7cc228674",
   "anchors": [
     {
       "id": "STATE-011",
@@ -690,7 +690,7 @@
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
         "start_snippet": "You are a phase-scoped agent assigned to **academic-paper Phase 4 (Drafting)** OR **Phase 6 (Revision after review)** per caller invocation.",
-        "end_snippet": "where none runs, this fence is the enforcement layer."
+        "end_snippet": "this fence is the enforcement layer."
       }
     },
     {
@@ -1052,7 +1052,7 @@
       "replacement_shape": "io_contract_block",
       "replacement_scope": {
         "start_snippet": "You are a single-phase agent assigned to **Phase 2 (Investigation)**.",
-        "end_snippet": "where none runs, this fence is the enforcement layer."
+        "end_snippet": "this fence is the enforcement layer."
       }
     },
     {

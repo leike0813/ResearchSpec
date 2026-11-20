@@ -82,6 +82,22 @@ void test("profile and change instructions expose bounded executable contracts",
     assert.equal(profile.data?.entries.some((entry) => entry.entry_id === "mid-entry" && entry.entry_node_id === "format" && entry.route_ref === "academic-pipeline:mid-entry"), true);
     assert.equal(profile.data?.review_workspace, undefined);
 
+    const screening = parseEnvelope<{ entries: Array<{
+      entry_id: string; title: string; route_ref: string; prerequisites: string;
+      boundary_outputs: Array<{ role: string }>; formal_gates: Array<{ gate_id: string }>; risk_cost: string;
+    }> }>(runCli(["instructions", "profile:sr-screener", "--json"], root));
+    assert.equal(screening.ok, true, JSON.stringify(screening.error));
+    assert.equal(screening.data?.entries.length, 1);
+    const fullRunEntry = screening.data?.entries.find((entry) => entry.entry_id === "main");
+    assert.equal(fullRunEntry?.route_ref, "sr-screener:protocol");
+    assert.equal(fullRunEntry?.title, "Full systematic review screening run");
+    assert.match(fullRunEntry?.prerequisites ?? "", /pilot records and labels/);
+    assert.match(fullRunEntry?.risk_cost ?? "", /high\/long_horizon/);
+    assert.deepEqual(fullRunEntry?.boundary_outputs.map((output) => output.role), ["prisma_counts", "literature_corpus"]);
+    assert.deepEqual(fullRunEntry?.formal_gates.map((gate) => gate.gate_id), [
+      "protocol-confirmation", "pilot-approval", "ta-quality", "ft-quality", "human-verification",
+    ]);
+
     const humanizer = parseEnvelope<{ review_workspace: { adapter: string; mutation_authority: string; selector: string } }>(
       runCli(["instructions", "profile:paper-humanizer", "--json"], root),
     );

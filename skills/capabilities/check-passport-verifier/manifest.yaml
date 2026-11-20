@@ -43,7 +43,7 @@ validators:
 knowledge_refs:
   - knowledge_id: degradation-registry
     path: knowledge/degradation-registry.json
-    content_hash: 2160f199a3e5b7200f575b4e411205bc8fa2920c95cc419a97023ae4cb6023ae
+    content_hash: f5af9eb44fff81c5c156d69a1ff8593043889fec92289aa3f7b2f9761584a7cf
     license: CC BY-NC 4.0
   - knowledge_id: validators-documents.py
     path: validators/documents.py

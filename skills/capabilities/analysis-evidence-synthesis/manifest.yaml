@@ -48,5 +48,5 @@ provenance:
     - KP-M1-06
   upstream_sources:
     - path: authoring/ars/m1-research/capabilities/03_evidence_synthesis.md
-      sha256: 9032f977fc6a4aee5a1623b745b78affa3478dbf8f49b97b09090f2ccea7b52e
+      sha256: 9609022ee0af2ee758eb0fb3039061ee17dce11e5cdcf26fa10ef1f24a92a86d
 license: CC BY-NC 4.0

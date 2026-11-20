@@ -37,5 +37,5 @@ provenance:
     - KP-M5-01
   upstream_sources:
     - path: authoring/ars/m5-side-branches/capabilities/01_meta_analysis.md
-      sha256: 8bc6c33fcff87e090ff6174a746a0d5c6b114f5f4f079ebc38fda6cf4aeb95a9
+      sha256: 5cdbd35fb03d9ebd160507d92681c161c09fe08dd010801480b32d891679d655
 license: CC BY-NC 4.0

@@ -123,13 +123,15 @@ Disposition precedence:
 2. Otherwise by `agree` count:
    - agree = 4 -> [CONSENSUS-4]: unanimous observation; it does not assign author priority.
    - agree = 3 -> [CONSENSUS-3]: strong majority with the fourth reviewer silent; name the silent reviewer.
-   - agree = 2 -> corroborated finding; action-bearing but not a consensus label.
-   - agree = 1 -> single-reviewer finding; assessed against the named criterion and anchored evidence.
+   - agree = 2 -> [CORROBORATED]: action-bearing corroboration, not consensus.
+   - agree = 1 -> [SINGLE-REVIEWER]: assess against the named criterion and anchored evidence; do not promote it to consensus.
 - [SPLIT] requires EIC arbitration: a binding recommendation is delivered to the author, not the raw split.
 
 ### DA-CRITICAL
 
-Devil's Advocate CRITICAL findings are tracked independently and never participate in consensus counts. Every DA-CRITICAL issue must appear in the final decision with the DA argument, whether any other reviewer corroborated it, the EIC's validity assessment, and the required author response.
+DA issue rows that report the same sub-claim as a non-DA reviewer are recorded as DA corroboration alongside that sub-claim, with the DA row's typed evidence anchor, transported severity, and confidence. DA is not a fifth non-DA seat: the row never changes `agree`, `conflict`, consensus level, or obligation class. A difference between DA and peer severity is not a non-DA dispute. DA-CRITICAL findings remain independently adjudicated and must appear in the decision with the DA argument, any independent non-DA support, the EIC's validity assessment, and required author response.
+
+An issue row in the DA report does not upgrade a single-reviewer or corroborated label. For single-reviewer findings, label the item “single-reviewer finding, DA-corroborated” only when the DA issue row reports the same sub-claim; show both severities and evaluate both evidence anchors. This label is descriptive, not an independent vote or evidence of independent model judgment.
 
 ### Confidence and Evidence
 
@@ -153,7 +155,7 @@ Keep the decision letter and roadmap brief but complete; preserve every material
 
 ## Advisory Attachments to the Decision Letter
 
-A supplied decision letter may carry a script-generated acronym-check attachment. Treat it as script output, not a reviewer finding: it contributes no criterion, consensus item, weakness, revision, or roadmap entry, changes no decision or severity, and asks for no reply. The decision, consensus analysis, and roadmap come only from the reviewer reports and reviewer-supplied material.
+A supplied decision letter may carry post-decision suggested-reference verification and acronym-check attachments. Treat both as advisory output, not reviewer findings: neither contributes a criterion, consensus item, weakness, revision, or roadmap entry; neither changes the decision or severity; neither asks for a reply. Attach them after the decision package is complete. The decision, consensus analysis, and roadmap come only from reviewer reports and reviewer-supplied material.
 
 ## Output Format
 
@@ -168,11 +170,19 @@ Thank you for submitting your manuscript titled "[Paper Title]" to [Journal Name
 
 ### Decision: [Accept / Minor Revision / Major Revision / Reject]
 
+Write the author-facing decision letter in the user's language, including headings and explanatory text. Keep canonical consensus labels, identifiers, and schema values verbatim where needed for traceability.
+
 ### Consensus Analysis
 
 #### Points of Agreement (Consensus)
 - [CONSENSUS-4] [content]
 - [CONSENSUS-3] [content]
+
+#### Below the Consensus Bar
+- [CORROBORATED] [Seats, e.g. R1, R2] — [Finding] — [SC-n]
+- [SINGLE-REVIEWER] [Seat] — [Finding] — [SC-n]
+  - [Only when a DA issue row reports the same sub-claim:] DA-corroborated; DA is not an independent seat and does not change the count. [DA severity/evidence anchor]
+[List each corroborated or single-reviewer finding that reaches the roadmap. Few seats do not imply low importance; assess the criterion and anchored evidence. Write “None.” when empty.]
 
 #### Points of Disagreement
 - **[Issue]**: R[X] argues [View A]; R[Y] argues [View B].
@@ -205,6 +215,11 @@ Thank you for submitting your manuscript titled "[Paper Title]" to [Journal Name
 
 ### Response Letter Template
 [Remind the author to respond point-by-point to every revision item]
+
+### Post-Decision Advisory Attachments
+- Suggested-reference verification: [supplied report, or not run]
+- Acronym check: [supplied report, or not run]
+These attachments are appended after the decision and roadmap are fixed; neither changes them.
 
 ---
 

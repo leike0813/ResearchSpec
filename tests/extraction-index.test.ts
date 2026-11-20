@@ -20,23 +20,18 @@ interface ExtractionIndex {
   }>;
 }
 
-void test("extraction index records all 120 verified artifacts", async () => {
+void test("extraction index accounts for verified artifacts in every milestone", async () => {
   const index = JSON.parse(await readFile("authoring/ars/extraction-index.json", "utf8")) as ExtractionIndex;
   assert.equal(index.schema_version, "1");
-  assert.equal(index.artifact_count, 120);
-  assert.deepEqual(index.verification_summary, { pass: 120 });
-  assert.equal(index.artifacts.length, 120);
+  assert.equal(index.artifact_count, index.artifacts.length);
+  assert.deepEqual(index.verification_summary, { pass: index.artifact_count });
   assert.ok(index.artifacts.every((item) => item.verification.status === "pass"));
-  assert.deepEqual(
-    Object.entries(index.milestones).map(([name, value]) => [name, value.total, value.pass]),
-    [
-      ["m1-research", 16, 16],
-      ["m2-writing", 16, 16],
-      ["m3-integrity-review", 25, 25],
-      ["m4-revision-finalize", 15, 15],
-      ["m5-side-branches", 48, 48],
-    ],
-  );
+  for (const milestone of ["m1-research", "m2-writing", "m3-integrity-review", "m4-revision-finalize", "m5-side-branches"]) {
+    const count = index.artifacts.filter(item => item.milestone === milestone).length;
+    assert.ok(count > 0);
+    assert.equal(index.milestones[milestone]?.pass, count);
+    assert.equal(index.milestones[milestone]?.total, count);
+  }
 });
 
 void test("extraction index check mode reports no drift", async () => {

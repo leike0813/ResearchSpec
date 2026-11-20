@@ -92,6 +92,8 @@ Integrity verification is focused on references, citations, and data; it perform
 
 ### Phase A: Reference Verification
 
+Keep verification evidence states distinct: never infer existence, DOI validity, or metadata match from model memory or identifier shape. Preserve unavailable, not-searched, and access-restricted states instead of converting them to NOT_FOUND. `UNVERIFIABLE_ACCESS` means the source exists but full text could not be checked; report it as a note, not an issue. Consume supplied integrity-exclusion records; excluded sources stay out of later revision corpora, citation checks, and bibliography until the author restores them, and must be re-verified. Cache freshness, scope conformance, novelty classification, and other ordinary advisory rows remain separate from issue counts and do not block or become revision instructions. Revision claim-strength-drift (E6) retains its separately declared checkpoint-closing handling; do not merge it into the ordinary advisory category.
+
 #### A0. Semantic Scholar API Batch Verification
 
 Run a batch Semantic Scholar check on all references before WebSearch verification:
@@ -153,13 +155,15 @@ For each cited statistical figure, record data content, claimed source, and cita
 
 Check the same data point across paragraphs, calculation correctness (percentages, ratios, totals), and consistency between tables and body text.
 
+Compare every abstract in the declared language pair with the manuscript body. An abstract sentence contradicted by the body, or a finding, number, or scope statement no longer present in the body, is a MEDIUM issue located at the abstract passage. An abstract that omits a body finding is not an issue. After a correction changing body findings, numbers, or scope, rerun the complete C2 comparison. In standalone revision mode, report that the abstract was not regenerated and identify any abstract passage now contradicted by the revised body.
+
 #### C3. Figure/Table Caption Fidelity
 
 Read each `figure_table_trace[]` entry. A trace entry is MALFORMED if it omits any required key (`artifact_id`, `source_data`, `transformation`, `caption_claim`, `supported_manuscript_claims`, `limitations`); a malformed entry short-circuits further checks for that entry. Verify trace completeness, that source data is real and transformations are reproducible, that caption claims match the data, and that limitations are surfaced as a `[FIGURE-LIMITATIONS-EMPTY]` advisory when empty. Report PASS, PASS WITH NOTES, or FAIL; advisory notes never downgrade a FAIL and never upgrade a FAIL.
 
 #### C4. Experiment Provenance & Claim Alignment
 
-Every planned-versus-executed entry with `executed: false` MUST carry a `skip_reason`. Verify each executed experiment's provenance and alignment with manuscript claims; known limitations keys must be present (an empty array is allowed). Report PASS, PASS WITH NOTES (advisory, never silent), or FAIL.
+Every planned-versus-executed entry with `executed: false` MUST carry a `skip_reason`. Verify each executed experiment's provenance and alignment with manuscript claims; known limitations keys must be present (an empty array is allowed). A per-experiment reproducibility lock may be null when no honest lock values apply (for example, a survey or analysis without an LLM/ARS session); require the supplied `repro_lock_reason`. Do not invent placeholder lock values, and do not treat that reason as proof that a lock is inapplicable. Report PASS, PASS WITH NOTES (advisory, never silent), or FAIL.
 
 ### Phase D: Originality Verification
 
@@ -223,6 +227,8 @@ On revision audits, compare each claim's strength rung to its prior rung. Empty 
 - PASS: no SERIOUS or MEDIUM issues.
 - PASS WITH NOTES: only MINOR/advisory findings.
 - FAIL: any SERIOUS or MEDIUM issue.
+
+`UNVERIFIABLE_ACCESS` and ordinary advisory rows are notes, not issues, and do not prevent PASS when there are no blocking issues. Keep issue counts, notes, and any separately governed revision-drift disposition distinct in the report.
 
 ### Gray-Zone Prevention Rule
 

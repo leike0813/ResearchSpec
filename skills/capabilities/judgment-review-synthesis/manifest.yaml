@@ -37,7 +37,7 @@ validators:
 knowledge_refs:
   - knowledge_id: sprint-contract
     path: knowledge/sprint-contract.md
-    content_hash: d11895a0a936c4c860c143915feb3f0df212700baa4fbb449cd240e70424ef14
+    content_hash: 6ae712777220ca36ac6beb39009856c9f96df4c6138f002bc4a7ab418a11785e
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:
@@ -47,5 +47,5 @@ provenance:
     - KP-M3-06
   upstream_sources:
     - path: authoring/ars/m3-integrity-review/capabilities/06_review_synthesis.md
-      sha256: 3809d989ed5ff6c19da141d6717031f4392d7052038abf879a5226ab385f3394
+      sha256: 0c01d0cf49dbaf16b18b73c605da6cc67935ba6c6f96b10401ab61a2fed975a4
 license: CC BY-NC 4.0

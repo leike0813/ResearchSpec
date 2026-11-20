@@ -2,9 +2,9 @@
 
 - Output kind: `final`
 - Source: `vendor/ars`
-- Source commit: `7de1c9dfb7af9c02a9b57750761323f35a743aa2`
+- Source commit: `23807f987024f2e038d12fd9e4e5d2a7cc228674`
 - Output: `skills/arsu`
-- Generated at: `2026-10-23T15:05:46Z`
+- Generated at: `2026-11-20T02:24:34Z`
 - Validation: pass
 
 ## Source Checkout
@@ -20,6 +20,7 @@
 - `academic-paper-reviewer`
 - `academic-pipeline`
 - `deep-research`
+- `sr-screener`
 
 ## Contract Integration
 
@@ -30,7 +31,7 @@
 - Anchor replacement coverage: 56/56 replaceable anchors
 - Diagnostic anchors matched: 2/2
 - Human replacement report: `anchor-replacement-report.md`
-- Runtime policy catalog: `ars-v3.22.2-agent-neutral-runtime`
+- Runtime policy catalog: `ars-v3.24.4-agent-neutral-runtime`
 - Runtime policy coverage: 41 classified sources
 - Runtime policy report: `runtime-policy-report.md`
 
@@ -38,15 +39,15 @@
 
 - Path: `routing-catalog.json`
 - Catalog ID: `arsu-routing-v0.1`
-- Skills: 4
-- Mode routes: 25
+- Skills: 5
+- Mode routes: 33
 - Entry routes: 2
 
 ## Preset Graph Profiles
 
 - Registry: `profiles/registry.json`
 - Registry version: `0.1.0`
-- Profiles: 14
+- Profiles: 15
 
 ## Anchor Replacement Semantics
 
@@ -64,10 +65,10 @@
 
 ## File Summary
 
-- Output files: 746
-- Excluded source files: 1659
-- Unclassified source files: 789
-- Risk findings: 3555
+- Output files: 936
+- Excluded source files: 1701
+- Unclassified source files: 828
+- Risk findings: 5166
 
 ## Risk Findings
 
@@ -78,22 +79,26 @@
 - `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 94: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 126: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 133: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 139: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 147: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 156: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 194: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 216: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 221: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 302: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 309: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 313: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 317: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 327: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 342: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 379: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 389: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 414: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 289: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 304: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 311: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 315: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 319: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 329: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 344: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 381: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 391: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 416: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 417: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 448: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 418: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 419: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 450: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md` line 477: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 32: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 32: platform_term `hook`
 - `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 70: issue_reference `issue_or_pr_reference`
@@ -104,24 +109,20 @@
 - `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 147: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 158: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 164: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 264: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 272: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 389: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 405: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 409: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 205: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 274: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 282: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 411: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 413: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 429: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 430: issue_reference `issue_or_pr_reference`
+- `academic-paper-reviewer/agents/domain_reviewer_agent.md` line 434: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 31: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 31: platform_term `hook`
 - `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 85: issue_reference `issue_or_pr_reference`
 - `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 154: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 155: history_term `legacy`
 - `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 155: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 156: history_term `legacy`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 156: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 162: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 166: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 175: issue_reference `issue_or_pr_reference`
-- `academic-paper-reviewer/agents/editorial_synthesizer_agent.md` line 225: issue_reference `issue_or_pr_reference`
-- ... 3505 more findings in `conversion-manifest.json`
+- ... 5116 more findings in `conversion-manifest.json`
 
 ## Validation
 

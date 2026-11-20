@@ -1,0 +1,504 @@
+schema_version: "2"
+profile_id: sr-screener
+profile_version: 0.1.0
+capability_registry_version: 0.1.0
+entries:
+  - entry_id: main
+    kind: end-to-end
+    node_id: protocol
+    route_ref: sr-screener:protocol
+    confirmation_summary:
+      title: Full systematic review screening run
+      prerequisites: review proposal; screening data identity; pilot records and
+        labels; screening records; full-text materials; human-confirmed
+        decisions
+      boundary_outputs:
+        - role: prisma_counts
+          type: prisma_counts
+          purpose: Final PRISMA flow counts reconciled with screening decisions.
+          structure: A self-contained report of identified, screened, excluded, and
+            included records with reasons and unresolved counts.
+          validation_profile: text-artifact
+        - role: literature_corpus
+          type: literature_corpus
+          purpose: Final included-study corpus for downstream research work.
+          structure: A structured bibliography corpus linked to the confirmed screening
+            decisions.
+          validation_profile: text-artifact
+      risk_cost: high; high/long_horizon
+nodes:
+  - node_id: protocol
+    kind: capability
+    capability_id: screening-protocol
+    input_bindings:
+      - role: review_proposal
+        source: handoff
+    expected_outputs:
+      - role: screening_protocol
+        required: true
+      - role: screening_config
+        required: true
+    prerequisites: []
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: protocol-confirmation
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - protocol
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: pilot-a
+    kind: capability
+    capability_id: screening-review-ballot
+    input_bindings:
+      - &a1
+        role: screening_protocol
+        source: node_output
+        from_node_id: protocol
+        from_role: screening_protocol
+      - &a2
+        role: screening_config
+        source: node_output
+        from_node_id: protocol
+        from_role: screening_config
+      - &a3
+        role: pilot_records
+        source: handoff
+      - role: stage
+        source: parameter
+        value: pilot
+      - role: reviewer_seat
+        source: parameter
+        value: A
+    expected_outputs:
+      - role: review_ballot
+        required: true
+    prerequisites:
+      - protocol-confirmation
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: pilot-b
+    kind: capability
+    capability_id: screening-review-ballot
+    input_bindings:
+      - *a1
+      - *a2
+      - *a3
+      - role: stage
+        source: parameter
+        value: pilot
+      - role: reviewer_seat
+        source: parameter
+        value: B
+    expected_outputs:
+      - role: review_ballot
+        required: true
+    prerequisites:
+      - protocol-confirmation
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: pilot
+    kind: capability
+    capability_id: screening-pilot
+    input_bindings:
+      - *a1
+      - *a2
+      - &a5
+        role: screening_data_identity
+        source: handoff
+      - role: pilot_records
+        source: handoff
+      - role: pilot_labels
+        source: handoff
+      - role: ballot_a
+        source: node_output
+        from_node_id: pilot-a
+        from_role: review_ballot
+      - role: ballot_b
+        source: node_output
+        from_node_id: pilot-b
+        from_role: review_ballot
+    expected_outputs:
+      - role: pilot_report
+        required: true
+    prerequisites:
+      - pilot-a
+      - pilot-b
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: pilot-approval
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - pilot
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: ta-a
+    kind: capability
+    capability_id: screening-review-ballot
+    input_bindings:
+      - *a1
+      - *a2
+      - &a4
+        role: screening_records
+        source: handoff
+      - role: stage
+        source: parameter
+        value: ta
+      - role: reviewer_seat
+        source: parameter
+        value: A
+    expected_outputs:
+      - role: review_ballot
+        required: true
+    prerequisites:
+      - pilot-approval
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: ta-b
+    kind: capability
+    capability_id: screening-review-ballot
+    input_bindings:
+      - *a1
+      - *a2
+      - *a4
+      - role: stage
+        source: parameter
+        value: ta
+      - role: reviewer_seat
+        source: parameter
+        value: B
+    expected_outputs:
+      - role: review_ballot
+        required: true
+    prerequisites:
+      - pilot-approval
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: ta
+    kind: capability
+    capability_id: screening-ta-screen
+    input_bindings:
+      - *a1
+      - *a2
+      - *a5
+      - role: screening_records
+        source: handoff
+      - role: pilot_report
+        source: node_output
+        from_node_id: pilot
+        from_role: pilot_report
+      - role: ballot_a
+        source: node_output
+        from_node_id: ta-a
+        from_role: review_ballot
+      - role: ballot_b
+        source: node_output
+        from_node_id: ta-b
+        from_role: review_ballot
+    expected_outputs:
+      - role: screening_log
+        required: true
+      - role: screening_conflicts
+        required: true
+      - role: excluded_records
+        required: true
+    prerequisites:
+      - ta-a
+      - ta-b
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: ta-adjudication
+    kind: capability
+    capability_id: screening-adjudicate
+    input_bindings:
+      - *a1
+      - *a2
+      - role: screening_conflicts
+        source: node_output
+        from_node_id: ta
+        from_role: screening_conflicts
+    expected_outputs:
+      - role: adjudication_advice
+        required: true
+    prerequisites:
+      - ta
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: exclusion-audit
+    kind: capability
+    capability_id: screening-audit
+    input_bindings:
+      - *a1
+      - *a2
+      - role: excluded_records
+        source: node_output
+        from_node_id: ta
+        from_role: excluded_records
+    expected_outputs:
+      - role: exclusion_audit
+        required: true
+    prerequisites:
+      - ta
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: ta-quality
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - ta-adjudication
+      - exclusion-audit
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: ft-a
+    kind: capability
+    capability_id: screening-review-ballot
+    input_bindings:
+      - *a1
+      - *a2
+      - &a6
+        role: full_text_materials
+        source: handoff
+      - role: stage
+        source: parameter
+        value: ft
+      - role: reviewer_seat
+        source: parameter
+        value: A
+    expected_outputs:
+      - role: review_ballot
+        required: true
+    prerequisites:
+      - ta-quality
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: ft-b
+    kind: capability
+    capability_id: screening-review-ballot
+    input_bindings:
+      - *a1
+      - *a2
+      - *a6
+      - role: stage
+        source: parameter
+        value: ft
+      - role: reviewer_seat
+        source: parameter
+        value: B
+    expected_outputs:
+      - role: review_ballot
+        required: true
+    prerequisites:
+      - ta-quality
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: ft
+    kind: capability
+    capability_id: screening-ft-screen
+    input_bindings:
+      - *a1
+      - *a2
+      - *a5
+      - role: full_text_materials
+        source: handoff
+      - role: screening_log
+        source: node_output
+        from_node_id: ta
+        from_role: screening_log
+      - role: ballot_a
+        source: node_output
+        from_node_id: ft-a
+        from_role: review_ballot
+      - role: ballot_b
+        source: node_output
+        from_node_id: ft-b
+        from_role: review_ballot
+      - role: ta_adjudication
+        source: node_output
+        from_node_id: ta-adjudication
+        from_role: adjudication_advice
+      - role: exclusion_audit
+        source: node_output
+        from_node_id: exclusion-audit
+        from_role: exclusion_audit
+      - role: human_confirmed_decisions
+        source: handoff
+    expected_outputs:
+      - role: full_text_decisions
+        required: true
+      - role: full_text_conflicts
+        required: true
+    prerequisites:
+      - ft-a
+      - ft-b
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: ft-adjudication
+    kind: capability
+    capability_id: screening-adjudicate
+    input_bindings:
+      - *a1
+      - *a2
+      - role: screening_conflicts
+        source: node_output
+        from_node_id: ft
+        from_role: full_text_conflicts
+    expected_outputs:
+      - role: adjudication_advice
+        required: true
+    prerequisites:
+      - ft
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: ft-quality
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - ft-adjudication
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: report
+    kind: capability
+    capability_id: screening-report
+    input_bindings:
+      - *a2
+      - *a5
+      - role: screening_log
+        source: node_output
+        from_node_id: ta
+        from_role: screening_log
+      - role: full_text_decisions
+        source: node_output
+        from_node_id: ft
+        from_role: full_text_decisions
+      - role: ta_adjudication
+        source: node_output
+        from_node_id: ta-adjudication
+        from_role: adjudication_advice
+      - role: exclusion_audit
+        source: node_output
+        from_node_id: exclusion-audit
+        from_role: exclusion_audit
+      - role: ft_adjudication
+        source: node_output
+        from_node_id: ft-adjudication
+        from_role: adjudication_advice
+      - role: human_confirmed_decisions
+        source: handoff
+    expected_outputs:
+      - role: prisma_counts
+        required: true
+      - role: literature_corpus
+        required: true
+    prerequisites:
+      - ft-quality
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+  - node_id: human-verification
+    kind: gate
+    input_bindings: []
+    expected_outputs: []
+    prerequisites:
+      - report
+    required_gate_ids: []
+    required_decision_ids: []
+    multiplicity: one
+    round_role: null
+parallel_groups:
+  - group_id: pilot-reviewers
+    node_ids:
+      - pilot-a
+      - pilot-b
+    join_policy: all
+  - group_id: ta-reviewers
+    node_ids:
+      - ta-a
+      - ta-b
+    join_policy: all
+  - group_id: ft-reviewers
+    node_ids:
+      - ft-a
+      - ft-b
+    join_policy: all
+gates:
+  - gate_id: protocol-confirmation
+    owner_node_id: protocol-confirmation
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+  - gate_id: pilot-approval
+    owner_node_id: pilot-approval
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+  - gate_id: ta-quality
+    owner_node_id: ta-quality
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+  - gate_id: ft-quality
+    owner_node_id: ft-quality
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+  - gate_id: human-verification
+    owner_node_id: human-verification
+    policy: required
+    verdicts:
+      - pass
+      - pass_with_conditions
+      - fail
+subgraphs: []
+decisions: []
+revision_round_template: null
+override_policy:
+  failed_gate_requires_decision: true

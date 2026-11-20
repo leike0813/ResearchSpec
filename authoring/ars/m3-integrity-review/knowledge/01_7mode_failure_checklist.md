@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 来源对照（source mapping）:
     - vendor/ars/academic-pipeline/references/ai_research_failure_modes.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
     1. [保留] 全文逐字节保留。
     2. [标注] 决策清单 M3 知识包之一（7 模式清单）；完整性门 2.5/4.5 的判定核心（横切协议，Q6 分层中归 checker 侧知识）。
 说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改
@@ -21,6 +22,7 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 **Status**: v3.2
 **Parent skill**: `academic-pipeline`
 **Used at**: Stage 2.5 INTEGRITY (blocking), Stage 4.5 FINAL INTEGRITY (blocking), Stage 6 PROCESS SUMMARY (reporting only)
+**Run by**: `integrity_verification_agent`, inside the Integrity Report; the MANDATORY integrity checkpoint shows each mode's outcome
 **Source**: Lu et al. (2026). Towards end-to-end automation of AI research. *Nature* 651, 914-919. doi:10.1038/s41586-026-10265-5 — Limitations section, Figure 2 (examples of failures in The AI Scientist's own accepted paper), Supplementary Information A.2.9 (debugging traces).
 
 ---
@@ -145,13 +147,14 @@ This also extends the existing 5-type citation hallucination taxonomy (in `acade
 
 ### At Stage 2.5 INTEGRITY (first integrity gate)
 
-Run all 7 modes. For each mode, produce one of three outcomes:
+Run all 7 modes. For each mode, produce one of four outcomes:
 
 - **CLEAR**: integrity reviewer has evidence that the mode does not apply. Record the evidence briefly.
 - **SUSPECTED**: one or more detection questions returned a concerning answer. Must be surfaced to the user.
 - **INSUFFICIENT EVIDENCE**: integrity reviewer cannot rule the mode in or out without user input (e.g., needs experiment logs the user hasn't provided).
+- **NOT APPLICABLE**: Modes 1, 3, 5, and 6 only, when the passport's `experiment_intake_declaration` has `status: no_experiments_declared` (#925). These four modes check experiment and analysis logs, and the scholar has said there are none; the pre-filter keys on that declaration rather than a paper type because `field_analyst_agent` first runs at Stage 3, after the Stage 2.5 gate. Record the declaration as the evidence, quoting its `scholar_answer` (or stating that the original words are not on record). If the draft nevertheless presents experiments or data analyses as run by the author (their results, run settings, or Methods text describing them as done; a literature search and screening procedure does not count), the declaration and the draft disagree: none of the four is NOT APPLICABLE, Modes 3 and 6 are SUSPECTED, and the user sees both. Any other declaration status leaves the four modes as they are. NOT APPLICABLE never blocks.
 
-**Block condition**: pipeline blocks if **any** mode is SUSPECTED, or if Modes 1, 3, 5, or 6 are INSUFFICIENT EVIDENCE (these four require user-provided logs to rule out and should not be silently skipped). Modes 2, 4, 7 INSUFFICIENT EVIDENCE can proceed with a warning and will be re-checked at 4.5.
+**Block condition**: pipeline blocks if **any** mode is SUSPECTED (except Mode 4, which is flag-only at Stage 2.5: it is shown to the user and re-checked at 4.5), or if Modes 1, 3, 5, or 6 are INSUFFICIENT EVIDENCE (these four require user-provided logs to rule out and should not be silently skipped). Modes 2, 4, 7 INSUFFICIENT EVIDENCE can proceed with a warning and will be re-checked at 4.5.
 
 **User acknowledgement options at block**:
 - Confirm the flag — return to Stage 2 WRITE (or earlier) to fix
@@ -160,12 +163,12 @@ Run all 7 modes. For each mode, produce one of three outcomes:
 
 ### At Stage 4.5 FINAL INTEGRITY
 
-Re-run all 7 modes. Additional rule: any mode that was SUSPECTED at 2.5 must be resolved by 4.5 (CLEAR or user-Overridden-with-reasoning). If the same mode is still SUSPECTED at 4.5, the pipeline re-blocks and refuses to proceed to Finalize until the issue is addressed — no amount of revision loops can skip this.
+Re-run all 7 modes with the same four outcomes and the same NOT APPLICABLE rule; at 4.5 a SUSPECTED Mode 4 blocks like any other mode. Additional rule: any mode that was SUSPECTED at 2.5 must be resolved by 4.5 (CLEAR, NOT APPLICABLE once the corrected draft no longer presents experiments or data analyses as run by the author, or user-Overridden-with-reasoning). If the same mode is still SUSPECTED at 4.5, the pipeline re-blocks and refuses to proceed to Finalize until the issue is addressed — no amount of revision loops can skip this.
 
 ### At Stage 6 PROCESS SUMMARY (AI Self-Reflection Report)
 
 Report only, no blocking. The Self-Reflection Report includes a "Failure Mode Audit Log" section listing, for each of the 7 modes:
-- Final status at 4.5 (CLEAR / OVERRIDDEN)
+- Final status at 4.5 (CLEAR / NOT APPLICABLE / OVERRIDDEN)
 - History: was it ever SUSPECTED during the pipeline? At which stage? How was it resolved?
 - If OVERRIDDEN: the user's reasoning
 
@@ -189,7 +192,6 @@ Gap coverage provided by this checklist: **Modes 1, 3, 5, 6, and the pipeline-le
 
 ## Open questions (for v3.3)
 
-- **False positive rate**: Modes 1, 5, and 6 require the user to supply experiment logs. If the user is writing a purely theoretical paper or a qualitative study, many of these detection questions don't apply. The checklist needs a paper-type pre-filter that turns off inapplicable modes based on the paper type detected by `field_analyst_agent`. v3.2 ships with all modes always-on; v3.3 should add the pre-filter.
 - **Override auditing**: if a user overrides a flag, is the reasoning ever reviewed? In v3.2 it goes into the Stage 6 record only. A stronger version would flag overrides for peer review during Stage 3 so that a reviewer can push back on the user's reasoning.
 
 ---

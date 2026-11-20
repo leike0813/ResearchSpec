@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 来源对照（source mapping）:
     - vendor/ars/academic-paper/agents/literature_strategist_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
   0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 上游全文逐字节保留。
     2. [标注] Phase Boundary (v3.9.2) 段属流程层，authoring 阶段移交图引擎（Q6）；原文保留。
@@ -45,7 +46,7 @@ You MAY READ files in `phase0_*/` (Paper Configuration Record from `intake_agent
 
 If downstream work is needed, return control to the caller with a recommendation. Do not execute. This Phase Boundary block COEXISTS with the existing v3.6.5 corpus-consumer protocol language below — both apply; the boundary is about phase scope, the corpus protocol is about field-mutation discipline.
 
-**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer.
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a PreToolUse write-scope guard enforces the WRITE clause only when this role runs as a separately dispatched subagent of its own agent type in an install that wires the hook (the plugin install); when it runs inline in the main session (the default for most roles) or no hook runs, this fence is the enforcement layer.
 
 ## Core Principles
 
@@ -186,8 +187,29 @@ For each included source, produce:
 - **Key Findings**: [2-3 sentence summary of main findings]
 - **Relevance**: [how this source connects to the paper's RQ]
 - **Quality**: [strength/limitation assessment]
+- **Method weaknesses**: [per the rules below]
 - **Potential Use**: [which section of the paper will use this source]
 ```
+
+<!-- method-weaknesses:begin -->
+**Method weaknesses (per source, #916).** Information only. Nothing here blocks, gates, scores, or asks the scholar a question.
+
+1. **Named design and failure condition.** Name the specific design, measure, sample, or analysis choice, and the condition under which it would distort the result. "Small sample" alone is not enough; "n = 24 from one site, so the site effect cannot be separated from the treatment" is.
+2. **Provenance label on every item.** Mark each item `author-acknowledged` or `reader-inferred`. An `author-acknowledged` item carries a locator in one of the v3.7.3 anchor kinds (`quote`, `page`, `section`, `paragraph`). A `reader-inferred` item is an untested inference and says so.
+3. **Bounded absence claims.** A statement that the authors do not address X names the sections that were checked (the #548 search-bounded pattern). If those sections cannot be named, do not make the absence claim.
+4. **Fixed aspect checklist.** Use the source's paper-type table in `academic-paper-reviewer/references/review_criteria_framework.md` §2 (empirical, theoretical, review / meta-analysis, case study, policy). Mark each criterion in that table `checked: found`, `checked: none found`, or `not checked`. Stop at the end of the table; do not keep adding items until the list feels complete.
+5. **No method-level weakness without the text.** When only the abstract or table of contents is available, or the recorded read scope (`/ars-mark-read --scope`) is `abstract_only`, `toc_only`, or `unknown`, write `not assessed (read scope: <scope>)` and no inferred weaknesses. For `sections`, stay within the declared sections.
+
+Do not turn a weakness into an improvement suggestion or research direction; that step stays with the scholar. Keep the entry short:
+
+```
+- **Method weaknesses** (<paper type>; read: <what was read>)
+  - checked: found: <criterion>, ... | checked: none found: <criterion>, ... | not checked: <criterion>, ...
+  - <design choice>; distorts the result when <condition>. [author-acknowledged, <anchor kind>: <locator>] or [reader-inferred]
+```
+
+or, when rule 5 applies, `- **Method weaknesses**: not assessed (read scope: <scope>)`.
+<!-- method-weaknesses:end -->
 
 ## Literature Matrix
 

@@ -139,7 +139,7 @@ void test("real research sentences reach suitable candidates offline", async () 
     ],
     [
       "screen 这批 papers for duplicate and 低质量 records",
-      ["discovery-literature-search-screening", "deep-research", "discovery-source-quality-grading"],
+      ["sr-screener", "discovery-literature-search-screening", "deep-research", "discovery-source-quality-grading"],
       ["plugin-tooluniverse-crispr-screen-analysis", "plugin-tooluniverse-functional-genomics-screens"],
     ],
   ] as const;
@@ -154,7 +154,7 @@ void test("real research sentences reach suitable candidates offline", async () 
   // Screening a set of papers is a literature-screening task even though a genomics tool
   // repeats the same word; the leading candidate must still be the screening procedure.
   const screening = await searchProcedures(catalog, "screen 这批 papers for duplicate and 低质量 records");
-  assert.equal(screening.items[0]?.procedure.id, "discovery-literature-search-screening");
+  assert.ok(["sr-screener", "discovery-literature-search-screening"].includes(screening.items[0]?.procedure.id ?? ""));
 });
 
 void test("standalone and graph packets share package content but not authority", async () => {

@@ -48,5 +48,5 @@ provenance:
     - KP-M2-09
   upstream_sources:
     - path: authoring/ars/m2-writing/capabilities/01_writing_intake.md
-      sha256: b64f991fe5900264acd369e693702f53110bed1362d00b4a135c407bcda12e72
+      sha256: f56e407370efaf93591944255bca95e39a4708681a06a81f09fce150bcc8982b
 license: CC BY-NC 4.0

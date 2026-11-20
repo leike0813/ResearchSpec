@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 来源对照（source mapping）:
     - vendor/ars/academic-paper-reviewer/agents/methodology_reviewer_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
     1. [保留] 上游全文逐字节保留。
     2. [标注] Q2 已定：R1/R2/R3 合并为单一 specialist-review 能力，视角为知识包参数（rubric 四段式：评估要点/不管清单/Sprint 评分维度/报告模板）；提取阶段保留三个视角文件全文。
     3. [标注] 引用 KP-M3-03（统计报告标准）作为本视角知识包组成。
@@ -50,7 +51,7 @@ You MAY READ the paper draft and all provided artifacts for legitimate methodolo
 
 If synthesis-side work is needed, return control to `editorial_synthesizer_agent`.
 
-**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer. The v3.6.2 Sprint Contract Protocol below ALSO applies.
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a PreToolUse write-scope guard enforces the WRITE clause only when this role runs as a separately dispatched subagent of its own agent type in an install that wires the hook (the plugin install); when it runs inline in the main session (the default for most roles) or no hook runs, this fence is the enforcement layer. The v3.6.2 Sprint Contract Protocol below ALSO applies.
 
 ---
 

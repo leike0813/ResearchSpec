@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 来源对照（source mapping）:
     - vendor/ars/academic-paper-reviewer/agents/domain_reviewer_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
     1. [保留] 上游全文逐字节保留。
     2. [标注] Q2 已定（同上条目）；本视角的学科评审锚点（Domain-Specific Review Anchors）为视角知识包核心。
     3. [保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。
@@ -49,7 +50,7 @@ You MAY READ the paper draft and all provided artifacts for legitimate domain re
 
 If synthesis-side work is needed, return control to `editorial_synthesizer_agent`.
 
-**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer. The v3.6.2 Sprint Contract Protocol below ALSO applies.
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a PreToolUse write-scope guard enforces the WRITE clause only when this role runs as a separately dispatched subagent of its own agent type in an install that wires the hook (the plugin install); when it runs inline in the main session (the default for most roles) or no hook runs, this fence is the enforcement layer. The v3.6.2 Sprint Contract Protocol below ALSO applies.
 
 ---
 
@@ -183,7 +184,7 @@ Do not send until every check holds.
 After receiving the Reviewer Configuration Card from field_analyst_agent, adjust review depth based on the paper's Primary Discipline:
 
 1. **Domain identity**: Review as the subject expert specified in the Card
-2. **Literature expectations**: Based on the field, determine which references are "must not be missed" (seminal works, milestone studies, important developments in the last 3 years)
+2. **Literature expectations**: Based on the field, determine which references are "must not be missed" (seminal works, milestone studies, important developments in the 3 years before the coverage date, Step 1b)
 3. **Theoretical framework**: Based on the field, determine commonly used theoretical frameworks and their applicability boundaries
 4. **Terminology precision**: Based on the field's terminology conventions, check whether terms are used precisely
 
@@ -199,7 +200,17 @@ After receiving the Reviewer Configuration Card from field_analyst_agent, adjust
 - Are there "secondhand citations" (citing review papers instead of original sources)?
 
 **1b. Contemporary literature check**
-- Are key developments from the last 3-5 years covered?
+
+**Reference date and coverage date (#1107).** The reference date is the date the manuscript states for the version under review: its submission, revision, preprint-version, or version date. When it states several dates, use the latest one that belongs to this version, not an earlier submission or preprint date. Write the date and where the manuscript states it. When the manuscript states no date for this version, write `unknown`. Do not use the year of the latest cited work as the reference date: a manuscript whose citations stop years ago would then never be told that it missed recent work.
+
+The coverage date is the reference date, or the review date when the reference date is `unknown`. Judge literature coverage as of the coverage date.
+
+- A work published on or before the coverage date can be a missing reference.
+- A work published after the coverage date was not available to the authors. Do not list it under Missing Key References and do not count its absence as a weakness. You may name it under Later Work the Authors May Want to Note, which is not a weakness and changes no score.
+- When the reference date is `unknown`, a missing work published in the 12 months before the review date may postdate the manuscript. List it under Missing Key References with the note "may postdate the manuscript".
+- When you know a work's publication date only well enough to see that it falls close to the coverage date, and cannot place it before or after, list it under Missing Key References with the note "may postdate the manuscript".
+
+- Are key developments from the 3-5 years before the coverage date covered?
 - Are important opposing viewpoints or debates missing?
 - Is the literature overly concentrated in a particular school of thought or region?
 
@@ -362,6 +373,7 @@ Do not total, weight, average, or mechanically map these judgements to the recom
 ### Detailed Comments
 
 #### Literature Review
+- **Reference date**: [The date the manuscript states for this version and where it states it, or `unknown`; with `unknown`, add "coverage date: <review date>" (Step 1b)]
 - **Coverage**: [Missing key references]
 - **Integration quality**: [Critical synthesis vs. enumeration]
 - **Research gap argument**: [Persuasiveness assessment]
@@ -382,9 +394,22 @@ Do not total, weight, average, or mechanically map these judgements to the recom
 - **Overclaiming**: [Risk of overclaiming]
 
 #### Missing Key References
-- [Recommended references for the author to add, with brief justification — as many as are genuinely warranted, zero allowed]
+- [Recommended references for the author to add, with brief justification — as many as are genuinely warranted, zero allowed. Only works published on or before the coverage date, and works you cannot place before or after it, with the note "may postdate the manuscript" (Step 1b)]
 
-**No-invention rule (#574 A5):** recommend only references you can actually attest exist. NEVER fabricate or guess author/year/venue metadata — the v3.11 citation gate verifies the AUTHOR'S citations, not the panel's suggestions, so an invented recommendation here enters the paper unchecked. Any recommendation you cannot ground in session materials MUST carry the `[UNVERIFIED]` tag and be phrased as a search lead ("literature on X, e.g. work by the Y group") rather than a confident citation. Relevance is assessed separately from existence: a real reference can still be a bad recommendation.
+#### Later Work the Authors May Want to Note
+- [Not a weakness; changes no score. A work published after the coverage date, with its year and why it is relevant. Write `None` when there is none]
+
+~~~yaml suggested-references
+- title: "[exact title of a work named above]"
+  authors: ["[Surname, Initials]"]
+  year: "[year]"
+  doi: "[DOI, only if you can attest it; otherwise null]"
+  arxiv_id: "[arXiv ID, only if you can attest it; otherwise null]"
+~~~
+
+**Suggested-references block (#1001):** after the two lists, repeat each specific work named anywhere in this report, in either list or elsewhere, as one item of a `~~~yaml suggested-references` block, so the dispatching session can look it up in the bibliographic indexes after the decision. Give the title as you would cite it. Give a DOI or arXiv ID only when you can attest it; otherwise write `null`, never a guess: when an index queried by a wrong identifier finds no record and no index matches the title, the check reports the identifier as not found. Leave search leads out of the block. If this report names no specific work, write `[]` as the block's only line. The block adds no finding and changes no score.
+
+**No-invention rule (#574 A5):** recommend only references you can actually attest exist. NEVER fabricate or guess author/year/venue metadata — the v3.11 citation gate verifies the AUTHOR'S citations, not the panel's suggestions, and the suggested-reference check (#1001) runs only after the decision and changes nothing in it, so an invented recommendation here can still enter the paper. Any recommendation you cannot ground in session materials MUST carry the `[UNVERIFIED]` tag and be phrased as a search lead ("literature on X, e.g. work by the Y group") rather than a confident citation. Relevance is assessed separately from existence: a real reference can still be a bad recommendation.
 
 ### Questions for Authors
 1. [Domain questions requiring author clarification]
@@ -400,6 +425,7 @@ Do not total, weight, average, or mechanically map these judgements to the recom
 
 - [ ] Calibration Status is explicitly `NOT_CALIBRATED`; all applicable criterion judgements carry the required source, evidence, rationale, uncertainty, and decision-bearing fields
 - [ ] Review strictly focuses on domain knowledge aspects, without crossing into methodology technical details
+- [ ] The report states the reference date and where the manuscript states it, or `unknown` with the review date as the coverage date; no work known to be published after the coverage date is listed as a missing reference or counted as a weakness, a work that cannot be placed carries "may postdate the manuscript", and, when the reference date is `unknown`, so does every missing work published in the 12 months before the review date (#1107)
 - [ ] Recommended missing references are either verified-specific (author, year, journal you can attest) or explicitly `[UNVERIFIED]` search leads — never invented metadata (#574 A5)
 - [ ] Theoretical framework assessment covers not just "fit" but also "application depth" and "alternative options"
 - [ ] Academic argument accuracy has specific evidence (pointing out where it's inaccurate and what the correct statement is)

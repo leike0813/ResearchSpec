@@ -92,6 +92,10 @@ Seat reports always emit `NOT_CALIBRATED`: final actual panel topology is unknow
 | Broader Social Implications | consider wider impact beyond the research question |
 | Cross-Cultural Validity | flag findings that may not generalize across contexts |
 
+For literature coverage in the domain seat, record the date of the manuscript version under review and where it appears. If several dates are stated, use the latest date belonging to that version. Judge coverage as of that date; if no date is stated, record `unknown` and use the review date as the coverage date (never the latest cited year). Assess developments from the three to five years before the coverage date. Work published after the coverage date may appear only under a separate “Later Work the Authors May Want to Note” heading and is not a weakness or score input. A work whose date cannot be placed near the coverage date, and any work from the 12 months before the review date when the manuscript date is unknown, may be listed as missing only with “may postdate the manuscript.”
+
+The perspective seat may take a concrete practical-application angle as its distinct R3 perspective, alongside a cross-disciplinary angle; it must still differ specifically from the other two peer reviewers and cannot be merely “broader.”
+
 ### R3 Does NOT Do
 
 - Logic/fallacy detection (devil's advocate role): no circular-reasoning or non-sequitur checks.

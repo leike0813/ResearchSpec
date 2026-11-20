@@ -1,0 +1,119 @@
+schema_version: "1"
+capability_id: screening-report
+title: PRISMA Screening Report
+description: Reconciles record-level decisions into traceable PRISMA counts and
+  the eligible literature corpus.
+maturity: operational
+class: verification
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: screening_data_identity
+    schema_ref: screening-data-identity.v1
+    source_policy: handoff
+    required: true
+  - role: screening_config
+    schema_ref: screening-config.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: true
+  - role: screening_log
+    schema_ref: screening-log.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: true
+  - role: full_text_decisions
+    schema_ref: full-text-decisions.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: true
+  - role: ta_adjudication
+    schema_ref: adjudication-advice.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: false
+  - role: ft_adjudication
+    schema_ref: adjudication-advice.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: false
+  - role: exclusion_audit
+    schema_ref: exclusion-audit.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: false
+  - role: human_confirmed_decisions
+    schema_ref: screening-human-confirmations.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: true
+outputs:
+  - role: prisma_counts
+    schema_ref: prisma-counts.v1
+    required: true
+  - role: literature_corpus
+    schema_ref: literature-corpus.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - screening_data_identity
+      - screening_config
+      - screening_log
+      - full_text_decisions
+      - ta_adjudication
+      - ft_adjudication
+      - exclusion_audit
+      - human_confirmed_decisions
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: reporting-and-handoff
+    path: knowledge/reporting_and_handoff.md
+    content_hash: 68b12fad4b010261144bc63346ba39c73a61de4a3e38d02f6fd8db4e4db961bb
+    license: CC BY-NC 4.0
+  - knowledge_id: failure-paths
+    path: knowledge/failure_paths.md
+    content_hash: 7a7c0254d9fce3fd33d594a95ca20843f08f561cc4ed665a2adeecd556913a34
+    license: CC BY-NC 4.0
+  - knowledge_id: tools-screening_common.py
+    path: tools/screening_common.py
+    content_hash: 8726b9293fc45dcd569208889201b1bee9585b8e98a4710ee927eaf912089c72
+    license: CC BY-NC 4.0
+  - knowledge_id: tools-screening_config.py
+    path: tools/screening_config.py
+    content_hash: 547e3c52fd60ad479b50dfb3c2bcfe39bbeb4c8ef669b98ea3b7db068ce4a743
+    license: CC BY-NC 4.0
+  - knowledge_id: tools-screening_import.py
+    path: tools/screening_import.py
+    content_hash: 9f1b65cf20a88f0e3790076a7e26c453ab207f17a684c8fff2ffb9784ac1f9c5
+    license: CC BY-NC 4.0
+  - knowledge_id: tools-screening_tools.py
+    path: tools/screening_tools.py
+    content_hash: 2ebb5b2795cae3897a74a17197267bfed25d93253e500115f9cd4bdf30bd11fb
+    license: CC BY-NC 4.0
+  - knowledge_id: tools-screening_export.py
+    path: tools/screening_export.py
+    content_hash: 75e8e5a1de02302e5249aa489daa4baeb1e3dc4cb93b682cd73e294c732199fe
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M1-SR-04
+    - KP-M1-SR-07
+    - KP-M1-SR-02
+  upstream_sources:
+    - path: authoring/ars/m1-research/capabilities/reporter_agent.md
+      sha256: 53ad1bbdbb5b9de5c1e9d56a358dbcc243714ffe1a1dfb334eec5b67c365141c
+license: CC BY-NC 4.0

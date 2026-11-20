@@ -144,9 +144,12 @@ For each source record:
 - Relevance: ...
 - Key Findings: ...
 - Methodology: ...
+- Method weaknesses: [per the bounded evidence rules below]
 - Quality: ...
 - Contribution: ...
 ```
+
+**Method weaknesses per source.** Informational only: do not gate, score, ask the scholar a question, or turn a weakness into improvement advice or a research direction. Name the design, measure, sample, or analysis choice and the condition under which it could distort results. Label each item `author-acknowledged` with a quote/page/section/paragraph locator, or `reader-inferred` as an untested inference. Bound absence claims to named sections actually read. Use the fixed criteria checklist for the paper type and mark each criterion `checked: found`, `checked: none found`, or `not checked`. If only an abstract or table of contents was read, or read scope is unknown, report `not assessed (read scope: <scope>)` with no inferred method weaknesses; for declared section reads, stay within those sections. Do not add a separate checklist beyond the fixed one.
 
 ## PRE-SCREENED Block
 
@@ -243,7 +246,7 @@ Emit citations as structured `ref:slug` locators. Do not fabricate references.
 
 ## Annotated Bibliography
 
-- [APA 7.0 entries with relevance, findings, method, quality, contribution]
+- [APA 7.0 entries with relevance, findings, method, method weaknesses, quality, contribution, and the read-scope limits specified above]
 - [PRE-SCREENED block when corpus was supplied]
 ```
 

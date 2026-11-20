@@ -24,7 +24,7 @@ A general-purpose academic paper writing tool — 12-agent pipeline covering all
 > **Routing discipline (v3.9.2):** plugin and skills-copy installs do not load this repository's `.claude/CLAUDE.md`, so its routing core is repeated below, identical to `../../shared/references/routing_core.md` (#892). If routing has not settled when this skill loads, apply the core before dispatching any agent.
 
 <!-- routing-core:begin -->
-**Step 0 — Escape hatch check (before any classification):** If the user's first message begins with `[direct-mode]` (case-insensitive byte-0 token, optionally preceded by whitespace/newlines that are stripped on parse), record this fact, strip the prefix and surrounding whitespace from the message, and skip directly to **Step 1 explicit-intent handling** on the stripped content. The literal `[direct-mode]` is NOT passed through to the dispatched agent. If the stripped message itself has no clear skill named, Step 1 falls through to Step 3 clarification (the escape hatch bypasses cross-phase clarification (Step 2), not all routing). When the token is honored and the named agent or skill needs inputs the message does not supply, read that agent's or skill's file and ask for what it requires, in its terms. Without the byte-0 token, naming an agent is not explicit intent: such a message goes through Steps 1-3 like any other, so cross-phase materials still get Step 2 clarification.
+**Step 0 — Escape hatch check (before any classification):** If the user's first message begins with `[direct-mode]` (case-insensitive byte-0 token, optionally preceded by whitespace/newlines that are stripped on parse), record this fact, strip the prefix and surrounding whitespace from the message, and skip directly to **Step 1 explicit-intent handling** on the stripped content. The literal `[direct-mode]` is NOT passed through to the dispatched agent. If the stripped message itself has no clear skill named, Step 1 falls through to Step 3 clarification (the escape hatch bypasses cross-phase clarification (Step 2), not all routing). When the token is honored and the named agent or skill needs inputs the message does not supply, read that agent's or skill's file and ask for what it requires, in its terms. A `[direct-mode]` token after any other non-whitespace character is not the escape hatch, even when the message asks to skip questions: classify the message through Steps 1-3 as if the token were absent, and do not forward the token. Without the byte-0 token, naming an agent is not explicit intent: such a message goes through Steps 1-3 like any other, so cross-phase materials still get Step 2 clarification.
 
 Otherwise, classify the user's input:
 
@@ -38,6 +38,8 @@ Otherwise, classify the user's input:
 
 3. **Ambiguous intent, no materials** — user provides no artifacts and no clear request:
    → Clarify per `../../shared/references/intent_clarification_protocol.md`.
+
+**Screening boundary (sr-screener):** a request to screen records the user already has (database exports, pasted abstracts, full-text PDFs) against a review's eligibility criteria, or to build a screening protocol, pilot the screening, adjudicate screening conflicts, audit exclusions, or report the selection counts, routes to `sr-screener`. A request to write a literature review, or to run a systematic review, meta-analysis, or PRISMA report, does not route to `sr-screener`. Screening starts only when the user asks for it: `deep-research` `systematic-review` mode may mention `sr-screener`, but never hands over to it automatically.
 
 **Anti-pattern (caused #133):** Receiving ambiguous cross-phase materials and silently auto-routing to a single-phase agent based on which phase the materials "look closest to." This bypasses orchestrator-level reconciliation and lets the subagent inherit the full ambiguity without independent oversight.
 <!-- routing-core:end -->
@@ -138,7 +140,7 @@ Activate `plan` mode when the user wants guidance, step-by-step planning, or exp
 | 9 | `formatter_agent` | Convert to LaTeX/DOCX (via Pandoc)/PDF/Markdown, journal formatting, cover letter, citation format conversion (APA 7 / Chicago / MLA / IEEE / Vancouver) | Phase 7 |
 | 10 | `socratic_mentor_agent` | Plan mode Socratic mentor: chapter-by-chapter guidance, convergence criteria (4 signals), question taxonomy (4 types), INSIGHT extraction | Plan Step 0-3 |
 | 11 | `visualization_agent` | Parse paper data and generate publication-quality figure code (Python matplotlib / R ggplot2) with APA 7.0 formatting, colorblind-safe palettes, and LaTeX integration | Phase 4 / Phase 7 |
-| 12 | `revision_coach_agent` | Parse unstructured reviewer comments into a Revision Roadmap, or explicitly identified real-committee comments into the separate #668 source-accounted concern tracker; works standalone | Revision-Coach mode |
+| 12 | `revision_coach_agent` | Parse unstructured reviewer comments into a Revision Roadmap, or research-ethics review comments (the protocol's Activation gate decides which) into the separate #668 source-accounted concern tracker; works standalone | Revision-Coach mode |
 
 ---
 
@@ -163,7 +165,7 @@ Phase 1: RESEARCH      -> [literature_strategist]      -> Search Strategy + Sour
 Phase 2: ARCHITECTURE  -> [structure_architect]        -> Paper Outline + Evidence Map
 Phase 3: ARGUMENTATION -> [argument_builder]           -> Argument Blueprint
 Phase 4: DRAFTING      -> [draft_writer]               -> Complete Draft
-Phase 5a: CITATIONS    -> [citation_compliance] ──┐    -> Citation Audit Report
+Phase 5a: CITATIONS    -> [citation_compliance] ──┐    -> Citation Audit Report + Corrected Draft (to Phase 6)
 Phase 5b: ABSTRACT     -> [abstract_bilingual]   ─┘    -> Bilingual Abstract + Keywords  (parallel)
 Phase 6: PEER REVIEW   -> [peer_reviewer]              -> Review Report (max 2 revision loops)
 Phase 7: FORMAT        -> [formatter]                  -> Final Output Package
@@ -201,9 +203,15 @@ alignment and do not silently reconstruct a target from model memory.
 
 1. ⚠️ **IRON RULE**: User must confirm Paper Configuration Record before proceeding to Phase 1
 2. **Phase 2 -> 3**: User must approve outline (can request restructuring)
-3. ⚠️ **IRON RULE**: Max 2 revision loops; unresolved items -> "Acknowledged Limitations"
-4. **Peer Review** Critical-severity issues block progression to Phase 7
+3. ⚠️ **IRON RULE**: Max 2 revision loops; unresolved items -> "Acknowledged Limitations" (when the user picks Option A; see rule 6)
+4. **Peer Review** Critical-severity issues block progression to Phase 7 through an Accept or Option A. While a Critical issue remains, `peer_reviewer_agent` does not offer Option A; the user can still ask for early formatting, and Phase 7 then follows rule 6
 5. User can skip Phase 1 (literature) if providing own sources
+6. **Phase 6 -> 7** (`full` mode, #1087): Phase 7 starts without a stop when peer review gave an Accept verdict for the draft that goes to Phase 7. In every other case Phase 7 starts only after the user confirms it at one stop, which `formatter_agent` shows before it formats, with the draft's Review Status (`formatter_agent` § Review Status). The cases are:
+   - **Last allowed revision**: after a Round 2 Minor Revision verdict, `draft_writer_agent` makes the second and last revision, and no review follows it.
+   - **Option A**: after Round 2, the user picks Option A, and `draft_writer_agent` adds the "Acknowledged Limitations" section.
+   - **Early formatting**: the user asks for Phase 7 before an Accept, including before any review.
+
+   Option C ends the workflow, and Phase 7 does not run. Option B returns to the phase it names. If the user declines at the stop, keep the draft and all Review Reports and end the workflow, as Option C does.
 
 ---
 
@@ -375,13 +383,13 @@ See `references/mode_selection_guide.md` for details.
 |------|---------|--------|--------|
 | `full` | "Write a paper" | All 9 (+ 11 if quantitative) | Complete paper draft (with figures if applicable) |
 | `outline-only` | "Paper outline" | 1->2->3 | Detailed outline + evidence map |
-| `revision` | "Revise paper" | 8->5->6 | Patch document + deterministically applied revised draft + apply report (#390; revision log via `templates/revision_tracking_template.md`) |
+| `revision` | "Revise paper" | 8->5->6 | Patch document + deterministically applied revised draft + apply report (#390; revision log via `templates/revision_tracking_template.md`) + Citation Audit Report with proposed citation fixes (#1068) |
 | `abstract-only` | "Write abstract" | 1->7 | Bilingual abstract + keywords |
 | `lit-review` | "Literature review" | 1->2 | Annotated bibliography + synthesis |
 | `format-convert` | "Convert to LaTeX" / "Convert citations to [format]" | 9 only | Formatted document; includes citation format conversion (APA 7 / Chicago / MLA / IEEE / Vancouver) |
 | `citation-check` | "Check citations" | 6 only | Citation error report |
 | `plan` | "guide my paper" / "help me plan my paper" | 1->10->3->4 | Chapter Plan + INSIGHT Collection |
-| `revision-coach` | "parse reviews" / "revision roadmap" / "I got reviewer comments" / "should we push back" / "conference rebuttal" / "grant panel response" / explicitly identified real committee correspondence | 12 only | Peer-review path: immutable Roadmap core + explicit author sidecar + optional Tracking Template/Response Skeleton. Committee path: separate #668 concern tracker + placeholder response skeleton; no Schema 11, reviewer obligation/severity, or determination. |
+| `revision-coach` | "parse reviews" / "revision roadmap" / "I got reviewer comments" / "should we push back" / "conference rebuttal" / "grant panel response" / research ethics review correspondence (the protocol's Activation gate decides) | 12 only | Peer-review path: immutable Roadmap core + explicit author sidecar + optional Tracking Template/Response Skeleton. Committee path: separate #668 concern tracker + placeholder response skeleton; no Schema 11, reviewer obligation/severity, or determination. |
 | **`disclosure`** (v3.2) | **"AI disclosure for Nature" / "generate AI usage statement"** | **9 only** | **Default venue path: `REQUIRED` / `ACTION_ONLY` / `NOT_REQUIRED` / `UNKNOWN` applicability plus typed halt status; policy-anchor path: anchor-specific render** |
 | **`rebuttal-audit`** | **"audit my response" / "check my rebuttal" / "did I miss any reviewer comment"** (requires BOTH reviewer comments AND an existing rebuttal draft) | **12 only (parse-only)** | **Rebuttal QA report: per-comment coverage + gaps + risk flags. No new response generated; advisory only. Does NOT emit Schema 11 / Material Passport / verified status.** |
 
@@ -402,11 +410,11 @@ This boundary governs this entrypoint and every packaged agent/reference/templat
 | Just need an outline | `outline-only` | balanced |
 | Have a draft, received review feedback | `revision` | fidelity |
 | Have unstructured reviewer comments | `revision-coach` | balanced |
-| Have comments from a real committee/institutional review office to track | `revision-coach` committee-correspondence variant | fidelity |
+| Have research-ethics review comments to track (the protocol's Activation gate decides which) | `revision-coach` committee-correspondence variant | fidelity |
 | Just need an abstract | `abstract-only` | fidelity |
 | Need to check/fix citations | `citation-check` | fidelity |
 | Need to convert format (LaTeX, DOCX) or citation style | `format-convert` | fidelity |
-| Want a systematic literature review paper | `lit-review` | fidelity |
+| Want a literature review section or paper (to conduct a systematic review, use `deep-research` `systematic-review` mode) | `lit-review` | fidelity |
 | Need a venue-specific AI-usage disclosure bundle for submission | `disclosure` | fidelity |
 | Have a written rebuttal draft to QA against reviewer comments | `rebuttal-audit` | fidelity |
 
@@ -414,13 +422,79 @@ This boundary governs this entrypoint and every packaged agent/reference/templat
 
 Not sure? Start with `plan` — it will guide you step by step. `disclosure` is a finishing step — run it after the paper is drafted, targeting the venue you plan to submit to.
 
-**Committee-correspondence routing:** use the `revision-coach` variant only when the
-user explicitly identifies a real committee/institutional review office. Load
+**Committee-correspondence routing:** when the user says, or the pasted text shows, that the comments may come from a research ethics or human-subjects protection review (for example, from a research ethics committee or an institutional review board (IRB)), load
 `references/committee_correspondence_protocol.md`; do not infer official authority
 from tone. Journal or conference reviewers, editors, area chairs, and program
 committees are peer review, not a committee for this variant, even when the user
-names the venue or the venue calls the role a committee (#854). The separate
+names the venue or the venue calls the role a committee (#854).
+The Activation gate in `committee_correspondence_protocol.md` decides which comments this variant covers and what to quote from the user before taking it; comments that the gate excludes take normal `revision-coach` (#907). The separate
 artifact is a source-accounted drafting aid and never enters peer-review Schema 11.
+
+### ResearchSpec availability boundary
+
+The upstream review-form synchronization check is unavailable (`not_checked`) in the runtime Skill. Treat the canonical note and its copied text as supplied reading material; do not invoke or recreate the checker.
+
+This boundary governs this entrypoint and every packaged agent/reference/template it links; nested mentions of the upstream path remain descriptive and cannot authorize execution.
+
+<!-- review-form-note:begin -->
+### Review-form note (#921)
+
+The author decides whether to run a systematic review. ARS reminds the author that the choice exists; it does not judge whether a question fits a systematic review, and no review form is ever a default step.
+
+**When to show it.** Show the note at the first of these two points. Both are actions the author takes:
+
+1. The author selects `lit-review` mode (in `deep-research` or `academic-paper`, by slash command or by request).
+2. The author confirms the research question: in `deep-research` `full` mode, the author confirms the RQ Brief before Phase 2; in `socratic` mode, the author confirms the Mentor's closing RQ Brief or RQ Summary as their research question. Show the note right after that confirmation. A Socratic ending the author has not confirmed (a turn-cap ending, an ending the author calls unfinished, the stagnation suggestion to switch to `full` mode, or a switch to `full` mode) is not this point; a later confirmation is.
+
+Whether the note appears must not depend on the topic, the wording, or the kind of research question. Do not show it at any other point, and do not show it, or hold it back, because a question looks like an effect question.
+
+**When not to show it.**
+
+- The note was already answered or skipped in this project or run. In a run with a passport file, look for a `checkpoint_closed` entry with `checkpoint_id: review-form-note` in what `python3 scripts/run_ledger.py show --passport-path <passport>` prints; without one, look in this conversation. Across separate sessions without a passport file the note can appear again; this is accepted. If the ledger holds a `checkpoint_opened` entry for `review-form-note` and no closing entry, the note is still awaiting its answer: show it again, append no second opening entry, and append the closing entry after the reply.
+- The author already named a review form in their own words or actions: entered `systematic-review` mode, asked for a systematic, scoping, rapid, narrative, or integrative review, or said they want no formal review. This test reads what the author said, not the content of the research question.
+
+**How to show it.**
+
+- Show the note text below verbatim: the English text in English conversations, the Traditional Chinese text in Traditional Chinese conversations, and the English text in every other language. Do not shorten, reorder, paraphrase, or add to it. Add no recommendation, default, or comment on which form fits the question, before or after it.
+- Then stop and wait for the author's reply. Do not start the literature search, the review, or Phase 2 before the author replies.
+- The note does not reopen the choice of workflow. If the author skips it, the mode the author asked for continues unchanged.
+- If the author asks which form fits their question, say that the choice is theirs. On request, describe any form in more detail, without a comparison that favours one form for their question.
+
+**After the reply.**
+
+- Skip, or a reply that keeps the current work: continue in the current mode. Skipping is a decision.
+- Systematic review: offer `deep-research` `systematic-review` mode, and enter it only when the author confirms.
+- Scoping review or rapid review: continue in the current mode, and say once that ARS has no separate mode for this form, so its protocol and reporting checklist (PRISMA-ScR for a scoping review) stay with the author.
+- Narrative or integrative review, or no formal review: continue in the current mode.
+- In a run with a passport file, record the note through `scripts/run_ledger.py append`: before waiting, unless the ledger already holds one, a `checkpoint_opened` entry (`checkpoint_id: review-form-note`, `stage`: the current stage or mode, `checkpoint_type: SLIM`, `question`: the note as shown, `options`: the five forms and `skip`); after the reply, a `checkpoint_closed` entry with `answer`: the form chosen or `skip`, and the author's exact words in `user_words`.
+- No path enters `systematic-review` mode on ARS's initiative. Only the author's explicit choice does.
+
+**Note text (English):**
+
+> **Before the review starts: which form of literature review?**
+> ARS does not choose this for you. There is no default and no recommendation, and the order below is not a ranking.
+>
+> - **Systematic review**: answers a focused question with a search and screening plan fixed in advance, with two people screening independently where possible. Months to more than a year for a team of several people, often with a registered protocol. In ARS: `systematic-review` mode.
+> - **Scoping review**: maps what has been studied on a topic, the main concepts, and the gaps, using a systematic approach. The work grows with the breadth of the topic. ARS has no separate mode for it.
+> - **Narrative or integrative review**: builds an argument or a framework from the literature. In a narrative review the author chooses the sources; an integrative review documents its search and evaluation and can combine different study designs. The work depends on the scope the author sets. In ARS: `lit-review` mode.
+> - **Rapid review**: a systematic review with some steps shortened or left out to deliver sooner, typically within weeks to a few months. ARS has no separate mode for it.
+> - **No formal review**: background from the sources at hand, for example for an introduction. It does not claim to cover the literature.
+>
+> Reply with the form you want, or reply "skip" to continue as you are. Either reply is your decision, and this note will not appear again in this project.
+
+**Note text (Traditional Chinese):**
+
+> **開始回顧之前：要做哪一種文獻回顧？**
+> 這件事由你決定，ARS 不替你選。下列選項沒有預設、沒有推薦，排列順序也不代表高下。
+>
+> - **系統性回顧（systematic review）**：回答一個聚焦的問題，檢索與篩選方式事先訂好，盡可能由兩人各自獨立篩選。一個數人團隊需要數個月到一年以上，通常有已登錄的研究計畫書。ARS 對應：`systematic-review` 模式。
+> - **範疇回顧（scoping review）**：用系統化的做法盤點一個主題已經研究了什麼、有哪些主要概念、缺口在哪裡。工作量隨主題的廣度增加。ARS 沒有專屬模式。
+> - **敘事或整合性回顧（narrative / integrative review）**：從文獻建立論證或架構。敘事回顧由作者選擇文獻；整合性回顧會記錄檢索與評估過程，並可合併不同研究設計。工作量取決於作者設定的範圍。ARS 對應：`lit-review` 模式。
+> - **快速回顧（rapid review）**：為了早點交出結果而縮短或省略部分步驟的系統性回顧，通常在數週到數個月內完成。ARS 沒有專屬模式。
+> - **不做正式回顧**：用手邊的文獻寫背景，例如論文的緒論。不宣稱涵蓋整體文獻。
+>
+> 請回覆你要的形式，或回覆「跳過」照目前的做法繼續。兩種回覆都算你的決定，這個專案裡不會再出現這則提醒。
+<!-- review-form-note:end -->
 
 ### Mode Selection Logic
 
@@ -435,6 +509,19 @@ Chinese citations, also read `references/apa7_chinese_citation_guide.md`; use
 its locale-specific abbreviation and ordering checks rather than applying
 the Latin-script alphabetical checklist to Chinese names. Preserve supplied
 venue overrides and the guide's disambiguation exceptions.
+
+The deliverable of this mode is the citation error report (the agent's Citation
+Audit Report): the errors found, the Corrected Reference List, and each in-text
+correction listed with its location and the exact replacement citation where
+one exists. A sentence that misstates what a correctly listed source says is an
+error and goes in the error list. If you have a remark that reports no error,
+such as an optional wording suggestion for a sentence whose citation is
+accurate, keep it out of the errors, the corrections, and the Items Flagged for
+Review, and put it in a separate notes line. Leave the user's excerpt or draft text to the user: offer a
+corrected version and produce it only when the user asks. In this mode the
+agent's Auto-correct principle covers the reference list and the listed
+replacements; its Corrected Draft output belongs to `full`-mode runs that call
+it as Phase 5a, not to this mode (#1062, #1068). For Chicago 17th, MLA 9th, IEEE, and Vancouver, the agent's Other Citation Styles: Report Only rule replaces this: the report lists findings only, with no Corrected Reference List or replacement citations. A corrected version of the user's text still comes only when the user asks, and it begins with a note that a correction for another style may be wrong (#1093).
 
 ---
 
@@ -539,6 +626,10 @@ Current ResearchSpec owners:
 - `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
 <!--/rs:PATCH-001-->
 
+**Citation check after revision (#1068).** In standalone revision mode (agents 8->5->6), `citation_compliance_agent` runs after the patch is applied. It does not edit the applied draft, its reference list included, and emits no Corrected Draft. It returns the Citation Audit Report with each fix as a proposal (location, current text, exact replacement) and the Corrected Reference List as a proposal. To change the draft, the author carries these fixes into a later revision round; an edit made outside a patch round is not covered by the revision evidence bundle. Pipeline revision rounds follow the orchestrator's Revision-Round Patch Sequencing, which does not dispatch this agent; there the Stage 2.5 and 4.5 integrity gates check citations.
+
+**Abstract after revision (#936).** Revision mode does not re-run `abstract_bilingual_agent`, so an abstract changes only where an author-approved target covers its blocks. A standalone revision's delivery always says the abstract was not regenerated. When the applied patch changes a finding, number, or scope that an abstract states, it also quotes each abstract sentence the patched text now contradicts, so the author can approve an abstract target in the next round or run `abstract-only`. In pipeline runs the integrity gate's C2 check also compares every abstract with the body.
+
 ---
 
 ## Plan Mode: Chapter-by-Chapter Guided Planning
@@ -639,7 +730,7 @@ Explicit prohibitions to prevent common failure modes:
 2. **Zero citation orphans** — in-text citations <-> reference list must perfectly match
 3. **Consistent register** — academic tone appropriate for the discipline
 4. **Logical flow** — clear transitions between paragraphs and sections
-5. **Word count compliance** — within +/-10% of target
+5. **Word count compliance** — within +/-10% of target, and never above the PCR `Word Ceiling` when one is set
 
 ### Bilingual Abstract Quality
 6. **Independent writing** — the two abstracts of the run's declared pair (default zh-TW and EN) are independently composed, NOT mechanical translations
@@ -656,7 +747,7 @@ Explicit prohibitions to prevent common failure modes:
 ### Peer Review
 14. **Five criterion-bound dimensions** — Originality, Methodological Rigor, Evidence Sufficiency, Argument Coherence, and Writing Quality; report categorical judgements with evidence and no numerical aggregation
 15. **Actionable feedback** — every criticism must include a specific suggestion
-16. **Max 2 revision rounds** — unresolved items become Acknowledged Limitations
+16. **Max 2 revision rounds** — when the user picks Option A, unresolved items become Acknowledged Limitations (Checkpoint Rule 6)
 
 ### Mandatory Inclusions
 ⚠️ **IRON RULE**: Every paper MUST include: Data Availability Statement, Ethics Declaration, Author Contributions (CRediT), Conflict of Interest Statement, Funding Acknowledgment.

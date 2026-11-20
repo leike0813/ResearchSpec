@@ -14,7 +14,7 @@ This report is for human audit of generated ARSU contract replacements. It is no
 - Replacement shape: `artifact_projection_block`
 - Replacement body SHA-256: `974dbffdffbe51f85e0db1a31345cb710a280ddc47ed107d628f5143f876653c`
 - ResearchSpec targets: `researchspec/specs/claims.yaml`, `researchspec/changes/<change-id>/change.md`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
+- Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `sr-screener/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
 - Before SHA-256: `cd600a01478b854779f28248cfde9c4be266358c4ba2232ca4e88b4f51f22134`
 - After SHA-256: `997e73f917f7ad7d72104d1727a8ac93bda3d99f14d56309f076240c9206f1c1`
 
@@ -62,8 +62,8 @@ Current ResearchSpec owners:
 - Replacement shape: `io_contract_block`
 - Replacement body SHA-256: `2bb781322e87cc46abea54bedcdeb9128d0e84adcd00aa9a3d71837d5378c16d`
 - ResearchSpec targets: `researchspec/specs/manuscript.yaml`, `researchspec/specs/claims.yaml`, `researchspec/runs/<run-id>/handoff.md`, `assets/shared/contracts/patch/revision_patch.schema.json`
-- Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
-- Before SHA-256: `0208068fc817d98c4c38fb0ef2da645475a0707080ccdef4d400f91b73e3a246`
+- Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `sr-screener/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
+- Before SHA-256: `b82c78780785f7ac53cbd48dbe6a6412f350a51c469bc3620f4f4af1076cb25f`
 - After SHA-256: `2b1517cf15bc87480b8ed53029efe08f5e4612125699de4d7e2f2cdf9b81afb2`
 
 #### Before
@@ -81,7 +81,7 @@ You MAY READ files in upstream phases (`phase0_*/` through `phase{N-1}_*/`) plus
 
 If downstream work is needed, return control to the caller. The v3.6.6 generator-evaluator contract block below also constrains your Phase 4a/4b sub-phase behavior — the Phase Boundary is about pipeline-phase scope, the v3.6.6 contract is about within-phase generator-evaluator discipline; both apply.
 
-**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer.
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a PreToolUse write-scope guard enforces the WRITE clause only when this role runs as a separately dispatched subagent of its own agent type in an install that wires the hook (the plugin install); when it runs inline in the main session (the default for most roles) or no hook runs, this fence is the enforcement layer.
 ````
 
 #### After
@@ -137,8 +137,8 @@ Current ResearchSpec owners:
 - Replacement shape: `patch_protocol_block`
 - Replacement body SHA-256: `0c2ed02a77ffc3f671917b06f4755ecc10ed8434c65787e15676a890c4ffc983`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
-- Before SHA-256: `14acf28919d04575d26dc16f97765125b086aa3a5f1a5014c3fbb92bce5e0342`
+- Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `sr-screener/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
+- Before SHA-256: `08f8d1e8d4ba8ebbe27ab7ca8afa2e06cbacc2fe477a6c3382e94244ee99ef39`
 - After SHA-256: `9778df2ac817625399e47b2f320791f9384afb8dad7f5a6975616fe3c4443515`
 
 #### Before
@@ -148,7 +148,7 @@ In **revision mode** (standalone `academic-paper` revision, which is also what p
 
 For a review-roadmap round, your revision-invocation context carries the
 **anchored draft**, its exact **block manifest**, immutable
-`revision-roadmap/1.0`, exact `claim-surface-manifest/1.0`, complete
+`revision-roadmap/1.1` (or a valid `revision-roadmap/1.0`), exact `claim-surface-manifest/1.0`, complete
 `author-adjudication/1.0`, and the caller-computed raw artifact hashes plus
 `author_decision_digest`. Copy those supplied bindings; do not compute or
 invent them. An integrity-correction round instead carries the anchored draft,
@@ -179,7 +179,7 @@ and return control to the caller. The author may narrow the change or explicitly
 
 **Apply-failure retry (once).** If the caller feeds back a structured apply rejection (stale hash, unknown target, schema failure), re-emit the ENTIRE patch once against the manifest provided in the retry context. Do not patch the patch. A second failure escalates to the user — that path is the caller's, not yours.
 
-**Role boundary (§3.5).** You emit; you never apply. You cannot run `ars_apply_revision_patch.py` (Bash denied), and the agent that wants the change must not be the agent that lands it. Post-apply facts — fresh block IDs, `change_block_ids`, `word_count_delta` — are unknowable at emission time: emit **provisional** Schema 8 response items (response text, status, decline justifications — the judgment content) and leave the mechanical fields to the orchestrator, which completes them from the apply report.
+**Role boundary (§3.5).** You emit; you never apply. You never run `ars_apply_revision_patch.py` (the write-scope guard denies you Bash only when you run as a separately dispatched subagent of your own agent type in an install that wires the hook (#973); otherwise this rule alone keeps the apply step out of your hands), and the agent that wants the change must not be the agent that lands it. Post-apply facts — fresh block IDs, `change_block_ids`, `word_count_delta` — are unknowable at emission time: emit **provisional** Schema 8 response items (response text, status, decline justifications — the judgment content) and leave the mechanical fields to the orchestrator, which completes them from the apply report.
 
 **Integrity-correction rounds (#89 Item 8/#670).** The gate's
 `integrity-correction-list/1.0` contains only `proposed_targets`: it is a patch
@@ -262,7 +262,7 @@ Current ResearchSpec owners:
 - Replacement shape: `checklist`
 - Replacement body SHA-256: `e27e92a95b5d212e7eefb5164fcb1385ccdcbedae497e6cd00932ed033d74fbd`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
+- Generated output paths: `academic-paper/agents/draft_writer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/draft_writer_agent.md`, `sr-screener/references/cross-skill/academic-paper/agents/draft_writer_agent.md`
 - Before SHA-256: `e63341155ff9ca906c4cdcadf2c49149d211c5cda6745813b54f684c8de8ff08`
 - After SHA-256: `5bc1e70d3fb369b62ba87b6ef922743affd5ae2241b321af910c24786c64b0e6`
 
@@ -308,7 +308,7 @@ Current ResearchSpec owners:
 - Replacement shape: `checklist`
 - Replacement body SHA-256: `2dac2bb7604e74ecb5cdb8b7718b9cc3f3bcb44bc8f15167073094b89eae02a4`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/agents/intake_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/intake_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/intake_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/intake_agent.md`
+- Generated output paths: `academic-paper/agents/intake_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/intake_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/intake_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/intake_agent.md`, `sr-screener/references/cross-skill/academic-paper/agents/intake_agent.md`
 - Before SHA-256: `66fffc1747a10574b1ba1cbacb3fdcb5d0e8ce221b60fc4e8c4114a1c31ea0c5`
 - After SHA-256: `f357b21d730e6ca7d18d82517fc159048b71e89fb7c90769cd16721aacb0a346`
 
@@ -355,7 +355,7 @@ Current ResearchSpec owners:
 - Replacement shape: `artifact_projection_block`
 - Replacement body SHA-256: `189c5b493761d94f421d59444ab74e03ffca3ec909695359f931c3230b32ab4e`
 - ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/agents/literature_strategist_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`
+- Generated output paths: `academic-paper/agents/literature_strategist_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`, `sr-screener/references/cross-skill/academic-paper/agents/literature_strategist_agent.md`
 - Before SHA-256: `c91c0b02261c8f02fd616f201a5531d6822ad17ce31dd2a79cc2fd36dec838a8`
 - After SHA-256: `6acdeb8d2bf9ff2cab8a7e3006eb2dbfb591efe9e7bfe394d1e68e10c4d27c8c`
 
@@ -401,7 +401,7 @@ Current ResearchSpec owners:
 - Replacement shape: `checklist`
 - Replacement body SHA-256: `6c7a2dca2e446d80a8058b387ce55a12f1db0f046b3176c4a524e5dee7392e42`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/agents/peer_reviewer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`
+- Generated output paths: `academic-paper/agents/peer_reviewer_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`, `academic-pipeline/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`, `deep-research/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`, `sr-screener/references/cross-skill/academic-paper/agents/peer_reviewer_agent.md`
 - Before SHA-256: `4ab16f5faffe69438ca13115b19eede4d3b4cea8bd173d4112910d9243820158`
 - After SHA-256: `5dc83e5f31b43fae5ae86898d7d3f0153b0840f59b93d53f725cd3184b339f9c`
 
@@ -507,8 +507,8 @@ Current ResearchSpec owners:
 - Replacement shape: `patch_protocol_block`
 - Replacement body SHA-256: `8d3f6e26c07ef3bab2a812b5baf63ba52296c65ef13b45b4edfb6bfc60b34c58`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `work/annotation-intake/`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/revision_patch_protocol.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `deep-research/references/cross-skill/academic-paper/references/revision_patch_protocol.md`
-- Before SHA-256: `8dbb477a9792e339b4498c3529833ab906082feb508108550cecfcf4cca5adbf`
+- Generated output paths: `academic-paper/references/revision_patch_protocol.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `deep-research/references/cross-skill/academic-paper/references/revision_patch_protocol.md`, `sr-screener/references/cross-skill/academic-paper/references/revision_patch_protocol.md`
+- Before SHA-256: `9c256f788cf8721fb23c75fa401b112d34d88e50892d9bcfcfb12ae7b3386da3`
 - After SHA-256: `055521bb815e38dc48c7b45c567a72c942bfc86776b0ba2026b1821440fa9d07`
 
 #### Before
@@ -528,7 +528,7 @@ Current ResearchSpec owners:
 |---|---|---|
 | Anchored draft | `ars_anchorize_draft.py` (in place) | every block carries `<!--block:BNNNN-->`; IDs never renumbered |
 | Block manifest | same run, sidecar | `<draft>.block-manifest.json` — `base_draft_hash` + `{block_id, old_hash, first_line_excerpt}` per block; the ONLY legitimate hash source for a patch |
-| Immutable roadmap | editorial synthesizer / confirmed standalone adapter | `revision-roadmap/1.0`, exact draft + block-manifest bindings |
+| Immutable roadmap | editorial synthesizer / confirmed standalone adapter | `revision-roadmap/1.1` (a valid `revision-roadmap/1.0` is also accepted), exact draft + block-manifest bindings |
 | Claim surface manifest | deterministic registry builder | `claim-surface-manifest/1.0`, exact Claim Intent + UTF-8 surface bindings |
 | Author adjudication | `scripts/revision_roadmap.py build-adjudication` from explicit choices | `author-adjudication/1.0`; complete choices and exact authority only |
 | Integrity correction list | issuing integrity gate | `integrity-correction-list/1.0`; correction descriptions and exact `proposed_targets` only — a proposal, never write authority |
@@ -716,8 +716,8 @@ Current ResearchSpec owners:
 - Replacement shape: `io_contract_block`
 - Replacement body SHA-256: `d33e12bc7690018c59630bc1531fd9711bf69d14decd2edccb950249f9b68f2a`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
-- Before SHA-256: `d711b0df2f9f9451895658fc2ef417b951368eb485cc083fd3b26d52f3e1e730`
+- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`, `sr-screener/references/cross-skill/academic-paper/SKILL.md`
+- Before SHA-256: `e50111cc86a595ef698b17228e727d381c6b1699af1d0e12d0d21a9b5cea7e3a`
 - After SHA-256: `571a1516eb7bee9167e917fd0256edd9a4c8be9c1196a5ecb25e38538652797a`
 
 #### Before
@@ -729,7 +729,7 @@ Multi-phase agents (Bucket B: `argument_builder` P3+Plan, `visualization` P4+P7)
 
 Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per the routing core near the top of this file (Step 2) + `shared/references/intent_clarification_protocol.md`.
 
-**Enforcement (v3.9.2):** Phase Boundary blocks on Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope remains forward-scope (#134 Slices 3-5).
+**Enforcement (v3.9.2):** Phase Boundary blocks on Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a PreToolUse write-scope guard that applies only to Bucket A roles dispatched as separate subagents of their own agent type in an install that wires the hook (the plugin install); roles run inline in the main session by default, where only the prompt-level blocks apply (#134 rescope, PR #294; #973). Multi-phase envelope remains forward-scope (#134 Slices 3-5).
 ````
 
 #### After
@@ -775,8 +775,8 @@ Current ResearchSpec owners:
 - Replacement shape: `patch_protocol_block`
 - Replacement body SHA-256: `1059f4d766f26412f6d7eed79b5c029eca1e95f821a9a78254078f83cd0ed9bd`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `work/annotation-intake/`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
-- Before SHA-256: `4abd93d35463c59f585ba7adb1e55abe9f1d29abce91c343719e1d4c777e8d0f`
+- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`, `sr-screener/references/cross-skill/academic-paper/SKILL.md`
+- Before SHA-256: `917dd877c6b7b7ae1b28337c69197f1f17167576fb94801ff2d911e8251acde1`
 - After SHA-256: `104b7461f3a8f99f8ea922a8b60d0e0a07c1115d9152babb850987a1faa83559`
 
 #### Before
@@ -785,7 +785,7 @@ Current ResearchSpec owners:
 In revision mode, `draft_writer_agent` does NOT re-emit the complete paper. The round runs **anchorize → patch → deterministic apply → finalizer**, confining the regeneration surface to the blocks the revision explicitly touches (DELEGATE-52 blast-radius containment; spec `docs/design/2026-06-10-390-diff-patch-revision-mode-spec.md`):
 
 1. **Anchorize** the draft (`scripts/ars_anchorize_draft.py` — idempotent, content-neutral): every block gets a stable `<!--block:BNNNN-->` marker and an exact manifest. Nothing rewrites the draft before apply.
-2. **Bind explicit authority (#670):** validate the immutable `revision-roadmap/1.0`, exact registered claim surfaces, and complete `author-adjudication/1.0`. The roadmap keeps severity, obligation, cost scope, and bounded consequence independent; author triage and exact targets live only in the separate explicit sidecar.
+2. **Bind explicit authority (#670):** validate the immutable `revision-roadmap/1.1` (or a valid `revision-roadmap/1.0`, kept unchanged), exact registered claim surfaces, and complete `author-adjudication/1.0`. The roadmap keeps severity, obligation, cost scope, and bounded consequence independent; author triage and exact targets live only in the separate explicit sidecar.
 3. **The writer emits current patch 1.1** (`shared/contracts/patch/revision_patch.schema.json`) as a sidecar — every op cites only `will_address` items, stays inside exact target/operation scopes, and explicitly declares claim/collateral arrays. Registered claim movement needs an exact author-approved replacement; declined overlap needs exact collateral authority.
 4. **Deterministic apply** (`scripts/ars_apply_revision_patch.py`) replays every binding before structural analysis or write. Current report format 1.3 carries the mechanically derived authorization witness and the honest `unregistered_claim_drift_review_required` E6 boundary. If E6 later detects a drift on an unregistered surface, the checkpoint has no default-open route: the author must explicitly choose `restore`, `authorize_with_reason`, or `pause`. Build and replay validation bind each choice to one explicitly named run-local raw session-event artifact; the sidecar retains its recomputed digest but neither path nor message. Untouched blocks remain byte-identical.
 5. **Continuous evidence:** every review write, all-declined no-op, and integrity-correction round enters `revision-evidence-bundle/1.0`, from an exact integrity-PASS draft to the exact final draft. A scope escalation requires a new explicit sidecar or a narrower patch; legacy full re-emission cannot claim current authorization PASS.
@@ -866,7 +866,7 @@ Current ResearchSpec owners:
 - Replacement shape: `checklist`
 - Replacement body SHA-256: `22f532603a66ee9c6cf80e50de84e20b49d028cb77bb49b0959804c7485677ba`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
+- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`, `sr-screener/references/cross-skill/academic-paper/SKILL.md`
 - Before SHA-256: `f946f4b2af4d0f2988d516e7be7441defc3f3b1973f80e8a545acb57260bbf94`
 - After SHA-256: `b58069d457e11457b7fed3a604bfb46653815bca6cf0d99f63a63cf8edf46bd0`
 
@@ -913,7 +913,7 @@ Current ResearchSpec owners:
 - Replacement shape: `artifact_projection_block`
 - Replacement body SHA-256: `11ee2b79dad4cd3cc475ddd9186c8c125b360f38478e71abf98b7bbffcfab55a`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
+- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`, `sr-screener/references/cross-skill/academic-paper/SKILL.md`
 - Before SHA-256: `9c9e7b8667bdd300ce840cc9ef5290ceba98e67aa5428ee9d60ecc90a402ea70`
 - After SHA-256: `251c58bd5a42a339cd7512cf79c2d7d09ea01ab5ef5d7409455c262d92e35b1c`
 
@@ -961,14 +961,14 @@ Current ResearchSpec owners:
 - Replacement shape: `protocol_block`
 - Replacement body SHA-256: `532b7b5700995a42bd0b783640351e16ab377592c5b8977397affbc29eec47ea`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`
-- Before SHA-256: `a4996c0d2b682365c4675cb5bde7b106fdad529c301bff428e303b418615f63d`
+- Generated output paths: `academic-paper/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-paper/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper/SKILL.md`, `deep-research/references/cross-skill/academic-paper/SKILL.md`, `sr-screener/references/cross-skill/academic-paper/SKILL.md`
+- Before SHA-256: `23e4772bfaefb79d076cdaa7813ad16316c28c95fe6e6a7e4a6de31d2d58ea8e`
 - After SHA-256: `1735228929e0073b8de5fb14eedb093285a0b3773a3a0683c42a4f7a954656b3`
 
 #### Before
 
 ````markdown
-**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` (in `academic-pipeline` skill) runs all phases end-to-end with state tracking via Material Passport.
+**Mode A — orchestrator-driven (default):** `pipeline_orchestrator_agent` (in `academic-pipeline` skill) runs all phases end-to-end with state tracking via Material Passport. As `academic-pipeline` Stage 2, a full run stops after Phase 6; Phase 7 formatting runs at pipeline Stage 5.
 
 **Mode B — phase-by-phase (cross-session resume):** User invokes one agent per phase across sessions for long-running projects. Common pattern: write the draft in one session, return next week to citation-check / abstract / peer-review independently.
 ````
@@ -1245,7 +1245,7 @@ Current ResearchSpec owners:
 - Replacement shape: `gate_rule_block`
 - Replacement body SHA-256: `7d006dff272819f6e4d0337f4ad6ccd5540785ff0c637109ce0c7a18f78aefb4`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-paper-reviewer/references/re_review_mode_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`, `sr-screener/references/cross-skill/academic-paper-reviewer/references/re_review_mode_protocol.md`
 - Before SHA-256: `c4858a0daae0ca170ba55fcb2e754bfe38ec0f6cbcd99fd0f245f22a60e49586`
 - After SHA-256: `d357858e96315a2a155e770467ca6a3fea741679fff0e18f96f910e17f54793b`
 
@@ -1321,7 +1321,7 @@ Current ResearchSpec owners:
 - Replacement shape: `artifact_projection_block`
 - Replacement body SHA-256: `1f8eda2b2f041b361301a2878fdac64858f273ead9dc6601569b6873880812db`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`, `academic-paper-reviewer/references/sprint_contract_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`, `academic-paper-reviewer/references/sprint_contract_protocol.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`, `deep-research/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`, `sr-screener/references/cross-skill/academic-paper-reviewer/references/sprint_contract_protocol.md`
 - Before SHA-256: `168193b937c339902ae460cdbc801b4f7b4f10f6d20341a2381c7b7553103b2c`
 - After SHA-256: `8c04736671b603873604d434189869fc3de4b3ecee4b197a7d35f7085877f1c0`
 
@@ -1409,8 +1409,8 @@ Current ResearchSpec owners:
 - Replacement shape: `io_contract_block`
 - Replacement body SHA-256: `3d396cb5caed1f82efd0217708e689850e7712480f2e89397ef8b4bb5e194949`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
-- Before SHA-256: `7f21fd6b5f04ff9571a2689d23365ab90a6017f3449822a7515d4b93d18ad320`
+- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`, `sr-screener/references/cross-skill/academic-paper-reviewer/SKILL.md`
+- Before SHA-256: `2c3644c23c7b08cefd6e5c374beb2d9b7fe52f77f978df358c3d8001f705c542`
 - After SHA-256: `352e7f9c80bad34a424c3fa56257be62c1b5a130e9c107e43ecd3fdabd25595c`
 
 #### Before
@@ -1424,7 +1424,7 @@ The v3.6.2 Sprint Contract Protocol (paper-blind Phase 1 + paper-visible Phase 2
 
 Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per the routing core near the top of this file (Step 2) + `shared/references/intent_clarification_protocol.md`.
 
-**Enforcement (v3.9.2):** Phase Boundary blocks on Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope remains forward-scope (#134 Slices 3-5).
+**Enforcement (v3.9.2):** Phase Boundary blocks on Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a PreToolUse write-scope guard that applies only to Bucket A roles dispatched as separate subagents of their own agent type in an install that wires the hook (the plugin install); roles run inline in the main session by default, where only the prompt-level blocks apply (#134 rescope, PR #294; #973). Multi-phase envelope remains forward-scope (#134 Slices 3-5).
 ````
 
 #### After
@@ -1468,7 +1468,7 @@ Current ResearchSpec owners:
 - Replacement shape: `checklist`
 - Replacement body SHA-256: `ec0e2738bf341fb84f2da4fc2d4d9412993cf4c21f802c962b7d6c1af8d281fa`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`, `sr-screener/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Before SHA-256: `fcc45e1c49c1e8af07a7c9b09c29eeb5b08c2a418c2674da51f631e58354c8a2`
 - After SHA-256: `b99943003cd7980a2512fc336b42d1fb43319ccd53b618187f0a3a6cccb244e6`
 
@@ -1531,7 +1531,7 @@ Current ResearchSpec owners:
 - Replacement shape: `checklist`
 - Replacement body SHA-256: `ddc676984bbc3eecf1f7bfa6bcc399fd271e92777eb26843fdbe81e13a25bddd`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`, `sr-screener/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Before SHA-256: `28e1591ebed9e51e25977eefb07c688c78bde8713748ef131170fd9485a67ea3`
 - After SHA-256: `b7d0073e2d5a8740c0fb22cdded128826ab06f8bec4bee79ea9d065a990a3dc7`
 
@@ -1579,7 +1579,7 @@ Current ResearchSpec owners:
 - Replacement shape: `gate_rule_block`
 - Replacement body SHA-256: `277ede8804851e3d2080b0617cc846a4a739a2eb11ca9bff27b2272b2a895732`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-paper-reviewer/SKILL.md`, `academic-paper-reviewer/SKILL.md`, `academic-pipeline/references/cross-skill/academic-paper-reviewer/SKILL.md`, `deep-research/references/cross-skill/academic-paper-reviewer/SKILL.md`, `sr-screener/references/cross-skill/academic-paper-reviewer/SKILL.md`
 - Before SHA-256: `68cb6e247eb5f1f28b4ac877b08017c4fddb6c38d23fff7322d9c15e253a09a5`
 - After SHA-256: `409a3fe3385e35d9281eb40658946d62db182d04ecdcd1679969aa02af56d9d2`
 
@@ -1651,7 +1651,7 @@ The packaged checker closure is exactly:
 - Replacement shape: `gate_rule_block`
 - Replacement body SHA-256: `8e11b02e3b1e0649fff671874b449103dab758733fa7b9770b235f24dc6cb4cf`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`, `sr-screener/references/cross-skill/academic-pipeline/agents/claim_ref_alignment_audit_agent.md`
 - Before SHA-256: `c879665cdb2c55aa75c9c8493988fa201ee146b78e0e9c3ecdcdcee7ea206008`
 - After SHA-256: `df5ec7143d7c62666ca1df000e460afdbab48fad18c5d701181568eae5d26bc7`
 
@@ -1696,8 +1696,8 @@ Current ResearchSpec owners:
 - Replacement shape: `gate_rule_block`
 - Replacement body SHA-256: `c7ace0affa009c796ea9bdf9ec99f4aa72b278808da0f29e919fb068500b3ee0`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `42d9ea2b008ebe3229aa685f60ff584be9ea2250879a5180f1392ce7f11b8591`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `sr-screener/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Before SHA-256: `20fab40faf49517e052de98aa81a4de3c64b0df90b5fa8b507b74d1778e064d5`
 - After SHA-256: `ed646060f85cdc17ad9e62c526a6bc3e92d118453315e78cb8a8cfb5d4eb8df9`
 
 #### Before
@@ -1706,9 +1706,9 @@ Current ResearchSpec owners:
 1. **Resolve the policy.** Read `terminal_policies.submission_package` from the Material Passport. Key absence — or absence of the whole `terminal_policies` object — resolves to `advisory` (the same per-key runtime convention as the existing keys). ALWAYS pass the resolved value explicitly: the CLI is never run policy-less in the pipeline (an unflagged run stamps `policy_slug: null` = a standalone unevaluated report, which can never satisfy the freshness guard below).
 2. **Run the verifier** on the package directory: `python scripts/verify_submission_package.py <package_dir> --policy <resolved>` plus `--passport` / `--venue-profile` / `--join-map` when the run has them — the SAME input set the freshness invocation (step 5) will carry, or the inputs fingerprint can never match.
 3. **Gate on stdout tokens, NEVER on exit codes.** Exit 1 also covers nonterminal advisory/heuristic fails (a strict-mode heuristic fail exits 1 with NO terminal token and must not block — heuristic findings never promote, structurally). Match each token as a line PREFIX, not full-line equality — the emitted lines carry a `strict_eligible_fails=<ids>` / `strict_eligible_not_checked=<ids>` suffix. The terminal signals are exactly:
-   - `TERMINAL-BLOCK policy=submission_package` (a strict-eligible check FAILED under `strict`) → return the package to the formatter fix loop, **bounded: 2 fix rounds**, then surface to the scholar (mirrors the revision-loop cap philosophy). One round = dispatch the formatter to remediate the named findings, then re-run the verifier; if the 2nd round still emits the token, STOP and surface — never a 3rd. Never carry a verdict across rounds.
+   - `TERMINAL-BLOCK policy=submission_package` (a strict-eligible check FAILED under `strict`) → return the package to the formatter fix loop, **bounded: 2 fix rounds**, then surface to the scholar (mirrors the revision-loop cap philosophy). One round = dispatch the formatter to remediate the named findings a formatting change can fix, then re-run the verifier (a finding that needs a content change goes to the scholar at once: the formatter cannot change content, so the ways out are flipping `submission_package` to `advisory` and re-finalizing, or stopping here); if the 2nd round still emits the token, STOP and surface — never a 3rd. Never carry a verdict across rounds.
    - `VERIFICATION-INCOMPLETE` (a strict-eligible check is NOT-CHECKED under `strict`) → blocks emission like a fail DOES (fail-closed §5.2: a missing parser or input must not waive the one check class the scholar opted into blocking on) — but its remediation is NOT the formatter fix loop: a missing venue profile or parser is not a formatter-fixable defect. Remediation, stated plainly to the scholar: declare a venue profile (under `strict`, Family B checks without one are strict-eligible NOT-CHECKED), or — the other way out — flip `submission_package` back to `advisory` and re-finalize.
-4. **Advisory path:** after the verifier writes its report, dispatch the formatter ONCE MORE in append-only mode to write the `Submission Package Advisories` section into `provenance_summary.md` from the report's findings (any fail / warn / NOT-CHECKED — see `formatter_agent.md`); then the pipeline completes. This re-entry is advisory transcription, not a content revision (no manuscript bytes change; Invariant 13 preserved). Byte-equivalence holds for non-opting users: no manuscript, ref-marker, or formatted-artifact bytes change — the report file and the advisories section are the only additions.
+4. **Advisory path:** after the verifier writes its report, dispatch the formatter ONCE MORE in append-only mode to write the `Submission Package Advisories` section into `provenance_summary.md` from the report's findings (any fail / warn / NOT-CHECKED — see `formatter_agent.md`); then Stage 5 continues to its completion checkpoint. This re-entry is advisory transcription, not a content revision (no manuscript bytes change; Invariant 13 preserved). Byte-equivalence holds for non-opting users: no manuscript, ref-marker, or formatted-artifact bytes change — the report file and the advisories section are the only additions.
 5. **Report reuse REQUIRES the freshness guard.** Before ever reusing an existing report (resume, re-entry, second finalization pass), run `--check-freshness --policy <resolved>` first, WITH the same `--venue-profile` / `--passport` / `--join-map` arguments the reuse context carries (the guard compares an inputs fingerprint too — a report produced under a different venue profile is stale). `STALE-REPORT` (fingerprint, inputs, or policy mismatch; null-stamped; missing/unreadable) → re-run the verifier; NEVER evaluate a stale report (§5.2 — the package-level analog of the `policy_hash` stamp). A FRESH report re-emits its verdict (token + exit semantics identical to a live run) — gate on that re-emitted token exactly as in step 3; "fresh" alone is never a pass.
 6. **Recompute each pass; nothing cached.** The gate verdict is a pure function of the CURRENT passport policy and the CURRENT package bytes — recomputed at every finalization pass and across every `resume_from_passport` re-entry (the C-V6(h) mirror). A previously-granted emission never survives a policy flip or a package edit without re-passing the gate.
 ````
@@ -1778,7 +1778,7 @@ Current ResearchSpec owners:
 - Replacement shape: `schema_projection_table`
 - Replacement body SHA-256: `9f8063c100496589e91e0806bb7eb716871d53dd3c1d4942afa066b11a1cd9cf`
 - ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `assets/shared/contracts/patch/revision_patch.schema.json`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `sr-screener/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `c4da59716b0f456089bd4e96ca36de57011f33eeca6c40296efa82564f89f465`
 - After SHA-256: `694f56af551e5afb6679ae6da0dc03bce481fdf4887d1b07c69bb2986449b488`
 
@@ -1836,8 +1836,8 @@ Current ResearchSpec owners:
 - Replacement shape: `patch_protocol_block`
 - Replacement body SHA-256: `9246697b076111e7ded59e8117da55873431e00dd01557d2a3987b51ff557054`
 - ResearchSpec targets: `assets/shared/contracts/patch/revision_patch.schema.json`, `scripts/apply-revision-patch.mjs`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `52f2d90db140e14e467f9302eb96da3eaec0e4bc622a837161bba2ab6375089a`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `sr-screener/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Before SHA-256: `c6de26c429eb7496aff391328bf30122089d7e047cce05a30b55f99531af09af`
 - After SHA-256: `03e5de6a54ced326974e873aef0d3ee22ccd63c10fba6be1495566dcbc39b20f`
 
 #### Before
@@ -1848,8 +1848,8 @@ When a revision stage dispatches `academic-paper` revision mode (Stage 3 → 4 /
 **Normative order per revision round — nothing may rewrite the draft between steps 1 and 3:**
 
 1. **Anchorize and chain-start:** `python scripts/ars_anchorize_draft.py <draft.md>`. The first round since integrity verification also binds the exact zero-open-issue PASS receipt. Nothing rewrites the draft before apply.
-2. **Build/validate explicit authority:** keep `revision-roadmap/1.0` immutable; build exact claim surfaces; collect one explicit author choice per item; run `scripts/revision_roadmap.py build-adjudication` and `validate-adjudication`. A user view is presentation-only. If every choice is declined, append a byte-identical `review_noop` bundle round and skip writer/apply.
-3. **Dispatch the writer** with the anchored draft, manifest, immutable roadmap, claim surfaces, complete author sidecar, and deterministic exact hashes/digest. It emits current patch 1.1 plus provisional Schema 8 items.
+2. **Build/validate explicit authority:** keep the `revision-roadmap/1.1` (or valid 1.0) roadmap immutable; build exact claim surfaces; collect one explicit author choice per item; run `scripts/revision_roadmap.py build-adjudication` and `validate-adjudication`. A user view is presentation-only. If every choice is declined, append a byte-identical `review_noop` bundle round and skip writer/apply.
+3. **Dispatch the writer** (corpus context without active `excluded_sources[]`, § Integrity-Excluded Sources (#936)) with the anchored draft, manifest, immutable roadmap, claim surfaces, complete author sidecar, and deterministic exact hashes/digest. It emits current patch 1.1 plus provisional Schema 8 items.
 4. **Apply with full authority arguments:** `python scripts/ars_apply_revision_patch.py <draft.md> <patch.json> --block-manifest <manifest.json> --roadmap <roadmap.json> --author-adjudication <author.json> --claim-surface-manifest <claims.json> --artifact-root <root> --output <draft.rev<N>.md>`. Authorization replays before structural analysis/write; report 1.3 lands beside the output.
 5. **Token-conservation + finalizer:** run `scripts/check_revision_token_conservation.py` on the exact patch, then the Cite-Time Provenance Finalizer on the apply output. Token rows remain advisory. Exact registered claim authority is already fail-closed at apply; E6 still reviews unregistered semantic drift.
 6. **Complete Schema 8 mechanical fields**, including `change_block_ids` from the apply report, append the exact review round to `revision-evidence-bundle/1.0`, and validate it with `scripts/revision_roadmap.py validate-bundle`. Only a valid continuous bundle moves forward.
@@ -1913,8 +1913,8 @@ Current ResearchSpec owners:
 - Replacement shape: `protocol_block`
 - Replacement body SHA-256: `9c73d0533f98a86e26b5bd48e6cc23887242f1dd12e2e71d0dcd744aaf51b249`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `a75c54a895a2208b2a2e75262289c2b03e75cd1b963146d80db315b1e9bb9221`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `sr-screener/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Before SHA-256: `42b6c294de99a01b42211e4d0de78c4deb23d88156a12b5243181425203816f7`
 - After SHA-256: `ff32b144b8c4c69079bdd9814c467f50d0907e9fe461ea003bb85d798deb2f2a`
 
 #### Before
@@ -1922,7 +1922,7 @@ Current ResearchSpec owners:
 ````markdown
 1. `state_tracker` stages a new `kind: boundary` entry for `reset_boundary[]` (Schema 9). Entry matches `shared/contracts/passport/reset_ledger_entry.schema.json` `#/$defs/boundary`.
 2. Orchestrator computes `hash` using the normative byte serialization defined in protocol doc §"The reset boundary protocol" step 2: JSON Canonical Form (RFC 8785) per entry, LF-separated, new entry appended with `hash` set to placeholder `"000000000000"`, SHA-256 first 12 lowercase hex. Write the computed hash back into the new entry, then append to the ledger. Follow the protocol doc exactly — any deviation breaks cross-session resume.
-3. If the checkpoint co-occurs with a MANDATORY user decision (e.g., Stage 3 review outcome, Stage 5 finalization format), set `pending_decision` on the new entry. Each option is an object with `value` (branch identifier), `next_stage` (stage to route to, or `null` to terminate), and optional `next_mode`. `next` on the boundary entry is still populated as a best-guess default but must NOT be used to auto-advance — on resume the orchestrator looks up the chosen `value` in `options[]` and routes via that option's `next_stage`/`next_mode` (see §Resume Mode obligations).
+3. If the checkpoint co-occurs with a MANDATORY user decision (e.g., Stage 3 review outcome, Stage 5 finalization format), the entry staged in step 1 carries `pending_decision`, set before step 2 hashes it (the protocol hashes the entry with all other fields populated). Each option is an object with `value` (branch identifier), `next_stage` (stage to route to, or `null` to terminate), and optional `next_mode`. `next` on the boundary entry is still populated as a best-guess default but must NOT be used to auto-advance — on resume the orchestrator looks up the chosen `value` in `options[]` and routes via that option's `next_stage`/`next_mode` (see §Resume Mode obligations).
 4. In the checkpoint notification, orchestrator emits — as a distinct block below the Decision Dashboard but above the continue/pause prompt:
 
    ```
@@ -1937,7 +1937,7 @@ Current ResearchSpec owners:
 
    `<hash>` is 12 lowercase hex characters per `reset_ledger_entry.schema.json` — the schema is authoritative for the format.
 
-5. Orchestrator halts after emission. For `systematic-review` mode, orchestrator refuses any in-session `continue` and repeats the Resume Instruction. For other modes, an in-session `continue` is honored once but the orchestrator uses ONLY the passport ledger as input to the next stage (no replay of prior turns).
+5. Orchestrator halts after emission. For `systematic-review` mode, orchestrator refuses any in-session `continue` and repeats the Resume Instruction. For other modes, an in-session `continue` is honored once but the orchestrator uses ONLY the passport ledger as input to the next stage (no replay of prior turns); a `pending_decision` on the boundary is asked first (protocol doc, step 6).
 
 **Iron rules (reset boundary):**
 
@@ -1988,8 +1988,8 @@ Current ResearchSpec owners:
 - Replacement shape: `protocol_block`
 - Replacement body SHA-256: `03680c49396762a40cbc321865f131186e6c3421ce9c2a79dd7355aa1f219199`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `0e6926eecb1cf821d7414a79cff1aa13ebd958c2c9ef45df9aefebb0e2afab2b`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `sr-screener/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Before SHA-256: `53bc66c2e4ff57f634c8b79051440cea4cf018d2aafe65ad32ffb704492916a9`
 - After SHA-256: `915174ffaa9c09b821fb90f92f7b3822c1efd927559ff32a5f1e602a7e71cc8f`
 
 #### Before
@@ -2000,7 +2000,7 @@ Current ResearchSpec owners:
 **Contract:** full spec in [`../references/passport_as_reset_boundary.md`](../references/passport_as_reset_boundary.md) §"`resume_from_passport` mode contract".
 
 **Orchestrator obligations:**
-1. **Acquire passport lock.** Before reading the ledger or checking for a prior consuming entry, acquire an exclusive advisory lock on the adjacent stable `.<passport-basename>.lock` sidecar (see `references/passport_as_reset_boundary.md` §"Concurrency model"). Every passport writer uses this same sidecar; never lock the replaceable passport inode. Hold the lock across the read, the no-prior-resume check, and the append. Release after the append is durable on disk. Do NOT release between steps.
+1. **Acquire passport lock.** Before the authoritative read of the ledger and the check for a prior consuming entry, acquire an exclusive advisory lock on the adjacent stable `.<passport-basename>.lock` sidecar (see `references/passport_as_reset_boundary.md` §"Concurrency model"). Every passport writer uses this same sidecar; never lock the replaceable passport inode. Ask steps 7-8 first from an unlocked read, then acquire the lock, re-read, repeat the no-prior-resume check, and append; release after the append is durable on disk (protocol doc, Iron rule 9).
 2. Parse `<hash>` from user input. Validate `^[0-9a-f]{12}$`.
 3. Locate passport file: prefer explicit path in user input; else look in `./passports/` or `./material_passport*.yaml` relative to CWD; else ask the user for the path.
 4. Load `reset_boundary[]`. Find the entry with `kind: boundary` and matching `hash`. No match → hard error: "Passport hash `<hash>` not found in `<path>`. Cannot resume."
@@ -2073,8 +2073,8 @@ Current ResearchSpec owners:
 - Replacement shape: `protocol_block`
 - Replacement body SHA-256: `3812df6618c20b8895ce573e61eef243c07e62c7ab14c85ed507eae579dde2b0`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
-- Before SHA-256: `bd30ba900f068bc9aaec5cbc252bc450a2811756546c30c66630cbb1db75255f`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `sr-screener/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Before SHA-256: `2ff75ce2dc703e27978f9f026dad2b637df754f48b07569b13181d8e2e2cbfdd`
 - After SHA-256: `1c45f667b14bef620c6d7a9f7bb901847972aae21fd5fc44ffe7818f963417ce`
 
 #### Before
@@ -2084,11 +2084,12 @@ Current ResearchSpec owners:
 
 Context compaction replaces older turns with a model-written summary, and a subagent return shows only the subagent's report; either can drop a pending decision, the user's exact words, or a step's outcome. The run ledger keeps them beside the passport as they happen (design `docs/design/2026-09-23-887-handoff-integrity-design.md`, schema `shared/contracts/passport/run_ledger.schema.json`).
 
-- **Write each event when it happens.** Once the run has a passport file, append each entry with `python3 scripts/run_ledger.py append --passport-path <passport> --entry-file <file>`. Write the entry JSON with the file-writing tool into run-local storage outside the repository, never inline in a shell command, because the user's words can contain quotes and shell characters. Record the user's initial instructions first; every FULL, SLIM, and MANDATORY checkpoint when it opens (stage, type, question, options) and when the user's response closes it (the answer and the user's exact words; `view progress`, `pause`, a refused `skip`, or a `continue` with an unmet precondition leaves it open), including audit-gate choices, reset-path overrides, and in-stage questions that change a deliverable; each item of a multi-item answer as the user gives it (coaching triage, E6 dispositions, E5 confirmations, re-review deferral answers, a structural-escalation scope); a receipt for each required step that reports only on stdout or by exit status (command, input files as `input_paths`, exit status, gate tokens or an output digest, status `passed`, `failed`, or `not_run`, retries used); the retry, loop, and fix-round counters, with the stage for a per-stage counter; and the path of each transient input a later step needs (the E6 raw event files, the evidence source text). Name files by path, relative to the passport's folder or absolute, and let the script hash them; it refuses a digest that does not match its file (#898). Under `ARS_PASSPORT_RESET=1`, an opened entry names its boundary hash (`reset_boundary_hash`). Show a refused append to the user as refused; never shorten or paraphrase the user's words to make an entry fit, and never edit the ledger by hand.
+- **Write each event when it happens.** Once the run has a passport file, append each entry with `python3 scripts/run_ledger.py append --passport-path <passport> --entry-file <file>`. Write the entry JSON with the file-writing tool into run-local storage outside the repository, never inline in a shell command, because the user's words can contain quotes and shell characters. Record the user's initial instructions first; every FULL, SLIM, and MANDATORY checkpoint when it opens (stage, type, question, options) and when the user's response closes it (the answer and the user's exact words; `view progress`, `pause`, a refused `skip`, or a `continue` with an unmet precondition leaves it open), including audit-gate choices, reset-path overrides, and in-stage questions that change a deliverable; each item of a multi-item answer as the user gives it (coaching triage, E6 dispositions, E5 confirmations, re-review deferral answers, a structural-escalation scope); a receipt for each required step that reports only on stdout or by exit status (command, input files as `input_paths`, exit status, gate tokens or an output digest, status `passed`, `failed`, or `not_run`, retries used); the retry, loop, and fix-round counters, with the stage for a per-stage counter; and the path of each transient input a later step needs (the E6 raw event files, each file in the evidence source folder, recorded again after an integrity run rewrites it). Name files by path, relative to the passport's folder or absolute, and let the script hash them; it refuses a digest that does not match its file (#898). Under `ARS_PASSPORT_RESET=1`, an opened entry names its boundary hash (`reset_boundary_hash`). Show a refused append to the user as refused; never shorten or paraphrase the user's words to make an entry fit, and never edit the ledger by hand.
 - **Check after compaction, on resume, and after each subagent return.** Write a claims file with the decisions the summary or the report asserts, the outcomes it asserts for steps that report only on stdout or by exit status, and the stage's required steps of that kind, enumerated from the skills' text, and run `python3 scripts/run_ledger.py report --passport-path <passport> --claims <file>`. A paraphrase is not a decision: a checkpoint whose answer survives only as summary text stays open. A step counts as run only with a validating artifact, a receipt whose input files are unchanged (the report gives its outcome under `step_outcomes`), or a fresh run, and is otherwise `not run`, never `passed`; re-run a step with a retry limit only when a receipt shows the retries used, and otherwise ask the user first. At each stage close, run the same report with those required steps as `expected_steps`, alongside the state tracker's Material Gap Detection for deliverables and other artifacts, and name what is missing, including what a report did not mention.
 - **Show the handoff check only when it has something to report.** For the display, run the same report with `--render zh-TW` when the user writes in Traditional Chinese, or `--render en` otherwise, and insert its output verbatim; it prints nothing when there is nothing to report (#898). The block lists the groups that have items (awaiting your answer, cannot confirm, not run, missing) and ends with the number of items the ledger backs; do not re-word, merge, or reorder its lines, and do not ask the backed items again. For a partly collected answer, the recorded items stand and the rest are asked again.
 - **Fail closed.** A missing or unreadable ledger backs nothing, and a broken chain backs nothing from the break onward: ask again for every decision the session cannot show in the user's words. The rendered block names the ledger problem, so do not name it again. If the passport path itself is gone from the session, ask the user for it. Without a passport file, or where `scripts/run_ledger.py` cannot run, there is no ledger; say so once at the first checkpoint and apply these rules to what the session still shows.
-- **Keep it local.** Never put the whole ledger into a dispatch; a dispatch that carries a decision quotes only that decision's words (§ Checkpoint authority fidelity). Never name the ledger as a supporting file for the Codex audit wrapper. When the Stage 6 record quotes the initial instructions or a decision, take the words from the ledger's entries before any break the report names.
+- **Read it only through the script.** Besides `report`, read the ledger with `python3 scripts/run_ledger.py show --passport-path <passport>`, which prints only the entries before any break (#898): the retries a receipt used, the recorded answers of a partly collected answer, a closed checkpoint another step looks for, and the words a record quotes. Never open the ledger file itself, and treat a `show` that exits 1 as the fail-closed case below.
+- **Keep it local.** Never put the whole ledger into a dispatch; a dispatch that carries a decision quotes only that decision's words (§ Checkpoint authority fidelity). Never name the ledger as a supporting file for the Codex audit wrapper. When the Stage 6 record quotes the initial instructions or a decision, take the words from what `show` prints.
 
 *Epistemic status: prompt-level, indexed as risk R12 in `docs/RISK_REGISTER.md`. The report is deterministic only over what the ledger contains. The orchestrator writes the entries, so a fabricated entry stays R11's failure, and anything lost before its entry is written cannot be recovered. The hashes detect accidental damage, not deliberate edits, a lost tail, or a restored older copy.*
 ````
@@ -2127,7 +2128,7 @@ working material and does not authorize a workflow mutation or certify replay.
 - Replacement shape: `protocol_block`
 - Replacement body SHA-256: `3c3f98a713be194324a285719ba381658cec2b6f973c68b022e246c214f6d80f`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `academic-pipeline/agents/pipeline_orchestrator_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`, `sr-screener/references/cross-skill/academic-pipeline/agents/pipeline_orchestrator_agent.md`
 - Before SHA-256: `8539b22f8cc7b75535597a4090c8143e367ffc743c5f5a46326ffffdd3e25d3c`
 - After SHA-256: `be772d76b869275ebc4ef1bc00282feda115b05b83340b521fc0eb6ceb692560`
 
@@ -2182,7 +2183,7 @@ and does not receive checkpoint events.
 - Replacement shape: `artifact_projection_block`
 - Replacement body SHA-256: `f2c8bed252eae89ff2bc78fae905927067c01dccd77a70d8e5665c09ebcf29f0`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-pipeline/agents/state_tracker_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-pipeline/agents/state_tracker_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `sr-screener/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`
 - Before SHA-256: `eb48ce56ef73b0581071ff2d2d383a45f562b4258980ce910035f67cf2fe1cfd`
 - After SHA-256: `f622aa923c031546d21e4cc13094a268bc62a5e70c5055df85352734074a3ea7`
 
@@ -2241,7 +2242,7 @@ Current ResearchSpec owners:
 - Replacement shape: `protocol_block`
 - Replacement body SHA-256: `80e3f6bd0f3a7debba664caaa50977d4dab696828a1743f0c3dbe03cc7bb4844`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-pipeline/agents/state_tracker_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `academic-pipeline/agents/state_tracker_agent.md`, `deep-research/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`, `sr-screener/references/cross-skill/academic-pipeline/agents/state_tracker_agent.md`
 - Before SHA-256: `005dab7ac516d7ef10cd7c44dbfcfcdc7a7333dd1104179d9aea356e9e8bdda4`
 - After SHA-256: `92808f7d24ea01b973d563a06a48bd7020c3c16e98f6204a256c7b9ad2258bd7`
 
@@ -2438,7 +2439,7 @@ Current ResearchSpec owners:
 - Replacement shape: `artifact_projection_block`
 - Replacement body SHA-256: `1c58407931ea9b41674bb469685a693f07e6392e09a381ead769d33237a1f426`
 - ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`, `academic-pipeline/references/literature_corpus_consumers.md`, `deep-research/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`, `academic-pipeline/references/literature_corpus_consumers.md`, `deep-research/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`, `sr-screener/references/cross-skill/academic-pipeline/references/literature_corpus_consumers.md`
 - Before SHA-256: `590a6addf7c5280e4096aacd741ce56750e4ac47885a7a0db3ff9ac307477123`
 - After SHA-256: `6719f9eb3a0665a4057fc84bccd6a0905c06bdb57ed524cc1dc3c32229b69e93`
 
@@ -2484,8 +2485,8 @@ Current ResearchSpec owners:
 - Replacement shape: `protocol_block`
 - Replacement body SHA-256: `7e7fc2f1e5360a8e02320c879e0e375ff0a3003dd2b898a230f6d45eb13bd244`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`, `academic-pipeline/references/passport_as_reset_boundary.md`, `deep-research/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`
-- Before SHA-256: `65bfadf9c3398d2e5f683e1af991edf12239c54b2e20a8154bf4239a143ef326`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`, `academic-pipeline/references/passport_as_reset_boundary.md`, `deep-research/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`, `sr-screener/references/cross-skill/academic-pipeline/references/passport_as_reset_boundary.md`
+- Before SHA-256: `e9a51c835c62bfb81336d0d3f7b205ad5a63b16076113c36193b918cda8c858a`
 - After SHA-256: `de32ef72323f5bcc6f6366016517f7f5b2131570d3565e2f3e9fba278dcec845`
 
 #### Before
@@ -2527,12 +2528,12 @@ Without coordination, two processes can complete step 2 in parallel before eithe
 1. Flag OFF is pre-v3.6.3 behavior, bit-for-bit.
 2. Ledger is append-only. No exception, no "clean up" operation.
 3. Reset tag is the sole machine-stable handoff. Human-readable `### Resume Instruction` is for user ergonomics; consumers parse the tag.
-4. `systematic-review` with flag ON refuses in-session continuation across FULL checkpoints.
+4. `systematic-review` with flag ON refuses in-session continuation across FULL and MANDATORY checkpoints.
 5. Hash mismatch on resume is a hard error; orchestrator never proceeds on a guessed or coerced hash.
 6. MANDATORY checkpoints are not downgraded by reset; they co-occur.
 7. Hash is computed over the entry with the canonical placeholder `"000000000000"` in the `hash` field, serialized per the byte rules in §"The reset boundary protocol" step 2. `kind: resume` entries are never included in a `boundary` hash computation — the hash covers only prior `boundary` entries plus the new boundary entry itself. Any other convention (exclude-field, variable-length placeholder, post-hoc mutation, including resume entries) breaks cross-implementation interoperability and is forbidden.
 8. A `boundary` entry is "consumed" only by appending a `resume` entry with matching `consumes_hash`. If a `boundary` entry has `pending_decision` set, the orchestrator MUST re-prompt the user on resume and MUST NOT auto-advance using `next`. Each option in `pending_decision.options[]` carries its own routing (`next_stage`/`next_mode`); the boundary entry's `next` field is advisory only and MAY be `null` when all branches terminate or no sensible default exists. Actual routing on resume comes from the matched option's `next_stage`/`next_mode`, not from the boundary `next` field.
-9. Resume consumption and every other passport read-modify-write MUST hold the exclusive advisory lock on the adjacent stable `.<passport-basename>.lock` sidecar for the entire operation. Locking the replaceable passport inode is non-conforming. Releasing the sidecar lock between the no-prior-resume check and the resume-entry append reopens the double-resume race the rule exists to prevent. Non-POSIX implementations that cannot provide OS-level exclusion MUST refuse to resume rather than degrade silently.
+9. Resume consumption and every other passport read-modify-write MUST hold the exclusive advisory lock on the adjacent stable `.<passport-basename>.lock` sidecar for the entire operation. Locking the replaceable passport inode is non-conforming. Releasing the sidecar lock between the no-prior-resume check and the resume-entry append reopens the double-resume race the rule exists to prevent. Non-POSIX implementations that cannot provide OS-level exclusion MUST refuse to resume rather than degrade silently. Questions to the user (verification status, a pending decision) come before acquisition, from an unlocked read; the locked operation then re-reads and repeats the check, so the lock is never held while waiting for the user.
 ````
 
 #### After
@@ -2600,8 +2601,8 @@ Current ResearchSpec owners:
 - Replacement shape: `io_contract_block`
 - Replacement body SHA-256: `167cee028ac09dc914f2109e82790980cd3c1375a644d6766a16c0a021c70a27`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
-- Before SHA-256: `82c374110d2d6e5c4c746f5583540e404f014a4c494612ebb2ccf2d15dad8bf6`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`, `sr-screener/references/cross-skill/academic-pipeline/SKILL.md`
+- Before SHA-256: `ff4107e79882a1ada029aab563f8c66be16e47f766504321248199e7acb660fb`
 - After SHA-256: `66603ce38faab2951a187fb540a383a21f0303e782a9de2cfa527567d074bc27`
 
 #### Before
@@ -2617,7 +2618,7 @@ In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.
 
 Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per the routing core near the top of this file (Step 2) + `shared/references/intent_clarification_protocol.md`. **Critically:** if `pipeline_orchestrator_agent` is dispatched on ambiguous cross-phase materials, the orchestrator itself currently cannot reconcile (this is the v3.10 conductor #134 work) — v3.9.2 routes such cases to clarification BEFORE the orchestrator runs.
 
-**Enforcement (v3.9.2):** Phase Boundary blocks on downstream Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope + orchestrator structured intake remain forward-scope (#134 Slices 3-5).
+**Enforcement (v3.9.2):** Phase Boundary blocks on downstream Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a PreToolUse write-scope guard that applies only to Bucket A roles dispatched as separate subagents of their own agent type in an install that wires the hook (the plugin install); roles run inline in the main session by default, where only the prompt-level blocks apply (#134 rescope, PR #294; #973). Multi-phase envelope + orchestrator structured intake remain forward-scope (#134 Slices 3-5).
 ````
 
 #### After
@@ -2666,7 +2667,7 @@ Current ResearchSpec owners:
 - Replacement shape: `protocol_block`
 - Replacement body SHA-256: `ea828c4ab1437aacb0852e15cbab23b775da365b9888b894e3fe9c0fb91aed74`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`, `sr-screener/references/cross-skill/academic-pipeline/SKILL.md`
 - Before SHA-256: `9d830fcc9b071b1d1fca2c5d985b809e37cfed37cc97290a34fc633ba125d01f`
 - After SHA-256: `6d5e91c8445110a9c4cedb72c3471acda5032dc872cddd1596e3c3924c5e26e5`
 
@@ -2714,7 +2715,7 @@ Current ResearchSpec owners:
 - Replacement shape: `protocol_block`
 - Replacement body SHA-256: `e0966e19f564472544fa0c67ec33601fa4c5fc687c96b9a9381b16f4e9d4a6a4`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`
+- Generated output paths: `academic-paper/references/cross-skill/academic-pipeline/SKILL.md`, `academic-paper-reviewer/references/cross-skill/academic-pipeline/SKILL.md`, `academic-pipeline/SKILL.md`, `deep-research/references/cross-skill/academic-pipeline/SKILL.md`, `sr-screener/references/cross-skill/academic-pipeline/SKILL.md`
 - Before SHA-256: `885ee4c094ad0a77870257e2968363063330ba64f9f6732797b64dc947132826`
 - After SHA-256: `1d4457147e741b04e84b98938d8f9406438f52bae83e54426c187e5082de1129`
 
@@ -2755,8 +2756,8 @@ Current ResearchSpec owners:
 - Replacement shape: `io_contract_block`
 - Replacement body SHA-256: `b09ea69336ddce8f6c5bf3a1eea2ed94a3c64d76ea816b66b1147758273b8074`
 - ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/bibliography_agent.md`, `deep-research/agents/bibliography_agent.md`
-- Before SHA-256: `0309480229b94876752945cbb3483dea6b34b403fa51b207640131ffc7c7087f`
+- Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/bibliography_agent.md`, `deep-research/agents/bibliography_agent.md`, `sr-screener/references/cross-skill/deep-research/agents/bibliography_agent.md`
+- Before SHA-256: `1f56fedea1a28337b3dfde17f01c017ef7f6de26d8626bee5705495a5cc9ba14`
 - After SHA-256: `7f0d6b535ce033c64f8094c70eba2b4e3f9136c0f7416a0c7dd776bb75355227`
 
 #### Before
@@ -2774,7 +2775,7 @@ You MAY READ files in `phase1_*/` (Research Question Brief, Methodology Blueprin
 
 If downstream work is needed (synthesis, drafting, review), return control to the caller with a recommendation. Do not execute. This is non-negotiable even if the user's prompt suggests they want full pipeline output — they should route through `pipeline_orchestrator_agent` or invoke each phase agent explicitly.
 
-**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer.
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a PreToolUse write-scope guard enforces the WRITE clause only when this role runs as a separately dispatched subagent of its own agent type in an install that wires the hook (the plugin install); when it runs inline in the main session (the default for most roles) or no hook runs, this fence is the enforcement layer.
 ````
 
 #### After
@@ -2832,7 +2833,7 @@ Current ResearchSpec owners:
 - Replacement shape: `artifact_projection_block`
 - Replacement body SHA-256: `1f1f1dabb99b892fa743f8ac40c701df4e4237ae24a4583b58c4f7b4c8f90b0f`
 - ResearchSpec targets: `researchspec/specs/sources.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/bibliography_agent.md`, `deep-research/agents/bibliography_agent.md`
+- Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/bibliography_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/bibliography_agent.md`, `deep-research/agents/bibliography_agent.md`, `sr-screener/references/cross-skill/deep-research/agents/bibliography_agent.md`
 - Before SHA-256: `2dcd0a3b130b7117e4f207ff6e7bca2ecec04e1207e44f62087a806a3af4f9c6`
 - After SHA-256: `3915b77e7521db0eb5ee4d583a4756dded9adf0ca2209c45acf1deeef1da7d91`
 
@@ -2900,7 +2901,7 @@ Current ResearchSpec owners:
 - Replacement shape: `artifact_projection_block`
 - Replacement body SHA-256: `07fe3c6e70e16074c4197ddf0048982519adf05a432dc16e10d023dfacea4e8b`
 - ResearchSpec targets: `researchspec/specs/claims.yaml`, `researchspec/changes/<change-id>/change.md`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/report_compiler_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/report_compiler_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/report_compiler_agent.md`, `deep-research/agents/report_compiler_agent.md`
+- Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/report_compiler_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/report_compiler_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/report_compiler_agent.md`, `deep-research/agents/report_compiler_agent.md`, `sr-screener/references/cross-skill/deep-research/agents/report_compiler_agent.md`
 - Before SHA-256: `85473afda2c0be70de68028c2b5eeb6dd2308a1c97baeeab12fa102999d574bb`
 - After SHA-256: `55d5ed09194083aa4d660527ef638afddbd4403748089d34bcb14b8f35645c9f`
 
@@ -2949,7 +2950,7 @@ Current ResearchSpec owners:
 - Replacement shape: `artifact_projection_block`
 - Replacement body SHA-256: `cf1cd03180b8f1a6797d1c76cd0d7d135a975ef75eed40d8dd42b8be34ba97c1`
 - ResearchSpec targets: `researchspec/specs/claims.yaml`, `researchspec/changes/<change-id>/change.md`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/synthesis_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/synthesis_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/synthesis_agent.md`, `deep-research/agents/synthesis_agent.md`
+- Generated output paths: `academic-paper/references/cross-skill/deep-research/agents/synthesis_agent.md`, `academic-paper-reviewer/references/cross-skill/deep-research/agents/synthesis_agent.md`, `academic-pipeline/references/cross-skill/deep-research/agents/synthesis_agent.md`, `deep-research/agents/synthesis_agent.md`, `sr-screener/references/cross-skill/deep-research/agents/synthesis_agent.md`
 - Before SHA-256: `36472500843439df65bfe69c96070b4ebd056b9905959db6eaeda0d2ceb37517`
 - After SHA-256: `afd63b86875452a0c3789a85dcc6ee8c01daab1dc66a2b892b719bbd1803f61d`
 
@@ -3046,8 +3047,8 @@ Current ResearchSpec owners:
 - Replacement shape: `io_contract_block`
 - Replacement body SHA-256: `c0369edf0b5998d8a7dbea3fc26eff395c4d2bfb46269f97aab89aa985ee6ac8`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/deep-research/SKILL.md`, `academic-paper-reviewer/references/cross-skill/deep-research/SKILL.md`, `academic-pipeline/references/cross-skill/deep-research/SKILL.md`, `deep-research/SKILL.md`
-- Before SHA-256: `5925d3443e95d904eb84ea364bb237570465ac08277c8ee7fcc9f4bc09823f83`
+- Generated output paths: `academic-paper/references/cross-skill/deep-research/SKILL.md`, `academic-paper-reviewer/references/cross-skill/deep-research/SKILL.md`, `academic-pipeline/references/cross-skill/deep-research/SKILL.md`, `deep-research/SKILL.md`, `sr-screener/references/cross-skill/deep-research/SKILL.md`
+- Before SHA-256: `1299743a0817b2f5d6165fdac90e6ce3aed186d8b1795988c9a6daaea56a44de`
 - After SHA-256: `64f7941091c1fdd7b83d9449d91a1470692af328fe1d585695906680f3c36f97`
 
 #### Before
@@ -3057,7 +3058,7 @@ In Mode B, **single-phase agents (Bucket A per `docs/design/2026-05-18-ars-v3.9.
 
 Routing into Mode B requires explicit user signal — `/ars-<mode>` slash command or `[direct-mode]` prefix. Ambiguous cross-phase input defaults to clarification per the routing core near the top of this file (Step 2) + `shared/references/intent_clarification_protocol.md`.
 
-**Enforcement (v3.9.2):** Phase Boundary blocks on Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a deterministic PreToolUse write-scope guard in hook-enabled runtimes (#134 rescope, PR #294). Multi-phase envelope remains forward-scope (#134 Slices 3-5).
+**Enforcement (v3.9.2):** Phase Boundary blocks on Bucket A agents + advisory verifier (`scripts/check_pipeline_integrity.py`) + a PreToolUse write-scope guard that applies only to Bucket A roles dispatched as separate subagents of their own agent type in an install that wires the hook (the plugin install); roles run inline in the main session by default, where only the prompt-level blocks apply (#134 rescope, PR #294; #973). Multi-phase envelope remains forward-scope (#134 Slices 3-5).
 ````
 
 #### After
@@ -3100,7 +3101,7 @@ Current ResearchSpec owners:
 - Replacement shape: `protocol_block`
 - Replacement body SHA-256: `d75935f2cf7dc3882cf11a01ee4206429cf3c90dafeae8e0c764b9adea173930`
 - ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/cross-skill/deep-research/SKILL.md`, `academic-paper-reviewer/references/cross-skill/deep-research/SKILL.md`, `academic-pipeline/references/cross-skill/deep-research/SKILL.md`, `deep-research/SKILL.md`
+- Generated output paths: `academic-paper/references/cross-skill/deep-research/SKILL.md`, `academic-paper-reviewer/references/cross-skill/deep-research/SKILL.md`, `academic-pipeline/references/cross-skill/deep-research/SKILL.md`, `deep-research/SKILL.md`, `sr-screener/references/cross-skill/deep-research/SKILL.md`
 - Before SHA-256: `b2e0df17b51dcebaa974776543cb401f621b21e95d33735ea1ac0ce58b0436b3`
 - After SHA-256: `675c33411de0d3427336a7fdcb831f0589479181b18e4f3a9f1318b585401b89`
 
@@ -3145,7 +3146,7 @@ Current ResearchSpec owners:
 - Replacement shape: `gate_rule_block`
 - Replacement body SHA-256: `90699db9f6cb78586a537b21047a19001b48ad38dfa7064ab0815a6adca17285`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/shared/agents/compliance_agent.md`, `academic-paper-reviewer/references/shared/agents/compliance_agent.md`, `academic-pipeline/references/shared/agents/compliance_agent.md`, `deep-research/references/shared/agents/compliance_agent.md`
+- Generated output paths: `academic-paper/references/shared/agents/compliance_agent.md`, `academic-paper-reviewer/references/shared/agents/compliance_agent.md`, `academic-pipeline/references/shared/agents/compliance_agent.md`, `deep-research/references/shared/agents/compliance_agent.md`, `sr-screener/references/shared/agents/compliance_agent.md`
 - Before SHA-256: `19e4e6ce31b20a25097014f2feadb07fbf642696eb7cef7f61c90ae47149bf33`
 - After SHA-256: `3b837e918c523134b7857ca36754a627cdea6c72643e1450ec098f6d0420ec96`
 
@@ -3190,7 +3191,7 @@ Current ResearchSpec owners:
 - Replacement shape: `checklist`
 - Replacement body SHA-256: `0ef3445ad4851490e374d4d45db2a6bb34271bc454825e75cb6efe1136d99708`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/shared/compliance_checkpoint_protocol.md`, `academic-paper-reviewer/references/shared/compliance_checkpoint_protocol.md`, `academic-pipeline/references/shared/compliance_checkpoint_protocol.md`, `deep-research/references/shared/compliance_checkpoint_protocol.md`
+- Generated output paths: `academic-paper/references/shared/compliance_checkpoint_protocol.md`, `academic-paper-reviewer/references/shared/compliance_checkpoint_protocol.md`, `academic-pipeline/references/shared/compliance_checkpoint_protocol.md`, `deep-research/references/shared/compliance_checkpoint_protocol.md`, `sr-screener/references/shared/compliance_checkpoint_protocol.md`
 - Before SHA-256: `52a20afa717bdd39a4d63c6e66457f91341803a8389a874409e82e68b933b863`
 - After SHA-256: `e5dd7c21b9caa1c8e8ea4a8f146c2499f90ea9d623a87c61dcfa2d5051d3733f`
 
@@ -3235,7 +3236,7 @@ Current ResearchSpec owners:
 - Replacement shape: `artifact_projection_block`
 - Replacement body SHA-256: `d4cdadd22e152412f6e02f3d2ec47f54eec89bd5d7033f6981f74ef09613e67b`
 - ResearchSpec targets: `researchspec/runs/<run-id>/handoff.md`, `researchspec/specs/sources.yaml`
-- Generated output paths: `academic-paper/references/shared/ground_truth_isolation_pattern.md`, `academic-paper-reviewer/references/shared/ground_truth_isolation_pattern.md`, `academic-pipeline/references/shared/ground_truth_isolation_pattern.md`, `deep-research/references/shared/ground_truth_isolation_pattern.md`
+- Generated output paths: `academic-paper/references/shared/ground_truth_isolation_pattern.md`, `academic-paper-reviewer/references/shared/ground_truth_isolation_pattern.md`, `academic-pipeline/references/shared/ground_truth_isolation_pattern.md`, `deep-research/references/shared/ground_truth_isolation_pattern.md`, `sr-screener/references/shared/ground_truth_isolation_pattern.md`
 - Before SHA-256: `8489fcd47b2e4871bd0a2f4044149638bcd5db48c9f201e499f783671c97c860`
 - After SHA-256: `71830efedee889aae7692bbc957872ef919bee2983f41d6785bc2543089eb9d7`
 
@@ -3278,7 +3279,7 @@ Current ResearchSpec owners:
 - Replacement shape: `gate_rule_block`
 - Replacement body SHA-256: `06a0ce687a16b795534a682ff73f54a8a01f8c5bfba16682ca684ea9d48d6b8e`
 - ResearchSpec targets: `researchspec/profiles/academic-pipeline.yaml`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/shared/ground_truth_isolation_pattern.md`, `academic-paper-reviewer/references/shared/ground_truth_isolation_pattern.md`, `academic-pipeline/references/shared/ground_truth_isolation_pattern.md`, `deep-research/references/shared/ground_truth_isolation_pattern.md`
+- Generated output paths: `academic-paper/references/shared/ground_truth_isolation_pattern.md`, `academic-paper-reviewer/references/shared/ground_truth_isolation_pattern.md`, `academic-pipeline/references/shared/ground_truth_isolation_pattern.md`, `deep-research/references/shared/ground_truth_isolation_pattern.md`, `sr-screener/references/shared/ground_truth_isolation_pattern.md`
 - Before SHA-256: `ef679f383fea1e2cca7b486ef8b495a0bf41050c09d279285883e030a11dedf5`
 - After SHA-256: `35476bb2b0c8655583d4d649b60b6fa7e62fae9300e8327c57809d415afd9ca9`
 
@@ -3319,8 +3320,8 @@ Current ResearchSpec owners:
 - Replacement shape: `gate_rule_block`
 - Replacement body SHA-256: `b4f26c6ec6bfde43834a38e28357d62ab114b2e01734081662ffb6a81b35862f`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
-- Before SHA-256: `de088b731b086973f1be09b4330debb476fe894f3a6ecac76673eb32cc7b9d47`
+- Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`, `sr-screener/references/shared/handoff_schemas.md`
+- Before SHA-256: `ad455120085d379d928f9796bcf10d033f7648505400ca4be86db23ee485d73b`
 - After SHA-256: `cff1b1d8ce62974fab0c7a23f9ead2a8b10292e995912a55e1fc5fbbf2f6969b`
 
 #### Before
@@ -3332,8 +3333,8 @@ Current ResearchSpec owners:
 7. **Consumer validation**: Consuming agent should validate input on receipt and request re-generation if schema violations are found. For a current #672 chain this includes exact byte replay of the one `preregistration-artifact/1.0` sidecar and its explicitly named companion when provided. Absence, substitution, a repaired digest, or a changed companion is `HANDOFF_INCOMPLETE`/contract failure, never an inferred unavailable receipt.
 8. **Integrity gating**: Artifacts that have passed through integrity verification (Schema 5) must have their Material Passport updated with `verification_status: "VERIFIED"` and `integrity_pass_date`
 9. **Staleness detection**: If an upstream artifact is modified after a downstream artifact was produced, the downstream artifact's Material Passport should be updated to `verification_status: "STALE"`
-10. **Passport freshness**: A Material Passport's integrity results are considered STALE if `integrity_pass_date` is more than 24 hours old relative to the current timestamp. Stale passports require re-verification before proceeding
-11. **Stage-skip eligibility via passport**: A passport allows skipping Stage 2.5 (pre-review integrity) ONLY when ALL of the following conditions are met: (a) `verification_status` = `"VERIFIED"`, (b) `integrity_pass_date` is within the current session or less than 24 hours old, (c) `version_label` matches the current artifact version (content has not been modified since verification), and (d) the user explicitly confirms the skip. If any condition fails, full Stage 2.5 re-verification is required
+10. **Passport freshness**: A Material Passport's integrity results are considered STALE if `integrity_pass_date` is 24 hours old or older relative to the current timestamp. Stale passports require re-verification before proceeding
+11. **Passport does not grant Stage 2.5 skip**: In every pipeline run, Stage 2.5 (pre-review integrity) runs before the paper reaches Stage 3 (REVIEW), regardless of passport status, and a user request to skip it does not change this. (A revised draft that enters at Stage 4 or later goes through Stage 4.5 instead; see rule 12.) A prior Integrity Report is attached to the Stage 2.5 dispatch as context when ALL of the following conditions are met: (a) `verification_status` = `"VERIFIED"`, (b) `integrity_pass_date` is less than 24 hours old (rule 10; this holds within one session too), and (c) `version_label` matches the current artifact version (content has not been modified since verification). The report informs the rerun; it does not replace it
 12. **Passport does not grant Stage 4.5 skip**: The final integrity check (Stage 4.5) can NEVER be skipped via Material Passport, regardless of passport status. Stage 4.5 always requires full Mode 2 verification
 ````
 
@@ -3394,7 +3395,7 @@ Current ResearchSpec owners:
 - Replacement shape: `schema_projection_table`
 - Replacement body SHA-256: `0a06c05d8b7f3652d4aaebb9e3951cf6200875f6e7b4d8b9e1e1e8810190ae85`
 - ResearchSpec targets: `researchspec/specs/project.md`, `researchspec/specs/sources.yaml`, `researchspec/specs/claims.yaml`, `researchspec/specs/manuscript.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
+- Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`, `sr-screener/references/shared/handoff_schemas.md`
 - Before SHA-256: `24f2f8a9080227d39b038d392b831f95ef5dc249a0ccb74644b80d965449b2a7`
 - After SHA-256: `b9e2db7460977b7036914d01d5dcb28f872af4eafc01a5866e26f75b63b7e791`
 
@@ -3442,7 +3443,7 @@ Current ResearchSpec owners:
 - Replacement shape: `schema_projection_table`
 - Replacement body SHA-256: `70185245f2a7f9fe7607ad873cee6178d47a53a37ec338c81c4d87ed8bb953af`
 - ResearchSpec targets: `researchspec/changes/<change-id>/change.md`, `assets/shared/contracts/patch/revision_patch.schema.json`, `researchspec/runs/<run-id>/handoff.md`, `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`
-- Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
+- Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`, `sr-screener/references/shared/handoff_schemas.md`
 - Before SHA-256: `3773a18fe88945df922430c6423aa3a96c68d8c2ffafd991abba6442aa119d87`
 - After SHA-256: `da9b2c2ee8d29d42fecb71c298ba077734fdd5e2b88b11c7f05bb34382d706d6`
 
@@ -3486,7 +3487,7 @@ Current ResearchSpec owners:
 - Replacement shape: `artifact_projection_block`
 - Replacement body SHA-256: `5db314a6cf5e0a6fe726362a1c13e237175da0104c6b45e0f25b7b2c9349c99e`
 - ResearchSpec targets: `researchspec/runs/<run-id>/nodes/<node-instance>.yaml`, `researchspec/runs/<run-id>/handoff.md`
-- Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`
+- Generated output paths: `academic-paper/references/shared/handoff_schemas.md`, `academic-paper-reviewer/references/shared/handoff_schemas.md`, `academic-pipeline/references/shared/handoff_schemas.md`, `deep-research/references/shared/handoff_schemas.md`, `sr-screener/references/shared/handoff_schemas.md`
 - Before SHA-256: `66d6edfd32f6fbfc4ea2198020b68fd8bc21c91265e5fadd22b3a69e8ecd59f5`
 - After SHA-256: `975548ce3a67df12063634aa15fd9a381fcf1d208a0e41706250eab4280d0299`
 

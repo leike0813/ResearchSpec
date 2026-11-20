@@ -36,6 +36,7 @@ void test("runtime-policy catalog completely classifies the pinned ARS release",
   assert.deepEqual(
     ARSU_RUNTIME_POLICY_CATALOG.unavailable_runtime_references.map((item) => `${item.source_path}:${item.reference}`).sort(),
     [
+      "academic-paper/SKILL.md:scripts/check_review_form_note_sync.py",
       "academic-paper/SKILL.md:**Acronym check (#849):**",
       "academic-paper/SKILL.md:Acronym report (#849):",
       "academic-paper-reviewer/SKILL.md:scripts/check_acronyms.py",
@@ -47,6 +48,7 @@ void test("runtime-policy catalog completely classifies the pinned ARS release",
       "academic-pipeline/references/pipeline_state_machine.md:**Run ledger (#887).**",
       "academic-pipeline/references/pipeline_state_machine.md:`pending_decision` stays authoritative for the reset path",
       "deep-research/SKILL.md:scripts/build_cross_document_consistency_advisory.py",
+      "deep-research/SKILL.md:scripts/check_review_form_note_sync.py",
     ].sort(),
   );
   for (const item of ARSU_RUNTIME_POLICY_CATALOG.unavailable_runtime_references) {

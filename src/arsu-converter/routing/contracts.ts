@@ -1,10 +1,13 @@
 import { z } from "zod";
+import { BoundaryOutputDescriptorSchema } from "../../core/contracts/capability-graph.js";
+export { BoundaryOutputDescriptorSchema };
 
 export const ARSU_SKILL_IDS = [
   "deep-research",
   "academic-paper",
   "academic-paper-reviewer",
   "academic-pipeline",
+  "sr-screener",
 ] as const;
 
 export const ArsuSkillIdSchema = z.enum(ARSU_SKILL_IDS);
@@ -18,7 +21,7 @@ const StableSpecPathSchema = z.enum([
   "specs/manuscript.yaml",
 ]);
 export const RouteRefSchema = z.string().regex(
-  /^(?:deep-research|academic-paper|academic-paper-reviewer|academic-pipeline):[a-z0-9][a-z0-9_-]*$/,
+  new RegExp(`^(?:${ARSU_SKILL_IDS.join("|")}):[a-z0-9][a-z0-9_-]*$`),
 );
 export type RouteRef = `${ArsuSkillId}:${string}`;
 
@@ -27,14 +30,6 @@ export const PrerequisiteRequirementSchema = z.discriminatedUnion("kind", [
   z.strictObject({ kind: z.literal("handoff_role"), id: SafeIdSchema }),
   z.strictObject({ kind: z.literal("user_input"), id: SafeIdSchema }),
 ]);
-
-export const BoundaryOutputDescriptorSchema = z.strictObject({
-  role: SafeIdSchema,
-  type: SafeIdSchema,
-  purpose: z.string().trim().min(1),
-  structure: z.string().trim().min(1),
-  validation_profile: z.enum(["text-artifact", "binary-file-artifact"]),
-});
 
 export const PrerequisiteGroupSchema = z.strictObject({
   operator: z.enum(["all_of", "any_of"]),
@@ -159,7 +154,7 @@ export function validateRoutingCatalogReferences(catalog: ArsuRoutingCatalog): R
   }
   const modeCount = [...routes.values()].filter((route) => route.route_kind === "mode").length;
   const entryCount = [...routes.values()].filter((route) => route.route_kind === "entry").length;
-  if (modeCount !== 25) issues.push({ code: "mode_route_count_invalid", message: `Expected 25 mode routes, found ${String(modeCount)}.` });
+  if (modeCount !== 33) issues.push({ code: "mode_route_count_invalid", message: `Expected 33 mode routes, found ${String(modeCount)}.` });
   if (entryCount !== 2) issues.push({ code: "entry_route_count_invalid", message: `Expected 2 entry routes, found ${String(entryCount)}.` });
 
   for (const skill of catalog.skills) {

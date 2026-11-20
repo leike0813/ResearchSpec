@@ -1285,7 +1285,8 @@
           "route_ref": "academic-paper:revision-coach",
           "title": "Revision coaching",
           "intents": [
-            "parse reviewer comments or annotations and develop a revision strategy"
+            "parse reviewer comments or annotations and develop a revision strategy",
+            "track formal research ethics review comments on this study"
           ],
           "boundary_outputs": [
             {
@@ -1320,6 +1321,10 @@
                 {
                   "kind": "user_input",
                   "id": "reviewer_comments"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "research_ethics_review_letter"
                 },
                 {
                   "kind": "handoff_role",
@@ -2164,6 +2169,531 @@
           "intent": "review one existing manuscript",
           "route_ref": "academic-paper-reviewer:full",
           "reason": "A local peer-review request does not require pipeline orchestration."
+        }
+      ]
+    },
+    {
+      "skill_id": "sr-screener",
+      "title": "Systematic review screening",
+      "summary": "Screen study records against confirmed eligibility criteria and trace PRISMA counts to individual decisions.",
+      "intents": [
+        "screen these abstracts",
+        "screen full texts",
+        "resolve screening conflicts",
+        "系统综述文献筛选",
+        "核对排除理由"
+      ],
+      "default_route_ref": "sr-screener:protocol",
+      "routes": [
+        {
+          "route_ref": "sr-screener:protocol",
+          "title": "Screening protocol",
+          "intents": [
+            "turn a proposal into ordered eligibility criteria"
+          ],
+          "boundary_outputs": [
+            {
+              "role": "screening_protocol",
+              "type": "screening_protocol",
+              "purpose": "Screening Protocol produced by sr-screener:protocol for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "screening_config",
+              "type": "screening_config",
+              "purpose": "Screening Config produced by sr-screener:protocol for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "review_proposal"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "review_proposal"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "protocol_confirmation"
+            ]
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "iterative"
+          },
+          "start_confirmation": "required",
+          "route_kind": "mode",
+          "mode_id": "protocol"
+        },
+        {
+          "route_ref": "sr-screener:quick",
+          "title": "Single-reviewer triage",
+          "intents": [
+            "screen a few abstracts against my criteria"
+          ],
+          "boundary_outputs": [
+            {
+              "role": "triage_table",
+              "type": "triage_table",
+              "purpose": "Triage Table produced by sr-screener:quick for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "eligibility_criteria"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "eligibility_criteria"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "screening_records"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "screening_records"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "medium",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "low",
+            "interaction": "single_pass"
+          },
+          "start_confirmation": "required",
+          "route_kind": "mode",
+          "mode_id": "quick"
+        },
+        {
+          "route_ref": "sr-screener:pilot",
+          "title": "Pilot calibration",
+          "intents": [
+            "calibrate screening against team labels and seeds"
+          ],
+          "boundary_outputs": [
+            {
+              "role": "pilot_report",
+              "type": "pilot_report",
+              "purpose": "Pilot Report produced by sr-screener:pilot for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "screening_config"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "screening_config"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "screening_records"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "screening_records"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "pilot_labels"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "pilot_labels"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "pilot_approval"
+            ]
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "iterative"
+          },
+          "start_confirmation": "required",
+          "route_kind": "mode",
+          "mode_id": "pilot"
+        },
+        {
+          "route_ref": "sr-screener:ta-screen",
+          "title": "Title and abstract screening",
+          "intents": [
+            "independently screen database exports",
+            "题名摘要双筛"
+          ],
+          "boundary_outputs": [
+            {
+              "role": "screening_log",
+              "type": "screening_log",
+              "purpose": "Screening Log produced by sr-screener:ta-screen for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "screening_config"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "screening_config"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "screening_records"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "screening_records"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "pilot_report"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "pilot_report"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "screening_quality"
+            ]
+          },
+          "cost": {
+            "effort": "high",
+            "interaction": "long_horizon"
+          },
+          "start_confirmation": "required",
+          "route_kind": "mode",
+          "mode_id": "ta-screen"
+        },
+        {
+          "route_ref": "sr-screener:ft-screen",
+          "title": "Full-text eligibility",
+          "intents": [
+            "assess retrieved reports with page and section evidence"
+          ],
+          "boundary_outputs": [
+            {
+              "role": "full_text_decisions",
+              "type": "full_text_decisions",
+              "purpose": "Full Text Decisions produced by sr-screener:ft-screen for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "screening_config"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "screening_config"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "screening_log"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "screening_log"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "full_text_materials"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "full_text_materials"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "screening_quality"
+            ]
+          },
+          "cost": {
+            "effort": "high",
+            "interaction": "long_horizon"
+          },
+          "start_confirmation": "required",
+          "route_kind": "mode",
+          "mode_id": "ft-screen"
+        },
+        {
+          "route_ref": "sr-screener:adjudicate",
+          "title": "Screening conflict adjudication",
+          "intents": [
+            "advise on conflicting eligibility decisions"
+          ],
+          "boundary_outputs": [
+            {
+              "role": "adjudication_advice",
+              "type": "adjudication_advice",
+              "purpose": "Adjudication Advice produced by sr-screener:adjudicate for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "screening_config"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "screening_config"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "screening_conflicts"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "screening_conflicts"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "medium",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "single_pass"
+          },
+          "start_confirmation": "required",
+          "route_kind": "mode",
+          "mode_id": "adjudicate"
+        },
+        {
+          "route_ref": "sr-screener:audit",
+          "title": "Exclusion audit",
+          "intents": [
+            "recheck near misses and sample jointly excluded studies"
+          ],
+          "boundary_outputs": [
+            {
+              "role": "exclusion_audit",
+              "type": "exclusion_audit",
+              "purpose": "Exclusion Audit produced by sr-screener:audit for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "screening_config"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "screening_config"
+                }
+              ],
+              "fallback_route_refs": []
+            },
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "excluded_records"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "excluded_records"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "medium",
+          "gate_policy": {
+            "level": "none",
+            "gate_kinds": []
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "iterative"
+          },
+          "start_confirmation": "required",
+          "route_kind": "mode",
+          "mode_id": "audit"
+        },
+        {
+          "route_ref": "sr-screener:report",
+          "title": "PRISMA report and corpus",
+          "intents": [
+            "reconcile PRISMA counts and export screening results"
+          ],
+          "boundary_outputs": [
+            {
+              "role": "prisma_counts",
+              "type": "prisma_counts",
+              "purpose": "Prisma Counts produced by sr-screener:report for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            },
+            {
+              "role": "literature_corpus",
+              "type": "literature_corpus",
+              "purpose": "Literature Corpus produced by sr-screener:report for an explicit handoff or user delivery.",
+              "structure": "A self-contained text deliverable that states its scope, evidence basis, limits, and unresolved issues where applicable.",
+              "validation_profile": "text-artifact"
+            }
+          ],
+          "prerequisite_groups": [
+            {
+              "operator": "any_of",
+              "requirements": [
+                {
+                  "kind": "handoff_role",
+                  "id": "screening_log"
+                },
+                {
+                  "kind": "user_input",
+                  "id": "screening_log"
+                }
+              ],
+              "fallback_route_refs": []
+            }
+          ],
+          "risk_level": "high",
+          "gate_policy": {
+            "level": "required",
+            "gate_kinds": [
+              "human_verification"
+            ]
+          },
+          "cost": {
+            "effort": "medium",
+            "interaction": "iterative"
+          },
+          "start_confirmation": "required",
+          "route_kind": "mode",
+          "mode_id": "report"
+        }
+      ],
+      "near_misses": [
+        {
+          "intent": "design a search strategy",
+          "route_ref": "deep-research:systematic-review",
+          "reason": "Search design precedes eligibility screening."
         }
       ]
     }

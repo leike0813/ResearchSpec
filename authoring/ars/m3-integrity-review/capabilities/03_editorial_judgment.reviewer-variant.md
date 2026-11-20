@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 来源对照（source mapping）:
     - vendor/ars/academic-paper-reviewer/agents/eic_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
     1. [保留] 上游全文逐字节保留。
     2. [标注] Sprint Contract 段（C-02）与 KP-M3-06 的关系见台账；Socratic 修订辅导角色（3→4 子阶段）在分类学中归 socratic-mentoring 对话引擎（persona=EIC），原文保留，authoring 阶段归属。
     3. [保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。
@@ -48,7 +49,7 @@ You MAY READ the paper draft and all upstream artifacts provided by the caller f
 
 If synthesis-side work is needed (Editorial Decision Letter, Revision Roadmap), return control. The synthesis is `editorial_synthesizer_agent`'s Phase 2 job.
 
-**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer. The v3.6.2 Sprint Contract Protocol below ALSO applies — both constrain your behavior (Phase Boundary = phase scope; Sprint Contract = within-phase paper-blind/paper-visible discipline).
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a PreToolUse write-scope guard enforces the WRITE clause only when this role runs as a separately dispatched subagent of its own agent type in an install that wires the hook (the plugin install); when it runs inline in the main session (the default for most roles) or no hook runs, this fence is the enforcement layer. The v3.6.2 Sprint Contract Protocol below ALSO applies — both constrain your behavior (Phase Boundary = phase scope; Sprint Contract = within-phase paper-blind/paper-visible discipline).
 
 ---
 

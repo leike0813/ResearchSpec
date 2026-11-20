@@ -7,8 +7,9 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 提取日期: 2026-08-15
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
-    - vendor/ars/deep-research/agents/bibliography_agent.md §Search Documentation (PRISMA-style)（L143-158）
+    - vendor/ars/deep-research/agents/bibliography_agent.md §Search Documentation (PRISMA-style)（L164-179）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
     1. [保留] 原文逐字节保留。
     2. [标注] literature_strategist_agent 无此段（其检索文档化在 Output Format 中），authoring 阶段合并两变体时决定是否共享本包。
 说明: 提取阶段只做"忠实迁移 + 归属标注"。任何内容删改

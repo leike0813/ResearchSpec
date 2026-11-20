@@ -659,6 +659,14 @@ scenarios:
       - academic-paper-reviewer:calibration
       - academic-pipeline:end-to-end
       - academic-pipeline:mid-entry
+      - sr-screener:protocol
+      - sr-screener:quick
+      - sr-screener:pilot
+      - sr-screener:ta-screen
+      - sr-screener:ft-screen
+      - sr-screener:adjudicate
+      - sr-screener:audit
+      - sr-screener:report
     fixture_variant: review-cycle
     initial_state: fresh-initialized-workspace-per-route
     prompts:

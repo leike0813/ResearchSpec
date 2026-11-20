@@ -11,11 +11,11 @@ description: Maintain the upstream ARS project absorption path through analysis,
 分析 -> 吸纳 -> 转换 -> 审阅 -> 审计
 ```
 
-目标是把上游 `vendor/ars` 的更新，可追溯地转化为 38 个 capability package、graph profiles 和人类审阅工件，并让每一个锚点都有可验证的审计记录。
+目标是把上游 `vendor/ars` 的更新转化为可追溯的 capability package、graph profiles 和人类审阅工件，并为每个锚点保留可验证的审计记录。
 
 ## 输入与前置条件
 
-- 已 pin 的 `vendor/ars` 子模块（当前维护版本：`v3.22.2` @ `7de1c9dfb7af9c02a9b57750761323f35a743aa2`）。
+- 已 pin 的 `vendor/ars` 子模块（当前维护版本：`v3.24.4` @ `23807f987024f2e038d12fd9e4e5d2a7cc228674`）。
 - 项目依赖安装完成（`pnpm install`）。
 - 工作区干净或仅包含本次维护改动；子模块必须处于预期 commit。
 - 生成链路可用：`pnpm extraction:index`、`pnpm arsu:author`、`pnpm capability:parity`、`pnpm capability:review-html`、`pnpm capability:assessment-html`。
@@ -31,7 +31,7 @@ description: Maintain the upstream ARS project absorption path through analysis,
 
 ## 锚点命名
 
-`<version>-<short_commit>`，例如 `v3.22.2-7de1c9d`。目录：
+`<version>-<short_commit>`，例如 `v3.24.4-23807f9`。目录：
 
 ```
 audits/arsu/<anchor>/
@@ -53,7 +53,7 @@ audits/arsu/<anchor>/
    - `git -C vendor/ars describe --tags --always`
    - `git -C vendor/ars rev-parse HEAD`
 2. 确定分析范围：
-   - 首锚点：分析全部 4 个 Skill、27 个 mode、全部 agents/references/templates。
+   - 首锚点：分析全部 5 个 Skill、35 个 mode、全部 agents/references/templates。
    - 增量：`git -C vendor/ars diff <old>..<new> --stat`，并单独检查 `MODE_REGISTRY.md`、四个 `SKILL.md`、`agents/`、`references/`、`templates/`、`shared/`。
 3. 分类影响：
    - Mode 增删改 -> routing catalog、MODE_REGISTRY 锚点、审阅工件 tab 结构。
@@ -99,8 +99,8 @@ audits/arsu/<anchor>/
    - `pnpm arsu-maintenance:artifacts`
    - 等价于 `pnpm capability:parity` + `pnpm capability:review-html` + `pnpm capability:assessment-html` + `pnpm capability:gap-review-html`
 2. 机器审计确认：
-   - `artifacts/generated/capability-parity-report.json`：38 个 ARS 能力保持 operational；报告同时包含其他已注册能力，`below_*`、`output_missing`、`flow_retained` 全部为空。
-   - assessment：逐项记录所有 `gap / missing / converted_only / flow` 的语义判定。当前 116 个文本锚点中 107 preserved、2 converted_only、6 gap、1 flow；reviewer calibration 专用能力缺口保持显式，文本命中不证明语义保留。
+   - 核对 `artifacts/generated/capability-parity-report.json` 与 extraction index 对应的全部 ARS 能力均为 operational。报告同时包含其他已注册能力；检查 `below_*`、`output_missing`、`knowledge_below_threshold`、`flow_retained` 均为空。
+   - assessment：逐项记录所有 `gap / missing / converted_only / flow` 的语义判定；包含 `sr-screener` 的 8 个 mode 和 `screening-*` 转换能力。文本命中不证明语义保留。
    - 审阅工件中无旧 dotted capability ID。
 3. **Agent 语义审阅门（不能省略，不能只贴脚本输出）**：
    - 打开 `arsu-mode-capability-review.html`，逐 mode 抽检上游指令与转换节点：至少覆盖每个 Skill 1 个 mode，且所有本轮变更 mode 必须全部检查。
@@ -115,8 +115,8 @@ audits/arsu/<anchor>/
 
 1. 运行 `node scripts/arsu-maintenance.mjs records <anchor>`，自动生成/刷新 01–04 审计记录；已存在的 `05-semantic-review.md` 不会被覆盖：
    - `01-analysis.md`：上游库存、mode registry、影响映射
-   - `02-ingestion.md`：120 artifacts 全量清单与 hash
-   - `03-conversion.md`：38 capability 全表 + graph profiles 节点表
+   - `02-ingestion.md`：当前 extraction artifacts 全量清单与 hash
+   - `03-conversion.md`：当前 ARSU capability 全表 + graph profiles 节点表
    - `04-review.md`：parity 全表、per-mode 评估、per-package 覆盖率、工件 hash
 2. 运行 `node scripts/arsu-maintenance.mjs baseline <anchor>`：验证 `05-semantic-review.md` 已完成（含 `## 结论` 且无 `[NOT-COMPLETED]`），生成 `manifest.json`，并固化维护 Skill、01–05 记录与三份 HTML 工件的 SHA-256。
 3. 运行 `node scripts/arsu-maintenance.mjs check <anchor>`，必须 `ok`。

@@ -3,14 +3,14 @@
   "source": "vendor/ars",
   "extraction_root": "authoring/ars",
   "milestone_count": 5,
-  "artifact_count": 120,
+  "artifact_count": 131,
   "verification_summary": {
-    "pass": 120
+    "pass": 131
   },
   "milestones": {
     "m1-research": {
-      "total": 16,
-      "pass": 16,
+      "total": 27,
+      "pass": 27,
       "fail": 0,
       "error": 0,
       "skip": 0
@@ -56,6 +56,7 @@
         "vendor/ars/academic-paper/agents/literature_strategist_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Phase Boundary (v3.9.2) 段属流程层，authoring 阶段移交图引擎（Q6）；原文保留。",
@@ -63,12 +64,12 @@
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "f546cb9a15d568f8b5cd2570954d134fa6d09eec2ae506e517085ddbfef2d700",
+      "sha256": "ce051707df4261209ed39cbbb82f40aee4ec72c20f5612aec1e5711b7bd12bbb",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 643 artifact lines vs 643 upstream slice lines",
-        "actual_sha256": "f546cb9a15d568f8b5cd2570954d134fa6d09eec2ae506e517085ddbfef2d700",
-        "expected_sha256": "f546cb9a15d568f8b5cd2570954d134fa6d09eec2ae506e517085ddbfef2d700"
+        "detail": "sha256 match · 664 artifact lines vs 664 upstream slice lines",
+        "actual_sha256": "ce051707df4261209ed39cbbb82f40aee4ec72c20f5612aec1e5711b7bd12bbb",
+        "expected_sha256": "ce051707df4261209ed39cbbb82f40aee4ec72c20f5612aec1e5711b7bd12bbb"
       }
     },
     {
@@ -82,18 +83,19 @@
         "vendor/ars/deep-research/agents/bibliography_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Phase Boundary (v3.9.2) 段属流程层（phase 目录写约束），authoring 阶段移交图引擎/引擎侧验证器（Q6 决策）；原文保留。",
         "[标注] 本文件为 CAP-M1-01 的 deep-research 变体；与 academic-paper 变体（literature_strategist）的合并（Q1 式数据化模板参数化）在 authoring 阶段进行，提取阶段保留两变体全文。",
         "[保留-待定] 版本标记文字（v3.3/v3.6.5/v3.7.1/v3.7.3/v3.9.0 等）保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "d6dc70e8775a188b3d51ea7ee43b5a58fc5013119086166516f05cf006b15ad5",
+      "sha256": "7d8f93dda16738b1fd66127148003222a40dc7191918a0c05cf059653ec82dea",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 474 artifact lines vs 474 upstream slice lines",
-        "actual_sha256": "d6dc70e8775a188b3d51ea7ee43b5a58fc5013119086166516f05cf006b15ad5",
-        "expected_sha256": "d6dc70e8775a188b3d51ea7ee43b5a58fc5013119086166516f05cf006b15ad5"
+        "detail": "sha256 match · 496 artifact lines vs 496 upstream slice lines",
+        "actual_sha256": "7d8f93dda16738b1fd66127148003222a40dc7191918a0c05cf059653ec82dea",
+        "expected_sha256": "7d8f93dda16738b1fd66127148003222a40dc7191918a0c05cf059653ec82dea"
       }
     },
     {
@@ -107,17 +109,18 @@
         "vendor/ars/deep-research/agents/source_verification_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Phase Boundary 段属流程层（Q6），原文保留。",
         "[标注] 内嵌 7 级证据表与 KP-M1-01 重复；authoring 阶段改为引用知识包。",
         "[保留-待定] 版本标记文字（NEW v3.3 等）保留；authoring 阶段按当前状态策略处置。"
       ],
-      "sha256": "3ffecae526acdde6d28bb8d2a9f5a88f95c00f51338c8f4d4a724ced3f7777bf",
+      "sha256": "52c3550a986880bb2fbd1dacd1b25ceb837803cf0750781c3b4cff3dc9ca7f9a",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 220 artifact lines vs 220 upstream slice lines",
-        "actual_sha256": "3ffecae526acdde6d28bb8d2a9f5a88f95c00f51338c8f4d4a724ced3f7777bf",
-        "expected_sha256": "3ffecae526acdde6d28bb8d2a9f5a88f95c00f51338c8f4d4a724ced3f7777bf"
+        "actual_sha256": "52c3550a986880bb2fbd1dacd1b25ceb837803cf0750781c3b4cff3dc9ca7f9a",
+        "expected_sha256": "52c3550a986880bb2fbd1dacd1b25ceb837803cf0750781c3b4cff3dc9ca7f9a"
       }
     },
     {
@@ -131,18 +134,19 @@
         "vendor/ars/deep-research/agents/synthesis_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Phase Boundary 段属流程层（Q6），原文保留。",
         "[标注] 内嵌 Two/Three-Layer Citation 与 Claim Intent Manifest 两段已另存知识包（KP-M1-05/06），原文在本文中保留，authoring 阶段改引用。",
         "[保留-待定] PATTERN PROTECTION (v3.6.7) 段、版本标记保留；authoring 阶段策展。"
       ],
-      "sha256": "9032f977fc6a4aee5a1623b745b78affa3478dbf8f49b97b09090f2ccea7b52e",
+      "sha256": "9609022ee0af2ee758eb0fb3039061ee17dce11e5cdcf26fa10ef1f24a92a86d",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 373 artifact lines vs 373 upstream slice lines",
-        "actual_sha256": "9032f977fc6a4aee5a1623b745b78affa3478dbf8f49b97b09090f2ccea7b52e",
-        "expected_sha256": "9032f977fc6a4aee5a1623b745b78affa3478dbf8f49b97b09090f2ccea7b52e"
+        "actual_sha256": "9609022ee0af2ee758eb0fb3039061ee17dce11e5cdcf26fa10ef1f24a92a86d",
+        "expected_sha256": "9609022ee0af2ee758eb0fb3039061ee17dce11e5cdcf26fa10ef1f24a92a86d"
       }
     },
     {
@@ -156,18 +160,19 @@
         "vendor/ars/deep-research/agents/research_question_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Phase Boundary 段属流程层（Q6），原文保留。",
         "[标注] 内嵌 FINER 框架与引导问题已另存知识包（KP-M1-02/02b），原文保留，authoring 阶段改引用。",
         "[保留-待定] Socratic Mode Branch 属 socratic 模式路径（M5 苏格拉底引擎）；原文保留，authoring 阶段归属。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "dbcae40c6c8b862de622571828a74e06f651f4e98ed9ec99290d0e5ce809fd83",
+      "sha256": "fcaf6bd50f877f5acd6f6552f6db2ccf48869f9501f48c8914badb40c89723f4",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 217 artifact lines vs 217 upstream slice lines",
-        "actual_sha256": "dbcae40c6c8b862de622571828a74e06f651f4e98ed9ec99290d0e5ce809fd83",
-        "expected_sha256": "dbcae40c6c8b862de622571828a74e06f651f4e98ed9ec99290d0e5ce809fd83"
+        "detail": "sha256 match · 224 artifact lines vs 224 upstream slice lines",
+        "actual_sha256": "fcaf6bd50f877f5acd6f6552f6db2ccf48869f9501f48c8914badb40c89723f4",
+        "expected_sha256": "fcaf6bd50f877f5acd6f6552f6db2ccf48869f9501f48c8914badb40c89723f4"
       }
     },
     {
@@ -181,18 +186,107 @@
         "vendor/ars/deep-research/agents/research_architect_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Phase Boundary 段属流程层（Q6），原文保留。",
         "[标注] Cross-Model Blind Checkpoint (#518) 与 PATTERN PROTECTION (v3.6.7) 为可选/附加机制；原文保留，authoring 阶段策展（Q3 已定预承诺模式提升，本段是其兄弟机制）。",
         "[保留-待定] Design-Freeze Checkpoint Audit 段含 ARS_CROSS_MODEL 环境开关；原文保留，authoring 阶段按\"交付层策略\"归属（Q6 C-14 类）。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "0799efca117e19d662ca28bd692d95a6587cc88fcc19290067a023ff4136314e",
+      "sha256": "160f813381e39e6c2281693fd007e6c885fff857231783e5cd85f064c38f71f8",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 299 artifact lines vs 299 upstream slice lines",
-        "actual_sha256": "0799efca117e19d662ca28bd692d95a6587cc88fcc19290067a023ff4136314e",
-        "expected_sha256": "0799efca117e19d662ca28bd692d95a6587cc88fcc19290067a023ff4136314e"
+        "actual_sha256": "160f813381e39e6c2281693fd007e6c885fff857231783e5cd85f064c38f71f8",
+        "expected_sha256": "160f813381e39e6c2281693fd007e6c885fff857231783e5cd85f064c38f71f8"
+      }
+    },
+    {
+      "milestone": "m1-research",
+      "path": "authoring/ars/m1-research/capabilities/protocol_architect_agent.md",
+      "relative_path": "capabilities/protocol_architect_agent.md",
+      "kind": "capability",
+      "artifact_id": "CAP-M1-SR-01",
+      "name": "protocol-architect",
+      "sources": [
+        "vendor/ars/sr-screener/agents/protocol_architect_agent.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游全文逐字节保留。",
+        "[标注] 上游的子代理启动与成本确认属于执行编排；ResearchSpec 在 Procedure 中按独立节点和当前 run 确认承接。"
+      ],
+      "sha256": "99dd7482340eb18094cfebdfd8ca60bdf2922ba90911a6a3340b8b1315f1fb2c",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 106 artifact lines vs 106 upstream slice lines",
+        "actual_sha256": "99dd7482340eb18094cfebdfd8ca60bdf2922ba90911a6a3340b8b1315f1fb2c",
+        "expected_sha256": "99dd7482340eb18094cfebdfd8ca60bdf2922ba90911a6a3340b8b1315f1fb2c"
+      }
+    },
+    {
+      "milestone": "m1-research",
+      "path": "authoring/ars/m1-research/capabilities/qc_auditor_agent.md",
+      "relative_path": "capabilities/qc_auditor_agent.md",
+      "kind": "capability",
+      "artifact_id": "CAP-M1-SR-03",
+      "name": "qc-auditor",
+      "sources": [
+        "vendor/ars/sr-screener/agents/qc_auditor_agent.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游全文逐字节保留。",
+        "[标注] 上游高级复核者流程在 ResearchSpec 中由 audit 节点承接，独立性要求与人工确认边界写入 Procedure。"
+      ],
+      "sha256": "913010222ea9ca8718068280b2e4946d229c257634977f758ed2f0ff9f8565c7",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 73 artifact lines vs 73 upstream slice lines",
+        "actual_sha256": "913010222ea9ca8718068280b2e4946d229c257634977f758ed2f0ff9f8565c7",
+        "expected_sha256": "913010222ea9ca8718068280b2e4946d229c257634977f758ed2f0ff9f8565c7"
+      }
+    },
+    {
+      "milestone": "m1-research",
+      "path": "authoring/ars/m1-research/capabilities/reporter_agent.md",
+      "relative_path": "capabilities/reporter_agent.md",
+      "kind": "capability",
+      "artifact_id": "CAP-M1-SR-04",
+      "name": "reporter",
+      "sources": [
+        "vendor/ars/sr-screener/agents/reporter_agent.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游全文逐字节保留。",
+        "[标注] 上游报告代理的 provisional 规则、TO COMPLETE 槽位与 corpus 边界在 Procedure 中保留为硬约束。"
+      ],
+      "sha256": "53ad1bbdbb5b9de5c1e9d56a358dbcc243714ffe1a1dfb334eec5b67c365141c",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 54 artifact lines vs 54 upstream slice lines",
+        "actual_sha256": "53ad1bbdbb5b9de5c1e9d56a358dbcc243714ffe1a1dfb334eec5b67c365141c",
+        "expected_sha256": "53ad1bbdbb5b9de5c1e9d56a358dbcc243714ffe1a1dfb334eec5b67c365141c"
+      }
+    },
+    {
+      "milestone": "m1-research",
+      "path": "authoring/ars/m1-research/capabilities/screening_reviewer_agent.md",
+      "relative_path": "capabilities/screening_reviewer_agent.md",
+      "kind": "capability",
+      "artifact_id": "CAP-M1-SR-02",
+      "name": "screening-reviewer",
+      "sources": [
+        "vendor/ars/sr-screener/agents/screening_reviewer_agent.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游全文逐字节保留。",
+        "[标注] 上游审查者提示词绑定 subagent；ResearchSpec 将其落到独立 ballot 节点，并要求座位间上下文隔离。"
+      ],
+      "sha256": "7411ec9df3e52b7f037797728da1b6f7f22c5fb7fe42b06661742f1136d6700f",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 90 artifact lines vs 90 upstream slice lines",
+        "actual_sha256": "7411ec9df3e52b7f037797728da1b6f7f22c5fb7fe42b06661742f1136d6700f",
+        "expected_sha256": "7411ec9df3e52b7f037797728da1b6f7f22c5fb7fe42b06661742f1136d6700f"
       }
     },
     {
@@ -225,9 +319,10 @@
       "artifact_id": "KP-M1-02b",
       "name": "finer-framework（Socratic 引导问题）",
       "sources": [
-        "vendor/ars/deep-research/agents/research_question_agent.md §FINER Guiding Questions（L154-180）"
+        "vendor/ars/deep-research/agents/research_question_agent.md §FINER Guiding Questions（L161-187）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 原文逐字节保留。",
         "[标注] 属于 socratic 模式的引导工具；M5 苏格拉底引擎落地时消费。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
@@ -270,9 +365,10 @@
       "artifact_id": "KP-M1-03",
       "name": "prisma-style-documentation（PRISMA 风格检索文档化）",
       "sources": [
-        "vendor/ars/deep-research/agents/bibliography_agent.md §Search Documentation (PRISMA-style)（L143-158）"
+        "vendor/ars/deep-research/agents/bibliography_agent.md §Search Documentation (PRISMA-style)（L164-179）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 原文逐字节保留。",
         "[标注] literature_strategist_agent 无此段（其检索文档化在 Output Format 中），authoring 阶段合并两变体时决定是否共享本包。"
       ],
@@ -422,6 +518,160 @@
       }
     },
     {
+      "milestone": "m1-research",
+      "path": "authoring/ars/m1-research/knowledge/decision_rules.md",
+      "relative_path": "knowledge/decision_rules.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "KP-M1-SR-01",
+      "name": "screening-decision-rules",
+      "sources": [
+        "vendor/ars/sr-screener/references/decision_rules.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游全文逐字节保留。",
+        "[标注] 规则集同时供 reviewer、merge 与 audit 节点引用；判码顺序与 unclear 闸门不得改写。"
+      ],
+      "sha256": "c22b5e31a2bb5866d943c6cee2bf10292f303c2fe2418f451bd37d6e4996964e",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 97 artifact lines vs 97 upstream slice lines",
+        "actual_sha256": "c22b5e31a2bb5866d943c6cee2bf10292f303c2fe2418f451bd37d6e4996964e",
+        "expected_sha256": "c22b5e31a2bb5866d943c6cee2bf10292f303c2fe2418f451bd37d6e4996964e"
+      }
+    },
+    {
+      "milestone": "m1-research",
+      "path": "authoring/ars/m1-research/knowledge/failure_paths.md",
+      "relative_path": "knowledge/failure_paths.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "KP-M1-SR-02",
+      "name": "screening-failure-paths",
+      "sources": [
+        "vendor/ars/sr-screener/references/failure_paths.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游全文逐字节保留。",
+        "[标注] 失败与中断路径在 ResearchSpec 中必须保持 pending，不得默认排除；重试范围写入 Procedure。"
+      ],
+      "sha256": "9b6cf9d0cdf4d65463b6fc5f4641dc87629627661f18a35f4b7de450158c6efa",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 22 artifact lines vs 22 upstream slice lines",
+        "actual_sha256": "9b6cf9d0cdf4d65463b6fc5f4641dc87629627661f18a35f4b7de450158c6efa",
+        "expected_sha256": "9b6cf9d0cdf4d65463b6fc5f4641dc87629627661f18a35f4b7de450158c6efa"
+      }
+    },
+    {
+      "milestone": "m1-research",
+      "path": "authoring/ars/m1-research/knowledge/orchestration.md",
+      "relative_path": "knowledge/orchestration.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "KP-M1-SR-03",
+      "name": "screening-orchestration",
+      "sources": [
+        "vendor/ars/sr-screener/references/orchestration.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游全文逐字节保留。",
+        "[标注] 上游 fan-out 编排映射为图节点；宿主无独立执行能力时只允许单审 triage，映射规则写入 Procedure。"
+      ],
+      "sha256": "9c0ea6fdae4bfab603a3171a9e1c9ef52c031bbe8cd0ec0aa6d98c366987561b",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 181 artifact lines vs 181 upstream slice lines",
+        "actual_sha256": "9c0ea6fdae4bfab603a3171a9e1c9ef52c031bbe8cd0ec0aa6d98c366987561b",
+        "expected_sha256": "9c0ea6fdae4bfab603a3171a9e1c9ef52c031bbe8cd0ec0aa6d98c366987561b"
+      }
+    },
+    {
+      "milestone": "m1-research",
+      "path": "authoring/ars/m1-research/knowledge/protocol_template.md",
+      "relative_path": "knowledge/protocol_template.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "KP-M1-SR-04",
+      "name": "screening-protocol-template",
+      "sources": [
+        "vendor/ars/sr-screener/references/protocol_template.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游全文逐字节保留。",
+        "[标注] 模板中的占位符与边界样例保留；研究者确认前的准则不得进入 reviewer 提示词。"
+      ],
+      "sha256": "8118ca59489c029b5a8b2239fe223e224b14c1fb5234aa36e02041d211503ff0",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 108 artifact lines vs 108 upstream slice lines",
+        "actual_sha256": "8118ca59489c029b5a8b2239fe223e224b14c1fb5234aa36e02041d211503ff0",
+        "expected_sha256": "8118ca59489c029b5a8b2239fe223e224b14c1fb5234aa36e02041d211503ff0"
+      }
+    },
+    {
+      "milestone": "m1-research",
+      "path": "authoring/ars/m1-research/knowledge/quality_control.md",
+      "relative_path": "knowledge/quality_control.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "KP-M1-SR-05",
+      "name": "screening-quality-control",
+      "sources": [
+        "vendor/ars/sr-screener/references/quality_control.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游全文逐字节保留。",
+        "[标注] 复核抽样、种子校验和一致性统计口径在 Procedure 中作为质控硬约束保留。"
+      ],
+      "sha256": "9207281e9b105ab503d7fbae272943b4d34c6583a19b2fb80242de8afc854ae6",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 104 artifact lines vs 104 upstream slice lines",
+        "actual_sha256": "9207281e9b105ab503d7fbae272943b4d34c6583a19b2fb80242de8afc854ae6",
+        "expected_sha256": "9207281e9b105ab503d7fbae272943b4d34c6583a19b2fb80242de8afc854ae6"
+      }
+    },
+    {
+      "milestone": "m1-research",
+      "path": "authoring/ars/m1-research/knowledge/reporting_and_handoff.md",
+      "relative_path": "knowledge/reporting_and_handoff.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "KP-M1-SR-07",
+      "name": "screening-reporting-and-handoff",
+      "sources": [
+        "vendor/ars/sr-screener/references/reporting_and_handoff.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游全文逐字节保留。",
+        "[标注] PRISMA 数字、provisional 状态、TO COMPLETE 槽位与 corpus 格式在 Procedure 中转为报告门禁。"
+      ],
+      "sha256": "8c6120722ad91418f29e1f17642b1459843f3e427f3a621cf93da57f7c7d1c23",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 90 artifact lines vs 90 upstream slice lines",
+        "actual_sha256": "8c6120722ad91418f29e1f17642b1459843f3e427f3a621cf93da57f7c7d1c23",
+        "expected_sha256": "8c6120722ad91418f29e1f17642b1459843f3e427f3a621cf93da57f7c7d1c23"
+      }
+    },
+    {
+      "milestone": "m1-research",
+      "path": "authoring/ars/m1-research/knowledge/reviewer_roles.md",
+      "relative_path": "knowledge/reviewer_roles.md",
+      "kind": "knowledge-pack",
+      "artifact_id": "KP-M1-SR-06",
+      "name": "screening-reviewer-roles",
+      "sources": [
+        "vendor/ars/sr-screener/references/reviewer_roles.md（全文）"
+      ],
+      "ledger": [
+        "[保留] 上游全文逐字节保留。",
+        "[标注] A/B/ADJ/QC 的可见信息边界映射为 ballot 与 merge 节点的上下文隔离规则。"
+      ],
+      "sha256": "fd432c6ed2872d7e08b6406d8a2315a3ebd649541e9b49d265ab2a4e433233e7",
+      "verification": {
+        "status": "pass",
+        "detail": "sha256 match · 61 artifact lines vs 61 upstream slice lines",
+        "actual_sha256": "fd432c6ed2872d7e08b6406d8a2315a3ebd649541e9b49d265ab2a4e433233e7",
+        "expected_sha256": "fd432c6ed2872d7e08b6406d8a2315a3ebd649541e9b49d265ab2a4e433233e7"
+      }
+    },
+    {
       "milestone": "m2-writing",
       "path": "authoring/ars/m2-writing/capabilities/01_writing_intake.md",
       "relative_path": "capabilities/01_writing_intake.md",
@@ -432,6 +682,7 @@
         "vendor/ars/academic-paper/agents/intake_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Deep Research Handoff Detection 段的跳步逻辑属图引擎入度判定（Q5 决策：入口确认外壳归引擎 entry 模式）；原文保留。",
@@ -439,12 +690,12 @@
         "[保留-待定] Plan Mode 相关段（Plan Mode Detection / Simplified Interview）属 M5 苏格拉底引擎；版本标记文字保留，authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "b64f991fe5900264acd369e693702f53110bed1362d00b4a135c407bcda12e72",
+      "sha256": "f56e407370efaf93591944255bca95e39a4708681a06a81f09fce150bcc8982b",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 398 artifact lines vs 398 upstream slice lines",
-        "actual_sha256": "b64f991fe5900264acd369e693702f53110bed1362d00b4a135c407bcda12e72",
-        "expected_sha256": "b64f991fe5900264acd369e693702f53110bed1362d00b4a135c407bcda12e72"
+        "detail": "sha256 match · 400 artifact lines vs 400 upstream slice lines",
+        "actual_sha256": "f56e407370efaf93591944255bca95e39a4708681a06a81f09fce150bcc8982b",
+        "expected_sha256": "f56e407370efaf93591944255bca95e39a4708681a06a81f09fce150bcc8982b"
       }
     },
     {
@@ -458,6 +709,7 @@
         "vendor/ars/academic-paper/agents/structure_architect_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Phase Boundary 段属流程层（Q6），原文保留。",
@@ -465,12 +717,12 @@
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "6784fe3dcb606efad3ce5b4d37f1f3df0c4c2bcb8a5e5f1f8443fd05594c99c2",
+      "sha256": "4a3806109cf651c8c3467d34cb13e976ec9442e30b79d674efdf202e8ff3ca86",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 404 artifact lines vs 404 upstream slice lines",
-        "actual_sha256": "6784fe3dcb606efad3ce5b4d37f1f3df0c4c2bcb8a5e5f1f8443fd05594c99c2",
-        "expected_sha256": "6784fe3dcb606efad3ce5b4d37f1f3df0c4c2bcb8a5e5f1f8443fd05594c99c2"
+        "actual_sha256": "4a3806109cf651c8c3467d34cb13e976ec9442e30b79d674efdf202e8ff3ca86",
+        "expected_sha256": "4a3806109cf651c8c3467d34cb13e976ec9442e30b79d674efdf202e8ff3ca86"
       }
     },
     {
@@ -508,6 +760,7 @@
         "vendor/ars/academic-paper/agents/draft_writer_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Phase Boundary 段属流程层（Q6），原文保留。",
@@ -518,12 +771,12 @@
         "[保留-待定] 版本标记文字（v3.6.6/v3.7.1/v3.7.3/v3.8 等）保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "6f648cbae368fda4faca2435e8f48f8a3397b2355cc77604b3fb320f026c6852",
+      "sha256": "6f876f84f8852e983b6f770b2e5c9b56cd5d9554bfee0d3ac34dc692c7efa674",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 685 artifact lines vs 685 upstream slice lines",
-        "actual_sha256": "6f648cbae368fda4faca2435e8f48f8a3397b2355cc77604b3fb320f026c6852",
-        "expected_sha256": "6f648cbae368fda4faca2435e8f48f8a3397b2355cc77604b3fb320f026c6852"
+        "detail": "sha256 match · 687 artifact lines vs 687 upstream slice lines",
+        "actual_sha256": "6f876f84f8852e983b6f770b2e5c9b56cd5d9554bfee0d3ac34dc692c7efa674",
+        "expected_sha256": "6f876f84f8852e983b6f770b2e5c9b56cd5d9554bfee0d3ac34dc692c7efa674"
       }
     },
     {
@@ -537,6 +790,7 @@
         "vendor/ars/deep-research/agents/report_compiler_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Q1 已定：本变体与 ms-variant 合并为单一 drafting 能力；提取阶段保留两变体全文。",
@@ -544,12 +798,12 @@
         "[标注] Standalone-Mode Self-Gate (v3.7.3) 段属自检 checker 节点候选（Q4 决策的 self-check 家族），原文保留，authoring 阶段归属。",
         "[保留-待定] PATTERN PROTECTION (v3.6.7) 段、版本标记保留；authoring 阶段策展。"
       ],
-      "sha256": "546fccee1fab315d9a43a528c50862a2d27a17db1275d2fc58e2e312733fcbfd",
+      "sha256": "145752dc27339127606499d28ffae333fece49658766b1eeab9335f3c8e0b034",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 356 artifact lines vs 356 upstream slice lines",
-        "actual_sha256": "546fccee1fab315d9a43a528c50862a2d27a17db1275d2fc58e2e312733fcbfd",
-        "expected_sha256": "546fccee1fab315d9a43a528c50862a2d27a17db1275d2fc58e2e312733fcbfd"
+        "actual_sha256": "145752dc27339127606499d28ffae333fece49658766b1eeab9335f3c8e0b034",
+        "expected_sha256": "145752dc27339127606499d28ffae333fece49658766b1eeab9335f3c8e0b034"
       }
     },
     {
@@ -563,18 +817,19 @@
         "vendor/ars/academic-paper/agents/abstract_bilingual_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Phase Boundary 段属流程层（Q6），原文保留。",
         "[标注] Protected Hedges 段引用 shared/references/protected_hedging_phrases.md（未提取依赖，留待相应里程碑）。",
         "[保留-待定] 版本标记文字（#548 + v3.6.7 roster）保留；authoring 阶段按当前状态策略处置。"
       ],
-      "sha256": "cadd8aaa47fce069ca4e709a6a97fc33dea93dc6c5ef3acc603469bac63f7073",
+      "sha256": "ac22eb3c47e5251d2052ec13489798c166b0c318c24ba851a62493a299598384",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 198 artifact lines vs 198 upstream slice lines",
-        "actual_sha256": "cadd8aaa47fce069ca4e709a6a97fc33dea93dc6c5ef3acc603469bac63f7073",
-        "expected_sha256": "cadd8aaa47fce069ca4e709a6a97fc33dea93dc6c5ef3acc603469bac63f7073"
+        "actual_sha256": "ac22eb3c47e5251d2052ec13489798c166b0c318c24ba851a62493a299598384",
+        "expected_sha256": "ac22eb3c47e5251d2052ec13489798c166b0c318c24ba851a62493a299598384"
       }
     },
     {
@@ -588,6 +843,7 @@
         "vendor/ars/academic-paper/agents/citation_compliance_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Phase Boundary 段属流程层（Q6），原文保留。",
@@ -596,12 +852,12 @@
         "[标注] 中英文献差异段引用 apa7_chinese_citation_guide.md（未提取依赖）。",
         "[保留-待定] 版本标记文字（v3.12 #392 等）保留；authoring 阶段按当前状态策略处置。"
       ],
-      "sha256": "1fe2957b96aa2f810c2c3a6ecba580cb194fdf6d699666d976431482386e7402",
+      "sha256": "3c364c64cfe26d7c63f59cba5a8fee01099deaba431c7450887a18d1aa5c9a06",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 455 artifact lines vs 455 upstream slice lines",
-        "actual_sha256": "1fe2957b96aa2f810c2c3a6ecba580cb194fdf6d699666d976431482386e7402",
-        "expected_sha256": "1fe2957b96aa2f810c2c3a6ecba580cb194fdf6d699666d976431482386e7402"
+        "detail": "sha256 match · 489 artifact lines vs 489 upstream slice lines",
+        "actual_sha256": "3c364c64cfe26d7c63f59cba5a8fee01099deaba431c7450887a18d1aa5c9a06",
+        "expected_sha256": "3c364c64cfe26d7c63f59cba5a8fee01099deaba431c7450887a18d1aa5c9a06"
       }
     },
     {
@@ -705,16 +961,17 @@
         "vendor/ars/academic-paper/references/citation_format_switcher.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 全文逐字节保留（含格式对比矩阵、参考表命名、各格式细节）。",
         "[标注] 决策清单 M2 知识包之一（五种引文格式）；上游标注使用者为 citation_compliance_agent 与 formatter_agent；CAP-M2-06 内嵌 5 格式简表是本包的压缩镜像，authoring 阶段改引用。"
       ],
-      "sha256": "4f0f2ba43ddf656845a737cad53eb9e69bf8e6924fd6ff2a420ed156c5ace739",
+      "sha256": "87f1fa99eb2ac1310845069f78d346a6d9ff091d801c1dd98bca83bd3c3fa997",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 229 artifact lines vs 229 upstream slice lines",
-        "actual_sha256": "4f0f2ba43ddf656845a737cad53eb9e69bf8e6924fd6ff2a420ed156c5ace739",
-        "expected_sha256": "4f0f2ba43ddf656845a737cad53eb9e69bf8e6924fd6ff2a420ed156c5ace739"
+        "actual_sha256": "87f1fa99eb2ac1310845069f78d346a6d9ff091d801c1dd98bca83bd3c3fa997",
+        "expected_sha256": "87f1fa99eb2ac1310845069f78d346a6d9ff091d801c1dd98bca83bd3c3fa997"
       }
     },
     {
@@ -818,6 +1075,7 @@
         "vendor/ars/academic-pipeline/agents/integrity_verification_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Two Operating Modes（pre-review / final-check）的切换语义属流程层（图引擎 2.5/4.5 门实例化），原文保留，authoring 阶段归属。",
@@ -825,12 +1083,12 @@
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "e6ffe63a07e733f5d297915f82f55c1d12c15ddd5821dc9201b3f05a01dfb7e2",
+      "sha256": "3cf110c39e08b358bcf5748047f8866aca0031f40e6767fdbc1f26bb866b436b",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 887 artifact lines vs 887 upstream slice lines",
-        "actual_sha256": "e6ffe63a07e733f5d297915f82f55c1d12c15ddd5821dc9201b3f05a01dfb7e2",
-        "expected_sha256": "e6ffe63a07e733f5d297915f82f55c1d12c15ddd5821dc9201b3f05a01dfb7e2"
+        "detail": "sha256 match · 940 artifact lines vs 940 upstream slice lines",
+        "actual_sha256": "3cf110c39e08b358bcf5748047f8866aca0031f40e6767fdbc1f26bb866b436b",
+        "expected_sha256": "3cf110c39e08b358bcf5748047f8866aca0031f40e6767fdbc1f26bb866b436b"
       }
     },
     {
@@ -844,6 +1102,7 @@
         "vendor/ars/academic-paper-reviewer/agents/field_analyst_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Q2 已定：人设由本能力配置卡注入 specialist-review 节点；Q5 已定：本能力与 writing-intake 不合并，共享外壳归引擎入口模式。",
@@ -851,12 +1110,12 @@
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "26dacdebdfdd70373cf93167c7b02cca41306fe21f9a25a5d615f7aea61dadee",
+      "sha256": "6e35978abd6faec092f5f4e0b82c57e4d1dc7197d4ba40d9ed770fccc8b478ec",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 238 artifact lines vs 238 upstream slice lines",
-        "actual_sha256": "26dacdebdfdd70373cf93167c7b02cca41306fe21f9a25a5d615f7aea61dadee",
-        "expected_sha256": "26dacdebdfdd70373cf93167c7b02cca41306fe21f9a25a5d615f7aea61dadee"
+        "detail": "sha256 match · 278 artifact lines vs 278 upstream slice lines",
+        "actual_sha256": "6e35978abd6faec092f5f4e0b82c57e4d1dc7197d4ba40d9ed770fccc8b478ec",
+        "expected_sha256": "6e35978abd6faec092f5f4e0b82c57e4d1dc7197d4ba40d9ed770fccc8b478ec"
       }
     },
     {
@@ -870,17 +1129,18 @@
         "vendor/ars/deep-research/agents/editor_in_chief_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] 分类学合并结论：本变体与 reviewer-variant（eic_agent）程序同构、verdict scale 相同，差异在靶标（研究报告 vs 论文）；提取阶段保留两变体全文，合并在 authoring 阶段参数化。",
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。"
       ],
-      "sha256": "041624be60b32316f864d7dcf4eea37ec245ea6ed65f8213d641c1f14725b88c",
+      "sha256": "28b5ad256d0078e3750eb848e61f7b9c3e9a95e9b653724c02dfe436bad47f2d",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 184 artifact lines vs 184 upstream slice lines",
-        "actual_sha256": "041624be60b32316f864d7dcf4eea37ec245ea6ed65f8213d641c1f14725b88c",
-        "expected_sha256": "041624be60b32316f864d7dcf4eea37ec245ea6ed65f8213d641c1f14725b88c"
+        "actual_sha256": "28b5ad256d0078e3750eb848e61f7b9c3e9a95e9b653724c02dfe436bad47f2d",
+        "expected_sha256": "28b5ad256d0078e3750eb848e61f7b9c3e9a95e9b653724c02dfe436bad47f2d"
       }
     },
     {
@@ -894,17 +1154,18 @@
         "vendor/ars/academic-paper-reviewer/agents/eic_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Sprint Contract 段（C-02）与 KP-M3-06 的关系见台账；Socratic 修订辅导角色（3→4 子阶段）在分类学中归 socratic-mentoring 对话引擎（persona=EIC），原文保留，authoring 阶段归属。",
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "c5ec3150c7e7cc4c89358853d13af0bde8f211e0a735bcd8c72330d1f931943d",
+      "sha256": "9690e570d081bfcdef6da23fb93064af4028c9d6b766fcbcf0cf0981463d492f",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 340 artifact lines vs 340 upstream slice lines",
-        "actual_sha256": "c5ec3150c7e7cc4c89358853d13af0bde8f211e0a735bcd8c72330d1f931943d",
-        "expected_sha256": "c5ec3150c7e7cc4c89358853d13af0bde8f211e0a735bcd8c72330d1f931943d"
+        "actual_sha256": "9690e570d081bfcdef6da23fb93064af4028c9d6b766fcbcf0cf0981463d492f",
+        "expected_sha256": "9690e570d081bfcdef6da23fb93064af4028c9d6b766fcbcf0cf0981463d492f"
       }
     },
     {
@@ -918,18 +1179,19 @@
         "vendor/ars/academic-paper-reviewer/agents/methodology_reviewer_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Q2 已定：R1/R2/R3 合并为单一 specialist-review 能力，视角为知识包参数（rubric 四段式：评估要点/不管清单/Sprint 评分维度/报告模板）；提取阶段保留三个视角文件全文。",
         "[标注] 引用 KP-M3-03（统计报告标准）作为本视角知识包组成。",
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "91e462ee104cc253a44d387570ea95a49a4efffcc2b4765617baf292431de6cb",
+      "sha256": "7369527eb99f1ca2a7351a338a4e7ef0df482d3fb516056d271a944eb7d6d8b9",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 450 artifact lines vs 450 upstream slice lines",
-        "actual_sha256": "91e462ee104cc253a44d387570ea95a49a4efffcc2b4765617baf292431de6cb",
-        "expected_sha256": "91e462ee104cc253a44d387570ea95a49a4efffcc2b4765617baf292431de6cb"
+        "actual_sha256": "7369527eb99f1ca2a7351a338a4e7ef0df482d3fb516056d271a944eb7d6d8b9",
+        "expected_sha256": "7369527eb99f1ca2a7351a338a4e7ef0df482d3fb516056d271a944eb7d6d8b9"
       }
     },
     {
@@ -943,17 +1205,18 @@
         "vendor/ars/academic-paper-reviewer/agents/domain_reviewer_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Q2 已定（同上条目）；本视角的学科评审锚点（Domain-Specific Review Anchors）为视角知识包核心。",
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "eb6660aafadc851e3fc4545111b5113d467c9eb263ef069394db62c944ece1e5",
+      "sha256": "5f09b9b348814370c14185d6266622766ef36ab0942a14809c077771f5cbc932",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 413 artifact lines vs 413 upstream slice lines",
-        "actual_sha256": "eb6660aafadc851e3fc4545111b5113d467c9eb263ef069394db62c944ece1e5",
-        "expected_sha256": "eb6660aafadc851e3fc4545111b5113d467c9eb263ef069394db62c944ece1e5"
+        "detail": "sha256 match · 438 artifact lines vs 438 upstream slice lines",
+        "actual_sha256": "5f09b9b348814370c14185d6266622766ef36ab0942a14809c077771f5cbc932",
+        "expected_sha256": "5f09b9b348814370c14185d6266622766ef36ab0942a14809c077771f5cbc932"
       }
     },
     {
@@ -967,17 +1230,18 @@
         "vendor/ars/academic-paper-reviewer/agents/perspective_reviewer_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Q2 已定（同上条目）；Role Boundaries — R3 vs DA 段为视角排除域（\"不管清单\"）的来源。",
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "49bb946547593a918bd60faee88555d46a2a10b39f2857ef94163eef65920d81",
+      "sha256": "a99386515c1e9e5b73e91f3f9cd62f6ec3660f03e229371ad53531fa165cf007",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 428 artifact lines vs 428 upstream slice lines",
-        "actual_sha256": "49bb946547593a918bd60faee88555d46a2a10b39f2857ef94163eef65920d81",
-        "expected_sha256": "49bb946547593a918bd60faee88555d46a2a10b39f2857ef94163eef65920d81"
+        "detail": "sha256 match · 438 artifact lines vs 438 upstream slice lines",
+        "actual_sha256": "a99386515c1e9e5b73e91f3f9cd62f6ec3660f03e229371ad53531fa165cf007",
+        "expected_sha256": "a99386515c1e9e5b73e91f3f9cd62f6ec3660f03e229371ad53531fa165cf007"
       }
     },
     {
@@ -1018,18 +1282,19 @@
         "vendor/ars/academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 上游全文逐字节保留。",
         "[标注] 内嵌 Attack Intensity Preservation Protocol 段已另存 KP-M3-05b，原文保留，authoring 阶段改引用。",
         "[标注] Relationship with deep-research DA 段（两变体关系表）是合并参数化的直接依据，原文保留。",
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "b42eb5559bf91c8767f85e532dfa240e5e30feb92ae3fc0be96f20058acfcf6a",
+      "sha256": "3f39bad01d78a403da4318ed477acde13c3171ca61e96ee24c9404dade5ec1de",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 444 artifact lines vs 444 upstream slice lines",
-        "actual_sha256": "b42eb5559bf91c8767f85e532dfa240e5e30feb92ae3fc0be96f20058acfcf6a",
-        "expected_sha256": "b42eb5559bf91c8767f85e532dfa240e5e30feb92ae3fc0be96f20058acfcf6a"
+        "detail": "sha256 match · 447 artifact lines vs 447 upstream slice lines",
+        "actual_sha256": "3f39bad01d78a403da4318ed477acde13c3171ca61e96ee24c9404dade5ec1de",
+        "expected_sha256": "3f39bad01d78a403da4318ed477acde13c3171ca61e96ee24c9404dade5ec1de"
       }
     },
     {
@@ -1043,18 +1308,19 @@
         "vendor/ars/academic-paper-reviewer/agents/editorial_synthesizer_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] 三步骤机械协议 + forbidden-ops 是本能力的核心程序（近机械），原文保留；引用 KP-M3-04（编辑决定标准）。",
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "3809d989ed5ff6c19da141d6717031f4392d7052038abf879a5226ab385f3394",
+      "sha256": "0c01d0cf49dbaf16b18b73c605da6cc67935ba6c6f96b10401ab61a2fed975a4",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 495 artifact lines vs 495 upstream slice lines",
-        "actual_sha256": "3809d989ed5ff6c19da141d6717031f4392d7052038abf879a5226ab385f3394",
-        "expected_sha256": "3809d989ed5ff6c19da141d6717031f4392d7052038abf879a5226ab385f3394"
+        "detail": "sha256 match · 513 artifact lines vs 513 upstream slice lines",
+        "actual_sha256": "0c01d0cf49dbaf16b18b73c605da6cc67935ba6c6f96b10401ab61a2fed975a4",
+        "expected_sha256": "0c01d0cf49dbaf16b18b73c605da6cc67935ba6c6f96b10401ab61a2fed975a4"
       }
     },
     {
@@ -1068,6 +1334,7 @@
         "vendor/ars/academic-paper/agents/peer_reviewer_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 上游全文逐字节保留。",
         "[标注] Q4 已定：P6 内置评审循环删除，本能力降格为 checker 节点（无修订循环、无编辑决定）；其五维评分 rubric 归入评审 rubric 知识包族（authoring 阶段与 KP-M3-02 合并）。",
         "[标注] v3.6.6 Generator-Evaluator Contract Protocol 段按 Q3 决议：提升\"盲态预承诺\"通用协议（承诺-执行序对绑定本节点对）、丢弃机制细节；原文保留。",
@@ -1075,12 +1342,12 @@
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "ed37055a86a8d95bbbd0c3148936d690a98440f96417a3a066222c4a7b1aa415",
+      "sha256": "7972e55616c9b8d35364d1669d05329307b2186db02f4b0b0e56c52249b2b048",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 517 artifact lines vs 517 upstream slice lines",
-        "actual_sha256": "ed37055a86a8d95bbbd0c3148936d690a98440f96417a3a066222c4a7b1aa415",
-        "expected_sha256": "ed37055a86a8d95bbbd0c3148936d690a98440f96417a3a066222c4a7b1aa415"
+        "detail": "sha256 match · 540 artifact lines vs 540 upstream slice lines",
+        "actual_sha256": "7972e55616c9b8d35364d1669d05329307b2186db02f4b0b0e56c52249b2b048",
+        "expected_sha256": "7972e55616c9b8d35364d1669d05329307b2186db02f4b0b0e56c52249b2b048"
       }
     },
     {
@@ -1094,15 +1361,16 @@
         "vendor/ars/academic-pipeline/references/ai_research_failure_modes.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 全文逐字节保留。",
         "[标注] 决策清单 M3 知识包之一（7 模式清单）；完整性门 2.5/4.5 的判定核心（横切协议，Q6 分层中归 checker 侧知识）。"
       ],
-      "sha256": "26240eb1609dd8b574d7134d227059e9be44b1fe4cafc37cff2f1394906ca86e",
+      "sha256": "0390a93eeef2a7d4463e13c1c8816d8bd9c650f038685a7181b0c0d6ee4e8b1c",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 186 artifact lines vs 186 upstream slice lines",
-        "actual_sha256": "26240eb1609dd8b574d7134d227059e9be44b1fe4cafc37cff2f1394906ca86e",
-        "expected_sha256": "26240eb1609dd8b574d7134d227059e9be44b1fe4cafc37cff2f1394906ca86e"
+        "detail": "sha256 match · 187 artifact lines vs 187 upstream slice lines",
+        "actual_sha256": "0390a93eeef2a7d4463e13c1c8816d8bd9c650f038685a7181b0c0d6ee4e8b1c",
+        "expected_sha256": "0390a93eeef2a7d4463e13c1c8816d8bd9c650f038685a7181b0c0d6ee4e8b1c"
       }
     },
     {
@@ -1229,19 +1497,20 @@
       "artifact_id": "KP-M3-05b",
       "name": "attack-intensity-preservation（攻击强度保持协议，reviewer 形态）",
       "sources": [
-        "vendor/ars/academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md §Attack Intensity Preservation Protocol (v3.0)（L399-443）"
+        "vendor/ars/academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md §Attack Intensity Preservation Protocol (v3.0)（L401-446）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 原文逐字节保留。",
         "[标注] 决策清单 M3 知识包之一（让步阈值家族）；与 05a 的关系见其台账。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "c201d3d926a7b63b3f5a82dc87c12a13073368e24650ed8c76f904e6232f04a4",
+      "sha256": "ab85dfc18ef23a6a870c2cd9b3cd9a94a85c8c095b8886289b6871c9d6373747",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 46 artifact lines vs 46 upstream slice lines",
-        "actual_sha256": "c201d3d926a7b63b3f5a82dc87c12a13073368e24650ed8c76f904e6232f04a4",
-        "expected_sha256": "c201d3d926a7b63b3f5a82dc87c12a13073368e24650ed8c76f904e6232f04a4"
+        "detail": "sha256 match · 47 artifact lines vs 47 upstream slice lines",
+        "actual_sha256": "ab85dfc18ef23a6a870c2cd9b3cd9a94a85c8c095b8886289b6871c9d6373747",
+        "expected_sha256": "ab85dfc18ef23a6a870c2cd9b3cd9a94a85c8c095b8886289b6871c9d6373747"
       }
     },
     {
@@ -1255,17 +1524,18 @@
         "vendor/ars/academic-paper-reviewer/references/sprint_contract_protocol.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 全文逐字节保留。",
         "[标注-新增] **决策清单外新增**：5 个评审 agent 文件均内嵌\"v3.6.2 Sprint Contract Protocol\"段引用本协议（C-02），属 M3 评审能力族完整性所需。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "501c9c42a592e625df46a18027af9d8023b680ba9bdf87b2ae3f77bc84eb2810",
+      "sha256": "1e3ae19563f45f975e1518bd2193c6dccae4ed2317fbdb8b1bf2ec76e8878d8b",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 301 artifact lines vs 301 upstream slice lines",
-        "actual_sha256": "501c9c42a592e625df46a18027af9d8023b680ba9bdf87b2ae3f77bc84eb2810",
-        "expected_sha256": "501c9c42a592e625df46a18027af9d8023b680ba9bdf87b2ae3f77bc84eb2810"
+        "actual_sha256": "1e3ae19563f45f975e1518bd2193c6dccae4ed2317fbdb8b1bf2ec76e8878d8b",
+        "expected_sha256": "1e3ae19563f45f975e1518bd2193c6dccae4ed2317fbdb8b1bf2ec76e8878d8b"
       }
     },
     {
@@ -1279,17 +1549,18 @@
         "vendor/ars/academic-pipeline/references/claim_verification_protocol.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 全文逐字节保留。",
         "[标注-新增] **决策清单外新增**：integrity_verification_agent 多处声明本文件为权威（\"the complete protocol definition\"、E4/E5/E6 引用），属 CAP-M3-01 完整性所需。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "66d799fa187ba133c8bf7d0db31bc0ec3d616ff476d375194459e972f1dc79a4",
+      "sha256": "0a4c73e4d637481f4dd0544fc2a14829763f3fda950dc690126b7074d570d608",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 283 artifact lines vs 283 upstream slice lines",
-        "actual_sha256": "66d799fa187ba133c8bf7d0db31bc0ec3d616ff476d375194459e972f1dc79a4",
-        "expected_sha256": "66d799fa187ba133c8bf7d0db31bc0ec3d616ff476d375194459e972f1dc79a4"
+        "detail": "sha256 match · 291 artifact lines vs 291 upstream slice lines",
+        "actual_sha256": "0a4c73e4d637481f4dd0544fc2a14829763f3fda950dc690126b7074d570d608",
+        "expected_sha256": "0a4c73e4d637481f4dd0544fc2a14829763f3fda950dc690126b7074d570d608"
       }
     },
     {
@@ -1416,18 +1687,19 @@
         "vendor/ars/academic-paper/agents/revision_coach_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] 独立模式（standalone，无前置管道）——吸收后即独立子图入口；Commitment Extraction Pass (Kong A1 / v3.11) 段原文保留。",
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "d833e953034db451c5f1ad353c5a9a8e49121a463afb33979885bf8f54f330ae",
+      "sha256": "b756343ed02628ca46efc738adcecf3150acb2a5a70b73f6cff69cf90b9b76f5",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 363 artifact lines vs 363 upstream slice lines",
-        "actual_sha256": "d833e953034db451c5f1ad353c5a9a8e49121a463afb33979885bf8f54f330ae",
-        "expected_sha256": "d833e953034db451c5f1ad353c5a9a8e49121a463afb33979885bf8f54f330ae"
+        "detail": "sha256 match · 364 artifact lines vs 364 upstream slice lines",
+        "actual_sha256": "b756343ed02628ca46efc738adcecf3150acb2a5a70b73f6cff69cf90b9b76f5",
+        "expected_sha256": "b756343ed02628ca46efc738adcecf3150acb2a5a70b73f6cff69cf90b9b76f5"
       }
     },
     {
@@ -1486,6 +1758,7 @@
         "vendor/ars/academic-paper/agents/formatter_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] 分类学已定拆分：本能力=转换层（producer）；其 REFUSE 规则 1-12 与 Cite-Time Terminal Policy Gate（STAMP-ONLY）段属 cap.check.terminal-policy-gate（与 CAP-M4-04 finalizer 配对），原文在本文件中保留，authoring 阶段拆分。",
@@ -1493,12 +1766,12 @@
         "[保留-待定] 版本标记文字（v3.10/v3.11 规则编号等）保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "e270831e2437ee530a93b69785869adf932a87c3d25ca5898cbd6e78bbd55b78",
+      "sha256": "4cc81e36a8c7f9fdc96db77ba294edfc9428639c4a1cbdfb1d46dcb215a99891",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 1016 artifact lines vs 1016 upstream slice lines",
-        "actual_sha256": "e270831e2437ee530a93b69785869adf932a87c3d25ca5898cbd6e78bbd55b78",
-        "expected_sha256": "e270831e2437ee530a93b69785869adf932a87c3d25ca5898cbd6e78bbd55b78"
+        "detail": "sha256 match · 1045 artifact lines vs 1045 upstream slice lines",
+        "actual_sha256": "4cc81e36a8c7f9fdc96db77ba294edfc9428639c4a1cbdfb1d46dcb215a99891",
+        "expected_sha256": "4cc81e36a8c7f9fdc96db77ba294edfc9428639c4a1cbdfb1d46dcb215a99891"
       }
     },
     {
@@ -1509,9 +1782,10 @@
       "artifact_id": "CAP-M4-04",
       "name": "terminal-policy-gate（finalizer：唯一策略评估者）",
       "sources": [
-        "vendor/ars/academic-pipeline/agents/pipeline_orchestrator_agent.md §Cite-Time Provenance Finalizer（v3.7.1 → v3.10 extension，L1055-1286）"
+        "vendor/ars/academic-pipeline/agents/pipeline_orchestrator_agent.md §Cite-Time Provenance Finalizer（v3.7.1 → v3.10 extension，L1131-1362）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 原文逐字节保留（四代 finalizer：5-cell 矩阵、污染注解、三角测量层、终端策略层）。",
         "[标注] 上游声明\"finalizer 是唯一策略评估者、formatter 只盖章\"——本段是终端策略门的评估侧，与 formatter REFUSE 段（盖章侧）配对；分类学已将此逻辑从 orchestrator 拆出（orchestrator 其余职责吸收进图引擎）。",
@@ -1519,12 +1793,12 @@
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "2c09c82d6dd3dc50f79c669f9426f47867807c6fb0ac3685e544a24c652735ae",
+      "sha256": "401cbed33d377c3857642ede3d866142cbc9bb771be3dc767d719c958b5644b6",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 233 artifact lines vs 233 upstream slice lines",
-        "actual_sha256": "2c09c82d6dd3dc50f79c669f9426f47867807c6fb0ac3685e544a24c652735ae",
-        "expected_sha256": "2c09c82d6dd3dc50f79c669f9426f47867807c6fb0ac3685e544a24c652735ae"
+        "actual_sha256": "401cbed33d377c3857642ede3d866142cbc9bb771be3dc767d719c958b5644b6",
+        "expected_sha256": "401cbed33d377c3857642ede3d866142cbc9bb771be3dc767d719c958b5644b6"
       }
     },
     {
@@ -1535,20 +1809,21 @@
       "artifact_id": "CAP-M4-04",
       "name": "terminal-policy-gate（投稿包终检门 #394）",
       "sources": [
-        "vendor/ars/academic-pipeline/agents/pipeline_orchestrator_agent.md §Submission-Package Terminal Gate (#394 slice 4 — Stage 5, post-formatter)（L1400-1426）"
+        "vendor/ars/academic-pipeline/agents/pipeline_orchestrator_agent.md §Submission-Package Terminal Gate (#394 slice 4 — Stage 5, post-formatter)（L1476-1502）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 原文逐字节保留。",
         "[标注] package 级终端门（verify_submission_package.py 分发、TERMINAL-BLOCK / VERIFICATION-INCOMPLETE stdout 令牌语义）；原文保留，authoring 阶段归 terminal-policy-gate 家族。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "b6505eb11ed86164c982d6f4db2b7b4d9504b404642341b841c44fc115a9d160",
+      "sha256": "dd6c9a494d856bdc3fa2c791f5e12f80571023bb5605e3a291a00605ce10733b",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 28 artifact lines vs 28 upstream slice lines",
-        "actual_sha256": "b6505eb11ed86164c982d6f4db2b7b4d9504b404642341b841c44fc115a9d160",
-        "expected_sha256": "b6505eb11ed86164c982d6f4db2b7b4d9504b404642341b841c44fc115a9d160"
+        "actual_sha256": "dd6c9a494d856bdc3fa2c791f5e12f80571023bb5605e3a291a00605ce10733b",
+        "expected_sha256": "dd6c9a494d856bdc3fa2c791f5e12f80571023bb5605e3a291a00605ce10733b"
       }
     },
     {
@@ -1562,16 +1837,17 @@
         "vendor/ars/scripts/check_v3_9_4_temporal_verification.py（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 脚本全文逐字节保留。",
         "[标注] 上游对时间验证表面（写入方铁律 + 验证器）的镜像一致性 lint；吸收后归引擎侧验证器资产（Q6）。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "e2752451692cc5d8f6fbd01cf473b5c5a672b8b1af81d857765ee5e69841325a",
+      "sha256": "7edb4ecb8da5c58886e26cccadb27f0bd184f19e2a0f4ab8ca5651784f13b65e",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 140 artifact lines vs 140 upstream slice lines",
-        "actual_sha256": "e2752451692cc5d8f6fbd01cf473b5c5a672b8b1af81d857765ee5e69841325a",
-        "expected_sha256": "e2752451692cc5d8f6fbd01cf473b5c5a672b8b1af81d857765ee5e69841325a"
+        "actual_sha256": "7edb4ecb8da5c58886e26cccadb27f0bd184f19e2a0f4ab8ca5651784f13b65e",
+        "expected_sha256": "7edb4ecb8da5c58886e26cccadb27f0bd184f19e2a0f4ab8ca5651784f13b65e"
       }
     },
     {
@@ -1607,17 +1883,18 @@
         "vendor/ars/academic-paper/references/revision_patch_protocol.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 全文逐字节保留。",
         "[标注] 决策清单 M4 知识包之一（patch 协议）；脚本资产见 CAP-M4-02（ars_anchorize_draft.py / ars_apply_revision_patch.py）。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "fb8887ef8544d11ca44fcec55ce52dd7019d91bcce2d4645222e7b9906b36c40",
+      "sha256": "db7bf775469e686866185a002c9005201eafc5d69a2a5953061909154b665bde",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 179 artifact lines vs 179 upstream slice lines",
-        "actual_sha256": "fb8887ef8544d11ca44fcec55ce52dd7019d91bcce2d4645222e7b9906b36c40",
-        "expected_sha256": "fb8887ef8544d11ca44fcec55ce52dd7019d91bcce2d4645222e7b9906b36c40"
+        "actual_sha256": "db7bf775469e686866185a002c9005201eafc5d69a2a5953061909154b665bde",
+        "expected_sha256": "db7bf775469e686866185a002c9005201eafc5d69a2a5953061909154b665bde"
       }
     },
     {
@@ -1654,17 +1931,18 @@
         "vendor/ars/shared/contracts/degradation_registry.json（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 全文逐字节保留（JSON 原文，含 registry 自述语义与全部 mechanism 行）。",
         "[标注] 决策清单 M4 知识包之一（降级语义）；上游自述\"只索引不重述\"，authoring 阶段保留该定位，各机制语义仍以权威文件锚点为准。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "8e4d67cd76def9ab5490a03f449423f672c91949cc942ad860c3b0a7fe3aa883",
+      "sha256": "708bd8e6cbae45200781c36382b14f923e26a886d951af1fd039e1e0419a2065",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 479 artifact lines vs 479 upstream slice lines",
-        "actual_sha256": "8e4d67cd76def9ab5490a03f449423f672c91949cc942ad860c3b0a7fe3aa883",
-        "expected_sha256": "8e4d67cd76def9ab5490a03f449423f672c91949cc942ad860c3b0a7fe3aa883"
+        "detail": "sha256 match · 564 artifact lines vs 564 upstream slice lines",
+        "actual_sha256": "708bd8e6cbae45200781c36382b14f923e26a886d951af1fd039e1e0419a2065",
+        "expected_sha256": "708bd8e6cbae45200781c36382b14f923e26a886d951af1fd039e1e0419a2065"
       }
     },
     {
@@ -1767,16 +2045,17 @@
         "vendor/ars/deep-research/agents/meta_analysis_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 上游全文逐字节保留。",
         "[标注] systematic-review 子图节点；GRADE 框架、森林图数据、亚组/敏感性分析程序原文保留。",
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。"
       ],
-      "sha256": "8bc6c33fcff87e090ff6174a746a0d5c6b114f5f4f079ebc38fda6cf4aeb95a9",
+      "sha256": "5cdbd35fb03d9ebd160507d92681c161c09fe08dd010801480b32d891679d655",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 326 artifact lines vs 326 upstream slice lines",
-        "actual_sha256": "8bc6c33fcff87e090ff6174a746a0d5c6b114f5f4f079ebc38fda6cf4aeb95a9",
-        "expected_sha256": "8bc6c33fcff87e090ff6174a746a0d5c6b114f5f4f079ebc38fda6cf4aeb95a9"
+        "actual_sha256": "5cdbd35fb03d9ebd160507d92681c161c09fe08dd010801480b32d891679d655",
+        "expected_sha256": "5cdbd35fb03d9ebd160507d92681c161c09fe08dd010801480b32d891679d655"
       }
     },
     {
@@ -1790,17 +2069,18 @@
         "vendor/ars/deep-research/agents/risk_of_bias_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] RoB 2 / ROBINS-I 验证工具程序原文保留；systematic-review 子图 checker。",
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。"
       ],
-      "sha256": "e50b88d08bbd8ed9c4aa8e8fa54809e94d50910f142340dc83593a090a58fd17",
+      "sha256": "f5f2d094e79ac7dcc37d402d132402eeb7f7119b80d4e10f34b01704f40fef09",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 248 artifact lines vs 248 upstream slice lines",
-        "actual_sha256": "e50b88d08bbd8ed9c4aa8e8fa54809e94d50910f142340dc83593a090a58fd17",
-        "expected_sha256": "e50b88d08bbd8ed9c4aa8e8fa54809e94d50910f142340dc83593a090a58fd17"
+        "actual_sha256": "f5f2d094e79ac7dcc37d402d132402eeb7f7119b80d4e10f34b01704f40fef09",
+        "expected_sha256": "f5f2d094e79ac7dcc37d402d132402eeb7f7119b80d4e10f34b01704f40fef09"
       }
     },
     {
@@ -1837,18 +2117,19 @@
         "vendor/ars/deep-research/agents/socratic_mentor_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "[保留] 上游全文逐字节保留。",
         "[标注] 分类学合并结论：两变体同一对话引擎（5 层提问模型、INSIGHT、SCR 协议），差异在人设与主题域；提取阶段保留两变体全文，authoring 阶段 persona/domain 参数化。",
         "[标注] 阅读探针层（v3.5.1，opt-in）与相邻框架探针层原文保留；authoring 阶段按可选策略归属。",
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "7c841fe486dfb47ee19ba4d3a3a95c929929c1a96b7e0ff8b998e3f774fa66d2",
+      "sha256": "ce54f162926dc55d8d95e17a3a938b20e31c23ca3e9dc89bb1dcc97a1c997480",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 765 artifact lines vs 765 upstream slice lines",
-        "actual_sha256": "7c841fe486dfb47ee19ba4d3a3a95c929929c1a96b7e0ff8b998e3f774fa66d2",
-        "expected_sha256": "7c841fe486dfb47ee19ba4d3a3a95c929929c1a96b7e0ff8b998e3f774fa66d2"
+        "actual_sha256": "ce54f162926dc55d8d95e17a3a938b20e31c23ca3e9dc89bb1dcc97a1c997480",
+        "expected_sha256": "ce54f162926dc55d8d95e17a3a938b20e31c23ca3e9dc89bb1dcc97a1c997480"
       }
     },
     {
@@ -1933,17 +2214,18 @@
         "vendor/ars/shared/agents/compliance_agent.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 上游全文逐字节保留。",
         "[标注] advisory observer（warn-only，写入披露声明）；PRISMA-trAIce + RAISE 知识包见 KP-M5-10/11。",
         "[保留-待定] 版本标记文字保留；authoring 阶段按当前状态策略处置。"
       ],
-      "sha256": "5591165a4c945e27b928b826f1958bf9f5fe76405e7e82132aedcf2fdab00e32",
+      "sha256": "cf51ff7a3bf3fb40fa072e465974fdd934c4922392f57cb6609f24bd4cbef0b9",
       "verification": {
         "status": "pass",
         "detail": "sha256 match · 153 artifact lines vs 153 upstream slice lines",
-        "actual_sha256": "5591165a4c945e27b928b826f1958bf9f5fe76405e7e82132aedcf2fdab00e32",
-        "expected_sha256": "5591165a4c945e27b928b826f1958bf9f5fe76405e7e82132aedcf2fdab00e32"
+        "actual_sha256": "cf51ff7a3bf3fb40fa072e465974fdd934c4922392f57cb6609f24bd4cbef0b9",
+        "expected_sha256": "cf51ff7a3bf3fb40fa072e465974fdd934c4922392f57cb6609f24bd4cbef0b9"
       }
     },
     {
@@ -2428,17 +2710,18 @@
         "vendor/ars/academic-paper-reviewer/references/re_review_mode_protocol.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 全文逐字节保留。",
         "[标注] M3 未提取依赖（re-review 子图协议）；原文保留，authoring 阶段改引用。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "5e0440c636704015cd84ce3ba8805d871de6427c9122cd8aa8c5e22bc71f1e66",
+      "sha256": "cc31aa7ee8011b2f824673041334001a8cd458b724749230d9a51e1b1d443d02",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 341 artifact lines vs 341 upstream slice lines",
-        "actual_sha256": "5e0440c636704015cd84ce3ba8805d871de6427c9122cd8aa8c5e22bc71f1e66",
-        "expected_sha256": "5e0440c636704015cd84ce3ba8805d871de6427c9122cd8aa8c5e22bc71f1e66"
+        "detail": "sha256 match · 345 artifact lines vs 345 upstream slice lines",
+        "actual_sha256": "cc31aa7ee8011b2f824673041334001a8cd458b724749230d9a51e1b1d443d02",
+        "expected_sha256": "cc31aa7ee8011b2f824673041334001a8cd458b724749230d9a51e1b1d443d02"
       }
     },
     {
@@ -2813,17 +3096,18 @@
         "vendor/ars/shared/cross_model_verification.md（全文）"
       ],
       "ledger": [
+        "v3.24.4 增量同步：按当前来源校验正文与行号。",
         "v3.22.2 增量同步：保留上游切片并校验来源范围。",
         "[保留] 全文逐字节保留。",
         "[标注-清尾] 清尾批次：此前登记于【M1/M3】未提取依赖清单；引用方【CAP-M1-05（#518）、DA reviewer、editorial_synthesizer、integrity 引用；Q6 C-14 交付层归属待 authoring 定】。",
         "[刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。"
       ],
-      "sha256": "106bfea4595f425ac73bb8202d472be33c555caddc026a0b83fcecf44bf19f4e",
+      "sha256": "85ee229f74a81d07cdf0db269d1d68d59e5f28fc37eda4b7fb4c469539b21818",
       "verification": {
         "status": "pass",
-        "detail": "sha256 match · 757 artifact lines vs 757 upstream slice lines",
-        "actual_sha256": "106bfea4595f425ac73bb8202d472be33c555caddc026a0b83fcecf44bf19f4e",
-        "expected_sha256": "106bfea4595f425ac73bb8202d472be33c555caddc026a0b83fcecf44bf19f4e"
+        "detail": "sha256 match · 788 artifact lines vs 788 upstream slice lines",
+        "actual_sha256": "85ee229f74a81d07cdf0db269d1d68d59e5f28fc37eda4b7fb4c469539b21818",
+        "expected_sha256": "85ee229f74a81d07cdf0db269d1d68d59e5f28fc37eda4b7fb4c469539b21818"
       }
     },
     {

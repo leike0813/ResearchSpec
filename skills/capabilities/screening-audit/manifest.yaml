@@ -1,0 +1,63 @@
+schema_version: "1"
+capability_id: screening-audit
+title: Screening Exclusion Audit
+description: Rechecks protocol-defined near misses and a reproducible sample of
+  jointly excluded records.
+maturity: operational
+class: verification
+node_kind: checker
+execution_type: llm
+params: {}
+inputs:
+  - role: screening_protocol
+    schema_ref: screening-protocol.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: true
+  - role: screening_config
+    schema_ref: screening-config.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: true
+  - role: excluded_records
+    schema_ref: excluded-records.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: true
+outputs:
+  - role: exclusion_audit
+    schema_ref: exclusion-audit.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - screening_protocol
+      - screening_config
+      - excluded_records
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: quality-control
+    path: knowledge/quality_control.md
+    content_hash: e3af142ab64899bd4ad6771bf2d656858f9d6765f6f39bf74fc500bcbe9a9fc6
+    license: CC BY-NC 4.0
+  - knowledge_id: failure-paths
+    path: knowledge/failure_paths.md
+    content_hash: 7a7c0254d9fce3fd33d594a95ca20843f08f561cc4ed665a2adeecd556913a34
+    license: CC BY-NC 4.0
+gate_policy: none
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M1-SR-03
+    - KP-M1-SR-05
+    - KP-M1-SR-02
+  upstream_sources:
+    - path: authoring/ars/m1-research/capabilities/qc_auditor_agent.md
+      sha256: 913010222ea9ca8718068280b2e4946d229c257634977f758ed2f0ff9f8565c7
+license: CC BY-NC 4.0

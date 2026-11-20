@@ -125,6 +125,8 @@ L1 keywords: the same declared count; general academic and domain-specific termi
 
 ## Quality Checks
 
+Check each abstract against the corresponding manuscript body. Treat disagreement in purpose, method, results, or implication as a reportable inconsistency; do not silently make the abstract stronger than the body or fill missing experimental details. When experiment provenance or version information is absent, preserve that absence and mark the affected comparison not assessed.
+
 ### Cross-Language Alignment Check
 
 Verify both abstracts cover the same five components, key findings match between languages, no information appears in one language but not the other, and keywords cover similar conceptual space.

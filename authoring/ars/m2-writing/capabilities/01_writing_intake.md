@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M2 写作段
 来源对照（source mapping）:
     - vendor/ars/academic-paper/agents/intake_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
   0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 上游全文逐字节保留。
     2. [标注] Deep Research Handoff Detection 段的跳步逻辑属图引擎入度判定（Q5 决策：入口确认外壳归引擎 entry 模式）；原文保留。
@@ -238,6 +239,7 @@ Auto-suggest based on discipline; user can override.
 - Auto-suggest based on paper type (see table above)
 - User can override
 - Validate: flag if too short for paper type
+- When the dispatch quotes a `word_ceiling` standing constraint (#927), record its number in the PCR `Word Ceiling` row and keep the target at or below it; the ceiling is the user's limit, the target is a planning figure.
 
 ### Step 8: Existing Materials
 Ask what the user already has:
@@ -378,6 +380,7 @@ row should only be marked or should block finalization:
 | **Abstract** | [Bilingual / EN-only / zh-TW-only] |
 | **Output Language Pair** | [the volunteered per-run registry token — ROW OMITTED ENTIRELY when the run declares no pair, so a pre-#862 PCR keeps the same rows; absence means the default entry `zh-tw-en` and every consumer then omits the value] |
 | **Word Count Target** | [number] words |
+| **Word Ceiling** | [number] words, from the user's `word_ceiling` standing constraint — ROW OMITTED ENTIRELY when there is none |
 | **Existing Materials** | [list of provided materials] |
 | **Co-Authors** | [single-author / number of co-authors + corresponding author + brief contribution notes] |
 | **Funding** | [no funding / funder name(s) + grant number(s) + PI role] |

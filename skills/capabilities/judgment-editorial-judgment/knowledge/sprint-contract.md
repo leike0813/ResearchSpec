@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 来源对照（source mapping）:
     - vendor/ars/academic-paper-reviewer/references/sprint_contract_protocol.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
   0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 全文逐字节保留。
     2. [标注-新增] **决策清单外新增**：5 个评审 agent 文件均内嵌"v3.6.2 Sprint Contract Protocol"段引用本协议（C-02），属 M3 评审能力族完整性所需。
@@ -85,7 +86,7 @@ Run these as `scripts/check_phase_conformance.py --contract <C> --role <dispatch
   this is a pointer commitment, not manuscript applicability. An unbound call
   instead emits exactly `criteria_binding_unavailable` and makes no venue-fit
   claim. Neither form adds an H2 or copies criterion prose.
-- `check_phase_conformance.py` searches every 12-word full-manuscript shingle against Phase 1 after whitespace normalization and case-folding. A hit fails unless it also occurs in the actual metadata-envelope values or the contract JSON. `--manuscript` and `--metadata` are mandatory, so this family cannot be skipped.
+- `check_phase_conformance.py` searches every 24-point full-manuscript shingle against Phase 1 after NFKC, case-folding, and `_tokens()` splitting: a word is 2 points and each Han, Hiragana, or Katakana letter or number is 1, so a shingle is 12 English words or 24 Chinese or Japanese characters (#1077). A hit fails unless it also occurs in the actual metadata-envelope values or the contract JSON. `--manuscript` and `--metadata` are mandatory, so this family cannot be skipped.
 
 Terminal Phase 1 structural preflight (mandatory). Silently inspect the exact text you are about to send:
 1. The only H2 sections are exactly one `## Contract Paraphrase` followed by exactly one `## Scoring Plan`. The paraphrase meets `measurement_procedure.paraphrase_minimum_dimensions`: `"all"` means one paragraph per contract dimension; integer `k` means at least `k` paragraphs tied to distinct dimensions.

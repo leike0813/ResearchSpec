@@ -7,13 +7,14 @@ import { M2_AUTHORING_SOURCES } from "./m2-sources.js";
 import { M3_AUTHORING_SOURCES } from "./m3-sources.js";
 import { M4_AUTHORING_SOURCES } from "./m4-sources.js";
 import { M5_AUTHORING_SOURCES } from "./m5-sources.js";
+import { SR_SCREENING_SOURCES } from "./sr-screening-sources.js";
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const outputRoot = path.resolve(args.find((arg) => arg !== "author" && !arg.startsWith("--")) ?? "skills/capabilities");
   const dryRun = args.includes("--dry-run");
   const results = [];
-  for (const source of [...M1_AUTHORING_SOURCES, ...M2_AUTHORING_SOURCES, ...M3_AUTHORING_SOURCES, ...M4_AUTHORING_SOURCES, ...M5_AUTHORING_SOURCES]) {
+  for (const source of [...M1_AUTHORING_SOURCES, ...M2_AUTHORING_SOURCES, ...M3_AUTHORING_SOURCES, ...M4_AUTHORING_SOURCES, ...M5_AUTHORING_SOURCES, ...SR_SCREENING_SOURCES]) {
     if (dryRun) {
       results.push({ capability_id: source.capability_id, would_author: true });
     } else {

@@ -7,8 +7,9 @@ ARS 提取工件（Extraction Artifact）— M4 修订与定稿段
 提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
-    - vendor/ars/academic-pipeline/agents/pipeline_orchestrator_agent.md §Cite-Time Provenance Finalizer（v3.7.1 → v3.10 extension，L1055-1286）
+    - vendor/ars/academic-pipeline/agents/pipeline_orchestrator_agent.md §Cite-Time Provenance Finalizer（v3.7.1 → v3.10 extension，L1131-1362）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
   0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 原文逐字节保留（四代 finalizer：5-cell 矩阵、污染注解、三角测量层、终端策略层）。
     2. [标注] 上游声明"finalizer 是唯一策略评估者、formatter 只盖章"——本段是终端策略门的评估侧，与 formatter REFUSE 段（盖章侧）配对；分类学已将此逻辑从 orchestrator 拆出（orchestrator 其余职责吸收进图引擎）。
@@ -22,7 +23,7 @@ ARS 提取工件（Extraction Artifact）— M4 修订与定稿段
 
 ## Cite-Time Provenance Finalizer (v3.7.1)
 
-When `academic-pipeline` mode is active, the orchestrator runs the **Cite-Time Provenance Finalizer** at every Stage 4 → Stage 5 transition (and on every revision loop pass back through Stage 4) to resolve the two-layer citation markers emitted by `synthesis_agent`, `draft_writer_agent`, and `report_compiler_agent` per Step 3a.
+When `academic-pipeline` mode is active, the orchestrator runs the **Cite-Time Provenance Finalizer** at every Stage 4 → Stage 5 transition (first at Stage 4.5, § Final-Output Pre-Check at Stage 4.5 (#929)) (and on every revision loop pass back through Stage 4) to resolve the two-layer citation markers emitted by `synthesis_agent`, `draft_writer_agent`, and `report_compiler_agent` per Step 3a.
 
 **Trigger boundary:** Stage transition from drafting (Stage 4) to formatting (Stage 5), mirroring the v3.6.7 Step 6 audit_artifact gate. The finalizer runs BEFORE `formatter_agent`'s hard-gate check.
 

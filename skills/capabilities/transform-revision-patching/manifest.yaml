@@ -30,7 +30,7 @@ validators:
 knowledge_refs:
   - knowledge_id: revision-patch-protocol
     path: knowledge/revision-patch-protocol.md
-    content_hash: dcb80acc4f6bb563e9936069c4b2467fa96d2c2dfed7f4a3a1b58e6f11e4428f
+    content_hash: 2cecb99beb5f853acd1f669d702027cffb0422d29629286c3611dd74f417a135
     license: CC BY-NC 4.0
 gate_policy: required
 provenance:

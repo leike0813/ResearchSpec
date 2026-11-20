@@ -1,0 +1,581 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "patch_format_version": {
+      "type": "string",
+      "const": "2.0"
+    },
+    "authorization_context": {
+      "type": "string",
+      "enum": [
+        "review_roadmap",
+        "integrity_correction"
+      ]
+    },
+    "revision_round": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "base_draft_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{12}$"
+    },
+    "revision_rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "emitted_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ops": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "operation_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+              },
+              "block_id": {
+                "type": "string",
+                "pattern": "^B[0-9]{4,}$"
+              },
+              "roadmap_item_ids": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                }
+              },
+              "annotation_refs": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "annotation_set_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    },
+                    "annotation_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    }
+                  },
+                  "required": [
+                    "annotation_set_id",
+                    "annotation_id"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "claim_strength_changes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "claim_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    },
+                    "change_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    },
+                    "from_strength": {
+                      "type": "string",
+                      "enum": [
+                        "tentative",
+                        "supported",
+                        "strong"
+                      ]
+                    },
+                    "to_strength": {
+                      "type": "string",
+                      "enum": [
+                        "tentative",
+                        "supported",
+                        "strong"
+                      ]
+                    },
+                    "direction": {
+                      "type": "string",
+                      "enum": [
+                        "strengthen",
+                        "weaken"
+                      ]
+                    },
+                    "rationale": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "claim_id",
+                    "change_id",
+                    "from_strength",
+                    "to_strength",
+                    "direction",
+                    "rationale"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "op": {
+                "type": "string",
+                "const": "replace_block"
+              },
+              "old_hash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{12}$"
+              },
+              "new_text": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "operation_id",
+              "block_id",
+              "roadmap_item_ids",
+              "op",
+              "old_hash",
+              "new_text"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "operation_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                  },
+                  "block_id": {
+                    "type": "string",
+                    "pattern": "^B[0-9]{4,}$"
+                  },
+                  "roadmap_item_ids": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    }
+                  },
+                  "annotation_refs": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "annotation_set_id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                        },
+                        "annotation_id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                        }
+                      },
+                      "required": [
+                        "annotation_set_id",
+                        "annotation_id"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "claim_strength_changes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "claim_id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                        },
+                        "change_id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                        },
+                        "from_strength": {
+                          "type": "string",
+                          "enum": [
+                            "tentative",
+                            "supported",
+                            "strong"
+                          ]
+                        },
+                        "to_strength": {
+                          "type": "string",
+                          "enum": [
+                            "tentative",
+                            "supported",
+                            "strong"
+                          ]
+                        },
+                        "direction": {
+                          "type": "string",
+                          "enum": [
+                            "strengthen",
+                            "weaken"
+                          ]
+                        },
+                        "rationale": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "claim_id",
+                        "change_id",
+                        "from_strength",
+                        "to_strength",
+                        "direction",
+                        "rationale"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "op": {
+                    "type": "string",
+                    "const": "insert_after"
+                  },
+                  "old_hash": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{12}$"
+                  },
+                  "new_text": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "operation_id",
+                  "block_id",
+                  "roadmap_item_ids",
+                  "op",
+                  "old_hash",
+                  "new_text"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "operation_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                  },
+                  "block_id": {
+                    "type": "string",
+                    "const": "DOC-BODY-START"
+                  },
+                  "roadmap_item_ids": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    }
+                  },
+                  "annotation_refs": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "annotation_set_id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                        },
+                        "annotation_id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                        }
+                      },
+                      "required": [
+                        "annotation_set_id",
+                        "annotation_id"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "claim_strength_changes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "claim_id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                        },
+                        "change_id": {
+                          "type": "string",
+                          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                        },
+                        "from_strength": {
+                          "type": "string",
+                          "enum": [
+                            "tentative",
+                            "supported",
+                            "strong"
+                          ]
+                        },
+                        "to_strength": {
+                          "type": "string",
+                          "enum": [
+                            "tentative",
+                            "supported",
+                            "strong"
+                          ]
+                        },
+                        "direction": {
+                          "type": "string",
+                          "enum": [
+                            "strengthen",
+                            "weaken"
+                          ]
+                        },
+                        "rationale": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "claim_id",
+                        "change_id",
+                        "from_strength",
+                        "to_strength",
+                        "direction",
+                        "rationale"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "op": {
+                    "type": "string",
+                    "const": "insert_after"
+                  },
+                  "new_text": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "operation_id",
+                  "block_id",
+                  "roadmap_item_ids",
+                  "op",
+                  "new_text"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "operation_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+              },
+              "block_id": {
+                "type": "string",
+                "pattern": "^B[0-9]{4,}$"
+              },
+              "roadmap_item_ids": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                }
+              },
+              "annotation_refs": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "annotation_set_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    },
+                    "annotation_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    }
+                  },
+                  "required": [
+                    "annotation_set_id",
+                    "annotation_id"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "claim_strength_changes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "claim_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    },
+                    "change_id": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                    },
+                    "from_strength": {
+                      "type": "string",
+                      "enum": [
+                        "tentative",
+                        "supported",
+                        "strong"
+                      ]
+                    },
+                    "to_strength": {
+                      "type": "string",
+                      "enum": [
+                        "tentative",
+                        "supported",
+                        "strong"
+                      ]
+                    },
+                    "direction": {
+                      "type": "string",
+                      "enum": [
+                        "strengthen",
+                        "weaken"
+                      ]
+                    },
+                    "rationale": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "claim_id",
+                    "change_id",
+                    "from_strength",
+                    "to_strength",
+                    "direction",
+                    "rationale"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "op": {
+                "type": "string",
+                "const": "delete_block"
+              },
+              "old_hash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{12}$"
+              }
+            },
+            "required": [
+              "operation_id",
+              "block_id",
+              "roadmap_item_ids",
+              "op",
+              "old_hash"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "annotation_mapping": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "annotation_set_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+              },
+              "annotation_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+              },
+              "disposition": {
+                "type": "string",
+                "enum": [
+                  "implemented",
+                  "answered_without_text_change",
+                  "deferred",
+                  "rejected",
+                  "unresolved",
+                  "superseded"
+                ]
+              },
+              "answer": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "superseded_by": {
+                "type": "object",
+                "properties": {
+                  "annotation_set_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                  },
+                  "annotation_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                  }
+                },
+                "required": [
+                  "annotation_set_id",
+                  "annotation_id"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "annotation_set_id",
+              "annotation_id",
+              "disposition"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "annotations"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "patch_format_version",
+    "revision_round",
+    "base_draft_hash",
+    "revision_rationale",
+    "emitted_by",
+    "ops"
+  ],
+  "additionalProperties": false,
+  "$id": "researchspec://arsu/contracts/revision-patch/v2",
+  "title": "ResearchSpec-adapted ARSU Revision Patch",
+  "description": "The sole manuscript patch contract for ARSU revision work."
+}

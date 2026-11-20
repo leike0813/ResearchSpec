@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M2 写作段
 来源对照（source mapping）:
     - vendor/ars/deep-research/agents/report_compiler_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
   0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 上游全文逐字节保留。
     2. [标注] Q1 已定：本变体与 ms-variant 合并为单一 drafting 能力；提取阶段保留两变体全文。
@@ -21,7 +22,7 @@ ARS 提取工件（Extraction Artifact）— M2 写作段
 -->
 
 ---
-name: report_compiler_agent
+name: report-compiler-agent
 description: "Transforms research findings into polished APA 7.0 academic reports; activated in Phase 4 and Phase 6"
 model: inherit
 tools: Read, Write, Edit, Grep, Glob

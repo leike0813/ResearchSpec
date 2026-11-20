@@ -85,6 +85,12 @@
       "profile_version": "0.1.0",
       "source_path": "review-response.yaml",
       "profile_sha256": "eed01fd884f726e439ae3a0f3365f939ff9ec0674a2e4b566258a8c3ad859f5f"
+    },
+    {
+      "profile_id": "sr-screener",
+      "profile_version": "0.1.0",
+      "source_path": "sr-screener.yaml",
+      "profile_sha256": "bf850edef38ae5dc3ac03c0b12d1b39c4677c99a7161b443d374c189af15d75f"
     }
   ]
 }

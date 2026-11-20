@@ -45,5 +45,5 @@ provenance:
     - KP-M3-10
   upstream_sources:
     - path: authoring/ars/m3-integrity-review/capabilities/02_review_panel_config.md
-      sha256: 26dacdebdfdd70373cf93167c7b02cca41306fe21f9a25a5d615f7aea61dadee
+      sha256: 6e35978abd6faec092f5f4e0b82c57e4d1dc7197d4ba40d9ed770fccc8b478ec
 license: CC BY-NC 4.0

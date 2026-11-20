@@ -11,8 +11,14 @@
    - Chinese (Traditional Chinese)
    - English
    - Both (default: generate the user's primary conversation language first)
+   Ask in the same question whether to add a PDF. An active standing constraint
+   that answers either point is followed without asking (pipeline orchestrator
+   § Standing Constraints (#927)).
 
-2. Review session history and compile the following:
+2. Review session history and compile the following (after a reset boundary the
+   session holds only the turns since the last resume: take earlier decisions and
+   words from the passport and run ledger, and say in the record which parts come
+   from those rather than the conversation):
    - User's initial instructions (verbatim quote)
    - Key decision points and user interventions at each stage
    - Direction correction moments and reasons
@@ -28,7 +34,7 @@
 
 3. Generate Markdown version (paper_creation_process.md / paper_creation_process_en.md)
 
-4. Convert to LaTeX and compile PDF:
+4. Only when a PDF was asked for, convert to LaTeX and compile PDF:
    - pandoc MD -> LaTeX body
    - Package complete LaTeX document (with cover page, table of contents, headers/footers)
    - tectonic compile PDF
@@ -207,7 +213,7 @@ invalid, disclose the limitation and continue with a single-model result.
 ## Output Specifications
 
 - **Filename**: `paper_creation_process.md` (Chinese) / `paper_creation_process_en.md` (English)
-- **PDF**: `paper_creation_process_zh.pdf` / `paper_creation_process_en.pdf`
+- **PDF** (when asked for): `paper_creation_process_zh.pdf` / `paper_creation_process_en.pdf`
 - **LaTeX template**: `article` class, 12pt, A4, Times New Roman + Source Han Serif TC VF
 - **Includes table of contents**: `\tableofcontents`
 - **Header**: left = document title (italic), right = date

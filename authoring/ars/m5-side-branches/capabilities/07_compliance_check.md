@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M5 支线段
 来源对照（source mapping）:
     - vendor/ars/shared/agents/compliance_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
   0. v3.22.2 增量同步：保留上游切片并校验来源范围。
     1. [保留] 上游全文逐字节保留。
     2. [标注] advisory observer（warn-only，写入披露声明）；PRISMA-trAIce + RAISE 知识包见 KP-M5-10/11。
@@ -156,7 +157,7 @@ Self-check failures are not errors — they are the agent's guardrail. Document 
 ## Interaction with existing agents
 
 - Runs AFTER `integrity_verification_agent` (existing) at Stage 2.5 / 4.5 — compliance extends integrity, does not replace it.
-- Runs ALONGSIDE `failure_mode_checklist` (v3.2). Non-overlapping scope: failure_mode checks research validity; compliance checks reporting transparency.
+- Runs ALONGSIDE the v3.2 AI Research Failure Mode Checklist, which `integrity_verification_agent` runs (`academic-pipeline/references/ai_research_failure_modes.md`). Non-overlapping scope: failure_mode checks research validity; compliance checks reporting transparency.
 - Provides output consumed by `report_compiler_agent` (at Stage 6) for the AI Self-Reflection Report compliance summary.
 
 ## Invocation protocol

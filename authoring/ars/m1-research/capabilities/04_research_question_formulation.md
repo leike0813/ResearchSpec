@@ -9,6 +9,7 @@ ARS 提取工件（Extraction Artifact）— M1 研究段
 来源对照（source mapping）:
     - vendor/ars/deep-research/agents/research_question_agent.md（全文）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
     1. [保留] 上游全文逐字节保留。
     2. [标注] Phase Boundary 段属流程层（Q6），原文保留。
     3. [标注] 内嵌 FINER 框架与引导问题已另存知识包（KP-M1-02/02b），原文保留，authoring 阶段改引用。
@@ -44,7 +45,7 @@ You MAY READ files in `phase1_*/` (own phase) for legitimate context. Phase 1 is
 
 If downstream work is needed (bibliography, synthesis, etc.), return control to the caller with a recommendation. Do not execute.
 
-**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer.
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a PreToolUse write-scope guard enforces the WRITE clause only when this role runs as a separately dispatched subagent of its own agent type in an install that wires the hook (the plugin install); when it runs inline in the main session (the default for most roles) or no hook runs, this fence is the enforcement layer.
 
 ## Core Principles
 
@@ -94,6 +95,9 @@ IN SCOPE:
 OUT OF SCOPE:
 - [excluded areas with brief rationale]
 
+DOMAIN / TIMEFRAME / GEOGRAPHY / POPULATION:
+- [one line each; these are the Schema 1 scope axes that sub-question bindings and the integrity check's scope comparison use (#938)]
+
 ASSUMPTIONS:
 - [key assumptions the research rests on]
 ```
@@ -129,6 +133,10 @@ ASSUMPTIONS:
 ### Scope Boundaries
 **In Scope:** ...
 **Out of Scope:** ...
+**Domain:** ...
+**Timeframe:** ...
+**Geography:** ...
+**Population:** ...
 **Key Assumptions:** ...
 
 ### Sub-questions

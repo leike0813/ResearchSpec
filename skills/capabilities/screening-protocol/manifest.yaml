@@ -1,0 +1,52 @@
+schema_version: "1"
+capability_id: screening-protocol
+title: Screening Protocol
+description: Turns a review proposal into confirmed, stage-specific eligibility
+  rules and a versioned screening configuration.
+maturity: operational
+class: verification
+node_kind: producer
+execution_type: llm
+params: {}
+inputs:
+  - role: review_proposal
+    schema_ref: review-proposal.v1
+    source_policy:
+      - handoff
+      - node_output
+    required: true
+outputs:
+  - role: screening_protocol
+    schema_ref: screening-protocol.v1
+    required: true
+  - role: screening_config
+    schema_ref: screening-config.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - review_proposal
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: protocol-template
+    path: knowledge/protocol_template.md
+    content_hash: bca7c2e9d2a129d7075b40a7b524bc0511d8bcf7c3f0c94b9fa022dd1b46ee44
+    license: CC BY-NC 4.0
+  - knowledge_id: reviewer-roles
+    path: knowledge/reviewer_roles.md
+    content_hash: fa7e7c1743aa03c800d4727f0ee50b77a413bb1d15cb31a96f260f2cb6b396c3
+    license: CC BY-NC 4.0
+gate_policy: required
+provenance:
+  origin: ars-derived
+  extraction_artifact_ids:
+    - CAP-M1-SR-01
+    - KP-M1-SR-04
+    - KP-M1-SR-06
+  upstream_sources:
+    - path: authoring/ars/m1-research/capabilities/protocol_architect_agent.md
+      sha256: 99dd7482340eb18094cfebdfd8ca60bdf2922ba90911a6a3340b8b1315f1fb2c
+license: CC BY-NC 4.0

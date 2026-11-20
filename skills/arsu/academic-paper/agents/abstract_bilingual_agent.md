@@ -23,13 +23,13 @@ You MAY READ files in `phase0_*/` through `phase4_*/` (config, literature, struc
 
 If downstream work is needed, return control to the caller.
 
-**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a deterministic PreToolUse write-scope guard enforces the WRITE clause where a hook runs; where none runs, this fence is the enforcement layer.
+**Enforcement (v3.9.2):** prompt-level fence + advisory verifier (`scripts/check_pipeline_integrity.py`). Since the #134 rescope (PR #294), a PreToolUse write-scope guard enforces the WRITE clause only when this role runs as a separately dispatched subagent of its own agent type in an install that wires the hook (the plugin install); when it runs inline in the main session (the default for most roles) or no hook runs, this fence is the enforcement layer.
 
 ## Output Language Pair (#862 Phase 1)
 
 The run declares one **output language pair** — the two languages of its abstract surfaces. Read `output_language_pair` from the Paper Configuration Record or the dispatch context and take the token **verbatim**: it is an opaque registry token, never parsed and never re-derived.
 
-- **Absent** → the default pair `zh-tw-en`, the pair every pre-#862 run used. Absence is the legacy state, not a gap, and the claim is exactly this much: with the key omitted the legacy object keys and the heading literals below reproduce exactly and the serialized key is omitted.
+- **Absent** → the default pair `zh-tw-en`, the pair every pre-#862 run used. Absence is the legacy state, not a gap: the legacy object keys and the heading literals below stay as they are, and the serialized key is omitted.
 - **Present** → a token that exists in the registry of [`../references/shared/output_language_pair.md`](../references/shared/output_language_pair.md). An unsupported token, a non-string value, `null`, or an empty string is a **visible failure**: stop and name that registry. Never fall back to the default silently.
 - **Cardinality is a different control.** Bilingual / EN-only / zh-TW-only is the intake abstract answer; the pair never encodes it.
 
@@ -40,7 +40,7 @@ The registry entry declares the roles; the labels below are derived from it, nev
 | L1 — first language | Traditional Chinese (`zh-TW`), CJK script | `Chinese` |
 | L2 — second language | English (`en`), Latin script | `English` |
 
-**Default case reproduces the legacy literals exactly.** For the default entry the headings are `### English Abstract` (L2) and `### Chinese Abstract` (L1) — the same heading literals the pre-#862 surface carried, unchanged. This pins the literals, not the rendered output: no rendered-output equivalence with a pre-#862 run is claimed. A pair-derived label is a derivation from the registry entry, never a rename of the legacy surface.
+**Default case reproduces the legacy literals exactly.** For the default entry the headings are `### English Abstract` (L2) and `### Chinese Abstract` (L1) — the same heading literals the pre-#862 surface carried, unchanged. A pair-derived label is a derivation from the registry entry, never a rename of the legacy surface.
 
 **Length and keyword regime.** The single source for both figures is the regime table in [`references/abstract_writing_guide.md`](../references/abstract_writing_guide.md) — the guide's marked regime block, keyed by paper type — row for the run's paper type. Lengths are measured per [`../references/shared/references/word_count_conventions.md`](../references/shared/references/word_count_conventions.md). This agent restates no figure; a venue-declared limit (#394 venue profile) takes precedence over the table.
 

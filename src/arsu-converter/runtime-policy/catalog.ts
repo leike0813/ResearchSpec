@@ -1,6 +1,6 @@
 import type { RuntimePolicyCatalog, RuntimePolicyCatalogEntry } from "./types.js";
 
-export const RUNTIME_POLICY_SOURCE_COMMIT = "7de1c9dfb7af9c02a9b57750761323f35a743aa2";
+export const RUNTIME_POLICY_SOURCE_COMMIT = "23807f987024f2e038d12fd9e4e5d2a7cc228674";
 
 const active = (source_path: string, rationale: string, adaptation: RuntimePolicyCatalogEntry["adaptation"] = "paragraphs"): RuntimePolicyCatalogEntry => ({
   source_path,
@@ -29,11 +29,12 @@ const unavailable = (
 
 export const ARSU_RUNTIME_POLICY_CATALOG = {
   schema_version: "researchspec.arsu.runtime-policy.v1",
-  catalog_id: "ars-v3.22.2-agent-neutral-runtime",
+  catalog_id: "ars-v3.24.4-agent-neutral-runtime",
   source_commit: RUNTIME_POLICY_SOURCE_COMMIT,
   excluded_non_runtime_paths: [
     "academic-pipeline/references/changelog.md",
     "shared/contracts/README.md",
+    "shared/contracts/passport/excluded_source_entry.schema.json",
   ],
   match_keywords: [
     "ARS_CROSS_MODEL",
@@ -86,6 +87,18 @@ export const ARSU_RUNTIME_POLICY_CATALOG = {
     retain("shared/templates/codex_audit_multifile_template.md", "Audit template field is output data, not runtime dispatch guidance."),
   ],
   unavailable_runtime_references: [
+    unavailable(
+      "academic-paper/SKILL.md",
+      "scripts/check_review_form_note_sync.py",
+      "The upstream review-form copy checker is maintainer tooling and is not part of the runtime Skill.",
+      "### ResearchSpec availability boundary\n\nThe upstream review-form synchronization check is unavailable (`not_checked`) in the runtime Skill. Treat the canonical note and its copied text as supplied reading material; do not invoke or recreate the checker.",
+    ),
+    unavailable(
+      "deep-research/SKILL.md",
+      "scripts/check_review_form_note_sync.py",
+      "The upstream review-form copy checker is maintainer tooling and is not part of the runtime Skill.",
+      "### ResearchSpec availability boundary\n\nThe upstream review-form synchronization check is unavailable (`not_checked`) in the runtime Skill. Treat the canonical note and its copied text as supplied reading material; do not invoke or recreate the checker.",
+    ),
     unavailable(
       "academic-pipeline/references/pipeline_state_machine.md",
       "**Run ledger (#887).**",

@@ -48,7 +48,7 @@ The \`${groupName}\` Skill tree is adapted by ResearchSpec from Academic Researc
 - ResearchSpec vendored source: \`vendor/ars\`
 - License: Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
 - License URL: https://creativecommons.org/licenses/by-nc/4.0/
-
+${groupName === "sr-screener" ? "- Upstream screening Skill maintainer: erfanz97.\n" : ""}
 ResearchSpec conversion adapts paths, routing descriptions, contract preflight guidance, and runtime-control instructions. Those adaptations do not remove the upstream attribution or noncommercial restriction. See the adjacent \`LICENSE\` file for the complete license terms.
 `;
 }

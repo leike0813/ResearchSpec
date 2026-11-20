@@ -7,8 +7,9 @@ ARS 提取工件（Extraction Artifact）— M3 完整性与评审段
 提取日期: 2026-09-06
 提取方式: verbatim — 上游原文逐字节保留，未改写、未压缩
 来源对照（source mapping）:
-    - vendor/ars/academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md §Attack Intensity Preservation Protocol (v3.0)（L399-443）
+    - vendor/ars/academic-paper-reviewer/agents/devils_advocate_reviewer_agent.md §Attack Intensity Preservation Protocol (v3.0)（L401-446）
 变更台账（ledger）:
+    0. v3.24.4 增量同步：按当前来源校验正文与行号。
     1. [保留] 原文逐字节保留。
     2. [标注] 决策清单 M3 知识包之一（让步阈值家族）；与 05a 的关系见其台账。
     3. [刷新] 已按 ARS v3.21.1（127ff85）重新提取受影响上游正文；正文保持逐字节原文。
@@ -51,13 +52,14 @@ When receiving a rebuttal to one of your findings, assess it in this order:
 
 ### Cross-Model DA (Optional, v3.0)
 
-When `ARS_CROSS_MODEL` is set, do not send the paper automatically. First ask for explicit user consent and identify the external provider, model, and manuscript content that would be sent. If the user approves, send only the paper content needed for a blind cross-model DA critique (without your own DA findings — to prevent anchoring). Transport follows the #523 ownership rule: you are a fenced single-phase (Bucket A) agent with all Bash denied at runtime, so when you run as a dispatched subagent you emit the sanitized payload as the canonical `[CROSS-MODEL-HANDOFF v1]` envelope (`shared/cross_model_verification.md` § Cross-model handoff envelope (#527)) with `checkpoint_kind: da_critique`, `owner_agent: devils_advocate_reviewer_agent`, `expected_result: full_return`, and a `correlation_id` you choose (no `owner_decision` header — this call has no enum comparison), and the dispatching layer executes the API call (see § Blind Disagreement Checkpoints → Transport ownership); executing inline in a shell-capable context, that context runs the call directly. Unlike the enum checkpoints, this call has no mechanical comparison the dispatcher could apply — so on every successful response the dispatching layer re-invokes you with the cross-model's critique, and the findings comparison below is yours. Compare with your own findings — any novel CRITICAL/MAJOR issues not in your report → add as `[CROSS-MODEL-FINDING]`. If the cross-model API fails or consent is not granted, log `[CROSS-MODEL-SKIPPED]` or `[CROSS-MODEL-ERROR]` as appropriate and continue with single-model DA. A cross-model substrate and output blinding are typed provenance dimensions, not proof of independent error processes. See `shared/cross_model_verification.md` for setup and API patterns. When not set, standard single-model review operates unchanged.
+When `ARS_CROSS_MODEL` is set, do not send the paper automatically. First ask for explicit user consent and identify the external provider, model, and manuscript content that would be sent. If the user approves, send only the paper content needed for a blind cross-model DA critique (without your own DA findings — to prevent anchoring). Transport follows the #523 ownership rule: you are a single-phase (Bucket A) agent, and the write-scope guard denies you all Bash only when you run as a separately dispatched subagent of your own agent type in an install that wires the hook (#973); otherwise this rule alone applies. So when you run as a dispatched subagent you emit the sanitized payload as the canonical `[CROSS-MODEL-HANDOFF v1]` envelope (`shared/cross_model_verification.md` § Cross-model handoff envelope (#527)) with `checkpoint_kind: da_critique`, `owner_agent: devils_advocate_reviewer_agent`, `expected_result: full_return`, and a `correlation_id` you choose (no `owner_decision` header — this call has no enum comparison), and the dispatching layer executes the API call (see § Blind Disagreement Checkpoints → Transport ownership); executing inline in a shell-capable context, that context runs the call directly. Unlike the enum checkpoints, this call has no mechanical comparison the dispatcher could apply — so on every successful response the dispatching layer re-invokes you with the cross-model's critique, and the findings comparison below is yours. Compare with your own findings — any novel CRITICAL/MAJOR issues not in your report → add as `[CROSS-MODEL-FINDING]`. If the cross-model API fails or consent is not granted, log `[CROSS-MODEL-SKIPPED]` or `[CROSS-MODEL-ERROR]` as appropriate and continue with single-model DA. A cross-model substrate and output blinding are typed provenance dimensions, not proof of independent error processes. See `shared/cross_model_verification.md` for setup and API patterns. When not set, standard single-model review operates unchanged.
 
 ### Frame-Lock Detection
 
 After completing the review, ask yourself:
 - "Is there an unstated assumption underlying this entire paper that none of the 8 challenge dimensions captured?"
 - If yes, add it as an additional finding under a new section: **"Unexamined Premise"**
+- A premise, stated or unstated, that a core claim depends on and that the paper does not support, including one about who benefits, who bears the cost, or who is left out, must be a CRITICAL or MAJOR issue row with a typed Evidence Anchor, banded by its decision impact; mentioning it only in prose or in a list or section does not satisfy this rule (#1098). In `reviewer_full`, Phase 2 item 3 states this rule and the Phase 2 output grammar governs placement.
 
 ### Origin
 

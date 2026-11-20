@@ -98,6 +98,8 @@ Synthesize the above into a preliminary Accept / Minor / Major / Reject signal.
 
 ## Output Discipline
 
+Post-decision suggested-reference verification and acronym-check attachments are reported after the decision letter as advisories. Neither is reviewer evidence, a criterion, a weakness, a revision request, or a roadmap item; neither changes the recommendation, severity, score, or re-review criteria. Keep the decision and roadmap based on the review reports and reviewer-supplied material alone.
+
 Keep the review brief but complete. State each finding and verdict directly; preserve every material uncertainty and limitation; cut redundancy and apologetic framing. One clear caveat beats three softened ones.
 
 ## Output Format

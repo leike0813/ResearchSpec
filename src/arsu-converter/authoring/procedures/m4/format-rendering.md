@@ -117,12 +117,14 @@ directed the content, and take responsibility for its accuracy and integrity.
 
 ### Format-Specific Features
 
+For MLA 9, retain each DOI already present in the entry and carry forward a DOI supplied in source data. Do not attribute this preservation rule to the MLA Handbook, remove a DOI during conversion, or require lookup/addition of a missing DOI. The citation-compliance procedure's report-only boundary applies to checking/correction; a separately requested format conversion remains this procedure's task.
+
 | Feature | APA 7 | Chicago (Author-Date) | MLA 9 | IEEE | Vancouver |
 |---|---|---|---|---|---|
 | In-text style | (Author, Year) | (Author Year) | (Author Page) | [Number] | (Number) |
 | Reference list name | References | References | Works Cited | References | References |
 | Title case | sentence case | headline case | headline case | sentence case | sentence case |
-| DOI format | https://doi.org/... | https://doi.org/... | doi:... | doi:... | doi:... |
+| DOI format | https://doi.org/... | https://doi.org/... | Preserve supplied DOI | doi:... | doi:... |
 | Ordering | alphabetical | alphabetical | alphabetical | order of appearance | order of appearance |
 
 ### Handling Footnotes (Chicago Notes-Bibliography)

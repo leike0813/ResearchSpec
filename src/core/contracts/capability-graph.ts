@@ -45,18 +45,36 @@ export const GraphExpectedOutputSchema = z.strictObject({
   required: z.boolean().optional(),
 });
 
+const BoundaryIdSchema = z.string().regex(/^[a-z0-9][a-z0-9_-]*$/);
+export const BoundaryOutputDescriptorSchema = z.strictObject({
+  role: BoundaryIdSchema,
+  type: BoundaryIdSchema,
+  purpose: NonEmptySchema,
+  structure: NonEmptySchema,
+  validation_profile: z.enum(["text-artifact", "binary-file-artifact"]),
+});
+
+const GraphEntryConfirmationSummarySchema = z.strictObject({
+  title: NonEmptySchema,
+  prerequisites: NonEmptySchema,
+  boundary_outputs: z.array(BoundaryOutputDescriptorSchema).min(1),
+  risk_cost: NonEmptySchema,
+});
+
 export const GraphEntrySchema = z.discriminatedUnion("kind", [
   z.strictObject({
     entry_id: StableIdSchema,
     kind: z.literal("end-to-end"),
     node_id: StableIdSchema,
     route_ref: NonEmptySchema.optional(),
+    confirmation_summary: GraphEntryConfirmationSummarySchema.optional(),
   }),
   z.strictObject({
     entry_id: StableIdSchema,
     kind: z.literal("mid-entry"),
     entry_points: IdListSchema.min(1),
     route_ref: NonEmptySchema.optional(),
+    confirmation_summary: GraphEntryConfirmationSummarySchema.optional(),
   }),
 ]);
 

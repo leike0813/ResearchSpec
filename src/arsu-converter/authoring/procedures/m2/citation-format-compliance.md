@@ -28,6 +28,10 @@ Use the referenced citation-format standards knowledge pack as the canonical for
 
 ## Verification Checklist
 
+### Non-APA Styles: Report Only
+
+For Chicago 17th, MLA 9th, IEEE, and Vancouver, report findings without changing citation text or references in any mode. In citation-check mode, provide a corrected version only when the user explicitly asks; lead with a warning that these checks were written for APA 7 and may be wrong for the selected style. Keep the reference list unchanged, put findings under review items, and report zero auto-corrections. Do not apply correction, conversion, sorting, rebuilding, or DOI-addition steps to these styles. A separately requested format-conversion task follows the format-conversion procedure, not this correction path.
+
 ### 1. In-Text <-> Reference List Cross-Check
 
 For each in-text citation: appears in the reference list, author name(s) match exactly, year matches exactly, and "et al." is used correctly (3+ authors for APA 7, abbreviated from the first citation unless names are needed to disambiguate same-year works; for Chinese citations apply the Chinese Citation Special Checks below). For each reference-list entry: cited at least once in text; never an orphan reference.

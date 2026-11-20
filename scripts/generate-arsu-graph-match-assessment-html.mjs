@@ -2,9 +2,10 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { SCREENING_MODE_MAP } from "./arsu-screening-mode-map.mjs";
 
 const ROOT = process.cwd();
-const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.22.2-7de1c9d";
+const DEFAULT_ANCHOR = process.env.ARSU_ANCHOR ?? "v3.24.4-23807f9";
 const AUDIT_ARTIFACTS = path.join(ROOT, "audits", "arsu", DEFAULT_ANCHOR, "artifacts");
 const ARS = path.join(ROOT, "vendor", "ars");
 const CAPABILITIES = path.join(ROOT, "skills", "capabilities");
@@ -28,6 +29,7 @@ function isOptionalDoc(rel) {
 // ---------- anchor definitions ----------
 const A = (label, anchor, opts = {}) => ({ label, anchor, ...opts });
 const ANCHORS = {
+  ...Object.fromEntries(SCREENING_MODE_MAP.map(({ route, anchors }) => [route, anchors.map(([label, anchor]) => A(label, anchor))])),
   "deep-research:full": [
     A("研究问题评分", "FINER"),
     A("检索记录", "PRISMA"),

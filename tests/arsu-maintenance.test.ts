@@ -55,3 +55,26 @@ void test("semantic review rendering uses the selected anchor and reports missin
     await rm(dir, { recursive: true, force: true });
   }
 });
+
+void test("screening quick review and assessment stay bound to the standalone quick capability", async () => {
+  const dir = await mkdtemp(path.join(os.tmpdir(), "arsu-screening-quick-"));
+  try {
+    const reviewPath = path.join(dir, "arsu-mode-capability-review.html");
+    const assessmentPath = path.join(dir, "arsu-mode-graph-match-assessment.html");
+    execFileSync(process.execPath, ["scripts/generate-arsu-capability-review-html.mjs", reviewPath]);
+    execFileSync(process.execPath, ["scripts/generate-arsu-graph-match-assessment-html.mjs", assessmentPath]);
+    const review = await readFile(reviewPath, "utf8");
+    const routeIndex = review.indexOf('<div class="mode-route">sr-screener:quick</div>');
+    const panel = review.slice(review.lastIndexOf("<section class=\"mode-panel\"", routeIndex), review.indexOf("</section>", routeIndex));
+    const packageIds = [...panel.matchAll(/<span class="cap-id">(screening-[^<]+)<\/span>/g)].map((match) => match[1]);
+    assert.deepEqual(packageIds, ["screening-quick"]);
+
+    const assessment = await readFile(assessmentPath, "utf8");
+    const assessmentIndex = assessment.indexOf('<div class="mode-route">sr-screener:quick</div>');
+    const assessmentPanel = assessment.slice(assessment.lastIndexOf("<section class=\"mode-panel\"", assessmentIndex), assessment.indexOf("</section>", assessmentIndex));
+    assert.match(assessmentPanel, /abstract|eligibility|include/i);
+    assert.doesNotMatch(assessmentPanel, /screening-(?:protocol|pilot|ta-screen|ft-screen|adjudicate|audit|report)/);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
