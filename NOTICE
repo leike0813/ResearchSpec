@@ -136,6 +136,17 @@ are not distributed. Mermaid and Three.js retain their own copyright and
 license notices with the applicable resources. Source and resource decisions
 are recorded in audits/patent-disclosure-skill/source-audit.json.
 
+Software Copyright Materials Skill
+
+- Source: https://github.com/suling-fun/software-copyright-materials-skill
+- Revision: 6c9e6e72d8afce7aaccc9831ccd645a6ae2ccb16 (v4.4.0)
+- Copyright (c) 2026 Software Copyright Materials contributors
+- License: MIT, preserved with both derived packages.
+
+ResearchSpec authors the case workflow and filing guidance and incorporates
+reviewed document helpers. File decisions and ancestry are recorded in
+audits/software-copyright-materials/catalog.json.
+
 Paper Humanizer writing guard
 
 - Source: the paper-humanizer snapshot at 84eb2edf9570aea85a799e4c4db559882c19928c.

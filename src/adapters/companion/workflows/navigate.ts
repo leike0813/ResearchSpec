@@ -7,7 +7,7 @@ const GRAPH_REASONS = "formal Gates or Decisions, parallel or joined execution, 
 export const navigateWorkflow = {
   id: "navigate",
   name: "ResearchSpec Navigate",
-  description: "Use for literature synthesis, manuscript writing or revision, evidence checks, peer review, reviewer replies, patent research or document preparation, and continuing research work in a ResearchSpec project, even when the request does not name ResearchSpec. Navigate discovers the relevant procedure or governed workflow and carries the work through its current instructions.",
+  description: "Use for literature synthesis, manuscript writing or revision, evidence checks, peer review, reviewer replies, patent research or document preparation, Chinese software copyright registration materials (软著, R11), and continuing research work in a ResearchSpec project, even when the request does not name ResearchSpec. Navigate discovers the relevant procedure or governed workflow and carries the work through its current instructions.",
   instructions: renderNavigateExecutionGuidance("skill"),
 } satisfies CompanionWorkflowSource;
 
@@ -27,6 +27,7 @@ Translate the user's research request into a legal ResearchSpec action, carry it
 Use Navigate when the user:
 
 - describes an ordinary literature, manuscript, evidence, review, or patent task, including a bounded one that names no ResearchSpec term;
+- asks to prepare or file Chinese software copyright registration (软著, R11) materials;
 - describes a vague, broad, or cross-capability research goal;
 - asks which ResearchSpec procedure, profile, command, or selector to use;
 - wants to start, resume, inspect, verify, explain, export, or finish governed work;
@@ -36,9 +37,9 @@ An explicit bounded procedure can route directly after the same eligibility chec
 
 ## Work Loop
 
-For research or patent work in an initialized project:
+For research, patent, or software copyright registration work in an initialized project:
 
-1. Run \`researchspec status --json\`. Compare unfinished \`run_summaries\` with the current task, including declared delivery, blockers, and next inspections. If a related confirmed run is unfinished, follow its current exact selector instructions and pending controls. A completed historical run does not take over a new task.
+1. Run \`researchspec status --json\`. Compare unfinished \`run_summaries\` with the current task, including declared delivery, blockers, and next inspections. If a related confirmed run is unfinished, follow its current exact selector instructions and pending controls. If the run lists \`required_plugin_domains\`, preview that installation, get separate consent, install, and reread status to resume the same run. A completed historical run does not take over a new task.
 2. Otherwise, if continuing ordinary work, compare the matching task note with current materials. If the work needs ${GRAPH_REASONS}, follow the Graph section below. For standalone work, search \`researchspec list procedures --query "<original user request>" --json\` using the original request, including Chinese or mixed language. Compare candidate purposes and declared input/output roles against the task and actual materials; inspect promising cards with \`show procedure:<id> --json\`. If no candidate fits, make at most one focused reformulation. An empty-query error requires meaningful task text. A reported semantic fallback leaves offline candidates usable; propose explicit model preparation only when the user wants it.
 3. For standalone work, load \`researchspec instructions procedure:<id> --json\` for the selected eligible procedure. Use actual files or inline material to assess its input needs. For uncertain material or an exchange, optionally add \`--input <materials.yaml>\` as described under Standalone below. If a required material is missing, pause the work that depends on it and ask one focused question; continue independent work with its limits stated.
 4. Complete Prepare Manuscript Work below before manuscript production or delegation. Then carry out the selected packet's scholarly work inline or through an eligible worker. Save its declared file outputs as ordinary project files outside \`researchspec/\`, distinguishing usable partial outputs from completed delivery. Connect ordinary materials by their actual purpose; use native interpretation or transformation where a declared Procedure link is absent, and identify any unmet contract.
@@ -48,7 +49,9 @@ For an explanation-only request, use the narrowest current read command; it need
 
 Candidate-card eligibility describes current workspace and domain selection facts. It leaves research fit, input adequacy and consent for the Agent to assess; successful activation still validates the current package and workspace.
 
-Patent work uses the same discovery and authority boundaries. Confirm jurisdiction and patent type; China is the default jurisdiction. Fixed patent capabilities need no plugin installation. Before a docket run, disclose the default three-round budget, document/CAD/browser prerequisites and optional vault or map projection costs. At each continuation Decision, report remaining issues and the cost of another round; the budget is guidance and the human chooses continuation. After a confirmed continue, use the CLI handoff command to select the preceding round's accepted disclosure_bundle and application_bundle outputs before consuming the next revision node; verify the paths in current instructions. Preserve all earlier versions. Bind patent file indexes to applicable declared roles, and explain any native interpretation needed for ordinary composition. Optional Obsidian writes use an explicitly selected vault; maps read the selected frozen corpus. Preserve patent source categories and evidence limits when combining them with academic research.
+Use the requested deliverable to decide whether to offer the optional Intellectual property materials domain (\`intellectual-property-materials\`). It supplies software copyright registration materials, patent disclosure, application, docket, and research-to-patent. Discover their Procedures using the original request even when the domain is unselected. When a matching card requires selection or profile instructions report \`profile_domain_selection_required\`, preview the exact domain install and obtain explicit consent. Confirm a root run separately after installation. A manuscript mentioning registration or using patent evidence proceeds with the relevant built-in paper capabilities. For a request for both a manuscript and registration materials, handle registration as its own task and case.
+
+Patent search, reading, intelligence, patent-informed paper, and office-action responses are available by default. Confirm jurisdiction and patent type; China is the default jurisdiction. Before a docket run, disclose the default three-round budget, document/CAD/browser prerequisites and optional vault or map projection costs. At each continuation Decision, report remaining issues and the cost of another round; the budget is guidance and the human chooses continuation. After a confirmed continue, use the CLI handoff command to select the preceding round's accepted disclosure_bundle and application_bundle outputs before consuming the next revision node; verify the paths in current instructions. Preserve all earlier versions. Bind patent file indexes to applicable declared roles, and explain any native interpretation needed for ordinary composition. Optional Obsidian writes use an explicitly selected vault; maps read the selected frozen corpus. Preserve patent source categories and evidence limits when combining them with academic research.
 
 ${MANUSCRIPT_PREPARATION_GUIDANCE}
 

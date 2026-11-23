@@ -4,7 +4,7 @@ import path from "node:path";
 import { test } from "node:test";
 
 import { COMPANION_INTENTS } from "../src/adapters/companion/index.js";
-import { loadCapabilityRegistry } from "../src/capabilities/registry.js";
+import { loadBaseCapabilityRegistry } from "../src/capabilities/registry.js";
 import { ARSU_SKILL_IDS } from "../src/arsu-converter/routing/contracts.js";
 import { loadPluginExtensionRegistry } from "../src/plugins/extensions.js";
 import { loadProcedureCatalog, procedureCard } from "../src/procedures/catalog.js";
@@ -14,7 +14,7 @@ import { searchProcedures } from "../src/procedures/search.js";
 void test("procedure catalog is derived, ranked, and progressively disclosed", async () => {
   const [catalog, core, extensions] = await Promise.all([
     loadProcedureCatalog(),
-    loadCapabilityRegistry(),
+    loadBaseCapabilityRegistry(),
     loadPluginExtensionRegistry(),
   ]);
   assert.equal(catalog.size, ARSU_SKILL_IDS.length + COMPANION_INTENTS.length - 1 + core.capabilities.size + extensions.capabilities.size);
@@ -83,6 +83,8 @@ void test("bilingual natural requests reach suitable candidates without Agent tr
       "design-review-response-workboard-planning",
     ]],
     ["专利文献阅读", ["analysis-patent-reading", "transform-patent-research-evidence"]],
+    ["根据科研成果走研究转专利流程", ["design-patent-intake"]],
+    ["帮我为这个软件准备软件著作权登记材料", ["plugin-software-copyright-materials"]],
     ["比较这篇论文和这件专利的技术异同", ["analysis-paper-patent-comparison"]],
     ["按权利要求制作 Excel 对照表", ["analysis-patent-claim-chart"]],
     ["历史档案研究", [

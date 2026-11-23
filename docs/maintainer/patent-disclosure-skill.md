@@ -5,9 +5,8 @@ The third-party source is pinned at commit
 `b2ffa8dfca682ae9535c6e43c68cabe7ebf9e3d2`. The root Skill reports 5.2.1.
 The `snapshot-91e3b43a` source audit accounts for all 540 tracked files.
 
-The nine businesses become eighteen fixed stages in the ordinary capability
-registry. No plugin vendor, domain membership or additional host entry is
-created. Seven graph profiles are authored in
+The nine businesses become eighteen stages maintained in the ordinary capability
+registry. Seven graph profiles are authored in
 `src/arsu-converter/workflow/graph-profiles/patent.ts`; the ARSU conversion
 projects them together with the academic profiles and owns
 `skills/arsu/profiles` plus the entries that describe it in the ARSU conversion
@@ -17,7 +16,14 @@ running the ARSU conversion, never writing the shared registry from this
 maintenance path. `pnpm arsu:convert` refuses to write when the current output
 already differs from its own manifest; that state is repaired once with the
 converter's `--force` option, after inspecting the drift. Core workflow code
-has no patent-specific control branches.
+uses the common graph runtime.
+
+`src/graph-profiles/intellectual-property.ts` selects four profiles and their
+exclusive capabilities for the Intellectual property materials domain. The
+extension registry references these existing projections and their reviewed hashes.
+After changing a selected projection, refresh the extension registry through
+`scripts/generate-software-copyright-materials.mjs`. Patent search and patent-informed
+paper continue to resolve through the base runtime.
 
 `audits/patent-disclosure-skill/catalog.json` owns maintained paths and the pin.
 Typed definitions in `src/vendor-converters/patent-disclosure-skill/capabilities.ts`

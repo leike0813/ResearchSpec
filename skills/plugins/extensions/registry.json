@@ -3,6 +3,60 @@
   "registry_version": "0.7.0",
   "capabilities": [
     {
+      "capability_id": "analysis-patent-prior-art",
+      "source_path": "analysis-patent-prior-art",
+      "manifest_sha256": "1624ced04795b61d20c28d8ae5d271338c7bcf28277e30a77926ebc0cc0c81dd",
+      "source_root": "bundled"
+    },
+    {
+      "capability_id": "check-patent-application",
+      "source_path": "check-patent-application",
+      "manifest_sha256": "058364c63d41d24dcad10e88c78725d58053540241fa42dcc9f1e2880796fe03",
+      "source_root": "bundled"
+    },
+    {
+      "capability_id": "check-patent-disclosure",
+      "source_path": "check-patent-disclosure",
+      "manifest_sha256": "5a00cb914639dbbedabaa721e2f88b94ec10c55d70feadecdd292dc7c0e4ad0d",
+      "source_root": "bundled"
+    },
+    {
+      "capability_id": "check-patent-docket",
+      "source_path": "check-patent-docket",
+      "manifest_sha256": "1949bd755e302f33e823e4d3b7c09b7531dab3ee7bb41cf223a91372ab0099a7",
+      "source_root": "bundled"
+    },
+    {
+      "capability_id": "design-patent-intake",
+      "source_path": "design-patent-intake",
+      "manifest_sha256": "9f116328b21fe999d6e92aa3d430212efac85d581709b4440f780d76ed64fa07",
+      "source_root": "bundled"
+    },
+    {
+      "capability_id": "design-patent-invention-mining",
+      "source_path": "design-patent-invention-mining",
+      "manifest_sha256": "51541e8c0947b4b0de4387eafb2752cc0094c3347f77e2b83dd0ca323b496053",
+      "source_root": "bundled"
+    },
+    {
+      "capability_id": "design-patent-protection-layout",
+      "source_path": "design-patent-protection-layout",
+      "manifest_sha256": "fdae82b6c63d3186431162c80d87719d1902d47dbb4b7b5a386e1d02ff35bee9",
+      "source_root": "bundled"
+    },
+    {
+      "capability_id": "generation-patent-application",
+      "source_path": "generation-patent-application",
+      "manifest_sha256": "c7559fddfbc33be552cdfda45c41b0a36f76f219d9f0f4d9cbfb09246551ddc9",
+      "source_root": "bundled"
+    },
+    {
+      "capability_id": "generation-patent-disclosure",
+      "source_path": "generation-patent-disclosure",
+      "manifest_sha256": "9e71971d1da0d02cb5277b544289f18ed6000a213e7d294c8829859aa1a4ef53",
+      "source_root": "bundled"
+    },
+    {
       "capability_id": "plugin-ecology-biodiversity",
       "source_path": "capabilities/plugin-ecology-biodiversity",
       "manifest_sha256": "7febc3263a7c80c3829ca11c7760b03147a874a59caa31e7662475ecbe5b1b2b"
@@ -1108,6 +1162,11 @@
       "manifest_sha256": "862f859f55d8a8cf08c1aa7f0aa5c3b565a12b7435d19e8998bb831fe6955c00"
     },
     {
+      "capability_id": "plugin-software-copyright-materials",
+      "source_path": "capabilities/plugin-software-copyright-materials",
+      "manifest_sha256": "9bbf4bad2843a3b5b7da04405acb69d0f495ca11dcd19543a80c9d99d4fe5fc1"
+    },
+    {
       "capability_id": "plugin-tooluniverse-acmg-variant-classification",
       "source_path": "capabilities/plugin-tooluniverse-acmg-variant-classification",
       "manifest_sha256": "af9cc101f5ab96be4f26064430b492a0046ab69d6ef974c0fd967ab0fb997c06"
@@ -1756,9 +1815,33 @@
       "capability_id": "plugin-tooluniverse-variant-to-mechanism",
       "source_path": "capabilities/plugin-tooluniverse-variant-to-mechanism",
       "manifest_sha256": "62cf3c522113bffbc38b37e8b2756224a1428a20477d4ab7161c2ed2a99f0293"
+    },
+    {
+      "capability_id": "transform-patent-docket-revision",
+      "source_path": "transform-patent-docket-revision",
+      "manifest_sha256": "314cfc35197e0530dc6c8a2df288eed3bbb0bfc6254c3a7d1655a39203e4495d",
+      "source_root": "bundled"
     }
   ],
   "profiles": [
+    {
+      "profile_id": "patent-application",
+      "source_path": "patent-application.yaml",
+      "profile_sha256": "f67e1603e845b28142731bb380d02f801e10012bf0f6273ebdb7a334aa75da3f",
+      "source_root": "bundled"
+    },
+    {
+      "profile_id": "patent-disclosure",
+      "source_path": "patent-disclosure.yaml",
+      "profile_sha256": "d21f3848db4d7f9eaa14603b44fe9cd23bf04118f807011bbc3caf7bc9d02199",
+      "source_root": "bundled"
+    },
+    {
+      "profile_id": "patent-docket",
+      "source_path": "patent-docket.yaml",
+      "profile_sha256": "419af1793d779ce29cce8e1999ec61e9d191af13d31e7cb68faa8526e882bd78",
+      "source_root": "bundled"
+    },
     {
       "profile_id": "plugin-ecology-biodiversity",
       "source_path": "profiles/plugin-ecology-biodiversity.yaml",
@@ -2865,6 +2948,11 @@
       "profile_sha256": "afc29cf1af32b733ef9d1c0dcabfa6e07d7fccd19d8679b21803191e14f77039"
     },
     {
+      "profile_id": "plugin-software-copyright-materials",
+      "source_path": "profiles/plugin-software-copyright-materials.yaml",
+      "profile_sha256": "2b2bbb1d4c0814cffafff8ab3620f27f48ab9968ab858083ed785e14b0c9336a"
+    },
+    {
       "profile_id": "plugin-tooluniverse-acmg-variant-classification",
       "source_path": "profiles/plugin-tooluniverse-acmg-variant-classification.yaml",
       "profile_sha256": "9cb2cf5f00ecf224cf7eb5c27856a04f76eb13adb5c91c927e4a5f7062396c2b"
@@ -3513,6 +3601,12 @@
       "profile_id": "plugin-tooluniverse-variant-to-mechanism",
       "source_path": "profiles/plugin-tooluniverse-variant-to-mechanism.yaml",
       "profile_sha256": "ad02849d269ccd9426860e43247524568f688cb9bcd8b3805e9246e9a904e17d"
+    },
+    {
+      "profile_id": "research-to-patent",
+      "source_path": "research-to-patent.yaml",
+      "profile_sha256": "3e757f2ef993f3fec05aa3c19888ccb6d629892f50f55b44626f3d2feef23529",
+      "source_root": "bundled"
     }
   ],
   "domains": [
@@ -4290,6 +4384,29 @@
       ],
       "profiles": [
         "plugin-tooluniverse-inorganic-physical-chemistry"
+      ]
+    },
+    {
+      "domain_id": "intellectual-property-materials",
+      "capabilities": [
+        "analysis-patent-prior-art",
+        "check-patent-application",
+        "check-patent-disclosure",
+        "check-patent-docket",
+        "design-patent-intake",
+        "design-patent-invention-mining",
+        "design-patent-protection-layout",
+        "generation-patent-application",
+        "generation-patent-disclosure",
+        "plugin-software-copyright-materials",
+        "transform-patent-docket-revision"
+      ],
+      "profiles": [
+        "patent-application",
+        "patent-disclosure",
+        "patent-docket",
+        "plugin-software-copyright-materials",
+        "research-to-patent"
       ]
     },
     {

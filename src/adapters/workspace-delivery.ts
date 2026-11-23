@@ -9,7 +9,7 @@ import {
 } from "../literature-adapters/index.js";
 import type { LoadedPluginRegistry } from "../plugins/registry.js";
 import { planPluginProjection } from "../plugins/graph-delivery.js";
-import { loadGraphProfileRegistry } from "../graph-profiles/registry.js";
+import { loadBaseGraphProfileRegistry } from "../graph-profiles/registry.js";
 import type { DomainResolutionSnapshot } from "./installations.js";
 import { planToolDelivery } from "./delivery.js";
 import { resolveManagedTarget, validateManagedTarget } from "./managed-target.js";
@@ -53,7 +53,7 @@ export async function planWorkspaceDelivery(input: {
   paperHumanizerGuard?: "on" | "off";
 }): Promise<WorkspaceDeliveryPlan> {
   for (const installation of input.existingInstallations) await validateManagedTarget(input.projectRoot, installation);
-  const profileDefinitions = [...(await loadGraphProfileRegistry()).profiles.values()];
+  const profileDefinitions = [...(await loadBaseGraphProfileRegistry()).profiles.values()];
   const profileOperations: PlannedWrite[] = [];
   const profileInstallations: ManagedInstallation[] = [];
   for (const definition of profileDefinitions) {

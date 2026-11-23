@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, mkdir, mkdtemp, readdir, rm, writeFile } from "node:fs/promises";
+import { access, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
@@ -14,6 +14,8 @@ import {
 } from "../src/capabilities/registry.js";
 import { AUTHORED_GRAPH_PROFILES } from "../src/arsu-converter/workflow/graph-profiles/index.js";
 import { PATENT_GRAPH_PROFILES } from "../src/arsu-converter/workflow/graph-profiles/patent.js";
+import { INTELLECTUAL_PROPERTY_DOMAIN_ID, OPTIONAL_PATENT_PROFILE_IDS } from "../src/graph-profiles/intellectual-property.js";
+import { loadWorkspaceCapabilityRegistry } from "../src/plugins/runtime-capabilities.js";
 import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
 import {
   evaluateGraphFrontier,
@@ -85,6 +87,16 @@ function frontierFor(index: WorkspaceIndex, runId: string): GraphFrontier {
 
 async function reload(workspace: string): Promise<WorkspaceIndex> {
   return loadGraphWorkspaceIndex(workspace);
+}
+
+async function writePatentWorkspace(root: string): Promise<string> {
+  const workspace = await writeBaseWorkspace(root);
+  const index = await reload(workspace);
+  await writeFile(path.join(workspace, "config.yaml"), stringify({
+    ...index.config,
+    plugins: { selected: [INTELLECTUAL_PROPERTY_DOMAIN_ID] },
+  }));
+  return workspace;
 }
 
 function resolutionFor(index: WorkspaceIndex, runId: string, nodeId: string, round?: number): ReturnType<typeof resolveGraphNodeInputs> {
@@ -202,12 +214,12 @@ void test("patent-informed writing waits for both sources and consumes the bridg
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-patent-composition-"));
   try {
     const workspace = await writeBaseWorkspace(root);
-    for (const { profile, projection } of AUTHORED_GRAPH_PROFILES) {
+    for (const { profile, projection } of AUTHORED_GRAPH_PROFILES.filter(({ profile }) => !OPTIONAL_PATENT_PROFILE_IDS.has(profile.profile_id))) {
       await writeFile(path.join(workspace, "profiles", `${profile.profile_id}.yaml`), projection, "utf8");
     }
     await writeFixture(root, "patent/search-request.md", "Selected search scope.\n");
-    const registry = await loadCapabilityRegistry();
     let index = await reload(workspace);
+    const registry = await loadWorkspaceCapabilityRegistry(index);
     const started = await startGraphRun({ index, capabilityRegistry: registry, profileId: "patent-informed-paper", confirmedBy: "researcher", command: {
       schema_version: "2", confirmed_at: TIME, entry_id: "main", entry_node_id: "source-gate", prerequisites: [],
       handoff_inputs: [{ role: "search_request", type: "markdown", path: "patent/search-request.md", purpose: "Selected patent sources." }],
@@ -247,7 +259,7 @@ void test("patent-informed writing waits for both sources and consumes the bridg
 void test("patent docket runs disclosure, application and a bounded revision round before completing", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-patent-docket-"));
   try {
-    const workspace = await writeBaseWorkspace(root);
+    const workspace = await writePatentWorkspace(root);
     for (const profileId of ["patent-disclosure", "patent-application", "patent-docket"]) {
       await writeFile(path.join(workspace, "profiles", `${profileId}.yaml`), patentProfile(profileId) === undefined ? "" : PATENT_GRAPH_PROFILES.find((item) => item.profile.profile_id === profileId)?.projection ?? "", "utf8");
     }
@@ -527,7 +539,7 @@ void test("interpretation-only patent intelligence completes without selecting t
   }
 });
 
-void test("init and update project one Navigate entry and every new patent preset profile", async () => {
+void test("the materials domain previews, installs and resumes the existing patent preparation chain", async () => {
   const root = await tempProject();
   try {
     const codexHome = path.join(root, "codex-home");
@@ -544,12 +556,71 @@ void test("init and update project one Navigate entry and every new patent prese
     const workspace = path.join(root, "researchspec");
     const patentProfileIds = PATENT_GRAPH_PROFILES.map((item) => item.profile.profile_id);
     const emitted = (await readdir(path.join(workspace, "profiles"))).filter((name) => name.endsWith(".yaml"));
-    for (const profileId of patentProfileIds) assert.ok(emitted.includes(`${profileId}.yaml`), `init did not emit ${profileId}.yaml`);
-    const installedIndex = await loadGraphWorkspaceIndex(workspace);
-    for (const profileId of patentProfileIds) assert.ok(installedIndex.profiles.has(profileId), `installed profile is unavailable: ${profileId}`);
+    for (const id of patentProfileIds) assert.equal(emitted.includes(`${id}.yaml`), !OPTIONAL_PATENT_PROFILE_IDS.has(id), id);
+    const cli = <T = unknown>(...args: string[]) => parseEnvelope<T>(runCli([...args, "--json"], root, { CODEX_HOME: codexHome }));
+    assert.equal(cli("instructions", "profile:patent-informed-paper").ok, true);
+    assert.equal(cli("instructions", "procedure:discovery-patent-search").ok, true);
+    assert.equal(cli("instructions", "profile:research-to-patent").error?.code, "profile_domain_selection_required");
+    assert.equal(cli("instructions", "procedure:generation-patent-disclosure").error?.code, "procedure_domain_selection_required");
 
-    assert.equal(runCli(["update", "--tools", "none", "--json"], root, { CODEX_HOME: codexHome }).status, 0);
-    await access(path.join(workspace, "profiles", "patent-docket.yaml"));
+    const candidates = cli<{ items: Array<{ procedure_id: string; eligibility: { state: string; domains: string[] } }> }>(
+      "list", "procedures", "--query", "把这篇技术论文整理成专利交底书",
+    );
+    const disclosure = candidates.data?.items.find((item) => item.procedure_id === "generation-patent-disclosure");
+    assert.equal(disclosure?.eligibility.state, "domain_selection_required");
+    assert.deepEqual(disclosure?.eligibility.domains, [INTELLECTUAL_PROPERTY_DOMAIN_ID]);
+    const configPath = path.join(workspace, "config.yaml");
+    const beforePreview = await readFile(configPath, "utf8");
+    const preview = cli<{ resolved_profile_ids: string[] }>("plugin", "install", INTELLECTUAL_PROPERTY_DOMAIN_ID, "--dry-run", "--yes");
+    assert.equal(preview.ok, true, JSON.stringify(preview.error));
+    assert.deepEqual(preview.data?.resolved_profile_ids.sort(), [...OPTIONAL_PATENT_PROFILE_IDS, "plugin-software-copyright-materials"].sort());
+    assert.equal(await readFile(configPath, "utf8"), beforePreview);
+    assert.equal(cli("plugin", "install", INTELLECTUAL_PROPERTY_DOMAIN_ID, "--yes").ok, true);
+    assert.equal(cli("instructions", "profile:research-to-patent").ok, true);
+    assert.equal(cli("instructions", "procedure:plugin-software-copyright-materials").ok, true);
+
+    await writeFixture(root, "materials/tech.md", "Technical materials.\n");
+    await writeFixture(root, "docket.yaml", stringify({
+      schema_version: "2", confirmed_at: TIME, entry_id: "main", entry_node_id: "disclosure", prerequisites: [],
+      handoff_inputs: [{ role: "technical_materials", type: "markdown", path: "materials/tech.md", purpose: "Technical materials." }],
+      planned_outputs: ["patent_case", "disclosure_bundle", "application_bundle", "docket_review"].map((role) => ({
+        role, type: "markdown", path: `patent/${role}.md`, purpose: role,
+      })),
+      formal_gates: ["patent-docket-disclosure", "patent-docket-complete"], cost: { effort: "high", interaction: "iterative" },
+    }));
+    const started = cli<{ run_id: string }>("start", "profile:patent-docket", "--input", "docket.yaml", "--confirmed-by", "researcher");
+    assert.ok(started.data?.run_id, JSON.stringify(started.error));
+    const runId = started.data.run_id;
+    const frozenGraph = path.join(workspace, "runs", runId, "graph.yaml");
+    const frozenBefore = await readFile(frozenGraph, "utf8");
+
+    // Simulate a workspace whose active run and profiles predate the domain.
+    const index = await reload(workspace);
+    const legacyDomain = "private-law-and-civil-obligations";
+    const manifestPath = path.join(workspace, "tool-installation-manifest.json");
+    await writeFile(configPath, stringify({ ...index.config, plugins: { selected: [legacyDomain] } }));
+    await writeFile(manifestPath, JSON.stringify({
+      ...index.manifest,
+      plugin_resolutions: index.manifest.plugin_resolutions.map((snapshot) => ({
+        ...snapshot, domain_id: legacyDomain, resolved_capability_ids: ["plugin-software-copyright-materials"],
+        resolved_profile_ids: ["plugin-software-copyright-materials"],
+      })),
+      installations: index.manifest.installations.map((item) =>
+        item.source.kind === "plugin-profile" && OPTIONAL_PATENT_PROFILE_IDS.has(item.source.profile_id)
+          ? { ...item, source: { ...item.source, kind: "framework-profile" } } : item),
+    }));
+    const status = cli<{ run_summaries: Array<{ run_id: string; required_plugin_domains?: string[] }> }>("status");
+    assert.deepEqual(status.data?.run_summaries.find((run) => run.run_id === runId)?.required_plugin_domains, [INTELLECTUAL_PROPERTY_DOMAIN_ID]);
+    const disclosureSelector = `node:${runId}/disclosure`;
+    assert.equal(cli("instructions", disclosureSelector).error?.code, "profile_domain_selection_required");
+    assert.equal(cli("plugin", "install", INTELLECTUAL_PROPERTY_DOMAIN_ID, "--yes").ok, true);
+    assert.equal(cli("plugin", "uninstall", legacyDomain).ok, true);
+    assert.equal(cli("update").ok, true);
+    assert.equal(await readFile(frozenGraph, "utf8"), frozenBefore);
+    const child = cli<{ run_id: string }>("start", disclosureSelector);
+    assert.ok(child.data?.run_id, JSON.stringify(child.error));
+    assert.equal(cli("instructions", `node:${child.data.run_id}/intake`).ok, true);
+    assert.equal(cli("check", "all").ok, true);
   } finally {
     await cleanup(root);
   }

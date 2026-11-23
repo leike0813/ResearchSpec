@@ -8,7 +8,7 @@ import { COMPANION_INTENTS, renderCompanionSkill, renderCompanionSkillFiles } fr
 import { LITERATURE_ADAPTER_SKILL_IDS } from "../src/literature-adapters/catalog.js";
 import { loadPluginExtensionRegistry } from "../src/plugins/extensions.js";
 import { loadProcedureCatalog } from "../src/procedures/catalog.js";
-import { loadCapabilityRegistry } from "../src/capabilities/registry.js";
+import { loadBaseCapabilityRegistry } from "../src/capabilities/registry.js";
 import { ARSU_ROUTING_CATALOG } from "../src/arsu-converter/routing/catalog.js";
 import { loadHarnessCatalog, readHarnessFile, validateHarnessSkillRoot, type HarnessFileTreeNode } from "../harness/catalog.js";
 import { createSkillHarnessServer, HARNESS_DEFAULT_HOST, renderHarnessMarkdown } from "../harness/server.js";
@@ -23,7 +23,7 @@ void test("harness separates visible entries from the complete hidden procedure 
   assert.equal(loaded.catalog.summary.procedures, procedureCatalog.size);
   assert.equal(loaded.catalog.summary.arsu_procedures, ARSU_ROUTING_CATALOG.skills.length);
   assert.equal(loaded.catalog.summary.companion_procedures, COMPANION_INTENTS.length - 1);
-  const capabilities = await loadCapabilityRegistry();
+  const capabilities = await loadBaseCapabilityRegistry();
   assert.equal(loaded.catalog.summary.core_procedures, capabilities.capabilities.size);
   const extensions = await loadPluginExtensionRegistry();
   assert.equal(loaded.catalog.summary.plugin_procedures, extensions.capabilities.size);
@@ -34,7 +34,7 @@ void test("harness separates visible entries from the complete hidden procedure 
   assert.equal(adapterSkills.filter((skill) => skill.adapter?.role === "task").length, 5);
   assert.equal(adapterSkills.filter((skill) => skill.adapter?.role === "mechanism").length, 1);
   assert.equal(adapterSkills.every((skill) => skill.files.some((file) => file.path === "assets/runner.json")), true);
-  assert.equal(loaded.catalog.summary.domains, 218);
+  assert.equal(loaded.catalog.summary.domains, 219);
   assert.equal(loaded.catalog.summary.available_domains, loaded.catalog.domains.filter((domain) => domain.direct_procedure_ids.length > 0).length);
   assert.ok(loaded.catalog.domains.some((domain) => domain.available && domain.resolved_procedure_ids.length >= domain.direct_procedure_ids.length));
   assert.ok(loaded.catalog.procedures.some((skill) => skill.family === "plugin" && skill.resolved_domain_ids.length > 1));

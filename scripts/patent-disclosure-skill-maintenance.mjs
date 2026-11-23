@@ -38,7 +38,8 @@ export function collectState(root, anchor) {
   const maintained = [catalogPath, catalog.source_definitions, catalog.graph_definitions, catalog.maintenance_skill,
     "scripts/patent-source-audit.mjs", "scripts/prepare-patent-authoring.mjs", "scripts/patent-disclosure-skill-maintenance.mjs",
     "src/vendor-converters/patent-disclosure-skill/cli.ts", "src/arsu-converter/authoring/author.ts",
-    "docs/user/patent-workflows.md", "docs/maintainer/patent-disclosure-skill.md", "NOTICE", "LICENSE"];
+    "docs/user/patent-workflows.md", "docs/maintainer/patent-disclosure-skill.md", "NOTICE", "LICENSE",
+    "src/graph-profiles/intellectual-property.ts"];
   return {
     schema_version: "1", vendor_id: catalog.vendor_id, anchor_id: anchor ?? catalog.anchor_id,
     businesses: audit.businesses,
@@ -69,7 +70,7 @@ function records(root, catalog, state) {
   const sections = [
     ["Source analysis", `Pinned commit ${state.upstream.revision}; complete tracked inventory: ${state.upstream.file_count}.\n\nSee [the source audit](${sourceAudit}) for every source, exclusion, external resource and license decision.`],
     ["Ingestion", `Authoring tree: ${state.authoring_tree_sha256}.\n\nSource extractions bind upstream byte hashes; curated knowledge records authored derivation.`],
-    ["Conversion", `${state.packages.length} fixed capabilities and ${state.profiles.length} profiles.\n\nPackage and profile hashes are recorded in manifest.json. Registry membership is fixed capability membership, outside plugin domains.`],
+    ["Conversion", `${state.packages.length} maintained capabilities and ${state.profiles.length} profiles.\n\nPackage and profile hashes are recorded in manifest.json. Intellectual property materials reuses the reviewed patent preparation projections. Patent intelligence and patent-informed paper use the base runtime.`],
     ["Review evidence", "Read review-decision.json and 05-semantic-review.md. Conversion and checking are static; runtime tests execute only explicitly selected adapted tools on fixtures."],
   ];
   sections.forEach(([title, body], index) => write(root, `${anchor}/${RECORD_FILES[index]}`, `# ${title}\n\n${body}\n`));

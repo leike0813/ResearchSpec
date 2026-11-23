@@ -2,12 +2,12 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { COMPANION_INTENTS, renderCompanionSkill } from "../adapters/companion/index.js";
-import { loadCapabilityRegistry } from "../capabilities/registry.js";
+import { loadBaseCapabilityRegistry } from "../capabilities/registry.js";
 import type { CapabilityManifest } from "../core/contracts/capability-manifest.js";
-import { loadGraphProfileRegistry } from "../graph-profiles/registry.js";
+import { loadBaseGraphProfileRegistry } from "../graph-profiles/registry.js";
 import { ARSU_ROUTING_CATALOG } from "../arsu-converter/routing/catalog.js";
 import { PACKAGE_ROOT } from "../capabilities/registry.js";
-import { loadPluginExtensionRegistry } from "../plugins/extensions.js";
+import { loadRuntimePluginExtensionRegistry } from "../plugins/extensions.js";
 import { procedureEligibility, type ProcedureEligibility, type ProcedureEligibilityContext } from "./eligibility.js";
 
 export type ProcedureKind = "arsu" | "companion" | "capability" | "plugin";
@@ -46,10 +46,10 @@ export interface ProcedureCard {
 }
 
 export async function loadProcedureCatalog(packageRoot = PACKAGE_ROOT): Promise<ReadonlyMap<string, ProcedureDefinition>> {
-  const core = await loadCapabilityRegistry(path.join(packageRoot, "skills/capabilities"));
+  const core = await loadBaseCapabilityRegistry(path.join(packageRoot, "skills/capabilities"));
   const [profiles, extensions] = await Promise.all([
-    loadGraphProfileRegistry(path.join(packageRoot, "skills/arsu/profiles"), core),
-    loadPluginExtensionRegistry(path.join(packageRoot, "skills/plugins/extensions")),
+    loadBaseGraphProfileRegistry(path.join(packageRoot, "skills/arsu/profiles"), core),
+    loadRuntimePluginExtensionRegistry(path.join(packageRoot, "skills/plugins/extensions"), packageRoot, core),
   ]);
   const result = new Map<string, ProcedureDefinition>();
   const add = (procedure: ProcedureDefinition) => {

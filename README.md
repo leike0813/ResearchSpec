@@ -51,10 +51,10 @@ ResearchSpec 不是从零构建——它吸纳并整合了多个优秀上游项�
 
 ### 领域 Skill 插件（经审查转换的第三方上游项目）
 
-专利固定能力吸纳 [patent-disclosure-skill](https://github.com/handsomestWei/patent-disclosure-skill)
+专利能力吸纳 [patent-disclosure-skill](https://github.com/handsomestWei/patent-disclosure-skill)
 的九项业务，拆成十八个可复用阶段，提供五个独立 graph 以及 `research-to-patent`、
-`patent-informed-paper` 两个组合。它们随基础安装提供，支持 Word、Excel、附图/CAD、
-Obsidian 和本地交互地图的配置式交付。见[专利任务](docs/user/patent-workflows.md)。
+`patent-informed-paper` 两个组合。交底、申请、案卷和研究转专利随可选的「知识产权材料」工具域提供。
+专利检索、情报辅助论文和审查意见答复随基础安装提供。见[专利任务](docs/user/patent-workflows.md)。
 
 | 上游项目 | 版本 | 经审查输出的 Skills 数量 | 覆盖领域 |
 |---|---|---|---|
@@ -64,6 +64,7 @@ Obsidian 和本地交互地图的配置式交付。见[专利任务](docs/user/p
 | **FinRobot** | snapshot-2717499 | 6 | 银行金融与投资、会计审计 |
 | **HistAgent** | snapshot-47bbe21 | 3 | 历史研究、遗产档案与博物馆研究 |
 | **Education Agent Skills** | snapshot-32fce5c | 136 | 课程与教学法、教育系统、特殊教育研究 |
+| **Software Copyright Materials Skill** | v4.4.0 | 1 | 知识产权材料，见[软件著作权登记材料](docs/user/software-copyright-materials.md) |
 
 上游内容通过不可变审计和独立转换器管道处理，生产准入由经审阅的决策与内容身份约束。不同来源采用保留指令文本、复制已审阅资源或重新创作执行流程的方式；分发内容保留相应出处记录、许可和署名。
 

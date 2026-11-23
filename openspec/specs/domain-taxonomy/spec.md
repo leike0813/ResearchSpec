@@ -18,19 +18,19 @@ ResearchSpec SHALL use ANZSRC 2020 Fields of Research Group as its only discipli
 - **AND** its four-digit Group code SHALL be retained as structured metadata
 
 ### Requirement: ResearchSpec Tool Taxonomy
-ResearchSpec SHALL maintain exactly five coarse tool domains for cross-disciplinary work and SHALL prefer an applicable ANZSRC Group when a Skill's primary meaning is disciplinary.
+ResearchSpec SHALL maintain exactly six coarse tool domains for cross-disciplinary work and SHALL prefer an applicable ANZSRC Group when a Skill's primary meaning is disciplinary.
 
 #### Scenario: Tool catalog is fixed
 - **WHEN** the internal domain catalog is validated
-- **THEN** it SHALL contain the five documented ResearchSpec tool domain IDs
+- **THEN** it SHALL contain the six documented ResearchSpec tool domain IDs
 - **AND** tool domains SHALL NOT declare ANZSRC Group codes
 
 ### Requirement: Complete Fixed Internal Domain Catalog
-ResearchSpec SHALL pre-create all 213 ANZSRC Group domains and all five tool domains internally, while public availability SHALL be derived exclusively from a non-empty reviewed direct Skill list.
+ResearchSpec SHALL pre-create all 213 ANZSRC Group domains and all six tool domains internally, while public availability SHALL be derived exclusively from a non-empty reviewed direct Skill list.
 
 #### Scenario: Empty domain remains internal
 - **WHEN** a catalog domain contains no reviewed Skill
-- **THEN** registry validation SHALL retain it as one of 218 internal domains
+- **THEN** registry validation SHALL retain it as one of 219 internal domains
 - **AND** normal discovery, show, install, JSON, and Navigate surfaces SHALL not expose it as available
 
 ### Requirement: ANZSRC Field Audit Metadata
@@ -54,7 +54,7 @@ Every admitted Scientific Agent Skill SHALL have explicit source-neutral members
 - **THEN** reviewers select its user-relevant existing domain membership independently of the audit metadata
 
 #### Scenario: Unclassified skill lacks tool fit
-- **WHEN** a candidate has no natural ANZSRC Field and no clear fit to one of the five fixed tool domains
+- **WHEN** a candidate has no natural ANZSRC Field and no clear fit to one of the six fixed tool domains
 - **THEN** the candidate remains excluded
 - **AND** no general-purpose or vendor-specific domain is created
 
@@ -65,7 +65,7 @@ Every admitted Materials-Science-Skills-For-LLM Skill SHALL have explicit source
 - **WHEN** all seven admitted Materials Skills are added to the catalog
 - **THEN** they are assigned only among `materials-engineering`, `macromolecular-and-materials-chemistry`, and `computational-modeling-and-simulation`
 - **AND** `materials-engineering` becomes publicly discoverable
-- **AND** the public domain count increases from 48 to 49 while the internal catalog remains 218
+- **AND** the public domain count increases from 48 to 49 while the internal catalog remains 219
 
 ### Requirement: Reviewed Fourth-Vendor Finance Membership SHALL Be Explicit
 Every admitted FinRobot-derived Skill SHALL have explicit source-neutral
@@ -78,7 +78,7 @@ ANZSRC Field metadata, source roles, provider use, or advisory relationships.
 - **WHEN** all six approved Skills are added to the domain catalog
 - **THEN** the accounting and banking domains become publicly discoverable
 - **AND** the public domain count increases from 49 to 51
-- **AND** the internal catalog remains exactly 218 domains
+- **AND** the internal catalog remains exactly 219 domains
 
 ### Requirement: Reviewed Fifth-Vendor Historical Membership SHALL Be Explicit
 Every admitted HistAgent-derived Skill SHALL have explicit source-neutral membership in `historical-studies`; `histagent-historical-source-identification` and `histagent-historical-source-analysis` SHALL also belong to `heritage-archive-and-museum-studies`. Membership SHALL NOT be inferred from ANZSRC Field metadata, provider use, external tools, media processing, or advisory relationships, and no HistAgent Skill SHALL enter a tool domain.
@@ -87,7 +87,7 @@ Every admitted HistAgent-derived Skill SHALL have explicit source-neutral member
 - **WHEN** all three approved Skills are added to the domain catalog
 - **THEN** the historical-studies and heritage/archive/museum domains become publicly discoverable
 - **AND** the public domain count increases from 51 to 53
-- **AND** the internal catalog remains exactly 218 domains
+- **AND** the internal catalog remains exactly 219 domains
 
 ### Requirement: Reviewed Sixth-Vendor Education Membership SHALL Be Explicit
 Every admitted Education Agent Skill SHALL belong directly to exactly one of
@@ -101,4 +101,22 @@ Fields, evidence strength, audience, or relationships.
 - **THEN** curriculum and pedagogy SHALL receive 54 Skills
 - **AND** education systems SHALL receive 9 Skills
 - **AND** specialist studies in education SHALL receive 73 Skills
-- **AND** the internal domain count SHALL remain 218
+- **AND** the internal domain count SHALL remain 219
+
+### Requirement: Reviewed Seventh-Vendor Intellectual Property Membership SHALL Be Explicit
+Every admitted software copyright materials Skill SHALL have explicit source-neutral membership in `intellectual-property-materials` and SHALL NOT belong to `private-law-and-civil-obligations` or any other discipline domain. Membership SHALL NOT be inferred from ANZSRC Field metadata.
+
+#### Scenario: Copyright materials Skill is assigned
+- **WHEN** the admitted software copyright materials Skill is added to the domain catalog
+- **THEN** `intellectual-property-materials` SHALL become publicly discoverable
+- **AND** `private-law-and-civil-obligations` SHALL remain internally empty and hidden from user discovery
+- **AND** the public domain count SHALL increase from 62 to 63
+- **AND** the internal catalog SHALL contain 219 domains
+
+### Requirement: Patent Preparation Reuses Reviewed Projections
+The Intellectual property materials domain SHALL reuse the reviewed patent preparation packages and profiles shipped with ResearchSpec. The extension registry SHALL own these assignments, while the domain catalog lists the reviewed vendor Skill.
+
+#### Scenario: Patent preparation is installed with the domain
+- **WHEN** a user selects the intellectual property materials domain
+- **THEN** the patent preparation capabilities and profiles SHALL become eligible in the workspace
+- **AND** the domain catalog SHALL list only the vendor-backed software copyright materials Skill

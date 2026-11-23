@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import {
   validateGraphAgainstCapabilityRegistry,
+  loadBaseCapabilityRegistry,
   loadCapabilityRegistry,
   type LoadedCapabilityRegistry,
 } from "../capabilities/registry.js";
@@ -17,6 +18,7 @@ import {
 } from "../core/contracts/capability-graph.js";
 import { StableIdSchema } from "../core/contracts/stable-specs.js";
 import type { Diagnostic } from "../core/validation/types.js";
+import { OPTIONAL_PATENT_PROFILE_IDS } from "./intellectual-property.js";
 
 const HexSha256Schema = z.string().regex(/^[0-9a-f]{64}$/, "profile hash must be a lowercase SHA-256 hex string");
 const NonEmptySchema = z.string().trim().min(1);
@@ -70,6 +72,7 @@ export const GRAPH_PROFILE_ROOT = path.join(PACKAGE_ROOT, "skills/arsu/profiles"
 export async function loadGraphProfileRegistry(
   root = GRAPH_PROFILE_ROOT,
   registry?: LoadedCapabilityRegistry,
+  excludedIds?: ReadonlySet<string>,
 ): Promise<LoadedGraphProfileRegistry> {
   const registryPath = path.join(root, GRAPH_PROFILE_REGISTRY_FILENAME);
   let raw: unknown;
@@ -80,7 +83,14 @@ export async function loadGraphProfileRegistry(
       fatal("graph_profile_registry_unreadable", `Cannot read graph profile registry: ${error instanceof Error ? error.message : String(error)}`, registryPath),
     ]);
   }
-  return validateGraphProfileRegistry(raw, root, registryPath, registry ?? await loadCapabilityRegistry());
+  return validateGraphProfileRegistry(raw, root, registryPath, registry ?? await loadCapabilityRegistry(), excludedIds);
+}
+
+export async function loadBaseGraphProfileRegistry(
+  root = GRAPH_PROFILE_ROOT,
+  registry?: LoadedCapabilityRegistry,
+): Promise<LoadedGraphProfileRegistry> {
+  return loadGraphProfileRegistry(root, registry ?? await loadBaseCapabilityRegistry(), OPTIONAL_PATENT_PROFILE_IDS);
 }
 
 export async function validateGraphProfileRegistry(
@@ -88,6 +98,7 @@ export async function validateGraphProfileRegistry(
   root: string,
   registryPath = path.join(root, GRAPH_PROFILE_REGISTRY_FILENAME),
   capabilityRegistry?: LoadedCapabilityRegistry,
+  excludedIds?: ReadonlySet<string>,
 ): Promise<LoadedGraphProfileRegistry> {
   const parsed = GraphProfileRegistrySchema.safeParse(raw);
   if (!parsed.success) {
@@ -101,7 +112,11 @@ export async function validateGraphProfileRegistry(
   const seen = new Set<string>();
   const profiles = new Map<string, RegisteredGraphProfile>();
 
-  for (const entry of parsed.data.profiles) {
+  const definitions = excludedIds === undefined ? parsed.data : {
+    ...parsed.data,
+    profiles: parsed.data.profiles.filter((entry) => !excludedIds.has(entry.profile_id)),
+  };
+  for (const entry of definitions.profiles) {
     if (seen.has(entry.profile_id)) {
       errors.push(fatal("graph_profile_registry_id_duplicate", `Duplicate graph profile ID: ${entry.profile_id}`, registryPath));
       continue;
@@ -170,7 +185,7 @@ export async function validateGraphProfileRegistry(
   }
 
   if (errors.length > 0) throw new GraphProfileRegistryError(errors);
-  return { root, registryPath, registry: parsed.data, profiles, diagnostics: [] };
+  return { root, registryPath, registry: definitions, profiles, diagnostics: [] };
 }
 
 function isSafeRelativePath(value: string): boolean {

@@ -7,7 +7,7 @@ import { promisify } from "node:util";
 import { parse, stringify } from "yaml";
 
 import { sha256 } from "../../core/workspace/write-plan.js";
-import { assemblePluginRegistry } from "../../plugins/assembler.js";
+import { assemblePluginRegistry, INTERNAL_DOMAIN_COUNT } from "../../plugins/assembler.js";
 import { availableDomains, loadPluginRegistry, type PluginRegistry } from "../../plugins/registry.js";
 import { commitVendorStage, pathExists, posix, prepareVendorStage, vendorProjectionDiff, walkFiles } from "../shared/staging.js";
 import { productionVendorInventoryErrors } from "../shared/production-vendors.js";
@@ -97,7 +97,7 @@ export async function checkScientificAgentSkillsOutput(repoRoot: string): Promis
     if (!vendor) errors.push("Scientific Agent Skills vendor is absent from the bundled registry");
     else if (vendor.skills.length !== expected) errors.push(`Expected ${String(expected)} Scientific Agent Skills, found ${String(vendor.skills.length)}`);
     errors.push(...productionVendorInventoryErrors(loaded.vendors.keys()));
-    if (loaded.domains.size !== 218) errors.push(`Expected 218 internal domains, found ${String(loaded.domains.size)}`);
+    if (loaded.domains.size !== INTERNAL_DOMAIN_COUNT) errors.push(`Expected ${String(INTERNAL_DOMAIN_COUNT)} internal domains, found ${String(loaded.domains.size)}`);
     if (!availableDomains(loaded).length) errors.push("Production registry has no available domains");
     warnings.push(...loaded.diagnostics.map((item) => item.message));
   } catch (error) { errors.push(error instanceof Error ? error.message : String(error)); }

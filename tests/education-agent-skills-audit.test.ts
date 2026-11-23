@@ -20,6 +20,7 @@ import {
   type EducationAgentSkillsAudit,
 } from "../src/vendor-audits/education-agent-skills.js";
 import { CLI_TOP_LEVEL_COMMANDS } from "../src/cli/command-catalog.js";
+import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/production-vendors.js";
 import { gitOutput } from "./helpers/vendor-audit.js";
 import { runCli } from "./helpers/cli.js";
 
@@ -172,7 +173,7 @@ void test("audit generation and the JSON-derived report are byte-identical and c
 
 void test("approved ingestion publishes only reviewed static Skills without changing the public CLI", async () => {
   const registry = JSON.parse(await readFile(path.resolve("skills/plugins/registry.json"), "utf8")) as { vendors: Array<{ vendor_id: string }> };
-  assert.deepEqual(registry.vendors.map((vendor) => vendor.vendor_id), ["education-agent-skills", "finrobot", "histagent", "materials-science-skills-for-llm", "scientific-agent-skills", "tooluniverse"]);
+  assert.deepEqual(registry.vendors.map((vendor) => vendor.vendor_id), [...PRODUCTION_VENDOR_IDS]);
   const packageJson = JSON.parse(await readFile(path.resolve("package.json"), "utf8")) as { files: string[]; scripts: Record<string, string> };
   assert.equal(packageJson.files.some((entry) => entry === "vendor" || entry.startsWith("vendor/") || entry === "audits" || entry.startsWith("audits/")), false);
   assert.ok(packageJson.files.includes("!dist/src/vendor-converters"));

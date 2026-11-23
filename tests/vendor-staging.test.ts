@@ -5,13 +5,14 @@ import path from "node:path";
 import { test } from "node:test";
 
 import { sha256 } from "../src/core/workspace/write-plan.js";
-import { commitVendorStage, prepareVendorStage, walkFiles } from "../src/vendor-converters/shared/staging.js";
+import { commitVendorStage, pathExists, prepareVendorStage, walkFiles } from "../src/vendor-converters/shared/staging.js";
 import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/production-vendors.js";
 
 const PLUGIN_ROOT = path.resolve("skills/plugins");
 
-void test("shared staging commits only the target vendor projection for every production converter", async () => {
+void test("shared staging commits only the target projection for converters with staged reports", async () => {
   for (const vendorId of PRODUCTION_VENDOR_IDS) {
+    if (!(await pathExists(path.join(PLUGIN_ROOT, "conversion-reports", `${vendorId}.md`)))) continue;
     const root = await mkdtemp(path.join(tmpdir(), `researchspec-staging-${vendorId}-`));
     const output = path.join(root, "output");
     const stage = path.join(root, "stage");
@@ -37,7 +38,7 @@ async function vendorOwnedHashes(root: string, vendorIds: readonly string[]): Pr
     for (const file of await walkFiles(path.join(root, "vendors", vendorId))) result[path.relative(root, file)] = sha256(await readFile(file));
     for (const [area, extension] of [["vendor-bundles", "json"], ["vendor-manifests", "json"], ["conversion-reports", "md"]] as const) {
       const file = path.join(root, area, `${vendorId}.${extension}`);
-      result[path.relative(root, file)] = sha256(await readFile(file));
+      if (await pathExists(file)) result[path.relative(root, file)] = sha256(await readFile(file));
     }
   }
   return result;

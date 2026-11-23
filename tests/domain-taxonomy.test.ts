@@ -18,13 +18,13 @@ void test("ANZSRC 2020 snapshot preserves the official hierarchy and attribution
   assert.equal(snapshot.license, "CC-BY-4.0");
 });
 
-void test("internal catalog contains every Group and five tools while public catalog is non-empty", async () => {
+void test("internal catalog contains every Group and six tools while public catalog is non-empty", async () => {
   const snapshot = await loadAnzsrcSnapshot(SNAPSHOT_PATH);
   const registry = await loadPluginRegistry();
   const discipline = registry.registry.domains.filter((domain) => domain.domain_type === "discipline");
   const tools = registry.registry.domains.filter((domain) => domain.domain_type === "tool");
   assert.equal(discipline.length, 213);
-  assert.equal(tools.length, 5);
+  assert.equal(tools.length, 6);
   assert.deepEqual(new Set(discipline.map((domain) => domain.anzsrc_group_code)), new Set(snapshot.groups.map((group) => group.code)));
   for (const group of snapshot.groups) {
     const domain = registry.domains.get(anzsrcGroupDomainId(group.title));
@@ -33,7 +33,7 @@ void test("internal catalog contains every Group and five tools while public cat
   }
   const catalog = JSON.parse(await readFile(path.resolve("src/plugins/domain-catalog.json"), "utf8")) as { domains: Array<{ skills: string[] }> };
   assert.equal(availableDomains(registry).length, catalog.domains.filter((domain) => domain.skills.length > 0).length);
-  assert.equal(tools.filter((domain) => domain.skills.length > 0).length, 5);
+  assert.equal(tools.filter((domain) => domain.skills.length > 0).length, 6);
 });
 
 void test("all Field-audited vendor records carry valid metadata independent of membership", async () => {

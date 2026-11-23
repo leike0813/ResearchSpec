@@ -1,0 +1,10 @@
+{
+  "vendor_id": "software-copyright-materials-skill",
+  "skill_id": "software-copyright-materials",
+  "repository": "https://github.com/suling-fun/software-copyright-materials-skill",
+  "release": "v4.4.0",
+  "revision": "6c9e6e72d8afce7aaccc9831ccd645a6ae2ccb16",
+  "tree": "d0b48fba5f30b32224ad77a0d409de69fadb3882",
+  "license": "MIT",
+  "review": "audits/software-copyright-materials/catalog.json"
+}

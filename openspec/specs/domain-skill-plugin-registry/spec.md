@@ -26,7 +26,7 @@ Every vendor Skill SHALL declare a dependency list whose targets are globally re
 - **THEN** the resolver SHALL include the required Skill and its transitive dependencies exactly once
 
 ### Requirement: Stable Overlapping Domain Catalog
-ResearchSpec SHALL provide one source-neutral catalog containing all 213 ANZSRC Group domains and five ResearchSpec tool domains whose reviewed membership lists may be empty or overlap without duplicating Skill assets.
+ResearchSpec SHALL provide one source-neutral catalog containing all 213 ANZSRC Group domains and six ResearchSpec tool domains whose reviewed membership lists may be empty or overlap without duplicating Skill assets.
 
 #### Scenario: ToolUniverse domain membership is assembled
 - **WHEN** the audited ToolUniverse bundle and domain catalog are assembled

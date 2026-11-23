@@ -17,6 +17,7 @@ import {
   type CapabilityGraphDiagnostic,
 } from "../core/contracts/capability-graph.js";
 import type { Diagnostic } from "../core/validation/types.js";
+import { OPTIONAL_PATENT_CAPABILITY_IDS } from "../graph-profiles/intellectual-property.js";
 
 const NonEmptySchema = z.string().trim().min(1);
 const HexSha256Schema = z.string().regex(/^[0-9a-f]{64}$/, "manifest hash must be a lowercase SHA-256 hex string");
@@ -85,6 +86,7 @@ export const CAPABILITY_ROOT = path.join(PACKAGE_ROOT, "skills/capabilities");
 export async function loadCapabilityRegistry(
   capabilityRoot = CAPABILITY_ROOT,
   options: CapabilityRegistryResolutionOptions = {},
+  excludedIds?: ReadonlySet<string>,
 ): Promise<LoadedCapabilityRegistry> {
   const registryPath = path.join(capabilityRoot, CAPABILITY_REGISTRY_FILENAME);
   let raw: unknown;
@@ -93,7 +95,11 @@ export async function loadCapabilityRegistry(
   } catch (error) {
     throw new CapabilityRegistryError([fatal("capability_registry_unreadable", `Cannot read capability registry: ${error instanceof Error ? error.message : String(error)}`, registryPath)]);
   }
-  return validateCapabilityRegistry(raw, capabilityRoot, registryPath, options);
+  return validateCapabilityRegistry(raw, capabilityRoot, registryPath, options, excludedIds);
+}
+
+export function loadBaseCapabilityRegistry(capabilityRoot = CAPABILITY_ROOT): Promise<LoadedCapabilityRegistry> {
+  return loadCapabilityRegistry(capabilityRoot, {}, OPTIONAL_PATENT_CAPABILITY_IDS);
 }
 
 export async function validateCapabilityRegistry(
@@ -101,13 +107,17 @@ export async function validateCapabilityRegistry(
   capabilityRoot: string,
   registryPath = path.join(capabilityRoot, CAPABILITY_REGISTRY_FILENAME),
   options: CapabilityRegistryResolutionOptions = {},
+  excludedIds?: ReadonlySet<string>,
 ): Promise<LoadedCapabilityRegistry> {
   const parsed = CapabilityRegistrySchema.safeParse(raw);
   if (!parsed.success) {
     throw new CapabilityRegistryError(parsed.error.issues.map((issue) => fatal("capability_registry_invalid", `Invalid capability registry at ${issue.path.join(".") || "root"}: ${issue.message}`, registryPath, issue)));
   }
 
-  const registry = parsed.data;
+  const registry = excludedIds === undefined ? parsed.data : {
+    ...parsed.data,
+    capabilities: parsed.data.capabilities.filter((entry) => !excludedIds.has(entry.capability_id)),
+  };
   const errors: Diagnostic[] = [];
   const warnings: Diagnostic[] = [];
   uniqueIds(registry.capabilities.map((entry) => entry.capability_id), "capability", errors, registryPath);

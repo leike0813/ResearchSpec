@@ -14,7 +14,8 @@ import {
   startGraphChildRun,
   submitGraphNode,
 } from "../../core/runtime/graph-run.js";
-import { loadGraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
+import { loadGraphWorkspaceIndex, type GraphWorkspaceIndex } from "../../core/runtime/graph-workspace-index.js";
+import { INTELLECTUAL_PROPERTY_DOMAIN_ID, OPTIONAL_PATENT_PROFILE_IDS } from "../../graph-profiles/intellectual-property.js";
 import { buildGraphRunSummary, type GraphRunSummary } from "../../core/runtime/graph-recovery.js";
 import { requireGraphWorkspace } from "../../core/workspace/graph-discover.js";
 import { validateGraphAgainstCapabilityRegistry } from "../../capabilities/registry.js";
@@ -78,6 +79,19 @@ function requireActor(actor: string | undefined): string {
   return trimmed;
 }
 
+function requiresPatentDomain(index: GraphWorkspaceIndex, profileId: string): boolean {
+  return OPTIONAL_PATENT_PROFILE_IDS.has(profileId)
+    && !index.config.plugins.selected.includes(INTELLECTUAL_PROPERTY_DOMAIN_ID);
+}
+
+function requireProfileDomain(index: GraphWorkspaceIndex, profileId: string | undefined): void {
+  if (profileId !== undefined && requiresPatentDomain(index, profileId)) {
+    throw new CliError("profile_domain_selection_required", `Profile ${profileId} requires the ${INTELLECTUAL_PROPERTY_DOMAIN_ID} domain.`, 1,
+      "Preview the domain installation and request explicit consent before proceeding.",
+      { profile_id: profileId, eligible_domains: [INTELLECTUAL_PROPERTY_DOMAIN_ID] });
+  }
+}
+
 export async function handleGraphStatus(context: CommandContext): Promise<CommandResult> {
   const workspace = await graphWorkspace(context);
   const index = await loadGraphWorkspaceIndex(workspace);
@@ -87,7 +101,7 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
   const pendingGateItems: Array<Record<string, unknown>> = [];
   const pendingDecisionItems: Array<Record<string, unknown>> = [];
   const nodesByRun: Record<string, Array<Record<string, unknown>>> = {};
-  const runSummaries: GraphRunSummary[] = [];
+  const runSummaries: (GraphRunSummary & { required_plugin_domains?: string[] })[] = [];
   const childRuns = graphChildRunSnapshots(index);
   const registry = index.runs.length > 0 ? await loadWorkspaceCapabilityRegistry(index) : undefined;
   for (const record of index.runs) {
@@ -103,7 +117,9 @@ export async function handleGraphStatus(context: CommandContext): Promise<Comman
     const frontier = evaluateGraphFrontier(record.run, record.graph, nodes, childRuns,
       registry && record.handoff ? { registry, handoff: record.handoff.frontmatter } : undefined);
     const summary = buildGraphRunSummary(record, frontier);
-    if (summary?.unfinished) runSummaries.push(summary);
+    if (summary?.unfinished) runSummaries.push(requiresPatentDomain(index, record.graph.profile_id)
+      ? { ...summary, required_plugin_domains: [INTELLECTUAL_PROPERTY_DOMAIN_ID] }
+      : summary);
     for (const item of frontier.eligible_nodes) frontierItems.push({ selector: item.selector, run_id: record.run.run_id, node_id: item.node_id, ...(item.round === undefined ? {} : { round: item.round }) });
     for (const item of frontier.pending_subgraph_starts) childStartItems.push({ selector: item.selector, run_id: record.run.run_id, node_id: item.node_id, ...(item.round === undefined ? {} : { round: item.round }) });
     for (const selector of frontier.pending_gates) pendingGateItems.push({ selector, run_id: record.run.run_id });
@@ -203,6 +219,7 @@ export async function handleGraphInstructions(selector: string, context: Command
   }
   if (selector.startsWith("profile:")) {
     const profileId = selector.slice("profile:".length);
+    requireProfileDomain(index, profileId);
     const profile = index.profiles.get(profileId);
     const source = index.profileFiles.get(profileId);
     if (!profile || !source) throw new CliError("profile_not_found", `Graph profile not found: ${profileId}`, 1);
@@ -302,6 +319,7 @@ export async function handleGraphInstructions(selector: string, context: Command
       pending_gates: frontier.pending_gates,
       pending_decisions: frontier.pending_decisions,
       blockers: frontier.blockers,
+      ...(requiresPatentDomain(index, record.graph.profile_id) ? { required_plugin_domains: [INTELLECTUAL_PROPERTY_DOMAIN_ID] } : {}),
       summary: buildGraphRunSummary(record, frontier),
       completion_ready: frontier.completion_ready,
       ...(reviewWorkspace === undefined ? {} : { review_workspace: reviewWorkspace }),
@@ -314,6 +332,7 @@ export async function handleGraphInstructions(selector: string, context: Command
     const round = nodeMatch[3] === undefined ? undefined : Number(nodeMatch[3]);
     const record = index.runs.find((item) => item.run?.run_id === runId);
     if (!record?.run || !record.graph) throw new CliError("run_not_found", `Run not found: ${runId}`, 1);
+    requireProfileDomain(index, record.graph.profile_id);
     const definition = record.graph.nodes.find((item) => item.node_id === nodeId);
     if (!definition) throw new CliError("node_not_found", `Node not found: ${nodeId}`, 1);
     const nodes = record.nodeEntries.flatMap((entry) => entry.node ? [entry.node] : []);
@@ -448,6 +467,7 @@ export async function handleGraphStart(options: GraphStartOptions, context: Comm
   const index = await loadGraphWorkspaceIndex(workspace);
   const nodeMatch = /^node:([^/]+)\/([^@]+)(?:@(\d+))?$/.exec(options.selector);
   if (nodeMatch) {
+    requireProfileDomain(index, index.runs.find((record) => record.run?.run_id === nodeMatch[1])?.graph?.profile_id);
     if (options.confirmedBy) throw new CliError("child_start_options_invalid", "Child-run start inherits parent authorization and does not accept --confirmed-by.", 2);
     let command: unknown;
     if (options.input) {
@@ -469,6 +489,7 @@ export async function handleGraphStart(options: GraphStartOptions, context: Comm
     } catch (error) { throw graphControlCliError(error); }
   }
   const profileId = options.selector.startsWith("profile:") ? options.selector.slice("profile:".length) : options.selector;
+  requireProfileDomain(index, profileId);
   if (!options.input) throw new CliError("input_required", "Root run start requires --input.", 2);
   if (!options.confirmedBy?.trim()) throw new CliError("confirmation_missing", "Root run start requires --confirmed-by.", 2);
   let command: unknown;
@@ -524,6 +545,7 @@ export async function handleGraphAdvance(selector: string, options: GraphAdvance
   const runId = nodeMatch[1] ?? "";
   const nodeId = nodeMatch[2] ?? "";
   const round = nodeMatch[3] === undefined ? undefined : Number(nodeMatch[3]);
+  requireProfileDomain(index, index.runs.find((record) => record.run?.run_id === runId)?.graph?.profile_id);
   let payload: unknown;
   try { payload = parseYaml(await readFile(path.resolve(context.cwd, options.input), "utf8")); }
   catch (error) { throw new CliError("advance_input_unreadable", `Cannot read Advance input: ${error instanceof Error ? error.message : String(error)}`, 2); }
@@ -548,8 +570,11 @@ export async function handleGraphCheck(strict: boolean, context: CommandContext,
       ...(target === "runs" ? [] : [...index.profiles.entries()].map(([id, graph]) => ({ graph, path: index.profileFiles.get(id)?.absolutePath }))),
       ...(target === "profiles" ? [] : index.runs.flatMap((run) => run.graph ? [{ graph: run.graph, path: run.graphPath }] : [])),
     ];
-    for (const entry of graphs) for (const issue of validateGraphAgainstCapabilityRegistry(registry, entry.graph)) {
-      diagnostics.push({ severity: "error", blocking: true, code: issue.code ?? "profile_capability_invalid", message: issue.message, path: entry.path, details: issue });
+    for (const entry of graphs) {
+      if (requiresPatentDomain(index, entry.graph.profile_id)) continue;
+      for (const issue of validateGraphAgainstCapabilityRegistry(registry, entry.graph)) {
+        diagnostics.push({ severity: "error", blocking: true, code: issue.code ?? "profile_capability_invalid", message: issue.message, path: entry.path, details: issue });
+      }
     }
   }
   if (target === "all" || target === "plugins") diagnostics.push(...await pluginWorkspaceDiagnostics(index, target === "plugins"));

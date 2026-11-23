@@ -1,0 +1,85 @@
+schema_version: "1"
+capability_id: plugin-software-copyright-materials
+title: Software Copyright Registration Materials
+description: Prepare and verify Chinese R11 software copyright registration
+  materials and guide applicant-controlled filing. Use when the user requests
+  software copyright registration documents or R11 filing assistance
+  (软著、软件著作权登记).
+maturity: operational
+class: analysis
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: task_request
+    schema_ref: plugin-task.v1
+    required: true
+    source_policy: handoff
+outputs:
+  - role: registration_materials
+    schema_ref: plugin-result.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - task_request
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: materials
+    path: scripts/materials.py
+    content_hash: bcb3da942ddf8fed4d6e379ae84347185d105a0da4786dc8c6af5c398876d079
+    license: MIT
+  - knowledge_id: filing
+    path: references/filing.md
+    content_hash: bda9f2c6e753b3517a972890185439bcbf5adc38ddfce960c9333b0f8337073e
+    license: MIT
+  - knowledge_id: NOTICE
+    path: NOTICE
+    content_hash: a520d38f550c4a96c820c497893a79896630b64acff0db0929076462a46c4d28
+    license: MIT
+  - knowledge_id: LICENSE
+    path: LICENSE
+    content_hash: e949ee7230994b92931cc265399d963ed5498e0a446f3e0cd4eb6952f900f6da
+    license: MIT
+  - knowledge_id: build-docx-from-md
+    path: scripts/build_docx_from_md.py
+    content_hash: 655bbbf45ec06fa44bb3be35848bbf3d60b4c1b26cbb755f272cde158ad4484c
+    license: MIT
+  - knowledge_id: common
+    path: scripts/common.py
+    content_hash: 6c2dbcfdbb7987406e784e16fb07e36e4b9bfbdb281eced64cd797fcae4086f8
+    license: MIT
+  - knowledge_id: generate-application-info
+    path: scripts/generate_application_info.py
+    content_hash: 16e5bf3571839c35a506779bbbc66d9838de037196a5419d3595e75c93c09b5c
+    license: MIT
+  - knowledge_id: render-code-pdf
+    path: scripts/render_code_pdf.py
+    content_hash: e9557dfaa95ee8385eb8d1eefc3171c6bf7b3f6355184e471000c7e643439764
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  upstream_sources:
+    - path: skills/plugins/vendors/software-copyright-materials-skill/software-copyright-materials/SKILL.md
+      sha256: 4450aefd8dfc07fe8ab22352fcc0897642b6515b20cf824bb1a9fb09609adf0b
+    - path: skills/plugins/vendors/software-copyright-materials-skill/software-copyright-materials/scripts/materials.py
+      sha256: bcb3da942ddf8fed4d6e379ae84347185d105a0da4786dc8c6af5c398876d079
+    - path: skills/plugins/vendors/software-copyright-materials-skill/software-copyright-materials/references/filing.md
+      sha256: bda9f2c6e753b3517a972890185439bcbf5adc38ddfce960c9333b0f8337073e
+    - path: skills/plugins/vendors/software-copyright-materials-skill/software-copyright-materials/NOTICE
+      sha256: a520d38f550c4a96c820c497893a79896630b64acff0db0929076462a46c4d28
+    - path: skills/plugins/vendors/software-copyright-materials-skill/software-copyright-materials/LICENSE
+      sha256: e949ee7230994b92931cc265399d963ed5498e0a446f3e0cd4eb6952f900f6da
+    - path: skills/plugins/vendors/software-copyright-materials-skill/software-copyright-materials/scripts/build_docx_from_md.py
+      sha256: 655bbbf45ec06fa44bb3be35848bbf3d60b4c1b26cbb755f272cde158ad4484c
+    - path: skills/plugins/vendors/software-copyright-materials-skill/software-copyright-materials/scripts/common.py
+      sha256: 6c2dbcfdbb7987406e784e16fb07e36e4b9bfbdb281eced64cd797fcae4086f8
+    - path: skills/plugins/vendors/software-copyright-materials-skill/software-copyright-materials/scripts/generate_application_info.py
+      sha256: 16e5bf3571839c35a506779bbbc66d9838de037196a5419d3595e75c93c09b5c
+    - path: skills/plugins/vendors/software-copyright-materials-skill/software-copyright-materials/scripts/render_code_pdf.py
+      sha256: e9557dfaa95ee8385eb8d1eefc3171c6bf7b3f6355184e471000c7e643439764
+license: MIT

@@ -36,7 +36,7 @@ pnpm tooluniverse:check
 pnpm tooluniverse:idempotence
 ```
 
-`convert` refuses unexplained generated drift unless `--force` is used after review, then refreshes the isolated bundle and invokes central assembly. It stages against all published vendors and commits only ToolUniverse-owned output plus the registry. `check` validates the 130-Skill vendor output and assembled 218-domain registry without owning the evolving public-domain count. `idempotence` compares the isolated outputs and combined registry. None of these commands executes upstream Skill scripts or installs their dependencies.
+`convert` refuses unexplained generated drift unless `--force` is used after review, then refreshes the isolated bundle and invokes central assembly. It stages against all published vendors and commits only ToolUniverse-owned output plus the registry. `check` validates the 130-Skill vendor output and the assembled domain registry. `idempotence` compares the isolated outputs and combined registry. None of these commands executes upstream Skill scripts or installs their dependencies.
 
 When updating ToolUniverse, first pin the new submodule revision and open a new audit. Reconcile every inventory, resource, frontmatter, dependency, safety, license, Field mapping, and domain-membership change before updating converter inputs.
 

@@ -22,6 +22,7 @@ let expectedBaseSkills = [];
 let expectedAdapterSkills = [];
 let expectedSkills = [];
 let expectedProfiles = [];
+let expectedOptionalProfiles = [];
 let expectedProjectToolIds = [];
 let expectedProjectSkillWriterIds = [];
 let expectedCommandToolIds = [];
@@ -135,6 +136,9 @@ try {
     const profile = parseYaml(await readFile(path.join(currentWorkspace, "profiles", `${profileId}.yaml`), "utf8"));
     assert(profile?.schema_version === "2" && profile?.profile_id === profileId, `Installed init did not project current graph profile: ${profileId}`);
   }
+  for (const profileId of expectedOptionalProfiles) {
+    assert(!await pathExists(path.join(currentWorkspace, "profiles", `${profileId}.yaml`)), `Installed init projected optional profile: ${profileId}`);
+  }
   assert(equal((await directoryNames(currentWorkspace)).sort(), ["changes", "hooks", "profiles", "runs", "specs"]), "Installed current workspace directory set is invalid.");
   assert(currentConfig?.agent_tools?.paper_humanizer_guard === "on", "Installed writing guard default was not persisted.");
   const guardRoot = path.join(currentWorkspace, "hooks/paper-humanizer");
@@ -177,6 +181,11 @@ try {
   run(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
   await verifyInstalledMinimalJourney(bin, projectDirectory, environment);
   await verifyInstalledAcademicPipelineJourney(bin, projectDirectory, environment);
+  const ipPreview = JSON.parse(run(bin, ["plugin", "install", "intellectual-property-materials", "--dry-run", "--yes", "--json"], projectDirectory, environment).stdout);
+  assert(equal(ipPreview.data.resolved_profile_ids.sort(), [...expectedOptionalProfiles, "plugin-software-copyright-materials"].sort()), "Packaged installation preview has an incomplete materials domain.");
+  run(bin, ["instructions", "profile:patent-informed-paper", "--json"], projectDirectory, environment);
+  run(bin, ["plugin", "install", "intellectual-property-materials", "--yes", "--json"], projectDirectory, environment);
+  run(bin, ["instructions", "profile:research-to-patent", "--json"], projectDirectory, environment);
 
   run(bin, ["init", allToolsProjectDirectory, "--tools", expectedProjectToolIds.join(","), "--delivery", "both", "--json"], installDirectory, environment);
   await verifyAllProjectToolDelivery(allToolsProjectDirectory, handbookDigest);
@@ -211,7 +220,7 @@ async function verifyTarballFiles(files) {
     "hooks/paper-humanizer/guard.md", "hooks/paper-humanizer/inject.cjs",
     "hooks/paper-humanizer/LICENSE",
     "LICENSES/MIT.txt", "LICENSES/CC-BY-NC-4.0.txt", "LICENSES/CC-BY-SA-4.0.txt", "LICENSES/Apache-2.0.txt", "LICENSES/AGPL-3.0.txt",
-    "docs/README.md", "docs/user/README.md", "docs/user/usage-model.md", "docs/user/cli-handbook.md", "docs/user/literature-adapters.md", "docs/user/review-workspace.md",
+    "docs/README.md", "docs/user/README.md", "docs/user/usage-model.md", "docs/user/cli-handbook.md", "docs/user/literature-adapters.md", "docs/user/review-workspace.md", "docs/user/software-copyright-materials.md",
     "docs/developer/README.md", "docs/developer/architecture.md", "docs/developer/cli-interface.md", "docs/developer/domain-plugins.md", "docs/developer/domain-taxonomy.md", "docs/developer/manuscript-annotations.md",
     "docs/developer/runtime/README.md", "docs/developer/runtime/core_runtime_model.md", "docs/developer/runtime/runtime_protocols.md",
     "docs/developer/runtime/deep_research_workflow.md", "docs/developer/runtime/academic_paper_workflow.md", "docs/developer/runtime/academic_paper_reviewer_workflow.md", "docs/developer/runtime/academic_pipeline_workflow.md",
@@ -272,13 +281,26 @@ async function verifyTarballFiles(files) {
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/SKILL.md",
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/LICENSE",
     "skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/NOTICE.md",
+    "skills/plugins/vendor-bundles/software-copyright-materials-skill.json",
+    "skills/plugins/extensions/capabilities/plugin-software-copyright-materials/manifest.yaml",
+    "skills/plugins/extensions/profiles/plugin-software-copyright-materials.yaml",
     "skills/arsu/researchspec-contracts.json", "artifacts/release/mvp-release-checklist.md", "review-workspace/index.html", "review-workspace/v1.html", "review-workspace/revision-master.html", "dist/src/cli/bin.js", "dist/src/annotation-intake.js", "dist/src/annotation-intake.d.ts", "dist/src/review-workspace.js", "dist/src/review-workspace.d.ts", "dist/src/review-workspace/session-cli.js",
   ];
+  for (const root of [
+    "skills/plugins/vendors/software-copyright-materials-skill/software-copyright-materials",
+    "skills/plugins/extensions/capabilities/plugin-software-copyright-materials",
+  ]) {
+    for (const file of ["SKILL.md", "LICENSE", "NOTICE", "DERIVATION.json", "references/filing.md",
+      "scripts/materials.py", "scripts/common.py", "scripts/generate_application_info.py",
+      "scripts/build_docx_from_md.py", "scripts/render_code_pdf.py"]) {
+      required.push(`${root}/${file}`);
+    }
+  }
   for (const skill of expectedArsuSkills) required.push(`skills/arsu/${skill}/SKILL.md`);
   for (const skill of expectedCapabilitySkills) {
     required.push(`skills/capabilities/${skill}/SKILL.md`, `skills/capabilities/${skill}/manifest.yaml`);
   }
-  for (const profile of expectedProfiles) required.push(`skills/arsu/profiles/${profile}.yaml`);
+  for (const profile of [...expectedProfiles, ...expectedOptionalProfiles]) required.push(`skills/arsu/profiles/${profile}.yaml`);
   for (const skill of expectedArsuSkills) {
     required.push(`skills/arsu/${skill}/SKILL.md`, `skills/arsu/${skill}/LICENSE`, `skills/arsu/${skill}/NOTICE.md`);
   }
@@ -483,6 +505,7 @@ async function loadPackagedSurface(root) {
   const toolModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "adapters", "tools.js")).href}?surface=${Date.now().toString()}`);
   const deliveryModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "adapters", "delivery.js")).href}?surface=${Date.now().toString()}`);
   const pluginModule = await import(`${pathToFileURL(path.join(root, "dist", "src", "plugins", "registry.js")).href}?surface=${Date.now().toString()}`);
+  const { OPTIONAL_PATENT_PROFILE_IDS } = await import(pathToFileURL(path.join(root, "dist/src/graph-profiles/intellectual-property.js")).href);
   const plugins = await pluginModule.loadPluginRegistry(path.join(root, "skills", "plugins"), false);
   const domains = uniqueSorted(pluginModule.availableDomains(plugins).map((item) => item.domain_id), "available plugin domains");
   const arsu = uniqueSorted(arsuManifest.generated_groups, "ARSU conversion manifest generated_groups");
@@ -497,7 +520,8 @@ async function loadPackagedSurface(root) {
     arsu,
     companions,
     capabilities,
-    profiles,
+    profiles: profiles.filter((id) => !OPTIONAL_PATENT_PROFILE_IDS.has(id)),
+    optionalProfiles: profiles.filter((id) => OPTIONAL_PATENT_PROFILE_IDS.has(id)),
     adapters,
     projectTools,
     projectSkillWriters,
@@ -515,6 +539,7 @@ function applyExpectedSurface(surface) {
   expectedAdapterSkills = surface.adapters;
   expectedSkills = uniqueSorted([...surface.base, ...surface.adapters], "complete selected Skill surface");
   expectedProfiles = surface.profiles;
+  expectedOptionalProfiles = surface.optionalProfiles;
   expectedProjectToolIds = surface.projectTools;
   expectedProjectSkillWriterIds = surface.projectSkillWriters;
   expectedCommandToolIds = surface.commandTools;

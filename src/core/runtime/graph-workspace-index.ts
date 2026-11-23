@@ -4,6 +4,7 @@ import { parse as parseYaml } from "yaml";
 
 import { ToolInstallationManifestSchema, type ToolInstallationManifest } from "../../adapters/installations.js";
 import { validateManagedTarget } from "../../adapters/managed-target.js";
+import { INTELLECTUAL_PROPERTY_DOMAIN_ID, OPTIONAL_PATENT_PROFILE_IDS } from "../../graph-profiles/intellectual-property.js";
 import { CapabilityGraphProfileSchema, type CapabilityGraphProfile } from "../contracts/capability-graph.js";
 import {
   ClaimsSpecV2Schema,
@@ -165,7 +166,8 @@ export async function loadGraphWorkspaceIndex(workspace: string): Promise<GraphW
   }
 
   const profileFiles = new Map<string, GraphWorkspaceFile>();
-  const profiles = await scanGraphProfiles(workspace, files, diagnostics, profileFiles);
+  const excludedProfiles = config.plugins.selected.includes(INTELLECTUAL_PROPERTY_DOMAIN_ID) ? undefined : OPTIONAL_PATENT_PROFILE_IDS;
+  const profiles = await scanGraphProfiles(workspace, files, diagnostics, profileFiles, excludedProfiles);
   validateProfileSubgraphs(profiles, profileFiles, diagnostics);
   const runEntries = await scanRuns(workspace, files, profiles, profileFiles, diagnostics);
   const runs = runEntries.filter((item) => item.run !== undefined && item.graph !== undefined && item.handoff !== undefined);
@@ -201,6 +203,7 @@ async function scanGraphProfiles(
   files: Map<string, GraphWorkspaceFile>,
   diagnostics: Diagnostic[],
   profileFiles: Map<string, GraphWorkspaceFile>,
+  excludedProfiles?: ReadonlySet<string>,
 ): Promise<Map<string, CapabilityGraphProfile>> {
   const root = path.join(workspace, "profiles");
   const profiles = new Map<string, CapabilityGraphProfile>();
@@ -216,8 +219,10 @@ async function scanGraphProfiles(
     const loaded = await readManagedFile(workspace, relativePath, diagnostics);
     if (!loaded) continue;
     files.set(relativePath, loaded);
+    if (excludedProfiles?.has(entry.name.slice(0, -".yaml".length))) continue;
     try {
       const parsed = CapabilityGraphProfileSchema.parse(parseYaml(loaded.text));
+      if (excludedProfiles?.has(parsed.profile_id)) continue;
       if (profiles.has(parsed.profile_id)) diagnostics.push(problem("profile_id_duplicate", `Duplicate graph profile ID: ${parsed.profile_id}`, loaded.absolutePath));
       profiles.set(parsed.profile_id, parsed);
       profileFiles.set(parsed.profile_id, loaded);

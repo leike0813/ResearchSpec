@@ -11,12 +11,7 @@ import {
   VendorDefinitionSchema,
 } from "./registry.js";
 import { anzsrcGroupDomainId, loadAnzsrcSnapshot } from "./taxonomy.js";
-
-const DomainCatalogSchema = z.strictObject({
-  schema_version: z.literal("1"),
-  taxonomy: DomainTaxonomySchema,
-  domains: z.array(DomainDefinitionSchema).length(218),
-});
+import { INTELLECTUAL_PROPERTY_DOMAIN_ID } from "../graph-profiles/intellectual-property.js";
 
 const VendorBundleSchema = z.strictObject({
   schema_version: z.literal("1"),
@@ -26,10 +21,20 @@ const VendorBundleSchema = z.strictObject({
 const TOOL_DOMAIN_IDS = new Set([
   "computational-modeling-and-simulation",
   "experimental-design-and-data-analysis",
+  INTELLECTUAL_PROPERTY_DOMAIN_ID,
   "laboratory-automation-and-informatics",
   "research-computing-infrastructure",
   "scientific-visualization-and-communication",
 ]);
+
+const ANZSRC_GROUP_DOMAIN_COUNT = 213;
+export const INTERNAL_DOMAIN_COUNT = ANZSRC_GROUP_DOMAIN_COUNT + TOOL_DOMAIN_IDS.size;
+
+const DomainCatalogSchema = z.strictObject({
+  schema_version: z.literal("1"),
+  taxonomy: DomainTaxonomySchema,
+  domains: z.array(DomainDefinitionSchema).length(INTERNAL_DOMAIN_COUNT),
+});
 
 export interface AssemblePluginRegistryOptions {
   repoRoot: string;
@@ -83,11 +88,11 @@ function validateCatalog(catalog: z.infer<typeof DomainCatalogSchema>, groups: r
       toolIds.add(domain.domain_id);
     }
   }
-  if (disciplineCodes.size !== 213 || [...expectedGroups.keys()].some((code) => !disciplineCodes.has(code))) {
+  if (disciplineCodes.size !== ANZSRC_GROUP_DOMAIN_COUNT || [...expectedGroups.keys()].some((code) => !disciplineCodes.has(code))) {
     throw new Error("Domain catalog must contain every ANZSRC Group exactly once.");
   }
   if (toolIds.size !== TOOL_DOMAIN_IDS.size || [...TOOL_DOMAIN_IDS].some((id) => !toolIds.has(id))) {
-    throw new Error("Domain catalog must contain exactly the five ResearchSpec tool domains.");
+    throw new Error(`Domain catalog must contain exactly ${String(TOOL_DOMAIN_IDS.size)} ResearchSpec tool domains.`);
   }
 }
 

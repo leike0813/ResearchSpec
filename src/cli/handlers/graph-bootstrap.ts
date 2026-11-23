@@ -58,7 +58,13 @@ async function applyGraphWorkspaceProjection(input: {
   const projectRoot = path.dirname(input.workspace);
   const existingInstallations = input.index?.manifest.installations ?? [];
   const priorTools = input.index?.config.agent_tools.selected ?? [];
-  const pluginRegistry = await loadPluginRegistry();
+  const existingPluginResolutions = input.index?.manifest.plugin_resolutions ?? [];
+  const hasPluginOwners = input.selectedPlugins.length > 0
+    || existingPluginResolutions.length > 0
+    || existingInstallations.some((installation) => installation.source.kind === "domain-skill"
+      || installation.source.kind === "plugin-capability"
+      || installation.source.kind === "plugin-profile");
+  const pluginRegistry = hasPluginOwners ? await loadPluginRegistry() : undefined;
   const deliveryPlan = await planWorkspaceDelivery({
     projectRoot,
     workspaceRoot: input.workspace,
@@ -69,9 +75,9 @@ async function applyGraphWorkspaceProjection(input: {
     selectedLiteratureAdapterIds: input.adapters,
     existingInstallations,
     force: input.context.force,
-    pluginRegistry,
+    ...(pluginRegistry === undefined ? {} : { pluginRegistry }),
     selectedPluginIds: input.selectedPlugins,
-    existingPluginResolutions: input.index?.manifest.plugin_resolutions ?? [],
+    existingPluginResolutions,
     preserveSkillIds: [],
     operation: input.index ? "update" : "init",
     paperHumanizerGuard: input.paperHumanizerGuard,

@@ -2980,6 +2980,54 @@
       ]
     },
     {
+      "vendor_id": "software-copyright-materials-skill",
+      "name": "Software Copyright Materials Skill",
+      "repository_url": "https://github.com/suling-fun/software-copyright-materials-skill",
+      "release": "v4.4.0",
+      "revision": "6c9e6e72d8afce7aaccc9831ccd645a6ae2ccb16",
+      "license": "MIT",
+      "converter_version": "1",
+      "skills": [
+        {
+          "skill_id": "software-copyright-materials",
+          "license": "MIT",
+          "dependencies": [],
+          "upstreams": [
+            {
+              "source_paths": [
+                "LICENSE",
+                "SKILL.md",
+                "references/application_fields.md",
+                "references/business_understanding_rules.md",
+                "references/ccopyright_submission_workflow.md",
+                "references/code_selection_rules.md",
+                "references/copyright_material_rules.md",
+                "references/manual_structure.md",
+                "references/output_directory_rules.md",
+                "references/verification_checklist.md",
+                "scripts/analyze_project.py",
+                "scripts/build_docx_from_md.py",
+                "scripts/capture_screenshots.py",
+                "scripts/check_environment.py",
+                "scripts/common.py",
+                "scripts/confirm_stage.py",
+                "scripts/convert_to_pdf.py",
+                "scripts/extract_code_material.py",
+                "scripts/generate_application_info.py",
+                "scripts/generate_business_context.py",
+                "scripts/generate_manual_draft.py",
+                "scripts/process_operation_video.py",
+                "scripts/propose_code_selection.py",
+                "scripts/render_code_pdf.py",
+                "scripts/verify_materials.py"
+              ],
+              "adaptation": "curated"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "vendor_id": "tooluniverse",
       "name": "ToolUniverse",
       "repository_url": "https://github.com/mims-harvard/ToolUniverse",
@@ -7193,6 +7241,16 @@
         "scientific-agent-skills-parallel-web",
         "scientific-agent-skills-pytorch-lightning",
         "scientific-agent-skills-transformers"
+      ]
+    },
+    {
+      "domain_id": "intellectual-property-materials",
+      "domain_type": "tool",
+      "title": "Intellectual property materials",
+      "description": "Cross-disciplinary preparation, verification, and delivery of intellectual property registration materials.",
+      "version": "0.1.0",
+      "skills": [
+        "software-copyright-materials"
       ]
     }
   ]

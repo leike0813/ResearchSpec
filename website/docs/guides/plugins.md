@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 title: Domain Plugins
-description: Install and manage domain-specific Skill plugins from 218 ANZSRC research fields
+description: Install and manage ResearchSpec discipline and tool domains
 ---
 
 # Domain Plugins
@@ -110,8 +110,13 @@ manifest-hash checks. It does not project the Procedure into the host Skill cata
 
 ResearchSpec uses ANZSRC 2020 Fields of Research (FoR) Groups as the
 classification standard. The internal catalog pre-creates 213 discipline
-domains plus five coarse tool domains. Empty domains remain hidden from
+domains plus six tool domains. Empty domains remain hidden from
 discovery.
+
+Intellectual property materials is available as `intellectual-property-materials`.
+It supplies software copyright registration, patent disclosure and application,
+patent docket, and research-to-patent. Patent intelligence and patent-informed
+paper are available in the base workspace.
 
 At runtime, the navigation Skill may suggest up to three relevant domains.
 Plugin consent is separate from route confirmation, and you always preview

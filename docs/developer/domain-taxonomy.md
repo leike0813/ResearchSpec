@@ -15,31 +15,34 @@
 
 每个 ANZSRC Group 对应一个固定的学科型 domain。`domain_id` 由官方英文 Group title 规范化为 kebab-case；四位 Group code 另存为 `anzsrc_group_code`。domain 的 Skill 列表由 `src/plugins/domain-catalog.json` 显式审校维护，不能从 Field 映射自动生成。
 
-ResearchSpec 另维护五个粗粒度工具型 domain：
+ResearchSpec 另维护六个粗粒度工具型 domain：
 
 - `experimental-design-and-data-analysis` — Cross-disciplinary experimental design, data preparation, measurement evaluation, statistical analysis, evidence synthesis, and quantitative interpretation.
 - `computational-modeling-and-simulation` — Cross-disciplinary construction, execution, and interpretation of computational models and simulations.
 - `scientific-visualization-and-communication` — Cross-disciplinary creation of scientific figures, diagrams, presentations, and other visual research communication.
 - `laboratory-automation-and-informatics` — Cross-disciplinary laboratory automation, instruments, protocols, sample operations, and laboratory information systems.
 - `research-computing-infrastructure` — Cross-disciplinary research computing environments, scalable execution, workflow infrastructure, and data storage operations.
+- `intellectual-property-materials` — Cross-disciplinary preparation, verification, and delivery of intellectual property registration materials.
 
 若 Skill 的核心语义能明确归入 ANZSRC Group（例如 Machine learning、Statistics、Clinical sciences），优先归入学科型 domain。工具域只补充跨学科工作类型。Reference management 不作为工具域。
 
 ## 内部目录与用户可见性
 
-Registry Schema 1 内部固定保存 213 个学科型 domain 和 5 个工具型 domain，共 218 个。只有 `skills` 非空的 domain 才是公开可用项：普通 `plugin list/show/install`、JSON、status available、check 和 Navigate 均隐藏或拒绝空 domain。
+Registry Schema 1 内部固定保存 213 个学科型 domain 和 6 个工具型 domain，共 219 个。只有 `skills` 非空的 domain 才是公开可用项：普通 `plugin list/show/install`、JSON、status available、check 和 Navigate 均隐藏或拒绝空 domain。
 
 若已选 domain 在后续版本中被移除或变空，`plugin list --installed` 与 status 仍将其显示为 unavailable，以保留 manifest resolution snapshot 的安全卸载能力；update 会阻断。该 domain 后续重新获得 Skills 时，会在同一 ID 下恢复可用。
 
-当前 ToolUniverse、Scientific Agent Skills、Materials-Science-Skills-For-LLM、
-FinRobot、HistAgent 与 Education Agent Skills 合计提供 59 个非空 domain。FinRobot 的六个准入 Skills 全部加入
+当前注册的上游合计提供 63 个非空 domain。R11 登记材料加入工具域
+`intellectual-property-materials`，`private-law-and-civil-obligations`（4806）因此保持为空并对用户隐藏。
+同一次安装还启用交底、申请、案卷和研究转专利。扩展 registry 引用已有的专利 Procedure 和 profile，
+域目录的 `skills` 列表记录供应商 Skill。FinRobot 的六个准入 Skills 全部加入
 `banking-finance-and-investment`，其中 statement analysis 与 company
 fundamentals 也加入 `accounting-auditing-and-accountability`。Materials vendor
 的七个准入 Skills 经人工加入 `materials-engineering`、
 `macromolecular-and-materials-chemistry` 与
 `computational-modeling-and-simulation`；GPU、远程服务和 HPC 使用本身不产生
 `research-computing-infrastructure` membership。Scientific Agent Skills 的 56
-个准入 Skills 经人工加入 24 个 ANZSRC Group domain 和全部五个工具域。HistAgent
+个准入 Skills 经人工加入 24 个 ANZSRC Group domain 和全部五个既有工具域。HistAgent
 的三个准入 Skills 全部加入 `historical-studies`；source identification 与 source
 analysis 另加入 `heritage-archive-and-museum-studies`，且不加入任何工具域。其他
 Education Agent Skills 的 136 个准入 Skills 分别加入

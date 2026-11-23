@@ -1,14 +1,14 @@
-import { loadCapabilityRegistry, type LoadedCapabilityRegistry, type RegisteredCapability } from "../capabilities/registry.js";
+import { loadBaseCapabilityRegistry, type LoadedCapabilityRegistry, type RegisteredCapability } from "../capabilities/registry.js";
 import type { GraphWorkspaceIndex } from "../core/runtime/graph-workspace-index.js";
-import { loadPluginExtensionRegistry, resolveDomainExtensions, type LoadedPluginExtensionRegistry } from "./extensions.js";
+import { loadRuntimePluginExtensionRegistry, resolveDomainExtensions, type LoadedPluginExtensionRegistry } from "./extensions.js";
 
 export async function loadWorkspaceCapabilityRegistry(
   index: GraphWorkspaceIndex,
   extensionRegistry?: LoadedPluginExtensionRegistry,
 ): Promise<LoadedCapabilityRegistry> {
-  const base = await loadCapabilityRegistry();
+  const base = await loadBaseCapabilityRegistry();
   if (index.config.plugins.selected.length === 0) return base;
-  const extensions = extensionRegistry ?? await loadPluginExtensionRegistry();
+  const extensions = extensionRegistry ?? await loadRuntimePluginExtensionRegistry();
   const resolved = resolveDomainExtensions(extensions, index.config.plugins.selected);
   const capabilities = new Map<string, RegisteredCapability>(base.capabilities);
 
@@ -39,6 +39,6 @@ export async function loadWorkspaceCapabilityRegistry(
       capabilities: capabilitiesList.map((item) => item.entry),
     },
     capabilities,
-    diagnostics: base.diagnostics,
+    diagnostics: [...base.diagnostics, ...extensions.diagnostics],
   };
 }

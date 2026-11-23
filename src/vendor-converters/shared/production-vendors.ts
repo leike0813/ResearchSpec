@@ -7,6 +7,7 @@ export const PRODUCTION_VENDOR_IDS = [
   "histagent",
   "materials-science-skills-for-llm",
   "scientific-agent-skills",
+  "software-copyright-materials-skill",
   "tooluniverse",
 ] as const;
 

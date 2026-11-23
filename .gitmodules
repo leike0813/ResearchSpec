@@ -26,3 +26,6 @@
 [submodule "vendor/patent-disclosure-skill"]
 	path = vendor/patent-disclosure-skill
 	url = https://github.com/handsomestWei/patent-disclosure-skill.git
+[submodule "vendor/software-copyright-materials-skill"]
+	path = vendor/software-copyright-materials-skill
+	url = https://github.com/suling-fun/software-copyright-materials-skill.git

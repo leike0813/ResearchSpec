@@ -54,8 +54,11 @@ maintenance review never supplies a user's runtime Gate or Decision verdict.
    authored profile, patent ones included, and owns their registry and
    conversion manifest. Change a profile definition, then run the ARSU
    conversion (`pnpm arsu:convert`) before patent acceptance, and read the
-   projection back through `check`. Review generated diff and verify existing
-   unrelated packages remain intact.
+   projection back through `check`. For changes to patent preparation packages
+   or profiles, run `node scripts/generate-software-copyright-materials.mjs`
+   after both projections are current. It refreshes the Intellectual property
+   materials domain's references. Review the generated diff and check the
+   built-in patent-intelligence and patent-informed paper paths.
 5. Verify behavior through existing copied-tree runtime tests and graph tests.
    Exercise ordinary file indexes, Word/Excel/drawing paths, reader extraction,
    selected-vault projection and map inputs as applicable. Use local fixtures

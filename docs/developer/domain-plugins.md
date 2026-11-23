@@ -76,7 +76,9 @@ Validation rejects unsafe paths, duplicate IDs, base-Skill conflicts, unknown or
 
 ## Fixed internal catalog and public availability
 
-The internal catalog pre-creates all 213 ANZSRC Group domains and five ResearchSpec tool domains. Empty domains are valid internally so taxonomy identity does not depend on current vendor coverage. Public availability is derived only from a non-empty reviewed `skills` list.
+The internal catalog pre-creates all 213 ANZSRC Group domains and six ResearchSpec tool domains. Empty domains are valid internally so taxonomy identity does not depend on current vendor coverage. Public availability is derived only from a non-empty reviewed `skills` list.
+
+The Intellectual property materials domain groups R11 and the four patent preparation profiles. Its extension registry entries reference the reviewed patent packages and profiles under `skills/capabilities/` and `skills/arsu/profiles/`.
 
 Normal `plugin list`, direct `show` and `install`, JSON, status availability, checks, and Navigate hide or reject empty domains. A previously selected domain that later becomes empty or disappears remains visible only through installed status as `unavailable`; update blocks, while its saved manifest snapshot permits safe uninstall. Repopulating the same stable ID restores availability.
 

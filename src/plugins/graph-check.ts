@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-import { capabilityIds, loadCapabilityRegistry, validateGraphAgainstCapabilityRegistry } from "../capabilities/registry.js";
+import { capabilityIds, loadBaseCapabilityRegistry, validateGraphAgainstCapabilityRegistry } from "../capabilities/registry.js";
 import type { CapabilityManifest } from "../core/contracts/capability-manifest.js";
 import type { GraphWorkspaceIndex } from "../core/runtime/graph-workspace-index.js";
 import type { Diagnostic } from "../core/validation/types.js";
@@ -41,7 +41,7 @@ export async function pluginWorkspaceDiagnostics(index: GraphWorkspaceIndex, alw
   const baseCapabilityIds = new Set<string>();
   let baseRegistry;
   try {
-    baseRegistry = await loadCapabilityRegistry();
+    baseRegistry = await loadBaseCapabilityRegistry();
     for (const capabilityId of capabilityIds(baseRegistry)) baseCapabilityIds.add(capabilityId);
   } catch (error) {
     diagnostics.push({

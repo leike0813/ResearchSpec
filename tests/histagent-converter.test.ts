@@ -26,7 +26,7 @@ void test("HistAgent generated bundle is the approved complete three-Skill proje
   assert.deepEqual([...loaded.vendors.keys()], [...PRODUCTION_VENDOR_IDS]);
   assert.equal(loaded.vendors.get("histagent")?.skills.length, 3);
   assert.ok(loaded.vendors.get("histagent")?.skills.every((skill) => skill.dependencies.length === 0));
-  assert.equal(loaded.domains.size, 218);
+  assert.equal(loaded.domains.size, 219);
   const domainCatalog = JSON.parse(await readFile(path.resolve("src/plugins/domain-catalog.json"), "utf8")) as { domains: Array<{ skills: string[] }> };
   assert.equal(availableDomains(loaded).length, domainCatalog.domains.filter((domain) => domain.skills.length > 0).length);
   assert.deepEqual(loaded.domains.get("historical-studies")?.skills, [

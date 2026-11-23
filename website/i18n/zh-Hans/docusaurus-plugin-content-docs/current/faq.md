@@ -37,8 +37,8 @@ ResearchSpec 是一个基于文件的框架，用于编排学术论文写作工�
 
 ### 我可以添加自己的技能吗？
 
-ResearchSpec 支持来自 218 个 ANZSRC 研究领域的领域插件。你可以通过
-`researchspec plugin install` 安装预审插件。
+ResearchSpec 的目录包含 213 个 ANZSRC 学科域和 6 个工具域。`researchspec plugin list`
+会列出已提供能力的域，`researchspec plugin install` 可按需安装。
 
 ## 工作流
 

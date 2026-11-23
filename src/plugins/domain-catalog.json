@@ -2502,6 +2502,16 @@
         "scientific-agent-skills-pytorch-lightning",
         "scientific-agent-skills-transformers"
       ]
+    },
+    {
+      "domain_id": "intellectual-property-materials",
+      "domain_type": "tool",
+      "title": "Intellectual property materials",
+      "description": "Cross-disciplinary preparation, verification, and delivery of intellectual property registration materials.",
+      "version": "0.1.0",
+      "skills": [
+        "software-copyright-materials"
+      ]
     }
   ]
 }

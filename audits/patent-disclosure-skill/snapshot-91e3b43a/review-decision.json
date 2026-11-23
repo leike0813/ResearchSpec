@@ -2,7 +2,7 @@
   "schema_version": "1",
   "status": "approved",
   "reviewer": "Codex, ResearchSpec patent capability maintenance review",
-  "reviewed_at": "2026-11-20T13:49:16.522Z",
+  "reviewed_at": "2026-11-23T06:12:15.000Z",
   "businesses": [
     {
       "business": "patent-application",
@@ -70,6 +70,11 @@
       "id": "shared-notice-drift",
       "status": "resolved",
       "summary": "Read the existing ARS attribution change and bound the current notice in the new anchor."
+    },
+    {
+      "id": "intellectual-property-materials-delivery",
+      "status": "resolved",
+      "summary": "CLI fixture verified opt-in discovery, preview, adoption of the original profile ownership, and resumption of the same frozen run. Patent intelligence and the writing composition passed without installation. The reviewed package and profile bytes are identical."
     }
   ],
   "execution_limits": [
@@ -225,7 +230,7 @@
       },
       {
         "path": ".agents/skills/patent-disclosure-skill-maintenance/SKILL.md",
-        "sha256": "f47fdf242ee00869dd45a96721b39880d2ffced875f0f40d94e671add2edc92f"
+        "sha256": "e0e3e5ce6af6f2f589af1c6dfae4f9091c4aa7acf7051b1e82385113c7ae9de9"
       },
       {
         "path": "scripts/patent-source-audit.mjs",
@@ -237,7 +242,7 @@
       },
       {
         "path": "scripts/patent-disclosure-skill-maintenance.mjs",
-        "sha256": "e9b17aa8415e1c42b23511cad89ed6aedb530ccdc1eb9d921261af4013f8b3da"
+        "sha256": "dc31b1e2953181a4e1e77149d1d9aaa38bc6ebe9c48c9afd8b3a552f4e69c5a6"
       },
       {
         "path": "src/vendor-converters/patent-disclosure-skill/cli.ts",
@@ -249,19 +254,23 @@
       },
       {
         "path": "docs/user/patent-workflows.md",
-        "sha256": "656f1e6f842f7ff7f6a40670d7cb634b472598f049191f829512a24179e77e56"
+        "sha256": "ab65f02fd3c06ea1e50586da5c04ce815016118aed0074ad63d7ec496e7af528"
       },
       {
         "path": "docs/maintainer/patent-disclosure-skill.md",
-        "sha256": "86c8b995e59d732e38e4f0ca0768036428e6c1d75f304c12ae4e8e5d40d0d367"
+        "sha256": "6c93805ef07af408a302de645f09183ce29134665b00ca6505197e2cd08a9ba6"
       },
       {
         "path": "NOTICE",
-        "sha256": "55ed78d3702bdc1c96b005e351d7380b55fce9680ff07aee8b8dae2ac89a47ac"
+        "sha256": "552e9648ce460f0064674209f92fb63e28ee46325d113da9f3cd034cde466486"
       },
       {
         "path": "LICENSE",
         "sha256": "68f29fe408ba461ff4bcd7d0760ee5b72d183b64427556a4fb31965137854096"
+      },
+      {
+        "path": "src/graph-profiles/intellectual-property.ts",
+        "sha256": "1484a961462e771c7a18ab070071f2678345015923fce11c132b2d7a76fa7ed9"
       }
     ]
   }

@@ -121,7 +121,7 @@ pnpm education-agent-skills:check
 pnpm education-agent-skills:idempotence
 ```
 
-Conversion stages all six published vendors, assembles the complete 218-domain
+Conversion stages the published vendors, assembles the complete domain
 registry, and commits only the Education vendor projection plus the central
 registry. `check` validates the approved tree hash, exact domain membership,
 empty hard dependencies, and six-vendor inventory. `idempotence` regenerates in

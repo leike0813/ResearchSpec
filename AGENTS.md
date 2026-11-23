@@ -28,6 +28,7 @@ Current external reference paths:
 - Education Agent Skills working checkout: `/home/joshua/Workspace/Code/Skill/education-agent-skills`
 - Education Agent Skills audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/education-agent-skills`
 - Patent Disclosure Skill converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/patent-disclosure-skill`
+- Software Copyright Materials Skill converter source: `vendor/software-copyright-materials-skill`
 
 When paths or ownership change, update this file in the same change so future
 agents do not follow stale locations.
@@ -289,9 +290,9 @@ selector, producer, frontier, and workflow authority unchanged.
 
 Discipline domains use ANZSRC 2020 Fields of Research Group as their only
 classification standard; Field is audit metadata and never automatic membership.
-ResearchSpec also owns exactly five coarse tool domains documented in
+ResearchSpec also owns exactly six coarse tool domains documented in
 `docs/developer/domain-taxonomy.md`. The internal catalog pre-creates all 213 discipline
-domains and five tool domains, but empty domains remain hidden from ordinary user
+domains and six tool domains, but empty domains remain hidden from ordinary user
 discovery and installation. A selected domain that becomes empty is unavailable
 recovery state until it is safely uninstalled or repopulated.
 
@@ -652,9 +653,12 @@ Skill-level content license.
 `vendor/patent-disclosure-skill` is a third-party pinned input at commit
 `91e3b43a3e6b568c627bc83ffcb73ff453bf0304`, tree
 `b2ffa8dfca682ae9535c6e43c68cabe7ebf9e3d2`. Its complete 540-file inventory
-feeds eighteen fixed capabilities and seven profiles, including research-to-patent
-and patent-informed-paper. It has no plugin-domain membership or additional host
-entry. The source root is MIT; copied Mermaid/Three.js assets retain their notices.
+feeds eighteen capabilities and seven profiles, including research-to-patent and
+patent-informed-paper. The `intellectual-property-materials` tool domain delivers
+disclosure, application, docket, research-to-patent and the Procedures exclusive
+to those profiles. Patent search is shared with built-in patent intelligence.
+Patent-informed paper and office-action responses are built-in. Navigate is the
+host entry. The source root is MIT; copied Mermaid/Three.js assets retain their notices.
 Models and IPC data are configured external inputs. Tools produce ordinary files;
 CLI alone owns formal workflow state. Docket performs bounded semantic rounds,
 with the default three-round budget presented to the user and continuation chosen
@@ -676,6 +680,19 @@ the paper is the principal technical disclosure. The independently authored
 and patent directly and returns a Markdown report. Its canonical source is
 its package in `skills/capabilities/`; the patent maintenance catalog binds
 its reviewed tree alongside the derived packages.
+
+For R11 general deposit materials, offer the `intellectual-property-materials`
+domain when the user requests registration deliverables. Keep manuscript
+work on its selected route and make registration deliveries in a separate
+`work/software-copyright/<case-id>/` directory. Domain installation, a formal
+run, and browser assistance each have their own authorization. The applicant
+handles identity verification, declarations, signatures, and submission.
+Maintain the pin and both generated package trees through
+`audits/software-copyright-materials/catalog.json` and
+`scripts/generate-software-copyright-materials.mjs`. The generator also binds
+the opt-in patent entries to the existing package and profile hashes, as
+selected by `src/graph-profiles/intellectual-property.ts`. Regenerate the
+extension registry when one of those reviewed hashes changes.
 
 `audits/own-vendors/catalog.json` is the unified maintenance catalog for
 user-owned upstream vendors (currently `paper-humanizer` and
