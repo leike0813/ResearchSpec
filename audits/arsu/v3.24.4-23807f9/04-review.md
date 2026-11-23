@@ -4,8 +4,8 @@
 
 | metric | value |
 |---|---|
-| avg section coverage | 0.9428335729865457 |
-| avg rule coverage | 0.9678619707956442 |
+| avg section coverage | 0.9438364927587116 |
+| avg rule coverage | 0.9684257958694048 |
 | below section threshold | 0 |
 | below rule threshold | 0 |
 | output missing | 0 |
@@ -87,6 +87,7 @@
 | `discovery-literature-search-screening` | 0.837 | 1.000 | 311 | 2 | yes | none |
 | `discovery-source-quality-grading` | 1.000 | 1.000 | 201 | 1 | yes | none |
 | `generation-abstract-writing` | 1.000 | 1.000 | 208 | 3 | yes | none |
+| `generation-chinese-patent-filing` | 1.000 | 1.000 | 242 | 14 | yes | none |
 | `generation-figure-generation` | 0.816 | 0.667 | 226 | 2 | yes | none |
 | `generation-format-rendering` | 0.939 | 1.000 | 365 | 2 | yes | none |
 | `generation-humanization-reference` | 0.981 | 1.000 | 220 | 1 | yes | none |
@@ -116,7 +117,7 @@
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `artifacts/generated/capability-parity-report.json` | `3e4516fe124f6e393d5f543f9f5afbf1687bf05bfa3a6bd9e19a21ef79476686` |
+| parity report | `artifacts/generated/capability-parity-report.json` | `4fedd1bfb0d113b5a26c29e32fa97eaaca6510c2b8d4f629de8b7b391bc9b08b` |
 | mode-capability review HTML | `audits/arsu/v3.24.4-23807f9/artifacts/arsu-mode-capability-review.html` | `28c6cad11dbe10addfcc2f98a6045535a2293c8295182f7ad0df04e10ed61ac5` |
 | graph-match assessment HTML | `audits/arsu/v3.24.4-23807f9/artifacts/arsu-mode-graph-match-assessment.html` | `87d5c5c2fe0860f8adae9b8592f0dbc1d4554a434d6267cf2f7d17e4b0ca1817` |
 | gap semantic review HTML | `audits/arsu/v3.24.4-23807f9/artifacts/arsu-mode-gap-semantic-review.html` | `17cb4f608c573d482ffaea1ceb1b5620c58f9547ddcc47dcb198e1edc569b7ff` |

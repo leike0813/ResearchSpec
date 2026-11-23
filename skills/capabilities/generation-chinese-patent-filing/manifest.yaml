@@ -1,0 +1,98 @@
+schema_version: "1"
+capability_id: generation-chinese-patent-filing
+title: 中国专利申报材料
+description: 根据交底书、审定稿、外观图样或 PCT 原始申请准备发明、实用新型、外观设计及 PCT 中国国家阶段材料，生成国知局 CNIPA
+  XML ZIP 和 DOCX，核对申报草稿（China patent filing, PCT national phase）。
+maturity: operational
+class: generation
+node_kind: producer
+execution_type: mixed
+params: {}
+inputs:
+  - role: filing_source
+    schema_ref: chinese-patent-filing-source.v1
+    required: false
+    source_policy: handoff
+  - role: application_bundle
+    schema_ref: application-bundle.v1
+    required: false
+    source_policy: handoff
+outputs:
+  - role: filing_verification
+    schema_ref: chinese-patent-filing-verification.v1
+    required: true
+validators:
+  - validator_id: capability.policy.output_roles
+    kind: policy
+    inputs:
+      - filing_source
+      - application_bundle
+    outputs: []
+    error_codes:
+      - output_roles_invalid
+knowledge_refs:
+  - knowledge_id: references--u7533--u8bf7--u6587--u4ef6--u4e0e--u6838--u9a8c-.md
+    path: references/申请文件与核验.md
+    content_hash: 9f39fbd7c9e7e5821c4ef714dc1eeebdc48212eac55f8f69cfe3f74d90f2db2c
+    license: MIT
+  - knowledge_id: references-PCT-u8fdb--u5165--u4e2d--u56fd--u56fd--u5bb6--u9636--u6bb5-.md
+    path: references/PCT进入中国国家阶段.md
+    content_hash: 893e7fcf281ff41a02d330cabf691da0acc7a323a5d425937e43db46711cf574
+    license: MIT
+  - knowledge_id: references--u5b98--u65b9-XML-u8f6c--u6362--u4e0e--u8349--u7a3f--u5bfc--u5165-.md
+    path: references/官方XML转换与草稿导入.md
+    content_hash: 103bb623a246704d02d460e80f630e516ea7dcde7913b16d3a0cbfc9b81d98c5
+    license: MIT
+  - knowledge_id: scripts-build_filing.py
+    path: scripts/build_filing.py
+    content_hash: 361e2b4d74350129cc4d9878379fc4bf1fecea5aa8f385154dfedeb2f81b81f3
+    license: MIT
+  - knowledge_id: scripts-docx_to_cnipa_zip.py
+    path: scripts/docx_to_cnipa_zip.py
+    content_hash: fda2e256e2c680f2555c453b5600daa346c3ab7a6185f984526885a6cd3844fa
+    license: MIT
+  - knowledge_id: scripts-filing_docx_reader.py
+    path: scripts/filing_docx_reader.py
+    content_hash: f1a75c385c60463cf426f2ef6b71a1bd6463fea9fecee4a1a441025e1fdd06be
+    license: MIT
+  - knowledge_id: scripts-filing_docx_writer.py
+    path: scripts/filing_docx_writer.py
+    content_hash: 321abdc0d79f1caa92796fe2d780a5e40680ab596ebfa50172b922efb4980a0c
+    license: MIT
+  - knowledge_id: scripts-filing_ir.py
+    path: scripts/filing_ir.py
+    content_hash: c62b9ad5fabe3b5469ef09f191b4a3f3041299f45cfb3b2339c44ea24aa42859
+    license: MIT
+  - knowledge_id: scripts-filing_markdown.py
+    path: scripts/filing_markdown.py
+    content_hash: 4e3ce7c54ec58625cad59af0c7290278056e7319ba5c4ef0c8775c205cd7a8c5
+    license: MIT
+  - knowledge_id: scripts-filing_xml_writer.py
+    path: scripts/filing_xml_writer.py
+    content_hash: 4d63fc5224fca012ed3ee95a4795e425387995e542d0a7b1c60ebf450a1649bf
+    license: MIT
+  - knowledge_id: assets-WORD-u8f6c-XML-u7f16--u8f91--u5668--u4e94--u4e66--u6a21--u677f--u6587--u4ef6-.docx
+    path: assets/WORD转XML编辑器五书模板文件.docx
+    content_hash: e52e39abec20f433c635e0586109465371ba7f5c144a01845e5dd49d04844c21
+    license: LicenseRef-CNIPA-Official-Template
+  - knowledge_id: assets-sRGB-v4.icc
+    path: assets/sRGB-v4.icc
+    content_hash: d25e5802044c70ad354c8931ae945814a1826aa954ebe9e74efb68945c3ce2fd
+    license: CC0-1.0
+  - knowledge_id: LICENSE
+    path: LICENSE
+    content_hash: 80fc93c62933f00c8499a26157f068769badbfe7302996bd024312988f9ae40f
+    license: MIT
+  - knowledge_id: NOTICE.md
+    path: NOTICE.md
+    content_hash: b4a52fe3fe664ce665ff6a6b98556226213631b2c5787be07673da6518ea55dc
+    license: MIT
+gate_policy: advisory
+provenance:
+  origin: vendor-derived
+  extraction_artifact_ids:
+    - CPH-CAP-01
+  upstream_sources:
+    - path: vendor/chinese-patent-helper/upstream/chinese-patent-helper/SKILL.md
+      sha256: cc7243b593202e5dff83b1fc72ff869d50f9a56156c59a0af4bedd908dff46b3
+license: MIT

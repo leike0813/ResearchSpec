@@ -14,7 +14,11 @@ import {
 } from "../src/capabilities/registry.js";
 import { AUTHORED_GRAPH_PROFILES } from "../src/arsu-converter/workflow/graph-profiles/index.js";
 import { PATENT_GRAPH_PROFILES } from "../src/arsu-converter/workflow/graph-profiles/patent.js";
-import { INTELLECTUAL_PROPERTY_DOMAIN_ID, OPTIONAL_PATENT_PROFILE_IDS } from "../src/graph-profiles/intellectual-property.js";
+import {
+  CHINESE_PATENT_FILING_ID,
+  INTELLECTUAL_PROPERTY_DOMAIN_ID,
+  OPTIONAL_PATENT_PROFILE_IDS,
+} from "../src/graph-profiles/intellectual-property.js";
 import { loadWorkspaceCapabilityRegistry } from "../src/plugins/runtime-capabilities.js";
 import { loadGraphWorkspaceIndex } from "../src/core/runtime/graph-workspace-index.js";
 import {
@@ -558,10 +562,12 @@ void test("the materials domain previews, installs and resumes the existing pate
     const emitted = (await readdir(path.join(workspace, "profiles"))).filter((name) => name.endsWith(".yaml"));
     for (const id of patentProfileIds) assert.equal(emitted.includes(`${id}.yaml`), !OPTIONAL_PATENT_PROFILE_IDS.has(id), id);
     const cli = <T = unknown>(...args: string[]) => parseEnvelope<T>(runCli([...args, "--json"], root, { CODEX_HOME: codexHome }));
+    const filingSelector = `procedure:${CHINESE_PATENT_FILING_ID}`;
     assert.equal(cli("instructions", "profile:patent-informed-paper").ok, true);
     assert.equal(cli("instructions", "procedure:discovery-patent-search").ok, true);
     assert.equal(cli("instructions", "profile:research-to-patent").error?.code, "profile_domain_selection_required");
     assert.equal(cli("instructions", "procedure:generation-patent-disclosure").error?.code, "procedure_domain_selection_required");
+    assert.equal(cli("instructions", filingSelector).error?.code, "procedure_domain_selection_required");
 
     const candidates = cli<{ items: Array<{ procedure_id: string; eligibility: { state: string; domains: string[] } }> }>(
       "list", "procedures", "--query", "把这篇技术论文整理成专利交底书",
@@ -571,13 +577,17 @@ void test("the materials domain previews, installs and resumes the existing pate
     assert.deepEqual(disclosure?.eligibility.domains, [INTELLECTUAL_PROPERTY_DOMAIN_ID]);
     const configPath = path.join(workspace, "config.yaml");
     const beforePreview = await readFile(configPath, "utf8");
-    const preview = cli<{ resolved_profile_ids: string[] }>("plugin", "install", INTELLECTUAL_PROPERTY_DOMAIN_ID, "--dry-run", "--yes");
+    const preview = cli<{ resolved_capability_ids: string[]; resolved_profile_ids: string[] }>("plugin", "install", INTELLECTUAL_PROPERTY_DOMAIN_ID, "--dry-run", "--yes");
     assert.equal(preview.ok, true, JSON.stringify(preview.error));
+    assert.equal(preview.data?.resolved_capability_ids.includes(CHINESE_PATENT_FILING_ID), true);
     assert.deepEqual(preview.data?.resolved_profile_ids.sort(), [...OPTIONAL_PATENT_PROFILE_IDS, "plugin-software-copyright-materials"].sort());
     assert.equal(await readFile(configPath, "utf8"), beforePreview);
-    assert.equal(cli("plugin", "install", INTELLECTUAL_PROPERTY_DOMAIN_ID, "--yes").ok, true);
+    const installed = cli<{ resolved_capability_ids: string[] }>("plugin", "install", INTELLECTUAL_PROPERTY_DOMAIN_ID, "--yes");
+    assert.equal(installed.ok, true, JSON.stringify(installed.error));
+    assert.equal(installed.data?.resolved_capability_ids.includes(CHINESE_PATENT_FILING_ID), true);
     assert.equal(cli("instructions", "profile:research-to-patent").ok, true);
     assert.equal(cli("instructions", "procedure:plugin-software-copyright-materials").ok, true);
+    assert.equal(cli("instructions", filingSelector).ok, true);
 
     await writeFixture(root, "materials/tech.md", "Technical materials.\n");
     await writeFixture(root, "docket.yaml", stringify({

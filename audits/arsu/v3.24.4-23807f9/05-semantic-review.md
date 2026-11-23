@@ -68,6 +68,12 @@
 | 33 个既有 hash 变化包 | 变化涉及论文 intake/摘要/引文、证据质量与综合、reviewer panel/判断、pipeline 完整性/恢复及 checker contracts。逐包 ID、parity 与判定依据见 06；hash 变化不自动说明对应上游文件均有语义变化。 |
 | 14 个既有 hash 未变包 | 沿用旧锚点已审阅语义；本轮不把无 package diff 描述成重新验证。共享 registry 增长不会改变这些包的本地输入输出。完整 ID 清单见 06。 |
 
+## 中国专利申报材料补充审阅
+
+自有上游 `chinese-patent-helper@14d40f0` 增加一个独立申报材料包并进入聚合清单。ARS 上游、五个 Skill 的路由、转换包和图均沿用上述审阅，三个模式审阅工件重新生成后逐字节一致。
+
+`generation-chinese-patent-filing` 的语义承接见 [自有上游审阅](../../own-vendors/chinese-patent-helper/snapshot-14d40f0/05-semantic-review.md)。在已选择知识产权材料域的临时项目，现有 `application_bundle` 可作为独立材料读入，核验记录是普通文件。合成病例验证本地转换，具名案件是否可申报依赖官网草稿回显与预览。该 Procedure 没有图入口，也不改变现有专利图的材料契约或控制节点。
+
 ## 结论
 
 declared-fit-with-notes。八种筛选模式均可发现。合成工作区经已安装的 CLI 完成 19 个节点、三个双席汇合和五个人工 Gate。交付包内工具通过独立试筛合票、多批次题录与全文筛选、待判续跑、排除码与证据定位、人工覆盖，以及 PRISMA、RIS、语料、方法草稿和日志五种导出。QC 的 advance 与 flag 分支、快照不匹配、缺失记录和未取得全文分别有行为用例。两次 authoring 的产物按字节一致。

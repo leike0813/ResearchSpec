@@ -28,6 +28,7 @@ Current external reference paths:
 - Education Agent Skills working checkout: `/home/joshua/Workspace/Code/Skill/education-agent-skills`
 - Education Agent Skills audit source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/education-agent-skills`
 - Patent Disclosure Skill converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/patent-disclosure-skill`
+- Chinese Patent Helper vendor converter source: `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/vendor/chinese-patent-helper/upstream`
 - Software Copyright Materials Skill converter source: `vendor/software-copyright-materials-skill`
 
 When paths or ownership change, update this file in the same change so future
@@ -681,6 +682,21 @@ and patent directly and returns a Markdown report. Its canonical source is
 its package in `skills/capabilities/`; the patent maintenance catalog binds
 its reviewed tree alongside the derived packages.
 
+The `intellectual-property-materials` domain delivers the hidden standalone
+`generation-chinese-patent-filing` Procedure for CNIPA invention, utility
+model, design and PCT China national phase. It reads case files or the
+existing `application_bundle` and returns a local `filing_verification`
+record. Only the host Agent invokes the bundled converters in a configured
+Python 3.12 environment. Browser assistance requires separate authorization
+for the current official draft and materials. The applicant authenticates
+and controls formal submission and payment. Readiness requires current-version
+evidence for the applicable documents, draft readback and preview.
+
+For absorption, use `own-vendor-maintenance` and the pin, asset origins and
+distribution decisions in `vendor/chinese-patent-helper/SOURCE.json`. The
+bundled official five-book template retains its original bytes and separate
+attribution.
+
 For R11 general deposit materials, offer the `intellectual-property-materials`
 domain when the user requests registration deliverables. Keep manuscript
 work on its selected route and make registration deliveries in a separate
@@ -695,12 +711,14 @@ selected by `src/graph-profiles/intellectual-property.ts`. Regenerate the
 extension registry when one of those reviewed hashes changes.
 
 `audits/own-vendors/catalog.json` is the unified maintenance catalog for
-user-owned upstream vendors (currently `paper-humanizer` and
-`revision-master`). `scripts/own-vendor-maintenance.mjs` and
+user-owned upstream vendors (currently `paper-humanizer`, `revision-master`
+and `chinese-patent-helper`). `scripts/own-vendor-maintenance.mjs` and
 `.agents/skills/own-vendor-maintenance/SKILL.md` provide catalog-driven
 `artifacts / records / baseline / check / diff` anchors and the Agent semantic
 review gate. A future owned vendor is added through its extraction index,
 authoring sources, package script, and one additive catalog entry.
+Owned bundles may expose domain-delivered standalone Procedures without graph
+profiles; add a profile only where graph composition is needed.
 
 Paper-humanizer is pinned to local upstream commit
 `84eb2edf9570aea85a799e4c4db559882c19928c` at

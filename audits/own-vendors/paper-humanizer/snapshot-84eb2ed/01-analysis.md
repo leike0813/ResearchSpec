@@ -1,8 +1,8 @@
 # Own Vendor Anchor Analysis — paper-humanizer @ snapshot-84eb2ed
 
-- generated: 2026-10-23T15:20:33.742Z
+- generated: 2026-11-23T14:55:16.921Z
 - upstream: snapshot-84eb2ed @ 84eb2edf9570aea85a799e4c4db559882c19928c
-- maintenance skill SHA-256: `54da495208f529136035ff10375cc7ae76981c6d44a3f0f1795e744c6b5f68af`
+- maintenance skill SHA-256: `9f266b590f0a4e0c1c1b13faca9991ac29ccb0e4cc46640dfeca42f456cfa0ab`
 
 ## Upstream Inventory
 

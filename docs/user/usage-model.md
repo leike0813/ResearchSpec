@@ -175,6 +175,11 @@ Navigate 从 Procedure 目录识别任务，预览「知识产权材料」工具
 材料与交付，Obsidian 和本地地图是可选投影。默认中国管辖区，docket 三轮预算在入口摘要中说明；
 每轮继续/结束 Decision 以及所有正式 Gates 仍分别确认。具体入口和依赖见[专利任务](patent-workflows.md)。
 
+准备发明、实用新型、外观设计或 PCT 中国国家阶段申报材料时，使用同一工具域的独立 Procedure
+`generation-chinese-patent-filing`。它可读取现有 `application_bundle` 普通文件索引，交付适用
+文书与本地核验记录。浏览器协助须另行确认官方站点、当前案卷及材料范围，并在申请人认证后止于
+草稿预览。域安装、更新和材料交付见[专利任务](patent-workflows.md)。
+
 用户明确需要软件著作权登记材料时，Navigate 可提议安装同一个「知识产权材料」工具域的 R11 Procedure。
 论文中介绍软件或提及其登记情况时，继续使用论文流程。同时要求两项交付时，登记材料在独立案件目录制作和复核。
 只有需要正式工作流状态时才使用登记 profile，域安装、graph 启动和浏览器协助分别确认。

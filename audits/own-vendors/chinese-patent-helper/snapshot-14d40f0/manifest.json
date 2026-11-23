@@ -1,0 +1,61 @@
+{
+  "schema_version": "1",
+  "vendor_id": "chinese-patent-helper",
+  "anchor_id": "snapshot-14d40f0",
+  "created_at": "2026-11-23T14:55:17.160Z",
+  "upstream": {
+    "source_meta": "vendor/chinese-patent-helper/SOURCE.json",
+    "upstream_root": "vendor/chinese-patent-helper/upstream",
+    "release_label": "snapshot-14d40f0",
+    "commit": "14d40f003e9ca7d1d55dabbbd7d1aea455367368",
+    "tree_sha256": "8297d5f818dd12436ee94a5066b3a937440807c7270b0a95a5079a2f766f963a"
+  },
+  "extraction": {
+    "index_path": "authoring/chinese-patent-helper/extraction-index.json",
+    "index_sha256": "4fe1005f6e1a6faf51caebb5c7dbef455c0e5d858ddf9cab993ba3e846b98ce6",
+    "artifact_count": 13,
+    "pass": 13,
+    "fail": 0,
+    "error": 0
+  },
+  "conversion": {
+    "capability_count": 1,
+    "operational_count": 1,
+    "capability_ids": [
+      "generation-chinese-patent-filing"
+    ],
+    "registry_subset_sha256": "b1dc62bac6f16ce49bb7f2fb7550ff022c0ea3899c6d414101924989deb54913",
+    "packages_tree_sha256": "ac9714f7b8e7ecdba5e550cedfffead7fda71ce2016b7707554f90af8b59779c"
+  },
+  "delivery": {
+    "assets": [
+      {
+        "path": "skills/capabilities/generation-chinese-patent-filing/assets/sRGB-v4.icc",
+        "sha256": "d25e5802044c70ad354c8931ae945814a1826aa954ebe9e74efb68945c3ce2fd"
+      },
+      {
+        "path": "skills/capabilities/generation-chinese-patent-filing/assets/WORD转XML编辑器五书模板文件.docx",
+        "sha256": "e52e39abec20f433c635e0586109465371ba7f5c144a01845e5dd49d04844c21"
+      }
+    ]
+  },
+  "review": {
+    "parity_report_path": "/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json",
+    "parity_artifact_path": "audits/own-vendors/chinese-patent-helper/snapshot-14d40f0/artifacts/parity-packages.json",
+    "parity_artifact_sha256": "33111e1e99ef1436a8ad7748358680dadbc3aa69d356cc797b05b5f4ea5fde24",
+    "package_count": 1,
+    "operational_count": 1,
+    "avg_section_coverage": 1,
+    "avg_rule_coverage": 1,
+    "below_section_threshold": [],
+    "below_rule_threshold": [],
+    "output_missing": [],
+    "knowledge_below_threshold": [],
+    "flow_retained": []
+  },
+  "maintenance": {
+    "skill_sha256": "9f266b590f0a4e0c1c1b13faca9991ac29ccb0e4cc46640dfeca42f456cfa0ab",
+    "catalog_sha256": "ebae5463c89f91d75653882f51fa33ee48afe5147c9429886b64ddc4529f59f7",
+    "record_sha256": "b0afba7aba1a844163d23571518fedd1ae288b7187e57f7bcfdc47bebabf1056"
+  }
+}

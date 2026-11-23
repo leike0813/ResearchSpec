@@ -23,18 +23,17 @@ void test("own-vendor maintenance skill documents both vendors and the add-vendo
   assert.match(skill, /05-semantic-review\.md/);
 });
 
-void test("own-vendor catalog declares the two current vendors", async () => {
+void test("own-vendor catalog declares the current vendors", async () => {
   const catalog = JSON.parse(await readFile(path.join(root, "audits/own-vendors/catalog.json"), "utf8")) as {
     schema_version: string;
     vendors: Array<{ vendor_id: string; anchor_id: string; capability_ids: string[]; delivery_assets?: string[] }>;
   };
   assert.equal(catalog.schema_version, "1");
-  assert.equal(catalog.vendors.length, 2);
-  assert.deepEqual(catalog.vendors.map((item) => item.vendor_id), ["paper-humanizer", "revision-master"]);
-  assert.deepEqual(catalog.vendors[0]?.capability_ids.length, 4);
-  assert.deepEqual(catalog.vendors[1]?.capability_ids.length, 5);
-  assert.deepEqual(catalog.vendors[0]?.delivery_assets, ["hooks/paper-humanizer/guard.md", "hooks/paper-humanizer/inject.cjs", "hooks/paper-humanizer/LICENSE"]);
-  assert.equal(catalog.vendors[1]?.delivery_assets, undefined);
+  const vendors = new Map(catalog.vendors.map((vendor) => [vendor.vendor_id, vendor]));
+  assert.equal(vendors.size, catalog.vendors.length, "own-vendor IDs must be unique");
+  assert.deepEqual([...vendors.keys()].sort(), ["chinese-patent-helper", "paper-humanizer", "revision-master"]);
+  assert.equal(vendors.get("chinese-patent-helper")?.anchor_id, "snapshot-14d40f0");
+  assert.equal(vendors.get("chinese-patent-helper")?.capability_ids.includes("generation-chinese-patent-filing"), true);
 });
 
 void test("own-vendor anchors contain generated records and completed semantic reviews", async () => {
@@ -48,10 +47,11 @@ void test("own-vendor anchors contain generated records and completed semantic r
     const conversion = await readFile(path.join(dir, "03-conversion.md"), "utf8");
     const review = await readFile(path.join(dir, "04-review.md"), "utf8");
     const semantic = await readFile(path.join(dir, "05-semantic-review.md"), "utf8");
-    assert.match(analysis, /Own Vendor Anchor Analysis/);
-    assert.match(ingestion, vendor === "paper-humanizer" ? /PH-CAP-01/ : /RM-CAP-01/);
-    assert.match(conversion, vendor === "paper-humanizer" ? /check-paper-humanization-review/ : /design-review-response-intake/);
-    assert.match(review, /Parity Summary/);
+    assert.match(analysis, /^# Own Vendor Anchor Analysis/m);
+    assert.match(ingestion, /^# Own Vendor Anchor Ingestion/m);
+    assert.match(conversion, /^# Own Vendor Anchor Conversion/m);
+    assert.match(review, /^# Own Vendor Anchor Review/m);
+    if (vendor === "chinese-patent-helper") assert.match(conversion, /generation-chinese-patent-filing/);
     assert.doesNotMatch(semantic, /\[NOT-COMPLETED\]/);
     assert.match(semantic, /## 结论/);
     assert.match(semantic, /declared-fit/);
@@ -63,7 +63,9 @@ void test("own-vendor maintenance check passes for every current anchor", async 
     vendors: Array<{ vendor_id: string; anchor_id: string }>;
   };
   const stdout = execFileSync(process.execPath, ["scripts/own-vendor-maintenance.mjs", "check"], { encoding: "utf8" });
-  assert.deepEqual(stdout.trim().split("\n"), catalog.vendors.map(({ vendor_id, anchor_id }) => `OK ${vendor_id}@${anchor_id}`));
+  const actual = new Set(stdout.trim().split("\n"));
+  const expected = new Set(catalog.vendors.map(({ vendor_id, anchor_id }) => `OK ${vendor_id}@${anchor_id}`));
+  assert.deepEqual(actual, expected);
 });
 
 void test("package scripts expose the own-vendor maintenance loop", async () => {

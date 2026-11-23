@@ -228,6 +228,11 @@
       "manifest_sha256": "b95a50816b7ec904a845180398ee4dcb67743b5f9d1885d51dd2b74e50399e54"
     },
     {
+      "capability_id": "generation-chinese-patent-filing",
+      "source_path": "generation-chinese-patent-filing",
+      "manifest_sha256": "a393d6ca926b964ef8acf142eff803c13661e78df39829d00757d00a207c3977"
+    },
+    {
       "capability_id": "generation-figure-generation",
       "source_path": "generation-figure-generation",
       "manifest_sha256": "ac437d6da397cf643996a66b1ba90a46be35091e8a1cc0498e0e7396e3072f47"

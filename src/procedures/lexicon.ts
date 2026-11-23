@@ -42,6 +42,8 @@ export const CONCEPT_GROUPS: readonly (readonly string[])[] = [
   ["prior art", "现有技术", "在先技术"],
   ["patent claim", "权利要求"],
   ["patent application", "专利申请", "申请文件"],
+  ["patent filing", "专利申报", "专利提交", "国知局", "CNIPA"],
+  ["PCT national phase", "PCT 中国国家阶段", "PCT 进入中国国家阶段", "PCT 进入中国", "中国国家阶段"],
   ["patent disclosure", "专利交底书", "发明交底", "专利交底", "交底书"],
   ["research to patent", "研究转专利", "论文转专利", "科研成果转专利"],
   ["office action", "审查意见", "审查意见答复", "审查通知书"],

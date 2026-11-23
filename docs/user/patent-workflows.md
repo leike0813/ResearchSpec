@@ -10,10 +10,35 @@
 ```sh
 researchspec plugin install intellectual-property-materials --dry-run --yes
 researchspec plugin install intellectual-property-materials --yes
+researchspec plugin update intellectual-property-materials
 ```
 
 升级后继续已有的交底、申请、案卷或研究转专利运行时，先安装该域，再通过 `status --json`
 和原节点的 `instructions` 续跑。安装会采用已有的流程 ID 和版本。
+
+中国专利申报材料使用上述工具域中的独立 Procedure `generation-chinese-patent-filing`。
+它支持发明、实用新型、外观设计和 PCT 中国国家阶段。PCT 中文原稿正常进入时核对原文，
+外文原稿则按已确认的中文译文准备技术分册。
+
+`filing_source` 可传入一份主案卷，`application_bundle` 可直接接收现有申请成果的
+`application-bundle.v1` 普通文件索引。两者同时提供时先确认审定主版本，并记录分歧。Procedure
+生成适用的 DOCX、CNIPA XML ZIP、请求书填报资料、附件和同目录文件，并以必需的
+`filing_verification` 核验记录列明当前版本、实际交付路径、已完成检查、差异和证据限制。
+
+包内 `build_filing.py` 与 `docx_to_cnipa_zip.py` 是本地 CLI 转换入口，使用用户已有依赖的
+Python 3.12。Markdown 读入使用 `markdown-it-py`，DOCX 使用 `lxml`，位图使用 Pillow，
+XML 公式渲染需要 Matplotlib。缺少依赖时保留可用稿件并说明受影响的转换和恢复条件；安装依赖须
+单独取得用户同意。ResearchSpec 的安装、更新、检查和打包不会执行这些脚本，也不会安装依赖。
+
+网页核稿只在用户另行授权官方站点、当前案卷和具体材料后开始。域安装不包含浏览器授权。申请人
+完成认证后，Agent 只准备和检查该范围内的草稿并停在草稿预览；正式提交、声明、签章和缴费由申请人
+控制。以当前案卷当前版本的适用文书、草稿重开和整包预览证据判定“可提交”。
+
+能力包随附由国知局下载的[官方五书模板](https://cponline.cnipa.gov.cn/GzfwYwblGlwhTMVC/GzfwYwblGlwhT/selectToolsById?weihuRid=157)，
+保持原始字节并将 SHA-256 记录为
+`e52e39abec20f433c635e0586109465371ba7f5c144a01845e5dd49d04844c21`。官方页面未声明
+开源许可。其余表格和模板可从指令里的官方入口获取。外观图样使用的 `sRGB-v4.icc`
+按 CC0-1.0 随包提供。
 
 已有论文可直接作为技术材料进入交底。若论文是本案技术方案的主要来源，案卷会附逐特征来源表，
 随交底、申请和修订记录原文位置、技术观察、权项限定与待确认问题。仅作背景引用的论文无需此表。
@@ -54,6 +79,8 @@ Docket 默认预算为三轮。继续或结束由每轮的人类 Decision 决定
 researchspec list procedures --query "专利交底" --json
 researchspec show procedure:generation-patent-disclosure --json
 researchspec instructions procedure:generation-patent-disclosure --json
+researchspec show procedure:generation-chinese-patent-filing --json
+researchspec instructions procedure:generation-chinese-patent-filing --json
 researchspec instructions profile:patent-docket --json
 ```
 

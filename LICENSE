@@ -13,6 +13,14 @@ Bundled Mermaid and Three.js resources retain their own MIT notices. The seven
 patent and research/patent composition profiles are ResearchSpec-authored MIT
 graph declarations; licenses of referenced academic packages remain unchanged.
 
+Joshua Reed's (`leike0813`) original Chinese Patent Helper material is licensed
+under the MIT License with the owner's explicit authorization, including the
+source content under `vendor/chinese-patent-helper/upstream/**` and
+`authoring/chinese-patent-helper/**`. The published Procedure under
+`skills/capabilities/generation-chinese-patent-filing/**` retains the source
+copyright and complete MIT text. The official template and CC0 profile
+identified below retain their stated origins.
+
 ## CC BY-NC 4.0 material
 
 The following material is adapted from Academic Research Skills (ARS), copyright 2026 Cheng-I Wu, and remains licensed under the Creative Commons Attribution-NonCommercial 4.0 International License:
@@ -69,3 +77,23 @@ copy of the license is available at `LICENSES/CC-BY-SA-4.0.txt`.
 The CC BY-SA 4.0 grant and ShareAlike condition apply only to the identified
 Education Agent Skills material and do not change the licenses of ARSU-derived,
 ResearchSpec-authored, or other vendor material.
+
+## CNIPA official template material
+
+The file
+`skills/capabilities/generation-chinese-patent-filing/assets/WORD转XML编辑器五书模板文件.docx`
+is copied unchanged from the China National Intellectual Property
+Administration download at
+https://cponline.cnipa.gov.cn/GzfwYwblGlwhTMVC/GzfwYwblGlwhT/selectToolsById?weihuRid=157.
+Its SHA-256 is
+`e52e39abec20f433c635e0586109465371ba7f5c144a01845e5dd49d04844c21`.
+The official source declares no open-source license. The bundled file retains
+its official origin and source identity. Other official forms and templates are
+linked to their official download entries and are not bundled.
+
+## CC0-1.0 material
+
+`skills/capabilities/generation-chinese-patent-filing/assets/sRGB-v4.icc` is
+from `saucecontrol/Compact-ICC-Profiles` at commit
+`8e22c542d632e8800625581c4b417a2d081c02b4` and is distributed under CC0 1.0
+Universal.

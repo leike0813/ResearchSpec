@@ -2,7 +2,7 @@
   "schema_version": "1",
   "vendor_id": "paper-humanizer",
   "anchor_id": "snapshot-84eb2ed",
-  "created_at": "2026-10-23T15:20:33.773Z",
+  "created_at": "2026-11-23T14:55:16.937Z",
   "upstream": {
     "source_meta": "vendor/paper-humanizer/SOURCE.json",
     "upstream_root": "vendor/paper-humanizer/upstream",
@@ -61,8 +61,8 @@
     "flow_retained": []
   },
   "maintenance": {
-    "skill_sha256": "54da495208f529136035ff10375cc7ae76981c6d44a3f0f1795e744c6b5f68af",
-    "catalog_sha256": "d57a538118b5b24e00212cdbe250c1474d4d23adb8dadd693e849eced641bf7e",
-    "record_sha256": "823fc6d8bbeb549ff515ae378c3d74fc6aedbeed6cc74f828ca438e57802e247"
+    "skill_sha256": "9f266b590f0a4e0c1c1b13faca9991ac29ccb0e4cc46640dfeca42f456cfa0ab",
+    "catalog_sha256": "ebae5463c89f91d75653882f51fa33ee48afe5147c9429886b64ddc4529f59f7",
+    "record_sha256": "7d8b2518b02a3875bc185062c6fc3ed072952e36939b9b069bc7cb07232c5330"
   }
 }

@@ -133,6 +133,7 @@
     "arsu-maintenance:records": "node scripts/arsu-maintenance.mjs records",
     "paper-humanizer:author": "pnpm build && node dist/src/arsu-converter/authoring/paper-humanizer-cli.js",
     "revision-master:author": "pnpm build && node dist/src/arsu-converter/authoring/revision-master-cli.js",
+    "chinese-patent-helper:author": "pnpm build && node dist/src/arsu-converter/authoring/chinese-patent-helper-cli.js && node scripts/project-intellectual-property.mjs",
     "own-vendor-maintenance:artifacts": "node scripts/own-vendor-maintenance.mjs artifacts",
     "own-vendor-maintenance:records": "node scripts/own-vendor-maintenance.mjs records",
     "own-vendor-maintenance:baseline": "node scripts/own-vendor-maintenance.mjs baseline",

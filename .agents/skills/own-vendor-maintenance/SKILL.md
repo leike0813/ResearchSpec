@@ -1,6 +1,6 @@
 ---
 name: own-vendor-maintenance
-description: Maintain user-owned upstream projects absorbed as ResearchSpec capability packages. Use when adding a new owned vendor, updating paper-humanizer or revision-master, regenerating vendor-derived capability packages, or auditing an existing own-vendor anchor.
+description: Add, update, regenerate, or audit ResearchSpec capability packages derived from a user-owned upstream.
 ---
 
 # Own Vendor Maintenance
@@ -17,6 +17,11 @@ description: Maintain user-owned upstream projects absorbed as ResearchSpec capa
 |---|---|---|---|---|
 | `paper-humanizer` | `snapshot-84eb2ed` | `authoring/paper-humanizer/extraction-index.json` | 4 个核心 capability 包（无 `cap-` 前缀） | `hooks/paper-humanizer/guard.md`、`hooks/paper-humanizer/inject.cjs`、`hooks/paper-humanizer/LICENSE`（MIT 原许可） |
 | `revision-master` | `snapshot-13e69610` | `authoring/revision-master/extraction-index.json` | 5 个核心 capability 包（无 `cap-` 前缀） | — |
+| `chinese-patent-helper` | `snapshot-14d40f0` | `authoring/chinese-patent-helper/extraction-index.json` | `generation-chinese-patent-filing`（独立 Procedure） | 国知局五书模板、CC0 sRGB 配置（见 catalog） |
+
+用户自有 bundle 可以只交付 domain 中的隐藏 standalone Procedure。此类能力仍受
+manifest、registry、domain 交付和 parity 检查约束，但不声明 profile 依赖，也不拥有 run、
+node、Gate、Decision 或 transition 权威。只有需要 graph 组合时才增加 profile。
 
 目录总览：
 
@@ -118,7 +123,7 @@ pnpm own-vendor-maintenance:check
    - `below_section_threshold`、`below_rule_threshold`、`output_missing`、`knowledge_below_threshold`、`flow_retained` 全部为空。
 3. **Agent 语义审阅门（不能省略，不能只贴脚本输出）**：
    - 对每个 capability，阅读上游 extraction 原文与生成的 SKILL/knowledge，判定 `preserved / adapted / removed / gap`，并记录证据路径与原文片段。
-   - 执行流程权威检查：grep 生成 SKILL 的 next-node/next-phase/agent-team 模式；确认流程锚点由 graph profile 承接。
+   - 执行流程权威检查：grep 生成 SKILL 的 next-node/next-phase/agent-team 模式。有 profile 的能力确认流程锚点由 graph profile 承接；standalone capability 确认不依赖 profile、只作为独立 Procedure 交付，且不拥有 ResearchSpec workflow state。
    - 若 vendor 声明 `delivery_assets`，逐项记录 derivation 与 runtime 权威边界；该判定独立于 capability parity 结论。
    - 将结果写入 `audits/own-vendors/<vendor>/<anchor>/05-semantic-review.md`，必须以 `## 结论` 给出 `declared-fit / declared-fit-with-notes / not-fit`。
    - `05-semantic-review.md` 含 `[NOT-COMPLETED]` 时，`baseline` 必须拒绝生成 manifest。
@@ -137,8 +142,8 @@ pnpm own-vendor-maintenance:check
 未来加入新的用户自有项目时：
 
 1. 在 `vendor/<new-vendor>` 放置 `SOURCE.json` 与 `upstream/` 快照。
-2. 建立 `docs/<new-vendor>_extraction/` 与 `extraction-index.json`，逐字节验证。
-3. 增加 `src/arsu-converter/authoring/<new-vendor>-sources.ts`、CLI 与 procedures；生成 capability packages 与 graph profile。
+2. 建立 `authoring/<new-vendor>/` 与规范的 `authoring/<new-vendor>/extraction-index.json`，逐字节验证。
+3. 增加 `src/arsu-converter/authoring/<new-vendor>-sources.ts`、CLI 与 procedures；生成 capability packages，仅在需要 graph 组合时生成 graph profile。
 4. 在 `package.json` 增加 `<new-vendor>:author`。
 5. 在 `audits/own-vendors/catalog.json` 追加 vendor 条目。
 6. 建立首锚点，完成 Agent 语义审阅，运行 `records -> baseline -> check`。
@@ -148,7 +153,7 @@ pnpm own-vendor-maintenance:check
 
 - 子模块/快照必须可描述（tag/commit），脏输入禁止生成锚点。
 - 先 `diff` 后改文件；未变化的 extraction artifact 不得重写。
-- capability 重命名或删除属于破坏性变更，必须同步 graph profiles、tests、docs、审阅工件与 OpenSpec change。
+- capability 重命名或删除属于破坏性变更，必须同步 tests、docs、审阅工件、OpenSpec change 和引用该 capability 的 graph profiles。
 - 上游脚本/示例文件只做审计或参考；打包后也不由 ResearchSpec 执行。
 - catalog 或本 Skill 的变化影响所有当前 own-vendor 锚点的共享维护身份；先核对其他 vendor 的生产身份不变，再刷新其维护记录与 baseline。
 - own-vendor 包同时属于 ARSU 聚合锚点；更新后按 `arsu-maintenance` 刷新当前聚合审阅工件、语义复核、records、baseline 和 check。保留 ARS 上游、提取件、能力包和 graph 的未变字节。

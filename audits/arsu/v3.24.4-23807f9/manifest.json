@@ -13,15 +13,15 @@
     "error": 0
   },
   "conversion": {
-    "registry_sha256": "b9a3ed9f5cefb81c1e176c4e887fb1751be8c7654142e5efdeb95c80ee050d8e",
-    "capability_count": 56,
-    "operational_count": 56,
-    "packages_tree_sha256": "3c632c9c829ac6a8bdb20f966929d98dc3965cc27881309e77df7d991d5a2c0a"
+    "registry_sha256": "da02eb072eeafec909c0d406cdb30e8cd4cb9c075d3dc4ae481aa08723c8de31",
+    "capability_count": 57,
+    "operational_count": 57,
+    "packages_tree_sha256": "7648e3141e1d5756ded8494ceceb3c82ba32aa69dbe8314bb1a1b23166149cec"
   },
   "review": {
-    "parity_report_sha256": "3e4516fe124f6e393d5f543f9f5afbf1687bf05bfa3a6bd9e19a21ef79476686",
-    "section_coverage": 0.9428335729865457,
-    "rule_coverage": 0.9678619707956442,
+    "parity_report_sha256": "4fedd1bfb0d113b5a26c29e32fa97eaaca6510c2b8d4f629de8b7b391bc9b08b",
+    "section_coverage": 0.9438364927587116,
+    "rule_coverage": 0.9684257958694048,
     "below_section_threshold": [],
     "below_rule_threshold": [],
     "output_missing": [],
@@ -32,9 +32,9 @@
   },
   "maintenance": {
     "skill_sha256": "64376b16717570647942e654fcc087e65f8ff54dffcab25a3acd09a352ce28a2",
-    "record_sha256": "1192080d8a9d6a14468b2b165860551731d0f642d6a248521aac33bfecb0fab4"
+    "record_sha256": "f765c74d095eb20f2df86ad2f5b7668d6dfe0008e6fdb90f6beba642e30cfb72"
   },
   "schema_version": "1",
   "anchor_id": "v3.24.4-23807f9",
-  "created_at": "2026-11-20T02:27:45.267Z"
+  "created_at": "2026-11-23T14:54:13.476Z"
 }

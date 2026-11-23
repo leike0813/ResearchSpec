@@ -1,0 +1,31 @@
+{
+  "name": "chinese-patent-helper",
+  "repository": "https://github.com/leike0813/chinese_patent_helper",
+  "commit": "14d40f003e9ca7d1d55dabbbd7d1aea455367368",
+  "git_tree": "cb781cb497d9122b5f2bc84925ef3c2e7891b5c1",
+  "source_tree": "upstream",
+  "source_subtree": "chinese-patent-helper",
+  "snapshot": "snapshot-14d40f0",
+  "status": "maintainer-input-snapshot",
+  "provenance": "Owner-approved local main at the named repository",
+  "license": "MIT",
+  "license_scope": "Owner-authorized MIT for Joshua Reed (leike0813) original material",
+  "upstream_author": "Joshua Reed (leike0813)",
+  "inventory": "vendor/chinese-patent-helper/source-inventory.json",
+  "external_assets": {
+    "chinese-patent-helper/assets/WORD转XML编辑器五书模板文件.docx": {
+      "source": "https://cponline.cnipa.gov.cn/GzfwYwblGlwhTMVC/GzfwYwblGlwhT/selectToolsById?weihuRid=157",
+      "license": "LicenseRef-CNIPA-Official-Template",
+      "decision": "Carry the original publicly downloadable file with attribution as confirmed by the maintainer"
+    },
+    "chinese-patent-helper/assets/sRGB-v4.icc": {
+      "source": "https://github.com/saucecontrol/Compact-ICC-Profiles/blob/8e22c542d632e8800625581c4b417a2d081c02b4/profiles/sRGB-v4.icc",
+      "license": "CC0-1.0"
+    },
+    "tests/fixtures/CGATS001Compat-v2-micro.icc": {
+      "source": "https://github.com/saucecontrol/Compact-ICC-Profiles/blob/master/profiles/CGATS001Compat-v2-micro.icc",
+      "license": "CC0-1.0",
+      "decision": "Maintainer-only fixture"
+    }
+  }
+}

@@ -181,11 +181,21 @@ try {
   run(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
   await verifyInstalledMinimalJourney(bin, projectDirectory, environment);
   await verifyInstalledAcademicPipelineJourney(bin, projectDirectory, environment);
+  const filingSelector = "procedure:generation-chinese-patent-filing";
+  const filingBeforeSelection = runExpectFailure(bin, ["instructions", filingSelector, "--json"], projectDirectory, environment);
+  const filingBeforeSelectionEnvelope = JSON.parse(filingBeforeSelection.stdout);
+  assert(
+    filingBeforeSelectionEnvelope.error?.code === "procedure_domain_selection_required",
+    `Packaged Chinese patent filing Procedure was available before domain selection: ${filingBeforeSelection.stdout}${filingBeforeSelection.stderr}`,
+  );
   const ipPreview = JSON.parse(run(bin, ["plugin", "install", "intellectual-property-materials", "--dry-run", "--yes", "--json"], projectDirectory, environment).stdout);
+  assert(ipPreview.data?.resolved_capability_ids?.includes("generation-chinese-patent-filing"), "Packaged installation preview did not resolve the Chinese patent filing capability.");
   assert(equal(ipPreview.data.resolved_profile_ids.sort(), [...expectedOptionalProfiles, "plugin-software-copyright-materials"].sort()), "Packaged installation preview has an incomplete materials domain.");
   run(bin, ["instructions", "profile:patent-informed-paper", "--json"], projectDirectory, environment);
-  run(bin, ["plugin", "install", "intellectual-property-materials", "--yes", "--json"], projectDirectory, environment);
+  const ipInstall = JSON.parse(run(bin, ["plugin", "install", "intellectual-property-materials", "--yes", "--json"], projectDirectory, environment).stdout);
+  assert(ipInstall.data?.resolved_capability_ids?.includes("generation-chinese-patent-filing"), "Packaged installation did not resolve the Chinese patent filing capability.");
   run(bin, ["instructions", "profile:research-to-patent", "--json"], projectDirectory, environment);
+  run(bin, ["instructions", filingSelector, "--json"], projectDirectory, environment);
 
   run(bin, ["init", allToolsProjectDirectory, "--tools", expectedProjectToolIds.join(","), "--delivery", "both", "--json"], installDirectory, environment);
   await verifyAllProjectToolDelivery(allToolsProjectDirectory, handbookDigest);
@@ -229,6 +239,9 @@ async function verifyTarballFiles(files) {
     "skills/arsu/conversion-manifest.json",
     "skills/arsu/profiles/registry.json",
     "skills/capabilities/registry.json",
+    "skills/capabilities/generation-chinese-patent-filing/assets/WORD转XML编辑器五书模板文件.docx",
+    "skills/capabilities/generation-chinese-patent-filing/assets/sRGB-v4.icc",
+    "skills/capabilities/generation-chinese-patent-filing/scripts/build_filing.py",
     "literature-adapters/zotero/profile.template.json",
     "literature-adapters/zotero/LICENSE",
     "literature-adapters/zotero/NOTICE.md",

@@ -120,15 +120,16 @@ export async function loadProcedureCatalog(packageRoot = PACKAGE_ROOT): Promise<
   }
   for (const registered of extensions.capabilities.values()) {
     const manifest = registered.manifest;
+    const memberships = extensionProfiles.get(manifest.capability_id) ?? [];
     add({
       id: manifest.capability_id,
       selector: `procedure:${manifest.capability_id}`,
       kind: "plugin",
       title: manifest.title,
       description: manifest.description,
-      modes: ["standalone", "graph"],
+      modes: memberships.length > 0 ? ["standalone", "graph"] : ["standalone"],
       domains: (extensionDomains.get(manifest.capability_id) ?? []).sort(compareText),
-      profiles: extensionProfiles.get(manifest.capability_id) ?? [],
+      profiles: memberships,
       packageRoot: registered.packageRoot,
       contentPath: path.join(registered.packageRoot, "SKILL.md"),
       manifest,

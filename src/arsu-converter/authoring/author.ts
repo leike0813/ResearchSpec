@@ -29,6 +29,7 @@ export interface AuthoringPackageAsset {
 export interface AuthoringOptions {
   extractionIndexPath?: string;
   origin?: CapabilityManifest["provenance"]["origin"];
+  standaloneOnly?: boolean;
 }
 
 export interface AuthoringInputSource {
@@ -204,7 +205,7 @@ export async function authorCapabilityPackage(outputRoot: string, source: Capabi
   const procedureText = source.procedure_path
     ? await readFile(path.resolve(source.procedure_path), "utf8")
     : "";
-  const skillText = renderThinSkill(source, manifest, [...inlineKnowledge, procedureText].filter(Boolean).join("\n\n"));
+  const skillText = renderThinSkill(source, manifest, [...inlineKnowledge, procedureText].filter(Boolean).join("\n\n"), options.standaloneOnly);
   await writeFile(path.join(packageRoot, "SKILL.md"), skillText, "utf8");
   files.push("SKILL.md");
   const manifestText = stringify(manifest);
@@ -247,7 +248,7 @@ function readRegistry(registryPath: string): { registry_version: string; capabil
   }
 }
 
-function renderThinSkill(source: CapabilityAuthoringSource, manifest: CapabilityManifest, procedureText: string): string {
+function renderThinSkill(source: CapabilityAuthoringSource, manifest: CapabilityManifest, procedureText: string, standaloneOnly = false): string {
   return `---
 name: ${source.capability_id}
 description: "${source.description}"
@@ -261,7 +262,7 @@ metadata:
 
 # ${source.title}
 
-Execute exactly one ResearchSpec capability node.
+${standaloneOnly ? "Follow the active ResearchSpec Procedure packet for this standalone task." : "Execute exactly one ResearchSpec capability node."}
 
 ## Inputs
 
@@ -328,8 +329,8 @@ visible evidence for the owning human Gate, never a scientific clearance.
 
 ## Completion
 
-Return the declared outputs and follow the active procedure packet. In standalone
+${standaloneOnly ? "Report the declared outputs as ordinary project files." : `Return the declared outputs and follow the active procedure packet. In standalone
 mode, report ordinary output paths without modifying ResearchSpec workflow state.
-In graph mode, use only the packet's handoff and exact advance selector.
+In graph mode, use only the packet's handoff and exact advance selector.`}
 `;
 }

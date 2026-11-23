@@ -6,11 +6,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse, stringify } from "yaml";
 import { assemblePluginRegistry } from "../dist/src/plugins/assembler.js";
-import {
-  INTELLECTUAL_PROPERTY_DOMAIN_ID,
-  OPTIONAL_PATENT_CAPABILITY_IDS,
-  OPTIONAL_PATENT_PROFILE_IDS,
-} from "../dist/src/graph-profiles/intellectual-property.js";
+import { INTELLECTUAL_PROPERTY_DOMAIN_ID } from "../dist/src/graph-profiles/intellectual-property.js";
+import { projectBundledIntellectualProperty, upsert } from "./project-intellectual-property.mjs";
 
 const repoRoot = fileURLToPath(new URL("../", import.meta.url));
 const auditPath = "audits/software-copyright-materials/catalog.json";
@@ -120,9 +117,6 @@ const central = await assemblePluginRegistry({ repoRoot, pluginRoot: path.join(r
 emit(pluginRoot + "/registry.json", json(central));
 const registryPath = extensions + "/registry.json";
 const registry = JSON.parse(read(registryPath));
-function upsert(rows, key, row) {
-  return [...rows.filter((item) => item[key] !== row[key]), row].sort((a, b) => a[key].localeCompare(b[key]));
-}
 registry.capabilities = upsert(registry.capabilities, "capability_id", {
   capability_id: extensionId, source_path: packagePath, manifest_sha256: manifestHash,
 });
@@ -132,27 +126,16 @@ registry.profiles = upsert(registry.profiles, "profile_id", {
 const domains = central.domains.filter((domain) => domain.skills.includes(skillId));
 assert.deepEqual(domains.map((domain) => domain.domain_id), [INTELLECTUAL_PROPERTY_DOMAIN_ID]);
 const domainId = INTELLECTUAL_PROPERTY_DOMAIN_ID;
-const patentCapabilities = JSON.parse(read("skills/capabilities/registry.json")).capabilities
-  .filter((entry) => OPTIONAL_PATENT_CAPABILITY_IDS.has(entry.capability_id));
-const patentProfiles = JSON.parse(read("skills/arsu/profiles/registry.json")).profiles
-  .filter((entry) => OPTIONAL_PATENT_PROFILE_IDS.has(entry.profile_id));
-assert.equal(patentCapabilities.length, OPTIONAL_PATENT_CAPABILITY_IDS.size);
-assert.equal(patentProfiles.length, OPTIONAL_PATENT_PROFILE_IDS.size);
-for (const entry of patentCapabilities) {
-  registry.capabilities = upsert(registry.capabilities, "capability_id", { ...entry, source_root: "bundled" });
-}
-for (const { profile_id, source_path, profile_sha256 } of patentProfiles) {
-  registry.profiles = upsert(registry.profiles, "profile_id", { profile_id, source_path, profile_sha256, source_root: "bundled" });
-}
 registry.domains = registry.domains.map((domain) => ({
   ...domain,
-  capabilities: domain.capabilities.filter((id) => id !== extensionId && !OPTIONAL_PATENT_CAPABILITY_IDS.has(id)),
-  profiles: domain.profiles.filter((id) => id !== extensionId && !OPTIONAL_PATENT_PROFILE_IDS.has(id)),
+  capabilities: domain.capabilities.filter((id) => id !== extensionId),
+  profiles: domain.profiles.filter((id) => id !== extensionId),
 })).filter((domain) => domain.capabilities.length > 0 || domain.profiles.length > 0);
 const existing = registry.domains.find((domain) => domain.domain_id === domainId);
 registry.domains = upsert(registry.domains, "domain_id", {
   domain_id: domainId,
-  capabilities: [...(existing?.capabilities ?? []), extensionId, ...OPTIONAL_PATENT_CAPABILITY_IDS].sort(),
-  profiles: [...(existing?.profiles ?? []), extensionId, ...OPTIONAL_PATENT_PROFILE_IDS].sort(),
+  capabilities: [...(existing?.capabilities ?? []), extensionId].sort(),
+  profiles: [...(existing?.profiles ?? []), extensionId].sort(),
 });
+projectBundledIntellectualProperty(registry);
 emit(registryPath, json(registry));

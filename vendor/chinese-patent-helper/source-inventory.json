@@ -1,0 +1,575 @@
+{
+  "schema_version": "1",
+  "commit": "14d40f003e9ca7d1d55dabbbd7d1aea455367368",
+  "files": {
+    ".gitignore": {
+      "blob": "33a68f017a7b30607456181b660142cc7d2cfc09",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "AGENTS.md": {
+      "blob": "a9769df50fd6ffa7e77a39a419cd0403160631ca",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "chinese-patent-helper/SKILL.md": {
+      "blob": "360e7cae58463d265ff8c423613c61cc29b9ddab",
+      "decision": "adapt for the capability package",
+      "sha256": "cc7243b593202e5dff83b1fc72ff869d50f9a56156c59a0af4bedd908dff46b3"
+    },
+    "chinese-patent-helper/assets/110101发明专利请求书.doc": {
+      "blob": "e4f94dee7421b2205c111016481cb1d38b85955b",
+      "decision": "external official source, link only when needed"
+    },
+    "chinese-patent-helper/assets/120101实用新型专利请求书.wps": {
+      "blob": "fa7f39b2bac3ce1c9c8db97e2c5ddccf179f9e66",
+      "decision": "external official source, link only when needed"
+    },
+    "chinese-patent-helper/assets/130001外观设计图片或照片.doc": {
+      "blob": "5f9c16d7c921c46f718f2408caf1e03e18be899b",
+      "decision": "external official source, link only when needed"
+    },
+    "chinese-patent-helper/assets/130002外观设计简要说明.docx": {
+      "blob": "9349d9f18ef323b6036eeef60d48da01cf466de7",
+      "decision": "external official source, link only when needed"
+    },
+    "chinese-patent-helper/assets/130101外观设计专利请求书.wps": {
+      "blob": "41c64032e05c9b3251c8b3be720f708bacbb5748",
+      "decision": "external official source, link only when needed"
+    },
+    "chinese-patent-helper/assets/150101国际申请进入中国国家阶段声明（发明）.wps": {
+      "blob": "525cfbacdc1f648b5f6544a349a1310dd07a7a9f",
+      "decision": "external official source, link only when needed"
+    },
+    "chinese-patent-helper/assets/150102国际申请进入中国国家阶段声明（实用新型）.wps": {
+      "blob": "ac4d091c6ceb48d857622a7f03c602de2746f2f5",
+      "decision": "external official source, link only when needed"
+    },
+    "chinese-patent-helper/assets/WORD转XML编辑器五书模板文件.docx": {
+      "blob": "06f044cc5677f30aee864beb56ea960eb509ab42",
+      "decision": "copy to the capability package",
+      "sha256": "e52e39abec20f433c635e0586109465371ba7f5c144a01845e5dd49d04844c21"
+    },
+    "chinese-patent-helper/assets/sRGB-v4.icc": {
+      "blob": "9fdeab1738cbe1458a72e210bf776c3aa2df3255",
+      "decision": "copy to the capability package",
+      "sha256": "d25e5802044c70ad354c8931ae945814a1826aa954ebe9e74efb68945c3ce2fd"
+    },
+    "chinese-patent-helper/assets/外观设计图片或照片模版.dotx": {
+      "blob": "a772964f98cab436aecae1b3df48d229175acbfa",
+      "decision": "external official source, link only when needed"
+    },
+    "chinese-patent-helper/assets/外观设计简要说明模版.dotx": {
+      "blob": "db29e1dce3a64a095be15641588fd749b61490c0",
+      "decision": "external official source, link only when needed"
+    },
+    "chinese-patent-helper/references/PCT进入中国国家阶段.md": {
+      "blob": "828facbda9e72e03dd35fc835a5530c81c729bdc",
+      "decision": "adapt for the capability package",
+      "sha256": "3cfb7efa99ecf451bce57b0e6e9befad476c045913b0c51a727666c89c7fb8f4"
+    },
+    "chinese-patent-helper/references/官方XML转换与草稿导入.md": {
+      "blob": "4bad5429b411948ddb5844d80b6ae479902dc47f",
+      "decision": "adapt for the capability package",
+      "sha256": "d9e594e0cd98d0ee693575798fc5cc5fd98d459cbb2c90c92026e2faea883a47"
+    },
+    "chinese-patent-helper/references/申请文件与核验.md": {
+      "blob": "a39a05816035fe88281498f8fcb1c37c9fc260b5",
+      "decision": "adapt for the capability package",
+      "sha256": "5853b4d31230506631f4a88dc85a92f81e563c38b315237b1e7beda3adae73b5"
+    },
+    "chinese-patent-helper/scripts/build_filing.py": {
+      "blob": "16d67b10efcd7ed87aaade9572562de5d638bea3",
+      "decision": "copy to the capability package",
+      "sha256": "361e2b4d74350129cc4d9878379fc4bf1fecea5aa8f385154dfedeb2f81b81f3"
+    },
+    "chinese-patent-helper/scripts/docx_to_cnipa_zip.py": {
+      "blob": "3eb8ca1c382834e7aab6aaebda18110d676df365",
+      "decision": "copy to the capability package",
+      "sha256": "fda2e256e2c680f2555c453b5600daa346c3ab7a6185f984526885a6cd3844fa"
+    },
+    "chinese-patent-helper/scripts/filing_docx_reader.py": {
+      "blob": "ba115ad90e17b711194252b7e67d87d4384561c0",
+      "decision": "copy to the capability package",
+      "sha256": "f1a75c385c60463cf426f2ef6b71a1bd6463fea9fecee4a1a441025e1fdd06be"
+    },
+    "chinese-patent-helper/scripts/filing_docx_writer.py": {
+      "blob": "4681a46cccf68d382474cad3aefab3057cec8a80",
+      "decision": "adapt for the capability package",
+      "sha256": "8ab42b5e2b34a5bc91a0972a6945e19db70263b9417ad0328ebc7b2456ce10f1"
+    },
+    "chinese-patent-helper/scripts/filing_ir.py": {
+      "blob": "418d2a85cde6232a3ecfd354730a659d0ec5efe8",
+      "decision": "copy to the capability package",
+      "sha256": "c62b9ad5fabe3b5469ef09f191b4a3f3041299f45cfb3b2339c44ea24aa42859"
+    },
+    "chinese-patent-helper/scripts/filing_markdown.py": {
+      "blob": "0f722e45433cd772339dc850ce212b12f7bc1ec9",
+      "decision": "copy to the capability package",
+      "sha256": "4e3ce7c54ec58625cad59af0c7290278056e7319ba5c4ef0c8775c205cd7a8c5"
+    },
+    "chinese-patent-helper/scripts/filing_xml_writer.py": {
+      "blob": "ce71799e42aa6dfe9ce5703c54b11f1f1d6c8247",
+      "decision": "copy to the capability package",
+      "sha256": "4d63fc5224fca012ed3ee95a4795e425387995e542d0a7b1c60ebf450a1649bf"
+    },
+    "openspec/changes/archive/.gitkeep": {
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-add-cross-platform-cnipa-xml-converter/.openspec.yaml": {
+      "blob": "1b17417b0453514c935e75173fb594a1fa201298",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-add-cross-platform-cnipa-xml-converter/design.md": {
+      "blob": "0ff92ed4e5e81373afc29d2248123c54677d3b21",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-add-cross-platform-cnipa-xml-converter/proposal.md": {
+      "blob": "e82d21eb093d3e4b286b35ea09a172581255c591",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-add-cross-platform-cnipa-xml-converter/specs/cnipa-xml-conversion/spec.md": {
+      "blob": "6da26a51f8899c5098f83cecd94b55a05ec5216c",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-add-cross-platform-cnipa-xml-converter/specs/invention-filing-preparation/spec.md": {
+      "blob": "e655d4d2caed6c88b9957997a955b51420718ff3",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-add-cross-platform-cnipa-xml-converter/tasks.md": {
+      "blob": "5e059c028a1b9c7999a82306e18c5c07b5b4bbd9",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-bootstrap-invention-filing/.openspec.yaml": {
+      "blob": "1b17417b0453514c935e75173fb594a1fa201298",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-bootstrap-invention-filing/design.md": {
+      "blob": "16030e04c1f05959c1b458b8acfcb278260471fa",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-bootstrap-invention-filing/proposal.md": {
+      "blob": "f9972a9df2af41cc0807444d4301c1db73d85bec",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-bootstrap-invention-filing/specs/invention-filing-preparation/spec.md": {
+      "blob": "1fc4584976d4cf2643b3d07743a6aa1e3e31787d",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-bootstrap-invention-filing/tasks.md": {
+      "blob": "e1e62f273a1fd48908fcc80c00ce8df0a877c112",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-introduce-filing-document-ir/.openspec.yaml": {
+      "blob": "1b17417b0453514c935e75173fb594a1fa201298",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-introduce-filing-document-ir/design.md": {
+      "blob": "f36cfd654ef64a25c6e769520d135fa4f8748ed6",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-introduce-filing-document-ir/proposal.md": {
+      "blob": "007d690c88e86ffecff37acf1fe223b2ef577fe1",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-introduce-filing-document-ir/specs/filing-document-rendering/spec.md": {
+      "blob": "7719967a88dde7fc65605e238062f9e65743479b",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-22-introduce-filing-document-ir/tasks.md": {
+      "blob": "e2527e97c07d8f59efa4e997c2d5520f3405bba8",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-pct-china-national-phase/.openspec.yaml": {
+      "blob": "c10a97dee21c808cc771a6bbb46597171814fa1b",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-pct-china-national-phase/design.md": {
+      "blob": "ccbb5524dfec216f172a3d12c2d7990e5b84f1c7",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-pct-china-national-phase/proposal.md": {
+      "blob": "c6904f3c12a4d9d788daa9eb367a8d2dd544da3e",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-pct-china-national-phase/specs/invention-filing-preparation/spec.md": {
+      "blob": "7befd6e7ad969b44f661c0ddb3b4b2d23861644c",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-pct-china-national-phase/specs/pct-china-national-phase-preparation/spec.md": {
+      "blob": "81c29dd87a1c69eac7d744b484fca3c99daaf01a",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-pct-china-national-phase/tasks.md": {
+      "blob": "92522c54accdf68bf8424fde9fe0970e5ed5e78a",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-utility-model-and-design-filing/.openspec.yaml": {
+      "blob": "c10a97dee21c808cc771a6bbb46597171814fa1b",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-utility-model-and-design-filing/design.md": {
+      "blob": "98eaa8ad8dc1ff1d9e1302af1896002295d83cc7",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-utility-model-and-design-filing/proposal.md": {
+      "blob": "a7329f8fac68bc97b588de7b7bcef32ae5378244",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-utility-model-and-design-filing/specs/cnipa-xml-conversion/spec.md": {
+      "blob": "bb161ef4a6cee197befca773a02787004741d253",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-utility-model-and-design-filing/specs/design-filing-preparation/spec.md": {
+      "blob": "c8830421f636317f6b397d9260864f416e631b42",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-utility-model-and-design-filing/specs/filing-document-rendering/spec.md": {
+      "blob": "693e20ae1dfa3f0575f4db216bf5051cb5019805",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-utility-model-and-design-filing/specs/utility-model-filing-preparation/spec.md": {
+      "blob": "cb2653a4ab155f87b5dae3163d1ac9e9df0599e3",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/changes/archive/2026-11-23-add-utility-model-and-design-filing/tasks.md": {
+      "blob": "4fb7f5b3b3ef950ba7c44b51264fb1f42a462080",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/config.yaml": {
+      "blob": "2805cb671454f2a67816aaaafdb898888e7f11c6",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/specs/.gitkeep": {
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/specs/cnipa-xml-conversion/spec.md": {
+      "blob": "f7d9d90ad5853b054bb05f1c3c551ab1041e8694",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/specs/design-filing-preparation/spec.md": {
+      "blob": "b6cf09766ee8668d2ae3e61a645d8eb3e5194963",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/specs/filing-document-rendering/spec.md": {
+      "blob": "349df8499980ad0d8550baf2b598244c874afd70",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/specs/invention-filing-preparation/spec.md": {
+      "blob": "60428d6aa453d562816be0d14b74f9436f79bc67",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/specs/pct-china-national-phase-preparation/spec.md": {
+      "blob": "34cd91868ecb5d138894f12d17669a68ab12b8e6",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "openspec/specs/utility-model-filing-preparation/spec.md": {
+      "blob": "520b92473227d3c3633ff9403c42cc8c1e5e88da",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/cnipa/110101发明专利请求书.doc": {
+      "blob": "e4f94dee7421b2205c111016481cb1d38b85955b",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/WORD转XML编辑器—Word文档编写格式建议.doc": {
+      "blob": "9f1528c152ec3f54ac706ed6dd59c074fe8ee8e1",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/WORD转XML编辑器五书模板操作说明.pdf": {
+      "blob": "d92e69e6c8dc4365ba49d59106d6d6ab9e0bba96",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/WORD转XML编辑器五书模板文件.docx": {
+      "blob": "06f044cc5677f30aee864beb56ea960eb509ab42",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/WORD转XML编辑器软件用户操作手册（Windows-WORD）.pdf": {
+      "blob": "616681e40579b4a17b780545dd6f8241ed3b89af",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/WORD转XML编辑器软件用户操作手册（Windows-WPS）.pdf": {
+      "blob": "b38a90693939f73efdb2c5486899cfae591e464e",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/专利审查指南（2023，2025年修订）.pdf": {
+      "blob": "5f5af42b0a2eb2e0a04530a566106fc31746e65f",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/专利电子申请数据规范（20240120全量）.zip": {
+      "blob": "36b3116e91c9af4eab692a8fa3fee875b22387b4",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/中华人民共和国专利法实施细则（2023年修订）.txt": {
+      "blob": "1ff57c189176d965847ea84b473862e2cbcbe46f",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/中华人民共和国专利法（2020年修正）.txt": {
+      "blob": "b7055a7698c470b6fdcc4138c335980ab2552048",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/使用WORD转XML编辑器及专利业务办理系统提交XML文件常见问题解答.pdf": {
+      "blob": "ed52e9045fb1d511a4dd4da5f054929113f3c289",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/全面实施XML格式提交专利电子文件的通知.txt": {
+      "blob": "cd2a2dbb739fa0d71ff03d7712f148883d16ad1e",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/关于专利电子申请的规定（局令第57号）.txt": {
+      "blob": "56b0b1c940baf6c23571721bb61e7d17d44480c5",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/审查指南2025年修改对照表.pdf": {
+      "blob": "ce4bcfc85c7607797211bda33415247e852ca51e",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/应当以XML格式上传提交的专利电子文件清单.pdf": {
+      "blob": "4c2f25c47a6daa63121c596cde6e93a2cec3e3f4",
+      "decision": "external official source, link only when needed"
+    },
+    "references/cnipa/知识产权政务服务事项办事指南.pdf": {
+      "blob": "49601042697892120bd2532fd6a0bb410a46584a",
+      "decision": "external official source, link only when needed"
+    },
+    "references/中国发明专利申请操作指南.md": {
+      "blob": "1e6c9e9de6d9aebde25363abcdc3cf3b386529a5",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/官方XML转换与草稿导入实测.md": {
+      "blob": "abea6bad795b55d5591b8e7e39256cac973d0292",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/开发资料索引.md": {
+      "blob": "042eff7ec50c4ac88d0a2302cdcbabaf1b94be29",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/PCT中国国家阶段/figures/图1-中文.png": {
+      "blob": "9b295819168b33789f44abb42e1ce7cbaaa8a6f0",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "c361f80de1353633c4b4ff986db659e3907a299a92962b64c7180575be8e108f"
+    },
+    "references/验证样稿/PCT中国国家阶段/figures/图1-英文.png": {
+      "blob": "47e113c21a21f9a79820d0aec4f44078464bf5cb",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "d9b83dc06b476e3533cd3fd134d9599775b8a70640f457650f3fbe2587537fe5"
+    },
+    "references/验证样稿/PCT中国国家阶段/原始国际申请-英文.md": {
+      "blob": "4ba75e261d4ded871259d05dda30f952187f453d",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "9b4d0e025bdb085b96f9012867a4ea63788c5b2441995418070647c9495d8c2e"
+    },
+    "references/验证样稿/PCT中国国家阶段/译文审定稿.md": {
+      "blob": "bb89b51d7de2ef0bc5334a14679b023096447ba5",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "413823d2364f22373788fcc6ae8e2272729177fae1f3929373c5651d679060eb"
+    },
+    "references/验证样稿/synthetic-no-figure.docx": {
+      "blob": "8cc54b5db47b08f698570bcebdc377615ae181d3",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "eccdaf72ff8d25ae5327f4126b82891302f230c317ec0b6d6efb84a5458bd35a"
+    },
+    "references/验证样稿/synthetic-no-figure.zip": {
+      "blob": "dc90ea9800a2e4ca3b0c754ea2cfab38ace496dc",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "fae888970873c2f059b339764250fdfb9006357ac275066849f389df44b46916"
+    },
+    "references/验证样稿/synthetic-with-figure.docx": {
+      "blob": "431016e4dddd09a299701ffc7a154592354c1e25",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "c171e8fcb4a6437c69055fd5a623d5510094209e5ea40158b267654af9e8c0c8"
+    },
+    "references/验证样稿/synthetic-with-figure.zip": {
+      "blob": "2108363c9ab798288b22a846accdd9e36f671d46",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "36b69e73bece56643cb71d83685a383e941f6ee4d805505d8805446bf05e91d7"
+    },
+    "references/验证样稿/两类申请/README.md": {
+      "blob": "6322982d8edd6b4fafa4bc5bd1af0f19934e2100",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-01-六棱收纳盒/images/主视图.png": {
+      "blob": "611d6b063fdf1b6575e12d30d1b5be6b13edc6e4",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-01-六棱收纳盒/images/仰视图.png": {
+      "blob": "22c03343491245dbb2a76560489b0bfd5b9bcbfe",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-01-六棱收纳盒/images/俯视图.png": {
+      "blob": "cef29235f28322d5478b7e4e52707ff7b08b88f0",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-01-六棱收纳盒/images/右视图.png": {
+      "blob": "6e8c4a4c940cbdf48af9ef8304cedf4ea04647f3",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-01-六棱收纳盒/images/后视图.png": {
+      "blob": "d2bc862a8de40a6d2fed86170a5091db14fbc1ab",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-01-六棱收纳盒/images/左视图.png": {
+      "blob": "5ef789a4f6633e54472726a125743ab7649619c8",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-01-六棱收纳盒/images/立体图.png": {
+      "blob": "3b857ae158a2aaa51ee188363cd9720c22c94e95",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-01-六棱收纳盒/审定稿.md": {
+      "blob": "72cddab03e73505c805bba90084ab118ad6331ac",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-02-局部装饰板/images/主视图.png": {
+      "blob": "5795a75a659af8b905456cce5b507ffb698720df",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-02-局部装饰板/images/局部放大图.png": {
+      "blob": "82cf088ae97d1192623e401bd83063bad8a571df",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-02-局部装饰板/审定稿.md": {
+      "blob": "410391560d80fd0625672afec811cf814302f484",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-03-相似书签/images/设计1主视图.png": {
+      "blob": "9c39d01c10e68eda3d84319889d48b47c7a0ebf5",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "1905dde7063f49b0ea7c5f6389510e87c3c06e2c6060e6d958d317c31c9f566a"
+    },
+    "references/验证样稿/两类申请/外观设计-03-相似书签/images/设计2主视图.png": {
+      "blob": "d39cabf045a13dd412ba20bdd6f9059ce1711709",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "8a8c3156be8e6e11593a3f8c3a8c2c186e106948168c0fa6981d9c3dd8b60e96"
+    },
+    "references/验证样稿/两类申请/外观设计-03-相似书签/审定稿.md": {
+      "blob": "baf9af86e9dca33bbf544716242d9fb66e6e87e0",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "3c82dc875cd25d0b38a628b97e9f7c296ec3daa6404c09b48041a2ac65afe18d"
+    },
+    "references/验证样稿/两类申请/外观设计-04-成套贴纸/images/套件1主视图.png": {
+      "blob": "ccdcca4d568a4bbb9ac5bbe40edc57f4b84eea0d",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-04-成套贴纸/images/套件2主视图.png": {
+      "blob": "64d07d388edba36fb36a2327d938b79ab5c0b8df",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-04-成套贴纸/审定稿.md": {
+      "blob": "bf0d583eaf7610573aa45dfde54c08c586f783f5",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-05-组件连接件/images/组件1主视图.png": {
+      "blob": "f62cff6e30a293b5d5982bc5b8a5216f872e4e8b",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-05-组件连接件/images/组件1俯视图.png": {
+      "blob": "0f84b78658d58c2c054d683aac45532d33e1dd62",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-05-组件连接件/images/组件1立体图.png": {
+      "blob": "998721ffb9af1c422d27aaefca9e84563a91e5bf",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-05-组件连接件/images/组件2主视图.png": {
+      "blob": "bd6b0c1dd72a4406bb9284a5aa540355ac354a98",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-05-组件连接件/images/组件2俯视图.png": {
+      "blob": "742d3d2f7c18f08f50f1f89f6b8242dd3d409e6e",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-05-组件连接件/images/组件2立体图.png": {
+      "blob": "f784f8b8bc5e86a7610fe5208cdc85f62395207b",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-05-组件连接件/images/组合状态参考图.png": {
+      "blob": "c8f3a0751c9b1f4cbe1643318d8aeca4c656674e",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-05-组件连接件/审定稿.md": {
+      "blob": "8fa98fb9c2248cbf301fcc95c103ba41df87e188",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-05-组件连接件/申请文件.zip": {
+      "blob": "57ea62d2df0f97e5b61cbd6993f2c12848ee6543",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-05-组件连接件/组件2-插接座.glb": {
+      "blob": "8c1b308d7d35730f4cafd5bcac1dcd74f5565ea7",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-06-静态界面/images/主视图.png": {
+      "blob": "e89ee68bed544bdb0ba8541f23a62b78e7bbf451",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-06-静态界面/审定稿.md": {
+      "blob": "da56896e7c7b3af8df84631f538c43e2ab4c14bf",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-07-动态界面/images/主视图.png": {
+      "blob": "da522bdc467cccf3bac84d32aee56e924d9b8a76",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-07-动态界面/images/变化状态图1.png": {
+      "blob": "c61946468645aa25fd10f023e1ed48c3c5aa4be1",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-07-动态界面/images/变化状态图2.png": {
+      "blob": "f375276be971b2455d71cfd9a9992a2bad83e8f0",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-07-动态界面/images/变化状态图3.png": {
+      "blob": "fed22be0899f677047e89034fe815661ab63d4d0",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-07-动态界面/动态界面-演示.mp4": {
+      "blob": "d554d3a904368b9da8e08b675a180dff1da5e0eb",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-07-动态界面/审定稿.md": {
+      "blob": "690bb6ffdfebfa5b004eff2e596c6c88df1a4152",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/外观设计-07-动态界面/申请文件.zip": {
+      "blob": "0b54b34bd301bc968012ac24222c02fcc500047b",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/官方外观模板探针/130001.xml": {
+      "blob": "2a4b4ddffe3ce6cf5576258f4ccd83e25cd2055b",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/官方外观模板探针/130002.xml": {
+      "blob": "50d857848d35135e63cf174db4fbaf56fc5cccac",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "references/验证样稿/两类申请/实用新型-可调节夹持支架/figures/图1-爆炸结构示意图.png": {
+      "blob": "64b5bb5f9f81d301a5fdca3f0e46fc7e45947abf",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "9a4bf50ae22720600149a2fe9ebef237a7456fdd4f416bec70879247f384629f"
+    },
+    "references/验证样稿/两类申请/实用新型-可调节夹持支架/figures/图2-底座俯视结构示意图.png": {
+      "blob": "6e46a025790abb6f1aede49f017b9848886bb229",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "464524f50a71f58487aa578def211cb0dfed585de941c9253d36408d9d641513"
+    },
+    "references/验证样稿/两类申请/实用新型-可调节夹持支架/审定稿.md": {
+      "blob": "517eef9a2a5d9c9c3c84893679d4f1a78da1f1fa",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "417d3c8f8c5269b61984feb89a2cd31d017449665610a5f25c3d5f377d2686fd"
+    },
+    "references/验证样稿/两类申请/实用新型-可调节夹持支架/申请文件.zip": {
+      "blob": "31e04704c75edff2243cb1fd83658a1f4cfb6770",
+      "decision": "outside the shipping and regression test scope"
+    },
+    "tests/fixtures/CGATS001Compat-v2-micro.icc": {
+      "blob": "b5a73495bfc7509837b300800d8197d94e83fab7",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "73e1ba37d2bad5bab2a964f40a9eed96209666efc067c3322626214bbef234a0"
+    },
+    "tests/test_docx_to_cnipa_zip.py": {
+      "blob": "46e2efe176bb8983f87460197dea8d614a368fb2",
+      "decision": "maintainer-only synthetic conversion fixture or upstream regression test",
+      "sha256": "a2ecb8554e80e313af77a3a9daaa05cc354d46b0c5c8dea73ede6517e24af1de"
+    }
+  }
+}

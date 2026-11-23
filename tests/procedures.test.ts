@@ -48,6 +48,10 @@ void test("candidate cards carry declared manifest roles and routing intents", a
   assert.deepEqual(comparison.inputs, ["paper_source", "patent_source"]);
   assert.deepEqual(comparison.outputs, ["comparison_report"]);
   assert.deepEqual(comparison.profiles, []);
+  const filing = procedureCard(required("generation-chinese-patent-filing"));
+  assert.deepEqual(filing.modes, ["standalone"]);
+  assert.deepEqual(filing.profiles, []);
+  assert.deepEqual(filing.domains, ["intellectual-property-materials"]);
   const routed = required("deep-research");
   assert.ok((routed.intents?.length ?? 0) > 0, "routing intents come from ARSU skills and routes");
   assert.ok((routed.intents ?? []).includes("synthesize scholarly evidence"));
@@ -84,6 +88,8 @@ void test("bilingual natural requests reach suitable candidates without Agent tr
     ]],
     ["专利文献阅读", ["analysis-patent-reading", "transform-patent-research-evidence"]],
     ["根据科研成果走研究转专利流程", ["design-patent-intake"]],
+    ["中国专利 CNIPA XML ZIP 提交包", ["generation-chinese-patent-filing"]],
+    ["PCT 国际申请进入中国国家阶段", ["generation-chinese-patent-filing"]],
     ["帮我为这个软件准备软件著作权登记材料", ["plugin-software-copyright-materials"]],
     ["比较这篇论文和这件专利的技术异同", ["analysis-paper-patent-comparison"]],
     ["按权利要求制作 Excel 对照表", ["analysis-patent-claim-chart"]],

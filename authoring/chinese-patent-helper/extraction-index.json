@@ -1,0 +1,268 @@
+{
+  "schema_version": "1",
+  "source": "vendor/chinese-patent-helper",
+  "extraction_root": "authoring/chinese-patent-helper",
+  "milestone_count": 1,
+  "artifact_count": 13,
+  "verification_summary": {
+    "pass": 13
+  },
+  "milestones": {
+    "chinese-patent-helper": {
+      "total": 13,
+      "pass": 13,
+      "fail": 0,
+      "error": 0,
+      "skip": 0
+    }
+  },
+  "artifacts": [
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-CAP-01",
+      "kind": "capability",
+      "relative_path": "SKILL.md",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/SKILL.md",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/SKILL.md"
+      ],
+      "ledger": [
+        "adapt for the capability package"
+      ],
+      "sha256": "cc7243b593202e5dff83b1fc72ff869d50f9a56156c59a0af4bedd908dff46b3",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "cc7243b593202e5dff83b1fc72ff869d50f9a56156c59a0af4bedd908dff46b3",
+        "expected_sha256": "cc7243b593202e5dff83b1fc72ff869d50f9a56156c59a0af4bedd908dff46b3"
+      }
+    },
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-02",
+      "kind": "runtime-asset",
+      "relative_path": "assets/WORD转XML编辑器五书模板文件.docx",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/assets/WORD转XML编辑器五书模板文件.docx",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/assets/WORD转XML编辑器五书模板文件.docx"
+      ],
+      "ledger": [
+        "copy to the capability package"
+      ],
+      "sha256": "e52e39abec20f433c635e0586109465371ba7f5c144a01845e5dd49d04844c21",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "e52e39abec20f433c635e0586109465371ba7f5c144a01845e5dd49d04844c21",
+        "expected_sha256": "e52e39abec20f433c635e0586109465371ba7f5c144a01845e5dd49d04844c21"
+      }
+    },
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-03",
+      "kind": "runtime-asset",
+      "relative_path": "assets/sRGB-v4.icc",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/assets/sRGB-v4.icc",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/assets/sRGB-v4.icc"
+      ],
+      "ledger": [
+        "copy to the capability package"
+      ],
+      "sha256": "d25e5802044c70ad354c8931ae945814a1826aa954ebe9e74efb68945c3ce2fd",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "d25e5802044c70ad354c8931ae945814a1826aa954ebe9e74efb68945c3ce2fd",
+        "expected_sha256": "d25e5802044c70ad354c8931ae945814a1826aa954ebe9e74efb68945c3ce2fd"
+      }
+    },
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-04",
+      "kind": "knowledge-pack",
+      "relative_path": "references/PCT进入中国国家阶段.md",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/references/PCT进入中国国家阶段.md",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/references/PCT进入中国国家阶段.md"
+      ],
+      "ledger": [
+        "adapt for the capability package"
+      ],
+      "sha256": "3cfb7efa99ecf451bce57b0e6e9befad476c045913b0c51a727666c89c7fb8f4",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "3cfb7efa99ecf451bce57b0e6e9befad476c045913b0c51a727666c89c7fb8f4",
+        "expected_sha256": "3cfb7efa99ecf451bce57b0e6e9befad476c045913b0c51a727666c89c7fb8f4"
+      }
+    },
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-05",
+      "kind": "knowledge-pack",
+      "relative_path": "references/官方XML转换与草稿导入.md",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/references/官方XML转换与草稿导入.md",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/references/官方XML转换与草稿导入.md"
+      ],
+      "ledger": [
+        "adapt for the capability package"
+      ],
+      "sha256": "d9e594e0cd98d0ee693575798fc5cc5fd98d459cbb2c90c92026e2faea883a47",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "d9e594e0cd98d0ee693575798fc5cc5fd98d459cbb2c90c92026e2faea883a47",
+        "expected_sha256": "d9e594e0cd98d0ee693575798fc5cc5fd98d459cbb2c90c92026e2faea883a47"
+      }
+    },
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-06",
+      "kind": "knowledge-pack",
+      "relative_path": "references/申请文件与核验.md",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/references/申请文件与核验.md",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/references/申请文件与核验.md"
+      ],
+      "ledger": [
+        "adapt for the capability package"
+      ],
+      "sha256": "5853b4d31230506631f4a88dc85a92f81e563c38b315237b1e7beda3adae73b5",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "5853b4d31230506631f4a88dc85a92f81e563c38b315237b1e7beda3adae73b5",
+        "expected_sha256": "5853b4d31230506631f4a88dc85a92f81e563c38b315237b1e7beda3adae73b5"
+      }
+    },
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-07",
+      "kind": "runtime-asset",
+      "relative_path": "scripts/build_filing.py",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/build_filing.py",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/build_filing.py"
+      ],
+      "ledger": [
+        "copy to the capability package"
+      ],
+      "sha256": "361e2b4d74350129cc4d9878379fc4bf1fecea5aa8f385154dfedeb2f81b81f3",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "361e2b4d74350129cc4d9878379fc4bf1fecea5aa8f385154dfedeb2f81b81f3",
+        "expected_sha256": "361e2b4d74350129cc4d9878379fc4bf1fecea5aa8f385154dfedeb2f81b81f3"
+      }
+    },
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-08",
+      "kind": "runtime-asset",
+      "relative_path": "scripts/docx_to_cnipa_zip.py",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/docx_to_cnipa_zip.py",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/docx_to_cnipa_zip.py"
+      ],
+      "ledger": [
+        "copy to the capability package"
+      ],
+      "sha256": "fda2e256e2c680f2555c453b5600daa346c3ab7a6185f984526885a6cd3844fa",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "fda2e256e2c680f2555c453b5600daa346c3ab7a6185f984526885a6cd3844fa",
+        "expected_sha256": "fda2e256e2c680f2555c453b5600daa346c3ab7a6185f984526885a6cd3844fa"
+      }
+    },
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-09",
+      "kind": "runtime-asset",
+      "relative_path": "scripts/filing_docx_reader.py",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/filing_docx_reader.py",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/filing_docx_reader.py"
+      ],
+      "ledger": [
+        "copy to the capability package"
+      ],
+      "sha256": "f1a75c385c60463cf426f2ef6b71a1bd6463fea9fecee4a1a441025e1fdd06be",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "f1a75c385c60463cf426f2ef6b71a1bd6463fea9fecee4a1a441025e1fdd06be",
+        "expected_sha256": "f1a75c385c60463cf426f2ef6b71a1bd6463fea9fecee4a1a441025e1fdd06be"
+      }
+    },
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-10",
+      "kind": "runtime-asset",
+      "relative_path": "scripts/filing_docx_writer.py",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/filing_docx_writer.py",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/filing_docx_writer.py"
+      ],
+      "ledger": [
+        "adapt for the capability package"
+      ],
+      "sha256": "8ab42b5e2b34a5bc91a0972a6945e19db70263b9417ad0328ebc7b2456ce10f1",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "8ab42b5e2b34a5bc91a0972a6945e19db70263b9417ad0328ebc7b2456ce10f1",
+        "expected_sha256": "8ab42b5e2b34a5bc91a0972a6945e19db70263b9417ad0328ebc7b2456ce10f1"
+      }
+    },
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-11",
+      "kind": "runtime-asset",
+      "relative_path": "scripts/filing_ir.py",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/filing_ir.py",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/filing_ir.py"
+      ],
+      "ledger": [
+        "copy to the capability package"
+      ],
+      "sha256": "c62b9ad5fabe3b5469ef09f191b4a3f3041299f45cfb3b2339c44ea24aa42859",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "c62b9ad5fabe3b5469ef09f191b4a3f3041299f45cfb3b2339c44ea24aa42859",
+        "expected_sha256": "c62b9ad5fabe3b5469ef09f191b4a3f3041299f45cfb3b2339c44ea24aa42859"
+      }
+    },
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-12",
+      "kind": "runtime-asset",
+      "relative_path": "scripts/filing_markdown.py",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/filing_markdown.py",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/filing_markdown.py"
+      ],
+      "ledger": [
+        "copy to the capability package"
+      ],
+      "sha256": "4e3ce7c54ec58625cad59af0c7290278056e7319ba5c4ef0c8775c205cd7a8c5",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "4e3ce7c54ec58625cad59af0c7290278056e7319ba5c4ef0c8775c205cd7a8c5",
+        "expected_sha256": "4e3ce7c54ec58625cad59af0c7290278056e7319ba5c4ef0c8775c205cd7a8c5"
+      }
+    },
+    {
+      "milestone": "chinese-patent-helper",
+      "artifact_id": "CPH-13",
+      "kind": "runtime-asset",
+      "relative_path": "scripts/filing_xml_writer.py",
+      "path": "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/filing_xml_writer.py",
+      "sources": [
+        "vendor/chinese-patent-helper/upstream/chinese-patent-helper/scripts/filing_xml_writer.py"
+      ],
+      "ledger": [
+        "copy to the capability package"
+      ],
+      "sha256": "4d63fc5224fca012ed3ee95a4795e425387995e542d0a7b1c60ebf450a1649bf",
+      "verification": {
+        "status": "pass",
+        "actual_sha256": "4d63fc5224fca012ed3ee95a4795e425387995e542d0a7b1c60ebf450a1649bf",
+        "expected_sha256": "4d63fc5224fca012ed3ee95a4795e425387995e542d0a7b1c60ebf450a1649bf"
+      }
+    }
+  ]
+}

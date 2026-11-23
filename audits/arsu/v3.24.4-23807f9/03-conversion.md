@@ -1,8 +1,8 @@
 # ARSU Anchor Conversion — v3.24.4-23807f9
 
-- registry SHA-256: `b9a3ed9f5cefb81c1e176c4e887fb1751be8c7654142e5efdeb95c80ee050d8e`
-- packages tree SHA-256: `3c632c9c829ac6a8bdb20f966929d98dc3965cc27881309e77df7d991d5a2c0a`
-- capability count: 56 · operational: 56
+- registry SHA-256: `da02eb072eeafec909c0d406cdb30e8cd4cb9c075d3dc4ae481aa08723c8de31`
+- packages tree SHA-256: `7648e3141e1d5756ded8494ceceb3c82ba32aa69dbe8314bb1a1b23166149cec`
+- capability count: 57 · operational: 57
 
 ## Capability Packages
 
@@ -40,6 +40,7 @@
 | `discovery-literature-search-screening` | Literature Search And Screening | discovery | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `d5b7069e65ff` |
 | `discovery-source-quality-grading` | Source Quality Grading | verification | checker | llm | required | operational | 1/1 | 1 | 1 | 3 | `730453570d3c` |
 | `generation-abstract-writing` | Abstract Writing | generation | producer | llm | required | operational | 2/1 | 3 | 1 | 5 | `b95a50816b7e` |
+| `generation-chinese-patent-filing` | 中国专利申报材料 | generation | producer | mixed | advisory | operational | 2/1 | 14 | 1 | 16 | `a393d6ca926b` |
 | `generation-figure-generation` | Figure Generation | generation | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `ac437d6da397` |
 | `generation-format-rendering` | Format Rendering | generation | producer | mixed | required | operational | 1/1 | 2 | 1 | 4 | `c6367de2b769` |
 | `generation-humanization-reference` | Paper Humanizer Reference Mode | generation | observer | llm | none | operational | 0/0 | 1 | 1 | 3 | `21163e55acf6` |

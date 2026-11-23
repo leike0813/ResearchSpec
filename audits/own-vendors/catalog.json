@@ -37,6 +37,20 @@
         "design-review-response-workboard-planning",
         "generation-review-response-round"
       ]
+    },
+    {
+      "vendor_id": "chinese-patent-helper",
+      "release_label": "snapshot-14d40f0",
+      "anchor_id": "snapshot-14d40f0",
+      "source_meta": "vendor/chinese-patent-helper/SOURCE.json",
+      "upstream_root": "vendor/chinese-patent-helper/upstream",
+      "extraction_index": "authoring/chinese-patent-helper/extraction-index.json",
+      "author_script": "chinese-patent-helper:author",
+      "delivery_assets": [
+        "skills/capabilities/generation-chinese-patent-filing/assets/WORD转XML编辑器五书模板文件.docx",
+        "skills/capabilities/generation-chinese-patent-filing/assets/sRGB-v4.icc"
+      ],
+      "capability_ids": ["generation-chinese-patent-filing"]
     }
   ]
 }

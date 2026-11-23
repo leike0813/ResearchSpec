@@ -34,6 +34,7 @@ void test("patent baseline rejects unfinished review and detects reviewed tool d
       "scripts/patent-source-audit.mjs", "scripts/prepare-patent-authoring.mjs",
       "scripts/patent-disclosure-skill-maintenance.mjs", "src/arsu-converter/authoring/author.ts",
       "src/vendor-converters/patent-disclosure-skill", "src/arsu-converter/workflow/graph-profiles/patent.ts",
+      "src/graph-profiles/intellectual-property.ts",
       ".agents/skills/patent-disclosure-skill-maintenance/SKILL.md", catalog.authoring_root,
       "docs/user/patent-workflows.md", "docs/maintainer/patent-disclosure-skill.md", "NOTICE", "LICENSE",
       `${catalog.generated_root}/${selected.capability_id}`, `${catalog.generated_root}/registry.json`,

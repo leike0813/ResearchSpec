@@ -122,6 +122,43 @@ contact services, or upload material. The audit is the sole source of binding
 evidence; production update requires the audit to validate and a human to
 review the complete generated tree bound to its hash.
 
+Chinese Patent Helper
+
+- Source: https://github.com/leike0813/chinese_patent_helper
+- Revision: 14d40f003e9ca7d1d55dabbbd7d1aea455367368
+- Author: Joshua Reed (leike0813)
+- Provenance: owner-confirmed local `main` checkout of the named repository when
+  its remote was initially empty
+- License: MIT, explicitly authorized by the owner for the original material
+- Snapshot: `snapshot-14d40f0` under
+  `audits/own-vendors/chinese-patent-helper/snapshot-14d40f0`
+- Extraction index: `authoring/chinese-patent-helper/extraction-index.json`
+- Delivery: the hidden standalone Procedure
+  `generation-chinese-patent-filing` in
+  `skills/capabilities/generation-chinese-patent-filing`, delivered by the
+  existing `intellectual-property-materials` domain through normal install and
+  update, without a graph profile or ResearchSpec workflow-state authority
+
+The Procedure prepares CNIPA invention, utility model, design and PCT China
+national phase materials for Chinese-origin applications and foreign-language
+originals with an approved Chinese translation. Installation, update, checking
+and packaging treat its Python 3.12 converters and assets as static content.
+They never execute the converters, install dependencies, use browser access,
+or contact CNIPA.
+
+The bundled `assets/WORD转XML编辑器五书模板文件.docx` is the unchanged official
+CNIPA five-book template from
+https://cponline.cnipa.gov.cn/GzfwYwblGlwhTMVC/GzfwYwblGlwhT/selectToolsById?weihuRid=157,
+with SHA-256
+`e52e39abec20f433c635e0586109465371ba7f5c144a01845e5dd49d04844c21`.
+The official source declares no open-source license. Other official forms and
+templates are linked to their official downloads.
+
+The bundled `assets/sRGB-v4.icc` is from
+https://github.com/saucecontrol/Compact-ICC-Profiles/blob/8e22c542d632e8800625581c4b417a2d081c02b4/profiles/sRGB-v4.icc
+at commit `8e22c542d632e8800625581c4b417a2d081c02b4` and is released under
+CC0 1.0 Universal.
+
 Patent Disclosure Skill
 
 - Source: https://github.com/handsomestWei/patent-disclosure-skill

@@ -19,8 +19,7 @@ let currentVendor = null;
 let currentAnchor = "";
 
 function sha256(text) { return createHash("sha256").update(text, "utf8").digest("hex"); }
-function fileSha(pathName) { return sha256(readFileSync(pathName, "utf8")); }
-function byteSha(pathName) { return createHash("sha256").update(readFileSync(pathName)).digest("hex"); }
+function fileSha(pathName) { return sha256(readFileSync(pathName)); }
 function json(pathName) { return JSON.parse(readFileSync(pathName, "utf8")); }
 function esc(text) { return String(text ?? "").replaceAll("|", "\\|").replaceAll("\n", " "); }
 
@@ -46,7 +45,7 @@ function deliveryState(vendor) {
       if (stats.isSymbolicLink()) throw new Error(`Delivery asset path contains a symlink: ${assetPath}`);
     }
     if (!stats.isFile()) throw new Error(`Delivery asset is not a regular file: ${assetPath}`);
-    return { path: assetPath, sha256: byteSha(file) };
+    return { path: assetPath, sha256: fileSha(file) };
   });
   return { assets: assets.sort((a, b) => a.path.localeCompare(b.path)) };
 }

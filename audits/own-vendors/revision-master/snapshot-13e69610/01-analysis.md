@@ -1,8 +1,8 @@
 # Own Vendor Anchor Analysis — revision-master @ snapshot-13e69610
 
-- generated: 2026-10-23T15:20:33.969Z
+- generated: 2026-11-23T14:55:17.063Z
 - upstream: snapshot-13e69610 @ 13e69610f216f816f106d1a2a1672eedfa01ac9a
-- maintenance skill SHA-256: `54da495208f529136035ff10375cc7ae76981c6d44a3f0f1795e744c6b5f68af`
+- maintenance skill SHA-256: `9f266b590f0a4e0c1c1b13faca9991ac29ccb0e4cc46640dfeca42f456cfa0ab`
 
 ## Upstream Inventory
 
