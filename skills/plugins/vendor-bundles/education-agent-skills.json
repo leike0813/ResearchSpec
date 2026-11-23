@@ -4,8 +4,8 @@
     "vendor_id": "education-agent-skills",
     "name": "Education Agent Skills",
     "repository_url": "https://github.com/GarethManning/education-agent-skills",
-    "release": "snapshot-6bbbce4",
-    "revision": "6bbbce418f82e11044009c9f3b7373a354de5bd0",
+    "release": "v3.1.0",
+    "revision": "c0c82fb682001177b855576e45f27cc5e786e4c4",
     "license": "CC-BY-SA-4.0",
     "converter_version": "1",
     "skills": [
@@ -419,7 +419,8 @@
         "upstreams": [
           {
             "source_paths": [
-              "skills/curriculum-assessment/curriculum-knowledge-architecture-designer/SKILL.md"
+              "skills/curriculum-assessment/curriculum-knowledge-architecture-designer/SKILL.md",
+              "skills/curriculum-assessment/curriculum-knowledge-architecture-designer/references/worked-examples.md"
             ],
             "adaptation": "converted"
           }
@@ -848,7 +849,8 @@
         "upstreams": [
           {
             "source_paths": [
-              "skills/curriculum-assessment/kud-knowledge-type-mapper/SKILL.md"
+              "skills/curriculum-assessment/kud-knowledge-type-mapper/SKILL.md",
+              "skills/curriculum-assessment/kud-knowledge-type-mapper/references/worked-examples.md"
             ],
             "adaptation": "converted"
           }
@@ -1056,7 +1058,8 @@
         "upstreams": [
           {
             "source_paths": [
-              "skills/professional-learning/panel-review/SKILL.md"
+              "skills/professional-learning/panel-review/SKILL.md",
+              "skills/professional-learning/panel-review/references/worked-kud-review.md"
             ],
             "adaptation": "converted"
           }
@@ -1069,7 +1072,8 @@
         "upstreams": [
           {
             "source_paths": [
-              "skills/professional-learning/pedagogical-content-knowledge-developer/SKILL.md"
+              "skills/professional-learning/pedagogical-content-knowledge-developer/SKILL.md",
+              "skills/professional-learning/pedagogical-content-knowledge-developer/references/worked-examples.md"
             ],
             "adaptation": "converted"
           }
@@ -1342,7 +1346,8 @@
         "upstreams": [
           {
             "source_paths": [
-              "skills/curriculum-assessment/scope-and-sequence-designer/SKILL.md"
+              "skills/curriculum-assessment/scope-and-sequence-designer/SKILL.md",
+              "skills/curriculum-assessment/scope-and-sequence-designer/references/worked-examples.md"
             ],
             "adaptation": "converted"
           }
@@ -1550,7 +1555,8 @@
         "upstreams": [
           {
             "source_paths": [
-              "skills/professional-learning/technological-pedagogical-content-knowledge-developer/SKILL.md"
+              "skills/professional-learning/technological-pedagogical-content-knowledge-developer/SKILL.md",
+              "skills/professional-learning/technological-pedagogical-content-knowledge-developer/references/worked-examples.md"
             ],
             "adaptation": "converted"
           }

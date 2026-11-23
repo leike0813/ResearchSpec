@@ -19,7 +19,7 @@ import {
 } from "./lib/vendor-maintenance.mjs";
 
 const ROOT = process.cwd();
-const ANCHOR_CREATED_AT = "2026-10-01T00:00:00+08:00";
+const ANCHOR_CREATED_AT = "2026-11-20T00:00:00+08:00";
 const CATALOG_PATH = path.join(ROOT, "audits", "education-agent-skills", "catalog.json");
 const AUDIT_README = path.join(ROOT, "audits", "education-agent-skills", "README.md");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "education-agent-skills-maintenance", "SKILL.md");
@@ -351,7 +351,7 @@ ${rows.map((row) => `| \`${row.raw_skill_id}\` | \`${row.capability_id}\` | ${ro
 
 - [x] 上游身份固定为 \`${data.release}\` @ \`${state.upstream.revision}\`。
 - [x] 136 个 reviewed vendor-bundle Skills 一对一映射为 136 个 extension capability，raw Skills 继续保留为 advisory surface。
-- [x] 136 个静态 llm capability 使用统一 evidence-bound brief validator；reviewed 树不含脚本或 references。
+- [x] 136 个静态 llm capability 使用统一 evidence-bound brief validator，审查通过的 Markdown 示例登记为知识资源。
 - [x] 上游 runtime/provider 内容不进入 extension package；流程权威由 graph profile 承接。
 `;
 
@@ -367,7 +367,7 @@ ${rows.map((row) => `| \`${row.raw_skill_id}\` | \`${row.capability_id}\` | ${ro
 |---|---|---|---|
 ${state.advisory.raw_skills.map((skill) => `| \`${skill.skill_id}\` | ${skill.files} | \`${skill.tree_sha256}\` | \`${skill.skill_sha256}\` |`).join("\n")}
 
-## Tool Ingestion
+## Reference Ingestion
 
 | target | source | SHA-256 | byte-identical |
 |---|---|---|---|
@@ -375,8 +375,8 @@ ${rows.flatMap((row) => row.tool_files).map((tool) => `| \`${tool.target}\` | \`
 
 ## Verification
 
-- 每个 mixed package 的 \`tools/\` 与 reviewed vendor bundle 逐字节一致。
-- Agent-only package 不复制脚本，语义程序完整落在 \`SKILL.md\`。
+- 每份 Markdown 参考与 reviewed vendor bundle 逐字节一致。
+- 每项教学程序在 \`SKILL.md\` 说明示例何时适用。
 - 上游可执行文件只审计，不执行、不安装依赖、不访问服务。
 `;
 
@@ -476,8 +476,8 @@ ${rows.map((row) => `| \`${row.capability_id}\` | \`${row.package_tree_sha256}\`
     "03-conversion.md": conversion,
     "04-review.md": review,
   };
-  const incrementalEvidence = existsSync(path.join(artifactDir(anchorId), "incremental-audit.json"))
-    ? "\n## 增量审计依据\n\n上游差异见 `artifacts/upstream-analysis.md` 与 `artifacts/incremental-audit.json`；来源和证据继承见 `incremental-binding.json`，预览转换详情见 `artifacts/candidate-01-analysis.md` 至 `artifacts/candidate-04-review.md`。生产验证结果见 `artifacts/production-verification.json`，语义判定见 `05-semantic-review.md`。\n"
+  const incrementalEvidence = existsSync(path.join(dir, "upstream-review.md"))
+    ? "\n## 增量审计依据\n\n见 [上游审查](upstream-review.md)、[证据绑定](incremental-binding.json)、[完整预览](artifacts/preview-manifest.json)与[语义审查](05-semantic-review.md)。\n"
     : "";
   for (const [name, content] of Object.entries(records)) writeFileSync(path.join(dir, name), content + incrementalEvidence, "utf8");
   process.stdout.write(`wrote ${dir}/{${Object.keys(records).join(", ")}}${existsSync(semanticReviewPath) ? "; preserved 05-semantic-review.md" : ""}\n`);

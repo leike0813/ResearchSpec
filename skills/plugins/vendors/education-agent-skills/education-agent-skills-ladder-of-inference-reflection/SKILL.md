@@ -5,9 +5,9 @@ license: CC-BY-SA-4.0
 compatibility: Static educational guidance using user-provided context and only tools explicitly chosen by the invoking Agent. ResearchSpec installs files only and does not contact services, handle credentials, collect learner data, or grant workflow authority.
 metadata:
   vendor: education-agent-skills
-  vendor-release: snapshot-32fce5c
+  vendor-release: v3.1.0
   upstream-skill-id: systems-thinking/ladder-of-inference-reflection
-  source-sha256: 15068c44ce81c6868eaac7704fc0d925fe13a32affaf8018f3caeb272d5394ae
+  source-sha256: 9870b75aab695d85f2be04516adb5e728145af5a0165ae3933382719c28773f5
   researchspec-role: semantic-helper
 disable-model-invocation: false
 user-invocable: true
@@ -115,10 +115,12 @@ Student level: {{student_level}}
 Current interpretation: {{current_interpretation}}
 Desired use: {{desired_use}}
 
+Suitability check before generating alternatives: do not use this reflection immediately after significant harm, to adjudicate disputed facts, or to excuse documented harm. Prioritise safety and the school's appropriate human-led safeguarding, restorative or disciplinary process. Where there is a significant power imbalance, do not press the less-powerful person to reframe their experience; use qualified human facilitation and defer the exercise if time, trust or safety is missing. If unsuitable, retain the output sections but explain the deferral, mark alternative ladders and dialogue as deferred, and give a safe next step rather than inventing alternatives. This tool supports later reflection; it is not factual investigation.
+
 Rules:
 1. Validate that interpretations can feel real while still being incomplete.
 2. Distinguish observable data from selected data and meaning-making.
-3. Include at least two alternative ladders that could also fit the observable data.
+3. When suitable, include at least two alternative ladders that could also fit the observable data, labelled as possibilities rather than facts.
 4. Do not force forgiveness, positivity, or reconciliation.
 5. In conflict contexts, protect dignity and safety.
 6. End with questions that gather evidence or open dialogue.
@@ -177,7 +179,7 @@ What actions this ladder may lead to:
 - "I may be missing something. Can you help me understand...?"
 - "Another possibility is..."
 
-Self-check: Do not invalidate emotion. Do not present alternatives as truth. Keep safety and dignity central.
+Self-check: Confirm suitability before generating alternatives; if deferred, explain why and identify the human-led next step. Do not invalidate emotion or minimize documented harm. Do not present alternatives as truth. Keep safety and dignity central.
 ```
 
 ## Common Pitfalls
@@ -198,6 +200,6 @@ Self-check: Do not invalidate emotion. Do not present alternatives as truth. Kee
 
 - [ ] Observable data is separated from interpretation.
 - [ ] Assumptions are named tentatively.
-- [ ] At least two alternative ladders are included.
+- [ ] At least two tentative alternative ladders are included when suitable; otherwise the deferral and safe next step are explicit.
 - [ ] Dialogue language is safe and age-appropriate.
 - [ ] The output does not excuse harm or force reconciliation.

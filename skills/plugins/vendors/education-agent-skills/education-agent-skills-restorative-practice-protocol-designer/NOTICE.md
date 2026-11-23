@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `wellbeing-motivation-agency/restorative-practice-protocol-designer`
 - Source path: `skills/wellbeing-motivation-agency/restorative-practice-protocol-designer/SKILL.md`
-- Source SHA-256: `7ec90a91b85fdd63fec0199ad624d7b7c4cb2e8829ee38d28c0bb051c7ff1fe9`
+- Source SHA-256: `f6caf93ab7e44723f953a351f277905c8d2ddf256ab96568b175cdd6cd37dd4f`
 - Generated Skill: `education-agent-skills-restorative-practice-protocol-designer`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

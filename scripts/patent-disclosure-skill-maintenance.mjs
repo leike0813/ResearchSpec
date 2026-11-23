@@ -65,8 +65,9 @@ export function assertReviewed(state, review) {
 
 function records(root, catalog, state) {
   const anchor = anchorPath(catalog, state.anchor_id);
+  const sourceAudit = path.posix.relative(anchor, catalog.source_audit);
   const sections = [
-    ["Source analysis", `Pinned commit ${state.upstream.revision}; complete tracked inventory: ${state.upstream.file_count}.\n\nSee ../source-audit.json for every source, exclusion, external resource and license decision.`],
+    ["Source analysis", `Pinned commit ${state.upstream.revision}; complete tracked inventory: ${state.upstream.file_count}.\n\nSee [the source audit](${sourceAudit}) for every source, exclusion, external resource and license decision.`],
     ["Ingestion", `Authoring tree: ${state.authoring_tree_sha256}.\n\nSource extractions bind upstream byte hashes; curated knowledge records authored derivation.`],
     ["Conversion", `${state.packages.length} fixed capabilities and ${state.profiles.length} profiles.\n\nPackage and profile hashes are recorded in manifest.json. Registry membership is fixed capability membership, outside plugin domains.`],
     ["Review evidence", "Read review-decision.json and 05-semantic-review.md. Conversion and checking are static; runtime tests execute only explicitly selected adapted tools on fixtures."],

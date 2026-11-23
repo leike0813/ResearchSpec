@@ -48,7 +48,7 @@ try {
   const metadata = parsePackMetadata(pack.stdout);
   const sourceSurface = await loadPackagedSurface(packageRoot);
   applyExpectedSurface(sourceSurface);
-  verifyTarballFiles(metadata.files.map((file) => file.path));
+  await verifyTarballFiles(metadata.files.map((file) => file.path));
 
   const tarball = path.join(packageDirectory, metadata.filename);
   await writeFile(path.join(installDirectory, "package.json"), "{\"private\":true}\n", "utf8");
@@ -205,7 +205,7 @@ try {
   await rm(temporaryRoot, { recursive: true, force: true });
 }
 
-function verifyTarballFiles(files) {
+async function verifyTarballFiles(files) {
   const required = [
     "package.json", "README.md", "CHANGELOG.md", "SECURITY.md", "LICENSE", "NOTICE",
     "hooks/paper-humanizer/guard.md", "hooks/paper-humanizer/inject.cjs",
@@ -301,11 +301,10 @@ function verifyTarballFiles(files) {
   }
   for (const item of required) assert(files.includes(item), `Tarball is missing required file: ${item}`);
   const educationFiles = files.filter((file) => file.startsWith("skills/plugins/vendors/education-agent-skills/"));
-  assert(educationFiles.length === 136 * 3, `Tarball Education Skill file count mismatch: ${String(educationFiles.length)}`);
-  assert(
-    educationFiles.every((file) => /\/(?:SKILL\.md|LICENSE|NOTICE\.md)$/.test(file)),
-    "Tarball Education Skills contain an unexpected asset.",
-  );
+  const educationManifest = JSON.parse(await readFile(path.join(packageRoot, "skills/plugins/vendor-manifests/education-agent-skills.json"), "utf8"));
+  const expectedEducationFiles = educationManifest.file_dispositions.filter((row) => row.disposition === "included")
+    .map((row) => `skills/plugins/${row.output_path}`).sort();
+  assert(equal(educationFiles.sort(), expectedEducationFiles), "Tarball Education Skills differ from the reviewed vendor manifest.");
   const adapterRuntimeFiles = files.filter((file) => /^literature-adapters\/zotero\/bin\/[^/]+\/zotero-bridge(?:\.exe)?$/.test(file));
   assert(adapterRuntimeFiles.length === 7, `Tarball Zotero runtime count mismatch: ${String(adapterRuntimeFiles.length)}`);
   const adapterOpaqueFiles = files.filter((file) =>

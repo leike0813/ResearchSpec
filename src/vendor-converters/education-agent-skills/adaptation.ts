@@ -53,13 +53,7 @@ export function adaptEducationSkill(
     markedFrontmatterEvidenceIds.push(decision.evidence_id);
     return `${policies.policy.evidence.marker_open}${citation}${policies.policy.evidence.marker_close}`;
   });
-  const bodyResult = markBodyEvidence(
-    parsed.body,
-    evidenceDecisions.filter((decision) => decision.body_strategy === "author-year-complete-unit"),
-    auditEvidenceById,
-    policies.policy.evidence.marker_open,
-    policies.policy.evidence.marker_close,
-  );
+  const bodyResult = adaptEducationBodyEvidence(parsed.body, evidenceDecisions, auditEvidenceById, policies);
   const frontmatter = normalizeFrontmatter(parsed.frontmatter, admission, markedEvidenceSources, policies);
   const boundary = renderBoundary(safety, policies);
   return {
@@ -70,6 +64,21 @@ export function adaptEducationSkill(
     unmatchedEvidenceIds: bodyResult.unmatchedEvidenceIds,
     markedFrontmatterEvidenceIds,
   };
+}
+
+export function adaptEducationBodyEvidence(
+  body: string,
+  evidenceDecisions: EducationEvidenceAdaptationDecision[],
+  auditEvidenceById: ReadonlyMap<string, EducationEvidence>,
+  policies: EducationPolicies,
+) {
+  return markBodyEvidence(
+    body,
+    evidenceDecisions.filter((decision) => decision.body_strategy === "author-year-complete-unit"),
+    auditEvidenceById,
+    policies.policy.evidence.marker_open,
+    policies.policy.evidence.marker_close,
+  );
 }
 
 export function recoverEducationSourceBody(adaptedSkill: string, markerOpen = "⟦UNRESOLVED⟧", markerClose = "⟦/UNRESOLVED⟧"): string {

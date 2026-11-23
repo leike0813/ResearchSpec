@@ -48,5 +48,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-unassisted-evidence-checkpoint/SKILL.md
-      sha256: 2b31f9d54221844a5cf8df4a9f9a8664c66e6a20ab4a7870244ded3fa5a155c5
+      sha256: 544f782a50a3fe83f3ce01d8b77064e1a0ba735bd73eee581af823273bd4b20c
 license: CC-BY-SA-4.0

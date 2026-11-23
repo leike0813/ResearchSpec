@@ -48,5 +48,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-progressive-hint-ladder/SKILL.md
-      sha256: 44f751971df675bb6b36571634c44131df5a8b6b7a3e2182f8c50ee9b8b7e74b
+      sha256: 40109d8e5b5a5022787c0fcfc1eaaa0c9d1f883c938d1abcc4bd0082298bdcfe
 license: CC-BY-SA-4.0

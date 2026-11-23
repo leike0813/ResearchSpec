@@ -48,9 +48,9 @@ void test("patent baseline rejects unfinished review and detects reviewed tool d
     execFileSync("git", ["clone", "--quiet", "--shared", path.join(ROOT, catalog.upstream.path), path.join(root, catalog.upstream.path)], { stdio: "pipe" });
     await mkdir(path.join(root, "audits/patent-disclosure-skill"), { recursive: true });
     await writeFile(path.join(root, "audits/patent-disclosure-skill/catalog.json"), JSON.stringify({ ...catalog, profile_ids: [profile] }));
-    await writeFile(path.join(root, catalog.source_audit), JSON.stringify({ ...audit, capabilities: [selected] }));
     const anchor = path.join(root, "audits/patent-disclosure-skill", catalog.anchor_id);
     await mkdir(anchor, { recursive: true });
+    await writeFile(path.join(root, catalog.source_audit), JSON.stringify({ ...audit, capabilities: [selected] }));
     await writeFile(path.join(anchor, "05-semantic-review.md"), "# Fixture semantic review\n\nCompleted assessment of fixture outputs.\n");
     await writeFile(path.join(anchor, "review-decision.json"), JSON.stringify({ status: "pending" }));
     assert.throws(() => run(root, "baseline(root);"), /unfinished/);

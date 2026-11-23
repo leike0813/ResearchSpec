@@ -1,16 +1,16 @@
 {
   "schema_version": "1",
   "vendor_id": "education-agent-skills",
-  "release": "snapshot-6bbbce4",
-  "revision": "6bbbce418f82e11044009c9f3b7373a354de5bd0",
-  "audit_sha256": "57b93c4668e6ca29fcb191e35cdea56e85ab0a7888b78256c6e64096422c6406",
-  "evidence_map_sha256": "5d970cbb765a08f33444f6c9fcabcf4095e469e3fe1dc05730843fd2e7506fd2",
-  "production_policy_sha256": "ecf28c3d3bd001384f91f6934c11b095e89313450c6ef1d9fc0934620a213e3f",
+  "release": "v3.1.0",
+  "revision": "c0c82fb682001177b855576e45f27cc5e786e4c4",
+  "audit_sha256": "cb1f0416bf8da46a5218ec23f932f166366861c5b399bdbcf238e72a2da3d059",
+  "evidence_map_sha256": "232168ab30d86329a60d0a3cf1024c6f947535aaea47c03e76592d2f4f12983f",
+  "production_policy_sha256": "b8515dd494133c8cb0f2d2139b2e92dfa4afa2d6175b9aa501042dc8c81c81a2",
   "license_sha256": "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f",
-  "candidate_tree_set_sha256": "4d42fa3190d1e45f4bafce8c06a539d6e41bdc86d380b2cafb230eb6892ad633",
+  "candidate_tree_set_sha256": "3b473a920a815e10ada837e9f46f4990094a890e3e60bc4a4b9cae8e51d8671f",
   "review_status": "approved",
-  "approved_tree_set_sha256": "4d42fa3190d1e45f4bafce8c06a539d6e41bdc86d380b2cafb230eb6892ad633",
+  "approved_tree_set_sha256": "3b473a920a815e10ada837e9f46f4990094a890e3e60bc4a4b9cae8e51d8671f",
   "approved_by": "user",
-  "approved_at": "2026-10-01T07:12:20+08:00",
-  "note": "The user explicitly approved the complete incremental preview and authorized production conversion for this exact aggregate SHA-256."
+  "approved_at": "2026-11-23T00:25:07Z",
+  "note": "The maintainer approved publication of the complete v3.1.0 preview aggregate."
 }

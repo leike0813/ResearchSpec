@@ -1,7 +1,7 @@
 schema_version: "1"
 capability_id: analysis-patent-reading
 title: 专利通俗解读 (Patent Reading)
-description: 把公开号、PDF 或全文读成通俗笔记与图谱，产出稳定特征行与可机读段落（patent reading, claim features）。
+description: 解读中国与海外专利的公开号、PDF 或全文，产出通俗笔记、稳定特征行与可机读段落（patent reading, claim features）。
 maturity: operational
 class: analysis
 node_kind: producer
@@ -108,7 +108,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-vault-desc_paragraphs.py
     path: tools/vault/desc_paragraphs.py
-    content_hash: a46bf1c20a118e68f685d2bbee620c18a62f6a6c23969c9534513a01fd7ea787
+    content_hash: f5fb873e47032416ce0ec1310ca77111db747daa39ab5e7cf367263f20eb2ac2
     license: MIT
   - knowledge_id: tools-vault-clue_vault.py
     path: tools/vault/clue_vault.py
@@ -144,7 +144,43 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-patent_type.py
     path: tools/patent_type.py
-    content_hash: 26ff0b601b2704ba559e5d75abb40b5e0360d1f794df4c402427b5a54cfa1929
+    content_hash: ea96e685bb9b8c0d11c4a0d30f8fcf58a335878ee520842a181e0f7fb6564a6a
+    license: MIT
+  - knowledge_id: tools-google_patents-results.py
+    path: tools/google_patents/results.py
+    content_hash: 84689841f2f0255206f8176732e6d92778fc5f970e28d7c3cb50381624c76b56
+    license: MIT
+  - knowledge_id: tools-google_patents-query.py
+    path: tools/google_patents/query.py
+    content_hash: b931e04e8abb0a7ab8162356afd52c08750820900f8cc9647800d878c978eb58
+    license: MIT
+  - knowledge_id: tools-google_patents-paths.py
+    path: tools/google_patents/paths.py
+    content_hash: 1f7503d3582ad7a29c3250fba5d0985c2c1cbfd3094113e5fde365ed0a6f8874
+    license: MIT
+  - knowledge_id: tools-google_patents-html_text.py
+    path: tools/google_patents/html_text.py
+    content_hash: 9ab609cf688ea261a6a5988f239b0a9225189786ca14825caa2004bfdc903d4f
+    license: MIT
+  - knowledge_id: tools-google_patents-errors.py
+    path: tools/google_patents/errors.py
+    content_hash: c6de124552306c952705544119db4bda210af7167f28866acfc4bb48618aefb7
+    license: MIT
+  - knowledge_id: tools-google_patents-detail.py
+    path: tools/google_patents/detail.py
+    content_hash: bcb31684edbf2082b0f5c4436b6e69a29a5f59ca4e2100caf56ab5839494cf53
+    license: MIT
+  - knowledge_id: tools-google_patents-client.py
+    path: tools/google_patents/client.py
+    content_hash: 7320a73145865075f6d0ad8932677c38d93828f4cc149b56c5dd727b91acb7ff
+    license: MIT
+  - knowledge_id: tools-google_patents-api.py
+    path: tools/google_patents/api.py
+    content_hash: ab6d40d847518b2284abbf001cabfd968539e84ce834566110787cd2834847cc
+    license: MIT
+  - knowledge_id: tools-google_patents-__init__.py
+    path: tools/google_patents/__init__.py
+    content_hash: c45fb6bdecc97fac425f9dd1f9d54e165ae61fda6b2ee2eb8e925f85176fd434
     license: MIT
   - knowledge_id: tools-extract-figure_extract.py
     path: tools/extract/figure_extract.py
@@ -152,7 +188,11 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-extract-fetch_patent_pdf.py
     path: tools/extract/fetch_patent_pdf.py
-    content_hash: c7695df1ebcbd3db5573e498a8a57d4964ae891a0f1bbc5262b4cfc3380c4c00
+    content_hash: 27390e3c464431ecb3d689af3c207db9900a5602f202ea863a8a9f749b6ed6ae
+    license: MIT
+  - knowledge_id: tools-extract-fetch_gp_fulltext.py
+    path: tools/extract/fetch_gp_fulltext.py
+    content_hash: e63dfa9448a7c6fde7690dccaaf5fa75dd6fe3304a84f20a4859833af06d94c4
     license: MIT
   - knowledge_id: tools-extract-fetch_design_views.py
     path: tools/extract/fetch_design_views.py
@@ -180,7 +220,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-crawl-cnipa_epub_crawler.py
     path: tools/crawl/cnipa_epub_crawler.py
-    content_hash: f3a494a97157e47aa992ae3cbcec3d35196fe912f330da7b007dfd1a8051cac0
+    content_hash: 40993a658b435e84ba5893dba40a5791cf35ca873e70bdabf72d5091271b10ad
     license: MIT
   - knowledge_id: tools-stdio_utf8.py
     path: tools/stdio_utf8.py
@@ -188,11 +228,11 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-browser.py
     path: tools/browser.py
-    content_hash: 28ca833b97bfea93d4fbaf76926b4acc71480b384468af7930b910c511a2f283
+    content_hash: bb93c3bd82667066de3e99fd1f7e0ffcd7d0842645995254e020d0585e5a7af5
     license: MIT
   - knowledge_id: tools-analyze-validate_public_clues.py
     path: tools/analyze/validate_public_clues.py
-    content_hash: 08d9750b882b73ed207414c41d6752c75de2c01d1eb0b3bfbb6d2776f0286f15
+    content_hash: 53ba66d46362a1929d16c301ceda31dc4d64274aa65c9178aed854c06c6b2e13
     license: MIT
   - knowledge_id: tools-analyze-validate_claim_tree.py
     path: tools/analyze/validate_claim_tree.py
@@ -212,7 +252,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-analyze-build_context_anchor.py
     path: tools/analyze/build_context_anchor.py
-    content_hash: 4252511ba8bc0aabf519b63026e274d862b67addf5cca907484e131de55d4872
+    content_hash: a67670b98ec09efc10632a46cf21bd67116f0eb62df6864e4324cd4574a9438e
     license: MIT
   - knowledge_id: tools-analyze-build_claim_mermaid.py
     path: tools/analyze/build_claim_mermaid.py
@@ -248,7 +288,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: references-patent_pdf_sources.yaml
     path: references/patent_pdf_sources.yaml
-    content_hash: 5fd353a1d20408c44a7050b33b8b60ac0e284eba1d13e3df65fa1a90c343f7ed
+    content_hash: 3d034c2818b2c56b9eb4a39b2718d66f4d8ca4b350a7299e625c6ff3db4d7a59
     license: MIT
   - knowledge_id: references-patent_obsidian_format.md
     path: references/patent_obsidian_format.md
@@ -300,7 +340,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: NOTICE.md
     path: NOTICE.md
-    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    content_hash: f5a7add35ef089af7d3eed7692081e062baf1ecefad72c48805a2bfefe9f928b
     license: MIT
   - knowledge_id: LICENSE
     path: LICENSE
@@ -316,5 +356,5 @@ provenance:
     - PD-KP-17
   upstream_sources:
     - path: authoring/patent-disclosure-skill/extracted/capabilities/04.md
-      sha256: 1862e514a2f43022f96006948d79b6fa53e164428571114b55dc63895627ba36
+      sha256: 5a5ea8d7ca0bcf38789ab5561cf9863f156d9daf6a838b0879c6075615b5752e
 license: MIT

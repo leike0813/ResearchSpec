@@ -24,8 +24,8 @@ export const EDUCATION_VENDOR_ID = "education-agent-skills";
 export const EDUCATION_RELEASE = EDUCATION_AGENT_SKILLS.snapshotId;
 export const EDUCATION_REVISION = EDUCATION_AGENT_SKILLS.revision;
 export const EDUCATION_TREE = EDUCATION_AGENT_SKILLS.tree;
-export const EDUCATION_AUDIT_SHA256 = "57b93c4668e6ca29fcb191e35cdea56e85ab0a7888b78256c6e64096422c6406";
-export const EDUCATION_EVIDENCE_SHA256 = "5d970cbb765a08f33444f6c9fcabcf4095e469e3fe1dc05730843fd2e7506fd2";
+export const EDUCATION_AUDIT_SHA256 = "cb1f0416bf8da46a5218ec23f932f166366861c5b399bdbcf238e72a2da3d059";
+export const EDUCATION_EVIDENCE_SHA256 = "232168ab30d86329a60d0a3cf1024c6f947535aaea47c03e76592d2f4f12983f";
 export const EDUCATION_LICENSE_SHA256 = "f8366f5391f49974ea29b26f167b40f9c673714680666651c6fa047dc2314e4f";
 
 const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
@@ -113,12 +113,15 @@ const ProductionPolicySchema = z.strictObject({
   }),
   generation: z.strictObject({
     retained_sources: z.array(z.strictObject({
-      audit_path: z.string().regex(/^audits\/education-agent-skills\/snapshot-[a-f0-9]+\/skill-audit\.json$/),
+      audit_path: z.string().regex(/^audits\/education-agent-skills\/(?:snapshot-[a-f0-9]+|v\d+\.\d+\.\d+)\/skill-audit\.json$/),
       audit_sha256: Sha256Schema,
     })),
     generated_id_prefix: z.literal("education-agent-skills-"),
     source_root: z.literal("vendor/education-agent-skills"),
-    copied_skill_files: z.tuple([z.literal("SKILL.md")]),
+    reviewed_references: z.record(
+      z.string().regex(/^skills\/[a-z0-9-]+\/[a-z0-9-]+\/references\/[a-z0-9-]+\.md$/),
+      z.array(z.enum(["privacy", "learning-analytics"])),
+    ),
     excluded_source_surfaces: z.tuple([
       z.literal("installer"),
       z.literal("mcp-runtime"),
@@ -237,16 +240,31 @@ export async function loadEducationAgentSkillsPolicies(repoRoot: string): Promis
 
   await validatePinnedSource(repoRoot, policy, audit);
   const admission = buildAdmission(policy, audit);
+  const admittedPaths = new Set(admission.filter((item) => item.disposition === "admitted").map((item) => path.posix.dirname(item.source_path)));
+  const referencePathsBySkill = new Map<string, Map<string, string>>();
+  for (const referencePath of Object.keys(policy.generation.reviewed_references)) {
+    const skillPath = path.posix.dirname(path.posix.dirname(referencePath));
+    if (!admittedPaths.has(skillPath)) throw new Error(`Education reference belongs to an excluded or missing Skill: ${referencePath}`);
+    const source = audit.repository_inventory.files.find((file) => file.path === referencePath);
+    if (!source || !["100644", "100755"].includes(source.mode)) throw new Error(`Education reference is missing from the audited source: ${referencePath}`);
+    const references = referencePathsBySkill.get(skillPath) ?? new Map<string, string>();
+    references.set(referencePath, source.sha256);
+    referencePathsBySkill.set(skillPath, references);
+  }
   for (const retained of policy.generation.retained_sources) {
     const bytes = await readFile(path.join(repoRoot, retained.audit_path), "utf8");
     if (sha256(bytes) !== retained.audit_sha256) throw new Error("Education retained source audit differs from policy.");
     const previous = z.object({
       snapshot: z.object({ snapshot_id: z.string().min(1), revision: z.string().regex(/^[a-f0-9]{40}$/) }),
       skills: z.array(z.object({ skill_id: SkillIdSchema, source_sha256: Sha256Schema })),
+      repository_inventory: z.object({ files: z.array(z.object({ path: z.string(), sha256: Sha256Schema })) }),
     }).parse(JSON.parse(bytes) as unknown);
     const previousById = new Map(previous.skills.map((skill) => [skill.skill_id, skill.source_sha256]));
+    const previousFiles = new Map(previous.repository_inventory.files.map((file) => [file.path, file.sha256]));
     for (const decision of admission) {
       if (decision.source_revision !== policy.revision || previousById.get(decision.upstream_skill_id) !== decision.source_sha256) continue;
+      const references = referencePathsBySkill.get(path.posix.dirname(decision.source_path)) ?? [];
+      if (Array.from(references).some(([file, digest]) => previousFiles.get(file) !== digest)) continue;
       const { stdout: source } = await execFileAsync("git", ["-C", path.join(repoRoot, policy.generation.source_root), "show", `${previous.snapshot.revision}:${decision.source_path}`]);
       if (sha256(source) !== decision.source_sha256) throw new Error(`Education retained source identity differs: ${decision.upstream_skill_id}`);
       decision.source_release = previous.snapshot.snapshot_id;
@@ -379,9 +397,14 @@ function buildSafetyDomains(
     if (!admitted) return [];
     if (skill.prospective_domains.length !== 1) throw new Error(`Education admitted Skill must have exactly one reviewed domain: ${skill.skill_id}`);
     const domain = DomainIdSchema.parse(skill.prospective_domains[0]?.domain_id);
-    const presentRisks = skill.risks
+    const sourceRisks = skill.risks
       .filter((risk) => risk.status === "present" && risk.risk !== "original-framework")
       .map((risk) => risk.risk) as EducationSafetyDomainDecision["present_risks"];
+    const referencePrefix = path.posix.dirname(skill.source_path) + "/references/";
+    const referenceRisks = Object.entries(policy.generation.reviewed_references)
+      .filter(([referencePath]) => referencePath.startsWith(referencePrefix))
+      .flatMap(([, risks]) => risks);
+    const presentRisks = [...new Set([...sourceRisks, ...referenceRisks])];
     const boundaryKeys = new Set<z.infer<typeof BoundaryKeySchema>>(["authority"]);
     if (skill.audience.kind !== "teacher-facing" || presentRisks.includes("minors")) boundaryKeys.add("minors");
     for (const risk of presentRisks) boundaryKeys.add(risk);

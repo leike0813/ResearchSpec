@@ -1,18 +1,18 @@
 {
   "schema_version": "1",
   "vendor_id": "education-agent-skills",
-  "release": "snapshot-6bbbce4",
-  "revision": "6bbbce418f82e11044009c9f3b7373a354de5bd0",
-  "tree_hash": "b90188569a783ba7d20dcffe2db7a55816db7c0b",
+  "release": "v3.1.0",
+  "revision": "c0c82fb682001177b855576e45f27cc5e786e4c4",
+  "tree_hash": "9651f375d1114d7163c374ba39a8c26dde539544",
   "converter_version": "1",
   "audit": {
-    "path": "audits/education-agent-skills/snapshot-6bbbce4/skill-audit.json",
-    "sha256": "57b93c4668e6ca29fcb191e35cdea56e85ab0a7888b78256c6e64096422c6406",
+    "path": "audits/education-agent-skills/v3.1.0/skill-audit.json",
+    "sha256": "cb1f0416bf8da46a5218ec23f932f166366861c5b399bdbcf238e72a2da3d059",
     "expected_skills": 165
   },
   "evidence": {
-    "path": "audits/education-agent-skills/snapshot-6bbbce4/evidence-map.json",
-    "sha256": "5d970cbb765a08f33444f6c9fcabcf4095e469e3fe1dc05730843fd2e7506fd2",
+    "path": "audits/education-agent-skills/v3.1.0/evidence-map.json",
+    "sha256": "232168ab30d86329a60d0a3cf1024c6f947535aaea47c03e76592d2f4f12983f",
     "expected_declarations": 872,
     "marker_open": "⟦UNRESOLVED⟧",
     "marker_close": "⟦/UNRESOLVED⟧",
@@ -108,13 +108,22 @@
       {
         "audit_path": "audits/education-agent-skills/snapshot-32fce5c/skill-audit.json",
         "audit_sha256": "e9326c43078db4c6bce4387c5a41a5bef775ad4d1691095c2020ef9cb9926857"
+      },
+      {
+        "audit_path": "audits/education-agent-skills/snapshot-6bbbce4/skill-audit.json",
+        "audit_sha256": "57b93c4668e6ca29fcb191e35cdea56e85ab0a7888b78256c6e64096422c6406"
       }
     ],
     "generated_id_prefix": "education-agent-skills-",
     "source_root": "vendor/education-agent-skills",
-    "copied_skill_files": [
-      "SKILL.md"
-    ],
+    "reviewed_references": {
+      "skills/curriculum-assessment/curriculum-knowledge-architecture-designer/references/worked-examples.md": ["privacy", "learning-analytics"],
+      "skills/curriculum-assessment/kud-knowledge-type-mapper/references/worked-examples.md": [],
+      "skills/curriculum-assessment/scope-and-sequence-designer/references/worked-examples.md": [],
+      "skills/professional-learning/panel-review/references/worked-kud-review.md": [],
+      "skills/professional-learning/pedagogical-content-knowledge-developer/references/worked-examples.md": [],
+      "skills/professional-learning/technological-pedagogical-content-knowledge-developer/references/worked-examples.md": ["privacy"]
+    },
     "excluded_source_surfaces": [
       "installer",
       "mcp-runtime",

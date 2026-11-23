@@ -1,9 +1,9 @@
 schema_version: "1"
 capability_id: plugin-education-agent-skills-panel-review
 title: What This Skill Does
-description: Seven-role depersonalised panel review of framework artefacts (KUD,
-  criterion bank, LT definition, crosswalk, scope-and-sequence) in
-  sequential-isolation mode. Gate rule mean>=88 AND no role<70.
+description: Seven-role curriculum artefact review calibrated for wellbeing/SEL.
+  Uses simulated perspectives in one session; mean>=88 and no role<70 are
+  practitioner heuristics, not validated gates.
 maturity: operational
 class: analysis
 node_kind: producer
@@ -42,11 +42,17 @@ validators:
         - "{outputs_json}"
         - --required
         - scope,source_ledger,method_plan,work_products,validation_results,conclusions
-knowledge_refs: []
+knowledge_refs:
+  - knowledge_id: eas-references-worked-kud-review.md
+    path: references/worked-kud-review.md
+    content_hash: 5942f2f46482f0f677f57aeb328db85b46eea5004a0165b4f3ac39d44e49bcc4
+    license: CC-BY-SA-4.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-panel-review/SKILL.md
-      sha256: 9167a69ca9cf81dd0aafae02d48ea73e9c2a79b417bf49fd6b7c84494597bc9f
+      sha256: 13d1c014d0e1ef46aedea99d1fd390a2ea071581e9a670dd23a92cfed2adc1f9
+    - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-panel-review/references/worked-kud-review.md
+      sha256: 5942f2f46482f0f677f57aeb328db85b46eea5004a0165b4f3ac39d44e49bcc4
 license: CC-BY-SA-4.0

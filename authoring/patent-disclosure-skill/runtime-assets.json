@@ -16,6 +16,13 @@
         "read_when": "when auditing upstream or third-party attribution for this package"
       },
       {
+        "upstream_path": "skills/patent-disclosure/references/ai_disclosure.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-disclosure/references/ai_disclosure.md",
+        "output_path": "references/ai_disclosure.md",
+        "license": "MIT",
+        "read_when": "when the inventor's material already specifies a model, training, or inference"
+      },
+      {
         "upstream_path": "skills/patent-disclosure/references/design_view_cnipa.md",
         "source_path": "authoring/patent-disclosure-skill/resources/shared/design_view_cnipa.md",
         "output_path": "references/design_view_cnipa.md",
@@ -489,6 +496,13 @@
         "read_when": "when auditing upstream or third-party attribution for this package"
       },
       {
+        "upstream_path": "skills/patent-application/references/ai_implementation.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-application/references/ai_implementation.md",
+        "output_path": "references/ai_implementation.md",
+        "license": "MIT",
+        "read_when": "when the disclosed invention already uses a model, training, or inference"
+      },
+      {
         "upstream_path": "skills/patent-application/references/design_view_cnipa.md",
         "source_path": "authoring/patent-disclosure-skill/resources/shared/design_view_cnipa.md",
         "output_path": "references/design_view_cnipa.md",
@@ -501,6 +515,13 @@
         "output_path": "references/disclosure_to_spec_map.md",
         "license": "MIT",
         "read_when": "when mapping a disclosure bundle into application specification sections"
+      },
+      {
+        "upstream_path": "skills/patent-application/references/divisional_example_ai_security.md",
+        "source_path": "authoring/patent-disclosure-skill/resources/patent-application/references/divisional_example_ai_security.md",
+        "output_path": "references/divisional_example_ai_security.md",
+        "license": "MIT",
+        "read_when": "when illustrating divisional scope without using the example as evidence for the current case"
       },
       {
         "upstream_path": "skills/patent-application/references/promo_terms.yaml",
@@ -785,6 +806,81 @@
         "license": "MIT"
       },
       {
+        "upstream_path": "skills/patent-search/tools/google_patents/__init__.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/__init__.py",
+        "output_path": "tools/google_patents/__init__.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/google_patents/api.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/api.py",
+        "output_path": "tools/google_patents/api.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/google_patents/client.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/client.py",
+        "output_path": "tools/google_patents/client.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/config.py",
+        "output_path": "tools/google_patents/config.py",
+        "license": "MIT",
+        "read_when": "when running an authorized overseas patent search"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/google_patents/detail.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/detail.py",
+        "output_path": "tools/google_patents/detail.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/google_patents/errors.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/errors.py",
+        "output_path": "tools/google_patents/errors.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/google_patents/html_text.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/html_text.py",
+        "output_path": "tools/google_patents/html_text.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/paths.py",
+        "output_path": "tools/google_patents/paths.py",
+        "license": "MIT",
+        "read_when": "when running an authorized overseas patent search"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/google_patents/query.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/query.py",
+        "output_path": "tools/google_patents/query.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/report.py",
+        "output_path": "tools/google_patents/report.py",
+        "license": "MIT",
+        "read_when": "when running an authorized overseas patent search"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/google_patents/results.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/results.py",
+        "output_path": "tools/google_patents/results.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-search/tools/gp_search.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-search/tools/gp_search.py",
+        "output_path": "tools/gp_search.py",
+        "license": "MIT"
+      },
+      {
         "upstream_path": null,
         "source_path": "authoring/patent-disclosure-skill/runtime/shared/patent_files.py",
         "output_path": "tools/patent_files.py",
@@ -1045,6 +1141,12 @@
         "license": "MIT"
       },
       {
+        "upstream_path": "skills/patent-reader/tools/extract/fetch_gp_fulltext.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/extract/fetch_gp_fulltext.py",
+        "output_path": "tools/extract/fetch_gp_fulltext.py",
+        "license": "MIT"
+      },
+      {
         "upstream_path": "skills/patent-reader/tools/extract/fetch_patent_pdf.py",
         "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/extract/fetch_patent_pdf.py",
         "output_path": "tools/extract/fetch_patent_pdf.py",
@@ -1054,6 +1156,61 @@
         "upstream_path": "skills/patent-reader/tools/extract/figure_extract.py",
         "source_path": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/extract/figure_extract.py",
         "output_path": "tools/extract/figure_extract.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/google_patents/__init__.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/__init__.py",
+        "output_path": "tools/google_patents/__init__.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/google_patents/api.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/api.py",
+        "output_path": "tools/google_patents/api.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/google_patents/client.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/client.py",
+        "output_path": "tools/google_patents/client.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/google_patents/detail.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/detail.py",
+        "output_path": "tools/google_patents/detail.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/google_patents/errors.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/errors.py",
+        "output_path": "tools/google_patents/errors.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/google_patents/html_text.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/html_text.py",
+        "output_path": "tools/google_patents/html_text.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": null,
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/paths.py",
+        "output_path": "tools/google_patents/paths.py",
+        "license": "MIT",
+        "read_when": "when writing an authorized overseas patent retrieval"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/google_patents/query.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/query.py",
+        "output_path": "tools/google_patents/query.py",
+        "license": "MIT"
+      },
+      {
+        "upstream_path": "skills/patent-reader/tools/google_patents/results.py",
+        "source_path": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/results.py",
+        "output_path": "tools/google_patents/results.py",
         "license": "MIT"
       },
       {
@@ -1618,6 +1775,61 @@
   },
   "adaptations": [
     {
+      "source": "skills/patent-search/tools/google_patents/results.py",
+      "target": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/results.py",
+      "reason": "validates provider payloads and distinguishes invalid responses from a genuine empty result"
+    },
+    {
+      "source": "skills/patent-reader/tools/google_patents/results.py",
+      "target": "authoring/patent-disclosure-skill/runtime/shared/tools/google_patents/results.py",
+      "reason": "validates provider payloads and distinguishes invalid responses from a genuine empty result"
+    },
+    {
+      "source": "skills/patent-search/tools/gp_search.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-search/tools/gp_search.py",
+      "reason": "records the selected jurisdictions, completeness and bounded project-local JSON and Markdown outputs"
+    },
+    {
+      "source": "skills/patent-reader/tools/extract/fetch_gp_fulltext.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/extract/fetch_gp_fulltext.py",
+      "reason": "verifies publication identity and writes a new project-local evidence directory"
+    },
+    {
+      "source": "skills/patent-reader/tools/extract/fetch_patent_pdf.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-reader/tools/extract/fetch_patent_pdf.py",
+      "reason": "limits overseas detail requests and surfaces provider blocks before alternative downloads"
+    },
+    {
+      "source": "skills/patent-search/tools/cnipa_search.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-search/tools/cnipa_search.py",
+      "reason": "escapes literal percent signs in help so the command can display its options"
+    },
+    {
+      "source": "skills/patent-search/tools/search_config.py",
+      "target": "authoring/patent-disclosure-skill/runtime/patent-search/tools/search_config.py",
+      "reason": "maintains the domestic query defaults separately from the overseas configuration"
+    },
+    {
+      "source": "skills/patent-chart/tools/emit_chart.py",
+      "target": "authoring/patent-disclosure-skill/runtime/shared/emit_chart.py",
+      "reason": "the chart business owns the shared claim-level workbook renderer"
+    },
+    {
+      "source": "skills/patent-oa/tools/emit_chart.py",
+      "target": "authoring/patent-disclosure-skill/runtime/shared/emit_chart.py",
+      "reason": "the office-action stage reuses the chart renderer with its existing office-action worksheet"
+    },
+    {
+      "source": "skills/patent-chart/tools/xlsx_minimal.py",
+      "target": "authoring/patent-disclosure-skill/runtime/shared/xlsx_minimal.py",
+      "reason": "the chart business owns the shared workbook styles"
+    },
+    {
+      "source": "skills/patent-oa/tools/xlsx_minimal.py",
+      "target": "authoring/patent-disclosure-skill/runtime/shared/xlsx_minimal.py",
+      "reason": "the office-action worksheet uses the same workbook styles"
+    },
+    {
       "source": "skills/patent-disclosure/tools/fence/README.md",
       "target": "authoring/patent-disclosure-skill/runtime/patent-disclosure/tools/fence/README.md",
       "reason": "documents package-relative layout tools and actual scorecard arguments under human graph control."
@@ -1797,6 +2009,10 @@
     },
     {
       "path": "skills/patent-application/prompts/design_application.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-application/prompts/divisional.md",
       "reason": "procedure prompt converted into fixed stage procedures by authoring"
     },
     {
@@ -2724,11 +2940,31 @@
       "reason": "root entry, routing, or aggregate dependency list"
     },
     {
+      "path": "skills/patent-reader/references/clue_vocab.yaml",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/references/text_vocab.yaml",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
       "path": "skills/patent-reader/SKILL.md",
       "reason": "root entry, routing, or aggregate dependency list"
     },
     {
       "path": "skills/patent-reader/tests/__init__.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/fixtures/google_patents/detail_JP7371268B2.html",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/fixtures/google_patents/detail_US11450918B2.html",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/fixtures/google_patents/search.json",
       "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
     },
     {
@@ -2744,6 +2980,14 @@
       "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
     },
     {
+      "path": "skills/patent-reader/tests/test_clue_market.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_clue_vocab.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
       "path": "skills/patent-reader/tests/test_desc_paragraphs.py",
       "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
     },
@@ -2752,7 +2996,15 @@
       "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
     },
     {
+      "path": "skills/patent-reader/tests/test_fetch_gp_fulltext.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
       "path": "skills/patent-reader/tests/test_fetch_patent_pdf.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tests/test_google_patents.py",
       "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
     },
     {
@@ -2780,11 +3032,71 @@
       "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
     },
     {
+      "path": "skills/patent-reader/tests/test_text_vocab.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-reader/tools/shared/biblio.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/tools/shared/claims.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/tools/shared/obsidian_env.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/tools/shared/paths.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/tools/shared/rules.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/tools/shared/text_vocab.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/tools/vault/clues/__init__.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/tools/vault/clues/annotate.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/tools/vault/clues/matching.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/tools/vault/clues/model.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/tools/vault/clues/render.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/tools/vault/clues/summary.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
+      "path": "skills/patent-reader/tools/vault/clues/vocab.py",
+      "reason": "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts"
+    },
+    {
       "path": "skills/patent-search/prompts/covers_rank.md",
       "reason": "procedure prompt converted into fixed stage procedures by authoring"
     },
     {
       "path": "skills/patent-search/prompts/derived_query.md",
+      "reason": "procedure prompt converted into fixed stage procedures by authoring"
+    },
+    {
+      "path": "skills/patent-search/prompts/global_search.md",
       "reason": "procedure prompt converted into fixed stage procedures by authoring"
     },
     {
@@ -2804,6 +3116,18 @@
       "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
     },
     {
+      "path": "skills/patent-search/tests/fixtures/google_patents/detail_JP7371268B2.html",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-search/tests/fixtures/google_patents/detail_US11450918B2.html",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-search/tests/fixtures/google_patents/search.json",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
       "path": "skills/patent-search/tests/test_cnipa_search.py",
       "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
     },
@@ -2813,6 +3137,14 @@
     },
     {
       "path": "skills/patent-search/tests/test_emit_search_report.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-search/tests/test_google_patents.py",
+      "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
+    },
+    {
+      "path": "skills/patent-search/tests/test_gp_search.py",
       "reason": "upstream test suite replaced by ResearchSpec copied-tree tests"
     }
   ]

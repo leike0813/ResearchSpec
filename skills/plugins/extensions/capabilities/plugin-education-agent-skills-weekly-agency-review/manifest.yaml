@@ -49,5 +49,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-weekly-agency-review/SKILL.md
-      sha256: 5da7d1da192d78854ae4a495fa4b249fd716e9d920d98c201bb2a0e7edd8b95a
+      sha256: 10a6627b682b2ae0e51f22c4e31def0844e79309c44974110c1e056eeb54bb2e
 license: CC-BY-SA-4.0

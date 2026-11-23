@@ -12,8 +12,8 @@
 
 1. 判文献类型：用户声明优先，其次公开号文献种类码，最后扉页关键词。笔记结构与线索
    细则见 `knowledge/pd-kp-11-patent-reading.md`。
-2. 判定文献类型：用户声明优先，其次公开号文献种类码，最后扉页关键词。判定结果写进笔记前言。
-3. 取全文。外观设计（CN…S）走视图抓取，其余走 PDF：
+2. 把判定类型、局别和判定依据写进笔记前言。公开号的种类码只用于选择解读口径。
+3. 优先使用用户提供的 PDF 或全文。中国外观设计（CN…S）可用公布站视图工具，其他中国专利可用 PDF 路径：
 
 ```bash
 python tools/extract/fetch_patent_pdf.py --pub <公开号> -o <工作区相对目录>
@@ -22,7 +22,15 @@ python tools/extract/extract_patent_text.py --input <来源.pdf> --output <全�
 python tools/extract/extract_patent_figures.py --input <来源.pdf> --output <图目录>
 ```
 
-   抓取链路失败就停下请人给 PDF，并记 `fetch_failed`；不要用检索摘要冒充全文。
+   已获授权的海外公开号可用 `tools/extract/fetch_gp_fulltext.py` 读取 Google Patents 详情页。
+   记下局别、来源 URL、可得的权利要求及说明书段落和缺件。保留原语文档，若渠道提供机器译文，
+   列出所用语言和译文来源。限流时停止本轮。全文不可得则记 `fetch_failed` 并请用户提供 PDF，
+   仅按已取得的内容分级。
+
+```bash
+python tools/extract/fetch_gp_fulltext.py --project-root <项目根> --pub <海外公开号> \
+  --outdir <项目内新目录> --no-pdf
+```
 4. 拆权利要求：把独权拆成特征行 F1…，每行带原文短语与段号。默认兼拆从属权，形成权利要求树：
 
 ```bash

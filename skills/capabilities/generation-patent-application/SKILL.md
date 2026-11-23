@@ -38,6 +38,8 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `tools-md_to_docx.py` from `tools/md_to_docx.py`.
 - Load knowledge ID `tools-math_render.py` from `tools/math_render.py`.
 - Load knowledge ID `tools-math_to_omml.py` from `tools/math_to_omml.py`.
+- When illustrating divisional scope without using the example as evidence for the current case, load knowledge ID `references-divisional_example_ai_security.md` from `references/divisional_example_ai_security.md`.
+- When the disclosed invention already uses a model, training, or inference, load knowledge ID `references-ai_implementation.md` from `references/ai_implementation.md`.
 - When creating, validating, or projecting an ordinary patent file index for any stage, load knowledge ID `tools-patent_files.py` from `tools/patent_files.py`.
 - When auditing upstream or third-party attribution for this package, load knowledge ID `NOTICE.md` from `NOTICE.md`.
 - Load knowledge ID `LICENSE` from `LICENSE`.
@@ -56,6 +58,8 @@ Execute exactly one ResearchSpec capability node.
 - `tools/md_to_docx.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/math_render.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/math_to_omml.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- Use `references/divisional_example_ai_security.md` when illustrating divisional scope without using the example as evidence for the current case, as directed by the Procedure.
+- Use `references/ai_implementation.md` when the disclosed invention already uses a model, training, or inference, as directed by the Procedure.
 - Use `tools/patent_files.py` when creating, validating, or projecting an ordinary patent file index for any stage, as directed by the Procedure.
 - Use `NOTICE.md` when auditing upstream or third-party attribution for this package, as directed by the Procedure.
 - `LICENSE` is a package resource; use it as directed by the Procedure.
@@ -161,6 +165,26 @@ Agent 里显式调用（例如 `advance` 运行声明的校验器）时才执行
 ## 输入
 
 - `disclosure_bundle`（必需，handoff 或 node_output）。
+
+## 中国发明母案与分案
+
+用户要求母案或分案时，先确认本轮案件、母案的提交状态和交付类型。提交前可从已核实的交底
+材料提出主题与必要特征组合，交付案件范围表，并标明还须按实际提交文本复核。一次只处理
+用户确认的案卷。重合主题、未确认的独权组合和未核实的程序资格记入问题清单。
+
+母案已提交时，从本案交底索引所列或用户明确选定的材料核对名称、申请号、申请日、首次提交
+的说明书、权利要求书与原附图（如有）。
+案件范围表按案记录技术问题、独权必要特征组合、输入输出、实施例与技术效果。另写原始
+披露表，逐项定位拟写入权项和说明书的特征及其组合，记录原权项、段落、页码或图号，并
+区分明确记载、可直接且毫无疑义地确定、待核和缺失。能逐项定位的特征仍须核对组合关系。
+母案状态未知、首次提交材料缺失或无法确立完整支持时，交付分案核对稿与补件清单，
+正式申请保持待办。提交时点、资格和优先权声明由代理复核。
+
+用户要求四件套且原始支持齐备时，沿用下列成文步骤。分案说明书在标题后、技术领域前标明
+与母案的关系和已核实的母案信息。把两张表登记在申请索引的 `case_scope` 与
+`original_disclosure` 文件角色。涉及模型、训练或推理的已披露实施方式，可按需读取
+`references/ai_implementation.md`。需要对照拆案方式时读
+`references/divisional_example_ai_security.md`，本案依据仍采用本案材料与首次提交文本。
 
 ## 步骤
 

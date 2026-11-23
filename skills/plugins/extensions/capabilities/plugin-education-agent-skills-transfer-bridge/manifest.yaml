@@ -49,5 +49,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-transfer-bridge/SKILL.md
-      sha256: 9f2451b6a9399a3249b6ce5dccbc42b690de827cf0eac700c4287f9b036e7887
+      sha256: 0ac112c1e119eeb237ea9cbc995e24ab3c1aead5faba6660e49318eee5a1b950
 license: CC-BY-SA-4.0

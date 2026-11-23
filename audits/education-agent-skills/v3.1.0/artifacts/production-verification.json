@@ -1,0 +1,41 @@
+{
+  "schema_version": "1",
+  "vendor_id": "education-agent-skills",
+  "anchor_id": "v3.1.0",
+  "revision": "c0c82fb682001177b855576e45f27cc5e786e4c4",
+  "approved_tree_set_sha256": "3b473a920a815e10ada837e9f46f4990094a890e3e60bc4a4b9cae8e51d8671f",
+  "checks": {
+    "pnpm_check": "passed",
+    "pnpm_lint": "passed",
+    "authored_whitespace_check": "passed",
+    "audit_check": "passed",
+    "evidence_check": "passed",
+    "generated_output_check": "passed",
+    "idempotence_check": "passed",
+    "anchor_check": "passed",
+    "approved_preview_byte_match": "passed",
+    "old_anchor_preservation": "passed",
+    "unrelated_registry_and_arsu_profiles": "passed",
+    "reference_package_dry_run": "passed",
+    "pnpm_release_verify": "passed",
+    "tests": {
+      "command": "UV_CACHE_DIR=/tmp/researchspec-uv-cache pnpm test",
+      "tests": 624,
+      "pass": 623,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 1,
+      "skip_reason": "The shared Python environment lacks python-docx for the Patent Word rendering test."
+    }
+  },
+  "counts": {
+    "raw_skills": 136,
+    "changed_raw_skills": 36,
+    "unchanged_raw_skills": 100,
+    "extensions": 136,
+    "changed_extensions": 36,
+    "unchanged_extensions": 100,
+    "unchanged_profiles": 136,
+    "reviewed_references": 6
+  }
+}

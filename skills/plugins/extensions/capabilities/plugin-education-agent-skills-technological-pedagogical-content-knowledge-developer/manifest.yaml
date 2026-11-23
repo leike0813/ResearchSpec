@@ -42,11 +42,17 @@ validators:
         - "{outputs_json}"
         - --required
         - scope,source_ledger,method_plan,work_products,validation_results,conclusions
-knowledge_refs: []
+knowledge_refs:
+  - knowledge_id: eas-references-worked-examples.md
+    path: references/worked-examples.md
+    content_hash: 16a4799855aeee633573ccff56eef2a3bd8f87206b6566c933a1a54e8b57c8f0
+    license: CC-BY-SA-4.0
 gate_policy: advisory
 provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-technological-pedagogical-content-knowledge-developer/SKILL.md
-      sha256: 703f7db64fa487892a8a6b79b79510bf06fcec115c1df1de22020d8e9c582328
+      sha256: c29a88bee4f9621edd34242fbe2bddbcb3a2c52f05eb0835417c5ca92f243b55
+    - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-technological-pedagogical-content-knowledge-developer/references/worked-examples.md
+      sha256: 16a4799855aeee633573ccff56eef2a3bd8f87206b6566c933a1a54e8b57c8f0
 license: CC-BY-SA-4.0

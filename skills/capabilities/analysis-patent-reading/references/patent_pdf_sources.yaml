@@ -12,7 +12,9 @@ sources:
       - "https://patents.google.com/patent/{pub}/en"
       - "https://patents.google.com/patent/{pub}"
     notes: |
-      三页并行，读到 citation_pdf_url（页首约 2KB）即断开，再解析 pdfLink / CDN 兜底。
+      国内公开号可并行核对三种页面路径；海外公开号请求 /en 页面。
+      读取 citation_pdf_url 后解析 PDF 地址。HTTP 429 / 503 时停止本轮。
+      海外结构化全文按解读 Procedure 使用 tools/extract/fetch_gp_fulltext.py。
       直链 https://patents.google.com/patent/{pub}.pdf 常 404，勿当作主路径。
       详情页 404 = 未收录（新公开专利通常 1–3 周后才上 Google）；外观设计多有页无 PDF。
       实测正常 2.5–3 秒完成；连不上时约 5 秒失败，总时限默认 45 秒。

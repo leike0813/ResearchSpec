@@ -526,10 +526,10 @@ never import or execute HistAgent code, install dependencies, read credentials,
 start browsers, contact services, or upload material.
 
 `vendor/education-agent-skills` is the maintainer-only pinned input for the
-`snapshot-6bbbce4` audit at commit
-`6bbbce418f82e11044009c9f3b7373a354de5bd0` and tree
-`b90188569a783ba7d20dcffe2db7a55816db7c0b`. Its immutable audit covers all
-241 tracked files and all 165 upstream Skills. The checked-in JSON is the audit
+`v3.1.0` audit at commit
+`c0c82fb682001177b855576e45f27cc5e786e4c4` and tree
+`9651f375d1114d7163c374ba39a8c26dde539544`. Its immutable audit covers all
+330 tracked files and all 165 upstream Skills. The checked-in JSON is the audit
 SSOT; its Markdown report is derived deterministically and normal audit checking
 is offline. Upstream README, registry, domain, tag, evidence-strength, and
 relationship claims are observations only and never production authority.
@@ -541,7 +541,7 @@ never replaces the complete CC BY-SA 4.0 legal text and per-Skill notices that
 ResearchSpec distributes. README and plugin claims, plus the subtree-scoped
 `mcp-server/LICENSE`, still prove neither Skill-level redistribution rights nor
 embedded framework provenance. The ResearchSpec-owned `evidence-map.json` maps
-all 872 declarations to 719 normalized works: 293 verified, 410 unresolved,
+all 872 declarations to 719 normalized works: 294 verified, 409 unresolved,
 zero conflicting, and 16 not applicable. Twenty explicit multi-version
 declarations use composite mappings. Its `evidence-report.md` is derived
 deterministically, and `education-agent-skills:evidence:check` is offline and
@@ -589,7 +589,7 @@ approved binding is published in
 production tree publishes the sixth vendor with 136 static Skill trees, empty
 hard dependencies, complete CC BY-SA 4.0 licenses and notices, and membership
 only in the three reviewed education domains. The current production binding is
-`snapshot-6bbbce4`; its immutable audit, evidence map, production policy, license
+`v3.1.0`; its immutable audit, evidence map, production policy, license
 and approved aggregate are bound in the production manifest. Production checking and idempotence must
 fail on any source, audit, evidence, policy, license, generated-tree, domain, or
 registry drift. Education Agent Skills add no public CLI command or workflow
@@ -599,9 +599,11 @@ All 136 reviewed Education Agent Skills also project one-to-one into the new
 plugin extension mode as `plugin-education-agent-skills-*` capabilities and
 profiles. `scripts/generate-education-agent-skills-extensions.mjs` is the
 deterministic generator: each package is a static `execution_type: llm` tree
-with `knowledge_refs: []`, the reviewed `SKILL.md` body and
+with the reviewed `SKILL.md` body and
 `researchspec-education-boundary` block preserved, and the shared
-`validate_education_brief.py` six-field evidence validator. Domain assignments
+`validate_education_brief.py` six-field evidence validator. Six worked examples
+keep their `references/` paths and are declared as hash-bound knowledge refs.
+Domain assignments
 mirror the three reviewed education domains. Incremental regeneration rebuilds
 only the changed raw Skills and their packages; unchanged packages keep their
 reviewed source release and revision byte-for-byte.
@@ -611,8 +613,8 @@ extension maintenance SSOT. `scripts/education-agent-skills-maintenance.mjs`
 and `.agents/skills/education-agent-skills-maintenance/SKILL.md` provide
 catalog-driven `artifacts / records / baseline / check / diff` anchors and the
 Agent semantic review gate; `artifacts` regenerates the 136 packages. The
-current anchor is `snapshot-6bbbce4` under
-`audits/education-agent-skills/snapshot-6bbbce4/`. Future updates must follow
+current anchor is `v3.1.0` under
+`audits/education-agent-skills/v3.1.0/`. Future updates must follow
 the maintenance Skill before regenerating any
 `plugin-education-agent-skills-*` package or profile.
 
@@ -648,8 +650,8 @@ installs PyYAML/Jinja2. Vendor root licensing does not replace an evidenced
 Skill-level content license.
 
 `vendor/patent-disclosure-skill` is a third-party pinned input at commit
-`5073d3d837a5d139ef2bc763c9dd46bb9605df84`, tree
-`d4abb0dd1b7cc8b2f0f131060faad707be63ca96`. Its complete 489-file inventory
+`91e3b43a3e6b568c627bc83ffcb73ff453bf0304`, tree
+`b2ffa8dfca682ae9535c6e43c68cabe7ebf9e3d2`. Its complete 540-file inventory
 feeds eighteen fixed capabilities and seven profiles, including research-to-patent
 and patent-informed-paper. It has no plugin-domain membership or additional host
 entry. The source root is MIT; copied Mermaid/Three.js assets retain their notices.
@@ -662,7 +664,11 @@ dependencies. Maintain this source through
 `audits/patent-disclosure-skill/catalog.json`,
 `scripts/patent-disclosure-skill-maintenance.mjs` and
 `.agents/skills/patent-disclosure-skill-maintenance/SKILL.md`; the dedicated
-snapshot-5073d3d8 anchor binds the complete semantically reviewed output tree.
+`snapshot-91e3b43a` anchor binds the complete semantically reviewed output tree.
+Patent search and reading use authorized sources, record jurisdiction and
+retrieval completeness, and stop the current request on provider rate limits.
+Invention divisionals use the existing one-case workflow with traceable
+original disclosure or a planning draft and list of missing materials.
 
 Paper-backed drafting carries a versioned `paper_evidence` attachment when
 the paper is the principal technical disclosure. The independently authored

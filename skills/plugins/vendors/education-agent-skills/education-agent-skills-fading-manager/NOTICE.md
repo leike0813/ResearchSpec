@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `student-learning/fading-manager`
 - Source path: `skills/student-learning/fading-manager/SKILL.md`
-- Source SHA-256: `83681b24f6746e727480efdf657299f47fad1da9d858932bac2e3217a482b1d2`
+- Source SHA-256: `21bea4878731704de8bc9596003a6cf8cf3c9b7d7999b689ff92c5333e4d8c67`
 - Generated Skill: `education-agent-skills-fading-manager`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

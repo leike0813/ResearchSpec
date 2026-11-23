@@ -61,3 +61,19 @@ When a paper is the principal disclosure, the case, disclosure and application f
 #### Scenario: A disclosure cites a background paper
 - **WHEN** the disclosure identifies its own technical solution and cites a paper only as background
 - **THEN** drafting and review proceed without requesting a feature record for that paper or running a paper–patent comparison.
+
+### Requirement: Patent Overseas Retrieval Uses Explicit Scope
+The patent search and reader procedures SHALL support overseas bibliographic and full-text retrieval from a user-authorized source. The existing deliverables SHALL identify provenance and actual completeness.
+
+#### Scenario: The overseas service returns a rate limit
+- **WHEN** an explicitly requested overseas query is blocked or rate limited
+- **THEN** the tool reports incomplete retrieval with the provider status
+- **AND** the procedure ends that retrieval attempt
+
+### Requirement: Invention Divisionals Use Original Disclosure Evidence
+The patent application and review procedures SHALL distinguish pre-filing planning from drafting based on a filed parent. For a filed parent, supported technical features and their combination SHALL be traced to the initial filing.
+
+#### Scenario: The parent filing is unavailable
+- **WHEN** material from the initial parent filing is required and missing
+- **THEN** the procedure delivers a scope check and missing-materials list
+- **AND** the formal application stays pending

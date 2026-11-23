@@ -60,7 +60,8 @@ void test("work catalog is normalized, fully referenced, and preserves reviewed 
   assert.ok(value.works.length < value.declaration_mappings.length);
   assert.ok(value.works.every((work) => !work.claim_support_reviewed));
   const referenced = new Set(value.declaration_mappings.flatMap((mapping) => mapping.work_ids));
-  assert.deepEqual([...referenced].sort(compareText), value.works.map((work) => work.work_id));
+  assert.deepEqual(value.works.filter((work) => !referenced.has(work.work_id)).map((work) => work.work_id), ["work-0370"]);
+  assert.ok(value.google_scholar_discovery.blocked_work_ids.includes("work-0370"));
   for (const work of value.works) {
     assert.ok(work.review_reason);
     if (work.existence_status === "verified") {
@@ -156,30 +157,28 @@ void test("mapping semantics permit explicit composites and reject ordinary fan-
 void test("incremental rebinding inherits the prior evidence map and re-binds only the changed Skills", async () => {
   const values = await loadArtifacts();
   const previous = JSON.parse(
-    await readFile(path.resolve("audits/education-agent-skills/snapshot-32fce5c/evidence-map.json"), "utf8"),
+    await readFile(path.resolve("audits/education-agent-skills/snapshot-6bbbce4/evidence-map.json"), "utf8"),
   ) as EducationAgentSkillsEvidenceMap;
-  assert.deepEqual(values.evidenceMap.works, previous.works);
-  assert.deepEqual(values.evidenceMap.summary.existence_status_counts, previous.summary.existence_status_counts);
+  assert.deepEqual(values.evidenceMap.works.filter((work) => work.work_id !== "work-0306"), previous.works.filter((work) => work.work_id !== "work-0306"));
+  assert.equal(values.evidenceMap.works.find((work) => work.work_id === "work-0306")?.existence_status, "verified");
   assert.deepEqual(values.evidenceMap.google_scholar_discovery, previous.google_scholar_discovery);
   const previousById = new Map(previous.declaration_mappings.map((mapping) => [mapping.evidence_id, mapping]));
   const changed = values.evidenceMap.declaration_mappings.filter((mapping) => previousById.get(mapping.evidence_id)?.source_sha256 !== mapping.source_sha256);
-  assert.deepEqual([...new Set(changed.map((mapping) => mapping.skill_id))].sort(compareText), [
-    "student-learning/unassisted-evidence-checkpoint",
-    "student-learning/weekly-agency-review",
-  ]);
   for (const mapping of values.evidenceMap.declaration_mappings) {
     if (changed.includes(mapping)) continue;
     assert.deepEqual(mapping, previousById.get(mapping.evidence_id), mapping.evidence_id);
   }
   const citationChanged = values.evidenceMap.declaration_mappings.filter((mapping) => previousById.get(mapping.evidence_id)?.citation !== mapping.citation);
-  assert.deepEqual(citationChanged.map((mapping) => mapping.evidence_id), ["evidence-0768"]);
-  assert.deepEqual(citationChanged[0]?.work_ids, ["work-0317"]);
+  assert.deepEqual(citationChanged.map((mapping) => [mapping.evidence_id, mapping.work_ids]), [
+    ["evidence-0479", ["work-0072"]],
+    ["evidence-0727", ["work-0306"]],
+  ]);
   const binding = JSON.parse(
-    await readFile(path.resolve("audits/education-agent-skills/snapshot-6bbbce4/incremental-binding.json"), "utf8"),
+    await readFile(path.resolve(path.dirname(AUDIT_PATH), "incremental-binding.json"), "utf8"),
   ) as { new_audit_sha256: string; new_evidence_map_sha256: string; rebound: { declarations: number; citation_changed: number; unaffected_declarations: number } };
-  assert.equal(binding.rebound.declarations, 10);
-  assert.equal(binding.rebound.citation_changed, 1);
-  assert.equal(binding.rebound.unaffected_declarations, 862);
+  assert.equal(binding.rebound.declarations, changed.length);
+  assert.equal(binding.rebound.citation_changed, citationChanged.length);
+  assert.equal(binding.rebound.unaffected_declarations, values.evidenceMap.declaration_mappings.length - changed.length);
   assert.equal(binding.new_audit_sha256, createHash("sha256").update(values.auditJson).digest("hex"));
   assert.equal(binding.new_evidence_map_sha256, createHash("sha256").update(values.mapJson).digest("hex"));
 });

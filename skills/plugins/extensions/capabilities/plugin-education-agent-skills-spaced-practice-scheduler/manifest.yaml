@@ -47,5 +47,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-spaced-practice-scheduler/SKILL.md
-      sha256: 9136c099cab6d045123037abcabedd91d9c1e1588f6938de16a19517375d4478
+      sha256: 8b6d97d4a55d84f8ff2940faf0d7306a21c0ec1cc7924d8a8b346a11205eb99b
 license: CC-BY-SA-4.0

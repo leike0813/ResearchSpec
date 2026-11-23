@@ -42,7 +42,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-from patent_type import resolve_reader_patent_type
+from patent_type import infer_jurisdiction, resolve_reader_patent_type
 
 UA = "Mozilla/5.0 (compatible; patent-disclosure-skill/1.0)"
 # 总时限（秒）：解析详情页 + 下载 PDF。连不上 Google 时尽快失败，不干等。
@@ -52,6 +52,7 @@ PAGE_TIMEOUT = 8
 # PDF 单次 socket 读写超时（不是总时长；总时长受 DEFAULT_TIMEOUT 约束）
 PDF_SOCKET_TIMEOUT = 20
 PDF_ATTEMPTS = 2
+BLOCK_STATUS = frozenset({429, 503})
 _PAGE_CHUNK = 8192
 _PDF_CHUNK = 64 * 1024
 _SSL_CTX = ssl.create_default_context()
@@ -103,6 +104,9 @@ def load_known_cdn_examples(yaml_path: Path | None = None) -> dict[str, str]:
 
 def google_patent_page_urls(pub: str) -> list[str]:
     p = normalize_pub(pub)
+    jurisdiction = infer_jurisdiction(p)
+    if jurisdiction and jurisdiction != "CN":
+        return [f"https://patents.google.com/patent/{p}/en"]
     return [
         f"https://patents.google.com/patent/{p}/zh",
         f"https://patents.google.com/patent/{p}/en",
@@ -224,6 +228,8 @@ def _download_with_retry(
             except urllib.error.HTTPError as e:
                 last = e
                 log.append(f"fail_pdf:{url}:HTTP{e.code}")
+                if e.code in BLOCK_STATUS:
+                    raise FileNotFoundError(f"Google Patents 暂不可用（HTTP {e.code}）；本轮停止。") from e
                 if e.code == 404:
                     break
             except ValueError as e:
@@ -278,6 +284,8 @@ def resolve_pdf_url(
             log.append(f"page_timeout:{page_timeout:.0f}s")
             break
         log.append(line)
+        if code in BLOCK_STATUS:
+            raise FileNotFoundError(f"Google Patents 暂不可用（HTTP {code}）；本轮停止，请提供本地 PDF。")
         if urls:
             log.append(f"cdn_from_page:{urls[0]}")
             return urls[0], "google_patents_page", log

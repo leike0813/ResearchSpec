@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-6bbbce4
-- Revision: 6bbbce418f82e11044009c9f3b7373a354de5bd0
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `student-learning/unassisted-evidence-checkpoint`
 - Source path: `skills/student-learning/unassisted-evidence-checkpoint/SKILL.md`
-- Source SHA-256: `460a4d6d32b618859b5bc9de8fb148c97b5106d0b0139d6ecb6167536b808465`
+- Source SHA-256: `9aba72ff19f7845612f7ae290b11b2ec421d8cae13fb0686e17547bae0402092`
 - Generated Skill: `education-agent-skills-unassisted-evidence-checkpoint`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

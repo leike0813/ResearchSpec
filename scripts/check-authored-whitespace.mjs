@@ -154,6 +154,7 @@ function sha256(value) {
 
 function isGeneratedPreservedContent(relativePath) {
   return relativePath.startsWith("skills/plugins/vendors/scientific-agent-skills/")
+    || /^skills\/plugins\/vendors\/education-agent-skills\/[^/]+\/SKILL\.md$/.test(relativePath)
     || /^skills\/plugins\/extensions\/capabilities\/plugin-scientific-agent-skills-[^/]+\//.test(relativePath)
     || /^skills\/plugins\/extensions\/capabilities\/plugin-(?:tooluniverse|education-agent-skills)-[^/]+\/SKILL\.md$/.test(relativePath);
 }

@@ -3,14 +3,15 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `curriculum-assessment/curriculum-knowledge-architecture-designer`
 - Source path: `skills/curriculum-assessment/curriculum-knowledge-architecture-designer/SKILL.md`
-- Source SHA-256: `e3c6ea6c5c0786ee96bf1d81ee5d33d0d98e969bc73ac657cbeced6587571a18`
+- Source SHA-256: `fdf20cd0cd9e72485f9623301aab52ce9c11e62302755f58fda63c020c79dab5`
 - Generated Skill: `education-agent-skills-curriculum-knowledge-architecture-designer`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/
+- Worked example: `skills/curriculum-assessment/curriculum-knowledge-architecture-designer/references/worked-examples.md` (source SHA-256 `ee30e4a92e7176f0ca8392d1347ebab2f4231515d4c6a81d31789a8409f0a12c`)
 
 ResearchSpec changed the global Skill identifier and frontmatter envelope, added
 source-bound evidence-status disclosure (4

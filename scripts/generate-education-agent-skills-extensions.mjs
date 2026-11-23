@@ -59,7 +59,7 @@ function extensionSkill(extId, rawText, frontmatter, hasScripts, resourceLines, 
   const title = skillTitle(body) ?? extId;
   const description = frontmatter.description ?? `Reviewed Education Agent Skills ${title} workflow for one graph node.`;
   const resources = resourceLines.length > 0
-    ? `\n${resourceLines.map((line) => `- Load knowledge ID \`${line.id}\` from \`${line.path}\`.`).join("\n")}`
+    ? `\n${resourceLines.map((line) => `- When the procedure calls for the worked example, load knowledge ID \`${line.id}\` from \`${line.path}\`.`).join("\n")}\n\nWorked examples by Gareth Manning. ResearchSpec retains the examples and marks unresolved evidence where applicable. [Education Agent Skills](https://github.com/GarethManning/education-agent-skills) · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).`
     : "\n- No packaged knowledge files; all execution rules are in this SKILL.";
   const execution = hasScripts
     ? "Run any packaged script only through the host Agent's configured Python runtime; ResearchSpec never executes packaged resources."

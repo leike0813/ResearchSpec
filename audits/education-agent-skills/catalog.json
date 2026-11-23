@@ -6,11 +6,11 @@
   "upstream_root": "vendor/education-agent-skills",
   "generated_root": "skills/plugins/vendors/education-agent-skills",
   "extension_root": "skills/plugins/extensions",
-  "release": "snapshot-6bbbce4",
-  "revision": "6bbbce418f82e11044009c9f3b7373a354de5bd0",
-  "anchor_id": "snapshot-6bbbce4",
-  "audit_file": "audits/education-agent-skills/snapshot-6bbbce4/skill-audit.json",
-  "audit_report": "audits/education-agent-skills/snapshot-6bbbce4/report.md",
+  "release": "v3.1.0",
+  "revision": "c0c82fb682001177b855576e45f27cc5e786e4c4",
+  "anchor_id": "v3.1.0",
+  "audit_file": "audits/education-agent-skills/v3.1.0/skill-audit.json",
+  "audit_report": "audits/education-agent-skills/v3.1.0/report.md",
   "extension_domains": [
     "curriculum-and-pedagogy",
     "education-systems",
@@ -527,7 +527,12 @@
         "validation_results",
         "conclusions"
       ],
-      "tool_files": []
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/education-agent-skills/education-agent-skills-curriculum-knowledge-architecture-designer/references/worked-examples.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-curriculum-knowledge-architecture-designer/references/worked-examples.md"
+        }
+      ]
     },
     {
       "capability_id": "plugin-education-agent-skills-dialogic-teaching-move-generator",
@@ -1055,7 +1060,12 @@
         "validation_results",
         "conclusions"
       ],
-      "tool_files": []
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/education-agent-skills/education-agent-skills-kud-knowledge-type-mapper/references/worked-examples.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-kud-knowledge-type-mapper/references/worked-examples.md"
+        }
+      ]
     },
     {
       "capability_id": "plugin-education-agent-skills-ladder-of-inference-reflection",
@@ -1311,7 +1321,12 @@
         "validation_results",
         "conclusions"
       ],
-      "tool_files": []
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/education-agent-skills/education-agent-skills-panel-review/references/worked-kud-review.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-panel-review/references/worked-kud-review.md"
+        }
+      ]
     },
     {
       "capability_id": "plugin-education-agent-skills-pedagogical-content-knowledge-developer",
@@ -1327,7 +1342,12 @@
         "validation_results",
         "conclusions"
       ],
-      "tool_files": []
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/education-agent-skills/education-agent-skills-pedagogical-content-knowledge-developer/references/worked-examples.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-pedagogical-content-knowledge-developer/references/worked-examples.md"
+        }
+      ]
     },
     {
       "capability_id": "plugin-education-agent-skills-perma-based-lesson-designer",
@@ -1663,7 +1683,12 @@
         "validation_results",
         "conclusions"
       ],
-      "tool_files": []
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/education-agent-skills/education-agent-skills-scope-and-sequence-designer/references/worked-examples.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-scope-and-sequence-designer/references/worked-examples.md"
+        }
+      ]
     },
     {
       "capability_id": "plugin-education-agent-skills-self-efficacy-builder-sequence",
@@ -1919,7 +1944,12 @@
         "validation_results",
         "conclusions"
       ],
-      "tool_files": []
+      "tool_files": [
+        {
+          "source": "skills/plugins/vendors/education-agent-skills/education-agent-skills-technological-pedagogical-content-knowledge-developer/references/worked-examples.md",
+          "target": "skills/plugins/extensions/capabilities/plugin-education-agent-skills-technological-pedagogical-content-knowledge-developer/references/worked-examples.md"
+        }
+      ]
     },
     {
       "capability_id": "plugin-education-agent-skills-text-complexity-analyser",

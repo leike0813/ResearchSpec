@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `wellbeing-motivation-agency/awe-wonder-experience-designer`
 - Source path: `skills/wellbeing-motivation-agency/awe-wonder-experience-designer/SKILL.md`
-- Source SHA-256: `3249cc1879007f460f2ad52f078c9975a61c5450168b5fa1a5479036913d635e`
+- Source SHA-256: `b2fab9f2bdcd33a681f5d2aacc9e3d936b09b51fad92c61c7c0c68a911bf3c73`
 - Generated Skill: `education-agent-skills-awe-wonder-experience-designer`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-6bbbce4
-- Revision: 6bbbce418f82e11044009c9f3b7373a354de5bd0
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `student-learning/weekly-agency-review`
 - Source path: `skills/student-learning/weekly-agency-review/SKILL.md`
-- Source SHA-256: `08082d91b2873907dbbce27c33fd5def5d928fa029c1425583aae03649b9cc65`
+- Source SHA-256: `ef1648fa555e7626e47bd3ebce6a0d29a1b3676604149181f741fbdc8effaa76`
 - Generated Skill: `education-agent-skills-weekly-agency-review`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

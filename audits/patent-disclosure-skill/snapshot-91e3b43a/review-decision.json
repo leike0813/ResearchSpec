@@ -1,0 +1,268 @@
+{
+  "schema_version": "1",
+  "status": "approved",
+  "reviewer": "Codex, ResearchSpec patent capability maintenance review",
+  "reviewed_at": "2026-11-20T13:49:16.522Z",
+  "businesses": [
+    {
+      "business": "patent-application",
+      "status": "preserved-or-adapted",
+      "summary": "Original parent filing supports feature combinations and the existing four-document delivery."
+    },
+    {
+      "business": "patent-chart",
+      "status": "preserved-or-adapted",
+      "summary": "Claim-level evidence and precise workbook links preserve scene-specific review."
+    },
+    {
+      "business": "patent-disclosure",
+      "status": "preserved-or-adapted",
+      "summary": "Drafting and review distinguish inventor evidence, prior art, and unresolved contribution."
+    },
+    {
+      "business": "patent-docket",
+      "status": "preserved-or-adapted",
+      "summary": "Single-docket and human-controlled revision and branch policies are intact."
+    },
+    {
+      "business": "patent-exam-policy",
+      "status": "preserved-or-adapted",
+      "summary": "Policy reports retain timing and optional user-controlled application."
+    },
+    {
+      "business": "patent-map",
+      "status": "preserved-or-adapted",
+      "summary": "Selected local corpus and configured model/IPC resources are preserved."
+    },
+    {
+      "business": "patent-oa",
+      "status": "preserved-or-adapted",
+      "summary": "Office-action response and chart mapping remain independent of formal filing."
+    },
+    {
+      "business": "patent-reader",
+      "status": "preserved-or-adapted",
+      "summary": "Local PDF and scoped overseas evidence paths report completeness and provenance."
+    },
+    {
+      "business": "patent-search",
+      "status": "preserved-or-adapted",
+      "summary": "Domestic and overseas bibliographic retrieval keep source boundaries and explicit failure states."
+    }
+  ],
+  "findings": [
+    {
+      "id": "cnipa-cli-format",
+      "status": "resolved",
+      "summary": "Literal query wildcards no longer break argparse help; copied-tree smoke passed."
+    },
+    {
+      "id": "shared-chart-provenance",
+      "status": "resolved",
+      "summary": "Patent chart and OA projections share the authored claim-level renderer; both upstream paths are recorded."
+    },
+    {
+      "id": "overseas-provider-boundary",
+      "status": "resolved",
+      "summary": "Offline probes verified rate-limit stop, malformed versus empty results, local output scope and actual evidence completeness."
+    },
+    {
+      "id": "shared-notice-drift",
+      "status": "resolved",
+      "summary": "Read the existing ARS attribution change and bound the current notice in the new anchor."
+    }
+  ],
+  "execution_limits": [
+    "No live CNIPA or Google Patents requests, filing, or legal acceptance.",
+    "Shared Python environment lacks python-docx; Word rendering skipped. OMML token probe ran with a stub.",
+    "Configured CAD, browser UI and vector layout were outside the offline fixture coverage."
+  ],
+  "reviewed_state": {
+    "schema_version": "1",
+    "vendor_id": "patent-disclosure-skill",
+    "anchor_id": "snapshot-91e3b43a",
+    "businesses": [
+      "patent-application",
+      "patent-chart",
+      "patent-disclosure",
+      "patent-docket",
+      "patent-exam-policy",
+      "patent-map",
+      "patent-oa",
+      "patent-reader",
+      "patent-search"
+    ],
+    "upstream": {
+      "revision": "91e3b43a3e6b568c627bc83ffcb73ff453bf0304",
+      "tree": "b2ffa8dfca682ae9535c6e43c68cabe7ebf9e3d2",
+      "file_count": 540,
+      "tree_sha256": "7956813ed29b49827abf1a29124af384478c123d503c9e8a53310f242d32895b"
+    },
+    "source_audit_sha256": "1ca5af57e8ec13f4821af00b1f1def3a46013b9020d7524ea46484245b579598",
+    "authoring_tree_sha256": "a91d099dfd59e2925d12990bbf746cf24ebbc2ffecb992bb0f177b78cc074102",
+    "packages": [
+      {
+        "capability_id": "analysis-paper-patent-comparison",
+        "tree_sha256": "a8e7e414f44fd40180fea2e92222481cccded8e4f2ae37304731c7722e008b8c"
+      },
+      {
+        "capability_id": "analysis-patent-claim-chart",
+        "tree_sha256": "756461628bfefa15655d8391135504a7aacc8b2417b9af3f6e3d6a7956ab5179"
+      },
+      {
+        "capability_id": "analysis-patent-prior-art",
+        "tree_sha256": "13b248c735abfe89b0dbb4dbe79438cb8f6579db31e033623adeb6b7e5d50061"
+      },
+      {
+        "capability_id": "analysis-patent-reading",
+        "tree_sha256": "f63531873b66a4adf4843ea8aba962b1968245ba445b8cb0a9f174369e56c343"
+      },
+      {
+        "capability_id": "check-patent-application",
+        "tree_sha256": "e3d084333f2c9ee0907bb5dce00907eb966bab8c9f12bed8a55c61916a1c481b"
+      },
+      {
+        "capability_id": "check-patent-disclosure",
+        "tree_sha256": "7f3805afd2f4752e260d01f850364fa63879d6f6bd18f033a2893e0954c52d3b"
+      },
+      {
+        "capability_id": "check-patent-docket",
+        "tree_sha256": "4278b5131781102e07ba005800c84ee6254bc001f27096eafe46f74c1aa30737"
+      },
+      {
+        "capability_id": "check-patent-oa-response",
+        "tree_sha256": "71c51c868e59886a03f48b17af0d3df17d336dfa00f13fc30e305d99bc42dcc6"
+      },
+      {
+        "capability_id": "design-patent-intake",
+        "tree_sha256": "b9c75f7979219bea9f3186c24118c643560f09b1d62476434a2f499ee4ceeda3"
+      },
+      {
+        "capability_id": "design-patent-invention-mining",
+        "tree_sha256": "75fdabf4dfaa3a259fa4b6fcea0d1b039a91e73451cae7ae18687d3f86cc5a09"
+      },
+      {
+        "capability_id": "design-patent-protection-layout",
+        "tree_sha256": "4c1e2f5c3cf990f5907d45504fa8051a83dba79cf17d5c478901aab0c13589bc"
+      },
+      {
+        "capability_id": "discovery-patent-exam-policy",
+        "tree_sha256": "2f66833ae563dd738a2396f87929cf4bc067805c3c9f7d48d8d08bb8e3a09738"
+      },
+      {
+        "capability_id": "discovery-patent-search",
+        "tree_sha256": "d314a1d3152d44efd4c92f5c764c452175080be7c479506e240a3c315299318b"
+      },
+      {
+        "capability_id": "generation-patent-application",
+        "tree_sha256": "dd63cd979dcdb4c2204bd6fad46e20702e51ac4a3662647906e5fc9011ce76a1"
+      },
+      {
+        "capability_id": "generation-patent-disclosure",
+        "tree_sha256": "4d7518390c20c600a6544caa7ef6560132f36af38f4499d15188ade67274ebc1"
+      },
+      {
+        "capability_id": "generation-patent-map",
+        "tree_sha256": "1985022a67015efe977f4464c805007979544eb1c5e8353a641105f8ba693d36"
+      },
+      {
+        "capability_id": "generation-patent-oa-response",
+        "tree_sha256": "e68a75beb3524c8dbae72d24f4873ec2d94e95d966aff20a635221dc1dd69c56"
+      },
+      {
+        "capability_id": "transform-patent-docket-revision",
+        "tree_sha256": "61b4c9a9d3f750b82af81718d0f1cb78a82355db13881ee5ed17c91a91136379"
+      },
+      {
+        "capability_id": "transform-patent-research-evidence",
+        "tree_sha256": "11748d53e9d92ef53c300ad338533f78a5a80e93a869312fc23d3b4851346fdf"
+      }
+    ],
+    "profiles": [
+      {
+        "profile_id": "patent-disclosure",
+        "sha256": "d21f3848db4d7f9eaa14603b44fe9cd23bf04118f807011bbc3caf7bc9d02199"
+      },
+      {
+        "profile_id": "patent-application",
+        "sha256": "f67e1603e845b28142731bb380d02f801e10012bf0f6273ebdb7a334aa75da3f"
+      },
+      {
+        "profile_id": "patent-docket",
+        "sha256": "419af1793d779ce29cce8e1999ec61e9d191af13d31e7cb68faa8526e882bd78"
+      },
+      {
+        "profile_id": "patent-intelligence",
+        "sha256": "9f7dc5816c0ca576c4c50f0ff6c1cfc3f4fbd04a713a147b8fc9451164449a94"
+      },
+      {
+        "profile_id": "patent-oa",
+        "sha256": "5ed6dcc013f822454025af5415b637aac47db19c082e0b5f97ff8faf3e44f6e6"
+      },
+      {
+        "profile_id": "research-to-patent",
+        "sha256": "3e757f2ef993f3fec05aa3c19888ccb6d629892f50f55b44626f3d2feef23529"
+      },
+      {
+        "profile_id": "patent-informed-paper",
+        "sha256": "3681ea5c01ba8f56dce54cd3fd2fc22502f34de827a1ea56f2c4422fb507d298"
+      }
+    ],
+    "registry_sha256": "9e6e002c9816fbfc68cb62703e9669d3484f3f5e518df0f5a0b8ae50c956935b",
+    "profile_registry_sha256": "3cf5caddd776ecdd6e9c639061c68f2488a3968fbc60e52cb7f4cd4b7adb1ded",
+    "maintained_files": [
+      {
+        "path": "audits/patent-disclosure-skill/catalog.json",
+        "sha256": "0d81996d719dea16f50d953defcec5eeadea4a73c6a2c0cf360ddc81fe494dbf"
+      },
+      {
+        "path": "src/vendor-converters/patent-disclosure-skill/capabilities.ts",
+        "sha256": "63246cda6c1b09058e581a63363ffa038bee351549548489c2c7ee1289a1bf53"
+      },
+      {
+        "path": "src/arsu-converter/workflow/graph-profiles/patent.ts",
+        "sha256": "a29fec2b059c60591f7bb3a2ea745e3e6e7a098f89907abd08bb42e7dd678df7"
+      },
+      {
+        "path": ".agents/skills/patent-disclosure-skill-maintenance/SKILL.md",
+        "sha256": "f47fdf242ee00869dd45a96721b39880d2ffced875f0f40d94e671add2edc92f"
+      },
+      {
+        "path": "scripts/patent-source-audit.mjs",
+        "sha256": "c4f68b416499bc056762573ce1aa05badb1a7d36bfa68dd7cfb16e9d04089037"
+      },
+      {
+        "path": "scripts/prepare-patent-authoring.mjs",
+        "sha256": "8a6a00bcd7ec93040bae7e97ab110d9ff4bc8410c90f21696db65b28a9a568d2"
+      },
+      {
+        "path": "scripts/patent-disclosure-skill-maintenance.mjs",
+        "sha256": "e9b17aa8415e1c42b23511cad89ed6aedb530ccdc1eb9d921261af4013f8b3da"
+      },
+      {
+        "path": "src/vendor-converters/patent-disclosure-skill/cli.ts",
+        "sha256": "c49498329e2adfbe9519ad5598a6fba6094c07a8c1d69162dc3ac2405dbfb7df"
+      },
+      {
+        "path": "src/arsu-converter/authoring/author.ts",
+        "sha256": "2e7e71e69e83e4b502be8c6b5fb1b20234512f748dd71fb0f755197397249f37"
+      },
+      {
+        "path": "docs/user/patent-workflows.md",
+        "sha256": "656f1e6f842f7ff7f6a40670d7cb634b472598f049191f829512a24179e77e56"
+      },
+      {
+        "path": "docs/maintainer/patent-disclosure-skill.md",
+        "sha256": "86c8b995e59d732e38e4f0ca0768036428e6c1d75f304c12ae4e8e5d40d0d367"
+      },
+      {
+        "path": "NOTICE",
+        "sha256": "55ed78d3702bdc1c96b005e351d7380b55fce9680ff07aee8b8dae2ac89a47ac"
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "68f29fe408ba461ff4bcd7d0760ee5b72d183b64427556a4fb31965137854096"
+      }
+    ]
+  }
+}

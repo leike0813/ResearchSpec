@@ -6,17 +6,14 @@ suite.
 - `catalog.json` is the machine-readable maintenance SSOT generated from the
   reviewed vendor bundle and the source-neutral domain catalog: upstream pin,
   136 raw Skill mappings, validators, and required brief fields.
-- `snapshot-6bbbce4/` is the current approved production anchor for the
-  `6bbbce4` upstream revision; `snapshot-32fce5c/` is the immutable previous
-  anchor. `catalog.json` records the current production identity. A completed
+- `v3.1.0/` is the current approved production anchor. `snapshot-6bbbce4/`
+  and `snapshot-32fce5c/` preserve the prior reviewed releases.
+  `catalog.json` records the current production identity. A completed
   anchor holds the immutable upstream skill audit
   (`skill-audit.json`, `report.md`), the evidence map and report, extension
   records 01–05, `artifacts/extension-review.json`, and the hash-bound
-  `manifest.json`. An incremental anchor also carries
-  `artifacts/incremental-audit.json`, the candidate-to-baseline diff that scopes
-  the update, and `artifacts/production-verification.json`, which records
-  production checks and the observed changed-file set. Pre-approval records
-  remain in `artifacts/candidate-*.md`.
+  `manifest.json`. Incremental anchors also retain the candidate diff and
+  production verification under `artifacts/`.
 - `scripts/generate-education-agent-skills-extensions.mjs` regenerates all 136
   `plugin-education-agent-skills-*` packages, profiles, registry entries, and
   the catalog. `scripts/education-agent-skills-maintenance.mjs` provides

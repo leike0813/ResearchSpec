@@ -49,5 +49,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-fading-manager/SKILL.md
-      sha256: 313ee747ff0fd7d1ca364aac41545adc75625702c69da128b8bc802b73416fde
+      sha256: 274d4a51e7740a1abe9af2f58391592631dbe02a7d55f11a7b8673efb4c27f24
 license: CC-BY-SA-4.0

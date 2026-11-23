@@ -1,6 +1,6 @@
 ---
 name: analysis-patent-reading
-description: "把公开号、PDF 或全文读成通俗笔记与图谱，产出稳定特征行与可机读段落（patent reading, claim features）。"
+description: "解读中国与海外专利的公开号、PDF 或全文，产出通俗笔记、稳定特征行与可机读段落（patent reading, claim features）。"
 metadata:
   capability_id: analysis-patent-reading
   node_kind: producer
@@ -53,8 +53,18 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `tools-requirements.txt` from `tools/requirements.txt`.
 - Load knowledge ID `tools-README.md` from `tools/README.md`.
 - Load knowledge ID `tools-patent_type.py` from `tools/patent_type.py`.
+- Load knowledge ID `tools-google_patents-results.py` from `tools/google_patents/results.py`.
+- Load knowledge ID `tools-google_patents-query.py` from `tools/google_patents/query.py`.
+- When writing an authorized overseas patent retrieval, load knowledge ID `tools-google_patents-paths.py` from `tools/google_patents/paths.py`.
+- Load knowledge ID `tools-google_patents-html_text.py` from `tools/google_patents/html_text.py`.
+- Load knowledge ID `tools-google_patents-errors.py` from `tools/google_patents/errors.py`.
+- Load knowledge ID `tools-google_patents-detail.py` from `tools/google_patents/detail.py`.
+- Load knowledge ID `tools-google_patents-client.py` from `tools/google_patents/client.py`.
+- Load knowledge ID `tools-google_patents-api.py` from `tools/google_patents/api.py`.
+- Load knowledge ID `tools-google_patents-__init__.py` from `tools/google_patents/__init__.py`.
 - Load knowledge ID `tools-extract-figure_extract.py` from `tools/extract/figure_extract.py`.
 - Load knowledge ID `tools-extract-fetch_patent_pdf.py` from `tools/extract/fetch_patent_pdf.py`.
+- Load knowledge ID `tools-extract-fetch_gp_fulltext.py` from `tools/extract/fetch_gp_fulltext.py`.
 - Load knowledge ID `tools-extract-fetch_design_views.py` from `tools/extract/fetch_design_views.py`.
 - Load knowledge ID `tools-extract-extract_patent_text.py` from `tools/extract/extract_patent_text.py`.
 - Load knowledge ID `tools-extract-extract_patent_figures.py` from `tools/extract/extract_patent_figures.py`.
@@ -122,8 +132,18 @@ Execute exactly one ResearchSpec capability node.
 - `tools/requirements.txt` is a package resource; use it as directed by the Procedure.
 - `tools/README.md` is a package resource; use it as directed by the Procedure.
 - `tools/patent_type.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/google_patents/results.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/google_patents/query.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- Use `tools/google_patents/paths.py` when writing an authorized overseas patent retrieval, as directed by the Procedure.
+- `tools/google_patents/html_text.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/google_patents/errors.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/google_patents/detail.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/google_patents/client.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/google_patents/api.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/google_patents/__init__.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/extract/figure_extract.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/extract/fetch_patent_pdf.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/extract/fetch_gp_fulltext.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/extract/fetch_design_views.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/extract/extract_patent_text.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/extract/extract_patent_figures.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
@@ -269,8 +289,8 @@ Agent 里显式调用（例如 `advance` 运行声明的校验器）时才执行
 
 1. 判文献类型：用户声明优先，其次公开号文献种类码，最后扉页关键词。笔记结构与线索
    细则见 `knowledge/pd-kp-11-patent-reading.md`。
-2. 判定文献类型：用户声明优先，其次公开号文献种类码，最后扉页关键词。判定结果写进笔记前言。
-3. 取全文。外观设计（CN…S）走视图抓取，其余走 PDF：
+2. 把判定类型、局别和判定依据写进笔记前言。公开号的种类码只用于选择解读口径。
+3. 优先使用用户提供的 PDF 或全文。中国外观设计（CN…S）可用公布站视图工具，其他中国专利可用 PDF 路径：
 
 ```bash
 python tools/extract/fetch_patent_pdf.py --pub <公开号> -o <工作区相对目录>
@@ -279,7 +299,15 @@ python tools/extract/extract_patent_text.py --input <来源.pdf> --output <全�
 python tools/extract/extract_patent_figures.py --input <来源.pdf> --output <图目录>
 ```
 
-   抓取链路失败就停下请人给 PDF，并记 `fetch_failed`；不要用检索摘要冒充全文。
+   已获授权的海外公开号可用 `tools/extract/fetch_gp_fulltext.py` 读取 Google Patents 详情页。
+   记下局别、来源 URL、可得的权利要求及说明书段落和缺件。保留原语文档，若渠道提供机器译文，
+   列出所用语言和译文来源。限流时停止本轮。全文不可得则记 `fetch_failed` 并请用户提供 PDF，
+   仅按已取得的内容分级。
+
+```bash
+python tools/extract/fetch_gp_fulltext.py --project-root <项目根> --pub <海外公开号> \
+  --outdir <项目内新目录> --no-pdf
+```
 4. 拆权利要求：把独权拆成特征行 F1…，每行带原文短语与段号。默认兼拆从属权，形成权利要求树：
 
 ```bash

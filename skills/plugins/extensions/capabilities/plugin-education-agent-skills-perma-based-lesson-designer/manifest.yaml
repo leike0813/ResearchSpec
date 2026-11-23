@@ -48,5 +48,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-perma-based-lesson-designer/SKILL.md
-      sha256: 1512d328360acdd03c3a41f8ba7418466c3ec9224630cc24e4bc1bdbc999ff31
+      sha256: 992a7f4e3c4226d1ff929114e401324b8b9536651fc1c44b41c0d7932e6f81f3
 license: CC-BY-SA-4.0

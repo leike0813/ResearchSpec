@@ -12,12 +12,13 @@ export const EDUCATION_AGENT_SKILLS = {
   vendorId: "education-agent-skills",
   name: "Education Agent Skills",
   repositoryUrl: "https://github.com/GarethManning/education-agent-skills",
-  snapshotId: "snapshot-6bbbce4",
-  revision: "6bbbce418f82e11044009c9f3b7373a354de5bd0",
-  tree: "b90188569a783ba7d20dcffe2db7a55816db7c0b",
+  snapshotId: "v3.1.0",
+  releaseTag: "v3.1.0",
+  revision: "c0c82fb682001177b855576e45f27cc5e786e4c4",
+  tree: "9651f375d1114d7163c374ba39a8c26dde539544",
   sourcePath: "vendor/education-agent-skills",
-  auditPath: "audits/education-agent-skills/snapshot-6bbbce4/skill-audit.json",
-  reportPath: "audits/education-agent-skills/snapshot-6bbbce4/report.md",
+  auditPath: "audits/education-agent-skills/v3.1.0/skill-audit.json",
+  reportPath: "audits/education-agent-skills/v3.1.0/report.md",
 } as const;
 
 const EDUCATION_DOMAIN_REVIEWS = {
@@ -218,7 +219,7 @@ export const EducationAgentSkillsAuditSchema = z.strictObject({
   }),
   snapshot: z.strictObject({
     snapshot_id: z.literal(EDUCATION_AGENT_SKILLS.snapshotId),
-    release_tag: z.null(),
+    release_tag: z.literal(EDUCATION_AGENT_SKILLS.releaseTag),
     revision: z.literal(EDUCATION_AGENT_SKILLS.revision),
     tree_hash: z.literal(EDUCATION_AGENT_SKILLS.tree),
     checkout_path: z.literal(EDUCATION_AGENT_SKILLS.sourcePath),
@@ -351,7 +352,7 @@ export function buildEducationAgentSkillsAudit(repoRoot: string): EducationAgent
     },
     snapshot: {
       snapshot_id: EDUCATION_AGENT_SKILLS.snapshotId,
-      release_tag: null,
+      release_tag: EDUCATION_AGENT_SKILLS.releaseTag,
       revision: EDUCATION_AGENT_SKILLS.revision,
       tree_hash: EDUCATION_AGENT_SKILLS.tree,
       checkout_path: EDUCATION_AGENT_SKILLS.sourcePath,
@@ -402,7 +403,7 @@ export function renderEducationAgentSkillsReport(audit: EducationAgentSkillsAudi
     `- **审查 上游证据枚举异常：** ${String(value.findings.find((finding) => finding.code === "UPSTREAM-EVIDENCE-ENUM-ANOMALIES")?.evidence.length ?? 0)} 个 Skills 使用上游证据标签，超出文档化的枚举范围；任何上游标签都不被视为 ResearchSpec 结论。`,
     `- **审查 学生对话模式差异：** ${String(value.findings.find((finding) => finding.code === "STUDENT-DIALOGUE-SCHEMA-DIFFERENCE")?.evidence.length ?? 0)} 个面向学习者的 Skills 省略了 output_schema，而是定义了需要单独敏感内容审查的对话/证据捕获行为。`,
   ].join("\n");
-  return `# Education Agent Skills 审计 — ${value.snapshot.snapshot_id}\n\n## 来源绑定\n\n- 官方远程仓库：\`${value.vendor.repository_url}\`\n- 未标记提交：\`${value.snapshot.revision}\`\n- Git 树：\`${value.snapshot.tree_hash}\`\n- 已跟踪条目集 SHA-256：\`${value.snapshot.tracked_entry_set_sha256}\`\n- 已跟踪文件：${String(value.summary.tracked_files)}\n- 来源字节数：${String(value.repository_inventory.total_bytes)}\n- Skills：${String(value.summary.skills)} 个，分布在 ${String(value.summary.upstream_domains)} 个上游域\n\n本审计仅限维护者使用，不构成生产准入。未执行上游代码、安装依赖、配置凭据、启动 MCP 服务器或联系上游服务。过时的上游 \`AUDIT.md\` 和 README 统计数据仅为观察结果；以下所有总计均派生自 \`skill-audit.json\`。\n\n## 仓库清单\n\n| 分类 | 文件数 |\n|---|---:|\n${classificationRows}\n\n## 证据审查\n\n固定的 Skills 声明了 ${String(value.summary.evidence_declarations)} 个命名证据出现（${String(value.summary.distinct_evidence_strings)} 个不同的引用字符串）。每个出现都有明确的存证、作者/年份/标题、支持范围和误归因结论。固定的仓库未提供独立的书目标识符或来源包来验证这些声明，因此未解决的声明仍是阻止项，上游评级不会被提升为 ResearchSpec 结论。常规审计检查处于离线状态。\n\n| ResearchSpec 证据强度 | 声明数 |\n|---|---:|\n${evidenceRows}\n\n## 许可证与来源\n\n根目录新增了署名 Gareth Manning 的 CC BY-SA 4.0 通知，作者自有的 Skill 内容由此获得许可补强；通知未覆盖嵌入的原创框架主张与单独署名的第三方贡献，其再分发授权仍未确立。树内 \`mcp-server/LICENSE\` 只作用于该子树。Git 历史和声明的贡献者按 Skill 保留，每个 Skill 级的许可证结论区分根通知覆盖的作者自有内容与范围未确立的其余内容。分发还须满足署名、相同方式共享和修改披露义务，并由单独的审阅吸纳决定接受。\n\n| 许可证状态 | Skills 数 |\n|---|---:|\n${licenseRows}\n\n## 关系与重叠\n\n所有 ${String(value.summary.relationships)} 个 \`chains_well_with\` 声明均被保留。${String(value.summary.unresolved_relationships)} 个缺失、模糊或重复。已解析的关系仅为前瞻性建议链接；不创建硬依赖。每个 Skill 都包含对 ARSU 和五个现有供应商的明确重叠结论。\n\n## 敏感内容审查\n\n| 风险 | 存在风险的 Skills 数 |\n|---|---:|\n${riskRows}\n\n面向学生的实时辅导、学习者分析、福祉或动机诊断以及原创框架内容仍被阻止，以待后续人工审查。面向教师的内容仍可能间接影响未成年人，因此审计记录该暴露，而非假设仅限成人使用。\n\n## 前瞻性 ANZSRC Group 证据\n\n审计记录了 ${String(value.summary.prospective_domains)} 个手动推理的前瞻性 Groups：${prospectiveDomains.map((item) => `\`${item}\``).join("、")}。这些仅为审计证据，不创建域成员资格。上游域、标签或 Fields 不是自动分类权威。\n\n## 非生产引入建议\n\n| 处置 | Skills 数 |\n|---|---:|\n${recommendationRows}\n\n根许可证通知只覆盖作者自有的 Skill 内容，原创框架主张与第三方署名内容的再分发授权仍未确立，署名、相同方式共享和修改披露义务也尚未被审阅吸纳决定接受，因此已完成的审计不包含任何候选。内容适配分析仍按 Skill 保留：面向教师的学习科学、课程与评估、读写与批判性思维、课程对齐和专业学习是未来的候选重点，而学生辅导、分析、福祉/诊断、原创框架和不完整证据在应用许可证阻止项之前默认推迟。\n\n## 未来引入边界\n\n单独的 \`ingest-education-agent-skills\` 变更必须消费此不可变审计。它可以生成 \`education-agent-skills-<upstream-name>\` ID，合并两个前置元数据部分，并默认保留已批准的内容。每个已准出的输出都需要已审查的 CC BY-SA 4.0 许可证文本、Skill 本地的 \`NOTICE.md\` 和来源绑定。MCP 运行时、安装程序、编排器、测试、展示和维护表面被排除。任何内容适配和每个 ANZSRC Group 成员资格都需要单独的来源哈希绑定批准。\n\n## 发现\n\n${findingRows}\n\n阻止性发现：${String(value.summary.blocking_findings)} 个。即使所有前瞻性内容都被阻止，审计完成仍然有效；它不注册供应商、生成包、修改生产域或添加公共 CLI 命令。\n`;
+  return `# Education Agent Skills 审计 — ${value.snapshot.snapshot_id}\n\n## 来源绑定\n\n- 官方远程仓库：\`${value.vendor.repository_url}\`\n- 固定提交：\`${value.snapshot.revision}\`\n- 上游标签：\`${value.snapshot.release_tag}\`\n- Git 树：\`${value.snapshot.tree_hash}\`\n- 已跟踪条目集 SHA-256：\`${value.snapshot.tracked_entry_set_sha256}\`\n- 已跟踪文件：${String(value.summary.tracked_files)}\n- 来源字节数：${String(value.repository_inventory.total_bytes)}\n- Skills：${String(value.summary.skills)} 个，分布在 ${String(value.summary.upstream_domains)} 个上游域\n\n本审计仅限维护者使用，不构成生产准入。未执行上游代码、安装依赖、配置凭据、启动 MCP 服务器或联系上游服务。过时的上游 \`AUDIT.md\` 和 README 统计数据仅为观察结果；以下所有总计均派生自 \`skill-audit.json\`。\n\n## 仓库清单\n\n| 分类 | 文件数 |\n|---|---:|\n${classificationRows}\n\n## 证据审查\n\n固定的 Skills 声明了 ${String(value.summary.evidence_declarations)} 个命名证据出现（${String(value.summary.distinct_evidence_strings)} 个不同的引用字符串）。每个出现都有明确的存证、作者/年份/标题、支持范围和误归因结论。上游评级和引用字段保留为审计观察。独立书目核验见证据报告，未解决的声明需保留其证据限制。常规审计检查处于离线状态。\n\n| ResearchSpec 证据强度 | 声明数 |\n|---|---:|\n${evidenceRows}\n\n## 许可证与来源\n\n根目录包含署名 Gareth Manning 的 CC BY-SA 4.0 通知，作者自有的 Skill 内容由此获得许可补强；通知未覆盖嵌入的原创框架主张与单独署名的第三方贡献，其再分发授权仍未确立。树内 \`mcp-server/LICENSE\` 只作用于该子树。Git 历史和声明的贡献者按 Skill 保留，每个 Skill 级的许可证结论区分根通知覆盖的作者自有内容与范围未确立的其余内容。分发还须满足署名、相同方式共享和修改披露义务，并由单独的审阅吸纳决定接受。\n\n| 许可证状态 | Skills 数 |\n|---|---:|\n${licenseRows}\n\n## 关系与重叠\n\n所有 ${String(value.summary.relationships)} 个 \`chains_well_with\` 声明均被保留。${String(value.summary.unresolved_relationships)} 个缺失、模糊或重复。已解析的关系仅为前瞻性建议链接；不创建硬依赖。每个 Skill 都包含对 ARSU 和五个现有供应商的明确重叠结论。\n\n## 敏感内容审查\n\n| 风险 | 存在风险的 Skills 数 |\n|---|---:|\n${riskRows}\n\n面向学生的实时辅导、学习者分析、福祉或动机诊断以及原创框架内容仍被阻止，以待后续人工审查。面向教师的内容仍可能间接影响未成年人，因此审计记录该暴露，而非假设仅限成人使用。\n\n## 前瞻性 ANZSRC Group 证据\n\n审计记录了 ${String(value.summary.prospective_domains)} 个手动推理的前瞻性 Groups：${prospectiveDomains.map((item) => `\`${item}\``).join("、")}。这些仅为审计证据，不创建域成员资格。上游域、标签或 Fields 不是自动分类权威。\n\n## 非生产引入建议\n\n| 处置 | Skills 数 |\n|---|---:|\n${recommendationRows}\n\n根许可证通知只覆盖作者自有的 Skill 内容，原创框架主张与第三方署名内容的再分发授权仍未确立，署名、相同方式共享和修改披露义务也尚未被审阅吸纳决定接受，因此已完成的审计不包含任何候选。内容适配分析仍按 Skill 保留：面向教师的学习科学、课程与评估、读写与批判性思维、课程对齐和专业学习是未来的候选重点，而学生辅导、分析、福祉/诊断、原创框架和不完整证据在应用许可证阻止项之前默认推迟。\n\n## 未来引入边界\n\n单独的 \`ingest-education-agent-skills\` 变更必须消费此不可变审计。它可以生成 \`education-agent-skills-<upstream-name>\` ID，合并两个前置元数据部分，并默认保留已批准的内容。每个已准出的输出都需要已审查的 CC BY-SA 4.0 许可证文本、Skill 本地的 \`NOTICE.md\` 和来源绑定。MCP 运行时、安装程序、编排器、测试、展示和维护表面被排除。任何内容适配和每个 ANZSRC Group 成员资格都需要单独的来源哈希绑定批准。\n\n## 发现\n\n${findingRows}\n\n阻止性发现：${String(value.summary.blocking_findings)} 个。即使所有前瞻性内容都被阻止，审计完成仍然有效；它不注册供应商、生成包、修改生产域或添加公共 CLI 命令。\n`;
 }
 
 export function checkEducationAgentSkillsAuditArtifacts(actualJson: string | null, actualReport: string | null, expectedJson: string, expectedReport: string): string[] {
@@ -530,7 +531,9 @@ export function validateEducationAgentSkillsSnapshotIdentity(identity: { revisio
   if (identity.tree !== EDUCATION_AGENT_SKILLS.tree) throw new Error(`Education Agent Skills tree drift: expected ${EDUCATION_AGENT_SKILLS.tree}, received ${identity.tree}`);
   if (identity.remote.replace(/\.git$/, "") !== EDUCATION_AGENT_SKILLS.repositoryUrl) throw new Error(`Education Agent Skills remote drift: expected ${EDUCATION_AGENT_SKILLS.repositoryUrl}, received ${identity.remote}`);
   if (identity.status) throw new Error("Education Agent Skills checkout must be clean before audit generation or checking.");
-  if (identity.tags) throw new Error(`${EDUCATION_AGENT_SKILLS.snapshotId} must remain an untagged snapshot; found tags: ${identity.tags}`);
+  if (identity.tags && !identity.tags.split("\n").includes(EDUCATION_AGENT_SKILLS.releaseTag)) {
+    throw new Error(`Education Agent Skills release tag drift: expected ${EDUCATION_AGENT_SKILLS.releaseTag}, found ${identity.tags}`);
+  }
 }
 
 function readInventory(sourceRoot: string): InventoryFile[] {

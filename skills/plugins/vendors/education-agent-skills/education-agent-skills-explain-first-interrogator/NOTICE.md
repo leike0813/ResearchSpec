@@ -3,18 +3,18 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `student-learning/explain-first-interrogator`
 - Source path: `skills/student-learning/explain-first-interrogator/SKILL.md`
-- Source SHA-256: `aba08e222d596ede68b759d7adf2285d747eb37a2ccddcc573c28a0ef807b63f`
+- Source SHA-256: `4ee64b1a7e717bc8ddafaa3c6c9ba05c5c36d101878dea45973a648fc444a994`
 - Generated Skill: `education-agent-skills-explain-first-interrogator`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/
 
 ResearchSpec changed the global Skill identifier and frontmatter envelope, added
-source-bound evidence-status disclosure (3
-frontmatter declarations and 3 body units marked in this
+source-bound evidence-status disclosure (2
+frontmatter declarations and 2 body units marked in this
 tree), and added privacy, learner-safety, wellbeing, human-oversight, and
 ResearchSpec-authority boundaries where the immutable audit required them. The
 complete upstream educational body, declared inputs, outputs, prompt, examples,

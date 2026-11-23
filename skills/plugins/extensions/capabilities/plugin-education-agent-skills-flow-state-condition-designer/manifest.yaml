@@ -48,5 +48,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-flow-state-condition-designer/SKILL.md
-      sha256: 93e79a99fbd4f01aa1caee483b9708b4cdec76f1c1bb1ca38fbaa27eced8f130
+      sha256: 99d3ab36bcaf3006fd5be1b808fa6e31da1bc8b9b6979713b8d4476e48363896
 license: CC-BY-SA-4.0

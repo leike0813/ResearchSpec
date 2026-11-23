@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `student-learning/progressive-hint-ladder`
 - Source path: `skills/student-learning/progressive-hint-ladder/SKILL.md`
-- Source SHA-256: `5178e50cb0e4fd48e10dd6a0d16d1d884b805a2be0935989409030fb56274b55`
+- Source SHA-256: `563603c626673cf1f3ab2c3ed5ca58024b4e2dfbe8f0e446b06aed47f645d768`
 - Generated Skill: `education-agent-skills-progressive-hint-ladder`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

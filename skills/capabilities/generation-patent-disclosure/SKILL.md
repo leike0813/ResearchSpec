@@ -64,6 +64,7 @@ Execute exactly one ResearchSpec capability node.
 - When producing or validating the decompose structured artifact, load knowledge ID `references-schemas-decompose.schema.yaml` from `references/schemas/decompose.schema.yaml`.
 - When producing or validating the appearance structured artifact, load knowledge ID `references-schemas-appearance.schema.yaml` from `references/schemas/appearance.schema.yaml`.
 - When designing appearance/design line-art views or checking design-view conformity, load knowledge ID `references-design_view_cnipa.md` from `references/design_view_cnipa.md`.
+- When the inventor's material already specifies a model, training, or inference, load knowledge ID `references-ai_disclosure.md` from `references/ai_disclosure.md`.
 - When creating, validating, or projecting an ordinary patent file index for any stage, load knowledge ID `tools-patent_files.py` from `tools/patent_files.py`.
 - When auditing upstream or third-party attribution for this package, load knowledge ID `NOTICE.md` from `NOTICE.md`.
 - Load knowledge ID `LICENSE` from `LICENSE`.
@@ -106,6 +107,7 @@ Execute exactly one ResearchSpec capability node.
 - Use `references/schemas/decompose.schema.yaml` when producing or validating the decompose structured artifact, as directed by the Procedure.
 - Use `references/schemas/appearance.schema.yaml` when producing or validating the appearance structured artifact, as directed by the Procedure.
 - Use `references/design_view_cnipa.md` when designing appearance/design line-art views or checking design-view conformity, as directed by the Procedure.
+- Use `references/ai_disclosure.md` when the inventor's material already specifies a model, training, or inference, as directed by the Procedure.
 - Use `tools/patent_files.py` when creating, validating, or projecting an ordinary patent file index for any stage, as directed by the Procedure.
 - Use `NOTICE.md` when auditing upstream or third-party attribution for this package, as directed by the Procedure.
 - `LICENSE` is a package resource; use it as directed by the Procedure.
@@ -239,6 +241,11 @@ Agent 里显式调用（例如 `advance` 运行声明的校验器）时才执行
    不复制证据表，附件里把 5.1 / 5.2 的措辞写准。单点实测可写成实施例数据，更宽范围
    没有来源依据就留作待确认问题。补编或特征措辞变化时写新版本附件，旧版保留，索引
    指向当前版本。
+   分开记录发明人材料、背景/现有技术和角色待确认的文件。已核实的设计、代码、实验笔记
+   和主披露论文的可溯源技术内容可支持本案方案。背景论文、旧专利及第三方报告的参数与
+   测量值保留其来源，不写成本案实测。首次出现的外文技术缩写以中文全称加括注定义，后续
+   用语一致。材料已包含模型、训练或推理时，按需读取 `references/ai_disclosure.md`，写明
+   输入、输出及输出用于哪个技术步骤，并把缺失的实现事实记入交付待确认项。
 4. 按类型产出结构化材料（见下节）。
 5. 出图与 Word：
 

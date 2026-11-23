@@ -48,5 +48,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-stuck-and-error-diagnosis-coach/SKILL.md
-      sha256: 52d77bfff2f7d265e11116a7ef5ef0ada0d94dc8fd58b93d9218ca97799b9727
+      sha256: 2be66d7779ec7be247de87f216b728b5369f53d34a4730e16be775e8997e606d
 license: CC-BY-SA-4.0

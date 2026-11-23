@@ -5,7 +5,7 @@ These packages adapt the `patent-disclosure-skill` project by handsomestWei.
 ## Upstream
 
 - Project: patent-disclosure-skill
-- Pinned revision: 5073d3d837a5d139ef2bc763c9dd46bb9605df84
+- Pinned revision: 91e3b43a3e6b568c627bc83ffcb73ff453bf0304
 - License: MIT, Copyright (c) 2026 handsomestWei
 - Full license text: `LICENSE` (shipped with this package)
 

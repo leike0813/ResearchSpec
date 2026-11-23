@@ -25,12 +25,12 @@
     {
       "capability_id": "plugin-education-agent-skills-agency-scaffold-generator",
       "source_path": "capabilities/plugin-education-agent-skills-agency-scaffold-generator",
-      "manifest_sha256": "0cdd782ef5c0bed138d3344a0fd571cfc7dbd18105d650b66c26439ee47e3e7b"
+      "manifest_sha256": "fe70e96af2a0f6f08ab7600a59ec55de69b1757667f0981bf1d48085d76311d7"
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-claim-checker",
       "source_path": "capabilities/plugin-education-agent-skills-ai-claim-checker",
-      "manifest_sha256": "0d30dd6ddff202fb1e4eed4d61c99c1a4c314c2ab0b520b690f9b28bf124811d"
+      "manifest_sha256": "54a00cf95ec2aeff948593f83261a894a7e3a73b53a32040528c6a3fb958cb5f"
     },
     {
       "capability_id": "plugin-education-agent-skills-ai-expertise-interrogation-designer",
@@ -85,7 +85,7 @@
     {
       "capability_id": "plugin-education-agent-skills-awe-wonder-experience-designer",
       "source_path": "capabilities/plugin-education-agent-skills-awe-wonder-experience-designer",
-      "manifest_sha256": "e0b376e0d69f068c4c04a3440bf1273a04208eac03bc4ac4ab6cb14a26f10494"
+      "manifest_sha256": "2d3ae94e108cf28944b05d4b204a97719c8973b8bbe65d6e37bc31fca3b86ac5"
     },
     {
       "capability_id": "plugin-education-agent-skills-backwards-design-unit-planner",
@@ -95,7 +95,7 @@
     {
       "capability_id": "plugin-education-agent-skills-belonging-classroom-culture-designer",
       "source_path": "capabilities/plugin-education-agent-skills-belonging-classroom-culture-designer",
-      "manifest_sha256": "24425c7a26f64fff91ac4705f502115e4f313985aaff0ee055206047d56e5f56"
+      "manifest_sha256": "cad4aa35cefa2efc2bee1f077656666652f42618fa0029493f9a39e7768bb3c6"
     },
     {
       "capability_id": "plugin-education-agent-skills-biophilic-learning-environment-designer",
@@ -125,7 +125,7 @@
     {
       "capability_id": "plugin-education-agent-skills-confidence-calibration-check",
       "source_path": "capabilities/plugin-education-agent-skills-confidence-calibration-check",
-      "manifest_sha256": "c77f346e1a24ad323564ac7139a1228b2ba0a4f27180f8ecc14f5d4f37043bc5"
+      "manifest_sha256": "5c3b9845aebd8c31a41f1562aaa265b56236354c260ade4985983a9b302663c7"
     },
     {
       "capability_id": "plugin-education-agent-skills-coverage-audit",
@@ -165,7 +165,7 @@
     {
       "capability_id": "plugin-education-agent-skills-curriculum-knowledge-architecture-designer",
       "source_path": "capabilities/plugin-education-agent-skills-curriculum-knowledge-architecture-designer",
-      "manifest_sha256": "1bd17b04e188c3b0905066ded6051b4771f892a5614d9afe40ad90bfc0c8835e"
+      "manifest_sha256": "4d51f4a3aa8fbd1d28b2fe96acaf2a21f9b59859b17b053d2442889dcde5901e"
     },
     {
       "capability_id": "plugin-education-agent-skills-dialogic-teaching-move-generator",
@@ -175,7 +175,7 @@
     {
       "capability_id": "plugin-education-agent-skills-differentiation-adapter",
       "source_path": "capabilities/plugin-education-agent-skills-differentiation-adapter",
-      "manifest_sha256": "2199604033609c89d56fbe08ae9b214672fdbb557892519f45fad154e4eb66d5"
+      "manifest_sha256": "5a42331daa58551c2d95b8e86df64da2d526d9f3fdf4d21ee00b1c21d00b494a"
     },
     {
       "capability_id": "plugin-education-agent-skills-digital-worked-example-sequence",
@@ -240,7 +240,7 @@
     {
       "capability_id": "plugin-education-agent-skills-explain-first-interrogator",
       "source_path": "capabilities/plugin-education-agent-skills-explain-first-interrogator",
-      "manifest_sha256": "f850d416fc6a7772b336518a1f450b07e33481e3933560889af485113af98643"
+      "manifest_sha256": "3eb4ad6010a8a09557b32d0cd07ef79e21fa2e1da0482617fb3c2f1712be4284"
     },
     {
       "capability_id": "plugin-education-agent-skills-explicit-instruction-sequence-builder",
@@ -250,7 +250,7 @@
     {
       "capability_id": "plugin-education-agent-skills-fading-manager",
       "source_path": "capabilities/plugin-education-agent-skills-fading-manager",
-      "manifest_sha256": "bf11bdca9ec7459e815e8400550d55bad2597e2dd337d434dd34ccf7bc7ea673"
+      "manifest_sha256": "c344a631d27111439811759a3322e6e928380734809e5bc85b504f912131fa43"
     },
     {
       "capability_id": "plugin-education-agent-skills-feedback-quality-analyser",
@@ -260,7 +260,7 @@
     {
       "capability_id": "plugin-education-agent-skills-flow-state-condition-designer",
       "source_path": "capabilities/plugin-education-agent-skills-flow-state-condition-designer",
-      "manifest_sha256": "5f322a0257e7770bb7b7adab34f863af7e1a0c0d2cbd23572ca1c1d1a3fa0105"
+      "manifest_sha256": "dbf282373e6977fcf1680a8a014e529914b4d1cf525f14906b0c9b5170621bd7"
     },
     {
       "capability_id": "plugin-education-agent-skills-formative-assessment-loop-designer",
@@ -295,7 +295,7 @@
     {
       "capability_id": "plugin-education-agent-skills-implementation-intention-designer",
       "source_path": "capabilities/plugin-education-agent-skills-implementation-intention-designer",
-      "manifest_sha256": "c630c3ec49e04187e36391096c5e0efa4f946b4f188357a34c8408eeef67cf9a"
+      "manifest_sha256": "de7aefb9e7d2f047043f717321d661f608f549132f86a978676a97b9ff8e707d"
     },
     {
       "capability_id": "plugin-education-agent-skills-individual-spacing-algorithm-explainer",
@@ -325,17 +325,17 @@
     {
       "capability_id": "plugin-education-agent-skills-kud-chart-author",
       "source_path": "capabilities/plugin-education-agent-skills-kud-chart-author",
-      "manifest_sha256": "8fb3ff10365d3ea2d7248ff1bf0d33af1bb2bd0bbd6a93ff01cb84ff1ab95a95"
+      "manifest_sha256": "f65ba319e2da92280e9fa2e8c6b1f358022cfb108153ce57b46a7ef0d281f0a0"
     },
     {
       "capability_id": "plugin-education-agent-skills-kud-knowledge-type-mapper",
       "source_path": "capabilities/plugin-education-agent-skills-kud-knowledge-type-mapper",
-      "manifest_sha256": "ea70a282f9bef2b2de47f419250e1f0f28cb35b89b470a8863b891177a2f5f61"
+      "manifest_sha256": "d16add6a1ad8fed634af7c4a9368b4129e870b910a96e48e91e9def2660de6ea"
     },
     {
       "capability_id": "plugin-education-agent-skills-ladder-of-inference-reflection",
       "source_path": "capabilities/plugin-education-agent-skills-ladder-of-inference-reflection",
-      "manifest_sha256": "139377e843432f1ebd0148d2c592f930fff9ae441391be4e2169834fb626777b"
+      "manifest_sha256": "da3f90ac948a34fa56e88e2c3e0a031411bb923e38c41f7680287ca98d3e39e1"
     },
     {
       "capability_id": "plugin-education-agent-skills-language-demand-analyser",
@@ -400,7 +400,7 @@
     {
       "capability_id": "plugin-education-agent-skills-motivation-diagnostic-task-redesign",
       "source_path": "capabilities/plugin-education-agent-skills-motivation-diagnostic-task-redesign",
-      "manifest_sha256": "d0aad6a238f319833912ea4f49b99036d3c3937eb11fa81fa644599371142272"
+      "manifest_sha256": "2364740c4efc018c14c3f4a293743c0f36174a255f8770d879788576fbcabeb9"
     },
     {
       "capability_id": "plugin-education-agent-skills-outdoor-learning-sequence-designer",
@@ -410,17 +410,17 @@
     {
       "capability_id": "plugin-education-agent-skills-panel-review",
       "source_path": "capabilities/plugin-education-agent-skills-panel-review",
-      "manifest_sha256": "fd125d642a3294a0f6ec408d63eb7b6ef981c207bc459c76245b0f413d50dc5a"
+      "manifest_sha256": "538b20ec904268be5d9098138554f5cde04ccd307fd37534ec4b259ccee96ee4"
     },
     {
       "capability_id": "plugin-education-agent-skills-pedagogical-content-knowledge-developer",
       "source_path": "capabilities/plugin-education-agent-skills-pedagogical-content-knowledge-developer",
-      "manifest_sha256": "b67c75fb8d0d21d1223125ecca8036a80faf110f40b14e4e7dcfcdf16cc55797"
+      "manifest_sha256": "70a2fd866239d2879f5e8704dd9c292c9ef88ca77b3b250ec91b7050035eae59"
     },
     {
       "capability_id": "plugin-education-agent-skills-perma-based-lesson-designer",
       "source_path": "capabilities/plugin-education-agent-skills-perma-based-lesson-designer",
-      "manifest_sha256": "575e0b416a3106fd923626eb208589ba05396f0da27f65c375f85ad01c0c6313"
+      "manifest_sha256": "491f13985569918de0265d81bc77b703cee82b1f2aaf753889be0590ce217e6d"
     },
     {
       "capability_id": "plugin-education-agent-skills-perspective-taking-designer",
@@ -455,7 +455,7 @@
     {
       "capability_id": "plugin-education-agent-skills-productive-failure-protocol",
       "source_path": "capabilities/plugin-education-agent-skills-productive-failure-protocol",
-      "manifest_sha256": "d36617e68108e0c68d6e096fe3f19cf4c52bf6c9b67f3bbab3c7a9b4373a4d72"
+      "manifest_sha256": "1cb1885949009ab0b0678ca184e7a9ac916c837ef8320955d48d2c83cb212b26"
     },
     {
       "capability_id": "plugin-education-agent-skills-professional-development-session-designer",
@@ -465,7 +465,7 @@
     {
       "capability_id": "plugin-education-agent-skills-progressive-hint-ladder",
       "source_path": "capabilities/plugin-education-agent-skills-progressive-hint-ladder",
-      "manifest_sha256": "9f88244620e3172c9ba9094a237afa530a83a2addd7754697b51db8dea286fba"
+      "manifest_sha256": "a90084308033d95ee171cf03e1dc382478a312b0988752b39cc4fecb6eae9433"
     },
     {
       "capability_id": "plugin-education-agent-skills-project-brief-designer",
@@ -495,22 +495,22 @@
     {
       "capability_id": "plugin-education-agent-skills-restorative-practice-protocol-designer",
       "source_path": "capabilities/plugin-education-agent-skills-restorative-practice-protocol-designer",
-      "manifest_sha256": "29d5141e95eb0d29a9c71537668370c2df0f1256473a6b0878c918bcd97f4c65"
+      "manifest_sha256": "f06fc0ccc122bef5b696c51b655cbe93fd297d1fb0593517a5f6a6429809f2b7"
     },
     {
       "capability_id": "plugin-education-agent-skills-retrieval-practice-generator",
       "source_path": "capabilities/plugin-education-agent-skills-retrieval-practice-generator",
-      "manifest_sha256": "7701357dc1ef518620569e68da64574f6ccdaa156664ba8d7c66aea0e58db776"
+      "manifest_sha256": "6b4c48c5c232fdb6d05102192b9521b757575774b5fb1c89c41cd355c8a8d817"
     },
     {
       "capability_id": "plugin-education-agent-skills-retrieve-first-gate",
       "source_path": "capabilities/plugin-education-agent-skills-retrieve-first-gate",
-      "manifest_sha256": "7d99072546d2731724e659bbfb32d099244378314353ed8d3714dda0b3dcd709"
+      "manifest_sha256": "90991af93de150db73de3aaeac752e04cc26973baa51a0765495c2e04c512967"
     },
     {
       "capability_id": "plugin-education-agent-skills-ruler-emotional-literacy-sequence",
       "source_path": "capabilities/plugin-education-agent-skills-ruler-emotional-literacy-sequence",
-      "manifest_sha256": "faef2ea496436d7677ea290411dc7ad1e6c1665737da791544950572b097c025"
+      "manifest_sha256": "08143ba3a260b0068569e78d39afaaebac0fee55c8717fb70340a3a7b0c626ca"
     },
     {
       "capability_id": "plugin-education-agent-skills-scaffolded-task-modifier",
@@ -520,12 +520,12 @@
     {
       "capability_id": "plugin-education-agent-skills-scope-and-sequence-designer",
       "source_path": "capabilities/plugin-education-agent-skills-scope-and-sequence-designer",
-      "manifest_sha256": "9ce56cda69796baafb9d5d1c83a6fa8687b0c0a791f057bd06a5ade3684da68c"
+      "manifest_sha256": "72884154cd4bb8ed5f7fd97381b6b553d1e43592f809b10bc0bdc87c095f2468"
     },
     {
       "capability_id": "plugin-education-agent-skills-self-efficacy-builder-sequence",
       "source_path": "capabilities/plugin-education-agent-skills-self-efficacy-builder-sequence",
-      "manifest_sha256": "895373158242c7874e3b1de33b2cccad2bccdbc3b38c14cf634aa46faf8407cd"
+      "manifest_sha256": "3da0af50454f53428e8a0f5f7098b96f3631ce5d6a9bac08da60034a7e5c43d4"
     },
     {
       "capability_id": "plugin-education-agent-skills-self-explanation-prompt-designer",
@@ -560,17 +560,17 @@
     {
       "capability_id": "plugin-education-agent-skills-spaced-practice-scheduler",
       "source_path": "capabilities/plugin-education-agent-skills-spaced-practice-scheduler",
-      "manifest_sha256": "081758ef9399d25d18e5376e95f49cbf70bce19b2faadcd9f85a39e743e4e9c3"
+      "manifest_sha256": "14ed09f9c6f2b852d5eb63f22d6ce8e500e7bc25455c3291b1850800c4738f21"
     },
     {
       "capability_id": "plugin-education-agent-skills-srl-session-wrapper",
       "source_path": "capabilities/plugin-education-agent-skills-srl-session-wrapper",
-      "manifest_sha256": "c6c669bcdc9ffe3f71115cb6b00a7429dcb072cc1138cf323e6e1c833281a14d"
+      "manifest_sha256": "02bbcd10599cbd43595348005aa7f52e1efb512af01867c9f9252c458a45b6a8"
     },
     {
       "capability_id": "plugin-education-agent-skills-stuck-and-error-diagnosis-coach",
       "source_path": "capabilities/plugin-education-agent-skills-stuck-and-error-diagnosis-coach",
-      "manifest_sha256": "1f2285d5a3623a668a47e45b5bbd472e3de196ba66e28f8ca420611ddc1e5adb"
+      "manifest_sha256": "955254b6a16eee03638ae84812f124f8dc5d074151402e21706e3ff8c248ef01"
     },
     {
       "capability_id": "plugin-education-agent-skills-study-strategy-selector",
@@ -590,7 +590,7 @@
     {
       "capability_id": "plugin-education-agent-skills-teach-back-evaluator",
       "source_path": "capabilities/plugin-education-agent-skills-teach-back-evaluator",
-      "manifest_sha256": "b5bbe0c8b3eed33e4f39f4580cf58d52c2a8c7988d989d364c1a9c6cfaa31c60"
+      "manifest_sha256": "7730a2551892dbd9fb870f42ccbe883e2482c70073203913617373e2a14d9baa"
     },
     {
       "capability_id": "plugin-education-agent-skills-teacher-inquiry-cycle-designer",
@@ -600,7 +600,7 @@
     {
       "capability_id": "plugin-education-agent-skills-technological-pedagogical-content-knowledge-developer",
       "source_path": "capabilities/plugin-education-agent-skills-technological-pedagogical-content-knowledge-developer",
-      "manifest_sha256": "2aeec0d780781775b5c2e44176388baa7e9090d6e4aea803ad57e04a7d12ad2d"
+      "manifest_sha256": "3fd58e2a2718a81e6c7121ff203a5bb9dbf48bd4c7893f870c4793f054d64193"
     },
     {
       "capability_id": "plugin-education-agent-skills-text-complexity-analyser",
@@ -620,12 +620,12 @@
     {
       "capability_id": "plugin-education-agent-skills-transfer-bridge",
       "source_path": "capabilities/plugin-education-agent-skills-transfer-bridge",
-      "manifest_sha256": "1aba6805b67d5469e17b84d2ed87a03a6222b7da803696724d5302ca639ce59b"
+      "manifest_sha256": "e3b3c2114b518c0224a0a3b19ddb568ee6307c508b16df702748e08ee52a695b"
     },
     {
       "capability_id": "plugin-education-agent-skills-trauma-informed-practice-designer",
       "source_path": "capabilities/plugin-education-agent-skills-trauma-informed-practice-designer",
-      "manifest_sha256": "264e622859aac4c310ec2c00a58f20f50625b31f486843e4906ab46eec4296b6"
+      "manifest_sha256": "a1cfa4b08cfc32352853f6aab433a153c80fbf0e70739e6ed38eda4c209250cb"
     },
     {
       "capability_id": "plugin-education-agent-skills-ubuntu-collective-knowledge-task-designer",
@@ -650,7 +650,7 @@
     {
       "capability_id": "plugin-education-agent-skills-unassisted-evidence-checkpoint",
       "source_path": "capabilities/plugin-education-agent-skills-unassisted-evidence-checkpoint",
-      "manifest_sha256": "baf7435751d93d480ad845c9dbe33dd2f32a741025448fcb93e271d6a2579199"
+      "manifest_sha256": "78fdbde0d7548843de8ff41cd197cd6da746ac6ac9c78e2aaa90f1e327692e89"
     },
     {
       "capability_id": "plugin-education-agent-skills-uninterrupted-work-cycle-designer",
@@ -670,12 +670,12 @@
     {
       "capability_id": "plugin-education-agent-skills-weekly-agency-review",
       "source_path": "capabilities/plugin-education-agent-skills-weekly-agency-review",
-      "manifest_sha256": "75b5dec5d3bb9fb98433163f56ce2ad31c032fc4546e2ed1da9a69794c81aca8"
+      "manifest_sha256": "2dba51ed3cbdb95408e0b4490fa33d4a78033458907679853b27472e72052833"
     },
     {
       "capability_id": "plugin-education-agent-skills-wellbeing-learning-connection-mapper",
       "source_path": "capabilities/plugin-education-agent-skills-wellbeing-learning-connection-mapper",
-      "manifest_sha256": "6390a27c1ae74b380aed4b8ec5fc7568779705b1b1cdcfd514be839e69b18075"
+      "manifest_sha256": "2df35e0bc006b52cbf04483c2606b45b25a2daa1fd99b9ab0fed2b7fa4f6d4d6"
     },
     {
       "capability_id": "plugin-education-agent-skills-worked-example-fading-designer",

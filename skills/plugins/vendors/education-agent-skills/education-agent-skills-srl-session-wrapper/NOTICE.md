@@ -3,18 +3,18 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `student-learning/srl-session-wrapper`
 - Source path: `skills/student-learning/srl-session-wrapper/SKILL.md`
-- Source SHA-256: `dd0dd6fecec960929755becfbe59a032f3d97cdc3868903f812adf2a4a524b4c`
+- Source SHA-256: `2bc18a017e12caababf03b51ad58a8a594493f4b13e70fce48c612cba6a5beaf`
 - Generated Skill: `education-agent-skills-srl-session-wrapper`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/
 
 ResearchSpec changed the global Skill identifier and frontmatter envelope, added
 source-bound evidence-status disclosure (3
-frontmatter declarations and 4 body units marked in this
+frontmatter declarations and 3 body units marked in this
 tree), and added privacy, learner-safety, wellbeing, human-oversight, and
 ResearchSpec-authority boundaries where the immutable audit required them. The
 complete upstream educational body, declared inputs, outputs, prompt, examples,

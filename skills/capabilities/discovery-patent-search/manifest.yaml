@@ -1,8 +1,7 @@
 schema_version: "1"
 capability_id: discovery-patent-search
 title: 著录检索 (Patent Search)
-description: 中国专利公布公告著录检索：发明人、申请人、分类号、名称、摘要，或从单图与权要生成检索式（patent search,
-  bibliographic, CNIPA）。
+description: 中国专利公布公告著录检索，按指定局别检索海外专利，或从单图与权要生成检索式（patent search, CNIPA, Google Patents）。
 maturity: operational
 class: discovery
 node_kind: producer
@@ -34,7 +33,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: PD-KP-16
     path: knowledge/pd-kp-16-patent-search-records.md
-    content_hash: 07e79221deb60ca1f2990d5e726cb8f4116a2bc041c274762186278d292b99a5
+    content_hash: afca6bbc3248cd0b6872aef5a01e6127c08c55d4786a337ad53dbb3bdefd9110
     license: MIT
   - knowledge_id: PD-KP-17
     path: knowledge/pd-kp-17-runtime-tools-rules.md
@@ -60,6 +59,58 @@ knowledge_refs:
     path: tools/patent_type.py
     content_hash: 964bf1648e24d606a7ab4bfb482c5bafa417fb204a6543656008ed9afe1b66ce
     license: MIT
+  - knowledge_id: tools-gp_search.py
+    path: tools/gp_search.py
+    content_hash: c93f5117eecbd24e487169db11adfc74d811838d38cdad9917abc1e966fe51fb
+    license: MIT
+  - knowledge_id: tools-stdio_utf8.py
+    path: tools/stdio_utf8.py
+    content_hash: b66838457a55499568ffcce347e75b348ccccb2af4cd73f5799b16e4ed127e84
+    license: MIT
+  - knowledge_id: tools-google_patents-results.py
+    path: tools/google_patents/results.py
+    content_hash: 84689841f2f0255206f8176732e6d92778fc5f970e28d7c3cb50381624c76b56
+    license: MIT
+  - knowledge_id: tools-google_patents-report.py
+    path: tools/google_patents/report.py
+    content_hash: 529f3e20f2758d4c7757bb6f673f839fe3791824678367ac0283b6b564559b1b
+    license: MIT
+  - knowledge_id: tools-google_patents-query.py
+    path: tools/google_patents/query.py
+    content_hash: b931e04e8abb0a7ab8162356afd52c08750820900f8cc9647800d878c978eb58
+    license: MIT
+  - knowledge_id: tools-google_patents-paths.py
+    path: tools/google_patents/paths.py
+    content_hash: 1f7503d3582ad7a29c3250fba5d0985c2c1cbfd3094113e5fde365ed0a6f8874
+    license: MIT
+  - knowledge_id: tools-google_patents-html_text.py
+    path: tools/google_patents/html_text.py
+    content_hash: 9ab609cf688ea261a6a5988f239b0a9225189786ca14825caa2004bfdc903d4f
+    license: MIT
+  - knowledge_id: tools-google_patents-errors.py
+    path: tools/google_patents/errors.py
+    content_hash: c6de124552306c952705544119db4bda210af7167f28866acfc4bb48618aefb7
+    license: MIT
+  - knowledge_id: tools-google_patents-detail.py
+    path: tools/google_patents/detail.py
+    content_hash: bcb31684edbf2082b0f5c4436b6e69a29a5f59ca4e2100caf56ab5839494cf53
+    license: MIT
+  - knowledge_id: tools-google_patents-config.py
+    path: tools/google_patents/config.py
+    content_hash: cfb71b2eecb659dc4ace6fc2797d1952b44e503ffd9d55fcb8575ee8c9023282
+    license: MIT
+  - knowledge_id: tools-google_patents-client.py
+    path: tools/google_patents/client.py
+    content_hash: 7320a73145865075f6d0ad8932677c38d93828f4cc149b56c5dd727b91acb7ff
+    license: MIT
+  - knowledge_id: tools-google_patents-api.py
+    path: tools/google_patents/api.py
+    content_hash: ab6d40d847518b2284abbf001cabfd968539e84ce834566110787cd2834847cc
+    license: MIT
+  - knowledge_id: tools-google_patents-__init__.py
+    path: tools/google_patents/__init__.py
+    content_hash: c45fb6bdecc97fac425f9dd1f9d54e165ae61fda6b2ee2eb8e925f85176fd434
+    license: MIT
   - knowledge_id: tools-emit_search_report.py
     path: tools/emit_search_report.py
     content_hash: b874935dd237294edd6ea1f8b682884f622742003e6bf6aad43e46a7dd7524d4
@@ -74,23 +125,19 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-cnipa_search.py
     path: tools/cnipa_search.py
-    content_hash: 35299357f30de8e82175d1e294bfb15b2efbf7130b1c620424825a04bb8524a5
+    content_hash: a5e7ec310a9a04385982b29b2710dd2efa45c5d935e9b216fec4608dcc25b69a
     license: MIT
   - knowledge_id: tools-cnipa_crawler.py
     path: tools/cnipa_crawler.py
-    content_hash: f0fdcabc3872c6e8797214b2afea2b6d2365542ffc5bc8070d76a19892986633
+    content_hash: b6f88b6df7a997c6e13b99cdaa613c31b7bb986b2fe6ce5ea00764ad06958456
     license: MIT
   - knowledge_id: tools-cnipa_parse.py
     path: tools/cnipa_parse.py
-    content_hash: 4464272f558ee76dda57f9bc8e67985ab05acbd4b9e8efa320da33e021874db3
+    content_hash: 2937aeab8f87e39dc41ada2bf829a4d78b25cf0507dca120845ed5a25c2d75af
     license: MIT
   - knowledge_id: tools-browser.py
     path: tools/browser.py
-    content_hash: c196d95b50d692a5990332f1bc112727f09c18398e579a6684cc918f5f7e98c7
-    license: MIT
-  - knowledge_id: tools-stdio_utf8.py
-    path: tools/stdio_utf8.py
-    content_hash: b66838457a55499568ffcce347e75b348ccccb2af4cd73f5799b16e4ed127e84
+    content_hash: e75ced77397412ceb10695c1308cfd7344539edfe88b398cd562cc0d050f865b
     license: MIT
   - knowledge_id: references-schemas-patent_file_index.schema.yaml
     path: references/schemas/patent_file_index.schema.yaml
@@ -102,7 +149,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: config.yaml
     path: config.yaml
-    content_hash: c11873f15cbfd118b7c29eb8756f5f9fbc63edfee52dd4905de67914df573eab
+    content_hash: 3648818b5e80f46e730da866ead623eb853214df8e049bec12a2bcf1bb137e22
     license: MIT
   - knowledge_id: tools-patent_files.py
     path: tools/patent_files.py
@@ -110,7 +157,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: NOTICE.md
     path: NOTICE.md
-    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    content_hash: f5a7add35ef089af7d3eed7692081e062baf1ecefad72c48805a2bfefe9f928b
     license: MIT
   - knowledge_id: LICENSE
     path: LICENSE
@@ -126,5 +173,5 @@ provenance:
     - PD-KP-17
   upstream_sources:
     - path: authoring/patent-disclosure-skill/extracted/capabilities/03.md
-      sha256: ce7718bb6158abb4130e22d0c5d82564f40a00cd87ce8d25f6220e079083fed0
+      sha256: 52d130073b67a9996739a7532266119bfb4e6beaba58f6dadfbc741642f7ce75
 license: MIT

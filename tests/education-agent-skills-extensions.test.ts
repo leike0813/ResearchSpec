@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { test } from "node:test";
@@ -25,7 +26,21 @@ void test("Education Agent Skills bulk registry and domain assignments are compl
   assert.equal(ids.length, 136);
   assert.equal([...extensions.profiles.keys()].filter((id) => id.startsWith("plugin-education-agent-skills-")).length, 136);
   assert.equal(ids.filter((id) => extensions.capabilities.get(id)?.manifest.execution_type === "llm").length, 136);
-  for (const id of ids) assert.deepEqual(extensions.capabilities.get(id)?.manifest.knowledge_refs, []);
+  let referenceCount = 0;
+  for (const id of ids) {
+    const manifest = extensions.capabilities.get(id)?.manifest;
+    assert.ok(manifest);
+    for (const reference of manifest.knowledge_refs) {
+      assert.match(reference.path, /^references\/worked-[a-z-]+\.md$/);
+      const rawId = id.replace(/^plugin-/, "");
+      const rawReference = await readFile(path.join("skills/plugins/vendors/education-agent-skills", rawId, reference.path));
+      const projectedReference = await readFile(path.join("skills/plugins/extensions/capabilities", id, reference.path));
+      assert.deepEqual(projectedReference, rawReference, id);
+      assert.equal(createHash("sha256").update(projectedReference).digest("hex"), reference.content_hash, id);
+      referenceCount += 1;
+    }
+  }
+  assert.equal(referenceCount, 6);
 
   const catalog = JSON.parse(await readFile(path.resolve(".", "src/plugins/domain-catalog.json"), "utf8")) as {
     domains: Array<{ domain_id: string; skills: string[] }>;

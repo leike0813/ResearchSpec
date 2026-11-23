@@ -48,5 +48,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-belonging-classroom-culture-designer/SKILL.md
-      sha256: 15ae0f50e6c3ecee808abe90b6025b6de7ddafcf13b5687d61104b415daea7e4
+      sha256: f24e72689c9e87384fef27b7d6265fee23320091d45cd99ca8ec9573effffb64
 license: CC-BY-SA-4.0

@@ -61,6 +61,7 @@ const REASON = {
   ensureModel: "automatic vector model downloader; the map consumes explicitly configured local model files",
   ipcScheme: "IPC subclass scheme build pipeline and its data; the map reads explicitly configured IPC data instead",
   selfEvolve: "self-evolution policy backlog state maintained outside the distributed package",
+  readerRefactor: "upstream internal reader refactor; ResearchSpec retains the existing selected-vault implementation and evidence contracts",
 };
 
 // Office-action tools that persist or evolve the skill's own case store, vector
@@ -114,6 +115,16 @@ const AUTHORED_ALL = [
 ];
 
 const AUTHORED_BY_BUSINESS = {
+  "patent-search": ["config.py", "paths.py", "report.py"].map((name) => ({
+    source_path: `${AUTHORING}/runtime/shared/tools/google_patents/${name}`,
+    output_path: `tools/google_patents/${name}`,
+    read_when: "when running an authorized overseas patent search",
+  })),
+  "patent-reader": [{
+    source_path: `${AUTHORING}/runtime/shared/tools/google_patents/paths.py`,
+    output_path: "tools/google_patents/paths.py",
+    read_when: "when writing an authorized overseas patent retrieval",
+  }],
   "patent-oa": [
     {
       source_path: `${AUTHORING}/runtime/patent-oa/tools/oa_history.py`,
@@ -134,6 +145,56 @@ const AUTHORED_BY_BUSINESS = {
 // real vendor file and a real authored runtime target; the semantic business
 // feature stays intact while an automatic or unbounded boundary becomes explicit.
 const ADAPTATIONS = [
+  ...["patent-search", "patent-reader"].map((business) => ({
+    source: `skills/${business}/tools/google_patents/results.py`,
+    target: `${AUTHORING}/runtime/shared/tools/google_patents/results.py`,
+    reason: "validates provider payloads and distinguishes invalid responses from a genuine empty result",
+  })),
+  {
+    source: "skills/patent-search/tools/gp_search.py",
+    target: `${AUTHORING}/runtime/patent-search/tools/gp_search.py`,
+    reason: "records the selected jurisdictions, completeness and bounded project-local JSON and Markdown outputs",
+  },
+  {
+    source: "skills/patent-reader/tools/extract/fetch_gp_fulltext.py",
+    target: `${AUTHORING}/runtime/patent-reader/tools/extract/fetch_gp_fulltext.py`,
+    reason: "verifies publication identity and writes a new project-local evidence directory",
+  },
+  {
+    source: "skills/patent-reader/tools/extract/fetch_patent_pdf.py",
+    target: `${AUTHORING}/runtime/patent-reader/tools/extract/fetch_patent_pdf.py`,
+    reason: "limits overseas detail requests and surfaces provider blocks before alternative downloads",
+  },
+  {
+    source: "skills/patent-search/tools/cnipa_search.py",
+    target: `${AUTHORING}/runtime/patent-search/tools/cnipa_search.py`,
+    reason: "escapes literal percent signs in help so the command can display its options",
+  },
+  {
+    source: "skills/patent-search/tools/search_config.py",
+    target: `${AUTHORING}/runtime/patent-search/tools/search_config.py`,
+    reason: "maintains the domestic query defaults separately from the overseas configuration",
+  },
+  {
+    source: "skills/patent-chart/tools/emit_chart.py",
+    target: `${AUTHORING}/runtime/shared/emit_chart.py`,
+    reason: "the chart business owns the shared claim-level workbook renderer",
+  },
+  {
+    source: "skills/patent-oa/tools/emit_chart.py",
+    target: `${AUTHORING}/runtime/shared/emit_chart.py`,
+    reason: "the office-action stage reuses the chart renderer with its existing office-action worksheet",
+  },
+  {
+    source: "skills/patent-chart/tools/xlsx_minimal.py",
+    target: `${AUTHORING}/runtime/shared/xlsx_minimal.py`,
+    reason: "the chart business owns the shared workbook styles",
+  },
+  {
+    source: "skills/patent-oa/tools/xlsx_minimal.py",
+    target: `${AUTHORING}/runtime/shared/xlsx_minimal.py`,
+    reason: "the office-action worksheet uses the same workbook styles",
+  },
   {
     source: "skills/patent-disclosure/tools/fence/README.md",
     target: `${AUTHORING}/runtime/patent-disclosure/tools/fence/README.md`,
@@ -237,6 +298,11 @@ const ADAPTATIONS = [
 ];
 
 const READ_WHEN = new Map([
+  ["references/ai_disclosure.md", "when the inventor's material already specifies a model, training, or inference"],
+  ["references/ai_implementation.md", "when the disclosed invention already uses a model, training, or inference"],
+  ["references/divisional_example_ai_security.md", "when illustrating divisional scope without using the example as evidence for the current case"],
+  ["references/clue_vocab.yaml", "when normalizing technical clues from a patent"],
+  ["references/text_vocab.yaml", "when normalizing bibliographic or document text from a patent"],
   ["references/design_view_cnipa.md", "when designing appearance/design line-art views or checking design-view conformity"],
   ["references/disclosure_to_spec_map.md", "when mapping a disclosure bundle into application specification sections"],
   ["references/formulas/paradigms.yaml", "when a formula plan needs a paradigm template"],
@@ -297,6 +363,12 @@ function classify(rel) {
   if (business === "patent-disclosure" && rest === "tools/bootstrap_cad_venv.py") return excluded(REASON.cadInstaller);
   if (business === "patent-docket" && (rest.startsWith("tools/") || DOCKET_STATE.has(rest))) return excluded(REASON.docketState);
   if (business === "patent-oa" && OA_WRITERS.has(rest)) return excluded(REASON.oaWriter);
+  if (business === "patent-reader" && (
+    /^tools\/shared\/(?:biblio|claims|obsidian_env|paths|rules|text_vocab)\.py$/.test(rest)
+    || rest.startsWith("tools/vault/clues/")
+    || rest === "references/clue_vocab.yaml"
+    || rest === "references/text_vocab.yaml"
+  )) return excluded(REASON.readerRefactor);
   if (business === "patent-exam-policy" && (rest === "docs/archive.md" || rest === "references/schemas/exam_policy_backlog.schema.yaml" || rest === "references/topic_prompt_map.md")) {
     return excluded(REASON.selfEvolve);
   }
@@ -340,7 +412,7 @@ function buildProjection() {
     for (const [sha, group] of [...bySha.entries()].sort(([left], [right]) => left.localeCompare(right))) {
       if (group.length < 2) continue;
       const canonical = [...group].sort((left, right) => left.rel.localeCompare(right.rel))[0];
-      let name = path.posix.basename(canonical.rest);
+      let name = canonical.rest.startsWith("tools/google_patents/") ? canonical.rest : path.posix.basename(canonical.rest);
       if (usedNames.has(name)) name = `${sha.slice(0, 8)}-${name}`;
       usedNames.add(name);
       shared.set(sha, { name, canonical });
@@ -373,7 +445,9 @@ function buildProjection() {
     const sourcePath = adaptation?.target ?? (shared
       ? `${AUTHORING}/${folder}/shared/${shared.name}`
       : `${AUTHORING}/${folder}/${file.business}/${file.rest}`);
-    put(sourcePath, shared ? shared.canonical.bytes : file.bytes, file.kind === "resource" && !adaptation);
+    if (!adaptation || !sources.has(sourcePath)) {
+      put(sourcePath, shared ? shared.canonical.bytes : file.bytes, file.kind === "resource" && !adaptation);
+    }
     entries.push({
       business: file.business,
       upstream_path: file.rel,
@@ -430,6 +504,7 @@ function buildProjection() {
 
   for (const adaptation of ADAPTATIONS) {
     if (!files.some((file) => file.rel === adaptation.source)) throw new Error(`adaptation source missing: ${adaptation.source}`);
+    if (!existsSync(path.join(ROOT, adaptation.target))) throw new Error(`reviewed adaptation target missing: ${adaptation.target}`);
   }
 
   const manifest = { schema_version: "1", groups, adaptations: ADAPTATIONS, exclusions };

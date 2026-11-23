@@ -130,7 +130,7 @@ async function generateBundle(
       await mkdir(path.dirname(target), { recursive: true });
       await writeFile(target, file.content);
       fileDispositions.push({
-        source_path: file.path === "SKILL.md" ? tree.sourcePath : `generated/${file.path}`,
+        source_path: file.sourcePath ?? `generated/${file.path}`,
         output_path: `vendors/${VENDOR_ID}/${tree.skillId}/${file.path}`,
         disposition: "included",
         reason: "approved adapted Skill asset",
@@ -141,7 +141,7 @@ async function generateBundle(
       skill_id: tree.skillId,
       license: rendered.policies.policy.license.expression,
       dependencies: [],
-      upstreams: [{ source_paths: [tree.sourcePath], adaptation: "converted" }],
+      upstreams: [{ source_paths: tree.files.flatMap((file) => file.sourcePath ? [file.sourcePath] : []), adaptation: "converted" }],
     });
   }
   const vendor: PluginRegistry["vendors"][number] = {

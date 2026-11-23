@@ -43,7 +43,12 @@ export async function writeEducationAgentSkillsPreview(repoRoot: string, outputR
       marked_frontmatter_evidence_ids: tree.markedFrontmatterEvidenceIds,
       body_evidence_matches: tree.bodyEvidenceMatches,
       unmatched_body_evidence_ids: tree.unmatchedBodyEvidenceIds,
-      files: tree.files.map((file) => ({ path: file.path, sha256: file.sha256 })),
+      files: tree.files.map((file) => ({
+        path: file.path,
+        sha256: file.sha256,
+        source_path: file.sourcePath,
+        source_sha256: file.sourceSha256,
+      })),
     })),
   };
   const catalogs = {

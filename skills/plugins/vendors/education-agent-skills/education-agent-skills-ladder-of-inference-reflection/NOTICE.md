@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `systems-thinking/ladder-of-inference-reflection`
 - Source path: `skills/systems-thinking/ladder-of-inference-reflection/SKILL.md`
-- Source SHA-256: `15068c44ce81c6868eaac7704fc0d925fe13a32affaf8018f3caeb272d5394ae`
+- Source SHA-256: `9870b75aab695d85f2be04516adb5e728145af5a0165ae3933382719c28773f5`
 - Generated Skill: `education-agent-skills-ladder-of-inference-reflection`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

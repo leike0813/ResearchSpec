@@ -285,6 +285,8 @@ const KP_APPLICATION: KnowledgeDef = {
     UPSTREAM + "/skills/patent-application/prompts/guardrails.md",
     UPSTREAM + "/skills/patent-application/prompts/claim_strategy.md",
     UPSTREAM + "/skills/patent-application/prompts/material_gate.md",
+    UPSTREAM + "/skills/patent-application/prompts/divisional.md",
+    UPSTREAM + "/skills/patent-application/prompts/specification_builder.md",
   ],
 };
 const KP_CONSISTENCY: KnowledgeDef = {
@@ -386,6 +388,7 @@ const KP_SEARCH: KnowledgeDef = {
     UPSTREAM + "/skills/patent-search/SKILL.md",
     UPSTREAM + "/skills/patent-search/prompts/patent_search.md",
     UPSTREAM + "/skills/patent-search/prompts/derived_query.md",
+    UPSTREAM + "/skills/patent-search/prompts/global_search.md",
     UPSTREAM + "/skills/patent-search/prompts/covers_rank.md",
   ],
 };
@@ -507,7 +510,7 @@ const SOURCE_SPECS: readonly SourceSpec[] = [
     capability_id: "discovery-patent-search",
     procedure: "03-discovery-patent-search.md",
     title: "著录检索 (Patent Search)",
-    description: "中国专利公布公告著录检索：发明人、申请人、分类号、名称、摘要，或从单图与权要生成检索式（patent search, bibliographic, CNIPA）。",
+    description: "中国专利公布公告著录检索，按指定局别检索海外专利，或从单图与权要生成检索式（patent search, CNIPA, Google Patents）。",
     class: "discovery",
     node_kind: "producer",
     execution_type: "mixed",
@@ -522,7 +525,7 @@ const SOURCE_SPECS: readonly SourceSpec[] = [
     capability_id: "analysis-patent-reading",
     procedure: "04-analysis-patent-reading.md",
     title: "专利通俗解读 (Patent Reading)",
-    description: "把公开号、PDF 或全文读成通俗笔记与图谱，产出稳定特征行与可机读段落（patent reading, claim features）。",
+    description: "解读中国与海外专利的公开号、PDF 或全文，产出通俗笔记、稳定特征行与可机读段落（patent reading, claim features）。",
     class: "analysis",
     node_kind: "producer",
     execution_type: "mixed",
@@ -576,6 +579,7 @@ const SOURCE_SPECS: readonly SourceSpec[] = [
       "tools/vendor/",
       "references/schemas/",
       "references/design_view_cnipa.md",
+      "references/ai_disclosure.md",
     ],
     knowledge: [KP_GUARDRAILS, KP_DISCLOSURE, KP_RUNTIME],
     inputs: [
@@ -626,6 +630,8 @@ const SOURCE_SPECS: readonly SourceSpec[] = [
       "tools/render_invention_figures.py",
       "tools/compose_application_figure.py",
       "tools/emit_application_docx.py",
+      "references/ai_implementation.md",
+      "references/divisional_example_ai_security.md",
     ],
     knowledge: [KP_GUARDRAILS, KP_APPLICATION, KP_RUNTIME],
     inputs: [file("disclosure_bundle", "disclosure-bundle.v1")],

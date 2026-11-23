@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `student-learning/productive-failure-protocol`
 - Source path: `skills/student-learning/productive-failure-protocol/SKILL.md`
-- Source SHA-256: `981c2fbd183617787b40b094bbec3e76dc4630e9a73bc8797f51fb5c06b97c9f`
+- Source SHA-256: `83d7717ccbe49704015b5a60506aaf9a8981d0b97cf13fd14f2c2ea6a270d21d`
 - Generated Skill: `education-agent-skills-productive-failure-protocol`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

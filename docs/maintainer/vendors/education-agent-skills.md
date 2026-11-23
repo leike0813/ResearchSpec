@@ -6,15 +6,15 @@ ResearchSpec distributes 136 reviewed static Skills adapted from Education
 Agent Skills. The maintainer input is pinned at:
 
 - repository: `https://github.com/GarethManning/education-agent-skills`;
-- release: `snapshot-6bbbce4`;
-- revision: `6bbbce418f82e11044009c9f3b7373a354de5bd0`;
-- Git tree: `b90188569a783ba7d20dcffe2db7a55816db7c0b`.
+- release `v3.1.0`
+- revision `c0c82fb682001177b855576e45f27cc5e786e4c4`
+- Git tree `9651f375d1114d7163c374ba39a8c26dde539544`
 
 The immutable audit covers all 165 upstream Skills. Production admission accepts
 136 Gareth Manning Skills and excludes 19 original-framework Skills plus ten
 Sean Hu Skills whose redistribution authority is not established.
 
-The production snapshot is `snapshot-6bbbce4`. Its complete conversion preview
+The v3.1.0 conversion preview
 has user approval recorded in `review-decision.json`; production bytes must
 match that exact aggregate. Audit, evidence-map, policy, license, and aggregate
 hashes live in the binding files named below.
@@ -41,12 +41,16 @@ Relationships never create hard Skill dependencies.
 ## Generated Skill form
 
 Each admitted Skill is published as
-`education-agent-skills-<upstream-name>` with exactly:
+`education-agent-skills-<upstream-name>` with these standard files:
 
 - `SKILL.md`;
 - a complete CC BY-SA 4.0 `LICENSE`;
 - `NOTICE.md` with author, source, revision, source hash, generated ID, and
   modification disclosure.
+
+Reviewed worked examples keep their source-relative `references/` paths and
+the read conditions in `SKILL.md`. Each admitted reference is included in the
+complete-tree preview and package attribution.
 
 The adapter preserves the complete upstream educational body and the declared
 input/output schemas. It normalizes the global identifier and frontmatter
@@ -140,8 +144,9 @@ profiles. The generator
 `scripts/generate-education-agent-skills-extensions.mjs` produces the packages
 from the reviewed vendor bundle and the source-neutral domain catalog.
 
-- Every package is a static `execution_type: llm` tree with
-  `knowledge_refs: []`; the reviewed tree contains no scripts or references.
+- Every package is a static `execution_type: llm` tree. The six worked examples
+  are copied byte-for-byte from the reviewed vendor trees and declared as
+  hash-bound knowledge references.
 - The reviewed `SKILL.md` body, including the
   `researchspec-education-boundary` block, is preserved byte-for-byte except
   frontmatter replacement and the appended node contract.
@@ -172,7 +177,5 @@ package/profile trees, the maintenance Skill, the maintenance catalog, and
 records 01–05 in `manifest.json`. `artifacts` regenerates the 136 packages. The
 Agent semantic review is mandatory and `baseline` refuses an anchor whose
 `05-semantic-review.md` is not completed. The current production anchor is
-`snapshot-6bbbce4`; `snapshot-32fce5c` remains immutable historical evidence.
-The incremental update changes two raw Skills and their extension packages;
-the other 134 trees, all 136 profiles and validators, and domain assignments
-retain their reviewed bytes. `check` verifies the current production anchor.
+`v3.1.0`. The `snapshot-6bbbce4` and `snapshot-32fce5c` anchors preserve the
+previous production records. `check` verifies the current production anchor.

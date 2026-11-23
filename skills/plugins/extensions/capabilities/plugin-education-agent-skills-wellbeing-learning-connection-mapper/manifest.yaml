@@ -48,5 +48,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-wellbeing-learning-connection-mapper/SKILL.md
-      sha256: dc198a815b3efec56f3c9771f84d4c187ba397d7bde28bff6c79aa35bfd90e57
+      sha256: 081b7b7f876e87f893faf0dc42b9946ff35276f0474d338d91fd241b76656f71
 license: CC-BY-SA-4.0

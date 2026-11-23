@@ -84,7 +84,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: NOTICE.md
     path: NOTICE.md
-    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    content_hash: f5a7add35ef089af7d3eed7692081e062baf1ecefad72c48805a2bfefe9f928b
     license: MIT
   - knowledge_id: LICENSE
     path: LICENSE
@@ -99,5 +99,5 @@ provenance:
     - PD-KP-15
   upstream_sources:
     - path: authoring/patent-disclosure-skill/extracted/capabilities/18.md
-      sha256: 1862e514a2f43022f96006948d79b6fa53e164428571114b55dc63895627ba36
+      sha256: 5a5ea8d7ca0bcf38789ab5561cf9863f156d9daf6a838b0879c6075615b5752e
 license: MIT

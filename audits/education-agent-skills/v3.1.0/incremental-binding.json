@@ -1,0 +1,1562 @@
+{
+  "schema_version": "1",
+  "kind": "education-agent-skills-evidence-incremental-binding",
+  "vendor_id": "education-agent-skills",
+  "old_anchor": "snapshot-6bbbce4",
+  "new_anchor": "v3.1.0",
+  "old_revision": "6bbbce418f82e11044009c9f3b7373a354de5bd0",
+  "new_revision": "c0c82fb682001177b855576e45f27cc5e786e4c4",
+  "old_tree_hash": "b90188569a783ba7d20dcffe2db7a55816db7c0b",
+  "new_tree_hash": "9651f375d1114d7163c374ba39a8c26dde539544",
+  "old_audit_sha256": "57b93c4668e6ca29fcb191e35cdea56e85ab0a7888b78256c6e64096422c6406",
+  "new_audit_sha256": "cb1f0416bf8da46a5218ec23f932f166366861c5b399bdbcf238e72a2da3d059",
+  "new_evidence_map_sha256": "232168ab30d86329a60d0a3cf1024c6f947535aaea47c03e76592d2f4f12983f",
+  "rebound": {
+    "declarations": 254,
+    "citation_changed": 2,
+    "unaffected_declarations": 618,
+    "records": [
+      {
+        "evidence_id": "evidence-0113",
+        "skill_id": "curriculum-alignment/developmental-band-translator",
+        "source_sha256_before": "b1879a0422ba0c9e68ddd74752466709d7e2327ccdedab29bd0b6599d2bd2f5e",
+        "source_sha256_after": "57d1d93eccdc656dcc37fef5901aea76b66919ee46996b9f2a36b0de44d172b2"
+      },
+      {
+        "evidence_id": "evidence-0114",
+        "skill_id": "curriculum-alignment/developmental-band-translator",
+        "source_sha256_before": "b1879a0422ba0c9e68ddd74752466709d7e2327ccdedab29bd0b6599d2bd2f5e",
+        "source_sha256_after": "57d1d93eccdc656dcc37fef5901aea76b66919ee46996b9f2a36b0de44d172b2"
+      },
+      {
+        "evidence_id": "evidence-0115",
+        "skill_id": "curriculum-alignment/developmental-band-translator",
+        "source_sha256_before": "b1879a0422ba0c9e68ddd74752466709d7e2327ccdedab29bd0b6599d2bd2f5e",
+        "source_sha256_after": "57d1d93eccdc656dcc37fef5901aea76b66919ee46996b9f2a36b0de44d172b2"
+      },
+      {
+        "evidence_id": "evidence-0116",
+        "skill_id": "curriculum-alignment/developmental-band-translator",
+        "source_sha256_before": "b1879a0422ba0c9e68ddd74752466709d7e2327ccdedab29bd0b6599d2bd2f5e",
+        "source_sha256_after": "57d1d93eccdc656dcc37fef5901aea76b66919ee46996b9f2a36b0de44d172b2"
+      },
+      {
+        "evidence_id": "evidence-0117",
+        "skill_id": "curriculum-alignment/developmental-band-translator",
+        "source_sha256_before": "b1879a0422ba0c9e68ddd74752466709d7e2327ccdedab29bd0b6599d2bd2f5e",
+        "source_sha256_after": "57d1d93eccdc656dcc37fef5901aea76b66919ee46996b9f2a36b0de44d172b2"
+      },
+      {
+        "evidence_id": "evidence-0118",
+        "skill_id": "curriculum-alignment/kud-chart-author",
+        "source_sha256_before": "f597606246661031163dce8adb8abed9a7ddcd9be2daba3d6e1a8b826494bbcc",
+        "source_sha256_after": "5f2a4845fd1ed63338c29156118153fc391aa88f2ffab70ab086a408910eb2d1"
+      },
+      {
+        "evidence_id": "evidence-0119",
+        "skill_id": "curriculum-alignment/kud-chart-author",
+        "source_sha256_before": "f597606246661031163dce8adb8abed9a7ddcd9be2daba3d6e1a8b826494bbcc",
+        "source_sha256_after": "5f2a4845fd1ed63338c29156118153fc391aa88f2ffab70ab086a408910eb2d1"
+      },
+      {
+        "evidence_id": "evidence-0120",
+        "skill_id": "curriculum-alignment/kud-chart-author",
+        "source_sha256_before": "f597606246661031163dce8adb8abed9a7ddcd9be2daba3d6e1a8b826494bbcc",
+        "source_sha256_after": "5f2a4845fd1ed63338c29156118153fc391aa88f2ffab70ab086a408910eb2d1"
+      },
+      {
+        "evidence_id": "evidence-0121",
+        "skill_id": "curriculum-alignment/kud-chart-author",
+        "source_sha256_before": "f597606246661031163dce8adb8abed9a7ddcd9be2daba3d6e1a8b826494bbcc",
+        "source_sha256_after": "5f2a4845fd1ed63338c29156118153fc391aa88f2ffab70ab086a408910eb2d1"
+      },
+      {
+        "evidence_id": "evidence-0122",
+        "skill_id": "curriculum-alignment/kud-chart-author",
+        "source_sha256_before": "f597606246661031163dce8adb8abed9a7ddcd9be2daba3d6e1a8b826494bbcc",
+        "source_sha256_after": "5f2a4845fd1ed63338c29156118153fc391aa88f2ffab70ab086a408910eb2d1"
+      },
+      {
+        "evidence_id": "evidence-0123",
+        "skill_id": "curriculum-alignment/kud-chart-author",
+        "source_sha256_before": "f597606246661031163dce8adb8abed9a7ddcd9be2daba3d6e1a8b826494bbcc",
+        "source_sha256_after": "5f2a4845fd1ed63338c29156118153fc391aa88f2ffab70ab086a408910eb2d1"
+      },
+      {
+        "evidence_id": "evidence-0144",
+        "skill_id": "curriculum-assessment/curriculum-knowledge-architecture-designer",
+        "source_sha256_before": "e3c6ea6c5c0786ee96bf1d81ee5d33d0d98e969bc73ac657cbeced6587571a18",
+        "source_sha256_after": "fdf20cd0cd9e72485f9623301aab52ce9c11e62302755f58fda63c020c79dab5"
+      },
+      {
+        "evidence_id": "evidence-0145",
+        "skill_id": "curriculum-assessment/curriculum-knowledge-architecture-designer",
+        "source_sha256_before": "e3c6ea6c5c0786ee96bf1d81ee5d33d0d98e969bc73ac657cbeced6587571a18",
+        "source_sha256_after": "fdf20cd0cd9e72485f9623301aab52ce9c11e62302755f58fda63c020c79dab5"
+      },
+      {
+        "evidence_id": "evidence-0146",
+        "skill_id": "curriculum-assessment/curriculum-knowledge-architecture-designer",
+        "source_sha256_before": "e3c6ea6c5c0786ee96bf1d81ee5d33d0d98e969bc73ac657cbeced6587571a18",
+        "source_sha256_after": "fdf20cd0cd9e72485f9623301aab52ce9c11e62302755f58fda63c020c79dab5"
+      },
+      {
+        "evidence_id": "evidence-0147",
+        "skill_id": "curriculum-assessment/curriculum-knowledge-architecture-designer",
+        "source_sha256_before": "e3c6ea6c5c0786ee96bf1d81ee5d33d0d98e969bc73ac657cbeced6587571a18",
+        "source_sha256_after": "fdf20cd0cd9e72485f9623301aab52ce9c11e62302755f58fda63c020c79dab5"
+      },
+      {
+        "evidence_id": "evidence-0148",
+        "skill_id": "curriculum-assessment/curriculum-knowledge-architecture-designer",
+        "source_sha256_before": "e3c6ea6c5c0786ee96bf1d81ee5d33d0d98e969bc73ac657cbeced6587571a18",
+        "source_sha256_after": "fdf20cd0cd9e72485f9623301aab52ce9c11e62302755f58fda63c020c79dab5"
+      },
+      {
+        "evidence_id": "evidence-0149",
+        "skill_id": "curriculum-assessment/curriculum-knowledge-architecture-designer",
+        "source_sha256_before": "e3c6ea6c5c0786ee96bf1d81ee5d33d0d98e969bc73ac657cbeced6587571a18",
+        "source_sha256_after": "fdf20cd0cd9e72485f9623301aab52ce9c11e62302755f58fda63c020c79dab5"
+      },
+      {
+        "evidence_id": "evidence-0150",
+        "skill_id": "curriculum-assessment/curriculum-knowledge-architecture-designer",
+        "source_sha256_before": "e3c6ea6c5c0786ee96bf1d81ee5d33d0d98e969bc73ac657cbeced6587571a18",
+        "source_sha256_after": "fdf20cd0cd9e72485f9623301aab52ce9c11e62302755f58fda63c020c79dab5"
+      },
+      {
+        "evidence_id": "evidence-0151",
+        "skill_id": "curriculum-assessment/curriculum-knowledge-architecture-designer",
+        "source_sha256_before": "e3c6ea6c5c0786ee96bf1d81ee5d33d0d98e969bc73ac657cbeced6587571a18",
+        "source_sha256_after": "fdf20cd0cd9e72485f9623301aab52ce9c11e62302755f58fda63c020c79dab5"
+      },
+      {
+        "evidence_id": "evidence-0152",
+        "skill_id": "curriculum-assessment/curriculum-knowledge-architecture-designer",
+        "source_sha256_before": "e3c6ea6c5c0786ee96bf1d81ee5d33d0d98e969bc73ac657cbeced6587571a18",
+        "source_sha256_after": "fdf20cd0cd9e72485f9623301aab52ce9c11e62302755f58fda63c020c79dab5"
+      },
+      {
+        "evidence_id": "evidence-0153",
+        "skill_id": "curriculum-assessment/curriculum-knowledge-architecture-designer",
+        "source_sha256_before": "e3c6ea6c5c0786ee96bf1d81ee5d33d0d98e969bc73ac657cbeced6587571a18",
+        "source_sha256_after": "fdf20cd0cd9e72485f9623301aab52ce9c11e62302755f58fda63c020c79dab5"
+      },
+      {
+        "evidence_id": "evidence-0154",
+        "skill_id": "curriculum-assessment/curriculum-knowledge-architecture-designer",
+        "source_sha256_before": "e3c6ea6c5c0786ee96bf1d81ee5d33d0d98e969bc73ac657cbeced6587571a18",
+        "source_sha256_after": "fdf20cd0cd9e72485f9623301aab52ce9c11e62302755f58fda63c020c79dab5"
+      },
+      {
+        "evidence_id": "evidence-0155",
+        "skill_id": "curriculum-assessment/differentiation-adapter",
+        "source_sha256_before": "6545b55ca01e6eea998b9c1c808f6327a3dee87c91a4c313c4c7e6e163c35c5f",
+        "source_sha256_after": "13b3cbb8caf57f12bb988d3c243da16b3fcb1db3c5bac797b24866f2a0c84935"
+      },
+      {
+        "evidence_id": "evidence-0156",
+        "skill_id": "curriculum-assessment/differentiation-adapter",
+        "source_sha256_before": "6545b55ca01e6eea998b9c1c808f6327a3dee87c91a4c313c4c7e6e163c35c5f",
+        "source_sha256_after": "13b3cbb8caf57f12bb988d3c243da16b3fcb1db3c5bac797b24866f2a0c84935"
+      },
+      {
+        "evidence_id": "evidence-0157",
+        "skill_id": "curriculum-assessment/differentiation-adapter",
+        "source_sha256_before": "6545b55ca01e6eea998b9c1c808f6327a3dee87c91a4c313c4c7e6e163c35c5f",
+        "source_sha256_after": "13b3cbb8caf57f12bb988d3c243da16b3fcb1db3c5bac797b24866f2a0c84935"
+      },
+      {
+        "evidence_id": "evidence-0158",
+        "skill_id": "curriculum-assessment/differentiation-adapter",
+        "source_sha256_before": "6545b55ca01e6eea998b9c1c808f6327a3dee87c91a4c313c4c7e6e163c35c5f",
+        "source_sha256_after": "13b3cbb8caf57f12bb988d3c243da16b3fcb1db3c5bac797b24866f2a0c84935"
+      },
+      {
+        "evidence_id": "evidence-0159",
+        "skill_id": "curriculum-assessment/differentiation-adapter",
+        "source_sha256_before": "6545b55ca01e6eea998b9c1c808f6327a3dee87c91a4c313c4c7e6e163c35c5f",
+        "source_sha256_after": "13b3cbb8caf57f12bb988d3c243da16b3fcb1db3c5bac797b24866f2a0c84935"
+      },
+      {
+        "evidence_id": "evidence-0180",
+        "skill_id": "curriculum-assessment/kud-knowledge-type-mapper",
+        "source_sha256_before": "8cd13e8b3ba6829d235aca41a2f3ff7966ab13f57d63a8fbdab1b54b368b6479",
+        "source_sha256_after": "f8b132fe02b90a767a00848557641a8ec5e6e32ba4d4c59a17bf084423d98da5"
+      },
+      {
+        "evidence_id": "evidence-0181",
+        "skill_id": "curriculum-assessment/kud-knowledge-type-mapper",
+        "source_sha256_before": "8cd13e8b3ba6829d235aca41a2f3ff7966ab13f57d63a8fbdab1b54b368b6479",
+        "source_sha256_after": "f8b132fe02b90a767a00848557641a8ec5e6e32ba4d4c59a17bf084423d98da5"
+      },
+      {
+        "evidence_id": "evidence-0182",
+        "skill_id": "curriculum-assessment/kud-knowledge-type-mapper",
+        "source_sha256_before": "8cd13e8b3ba6829d235aca41a2f3ff7966ab13f57d63a8fbdab1b54b368b6479",
+        "source_sha256_after": "f8b132fe02b90a767a00848557641a8ec5e6e32ba4d4c59a17bf084423d98da5"
+      },
+      {
+        "evidence_id": "evidence-0183",
+        "skill_id": "curriculum-assessment/kud-knowledge-type-mapper",
+        "source_sha256_before": "8cd13e8b3ba6829d235aca41a2f3ff7966ab13f57d63a8fbdab1b54b368b6479",
+        "source_sha256_after": "f8b132fe02b90a767a00848557641a8ec5e6e32ba4d4c59a17bf084423d98da5"
+      },
+      {
+        "evidence_id": "evidence-0184",
+        "skill_id": "curriculum-assessment/kud-knowledge-type-mapper",
+        "source_sha256_before": "8cd13e8b3ba6829d235aca41a2f3ff7966ab13f57d63a8fbdab1b54b368b6479",
+        "source_sha256_after": "f8b132fe02b90a767a00848557641a8ec5e6e32ba4d4c59a17bf084423d98da5"
+      },
+      {
+        "evidence_id": "evidence-0185",
+        "skill_id": "curriculum-assessment/kud-knowledge-type-mapper",
+        "source_sha256_before": "8cd13e8b3ba6829d235aca41a2f3ff7966ab13f57d63a8fbdab1b54b368b6479",
+        "source_sha256_after": "f8b132fe02b90a767a00848557641a8ec5e6e32ba4d4c59a17bf084423d98da5"
+      },
+      {
+        "evidence_id": "evidence-0186",
+        "skill_id": "curriculum-assessment/kud-knowledge-type-mapper",
+        "source_sha256_before": "8cd13e8b3ba6829d235aca41a2f3ff7966ab13f57d63a8fbdab1b54b368b6479",
+        "source_sha256_after": "f8b132fe02b90a767a00848557641a8ec5e6e32ba4d4c59a17bf084423d98da5"
+      },
+      {
+        "evidence_id": "evidence-0187",
+        "skill_id": "curriculum-assessment/kud-knowledge-type-mapper",
+        "source_sha256_before": "8cd13e8b3ba6829d235aca41a2f3ff7966ab13f57d63a8fbdab1b54b368b6479",
+        "source_sha256_after": "f8b132fe02b90a767a00848557641a8ec5e6e32ba4d4c59a17bf084423d98da5"
+      },
+      {
+        "evidence_id": "evidence-0188",
+        "skill_id": "curriculum-assessment/kud-knowledge-type-mapper",
+        "source_sha256_before": "8cd13e8b3ba6829d235aca41a2f3ff7966ab13f57d63a8fbdab1b54b368b6479",
+        "source_sha256_after": "f8b132fe02b90a767a00848557641a8ec5e6e32ba4d4c59a17bf084423d98da5"
+      },
+      {
+        "evidence_id": "evidence-0189",
+        "skill_id": "curriculum-assessment/kud-knowledge-type-mapper",
+        "source_sha256_before": "8cd13e8b3ba6829d235aca41a2f3ff7966ab13f57d63a8fbdab1b54b368b6479",
+        "source_sha256_after": "f8b132fe02b90a767a00848557641a8ec5e6e32ba4d4c59a17bf084423d98da5"
+      },
+      {
+        "evidence_id": "evidence-0200",
+        "skill_id": "curriculum-assessment/scope-and-sequence-designer",
+        "source_sha256_before": "20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de",
+        "source_sha256_after": "7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262"
+      },
+      {
+        "evidence_id": "evidence-0201",
+        "skill_id": "curriculum-assessment/scope-and-sequence-designer",
+        "source_sha256_before": "20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de",
+        "source_sha256_after": "7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262"
+      },
+      {
+        "evidence_id": "evidence-0202",
+        "skill_id": "curriculum-assessment/scope-and-sequence-designer",
+        "source_sha256_before": "20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de",
+        "source_sha256_after": "7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262"
+      },
+      {
+        "evidence_id": "evidence-0203",
+        "skill_id": "curriculum-assessment/scope-and-sequence-designer",
+        "source_sha256_before": "20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de",
+        "source_sha256_after": "7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262"
+      },
+      {
+        "evidence_id": "evidence-0204",
+        "skill_id": "curriculum-assessment/scope-and-sequence-designer",
+        "source_sha256_before": "20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de",
+        "source_sha256_after": "7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262"
+      },
+      {
+        "evidence_id": "evidence-0205",
+        "skill_id": "curriculum-assessment/scope-and-sequence-designer",
+        "source_sha256_before": "20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de",
+        "source_sha256_after": "7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262"
+      },
+      {
+        "evidence_id": "evidence-0206",
+        "skill_id": "curriculum-assessment/scope-and-sequence-designer",
+        "source_sha256_before": "20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de",
+        "source_sha256_after": "7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262"
+      },
+      {
+        "evidence_id": "evidence-0207",
+        "skill_id": "curriculum-assessment/scope-and-sequence-designer",
+        "source_sha256_before": "20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de",
+        "source_sha256_after": "7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262"
+      },
+      {
+        "evidence_id": "evidence-0208",
+        "skill_id": "curriculum-assessment/scope-and-sequence-designer",
+        "source_sha256_before": "20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de",
+        "source_sha256_after": "7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262"
+      },
+      {
+        "evidence_id": "evidence-0209",
+        "skill_id": "curriculum-assessment/scope-and-sequence-designer",
+        "source_sha256_before": "20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de",
+        "source_sha256_after": "7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262"
+      },
+      {
+        "evidence_id": "evidence-0210",
+        "skill_id": "curriculum-assessment/scope-and-sequence-designer",
+        "source_sha256_before": "20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de",
+        "source_sha256_after": "7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262"
+      },
+      {
+        "evidence_id": "evidence-0211",
+        "skill_id": "curriculum-assessment/scope-and-sequence-designer",
+        "source_sha256_before": "20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de",
+        "source_sha256_after": "7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262"
+      },
+      {
+        "evidence_id": "evidence-0366",
+        "skill_id": "historical-thinking/historical-document-set-curator",
+        "source_sha256_before": "9cdcb821b2efa3905670e3eb1d898730af01ddbbb92a77d07e58bfe9717921f0",
+        "source_sha256_after": "a148ecab5a75eb3a01b76e9a537712bf719d0440a074d4ddf2b9b75281bcb08d"
+      },
+      {
+        "evidence_id": "evidence-0367",
+        "skill_id": "historical-thinking/historical-document-set-curator",
+        "source_sha256_before": "9cdcb821b2efa3905670e3eb1d898730af01ddbbb92a77d07e58bfe9717921f0",
+        "source_sha256_after": "a148ecab5a75eb3a01b76e9a537712bf719d0440a074d4ddf2b9b75281bcb08d"
+      },
+      {
+        "evidence_id": "evidence-0368",
+        "skill_id": "historical-thinking/historical-document-set-curator",
+        "source_sha256_before": "9cdcb821b2efa3905670e3eb1d898730af01ddbbb92a77d07e58bfe9717921f0",
+        "source_sha256_after": "a148ecab5a75eb3a01b76e9a537712bf719d0440a074d4ddf2b9b75281bcb08d"
+      },
+      {
+        "evidence_id": "evidence-0369",
+        "skill_id": "historical-thinking/historical-document-set-curator",
+        "source_sha256_before": "9cdcb821b2efa3905670e3eb1d898730af01ddbbb92a77d07e58bfe9717921f0",
+        "source_sha256_after": "a148ecab5a75eb3a01b76e9a537712bf719d0440a074d4ddf2b9b75281bcb08d"
+      },
+      {
+        "evidence_id": "evidence-0370",
+        "skill_id": "historical-thinking/historical-document-set-curator",
+        "source_sha256_before": "9cdcb821b2efa3905670e3eb1d898730af01ddbbb92a77d07e58bfe9717921f0",
+        "source_sha256_after": "a148ecab5a75eb3a01b76e9a537712bf719d0440a074d4ddf2b9b75281bcb08d"
+      },
+      {
+        "evidence_id": "evidence-0371",
+        "skill_id": "historical-thinking/historical-document-set-curator",
+        "source_sha256_before": "9cdcb821b2efa3905670e3eb1d898730af01ddbbb92a77d07e58bfe9717921f0",
+        "source_sha256_after": "a148ecab5a75eb3a01b76e9a537712bf719d0440a074d4ddf2b9b75281bcb08d"
+      },
+      {
+        "evidence_id": "evidence-0473",
+        "skill_id": "memory-learning-science/retrieval-practice-generator",
+        "source_sha256_before": "01182f519b7dfc6a5a204b3e49b26282f879f8b59d233fcaf1daafc3d7e43516",
+        "source_sha256_after": "e55101e427042173034785a11d3acc42d0532c27317d46bf0b89870ac092feeb"
+      },
+      {
+        "evidence_id": "evidence-0474",
+        "skill_id": "memory-learning-science/retrieval-practice-generator",
+        "source_sha256_before": "01182f519b7dfc6a5a204b3e49b26282f879f8b59d233fcaf1daafc3d7e43516",
+        "source_sha256_after": "e55101e427042173034785a11d3acc42d0532c27317d46bf0b89870ac092feeb"
+      },
+      {
+        "evidence_id": "evidence-0475",
+        "skill_id": "memory-learning-science/retrieval-practice-generator",
+        "source_sha256_before": "01182f519b7dfc6a5a204b3e49b26282f879f8b59d233fcaf1daafc3d7e43516",
+        "source_sha256_after": "e55101e427042173034785a11d3acc42d0532c27317d46bf0b89870ac092feeb"
+      },
+      {
+        "evidence_id": "evidence-0476",
+        "skill_id": "memory-learning-science/retrieval-practice-generator",
+        "source_sha256_before": "01182f519b7dfc6a5a204b3e49b26282f879f8b59d233fcaf1daafc3d7e43516",
+        "source_sha256_after": "e55101e427042173034785a11d3acc42d0532c27317d46bf0b89870ac092feeb"
+      },
+      {
+        "evidence_id": "evidence-0477",
+        "skill_id": "memory-learning-science/retrieval-practice-generator",
+        "source_sha256_before": "01182f519b7dfc6a5a204b3e49b26282f879f8b59d233fcaf1daafc3d7e43516",
+        "source_sha256_after": "e55101e427042173034785a11d3acc42d0532c27317d46bf0b89870ac092feeb"
+      },
+      {
+        "evidence_id": "evidence-0478",
+        "skill_id": "memory-learning-science/spaced-practice-scheduler",
+        "source_sha256_before": "2718ed5b78cf3c4457a12aa5bfe53a9894f55c69d4a655049eee3f8413899bff",
+        "source_sha256_after": "7e6af9e05bde5277598864c8bfa7f5e9f6c9318606cff1baaee378c4c9f5db2a"
+      },
+      {
+        "evidence_id": "evidence-0479",
+        "skill_id": "memory-learning-science/spaced-practice-scheduler",
+        "source_sha256_before": "2718ed5b78cf3c4457a12aa5bfe53a9894f55c69d4a655049eee3f8413899bff",
+        "source_sha256_after": "7e6af9e05bde5277598864c8bfa7f5e9f6c9318606cff1baaee378c4c9f5db2a",
+        "old_citation": "Cepeda et al. (2006) — Meta-analysis of 254 studies on distributed practice: optimal spacing depends on retention interval",
+        "new_citation": "Cepeda et al. (2006) — Quantitative synthesis of 317 experiments in 184 articles on distributed practice in verbal recall: effective spacing depends on the retention interval",
+        "old_work_ids": [
+          "work-0370"
+        ],
+        "new_work_ids": [
+          "work-0072"
+        ]
+      },
+      {
+        "evidence_id": "evidence-0480",
+        "skill_id": "memory-learning-science/spaced-practice-scheduler",
+        "source_sha256_before": "2718ed5b78cf3c4457a12aa5bfe53a9894f55c69d4a655049eee3f8413899bff",
+        "source_sha256_after": "7e6af9e05bde5277598864c8bfa7f5e9f6c9318606cff1baaee378c4c9f5db2a"
+      },
+      {
+        "evidence_id": "evidence-0481",
+        "skill_id": "memory-learning-science/spaced-practice-scheduler",
+        "source_sha256_before": "2718ed5b78cf3c4457a12aa5bfe53a9894f55c69d4a655049eee3f8413899bff",
+        "source_sha256_after": "7e6af9e05bde5277598864c8bfa7f5e9f6c9318606cff1baaee378c4c9f5db2a"
+      },
+      {
+        "evidence_id": "evidence-0482",
+        "skill_id": "memory-learning-science/spaced-practice-scheduler",
+        "source_sha256_before": "2718ed5b78cf3c4457a12aa5bfe53a9894f55c69d4a655049eee3f8413899bff",
+        "source_sha256_after": "7e6af9e05bde5277598864c8bfa7f5e9f6c9318606cff1baaee378c4c9f5db2a"
+      },
+      {
+        "evidence_id": "evidence-0527",
+        "skill_id": "original-frameworks/developmental-band-system-designer",
+        "source_sha256_before": "6820236c419bd6f35a6a2e3461fe6c9ababe9e888f9dc0caaa08443254f52704",
+        "source_sha256_after": "b58bc22222acc5cc5463cc8f6eb71eeefc6bd07418102c8b4fe7c31ee9c248a6"
+      },
+      {
+        "evidence_id": "evidence-0528",
+        "skill_id": "original-frameworks/developmental-band-system-designer",
+        "source_sha256_before": "6820236c419bd6f35a6a2e3461fe6c9ababe9e888f9dc0caaa08443254f52704",
+        "source_sha256_after": "b58bc22222acc5cc5463cc8f6eb71eeefc6bd07418102c8b4fe7c31ee9c248a6"
+      },
+      {
+        "evidence_id": "evidence-0529",
+        "skill_id": "original-frameworks/developmental-band-system-designer",
+        "source_sha256_before": "6820236c419bd6f35a6a2e3461fe6c9ababe9e888f9dc0caaa08443254f52704",
+        "source_sha256_after": "b58bc22222acc5cc5463cc8f6eb71eeefc6bd07418102c8b4fe7c31ee9c248a6"
+      },
+      {
+        "evidence_id": "evidence-0530",
+        "skill_id": "original-frameworks/developmental-band-system-designer",
+        "source_sha256_before": "6820236c419bd6f35a6a2e3461fe6c9ababe9e888f9dc0caaa08443254f52704",
+        "source_sha256_after": "b58bc22222acc5cc5463cc8f6eb71eeefc6bd07418102c8b4fe7c31ee9c248a6"
+      },
+      {
+        "evidence_id": "evidence-0531",
+        "skill_id": "original-frameworks/developmental-band-system-designer",
+        "source_sha256_before": "6820236c419bd6f35a6a2e3461fe6c9ababe9e888f9dc0caaa08443254f52704",
+        "source_sha256_after": "b58bc22222acc5cc5463cc8f6eb71eeefc6bd07418102c8b4fe7c31ee9c248a6"
+      },
+      {
+        "evidence_id": "evidence-0540",
+        "skill_id": "original-frameworks/dispositional-knowledge-assessment-designer",
+        "source_sha256_before": "06748a891782204684b63fc81352af58bee8759fd4e40e02b9b056887d5ce76b",
+        "source_sha256_after": "529ffc68bbced5e994ed184968c022e24ecf862f9aa7147f67097a7f5d3e13ff"
+      },
+      {
+        "evidence_id": "evidence-0541",
+        "skill_id": "original-frameworks/dispositional-knowledge-assessment-designer",
+        "source_sha256_before": "06748a891782204684b63fc81352af58bee8759fd4e40e02b9b056887d5ce76b",
+        "source_sha256_after": "529ffc68bbced5e994ed184968c022e24ecf862f9aa7147f67097a7f5d3e13ff"
+      },
+      {
+        "evidence_id": "evidence-0542",
+        "skill_id": "original-frameworks/dispositional-knowledge-assessment-designer",
+        "source_sha256_before": "06748a891782204684b63fc81352af58bee8759fd4e40e02b9b056887d5ce76b",
+        "source_sha256_after": "529ffc68bbced5e994ed184968c022e24ecf862f9aa7147f67097a7f5d3e13ff"
+      },
+      {
+        "evidence_id": "evidence-0543",
+        "skill_id": "original-frameworks/dispositional-knowledge-assessment-designer",
+        "source_sha256_before": "06748a891782204684b63fc81352af58bee8759fd4e40e02b9b056887d5ce76b",
+        "source_sha256_after": "529ffc68bbced5e994ed184968c022e24ecf862f9aa7147f67097a7f5d3e13ff"
+      },
+      {
+        "evidence_id": "evidence-0544",
+        "skill_id": "original-frameworks/dispositional-knowledge-assessment-designer",
+        "source_sha256_before": "06748a891782204684b63fc81352af58bee8759fd4e40e02b9b056887d5ce76b",
+        "source_sha256_after": "529ffc68bbced5e994ed184968c022e24ecf862f9aa7147f67097a7f5d3e13ff"
+      },
+      {
+        "evidence_id": "evidence-0545",
+        "skill_id": "original-frameworks/dispositional-knowledge-assessment-designer",
+        "source_sha256_before": "06748a891782204684b63fc81352af58bee8759fd4e40e02b9b056887d5ce76b",
+        "source_sha256_after": "529ffc68bbced5e994ed184968c022e24ecf862f9aa7147f67097a7f5d3e13ff"
+      },
+      {
+        "evidence_id": "evidence-0546",
+        "skill_id": "original-frameworks/dispositional-knowledge-assessment-designer",
+        "source_sha256_before": "06748a891782204684b63fc81352af58bee8759fd4e40e02b9b056887d5ce76b",
+        "source_sha256_after": "529ffc68bbced5e994ed184968c022e24ecf862f9aa7147f67097a7f5d3e13ff"
+      },
+      {
+        "evidence_id": "evidence-0547",
+        "skill_id": "original-frameworks/dispositional-knowledge-assessment-designer",
+        "source_sha256_before": "06748a891782204684b63fc81352af58bee8759fd4e40e02b9b056887d5ce76b",
+        "source_sha256_after": "529ffc68bbced5e994ed184968c022e24ecf862f9aa7147f67097a7f5d3e13ff"
+      },
+      {
+        "evidence_id": "evidence-0548",
+        "skill_id": "original-frameworks/dispositional-knowledge-assessment-designer",
+        "source_sha256_before": "06748a891782204684b63fc81352af58bee8759fd4e40e02b9b056887d5ce76b",
+        "source_sha256_after": "529ffc68bbced5e994ed184968c022e24ecf862f9aa7147f67097a7f5d3e13ff"
+      },
+      {
+        "evidence_id": "evidence-0549",
+        "skill_id": "original-frameworks/dispositional-knowledge-assessment-designer",
+        "source_sha256_before": "06748a891782204684b63fc81352af58bee8759fd4e40e02b9b056887d5ce76b",
+        "source_sha256_after": "529ffc68bbced5e994ed184968c022e24ecf862f9aa7147f67097a7f5d3e13ff"
+      },
+      {
+        "evidence_id": "evidence-0550",
+        "skill_id": "original-frameworks/dispositional-knowledge-assessment-designer",
+        "source_sha256_before": "06748a891782204684b63fc81352af58bee8759fd4e40e02b9b056887d5ce76b",
+        "source_sha256_after": "529ffc68bbced5e994ed184968c022e24ecf862f9aa7147f67097a7f5d3e13ff"
+      },
+      {
+        "evidence_id": "evidence-0551",
+        "skill_id": "original-frameworks/inclusive-design-orchestrator",
+        "source_sha256_before": "97e42e33c1ba372589561b67c185bfd4ffe60efc1000a837fe5943eec14ef19e",
+        "source_sha256_after": "6070e957ee64f23860b0006149b376def3fc3eb497d5b95e23d6768a27eea3b2"
+      },
+      {
+        "evidence_id": "evidence-0552",
+        "skill_id": "original-frameworks/inclusive-design-orchestrator",
+        "source_sha256_before": "97e42e33c1ba372589561b67c185bfd4ffe60efc1000a837fe5943eec14ef19e",
+        "source_sha256_after": "6070e957ee64f23860b0006149b376def3fc3eb497d5b95e23d6768a27eea3b2"
+      },
+      {
+        "evidence_id": "evidence-0553",
+        "skill_id": "original-frameworks/inclusive-design-orchestrator",
+        "source_sha256_before": "97e42e33c1ba372589561b67c185bfd4ffe60efc1000a837fe5943eec14ef19e",
+        "source_sha256_after": "6070e957ee64f23860b0006149b376def3fc3eb497d5b95e23d6768a27eea3b2"
+      },
+      {
+        "evidence_id": "evidence-0554",
+        "skill_id": "original-frameworks/inclusive-design-orchestrator",
+        "source_sha256_before": "97e42e33c1ba372589561b67c185bfd4ffe60efc1000a837fe5943eec14ef19e",
+        "source_sha256_after": "6070e957ee64f23860b0006149b376def3fc3eb497d5b95e23d6768a27eea3b2"
+      },
+      {
+        "evidence_id": "evidence-0555",
+        "skill_id": "original-frameworks/inclusive-design-orchestrator",
+        "source_sha256_before": "97e42e33c1ba372589561b67c185bfd4ffe60efc1000a837fe5943eec14ef19e",
+        "source_sha256_after": "6070e957ee64f23860b0006149b376def3fc3eb497d5b95e23d6768a27eea3b2"
+      },
+      {
+        "evidence_id": "evidence-0556",
+        "skill_id": "original-frameworks/inclusive-design-orchestrator",
+        "source_sha256_before": "97e42e33c1ba372589561b67c185bfd4ffe60efc1000a837fe5943eec14ef19e",
+        "source_sha256_after": "6070e957ee64f23860b0006149b376def3fc3eb497d5b95e23d6768a27eea3b2"
+      },
+      {
+        "evidence_id": "evidence-0557",
+        "skill_id": "original-frameworks/inclusive-design-orchestrator",
+        "source_sha256_before": "97e42e33c1ba372589561b67c185bfd4ffe60efc1000a837fe5943eec14ef19e",
+        "source_sha256_after": "6070e957ee64f23860b0006149b376def3fc3eb497d5b95e23d6768a27eea3b2"
+      },
+      {
+        "evidence_id": "evidence-0558",
+        "skill_id": "original-frameworks/learning-target-authoring-guide",
+        "source_sha256_before": "18e3f6f69e3ee62a83b16340fa0301883add3db700e19821490b00866761eff1",
+        "source_sha256_after": "5be967515deace5c633f68d2c117bff90f7fc908fa0937d7aad938516763112e"
+      },
+      {
+        "evidence_id": "evidence-0559",
+        "skill_id": "original-frameworks/learning-target-authoring-guide",
+        "source_sha256_before": "18e3f6f69e3ee62a83b16340fa0301883add3db700e19821490b00866761eff1",
+        "source_sha256_after": "5be967515deace5c633f68d2c117bff90f7fc908fa0937d7aad938516763112e"
+      },
+      {
+        "evidence_id": "evidence-0560",
+        "skill_id": "original-frameworks/learning-target-authoring-guide",
+        "source_sha256_before": "18e3f6f69e3ee62a83b16340fa0301883add3db700e19821490b00866761eff1",
+        "source_sha256_after": "5be967515deace5c633f68d2c117bff90f7fc908fa0937d7aad938516763112e"
+      },
+      {
+        "evidence_id": "evidence-0561",
+        "skill_id": "original-frameworks/learning-target-authoring-guide",
+        "source_sha256_before": "18e3f6f69e3ee62a83b16340fa0301883add3db700e19821490b00866761eff1",
+        "source_sha256_after": "5be967515deace5c633f68d2c117bff90f7fc908fa0937d7aad938516763112e"
+      },
+      {
+        "evidence_id": "evidence-0562",
+        "skill_id": "original-frameworks/learning-target-authoring-guide",
+        "source_sha256_before": "18e3f6f69e3ee62a83b16340fa0301883add3db700e19821490b00866761eff1",
+        "source_sha256_after": "5be967515deace5c633f68d2c117bff90f7fc908fa0937d7aad938516763112e"
+      },
+      {
+        "evidence_id": "evidence-0600",
+        "skill_id": "professional-learning/competency-framework-translator",
+        "source_sha256_before": "9fd6bf1a6b1fd385789c70a6cdd9ef7646d558ca78273293d2a5d0978b5efbee",
+        "source_sha256_after": "d0f2cddba419200e44fb96e5b46704e6a6fbd079d7da72c10b229ae7caeb4e2e"
+      },
+      {
+        "evidence_id": "evidence-0601",
+        "skill_id": "professional-learning/competency-framework-translator",
+        "source_sha256_before": "9fd6bf1a6b1fd385789c70a6cdd9ef7646d558ca78273293d2a5d0978b5efbee",
+        "source_sha256_after": "d0f2cddba419200e44fb96e5b46704e6a6fbd079d7da72c10b229ae7caeb4e2e"
+      },
+      {
+        "evidence_id": "evidence-0602",
+        "skill_id": "professional-learning/competency-framework-translator",
+        "source_sha256_before": "9fd6bf1a6b1fd385789c70a6cdd9ef7646d558ca78273293d2a5d0978b5efbee",
+        "source_sha256_after": "d0f2cddba419200e44fb96e5b46704e6a6fbd079d7da72c10b229ae7caeb4e2e"
+      },
+      {
+        "evidence_id": "evidence-0603",
+        "skill_id": "professional-learning/competency-framework-translator",
+        "source_sha256_before": "9fd6bf1a6b1fd385789c70a6cdd9ef7646d558ca78273293d2a5d0978b5efbee",
+        "source_sha256_after": "d0f2cddba419200e44fb96e5b46704e6a6fbd079d7da72c10b229ae7caeb4e2e"
+      },
+      {
+        "evidence_id": "evidence-0604",
+        "skill_id": "professional-learning/competency-framework-translator",
+        "source_sha256_before": "9fd6bf1a6b1fd385789c70a6cdd9ef7646d558ca78273293d2a5d0978b5efbee",
+        "source_sha256_after": "d0f2cddba419200e44fb96e5b46704e6a6fbd079d7da72c10b229ae7caeb4e2e"
+      },
+      {
+        "evidence_id": "evidence-0620",
+        "skill_id": "professional-learning/panel-review",
+        "source_sha256_before": "2eb97761fb0845075715819f695fc154a57e9a90cd82e80f55383b6304323255",
+        "source_sha256_after": "cbd87bf743f93c227711360c857d3105d147c73b0e477da8637f62492b9e5f10"
+      },
+      {
+        "evidence_id": "evidence-0621",
+        "skill_id": "professional-learning/panel-review",
+        "source_sha256_before": "2eb97761fb0845075715819f695fc154a57e9a90cd82e80f55383b6304323255",
+        "source_sha256_after": "cbd87bf743f93c227711360c857d3105d147c73b0e477da8637f62492b9e5f10"
+      },
+      {
+        "evidence_id": "evidence-0622",
+        "skill_id": "professional-learning/panel-review",
+        "source_sha256_before": "2eb97761fb0845075715819f695fc154a57e9a90cd82e80f55383b6304323255",
+        "source_sha256_after": "cbd87bf743f93c227711360c857d3105d147c73b0e477da8637f62492b9e5f10"
+      },
+      {
+        "evidence_id": "evidence-0623",
+        "skill_id": "professional-learning/panel-review",
+        "source_sha256_before": "2eb97761fb0845075715819f695fc154a57e9a90cd82e80f55383b6304323255",
+        "source_sha256_after": "cbd87bf743f93c227711360c857d3105d147c73b0e477da8637f62492b9e5f10"
+      },
+      {
+        "evidence_id": "evidence-0624",
+        "skill_id": "professional-learning/panel-review",
+        "source_sha256_before": "2eb97761fb0845075715819f695fc154a57e9a90cd82e80f55383b6304323255",
+        "source_sha256_after": "cbd87bf743f93c227711360c857d3105d147c73b0e477da8637f62492b9e5f10"
+      },
+      {
+        "evidence_id": "evidence-0625",
+        "skill_id": "professional-learning/panel-review",
+        "source_sha256_before": "2eb97761fb0845075715819f695fc154a57e9a90cd82e80f55383b6304323255",
+        "source_sha256_after": "cbd87bf743f93c227711360c857d3105d147c73b0e477da8637f62492b9e5f10"
+      },
+      {
+        "evidence_id": "evidence-0626",
+        "skill_id": "professional-learning/panel-review",
+        "source_sha256_before": "2eb97761fb0845075715819f695fc154a57e9a90cd82e80f55383b6304323255",
+        "source_sha256_after": "cbd87bf743f93c227711360c857d3105d147c73b0e477da8637f62492b9e5f10"
+      },
+      {
+        "evidence_id": "evidence-0627",
+        "skill_id": "professional-learning/pedagogical-content-knowledge-developer",
+        "source_sha256_before": "f8a431f23538c5fda43b6eba12ea790e389646049dc24234d86ce5ba180808b5",
+        "source_sha256_after": "d86f495722e7661d4559a3e058309c35bb1d74caa0a39189c60c7f9954f28c58"
+      },
+      {
+        "evidence_id": "evidence-0628",
+        "skill_id": "professional-learning/pedagogical-content-knowledge-developer",
+        "source_sha256_before": "f8a431f23538c5fda43b6eba12ea790e389646049dc24234d86ce5ba180808b5",
+        "source_sha256_after": "d86f495722e7661d4559a3e058309c35bb1d74caa0a39189c60c7f9954f28c58"
+      },
+      {
+        "evidence_id": "evidence-0629",
+        "skill_id": "professional-learning/pedagogical-content-knowledge-developer",
+        "source_sha256_before": "f8a431f23538c5fda43b6eba12ea790e389646049dc24234d86ce5ba180808b5",
+        "source_sha256_after": "d86f495722e7661d4559a3e058309c35bb1d74caa0a39189c60c7f9954f28c58"
+      },
+      {
+        "evidence_id": "evidence-0630",
+        "skill_id": "professional-learning/pedagogical-content-knowledge-developer",
+        "source_sha256_before": "f8a431f23538c5fda43b6eba12ea790e389646049dc24234d86ce5ba180808b5",
+        "source_sha256_after": "d86f495722e7661d4559a3e058309c35bb1d74caa0a39189c60c7f9954f28c58"
+      },
+      {
+        "evidence_id": "evidence-0631",
+        "skill_id": "professional-learning/pedagogical-content-knowledge-developer",
+        "source_sha256_before": "f8a431f23538c5fda43b6eba12ea790e389646049dc24234d86ce5ba180808b5",
+        "source_sha256_after": "d86f495722e7661d4559a3e058309c35bb1d74caa0a39189c60c7f9954f28c58"
+      },
+      {
+        "evidence_id": "evidence-0632",
+        "skill_id": "professional-learning/pedagogical-content-knowledge-developer",
+        "source_sha256_before": "f8a431f23538c5fda43b6eba12ea790e389646049dc24234d86ce5ba180808b5",
+        "source_sha256_after": "d86f495722e7661d4559a3e058309c35bb1d74caa0a39189c60c7f9954f28c58"
+      },
+      {
+        "evidence_id": "evidence-0633",
+        "skill_id": "professional-learning/pedagogical-content-knowledge-developer",
+        "source_sha256_before": "f8a431f23538c5fda43b6eba12ea790e389646049dc24234d86ce5ba180808b5",
+        "source_sha256_after": "d86f495722e7661d4559a3e058309c35bb1d74caa0a39189c60c7f9954f28c58"
+      },
+      {
+        "evidence_id": "evidence-0634",
+        "skill_id": "professional-learning/pedagogical-content-knowledge-developer",
+        "source_sha256_before": "f8a431f23538c5fda43b6eba12ea790e389646049dc24234d86ce5ba180808b5",
+        "source_sha256_after": "d86f495722e7661d4559a3e058309c35bb1d74caa0a39189c60c7f9954f28c58"
+      },
+      {
+        "evidence_id": "evidence-0635",
+        "skill_id": "professional-learning/pedagogical-content-knowledge-developer",
+        "source_sha256_before": "f8a431f23538c5fda43b6eba12ea790e389646049dc24234d86ce5ba180808b5",
+        "source_sha256_after": "d86f495722e7661d4559a3e058309c35bb1d74caa0a39189c60c7f9954f28c58"
+      },
+      {
+        "evidence_id": "evidence-0636",
+        "skill_id": "professional-learning/pedagogical-content-knowledge-developer",
+        "source_sha256_before": "f8a431f23538c5fda43b6eba12ea790e389646049dc24234d86ce5ba180808b5",
+        "source_sha256_after": "d86f495722e7661d4559a3e058309c35bb1d74caa0a39189c60c7f9954f28c58"
+      },
+      {
+        "evidence_id": "evidence-0652",
+        "skill_id": "professional-learning/technological-pedagogical-content-knowledge-developer",
+        "source_sha256_before": "bba497e20abdd748a52f32c7b4b18c4c8ba1ba212db8531fddac20c5f73558f1",
+        "source_sha256_after": "40b72a8ced93ec2a48b840c55672311495aa9cb3b6847c9f4ddeeb7855ce30ea"
+      },
+      {
+        "evidence_id": "evidence-0653",
+        "skill_id": "professional-learning/technological-pedagogical-content-knowledge-developer",
+        "source_sha256_before": "bba497e20abdd748a52f32c7b4b18c4c8ba1ba212db8531fddac20c5f73558f1",
+        "source_sha256_after": "40b72a8ced93ec2a48b840c55672311495aa9cb3b6847c9f4ddeeb7855ce30ea"
+      },
+      {
+        "evidence_id": "evidence-0654",
+        "skill_id": "professional-learning/technological-pedagogical-content-knowledge-developer",
+        "source_sha256_before": "bba497e20abdd748a52f32c7b4b18c4c8ba1ba212db8531fddac20c5f73558f1",
+        "source_sha256_after": "40b72a8ced93ec2a48b840c55672311495aa9cb3b6847c9f4ddeeb7855ce30ea"
+      },
+      {
+        "evidence_id": "evidence-0655",
+        "skill_id": "professional-learning/technological-pedagogical-content-knowledge-developer",
+        "source_sha256_before": "bba497e20abdd748a52f32c7b4b18c4c8ba1ba212db8531fddac20c5f73558f1",
+        "source_sha256_after": "40b72a8ced93ec2a48b840c55672311495aa9cb3b6847c9f4ddeeb7855ce30ea"
+      },
+      {
+        "evidence_id": "evidence-0656",
+        "skill_id": "professional-learning/technological-pedagogical-content-knowledge-developer",
+        "source_sha256_before": "bba497e20abdd748a52f32c7b4b18c4c8ba1ba212db8531fddac20c5f73558f1",
+        "source_sha256_after": "40b72a8ced93ec2a48b840c55672311495aa9cb3b6847c9f4ddeeb7855ce30ea"
+      },
+      {
+        "evidence_id": "evidence-0657",
+        "skill_id": "professional-learning/technological-pedagogical-content-knowledge-developer",
+        "source_sha256_before": "bba497e20abdd748a52f32c7b4b18c4c8ba1ba212db8531fddac20c5f73558f1",
+        "source_sha256_after": "40b72a8ced93ec2a48b840c55672311495aa9cb3b6847c9f4ddeeb7855ce30ea"
+      },
+      {
+        "evidence_id": "evidence-0658",
+        "skill_id": "professional-learning/technological-pedagogical-content-knowledge-developer",
+        "source_sha256_before": "bba497e20abdd748a52f32c7b4b18c4c8ba1ba212db8531fddac20c5f73558f1",
+        "source_sha256_after": "40b72a8ced93ec2a48b840c55672311495aa9cb3b6847c9f4ddeeb7855ce30ea"
+      },
+      {
+        "evidence_id": "evidence-0659",
+        "skill_id": "professional-learning/technological-pedagogical-content-knowledge-developer",
+        "source_sha256_before": "bba497e20abdd748a52f32c7b4b18c4c8ba1ba212db8531fddac20c5f73558f1",
+        "source_sha256_after": "40b72a8ced93ec2a48b840c55672311495aa9cb3b6847c9f4ddeeb7855ce30ea"
+      },
+      {
+        "evidence_id": "evidence-0660",
+        "skill_id": "professional-learning/technological-pedagogical-content-knowledge-developer",
+        "source_sha256_before": "bba497e20abdd748a52f32c7b4b18c4c8ba1ba212db8531fddac20c5f73558f1",
+        "source_sha256_after": "40b72a8ced93ec2a48b840c55672311495aa9cb3b6847c9f4ddeeb7855ce30ea"
+      },
+      {
+        "evidence_id": "evidence-0661",
+        "skill_id": "professional-learning/technological-pedagogical-content-knowledge-developer",
+        "source_sha256_before": "bba497e20abdd748a52f32c7b4b18c4c8ba1ba212db8531fddac20c5f73558f1",
+        "source_sha256_after": "40b72a8ced93ec2a48b840c55672311495aa9cb3b6847c9f4ddeeb7855ce30ea"
+      },
+      {
+        "evidence_id": "evidence-0713",
+        "skill_id": "student-learning/ai-claim-checker",
+        "source_sha256_before": "03209658ad2be7c9b7ae5f5252ecda8be996afa5124a6fb895bf852c6c2dc0f9",
+        "source_sha256_after": "be1acf78cc8ed96f5d73eba56bf29fda2cee1ca21ff9348063a0388cc5a0f472"
+      },
+      {
+        "evidence_id": "evidence-0714",
+        "skill_id": "student-learning/ai-claim-checker",
+        "source_sha256_before": "03209658ad2be7c9b7ae5f5252ecda8be996afa5124a6fb895bf852c6c2dc0f9",
+        "source_sha256_after": "be1acf78cc8ed96f5d73eba56bf29fda2cee1ca21ff9348063a0388cc5a0f472"
+      },
+      {
+        "evidence_id": "evidence-0715",
+        "skill_id": "student-learning/ai-claim-checker",
+        "source_sha256_before": "03209658ad2be7c9b7ae5f5252ecda8be996afa5124a6fb895bf852c6c2dc0f9",
+        "source_sha256_after": "be1acf78cc8ed96f5d73eba56bf29fda2cee1ca21ff9348063a0388cc5a0f472"
+      },
+      {
+        "evidence_id": "evidence-0716",
+        "skill_id": "student-learning/ai-claim-checker",
+        "source_sha256_before": "03209658ad2be7c9b7ae5f5252ecda8be996afa5124a6fb895bf852c6c2dc0f9",
+        "source_sha256_after": "be1acf78cc8ed96f5d73eba56bf29fda2cee1ca21ff9348063a0388cc5a0f472"
+      },
+      {
+        "evidence_id": "evidence-0717",
+        "skill_id": "student-learning/ai-claim-checker",
+        "source_sha256_before": "03209658ad2be7c9b7ae5f5252ecda8be996afa5124a6fb895bf852c6c2dc0f9",
+        "source_sha256_after": "be1acf78cc8ed96f5d73eba56bf29fda2cee1ca21ff9348063a0388cc5a0f472"
+      },
+      {
+        "evidence_id": "evidence-0718",
+        "skill_id": "student-learning/confidence-calibration-check",
+        "source_sha256_before": "6df4825de26d60df14ef5566f8b35e17b58031d156996551fa34ffedf6e96db5",
+        "source_sha256_after": "ab1d5db8f55f687bc474a537f2969c56af5871c5780f1f4a8c490132b03c60f4"
+      },
+      {
+        "evidence_id": "evidence-0719",
+        "skill_id": "student-learning/confidence-calibration-check",
+        "source_sha256_before": "6df4825de26d60df14ef5566f8b35e17b58031d156996551fa34ffedf6e96db5",
+        "source_sha256_after": "ab1d5db8f55f687bc474a537f2969c56af5871c5780f1f4a8c490132b03c60f4"
+      },
+      {
+        "evidence_id": "evidence-0720",
+        "skill_id": "student-learning/confidence-calibration-check",
+        "source_sha256_before": "6df4825de26d60df14ef5566f8b35e17b58031d156996551fa34ffedf6e96db5",
+        "source_sha256_after": "ab1d5db8f55f687bc474a537f2969c56af5871c5780f1f4a8c490132b03c60f4"
+      },
+      {
+        "evidence_id": "evidence-0721",
+        "skill_id": "student-learning/confidence-calibration-check",
+        "source_sha256_before": "6df4825de26d60df14ef5566f8b35e17b58031d156996551fa34ffedf6e96db5",
+        "source_sha256_after": "ab1d5db8f55f687bc474a537f2969c56af5871c5780f1f4a8c490132b03c60f4"
+      },
+      {
+        "evidence_id": "evidence-0722",
+        "skill_id": "student-learning/confidence-calibration-check",
+        "source_sha256_before": "6df4825de26d60df14ef5566f8b35e17b58031d156996551fa34ffedf6e96db5",
+        "source_sha256_after": "ab1d5db8f55f687bc474a537f2969c56af5871c5780f1f4a8c490132b03c60f4"
+      },
+      {
+        "evidence_id": "evidence-0723",
+        "skill_id": "student-learning/explain-first-interrogator",
+        "source_sha256_before": "aba08e222d596ede68b759d7adf2285d747eb37a2ccddcc573c28a0ef807b63f",
+        "source_sha256_after": "4ee64b1a7e717bc8ddafaa3c6c9ba05c5c36d101878dea45973a648fc444a994"
+      },
+      {
+        "evidence_id": "evidence-0724",
+        "skill_id": "student-learning/explain-first-interrogator",
+        "source_sha256_before": "aba08e222d596ede68b759d7adf2285d747eb37a2ccddcc573c28a0ef807b63f",
+        "source_sha256_after": "4ee64b1a7e717bc8ddafaa3c6c9ba05c5c36d101878dea45973a648fc444a994"
+      },
+      {
+        "evidence_id": "evidence-0725",
+        "skill_id": "student-learning/explain-first-interrogator",
+        "source_sha256_before": "aba08e222d596ede68b759d7adf2285d747eb37a2ccddcc573c28a0ef807b63f",
+        "source_sha256_after": "4ee64b1a7e717bc8ddafaa3c6c9ba05c5c36d101878dea45973a648fc444a994"
+      },
+      {
+        "evidence_id": "evidence-0726",
+        "skill_id": "student-learning/explain-first-interrogator",
+        "source_sha256_before": "aba08e222d596ede68b759d7adf2285d747eb37a2ccddcc573c28a0ef807b63f",
+        "source_sha256_after": "4ee64b1a7e717bc8ddafaa3c6c9ba05c5c36d101878dea45973a648fc444a994"
+      },
+      {
+        "evidence_id": "evidence-0727",
+        "skill_id": "student-learning/explain-first-interrogator",
+        "source_sha256_before": "aba08e222d596ede68b759d7adf2285d747eb37a2ccddcc573c28a0ef807b63f",
+        "source_sha256_after": "4ee64b1a7e717bc8ddafaa3c6c9ba05c5c36d101878dea45973a648fc444a994",
+        "old_citation": "arXiv 2604.00142 (2026) — LLM-supported self-explanation improving transfer performance",
+        "new_citation": "Chen et al. (2026) — Practice Less, Explain More: LLM-Supported Self-Explanation Improves Explanation Quality on Transfer Problems in Calculus (arXiv:2604.00142v2); NEI explanation-quality result, not demonstrated delayed durable transfer",
+        "old_work_ids": [
+          "work-0306"
+        ],
+        "new_work_ids": [
+          "work-0306"
+        ]
+      },
+      {
+        "evidence_id": "evidence-0728",
+        "skill_id": "student-learning/fading-manager",
+        "source_sha256_before": "83681b24f6746e727480efdf657299f47fad1da9d858932bac2e3217a482b1d2",
+        "source_sha256_after": "21bea4878731704de8bc9596003a6cf8cf3c9b7d7999b689ff92c5333e4d8c67"
+      },
+      {
+        "evidence_id": "evidence-0729",
+        "skill_id": "student-learning/fading-manager",
+        "source_sha256_before": "83681b24f6746e727480efdf657299f47fad1da9d858932bac2e3217a482b1d2",
+        "source_sha256_after": "21bea4878731704de8bc9596003a6cf8cf3c9b7d7999b689ff92c5333e4d8c67"
+      },
+      {
+        "evidence_id": "evidence-0730",
+        "skill_id": "student-learning/fading-manager",
+        "source_sha256_before": "83681b24f6746e727480efdf657299f47fad1da9d858932bac2e3217a482b1d2",
+        "source_sha256_after": "21bea4878731704de8bc9596003a6cf8cf3c9b7d7999b689ff92c5333e4d8c67"
+      },
+      {
+        "evidence_id": "evidence-0731",
+        "skill_id": "student-learning/fading-manager",
+        "source_sha256_before": "83681b24f6746e727480efdf657299f47fad1da9d858932bac2e3217a482b1d2",
+        "source_sha256_after": "21bea4878731704de8bc9596003a6cf8cf3c9b7d7999b689ff92c5333e4d8c67"
+      },
+      {
+        "evidence_id": "evidence-0732",
+        "skill_id": "student-learning/fading-manager",
+        "source_sha256_before": "83681b24f6746e727480efdf657299f47fad1da9d858932bac2e3217a482b1d2",
+        "source_sha256_after": "21bea4878731704de8bc9596003a6cf8cf3c9b7d7999b689ff92c5333e4d8c67"
+      },
+      {
+        "evidence_id": "evidence-0733",
+        "skill_id": "student-learning/productive-failure-protocol",
+        "source_sha256_before": "981c2fbd183617787b40b094bbec3e76dc4630e9a73bc8797f51fb5c06b97c9f",
+        "source_sha256_after": "83d7717ccbe49704015b5a60506aaf9a8981d0b97cf13fd14f2c2ea6a270d21d"
+      },
+      {
+        "evidence_id": "evidence-0734",
+        "skill_id": "student-learning/productive-failure-protocol",
+        "source_sha256_before": "981c2fbd183617787b40b094bbec3e76dc4630e9a73bc8797f51fb5c06b97c9f",
+        "source_sha256_after": "83d7717ccbe49704015b5a60506aaf9a8981d0b97cf13fd14f2c2ea6a270d21d"
+      },
+      {
+        "evidence_id": "evidence-0735",
+        "skill_id": "student-learning/productive-failure-protocol",
+        "source_sha256_before": "981c2fbd183617787b40b094bbec3e76dc4630e9a73bc8797f51fb5c06b97c9f",
+        "source_sha256_after": "83d7717ccbe49704015b5a60506aaf9a8981d0b97cf13fd14f2c2ea6a270d21d"
+      },
+      {
+        "evidence_id": "evidence-0736",
+        "skill_id": "student-learning/productive-failure-protocol",
+        "source_sha256_before": "981c2fbd183617787b40b094bbec3e76dc4630e9a73bc8797f51fb5c06b97c9f",
+        "source_sha256_after": "83d7717ccbe49704015b5a60506aaf9a8981d0b97cf13fd14f2c2ea6a270d21d"
+      },
+      {
+        "evidence_id": "evidence-0737",
+        "skill_id": "student-learning/productive-failure-protocol",
+        "source_sha256_before": "981c2fbd183617787b40b094bbec3e76dc4630e9a73bc8797f51fb5c06b97c9f",
+        "source_sha256_after": "83d7717ccbe49704015b5a60506aaf9a8981d0b97cf13fd14f2c2ea6a270d21d"
+      },
+      {
+        "evidence_id": "evidence-0738",
+        "skill_id": "student-learning/progressive-hint-ladder",
+        "source_sha256_before": "5178e50cb0e4fd48e10dd6a0d16d1d884b805a2be0935989409030fb56274b55",
+        "source_sha256_after": "563603c626673cf1f3ab2c3ed5ca58024b4e2dfbe8f0e446b06aed47f645d768"
+      },
+      {
+        "evidence_id": "evidence-0739",
+        "skill_id": "student-learning/progressive-hint-ladder",
+        "source_sha256_before": "5178e50cb0e4fd48e10dd6a0d16d1d884b805a2be0935989409030fb56274b55",
+        "source_sha256_after": "563603c626673cf1f3ab2c3ed5ca58024b4e2dfbe8f0e446b06aed47f645d768"
+      },
+      {
+        "evidence_id": "evidence-0740",
+        "skill_id": "student-learning/progressive-hint-ladder",
+        "source_sha256_before": "5178e50cb0e4fd48e10dd6a0d16d1d884b805a2be0935989409030fb56274b55",
+        "source_sha256_after": "563603c626673cf1f3ab2c3ed5ca58024b4e2dfbe8f0e446b06aed47f645d768"
+      },
+      {
+        "evidence_id": "evidence-0741",
+        "skill_id": "student-learning/progressive-hint-ladder",
+        "source_sha256_before": "5178e50cb0e4fd48e10dd6a0d16d1d884b805a2be0935989409030fb56274b55",
+        "source_sha256_after": "563603c626673cf1f3ab2c3ed5ca58024b4e2dfbe8f0e446b06aed47f645d768"
+      },
+      {
+        "evidence_id": "evidence-0742",
+        "skill_id": "student-learning/progressive-hint-ladder",
+        "source_sha256_before": "5178e50cb0e4fd48e10dd6a0d16d1d884b805a2be0935989409030fb56274b55",
+        "source_sha256_after": "563603c626673cf1f3ab2c3ed5ca58024b4e2dfbe8f0e446b06aed47f645d768"
+      },
+      {
+        "evidence_id": "evidence-0743",
+        "skill_id": "student-learning/retrieve-first-gate",
+        "source_sha256_before": "04bde0cc2ec1911ad45bcb3375763b977a7b92d87d760ed4886e5c8fe0ddae3c",
+        "source_sha256_after": "b8541e654e834f6dc4d287b982fba701237169df055a8fe2d6385986995d6be4"
+      },
+      {
+        "evidence_id": "evidence-0744",
+        "skill_id": "student-learning/retrieve-first-gate",
+        "source_sha256_before": "04bde0cc2ec1911ad45bcb3375763b977a7b92d87d760ed4886e5c8fe0ddae3c",
+        "source_sha256_after": "b8541e654e834f6dc4d287b982fba701237169df055a8fe2d6385986995d6be4"
+      },
+      {
+        "evidence_id": "evidence-0745",
+        "skill_id": "student-learning/retrieve-first-gate",
+        "source_sha256_before": "04bde0cc2ec1911ad45bcb3375763b977a7b92d87d760ed4886e5c8fe0ddae3c",
+        "source_sha256_after": "b8541e654e834f6dc4d287b982fba701237169df055a8fe2d6385986995d6be4"
+      },
+      {
+        "evidence_id": "evidence-0746",
+        "skill_id": "student-learning/retrieve-first-gate",
+        "source_sha256_before": "04bde0cc2ec1911ad45bcb3375763b977a7b92d87d760ed4886e5c8fe0ddae3c",
+        "source_sha256_after": "b8541e654e834f6dc4d287b982fba701237169df055a8fe2d6385986995d6be4"
+      },
+      {
+        "evidence_id": "evidence-0747",
+        "skill_id": "student-learning/retrieve-first-gate",
+        "source_sha256_before": "04bde0cc2ec1911ad45bcb3375763b977a7b92d87d760ed4886e5c8fe0ddae3c",
+        "source_sha256_after": "b8541e654e834f6dc4d287b982fba701237169df055a8fe2d6385986995d6be4"
+      },
+      {
+        "evidence_id": "evidence-0748",
+        "skill_id": "student-learning/srl-session-wrapper",
+        "source_sha256_before": "dd0dd6fecec960929755becfbe59a032f3d97cdc3868903f812adf2a4a524b4c",
+        "source_sha256_after": "2bc18a017e12caababf03b51ad58a8a594493f4b13e70fce48c612cba6a5beaf"
+      },
+      {
+        "evidence_id": "evidence-0749",
+        "skill_id": "student-learning/srl-session-wrapper",
+        "source_sha256_before": "dd0dd6fecec960929755becfbe59a032f3d97cdc3868903f812adf2a4a524b4c",
+        "source_sha256_after": "2bc18a017e12caababf03b51ad58a8a594493f4b13e70fce48c612cba6a5beaf"
+      },
+      {
+        "evidence_id": "evidence-0750",
+        "skill_id": "student-learning/srl-session-wrapper",
+        "source_sha256_before": "dd0dd6fecec960929755becfbe59a032f3d97cdc3868903f812adf2a4a524b4c",
+        "source_sha256_after": "2bc18a017e12caababf03b51ad58a8a594493f4b13e70fce48c612cba6a5beaf"
+      },
+      {
+        "evidence_id": "evidence-0751",
+        "skill_id": "student-learning/srl-session-wrapper",
+        "source_sha256_before": "dd0dd6fecec960929755becfbe59a032f3d97cdc3868903f812adf2a4a524b4c",
+        "source_sha256_after": "2bc18a017e12caababf03b51ad58a8a594493f4b13e70fce48c612cba6a5beaf"
+      },
+      {
+        "evidence_id": "evidence-0752",
+        "skill_id": "student-learning/srl-session-wrapper",
+        "source_sha256_before": "dd0dd6fecec960929755becfbe59a032f3d97cdc3868903f812adf2a4a524b4c",
+        "source_sha256_after": "2bc18a017e12caababf03b51ad58a8a594493f4b13e70fce48c612cba6a5beaf"
+      },
+      {
+        "evidence_id": "evidence-0753",
+        "skill_id": "student-learning/stuck-and-error-diagnosis-coach",
+        "source_sha256_before": "fb9f958472a5e8a712dd64653cb331dce737ac468a6e32868eabb340cb097473",
+        "source_sha256_after": "fbf2561b85b56c6fdbddf99cb066b7e3cc82e4572c6a54d24f1ba126b7bd0aeb"
+      },
+      {
+        "evidence_id": "evidence-0754",
+        "skill_id": "student-learning/stuck-and-error-diagnosis-coach",
+        "source_sha256_before": "fb9f958472a5e8a712dd64653cb331dce737ac468a6e32868eabb340cb097473",
+        "source_sha256_after": "fbf2561b85b56c6fdbddf99cb066b7e3cc82e4572c6a54d24f1ba126b7bd0aeb"
+      },
+      {
+        "evidence_id": "evidence-0755",
+        "skill_id": "student-learning/stuck-and-error-diagnosis-coach",
+        "source_sha256_before": "fb9f958472a5e8a712dd64653cb331dce737ac468a6e32868eabb340cb097473",
+        "source_sha256_after": "fbf2561b85b56c6fdbddf99cb066b7e3cc82e4572c6a54d24f1ba126b7bd0aeb"
+      },
+      {
+        "evidence_id": "evidence-0756",
+        "skill_id": "student-learning/stuck-and-error-diagnosis-coach",
+        "source_sha256_before": "fb9f958472a5e8a712dd64653cb331dce737ac468a6e32868eabb340cb097473",
+        "source_sha256_after": "fbf2561b85b56c6fdbddf99cb066b7e3cc82e4572c6a54d24f1ba126b7bd0aeb"
+      },
+      {
+        "evidence_id": "evidence-0757",
+        "skill_id": "student-learning/stuck-and-error-diagnosis-coach",
+        "source_sha256_before": "fb9f958472a5e8a712dd64653cb331dce737ac468a6e32868eabb340cb097473",
+        "source_sha256_after": "fbf2561b85b56c6fdbddf99cb066b7e3cc82e4572c6a54d24f1ba126b7bd0aeb"
+      },
+      {
+        "evidence_id": "evidence-0758",
+        "skill_id": "student-learning/teach-back-evaluator",
+        "source_sha256_before": "09c4d8639ccd8502c061fbf4a98a26203b60381de9da5054d50759dbe5bc87ee",
+        "source_sha256_after": "b640dc6564db29b604f33f9e77ee729e0d59081eca5535a8fabbec185cd432db"
+      },
+      {
+        "evidence_id": "evidence-0759",
+        "skill_id": "student-learning/teach-back-evaluator",
+        "source_sha256_before": "09c4d8639ccd8502c061fbf4a98a26203b60381de9da5054d50759dbe5bc87ee",
+        "source_sha256_after": "b640dc6564db29b604f33f9e77ee729e0d59081eca5535a8fabbec185cd432db"
+      },
+      {
+        "evidence_id": "evidence-0760",
+        "skill_id": "student-learning/teach-back-evaluator",
+        "source_sha256_before": "09c4d8639ccd8502c061fbf4a98a26203b60381de9da5054d50759dbe5bc87ee",
+        "source_sha256_after": "b640dc6564db29b604f33f9e77ee729e0d59081eca5535a8fabbec185cd432db"
+      },
+      {
+        "evidence_id": "evidence-0761",
+        "skill_id": "student-learning/teach-back-evaluator",
+        "source_sha256_before": "09c4d8639ccd8502c061fbf4a98a26203b60381de9da5054d50759dbe5bc87ee",
+        "source_sha256_after": "b640dc6564db29b604f33f9e77ee729e0d59081eca5535a8fabbec185cd432db"
+      },
+      {
+        "evidence_id": "evidence-0762",
+        "skill_id": "student-learning/teach-back-evaluator",
+        "source_sha256_before": "09c4d8639ccd8502c061fbf4a98a26203b60381de9da5054d50759dbe5bc87ee",
+        "source_sha256_after": "b640dc6564db29b604f33f9e77ee729e0d59081eca5535a8fabbec185cd432db"
+      },
+      {
+        "evidence_id": "evidence-0763",
+        "skill_id": "student-learning/transfer-bridge",
+        "source_sha256_before": "87b536419939a82c2f4bdef058a3250bc27643d2c4fa0c07bfe8ec871869b2f2",
+        "source_sha256_after": "c598ca09bb4cf0d3e1618e2f07b7995b52eca340966f3cf8e2082656cb392a64"
+      },
+      {
+        "evidence_id": "evidence-0764",
+        "skill_id": "student-learning/transfer-bridge",
+        "source_sha256_before": "87b536419939a82c2f4bdef058a3250bc27643d2c4fa0c07bfe8ec871869b2f2",
+        "source_sha256_after": "c598ca09bb4cf0d3e1618e2f07b7995b52eca340966f3cf8e2082656cb392a64"
+      },
+      {
+        "evidence_id": "evidence-0765",
+        "skill_id": "student-learning/transfer-bridge",
+        "source_sha256_before": "87b536419939a82c2f4bdef058a3250bc27643d2c4fa0c07bfe8ec871869b2f2",
+        "source_sha256_after": "c598ca09bb4cf0d3e1618e2f07b7995b52eca340966f3cf8e2082656cb392a64"
+      },
+      {
+        "evidence_id": "evidence-0766",
+        "skill_id": "student-learning/transfer-bridge",
+        "source_sha256_before": "87b536419939a82c2f4bdef058a3250bc27643d2c4fa0c07bfe8ec871869b2f2",
+        "source_sha256_after": "c598ca09bb4cf0d3e1618e2f07b7995b52eca340966f3cf8e2082656cb392a64"
+      },
+      {
+        "evidence_id": "evidence-0767",
+        "skill_id": "student-learning/transfer-bridge",
+        "source_sha256_before": "87b536419939a82c2f4bdef058a3250bc27643d2c4fa0c07bfe8ec871869b2f2",
+        "source_sha256_after": "c598ca09bb4cf0d3e1618e2f07b7995b52eca340966f3cf8e2082656cb392a64"
+      },
+      {
+        "evidence_id": "evidence-0768",
+        "skill_id": "student-learning/unassisted-evidence-checkpoint",
+        "source_sha256_before": "460a4d6d32b618859b5bc9de8fb148c97b5106d0b0139d6ecb6167536b808465",
+        "source_sha256_after": "9aba72ff19f7845612f7ae290b11b2ec421d8cae13fb0686e17547bae0402092"
+      },
+      {
+        "evidence_id": "evidence-0769",
+        "skill_id": "student-learning/unassisted-evidence-checkpoint",
+        "source_sha256_before": "460a4d6d32b618859b5bc9de8fb148c97b5106d0b0139d6ecb6167536b808465",
+        "source_sha256_after": "9aba72ff19f7845612f7ae290b11b2ec421d8cae13fb0686e17547bae0402092"
+      },
+      {
+        "evidence_id": "evidence-0770",
+        "skill_id": "student-learning/unassisted-evidence-checkpoint",
+        "source_sha256_before": "460a4d6d32b618859b5bc9de8fb148c97b5106d0b0139d6ecb6167536b808465",
+        "source_sha256_after": "9aba72ff19f7845612f7ae290b11b2ec421d8cae13fb0686e17547bae0402092"
+      },
+      {
+        "evidence_id": "evidence-0771",
+        "skill_id": "student-learning/unassisted-evidence-checkpoint",
+        "source_sha256_before": "460a4d6d32b618859b5bc9de8fb148c97b5106d0b0139d6ecb6167536b808465",
+        "source_sha256_after": "9aba72ff19f7845612f7ae290b11b2ec421d8cae13fb0686e17547bae0402092"
+      },
+      {
+        "evidence_id": "evidence-0772",
+        "skill_id": "student-learning/unassisted-evidence-checkpoint",
+        "source_sha256_before": "460a4d6d32b618859b5bc9de8fb148c97b5106d0b0139d6ecb6167536b808465",
+        "source_sha256_after": "9aba72ff19f7845612f7ae290b11b2ec421d8cae13fb0686e17547bae0402092"
+      },
+      {
+        "evidence_id": "evidence-0773",
+        "skill_id": "student-learning/weekly-agency-review",
+        "source_sha256_before": "08082d91b2873907dbbce27c33fd5def5d928fa029c1425583aae03649b9cc65",
+        "source_sha256_after": "ef1648fa555e7626e47bd3ebce6a0d29a1b3676604149181f741fbdc8effaa76"
+      },
+      {
+        "evidence_id": "evidence-0774",
+        "skill_id": "student-learning/weekly-agency-review",
+        "source_sha256_before": "08082d91b2873907dbbce27c33fd5def5d928fa029c1425583aae03649b9cc65",
+        "source_sha256_after": "ef1648fa555e7626e47bd3ebce6a0d29a1b3676604149181f741fbdc8effaa76"
+      },
+      {
+        "evidence_id": "evidence-0775",
+        "skill_id": "student-learning/weekly-agency-review",
+        "source_sha256_before": "08082d91b2873907dbbce27c33fd5def5d928fa029c1425583aae03649b9cc65",
+        "source_sha256_after": "ef1648fa555e7626e47bd3ebce6a0d29a1b3676604149181f741fbdc8effaa76"
+      },
+      {
+        "evidence_id": "evidence-0776",
+        "skill_id": "student-learning/weekly-agency-review",
+        "source_sha256_before": "08082d91b2873907dbbce27c33fd5def5d928fa029c1425583aae03649b9cc65",
+        "source_sha256_after": "ef1648fa555e7626e47bd3ebce6a0d29a1b3676604149181f741fbdc8effaa76"
+      },
+      {
+        "evidence_id": "evidence-0777",
+        "skill_id": "student-learning/weekly-agency-review",
+        "source_sha256_before": "08082d91b2873907dbbce27c33fd5def5d928fa029c1425583aae03649b9cc65",
+        "source_sha256_after": "ef1648fa555e7626e47bd3ebce6a0d29a1b3676604149181f741fbdc8effaa76"
+      },
+      {
+        "evidence_id": "evidence-0790",
+        "skill_id": "systems-thinking/ladder-of-inference-reflection",
+        "source_sha256_before": "15068c44ce81c6868eaac7704fc0d925fe13a32affaf8018f3caeb272d5394ae",
+        "source_sha256_after": "9870b75aab695d85f2be04516adb5e728145af5a0165ae3933382719c28773f5"
+      },
+      {
+        "evidence_id": "evidence-0791",
+        "skill_id": "systems-thinking/ladder-of-inference-reflection",
+        "source_sha256_before": "15068c44ce81c6868eaac7704fc0d925fe13a32affaf8018f3caeb272d5394ae",
+        "source_sha256_after": "9870b75aab695d85f2be04516adb5e728145af5a0165ae3933382719c28773f5"
+      },
+      {
+        "evidence_id": "evidence-0792",
+        "skill_id": "systems-thinking/ladder-of-inference-reflection",
+        "source_sha256_before": "15068c44ce81c6868eaac7704fc0d925fe13a32affaf8018f3caeb272d5394ae",
+        "source_sha256_after": "9870b75aab695d85f2be04516adb5e728145af5a0165ae3933382719c28773f5"
+      },
+      {
+        "evidence_id": "evidence-0793",
+        "skill_id": "systems-thinking/ladder-of-inference-reflection",
+        "source_sha256_before": "15068c44ce81c6868eaac7704fc0d925fe13a32affaf8018f3caeb272d5394ae",
+        "source_sha256_after": "9870b75aab695d85f2be04516adb5e728145af5a0165ae3933382719c28773f5"
+      },
+      {
+        "evidence_id": "evidence-0813",
+        "skill_id": "wellbeing-motivation-agency/agency-scaffold-generator",
+        "source_sha256_before": "3803c8bc63a828c42f7d5cd0429a3b8ebf8b29b6c424435005d47f06294fd2af",
+        "source_sha256_after": "1696004e55a61936c73e68a9c8e8f91c025b54d600a3e7a14265005540c596dc"
+      },
+      {
+        "evidence_id": "evidence-0814",
+        "skill_id": "wellbeing-motivation-agency/agency-scaffold-generator",
+        "source_sha256_before": "3803c8bc63a828c42f7d5cd0429a3b8ebf8b29b6c424435005d47f06294fd2af",
+        "source_sha256_after": "1696004e55a61936c73e68a9c8e8f91c025b54d600a3e7a14265005540c596dc"
+      },
+      {
+        "evidence_id": "evidence-0815",
+        "skill_id": "wellbeing-motivation-agency/agency-scaffold-generator",
+        "source_sha256_before": "3803c8bc63a828c42f7d5cd0429a3b8ebf8b29b6c424435005d47f06294fd2af",
+        "source_sha256_after": "1696004e55a61936c73e68a9c8e8f91c025b54d600a3e7a14265005540c596dc"
+      },
+      {
+        "evidence_id": "evidence-0816",
+        "skill_id": "wellbeing-motivation-agency/agency-scaffold-generator",
+        "source_sha256_before": "3803c8bc63a828c42f7d5cd0429a3b8ebf8b29b6c424435005d47f06294fd2af",
+        "source_sha256_after": "1696004e55a61936c73e68a9c8e8f91c025b54d600a3e7a14265005540c596dc"
+      },
+      {
+        "evidence_id": "evidence-0817",
+        "skill_id": "wellbeing-motivation-agency/agency-scaffold-generator",
+        "source_sha256_before": "3803c8bc63a828c42f7d5cd0429a3b8ebf8b29b6c424435005d47f06294fd2af",
+        "source_sha256_after": "1696004e55a61936c73e68a9c8e8f91c025b54d600a3e7a14265005540c596dc"
+      },
+      {
+        "evidence_id": "evidence-0818",
+        "skill_id": "wellbeing-motivation-agency/awe-wonder-experience-designer",
+        "source_sha256_before": "3249cc1879007f460f2ad52f078c9975a61c5450168b5fa1a5479036913d635e",
+        "source_sha256_after": "b2fab9f2bdcd33a681f5d2aacc9e3d936b09b51fad92c61c7c0c68a911bf3c73"
+      },
+      {
+        "evidence_id": "evidence-0819",
+        "skill_id": "wellbeing-motivation-agency/awe-wonder-experience-designer",
+        "source_sha256_before": "3249cc1879007f460f2ad52f078c9975a61c5450168b5fa1a5479036913d635e",
+        "source_sha256_after": "b2fab9f2bdcd33a681f5d2aacc9e3d936b09b51fad92c61c7c0c68a911bf3c73"
+      },
+      {
+        "evidence_id": "evidence-0820",
+        "skill_id": "wellbeing-motivation-agency/awe-wonder-experience-designer",
+        "source_sha256_before": "3249cc1879007f460f2ad52f078c9975a61c5450168b5fa1a5479036913d635e",
+        "source_sha256_after": "b2fab9f2bdcd33a681f5d2aacc9e3d936b09b51fad92c61c7c0c68a911bf3c73"
+      },
+      {
+        "evidence_id": "evidence-0821",
+        "skill_id": "wellbeing-motivation-agency/awe-wonder-experience-designer",
+        "source_sha256_before": "3249cc1879007f460f2ad52f078c9975a61c5450168b5fa1a5479036913d635e",
+        "source_sha256_after": "b2fab9f2bdcd33a681f5d2aacc9e3d936b09b51fad92c61c7c0c68a911bf3c73"
+      },
+      {
+        "evidence_id": "evidence-0822",
+        "skill_id": "wellbeing-motivation-agency/awe-wonder-experience-designer",
+        "source_sha256_before": "3249cc1879007f460f2ad52f078c9975a61c5450168b5fa1a5479036913d635e",
+        "source_sha256_after": "b2fab9f2bdcd33a681f5d2aacc9e3d936b09b51fad92c61c7c0c68a911bf3c73"
+      },
+      {
+        "evidence_id": "evidence-0823",
+        "skill_id": "wellbeing-motivation-agency/belonging-classroom-culture-designer",
+        "source_sha256_before": "5d4c825c85b67b2e76a7300700141a34b72c36c2953b49810f9f9b582ae6c8fb",
+        "source_sha256_after": "93f64baebfb16ca34ee217352423715b2505434668261c039e3283bbebc79f49"
+      },
+      {
+        "evidence_id": "evidence-0824",
+        "skill_id": "wellbeing-motivation-agency/belonging-classroom-culture-designer",
+        "source_sha256_before": "5d4c825c85b67b2e76a7300700141a34b72c36c2953b49810f9f9b582ae6c8fb",
+        "source_sha256_after": "93f64baebfb16ca34ee217352423715b2505434668261c039e3283bbebc79f49"
+      },
+      {
+        "evidence_id": "evidence-0825",
+        "skill_id": "wellbeing-motivation-agency/belonging-classroom-culture-designer",
+        "source_sha256_before": "5d4c825c85b67b2e76a7300700141a34b72c36c2953b49810f9f9b582ae6c8fb",
+        "source_sha256_after": "93f64baebfb16ca34ee217352423715b2505434668261c039e3283bbebc79f49"
+      },
+      {
+        "evidence_id": "evidence-0826",
+        "skill_id": "wellbeing-motivation-agency/belonging-classroom-culture-designer",
+        "source_sha256_before": "5d4c825c85b67b2e76a7300700141a34b72c36c2953b49810f9f9b582ae6c8fb",
+        "source_sha256_after": "93f64baebfb16ca34ee217352423715b2505434668261c039e3283bbebc79f49"
+      },
+      {
+        "evidence_id": "evidence-0827",
+        "skill_id": "wellbeing-motivation-agency/belonging-classroom-culture-designer",
+        "source_sha256_before": "5d4c825c85b67b2e76a7300700141a34b72c36c2953b49810f9f9b582ae6c8fb",
+        "source_sha256_after": "93f64baebfb16ca34ee217352423715b2505434668261c039e3283bbebc79f49"
+      },
+      {
+        "evidence_id": "evidence-0828",
+        "skill_id": "wellbeing-motivation-agency/flow-state-condition-designer",
+        "source_sha256_before": "94714b077d4cce82fa4e1075ca4f532b79c1a9ffeba3728cfa2211e4ebe252e1",
+        "source_sha256_after": "5568c1582dba70502c31077e8b0f1fbafe7e854895144fc5742f2a3d8fa03e6a"
+      },
+      {
+        "evidence_id": "evidence-0829",
+        "skill_id": "wellbeing-motivation-agency/flow-state-condition-designer",
+        "source_sha256_before": "94714b077d4cce82fa4e1075ca4f532b79c1a9ffeba3728cfa2211e4ebe252e1",
+        "source_sha256_after": "5568c1582dba70502c31077e8b0f1fbafe7e854895144fc5742f2a3d8fa03e6a"
+      },
+      {
+        "evidence_id": "evidence-0830",
+        "skill_id": "wellbeing-motivation-agency/flow-state-condition-designer",
+        "source_sha256_before": "94714b077d4cce82fa4e1075ca4f532b79c1a9ffeba3728cfa2211e4ebe252e1",
+        "source_sha256_after": "5568c1582dba70502c31077e8b0f1fbafe7e854895144fc5742f2a3d8fa03e6a"
+      },
+      {
+        "evidence_id": "evidence-0831",
+        "skill_id": "wellbeing-motivation-agency/flow-state-condition-designer",
+        "source_sha256_before": "94714b077d4cce82fa4e1075ca4f532b79c1a9ffeba3728cfa2211e4ebe252e1",
+        "source_sha256_after": "5568c1582dba70502c31077e8b0f1fbafe7e854895144fc5742f2a3d8fa03e6a"
+      },
+      {
+        "evidence_id": "evidence-0832",
+        "skill_id": "wellbeing-motivation-agency/flow-state-condition-designer",
+        "source_sha256_before": "94714b077d4cce82fa4e1075ca4f532b79c1a9ffeba3728cfa2211e4ebe252e1",
+        "source_sha256_after": "5568c1582dba70502c31077e8b0f1fbafe7e854895144fc5742f2a3d8fa03e6a"
+      },
+      {
+        "evidence_id": "evidence-0833",
+        "skill_id": "wellbeing-motivation-agency/implementation-intention-designer",
+        "source_sha256_before": "83819dfb83c3aeb253eab35292ca386e699a0363fced214cd2925adde51ee92d",
+        "source_sha256_after": "c19897d7fad8bc38151527e3f3cf77c5db414a619812062c6512a09ebad0264b"
+      },
+      {
+        "evidence_id": "evidence-0834",
+        "skill_id": "wellbeing-motivation-agency/implementation-intention-designer",
+        "source_sha256_before": "83819dfb83c3aeb253eab35292ca386e699a0363fced214cd2925adde51ee92d",
+        "source_sha256_after": "c19897d7fad8bc38151527e3f3cf77c5db414a619812062c6512a09ebad0264b"
+      },
+      {
+        "evidence_id": "evidence-0835",
+        "skill_id": "wellbeing-motivation-agency/implementation-intention-designer",
+        "source_sha256_before": "83819dfb83c3aeb253eab35292ca386e699a0363fced214cd2925adde51ee92d",
+        "source_sha256_after": "c19897d7fad8bc38151527e3f3cf77c5db414a619812062c6512a09ebad0264b"
+      },
+      {
+        "evidence_id": "evidence-0836",
+        "skill_id": "wellbeing-motivation-agency/implementation-intention-designer",
+        "source_sha256_before": "83819dfb83c3aeb253eab35292ca386e699a0363fced214cd2925adde51ee92d",
+        "source_sha256_after": "c19897d7fad8bc38151527e3f3cf77c5db414a619812062c6512a09ebad0264b"
+      },
+      {
+        "evidence_id": "evidence-0837",
+        "skill_id": "wellbeing-motivation-agency/implementation-intention-designer",
+        "source_sha256_before": "83819dfb83c3aeb253eab35292ca386e699a0363fced214cd2925adde51ee92d",
+        "source_sha256_after": "c19897d7fad8bc38151527e3f3cf77c5db414a619812062c6512a09ebad0264b"
+      },
+      {
+        "evidence_id": "evidence-0838",
+        "skill_id": "wellbeing-motivation-agency/motivation-diagnostic-task-redesign",
+        "source_sha256_before": "1b4717de6826f4cf803ef32f63cd4e854d3629165a28fc0e192aad38d358528e",
+        "source_sha256_after": "d958b4276aed9a0862d56eb8cbb73d3a03dad00addc6aab9670eacd00756186e"
+      },
+      {
+        "evidence_id": "evidence-0839",
+        "skill_id": "wellbeing-motivation-agency/motivation-diagnostic-task-redesign",
+        "source_sha256_before": "1b4717de6826f4cf803ef32f63cd4e854d3629165a28fc0e192aad38d358528e",
+        "source_sha256_after": "d958b4276aed9a0862d56eb8cbb73d3a03dad00addc6aab9670eacd00756186e"
+      },
+      {
+        "evidence_id": "evidence-0840",
+        "skill_id": "wellbeing-motivation-agency/motivation-diagnostic-task-redesign",
+        "source_sha256_before": "1b4717de6826f4cf803ef32f63cd4e854d3629165a28fc0e192aad38d358528e",
+        "source_sha256_after": "d958b4276aed9a0862d56eb8cbb73d3a03dad00addc6aab9670eacd00756186e"
+      },
+      {
+        "evidence_id": "evidence-0841",
+        "skill_id": "wellbeing-motivation-agency/motivation-diagnostic-task-redesign",
+        "source_sha256_before": "1b4717de6826f4cf803ef32f63cd4e854d3629165a28fc0e192aad38d358528e",
+        "source_sha256_after": "d958b4276aed9a0862d56eb8cbb73d3a03dad00addc6aab9670eacd00756186e"
+      },
+      {
+        "evidence_id": "evidence-0842",
+        "skill_id": "wellbeing-motivation-agency/motivation-diagnostic-task-redesign",
+        "source_sha256_before": "1b4717de6826f4cf803ef32f63cd4e854d3629165a28fc0e192aad38d358528e",
+        "source_sha256_after": "d958b4276aed9a0862d56eb8cbb73d3a03dad00addc6aab9670eacd00756186e"
+      },
+      {
+        "evidence_id": "evidence-0843",
+        "skill_id": "wellbeing-motivation-agency/perma-based-lesson-designer",
+        "source_sha256_before": "4fd5066f923dfafcbbad20561a5a6ec4572912ec05685b6c3fd9817a7f52c982",
+        "source_sha256_after": "c111d4901cde2e7cf9f742ec9d282c21fa5ccd57516efa911f631dbdbd05e3e8"
+      },
+      {
+        "evidence_id": "evidence-0844",
+        "skill_id": "wellbeing-motivation-agency/perma-based-lesson-designer",
+        "source_sha256_before": "4fd5066f923dfafcbbad20561a5a6ec4572912ec05685b6c3fd9817a7f52c982",
+        "source_sha256_after": "c111d4901cde2e7cf9f742ec9d282c21fa5ccd57516efa911f631dbdbd05e3e8"
+      },
+      {
+        "evidence_id": "evidence-0845",
+        "skill_id": "wellbeing-motivation-agency/perma-based-lesson-designer",
+        "source_sha256_before": "4fd5066f923dfafcbbad20561a5a6ec4572912ec05685b6c3fd9817a7f52c982",
+        "source_sha256_after": "c111d4901cde2e7cf9f742ec9d282c21fa5ccd57516efa911f631dbdbd05e3e8"
+      },
+      {
+        "evidence_id": "evidence-0846",
+        "skill_id": "wellbeing-motivation-agency/perma-based-lesson-designer",
+        "source_sha256_before": "4fd5066f923dfafcbbad20561a5a6ec4572912ec05685b6c3fd9817a7f52c982",
+        "source_sha256_after": "c111d4901cde2e7cf9f742ec9d282c21fa5ccd57516efa911f631dbdbd05e3e8"
+      },
+      {
+        "evidence_id": "evidence-0847",
+        "skill_id": "wellbeing-motivation-agency/perma-based-lesson-designer",
+        "source_sha256_before": "4fd5066f923dfafcbbad20561a5a6ec4572912ec05685b6c3fd9817a7f52c982",
+        "source_sha256_after": "c111d4901cde2e7cf9f742ec9d282c21fa5ccd57516efa911f631dbdbd05e3e8"
+      },
+      {
+        "evidence_id": "evidence-0848",
+        "skill_id": "wellbeing-motivation-agency/restorative-practice-protocol-designer",
+        "source_sha256_before": "7ec90a91b85fdd63fec0199ad624d7b7c4cb2e8829ee38d28c0bb051c7ff1fe9",
+        "source_sha256_after": "f6caf93ab7e44723f953a351f277905c8d2ddf256ab96568b175cdd6cd37dd4f"
+      },
+      {
+        "evidence_id": "evidence-0849",
+        "skill_id": "wellbeing-motivation-agency/restorative-practice-protocol-designer",
+        "source_sha256_before": "7ec90a91b85fdd63fec0199ad624d7b7c4cb2e8829ee38d28c0bb051c7ff1fe9",
+        "source_sha256_after": "f6caf93ab7e44723f953a351f277905c8d2ddf256ab96568b175cdd6cd37dd4f"
+      },
+      {
+        "evidence_id": "evidence-0850",
+        "skill_id": "wellbeing-motivation-agency/restorative-practice-protocol-designer",
+        "source_sha256_before": "7ec90a91b85fdd63fec0199ad624d7b7c4cb2e8829ee38d28c0bb051c7ff1fe9",
+        "source_sha256_after": "f6caf93ab7e44723f953a351f277905c8d2ddf256ab96568b175cdd6cd37dd4f"
+      },
+      {
+        "evidence_id": "evidence-0851",
+        "skill_id": "wellbeing-motivation-agency/restorative-practice-protocol-designer",
+        "source_sha256_before": "7ec90a91b85fdd63fec0199ad624d7b7c4cb2e8829ee38d28c0bb051c7ff1fe9",
+        "source_sha256_after": "f6caf93ab7e44723f953a351f277905c8d2ddf256ab96568b175cdd6cd37dd4f"
+      },
+      {
+        "evidence_id": "evidence-0852",
+        "skill_id": "wellbeing-motivation-agency/restorative-practice-protocol-designer",
+        "source_sha256_before": "7ec90a91b85fdd63fec0199ad624d7b7c4cb2e8829ee38d28c0bb051c7ff1fe9",
+        "source_sha256_after": "f6caf93ab7e44723f953a351f277905c8d2ddf256ab96568b175cdd6cd37dd4f"
+      },
+      {
+        "evidence_id": "evidence-0853",
+        "skill_id": "wellbeing-motivation-agency/ruler-emotional-literacy-sequence",
+        "source_sha256_before": "c6a079ba16320268ee52493686cbcd6dd9077ab72d88aaa850a47d5f92d36257",
+        "source_sha256_after": "af037f0df8b9e3d28434c535dd5f4d62d1700ecc06b02f9856d3844869c25b7d"
+      },
+      {
+        "evidence_id": "evidence-0854",
+        "skill_id": "wellbeing-motivation-agency/ruler-emotional-literacy-sequence",
+        "source_sha256_before": "c6a079ba16320268ee52493686cbcd6dd9077ab72d88aaa850a47d5f92d36257",
+        "source_sha256_after": "af037f0df8b9e3d28434c535dd5f4d62d1700ecc06b02f9856d3844869c25b7d"
+      },
+      {
+        "evidence_id": "evidence-0855",
+        "skill_id": "wellbeing-motivation-agency/ruler-emotional-literacy-sequence",
+        "source_sha256_before": "c6a079ba16320268ee52493686cbcd6dd9077ab72d88aaa850a47d5f92d36257",
+        "source_sha256_after": "af037f0df8b9e3d28434c535dd5f4d62d1700ecc06b02f9856d3844869c25b7d"
+      },
+      {
+        "evidence_id": "evidence-0856",
+        "skill_id": "wellbeing-motivation-agency/ruler-emotional-literacy-sequence",
+        "source_sha256_before": "c6a079ba16320268ee52493686cbcd6dd9077ab72d88aaa850a47d5f92d36257",
+        "source_sha256_after": "af037f0df8b9e3d28434c535dd5f4d62d1700ecc06b02f9856d3844869c25b7d"
+      },
+      {
+        "evidence_id": "evidence-0857",
+        "skill_id": "wellbeing-motivation-agency/ruler-emotional-literacy-sequence",
+        "source_sha256_before": "c6a079ba16320268ee52493686cbcd6dd9077ab72d88aaa850a47d5f92d36257",
+        "source_sha256_after": "af037f0df8b9e3d28434c535dd5f4d62d1700ecc06b02f9856d3844869c25b7d"
+      },
+      {
+        "evidence_id": "evidence-0858",
+        "skill_id": "wellbeing-motivation-agency/self-efficacy-builder-sequence",
+        "source_sha256_before": "3b66bdaef032d90bd840043301ba6454105e90d5c5de711a7a8310d031405a9c",
+        "source_sha256_after": "0ff235f3388aefd39535d3fa5edfbb46850fd4071193a0dd57c9e764741cb3f9"
+      },
+      {
+        "evidence_id": "evidence-0859",
+        "skill_id": "wellbeing-motivation-agency/self-efficacy-builder-sequence",
+        "source_sha256_before": "3b66bdaef032d90bd840043301ba6454105e90d5c5de711a7a8310d031405a9c",
+        "source_sha256_after": "0ff235f3388aefd39535d3fa5edfbb46850fd4071193a0dd57c9e764741cb3f9"
+      },
+      {
+        "evidence_id": "evidence-0860",
+        "skill_id": "wellbeing-motivation-agency/self-efficacy-builder-sequence",
+        "source_sha256_before": "3b66bdaef032d90bd840043301ba6454105e90d5c5de711a7a8310d031405a9c",
+        "source_sha256_after": "0ff235f3388aefd39535d3fa5edfbb46850fd4071193a0dd57c9e764741cb3f9"
+      },
+      {
+        "evidence_id": "evidence-0861",
+        "skill_id": "wellbeing-motivation-agency/self-efficacy-builder-sequence",
+        "source_sha256_before": "3b66bdaef032d90bd840043301ba6454105e90d5c5de711a7a8310d031405a9c",
+        "source_sha256_after": "0ff235f3388aefd39535d3fa5edfbb46850fd4071193a0dd57c9e764741cb3f9"
+      },
+      {
+        "evidence_id": "evidence-0862",
+        "skill_id": "wellbeing-motivation-agency/self-efficacy-builder-sequence",
+        "source_sha256_before": "3b66bdaef032d90bd840043301ba6454105e90d5c5de711a7a8310d031405a9c",
+        "source_sha256_after": "0ff235f3388aefd39535d3fa5edfbb46850fd4071193a0dd57c9e764741cb3f9"
+      },
+      {
+        "evidence_id": "evidence-0863",
+        "skill_id": "wellbeing-motivation-agency/trauma-informed-practice-designer",
+        "source_sha256_before": "26fc50ed988804a27fc34e01f3de8897b7ebed4e815f5c4299c7317919a6b71e",
+        "source_sha256_after": "1aaf20dfc5fb3ce6c843685799b76312bd291947717e6a23a05621eb9ac11257"
+      },
+      {
+        "evidence_id": "evidence-0864",
+        "skill_id": "wellbeing-motivation-agency/trauma-informed-practice-designer",
+        "source_sha256_before": "26fc50ed988804a27fc34e01f3de8897b7ebed4e815f5c4299c7317919a6b71e",
+        "source_sha256_after": "1aaf20dfc5fb3ce6c843685799b76312bd291947717e6a23a05621eb9ac11257"
+      },
+      {
+        "evidence_id": "evidence-0865",
+        "skill_id": "wellbeing-motivation-agency/trauma-informed-practice-designer",
+        "source_sha256_before": "26fc50ed988804a27fc34e01f3de8897b7ebed4e815f5c4299c7317919a6b71e",
+        "source_sha256_after": "1aaf20dfc5fb3ce6c843685799b76312bd291947717e6a23a05621eb9ac11257"
+      },
+      {
+        "evidence_id": "evidence-0866",
+        "skill_id": "wellbeing-motivation-agency/trauma-informed-practice-designer",
+        "source_sha256_before": "26fc50ed988804a27fc34e01f3de8897b7ebed4e815f5c4299c7317919a6b71e",
+        "source_sha256_after": "1aaf20dfc5fb3ce6c843685799b76312bd291947717e6a23a05621eb9ac11257"
+      },
+      {
+        "evidence_id": "evidence-0867",
+        "skill_id": "wellbeing-motivation-agency/trauma-informed-practice-designer",
+        "source_sha256_before": "26fc50ed988804a27fc34e01f3de8897b7ebed4e815f5c4299c7317919a6b71e",
+        "source_sha256_after": "1aaf20dfc5fb3ce6c843685799b76312bd291947717e6a23a05621eb9ac11257"
+      },
+      {
+        "evidence_id": "evidence-0868",
+        "skill_id": "wellbeing-motivation-agency/wellbeing-learning-connection-mapper",
+        "source_sha256_before": "ee8065c41aa3bb174ef457fc19d576a21115b94ef8352bf6db1822369e36da19",
+        "source_sha256_after": "7945fe9a75e8a46c593e4127bb7ed7a4534809cd95d4e0b713edf630e2912d4e"
+      },
+      {
+        "evidence_id": "evidence-0869",
+        "skill_id": "wellbeing-motivation-agency/wellbeing-learning-connection-mapper",
+        "source_sha256_before": "ee8065c41aa3bb174ef457fc19d576a21115b94ef8352bf6db1822369e36da19",
+        "source_sha256_after": "7945fe9a75e8a46c593e4127bb7ed7a4534809cd95d4e0b713edf630e2912d4e"
+      },
+      {
+        "evidence_id": "evidence-0870",
+        "skill_id": "wellbeing-motivation-agency/wellbeing-learning-connection-mapper",
+        "source_sha256_before": "ee8065c41aa3bb174ef457fc19d576a21115b94ef8352bf6db1822369e36da19",
+        "source_sha256_after": "7945fe9a75e8a46c593e4127bb7ed7a4534809cd95d4e0b713edf630e2912d4e"
+      },
+      {
+        "evidence_id": "evidence-0871",
+        "skill_id": "wellbeing-motivation-agency/wellbeing-learning-connection-mapper",
+        "source_sha256_before": "ee8065c41aa3bb174ef457fc19d576a21115b94ef8352bf6db1822369e36da19",
+        "source_sha256_after": "7945fe9a75e8a46c593e4127bb7ed7a4534809cd95d4e0b713edf630e2912d4e"
+      },
+      {
+        "evidence_id": "evidence-0872",
+        "skill_id": "wellbeing-motivation-agency/wellbeing-learning-connection-mapper",
+        "source_sha256_before": "ee8065c41aa3bb174ef457fc19d576a21115b94ef8352bf6db1822369e36da19",
+        "source_sha256_after": "7945fe9a75e8a46c593e4127bb7ed7a4534809cd95d4e0b713edf630e2912d4e"
+      }
+    ]
+  },
+  "discovery": "Original discovery results remain historical. Work work-0370 has no current declaration and is retained to preserve the blocked discovery ledger."
+}

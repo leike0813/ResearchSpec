@@ -1,6 +1,6 @@
 ---
 name: discovery-patent-search
-description: "中国专利公布公告著录检索：发明人、申请人、分类号、名称、摘要，或从单图与权要生成检索式（patent search, bibliographic, CNIPA）。"
+description: "中国专利公布公告著录检索，按指定局别检索海外专利，或从单图与权要生成检索式（patent search, CNIPA, Google Patents）。"
 metadata:
   capability_id: discovery-patent-search
   node_kind: producer
@@ -31,6 +31,19 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `tools-search_config.py` from `tools/search_config.py`.
 - Load knowledge ID `tools-requirements-cnipa.txt` from `tools/requirements-cnipa.txt`.
 - Load knowledge ID `tools-patent_type.py` from `tools/patent_type.py`.
+- Load knowledge ID `tools-gp_search.py` from `tools/gp_search.py`.
+- Load knowledge ID `tools-stdio_utf8.py` from `tools/stdio_utf8.py`.
+- Load knowledge ID `tools-google_patents-results.py` from `tools/google_patents/results.py`.
+- When running an authorized overseas patent search, load knowledge ID `tools-google_patents-report.py` from `tools/google_patents/report.py`.
+- Load knowledge ID `tools-google_patents-query.py` from `tools/google_patents/query.py`.
+- When running an authorized overseas patent search, load knowledge ID `tools-google_patents-paths.py` from `tools/google_patents/paths.py`.
+- Load knowledge ID `tools-google_patents-html_text.py` from `tools/google_patents/html_text.py`.
+- Load knowledge ID `tools-google_patents-errors.py` from `tools/google_patents/errors.py`.
+- Load knowledge ID `tools-google_patents-detail.py` from `tools/google_patents/detail.py`.
+- When running an authorized overseas patent search, load knowledge ID `tools-google_patents-config.py` from `tools/google_patents/config.py`.
+- Load knowledge ID `tools-google_patents-client.py` from `tools/google_patents/client.py`.
+- Load knowledge ID `tools-google_patents-api.py` from `tools/google_patents/api.py`.
+- Load knowledge ID `tools-google_patents-__init__.py` from `tools/google_patents/__init__.py`.
 - Load knowledge ID `tools-emit_search_report.py` from `tools/emit_search_report.py`.
 - Load knowledge ID `tools-derived_query.py` from `tools/derived_query.py`.
 - Load knowledge ID `tools-emit_covers_report.py` from `tools/emit_covers_report.py`.
@@ -38,7 +51,6 @@ Execute exactly one ResearchSpec capability node.
 - Load knowledge ID `tools-cnipa_crawler.py` from `tools/cnipa_crawler.py`.
 - Load knowledge ID `tools-cnipa_parse.py` from `tools/cnipa_parse.py`.
 - Load knowledge ID `tools-browser.py` from `tools/browser.py`.
-- Load knowledge ID `tools-stdio_utf8.py` from `tools/stdio_utf8.py`.
 - When creating or validating a patent file index, load knowledge ID `references-schemas-patent_file_index.schema.yaml` from `references/schemas/patent_file_index.schema.yaml`.
 - When classifying patent type for a search request, load knowledge ID `references-patent_type_search.yaml` from `references/patent_type_search.yaml`.
 - Load knowledge ID `config.yaml` from `config.yaml`.
@@ -53,6 +65,19 @@ Execute exactly one ResearchSpec capability node.
 - `tools/search_config.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/requirements-cnipa.txt` is a package resource; use it as directed by the Procedure.
 - `tools/patent_type.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/gp_search.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/stdio_utf8.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/google_patents/results.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- Use `tools/google_patents/report.py` when running an authorized overseas patent search, as directed by the Procedure.
+- `tools/google_patents/query.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- Use `tools/google_patents/paths.py` when running an authorized overseas patent search, as directed by the Procedure.
+- `tools/google_patents/html_text.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/google_patents/errors.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/google_patents/detail.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- Use `tools/google_patents/config.py` when running an authorized overseas patent search, as directed by the Procedure.
+- `tools/google_patents/client.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/google_patents/api.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
+- `tools/google_patents/__init__.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/emit_search_report.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/derived_query.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/emit_covers_report.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
@@ -60,7 +85,6 @@ Execute exactly one ResearchSpec capability node.
 - `tools/cnipa_crawler.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/cnipa_parse.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - `tools/browser.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
-- `tools/stdio_utf8.py` implements the package's authored computation; invoke it only through the declared runner and arguments.
 - Use `references/schemas/patent_file_index.schema.yaml` when creating or validating a patent file index, as directed by the Procedure.
 - Use `references/patent_type_search.yaml` when classifying patent type for a search request, as directed by the Procedure.
 - `config.yaml` is a package resource; use it as directed by the Procedure.
@@ -174,8 +198,10 @@ Agent 里显式调用（例如 `advance` 运行声明的校验器）时才执行
 
 1. 从 `search_request` 取至少一项著录字段作为检索输入；单图检索必须先确定专利类型，
    不能用 `all`。记录格式与词表细则见 `knowledge/pd-kp-16-patent-search-records.md`。
-2. 从 `search_request` 取至少一项著录字段。单图检索必须先确定专利类型，不能用 `all`。
-3. 跑本包检索工具：
+2. 从请求确认渠道。默认使用中国公布站，用户点名海外或指定局别并授权查询时使用 Google Patents。
+   未点名局别的海外查询覆盖 US、EP、WO、JP、KR。保留原始查询意图，按目标局别选用同义词和过滤条件。
+3. 国内检索使用下列命令。海外检索用本页的「海外检索」命令。用户同时指定两类范围时，
+   分别执行并在结果中区分来源。
 
 ```bash
 python tools/cnipa_search.py --inventor "<姓名>" --applicant "<单位>"
@@ -183,8 +209,8 @@ python tools/cnipa_search.py --title "<名称>" --abstract "<摘要词 and 词>"
 python tools/cnipa_search.py --abstract "<词 and 词>" --type design --derived-from image --type-inferred
 ```
 
-4. 翻页按「默认少翻页、完整性有门禁」处理。结果里出现 `EPUB_SEARCH_INCOMPLETE:` 就照实报告不完整，不要把部分结果当全集。
-5. 只有对照表派工或用户点名「按特征精排」时，才另出覆盖旁路；主列表报告格式不动：
+4. 公布站翻页按「默认少翻页、完整性有门禁」处理。结果里出现 `EPUB_SEARCH_INCOMPLETE:` 就报告不完整。
+5. 对照表派工或用户点名「按特征精排」时，可另出国内检索的覆盖旁路，保留主列表报告：
 
 ```bash
 python tools/emit_search_report.py --json <检索结果.json> --output-dir <out>
@@ -193,10 +219,21 @@ python tools/emit_covers_report.py --beside <检索结果.json> --output-dir <ou
 
 6. 写 `search_results`：一个普通 JSON 结果文件加一份 Markdown 列表，列出实际路径、命中条数与完整性说明。它不是规范文件索引，不要套用 `kind`。
 
+## 海外检索
+
+用 `tools/gp_search.py` 提交一次查询，记录局别、条件、来源、返回条数和页码。分页由用户明确请求。
+仅把成功查询的空结果记为零命中。限流结束本轮，服务不可用或响应无法解析则记录查询状态与已取得的
+材料。命中片段只能用于筛选，技术比对需要由解读 Procedure 取得原文。
+
+```bash
+python tools/gp_search.py --project-root <项目根> -q "<关键词>" \
+  --country US,EP,WO,JP,KR --note "<原始检索意图>"
+```
+
 ## 硬约束
 
 - 检索结果不冒充交底查新，也不冒充新颖性结论。
-- 只做公布站高级查询；从单图或权要只生成公布站布尔式，不做全网检索。
+- 单图或权要派生的常规国内检索使用公布站布尔式。海外渠道按用户确认的查找范围使用。
 - 解析以 `EPUB_SEARCH_MD:` / `EPUB_SEARCH_JSON:` 等机读前缀为准，终端红字或编码乱码不当作失败。
 - 不得编造公开号、链接或条数。
 

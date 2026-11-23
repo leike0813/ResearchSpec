@@ -86,7 +86,15 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-math_to_omml.py
     path: tools/math_to_omml.py
-    content_hash: 1e5ed79cf74b48fc1debe129dddb6ef45ac32ea2c1c83d4cbb3343a026e38dfa
+    content_hash: 9877ab5dc9288baa6ded9d431d8d7f0a843f08e62beea13babadc515a098866f
+    license: MIT
+  - knowledge_id: references-divisional_example_ai_security.md
+    path: references/divisional_example_ai_security.md
+    content_hash: 20c5a1c3e7edd6ddb57af9dfe2e317f41f2be51d4a4191ea3cdcbe9683da4c07
+    license: MIT
+  - knowledge_id: references-ai_implementation.md
+    path: references/ai_implementation.md
+    content_hash: e4085bbb2e941b4c6bd1eb37dfd505d3f538d6841185ca42de8b437bd6c832b7
     license: MIT
   - knowledge_id: tools-patent_files.py
     path: tools/patent_files.py
@@ -94,7 +102,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: NOTICE.md
     path: NOTICE.md
-    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    content_hash: f5a7add35ef089af7d3eed7692081e062baf1ecefad72c48805a2bfefe9f928b
     license: MIT
   - knowledge_id: LICENSE
     path: LICENSE
@@ -110,5 +118,5 @@ provenance:
     - PD-KP-17
   upstream_sources:
     - path: authoring/patent-disclosure-skill/extracted/capabilities/08.md
-      sha256: b39dd3729aacd42d986c621d17035b2d390359af86eb2086e526cc9ee020b116
+      sha256: 15cf180bcc04c998b3cb46fe07e623c2a3c623d87919722b0e114da574b3f922
 license: MIT

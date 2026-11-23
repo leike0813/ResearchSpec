@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `wellbeing-motivation-agency/self-efficacy-builder-sequence`
 - Source path: `skills/wellbeing-motivation-agency/self-efficacy-builder-sequence/SKILL.md`
-- Source SHA-256: `3b66bdaef032d90bd840043301ba6454105e90d5c5de711a7a8310d031405a9c`
+- Source SHA-256: `0ff235f3388aefd39535d3fa5edfbb46850fd4071193a0dd57c9e764741cb3f9`
 - Generated Skill: `education-agent-skills-self-efficacy-builder-sequence`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

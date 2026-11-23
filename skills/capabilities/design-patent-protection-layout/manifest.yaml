@@ -150,7 +150,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: NOTICE.md
     path: NOTICE.md
-    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    content_hash: f5a7add35ef089af7d3eed7692081e062baf1ecefad72c48805a2bfefe9f928b
     license: MIT
   - knowledge_id: LICENSE
     path: LICENSE

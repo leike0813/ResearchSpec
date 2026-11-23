@@ -48,5 +48,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-motivation-diagnostic-task-redesign/SKILL.md
-      sha256: b389448b5dc4bf3a89bb8deec24908f4e76c3b36a931b0671d5cd6f1f972f5fe
+      sha256: 75293af2a99f27821c410d07309e25d5240b71fd9d223ff4f0eb54e104d90ac2
 license: CC-BY-SA-4.0

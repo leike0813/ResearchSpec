@@ -80,7 +80,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-browser.py
     path: tools/browser.py
-    content_hash: c9cf02525200385732d5ab2015f23c017c07b496aca25c261f2cd1a5543f9c3d
+    content_hash: e9cf0cdb77e01ec4d1013f2b1ab873265f146e94f17a29a3213c1db47a2a385a
     license: MIT
   - knowledge_id: tools-stdio_utf8.py
     path: tools/stdio_utf8.py
@@ -124,7 +124,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-math_to_omml.py
     path: tools/math_to_omml.py
-    content_hash: 88720dd354b5f25f58e851a9d9540fb98c81d8f064ea3498afd554250cd503a0
+    content_hash: 3b061541abba3cb1e2fde4e2d6187a26d309cace0be4775ff104716da0124518
     license: MIT
   - knowledge_id: tools-cad_scan.py
     path: tools/cad_scan.py
@@ -198,13 +198,17 @@ knowledge_refs:
     path: references/design_view_cnipa.md
     content_hash: 18e477fb9d70be43d9e0d37301afb0620018a4f87d8e19b00a2d0d94afcfd1f0
     license: MIT
+  - knowledge_id: references-ai_disclosure.md
+    path: references/ai_disclosure.md
+    content_hash: 8b087ad581daeb90dbf0fe7e6a8a603357afeed47f4dd01213c6c48afb9f9526
+    license: MIT
   - knowledge_id: tools-patent_files.py
     path: tools/patent_files.py
     content_hash: 642269c8d3005216d8b42fa4c332cb9a3533d0e228468edfc823b017db8fca25
     license: MIT
   - knowledge_id: NOTICE.md
     path: NOTICE.md
-    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    content_hash: f5a7add35ef089af7d3eed7692081e062baf1ecefad72c48805a2bfefe9f928b
     license: MIT
   - knowledge_id: LICENSE
     path: LICENSE

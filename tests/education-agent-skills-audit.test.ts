@@ -28,7 +28,7 @@ const AUDIT_PATH = path.resolve(EDUCATION_AGENT_SKILLS.auditPath);
 const REPORT_PATH = path.resolve(EDUCATION_AGENT_SKILLS.reportPath);
 let builtAudit: EducationAgentSkillsAudit | undefined;
 
-void test("Education Agent Skills audit pins the official clean untagged snapshot and rejects all identity drift", () => {
+void test("Education Agent Skills audit pins the official clean release and rejects identity drift", () => {
   const identity = {
     revision: gitOutput(SOURCE_ROOT, ["rev-parse", "HEAD"]),
     tree: gitOutput(SOURCE_ROOT, ["rev-parse", "HEAD^{tree}"]),
@@ -41,12 +41,12 @@ void test("Education Agent Skills audit pins the official clean untagged snapsho
   assert.throws(() => validateEducationAgentSkillsSnapshotIdentity({ ...identity, tree: "0".repeat(40) }), /tree drift/);
   assert.throws(() => validateEducationAgentSkillsSnapshotIdentity({ ...identity, remote: "https://example.test/wrong" }), /remote drift/);
   assert.throws(() => validateEducationAgentSkillsSnapshotIdentity({ ...identity, status: " M README.md" }), /must be clean/);
-  assert.throws(() => validateEducationAgentSkillsSnapshotIdentity({ ...identity, tags: "v2.0.0" }), /must remain an untagged snapshot/);
+  assert.throws(() => validateEducationAgentSkillsSnapshotIdentity({ ...identity, tags: "v2.0.0" }), /release tag drift/);
 });
 
 void test("repository inventory covers every tracked file and Skill exactly once with stable hashes and classifications", async () => {
   const audit = getBuiltAudit();
-  assert.equal(audit.repository_inventory.tracked_file_count, 241);
+  assert.equal(audit.repository_inventory.tracked_file_count, 330);
   assert.equal(audit.skills.length, 165);
   assert.deepEqual(Object.keys(audit.repository_inventory.classification_counts), [
     "skill-content", "license-provenance", "project-doc", "installer", "mcp-runtime", "maintenance", "test", "generated", "showcase",
@@ -100,18 +100,18 @@ void test("evidence, license, and relationship schemas preserve unresolved and c
 void test("all named evidence, relationships, provenance, overlaps, risks, and prospective domains carry explicit conclusions", async () => {
   const audit = await readAudit();
   assert.deepEqual(audit.summary, {
-    tracked_files: 241,
+    tracked_files: 330,
     skills: 165,
     upstream_domains: 20,
     prospective_domains: 3,
     evidence_declarations: 872,
     distinct_evidence_strings: 737,
-    evidence_strength_counts: { verified: 0, partial: 216, unverified: 656, conflicting: 0 },
+    evidence_strength_counts: { verified: 0, partial: 215, unverified: 657, conflicting: 0 },
     relationships: 813,
     unresolved_relationships: 17,
     license_status_counts: { clear: 0, conditional: 136, unresolved: 29 },
     recommendation_counts: { candidate: 0, defer: 0, exclude: 165 },
-    risk_counts: { minors: 164, privacy: 24, "learning-analytics": 16, wellbeing: 70, diagnosis: 1, "original-framework": 19 },
+    risk_counts: { minors: 164, privacy: 25, "learning-analytics": 15, wellbeing: 70, diagnosis: 1, "original-framework": 19 },
     blocking_findings: 2,
   });
   assert.ok(audit.evidence.every((entry) => entry.review_basis && entry.blocker && entry.source_sha256));

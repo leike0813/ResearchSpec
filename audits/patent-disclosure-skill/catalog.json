@@ -2,14 +2,14 @@
   "schema_version": "1",
   "vendor_id": "patent-disclosure-skill",
   "delivery": "fixed-capabilities",
-  "anchor_id": "snapshot-5073d3d8",
+  "anchor_id": "snapshot-91e3b43a",
   "upstream": {
     "url": "https://github.com/handsomestWei/patent-disclosure-skill",
     "path": "vendor/patent-disclosure-skill",
-    "revision": "5073d3d837a5d139ef2bc763c9dd46bb9605df84",
-    "tree": "d4abb0dd1b7cc8b2f0f131060faad707be63ca96",
-    "reported_version": "5.0.0",
-    "tracked_file_count": 489,
+    "revision": "91e3b43a3e6b568c627bc83ffcb73ff453bf0304",
+    "tree": "b2ffa8dfca682ae9535c6e43c68cabe7ebf9e3d2",
+    "reported_version": "5.2.1",
+    "tracked_file_count": 540,
     "license": "MIT"
   },
   "authoring_root": "authoring/patent-disclosure-skill",
@@ -19,7 +19,7 @@
   "source_definitions": "src/vendor-converters/patent-disclosure-skill/capabilities.ts",
   "graph_definitions": "src/arsu-converter/workflow/graph-profiles/patent.ts",
   "maintenance_skill": ".agents/skills/patent-disclosure-skill-maintenance/SKILL.md",
-  "source_audit": "audits/patent-disclosure-skill/source-audit.json",
+  "source_audit": "audits/patent-disclosure-skill/snapshot-91e3b43a/source-audit.json",
   "profile_ids": [
     "patent-disclosure", "patent-application", "patent-docket", "patent-intelligence",
     "patent-oa", "research-to-patent", "patent-informed-paper"

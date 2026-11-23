@@ -5,9 +5,9 @@ license: CC-BY-SA-4.0
 compatibility: Static educational guidance using user-provided context and only tools explicitly chosen by the invoking Agent. ResearchSpec installs files only and does not contact services, handle credentials, collect learner data, or grant workflow authority.
 metadata:
   vendor: education-agent-skills
-  vendor-release: snapshot-32fce5c
+  vendor-release: v3.1.0
   upstream-skill-id: curriculum-assessment/differentiation-adapter
-  source-sha256: 6545b55ca01e6eea998b9c1c808f6327a3dee87c91a4c313c4c7e6e163c35c5f
+  source-sha256: 13b3cbb8caf57f12bb988d3c243da16b3fcb1db3c5bac797b24866f2a0c84935
   researchspec-role: semantic-helper
 disable-model-invocation: false
 user-invocable: true
@@ -92,7 +92,7 @@ Adapts a task for a specific learner profile — extension, support, EAL, ADHD, 
 
 ## Evidence Foundation
 
-⟦UNRESOLVED⟧Tomlinson (2001, 2014) established the framework for differentiated instruction, identifying three dimensions of differentiation: content (what students learn), process (how they learn it), and product (how they demonstrate learning).⟦/UNRESOLVED⟧ She emphasised that differentiation should be by readiness, interest, and learning profile — NOT by learning style (which is excluded from this library as debunked). ⟦UNRESOLVED⟧Rose & Meyer (2002) developed Universal Design for Learning (UDL), arguing that curricula should be designed from the outset to be accessible to all learners through three principles: multiple means of engagement (the "why" of learning), multiple means of representation (the "what"), and multiple means of action and expression (the "how").⟦/UNRESOLVED⟧ ⟦UNRESOLVED⟧Vygotsky (1978) established that instruction should target the Zone of Proximal Development — what the learner can do with appropriate support but not yet independently.⟦/UNRESOLVED⟧ ⟦UNRESOLVED⟧Hattie (2009) found that differentiation has moderate effect sizes overall but varies significantly by implementation quality — poorly implemented differentiation (giving weaker students easier work) can actually reduce achievement by lowering expectations.⟦/UNRESOLVED⟧ ⟦UNRESOLVED⟧CAST (2018) provided the most current UDL guidelines with specific implementation strategies.⟦/UNRESOLVED⟧
+⟦UNRESOLVED⟧Tomlinson (2001, 2014) established the framework for differentiated instruction, identifying three dimensions of differentiation: content (what students learn), process (how they learn it), and product (how they demonstrate learning).⟦/UNRESOLVED⟧ She emphasised that differentiation should be by readiness, interest, and learning profile — NOT by learning style (which is excluded from this library as debunked). ⟦UNRESOLVED⟧Rose & Meyer (2002) developed Universal Design for Learning (UDL), arguing that curricula should be designed from the outset to be accessible to all learners through three principles: multiple means of engagement (the "why" of learning), multiple means of representation (the "what"), and multiple means of action and expression (the "how").⟦/UNRESOLVED⟧ ⟦UNRESOLVED⟧Vygotsky (1978) established that instruction should target the Zone of Proximal Development — what the learner can do with appropriate support but not yet independently.⟦/UNRESOLVED⟧ ⟦UNRESOLVED⟧Hattie (2009) found that differentiation has moderate effect sizes overall but varies significantly by implementation quality — poorly implemented differentiation (giving weaker students easier work) can actually reduce achievement by lowering expectations.⟦/UNRESOLVED⟧ ⟦UNRESOLVED⟧CAST (2018) provided UDL Guidelines version 2.2, the historical edition used here for implementation strategies.⟦/UNRESOLVED⟧ CAST released version 3.0 in 2024; this skill retains its stated 2.2 basis rather than claiming to implement the newer edition.
 
 ## Input Schema
 
@@ -110,7 +110,7 @@ Optional (injected by context engine if available):
 ## Prompt
 
 ```
-⟦UNRESOLVED⟧You are an expert in differentiated instruction and inclusive education, with deep knowledge of Tomlinson's (2001, 2014) differentiation framework, Rose & Meyer's (2002) Universal Design for Learning principles, and CAST's (2018) UDL guidelines.⟦/UNRESOLVED⟧ You understand that effective differentiation modifies the ROUTE to learning, not the DESTINATION — all students work toward the same learning objective, but the pathway is adapted to remove barriers specific to each learner's profile.
+⟦UNRESOLVED⟧You are an expert in differentiated instruction and inclusive education, with deep knowledge of Tomlinson's (2001, 2014) differentiation framework, Rose & Meyer's (2002) Universal Design for Learning principles, and CAST's (2018) UDL Guidelines version 2.2.⟦/UNRESOLVED⟧ This is the historical edition used here, not a claim to implement version 3.0 (released in 2024). You understand that effective differentiation modifies the ROUTE to learning, not the DESTINATION — all students work toward the same learning objective, but the pathway is adapted to remove barriers specific to each learner's profile.
 
 IMPORTANT: Differentiation by learning style (visual/auditory/kinaesthetic preferences) is NOT supported — this is excluded from this library as debunked (Pashler et al., 2008). Differentiation by readiness, specific learning needs, and learner profile IS supported.
 

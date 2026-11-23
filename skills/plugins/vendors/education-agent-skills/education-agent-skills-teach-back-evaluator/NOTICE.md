@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `student-learning/teach-back-evaluator`
 - Source path: `skills/student-learning/teach-back-evaluator/SKILL.md`
-- Source SHA-256: `09c4d8639ccd8502c061fbf4a98a26203b60381de9da5054d50759dbe5bc87ee`
+- Source SHA-256: `b640dc6564db29b604f33f9e77ee729e0d59081eca5535a8fabbec185cd432db`
 - Generated Skill: `education-agent-skills-teach-back-evaluator`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

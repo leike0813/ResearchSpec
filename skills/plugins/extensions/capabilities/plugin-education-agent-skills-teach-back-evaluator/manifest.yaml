@@ -49,5 +49,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-teach-back-evaluator/SKILL.md
-      sha256: 80c825b2dc48f720e30d0f773381327a10f0191d9868fcb63beb97950d72f49e
+      sha256: e5b938bdaf938dc4728e56760db83135d22bf77f326050f08023270d3de00363
 license: CC-BY-SA-4.0

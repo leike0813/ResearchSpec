@@ -48,5 +48,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-agency-scaffold-generator/SKILL.md
-      sha256: 81b72ae6ca795cdd9ead1c6d5deedf584a806e00c06d0cc845fc7700333f7b3c
+      sha256: 1c15aae34e761be55519f251b3560be7121ee97e66e34abb375a96dbb2f40b99
 license: CC-BY-SA-4.0

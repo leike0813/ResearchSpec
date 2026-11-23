@@ -1,10 +1,9 @@
 # Patent fixed capability maintenance
 
 The third-party source is pinned at commit
-`5073d3d837a5d139ef2bc763c9dd46bb9605df84`, tree
-`d4abb0dd1b7cc8b2f0f131060faad707be63ca96`. The root Skill reports 5.0.0;
-the maintenance identity is `snapshot-5073d3d8`. All 489 tracked files are
-accounted for in `audits/patent-disclosure-skill/source-audit.json`.
+`91e3b43a3e6b568c627bc83ffcb73ff453bf0304`, tree
+`b2ffa8dfca682ae9535c6e43c68cabe7ebf9e3d2`. The root Skill reports 5.2.1.
+The `snapshot-91e3b43a` source audit accounts for all 540 tracked files.
 
 The nine businesses become eighteen fixed stages in the ordinary capability
 registry. No plugin vendor, domain membership or additional host entry is
@@ -36,7 +35,9 @@ package trees separately from the eighteen upstream-derived stages.
 and authored knowledge derivation. Capability extraction preserves upstream
 business instructions as provenance; generated Procedures implement the
 ResearchSpec control boundary. Root routing, installers, autonomous workflow
-writers, self-modifying maintenance, examples and marketing images are excluded.
+writers, self-modifying maintenance, product examples and marketing images stay
+in the source audit. The application stage includes the reviewed divisional
+illustration as a conditional reference.
 IPC datasets and model weights are configured external inputs.
 
 The root source is MIT, copyright 2026 handsomestWei. Each applicable package

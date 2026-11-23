@@ -48,5 +48,5 @@ provenance:
   origin: vendor-derived
   upstream_sources:
     - path: skills/plugins/vendors/education-agent-skills/education-agent-skills-trauma-informed-practice-designer/SKILL.md
-      sha256: df39441688e5d91aa0d28a80b6b98847e7dd38115b9c7b60a7b70bc63e59ac2a
+      sha256: 3289bbcbb75ba0c27e1b75b7daa9668441e8bb4fae1b55faca26eae7ab05a665
 license: CC-BY-SA-4.0

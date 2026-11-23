@@ -44,7 +44,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: PD-KP-10
     path: knowledge/pd-kp-10-claim-chart-rules.md
-    content_hash: 9355f49b9f161fc317a3d149fc94cdd923e427e6a33fed3d19c8203bfb31f742
+    content_hash: 3b0086a09fdd5a2f737d0a942b38d7732cbf71aef208129d9bdd2ae53bcd6838
     license: MIT
   - knowledge_id: PD-KP-17
     path: knowledge/pd-kp-17-runtime-tools-rules.md
@@ -60,7 +60,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-xlsx_minimal.py
     path: tools/xlsx_minimal.py
-    content_hash: edb12c22173ec802ca98c4538d970b07426189d3a33f48e3d8767a75af1a7445
+    content_hash: a18dc526792b5b64780852cfdc17f16c4090595f037e31776610c3a170ae5486
     license: MIT
   - knowledge_id: tools-highlights.py
     path: tools/highlights.py
@@ -72,7 +72,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-emit_chart.py
     path: tools/emit_chart.py
-    content_hash: bcba5941e689fa973bfad3e59968564f1c9403709884c52a3a81d490cfda940e
+    content_hash: 8b42a88b15db64ffa7c12465a5cc2a806e71db48dc3996bbf83d44437e136216
     license: MIT
   - knowledge_id: references-schemas-patent_file_index.schema.yaml
     path: references/schemas/patent_file_index.schema.yaml
@@ -92,7 +92,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: NOTICE.md
     path: NOTICE.md
-    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    content_hash: f5a7add35ef089af7d3eed7692081e062baf1ecefad72c48805a2bfefe9f928b
     license: MIT
   - knowledge_id: LICENSE
     path: LICENSE

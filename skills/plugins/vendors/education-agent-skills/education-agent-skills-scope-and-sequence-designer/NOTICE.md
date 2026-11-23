@@ -3,18 +3,19 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `curriculum-assessment/scope-and-sequence-designer`
 - Source path: `skills/curriculum-assessment/scope-and-sequence-designer/SKILL.md`
-- Source SHA-256: `20630a379803fb5023608904748531e3e03b3d9dad7d554901f0885ed5a9d9de`
+- Source SHA-256: `7325fe9b74c40f297c666871b6815094cee45fcbcee76e732564e27ce9a08262`
 - Generated Skill: `education-agent-skills-scope-and-sequence-designer`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/
+- Worked example: `skills/curriculum-assessment/scope-and-sequence-designer/references/worked-examples.md` (source SHA-256 `3a9a7b501a0460c72755c8569244e15673e94a971ebea383ca56930a6bb5cab3`)
 
 ResearchSpec changed the global Skill identifier and frontmatter envelope, added
 source-bound evidence-status disclosure (9
-frontmatter declarations and 14 body units marked in this
+frontmatter declarations and 12 body units marked in this
 tree), and added privacy, learner-safety, wellbeing, human-oversight, and
 ResearchSpec-authority boundaries where the immutable audit required them. The
 complete upstream educational body, declared inputs, outputs, prompt, examples,

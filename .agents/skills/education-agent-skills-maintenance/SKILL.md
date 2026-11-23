@@ -34,7 +34,7 @@ description: Maintain the Education Agent Skills plugin extension absorption pat
 
 ## 锚点命名
 
-`<release>-<short_revision>`，例如 `snapshot-6bbbce4`。目录：
+使用已固定的上游版本标签；无标签的版本使用 `snapshot-<short_revision>`。目录：
 
 ```
 audits/education-agent-skills/<anchor>/
@@ -55,7 +55,7 @@ audits/education-agent-skills/<anchor>/
    - `git -C vendor/education-agent-skills rev-parse HEAD`
 2. 确定分析范围：
    - 首锚点：全部 tracked files、165 个上游 Skills、136 个 admitted Gareth Manning Skills、872 项 evidence declarations 与 `skill-audit.json` / `evidence-map.json`；文件数与哈希以 immutable audit 为准，不在本文件缓存。
-   - 增量：`git -C vendor/education-agent-skills diff <old>..<new> --stat`，单独检查 136 个 vendor-bundle `SKILL.md`（无脚本/references）与审计事实。
+   - 增量：`git -C vendor/education-agent-skills diff <old>..<new> --stat`，检查已准入的 `SKILL.md`、审查过的 Markdown 参考和审计事实。
 3. 分类影响：
    - raw Skill 程序变化 -> 对应 extension `SKILL.md` 与 required brief fields。
    - 工具/引用变化 -> knowledge 路径 byte-for-byte 重同步 + 新 hash + registry hash。
@@ -100,7 +100,7 @@ audits/education-agent-skills/<anchor>/
 
 1. 运行 `node scripts/education-agent-skills-maintenance.mjs artifacts <anchor>`。
 2. 机器审计确认：
-   - 136 个 raw Skills -> 136 个 extension capability；全部为静态 llm package，统一 evidence-bound script validator，无 knowledge refs。
+   - 136 个 raw Skills -> 136 个静态 llm capability，统一 evidence-bound validator。审查过的 Markdown 参考逐字节投影，带相对路径、许可证和知识摘要。
    - registry subset、packages tree、profiles tree 均绑定 SHA-256。
    - 全部 knowledge 文件 byte-identical，required brief fields 全部绑定。
    - 三个 reviewed education 领域按 source-neutral domain catalog 镜像投影：

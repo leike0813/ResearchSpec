@@ -302,15 +302,6 @@ export const EducationAgentSkillsEvidenceMapSchema = z.strictObject({
       }
     }
   }
-  for (const workId of workIds) {
-    if (!referencedWorkIds.has(workId)) {
-      context.addIssue({
-        code: "custom",
-        path: ["works", workId],
-        message: "every work must be referenced by at least one declaration",
-      });
-    }
-  }
   const discoveryWorkIds = [
     ...value.google_scholar_discovery.results.map((result) => result.work_id),
     ...value.google_scholar_discovery.no_result_work_ids,
@@ -322,6 +313,16 @@ export const EducationAgentSkillsEvidenceMapSchema = z.strictObject({
         code: "custom",
         path: ["google_scholar_discovery", discoveryWorkId],
         message: "Scholar discovery references a missing work",
+      });
+    }
+  }
+  const historicalWorkIds = new Set(discoveryWorkIds);
+  for (const workId of workIds) {
+    if (!referencedWorkIds.has(workId) && !historicalWorkIds.has(workId)) {
+      context.addIssue({
+        code: "custom",
+        path: ["works", workId],
+        message: "every work must be referenced by a current declaration or recorded discovery",
       });
     }
   }

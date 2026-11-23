@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `wellbeing-motivation-agency/perma-based-lesson-designer`
 - Source path: `skills/wellbeing-motivation-agency/perma-based-lesson-designer/SKILL.md`
-- Source SHA-256: `4fd5066f923dfafcbbad20561a5a6ec4572912ec05685b6c3fd9817a7f52c982`
+- Source SHA-256: `c111d4901cde2e7cf9f742ec9d282c21fa5ccd57516efa911f631dbdbd05e3e8`
 - Generated Skill: `education-agent-skills-perma-based-lesson-designer`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

@@ -34,13 +34,13 @@ void test("Education Agent Skills maintenance catalog maps 136 reviewed Skills t
 
 testVendorAnchor(ROOT, {
   "vendor": "education-agent-skills",
-  "anchor": "snapshot-6bbbce4",
-  "revision": "6bbbce418f82e11044009c9f3b7373a354de5bd0",
+  "anchor": "v3.1.0",
+  "revision": "c0c82fb682001177b855576e45f27cc5e786e4c4",
   "capabilities": 136,
-  "contentFiles": 241,
+  "contentFiles": 330,
   "extension": {
     "llm_count": 136,
     "mixed_count": 0
   },
-  "toolFiles": 0
+  "toolFiles": 6
 });

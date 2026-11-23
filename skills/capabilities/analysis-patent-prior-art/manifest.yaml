@@ -67,11 +67,11 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-crawl-cnipa_epub_wait.yaml
     path: tools/crawl/cnipa_epub_wait.yaml
-    content_hash: 735b1998166c2360efba80df730daad7905cbd2d937b740f0eb549184be588d3
+    content_hash: a0154a302a9240f92aecc6f4a5f957ebb265a812adcc80306b8364ec3da86733
     license: MIT
   - knowledge_id: tools-crawl-cnipa_epub_wait.py
     path: tools/crawl/cnipa_epub_wait.py
-    content_hash: b1a4e93ccd2833a10ce9112f715a061c9e8c0c18e3bb067c62aa3962fe9cd9c0
+    content_hash: cf6ca82848ce57c73d352a0d5665bbacb9b25e33fbf355f9e7866da7d3727847
     license: MIT
   - knowledge_id: tools-crawl-cnipa_epub_search.py
     path: tools/crawl/cnipa_epub_search.py
@@ -79,11 +79,11 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-crawl-cnipa_epub_crawler.py
     path: tools/crawl/cnipa_epub_crawler.py
-    content_hash: b4c7e0787730c172b4dd995cfc626c0f3f29c2ba0b4d7a377561551378f6267e
+    content_hash: ea73cae1c841ea499ca57cf65583d80cd857a962ff530ca6831b65004851ca90
     license: MIT
   - knowledge_id: tools-crawl-cnipa_epub_nav.py
     path: tools/crawl/cnipa_epub_nav.py
-    content_hash: dd5d75fb7ef03386765e32471b5facbbe3e6aa32a5b19a9d6a5e062d4939730e
+    content_hash: 91dac3bcee3ad9cbeddb2b73920a07366c2298ec7e38dc96dc031ad0ccdbbfaa
     license: MIT
   - knowledge_id: tools-patent_type.py
     path: tools/patent_type.py
@@ -91,7 +91,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: tools-browser.py
     path: tools/browser.py
-    content_hash: c9cf02525200385732d5ab2015f23c017c07b496aca25c261f2cd1a5543f9c3d
+    content_hash: e9cf0cdb77e01ec4d1013f2b1ab873265f146e94f17a29a3213c1db47a2a385a
     license: MIT
   - knowledge_id: tools-stdio_utf8.py
     path: tools/stdio_utf8.py
@@ -107,7 +107,7 @@ knowledge_refs:
     license: MIT
   - knowledge_id: NOTICE.md
     path: NOTICE.md
-    content_hash: b4a8146ab87b57b4e1cfb9221cc115ac6915aad11cf6465fff0bf043bd82488e
+    content_hash: f5a7add35ef089af7d3eed7692081e062baf1ecefad72c48805a2bfefe9f928b
     license: MIT
   - knowledge_id: LICENSE
     path: LICENSE

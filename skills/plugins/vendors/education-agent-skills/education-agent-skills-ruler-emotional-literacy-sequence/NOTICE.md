@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `wellbeing-motivation-agency/ruler-emotional-literacy-sequence`
 - Source path: `skills/wellbeing-motivation-agency/ruler-emotional-literacy-sequence/SKILL.md`
-- Source SHA-256: `c6a079ba16320268ee52493686cbcd6dd9077ab72d88aaa850a47d5f92d36257`
+- Source SHA-256: `af037f0df8b9e3d28434c535dd5f4d62d1700ecc06b02f9856d3844869c25b7d`
 - Generated Skill: `education-agent-skills-ruler-emotional-literacy-sequence`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

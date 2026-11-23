@@ -1,11 +1,11 @@
 # Education Agent Skills Vendor Conversion
 
-- Release: `snapshot-6bbbce4`
-- Revision: `6bbbce418f82e11044009c9f3b7373a354de5bd0`
-- Audit SHA-256: `57b93c4668e6ca29fcb191e35cdea56e85ab0a7888b78256c6e64096422c6406`
-- Evidence map SHA-256: `5d970cbb765a08f33444f6c9fcabcf4095e469e3fe1dc05730843fd2e7506fd2`
-- Production policy SHA-256: `ecf28c3d3bd001384f91f6934c11b095e89313450c6ef1d9fc0934620a213e3f`
-- Approved complete-tree SHA-256: `4d42fa3190d1e45f4bafce8c06a539d6e41bdc86d380b2cafb230eb6892ad633`
+- Release: `v3.1.0`
+- Revision: `c0c82fb682001177b855576e45f27cc5e786e4c4`
+- Audit SHA-256: `cb1f0416bf8da46a5218ec23f932f166366861c5b399bdbcf238e72a2da3d059`
+- Evidence map SHA-256: `232168ab30d86329a60d0a3cf1024c6f947535aaea47c03e76592d2f4f12983f`
+- Production policy SHA-256: `b8515dd494133c8cb0f2d2139b2e92dfa4afa2d6175b9aa501042dc8c81c81a2`
+- Approved complete-tree SHA-256: `3b473a920a815e10ada837e9f46f4990094a890e3e60bc4a4b9cae8e51d8671f`
 - Generated Skills: 136
 - Excluded Skills: 29
 - Evidence adaptation decisions: 872

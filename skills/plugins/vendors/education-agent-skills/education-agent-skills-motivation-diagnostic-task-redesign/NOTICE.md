@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `wellbeing-motivation-agency/motivation-diagnostic-task-redesign`
 - Source path: `skills/wellbeing-motivation-agency/motivation-diagnostic-task-redesign/SKILL.md`
-- Source SHA-256: `1b4717de6826f4cf803ef32f63cd4e854d3629165a28fc0e192aad38d358528e`
+- Source SHA-256: `d958b4276aed9a0862d56eb8cbb73d3a03dad00addc6aab9670eacd00756186e`
 - Generated Skill: `education-agent-skills-motivation-diagnostic-task-redesign`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/

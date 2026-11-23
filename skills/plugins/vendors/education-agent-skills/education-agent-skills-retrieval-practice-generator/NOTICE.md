@@ -3,11 +3,11 @@
 This Skill is adapted from Education Agent Skills by Gareth Manning.
 
 - Source: https://github.com/GarethManning/education-agent-skills
-- Snapshot: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Snapshot: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
 - Upstream Skill: `memory-learning-science/retrieval-practice-generator`
 - Source path: `skills/memory-learning-science/retrieval-practice-generator/SKILL.md`
-- Source SHA-256: `01182f519b7dfc6a5a204b3e49b26282f879f8b59d233fcaf1daafc3d7e43516`
+- Source SHA-256: `e55101e427042173034785a11d3acc42d0532c27317d46bf0b89870ac092feeb`
 - Generated Skill: `education-agent-skills-retrieval-practice-generator`
 - License: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/
