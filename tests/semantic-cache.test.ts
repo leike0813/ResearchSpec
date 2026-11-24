@@ -118,7 +118,16 @@ void test("concurrent processes recover a dead owner without sharing mutation ow
       await writeFile(path.join(root, directory, "owner.json"), JSON.stringify({ pid: exited.pid, token: directory }));
     }
     const moduleUrl = new URL("../src/procedures/cache.js", import.meta.url).href;
-    const source = `import { acquireSemanticCacheLock } from ${JSON.stringify(moduleUrl)};
+    const source = `import fs from "node:fs/promises";
+      import { syncBuiltinESMExports } from "node:module";
+      const rename = fs.rename;
+      fs.rename = async () => {
+        fs.rename = rename;
+        syncBuiltinESMExports();
+        throw Object.assign(new Error("Transient rename denial"), { code: "EPERM" });
+      };
+      syncBuiltinESMExports();
+      const { acquireSemanticCacheLock } = await import(${JSON.stringify(moduleUrl)});
       try {
         const release = await acquireSemanticCacheLock(process.argv[1]);
         process.send("acquired");

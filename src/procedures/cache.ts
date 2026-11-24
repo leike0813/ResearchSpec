@@ -3,6 +3,7 @@ import { lstat, mkdir, readFile, readdir, realpath, rename, rm, stat, writeFile 
 import { homedir } from "node:os";
 import path from "node:path";
 import process from "node:process";
+import { setTimeout as delay } from "node:timers/promises";
 
 export type SemanticCacheKind = "runtime" | "model" | "index" | "staging";
 export interface SemanticCacheEntry { kind: SemanticCacheKind; path: string; bytes: number }
@@ -185,7 +186,7 @@ export async function acquireSemanticCacheLock(cacheRoot: string): Promise<() =>
           if (currentOwner?.pid !== previous.pid || currentOwner.token !== previous.token) {
             throw new SemanticCacheError("cache_busy", `The semantic cache lock changed during recovery: ${root}`);
           }
-          await discardRecoveredLock(lockPath);
+          await discardRecoveredLock(lockPath, claimPath);
           continue;
         }
         throw new SemanticCacheError("cache_busy", `The semantic cache recovery owner changed: ${root}`);
@@ -209,16 +210,30 @@ export async function acquireSemanticCacheLock(cacheRoot: string): Promise<() =>
       || recoveryStillOurs?.pid !== process.pid || recoveryStillOurs.token !== recoveryToken) {
       throw new SemanticCacheError("cache_busy", `The semantic cache lock changed during recovery: ${root}`);
     }
-    await discardRecoveredLock(lockPath);
+    await discardRecoveredLock(lockPath, recoveryPath);
   }
   throw new SemanticCacheError("cache_busy", `The semantic cache lock changed during recovery: ${root}`);
 }
 
-async function discardRecoveredLock(lockPath: string): Promise<void> {
+async function discardRecoveredLock(lockPath: string, claimPath: string): Promise<void> {
   // Detach the directory before deletion so contenders cannot add entries to it.
   const discarded = `${lockPath}-discarded-${randomUUID()}`;
-  await rename(lockPath, discarded);
-  await rm(discarded, { recursive: true, force: true });
+  for (let retry = 0; ; retry += 1) {
+    try {
+      await rename(lockPath, discarded);
+      break;
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (code !== "EPERM" && code !== "EACCES" && code !== "EBUSY") throw error;
+      if (retry === 5) {
+        await rm(claimPath, { recursive: true, force: true, maxRetries: 3 }).catch(() => undefined);
+        throw new SemanticCacheError("cache_busy", `The semantic cache lock directory is busy: ${lockPath}`);
+      }
+      // Windows can deny a directory rename while a contender reads its owner.
+      await delay(50 * (retry + 1));
+    }
+  }
+  await rm(discarded, { recursive: true, force: true, maxRetries: 3 });
 }
 
 async function assertManagedCandidate(root: string, entry: SemanticCacheEntry): Promise<void> {
