@@ -26,6 +26,8 @@ researchspec instructions procedure:<procedure-id>
 | `academic-pipeline` | 编排研究、写作、审阅和修订 |
 | `sr-screener` | 系统综述筛选、排除复核和 PRISMA 报告 |
 
+准备或更新 `sr-screener` 工作目录需要 POSIX 文件锁。Windows 用户可在 WSL 中运行该流程。
+
 五个 ARSU 工作流、三个 Companion 工作流、核心能力和插件扩展都是隐藏的 Procedure，不会投影到宿主 Skill 目录。插件 Procedure 只有在选择领域、确认可用并验证 manifest hash 后才会加载；其内容是静态审阅材料，ResearchSpec 不执行它。
 
 ## 可选 Zotero Adapter

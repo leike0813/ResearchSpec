@@ -1,7 +1,7 @@
 # ARSU Anchor Conversion — v3.24.4-23807f9
 
 - registry SHA-256: `da02eb072eeafec909c0d406cdb30e8cd4cb9c075d3dc4ae481aa08723c8de31`
-- packages tree SHA-256: `7648e3141e1d5756ded8494ceceb3c82ba32aa69dbe8314bb1a1b23166149cec`
+- packages tree SHA-256: `7a3b6232f6bd1dea8624d1810e4898b5ce15ee55d528990917bebd5a907cd6b4`
 - capability count: 57 · operational: 57
 
 ## Capability Packages
@@ -33,7 +33,7 @@
 | `design-methodology-design` | Methodology Design | design | producer | llm | required | operational | 1/1 | 4 | 1 | 6 | `0930c90fdcbc` |
 | `design-research-question-formulation` | Research Question Formulation | design | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `e236cdc1b966` |
 | `design-review-panel-config` | Review Panel Configuration | design | producer | llm | required | operational | 1/1 | 2 | 1 | 4 | `8898e588549b` |
-| `design-review-response-intake` | Review Response Intake | design | producer | mixed | none | operational | 4/2 | 6 | 1 | 44 | `678e26990197` |
+| `design-review-response-intake` | Review Response Intake | design | producer | mixed | none | operational | 4/2 | 6 | 1 | 40 | `678e26990197` |
 | `design-review-response-workboard-planning` | Review Response Workboard Planning | design | producer | mixed | required | operational | 1/1 | 12 | 1 | 44 | `9e3d9a6bfb88` |
 | `design-writing-intake` | Writing Intake | design | producer | llm | required | operational | 1/1 | 3 | 1 | 5 | `ecf071369c3f` |
 | `discovery-literature-monitoring` | Literature Monitoring | discovery | producer | llm | required | operational | 1/1 | 1 | 1 | 3 | `5085f65eba27` |
@@ -46,7 +46,7 @@
 | `generation-humanization-reference` | Paper Humanizer Reference Mode | generation | observer | llm | none | operational | 0/0 | 1 | 1 | 3 | `21163e55acf6` |
 | `generation-manuscript-drafting` | Manuscript Drafting | generation | producer | llm | required | operational | 3/1 | 5 | 1 | 7 | `fcee584a7e1b` |
 | `generation-report-compilation` | Research Report Compilation | generation | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `8f46c5fc0613` |
-| `generation-review-response-round` | Review Response Round | generation | producer | mixed | required | operational | 1/4 | 13 | 1 | 51 | `dbd50fb00c01` |
+| `generation-review-response-round` | Review Response Round | generation | producer | mixed | required | operational | 1/4 | 13 | 1 | 48 | `dbd50fb00c01` |
 | `judgment-devils-advocate-stress-test` | Devil's Advocate Stress Test | judgment | checker | llm | required | operational | 2/1 | 2 | 1 | 4 | `ae4972d22aee` |
 | `judgment-editorial-judgment` | Editorial Judgment | judgment | producer | llm | required | operational | 2/1 | 2 | 1 | 4 | `a033ffb4c83c` |
 | `judgment-review-synthesis` | Review Synthesis | judgment | producer | llm | required | operational | 3/1 | 1 | 1 | 3 | `44799f3b0fae` |

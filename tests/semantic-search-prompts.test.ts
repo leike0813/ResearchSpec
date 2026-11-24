@@ -42,6 +42,12 @@ void test("non-TTY output reports stage summaries and the final model counter", 
 void test("TTY renderer accepts an isolated terminal stream and stop is safe", async () => {
   const output = capturedStream(true);
   const progress = createSemanticSearchProgress(context(), output.stream);
+  // ora renders a spinner only when is-interactive accepts the stream, and that
+  // check reads CI and TERM from the environment, so pin both for this test.
+  const ci = process.env.CI;
+  const term = process.env.TERM;
+  delete process.env.CI;
+  process.env.TERM = "xterm-256color";
   try {
     progress.onProgress(event("runtime", "started"));
     progress.onProgress(event("model", "started"));
@@ -52,6 +58,8 @@ void test("TTY renderer accepts an isolated terminal stream and stop is safe", a
     assert.ok(output.read().includes("50%"));
   } finally {
     progress.stop();
+    if (ci === undefined) delete process.env.CI; else process.env.CI = ci;
+    if (term === undefined) delete process.env.TERM; else process.env.TERM = term;
   }
   progress.stop();
   assert.doesNotThrow(() => progress.onProgress(event("cache", "reused")));

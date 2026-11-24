@@ -198,6 +198,7 @@ void test("own-vendor delivery assets freeze raw byte identities and fail check 
         { path: FIXTURE_INJECT, sha256: fixtureSha(INJECT_BODY) },
       ],
     });
+    await writeText(path.join(fixtureRoot, "skills/capabilities/fixture-capability/__pycache__/fixture.pyc"), "local Python cache");
     const ok = runMaintenance(fixtureRoot, "check", FIXTURE_VENDOR, FIXTURE_ANCHOR);
     assert.equal(ok.status, 0, ok.stderr);
     assert.equal(ok.stdout.trim(), `OK ${FIXTURE_VENDOR}@${FIXTURE_ANCHOR}`);

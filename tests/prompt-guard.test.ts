@@ -16,6 +16,12 @@ async function plan(root: string, tools: string[], existing: ManagedInstallation
   return planPaperHumanizerHooks({ projectRoot: root, selectedToolIds: tools, reconciledToolIds: reconciled, existingInstallations: existing, enabled });
 }
 
+function runHook(file: string, options: { cwd: string; input: string; encoding: "utf8" }): string {
+  return process.platform === "win32"
+    ? execFileSync(process.execPath, [file], options)
+    : execFileSync(file, [], options);
+}
+
 void test("all reviewed native projections install and inject on successive turns", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-guard-'$`()-"));
   try {
@@ -50,17 +56,20 @@ void test("all reviewed native projections install and inject on successive turn
           }
         }
       } else {
-        let commands: string[];
-        if (definition.format === "script") commands = [JSON.stringify(file)];
+        let commands: Array<{ shell: string; command: string }>;
+        if (definition.format === "script") commands = [{ shell: "script", command: file }];
         else {
           const config: unknown = JSON.parse(await readFile(file, "utf8"));
-          const matches = JSON.stringify(config).match(/"(?:command|bash)":"((?:\\.|[^"\\])*)"/g);
-          assert.ok(matches);
-          commands = matches.map((entry: string) => JSON.parse(`"${entry.slice(entry.indexOf(":") + 2, -1)}"`) as string);
+          commands = [...JSON.stringify(config).matchAll(/"(command|bash|powershell)":"((?:\\.|[^"\\])*)"/g)]
+            .map(([, shell, command]) => ({ shell, command: JSON.parse(`"${command}"`) as string }))
+            .filter(({ shell }) => process.platform === "win32" ? shell !== "bash" : shell !== "powershell");
+          assert.ok(commands.length, tool.id);
         }
-        for (const cmd of commands) for (let turn = 0; turn < 2; turn++) {
+        for (const { shell, command: cmd } of commands) for (let turn = 0; turn < 2; turn++) {
           const options = { cwd: tmpdir(), input: JSON.stringify({ transformedPrompt: `original ${String(turn)}` }), encoding: "utf8" as const };
-          const stdout: string = definition.format === "script" ? execFileSync(file, [], options) : execSync(cmd, options);
+          const stdout: string = definition.format === "script" ? runHook(file, options)
+            : shell === "powershell" ? execFileSync("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", cmd], options)
+            : execSync(cmd, options);
           assert.ok(stdout.includes(guard) || JSON.stringify(JSON.parse(stdout)).includes(JSON.stringify(guard).slice(1, -1)), tool.id);
           if (definition.format === "copilot" && cmd.includes("copilot-transform")) assert.equal((JSON.parse(stdout) as { modifiedTransformedPrompt: string }).modifiedTransformedPrompt, `original ${String(turn)}\n\n${guard}`);
         }

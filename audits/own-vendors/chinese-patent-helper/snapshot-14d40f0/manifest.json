@@ -40,7 +40,7 @@
     ]
   },
   "review": {
-    "parity_report_path": "/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json",
+    "parity_report_path": "artifacts/generated/capability-parity-report.json",
     "parity_artifact_path": "audits/own-vendors/chinese-patent-helper/snapshot-14d40f0/artifacts/parity-packages.json",
     "parity_artifact_sha256": "33111e1e99ef1436a8ad7748358680dadbc3aa69d356cc797b05b5f4ea5fde24",
     "package_count": 1,
@@ -56,6 +56,6 @@
   "maintenance": {
     "skill_sha256": "9f266b590f0a4e0c1c1b13faca9991ac29ccb0e4cc46640dfeca42f456cfa0ab",
     "catalog_sha256": "ebae5463c89f91d75653882f51fa33ee48afe5147c9429886b64ddc4529f59f7",
-    "record_sha256": "b0afba7aba1a844163d23571518fedd1ae288b7187e57f7bcfdc47bebabf1056"
+    "record_sha256": "50a46d92d6fd734c2cf6a0c8061f1e58f7de0832f90582a57336e43663e05312"
   }
 }

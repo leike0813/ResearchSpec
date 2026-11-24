@@ -59,7 +59,7 @@ void test("changed-file discovery checks Unicode and newline filenames", async (
     execFileSync("git", ["clone", "--quiet", "--shared", "--no-checkout", ROOT, root], { stdio: "pipe" });
     const catalogPath = path.join(root, "catalog.json");
     await writeFile(catalogPath, JSON.stringify({ schema_version: "1", exemptions: [] }));
-    await writeFile(path.join(root, "附图\n说明.md"), "authored whitespace  \n");
+    await writeFile(path.join(root, process.platform === "win32" ? "附图 说明.md" : "附图\n说明.md"), "authored whitespace  \n");
     const result = spawnSync(process.execPath, [CHECKER, "--root", root, "--catalog", catalogPath], { encoding: "utf8" });
     assert.notEqual(result.status, 0);
     assert.match(result.stderr, /附图/);

@@ -36,6 +36,8 @@ registries at runtime; it is not a second persisted registry.
 | `academic-pipeline` | Cross-stage orchestration over research, writing, review, and revision |
 | `sr-screener` | Screening, exclusion review, and PRISMA reporting for a systematic review |
 
+Preparing or updating an `sr-screener` workspace requires POSIX file locking. On Windows, run that workflow in WSL.
+
 ## The hidden inventory
 
 The five ARSU workflows, the other three Companion workflows, the registered core

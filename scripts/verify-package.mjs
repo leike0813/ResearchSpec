@@ -92,17 +92,18 @@ try {
   ].join("\n"), "utf8");
   run(process.execPath, ["annotation-intake-consumer.mjs"], installDirectory);
   const handbookDigest = await verifyPackagedDocumentation(installedPackageRoot, metadata.files.map((file) => file.path));
-  const bin = path.join(installDirectory, "node_modules", ".bin", process.platform === "win32" ? "researchspec.cmd" : "researchspec");
-  const version = run(bin, ["--version"], installDirectory).stdout.trim();
+  const shim = path.join(installDirectory, "node_modules", ".bin", process.platform === "win32" ? "researchspec.cmd" : "researchspec");
+  const version = run(shim, ["--version"], installDirectory).stdout.trim();
   assert(version === sourcePackage.version, `Installed CLI version mismatch: ${version}`);
-  const help = run(bin, ["--help"], installDirectory).stdout;
+  const bin = path.resolve(installedPackageRoot, installedPackage.bin.researchspec);
+  const help = runCli(bin, ["--help"], installDirectory).stdout;
   const commandSection = help.split(/Commands:\r?\n/)[1] ?? "";
   const commands = [...commandSection.matchAll(/^  ([a-z][a-z-]*)(?:\s|$)/gm)]
     .map((match) => match[1])
     .filter((command) => command && command !== "help")
     .sort();
   assert(equal(commands, expectedCommands), `Installed command surface mismatch: ${commands.join(", ")}`);
-  const pluginList = JSON.parse(run(bin, ["plugin", "list", "--json"], installDirectory).stdout);
+  const pluginList = JSON.parse(runCli(bin, ["plugin", "list", "--json"], installDirectory).stdout);
   const domainIds = (pluginList.data?.domains ?? []).map((item) => item.domain_id).sort();
   assert(equal(domainIds, expectedDomains), `Installed domain catalog mismatch: ${domainIds.join(", ")}`);
   const packagedEducationRoot = path.join(installDirectory, "node_modules", "researchspec", "skills", "plugins", "vendors", "education-agent-skills");
@@ -118,7 +119,7 @@ try {
   }
 
   const environment = { ...process.env, CODEX_HOME: codexHome };
-  run(bin, ["init", projectDirectory, "--tools", "codex", "--delivery", "skills", "--literature-adapters", "zotero-library", "--json"], installDirectory, environment);
+  runCli(bin, ["init", projectDirectory, "--tools", "codex", "--delivery", "skills", "--literature-adapters", "zotero-library", "--json"], installDirectory, environment);
   const currentWorkspace = path.join(projectDirectory, "researchspec");
   const currentConfig = parseYaml(await readFile(path.join(currentWorkspace, "config.yaml"), "utf8"));
   assert(currentConfig?.schema_version === "2", "Installed init did not create schema 2 config.");
@@ -127,20 +128,20 @@ try {
   await readFile(path.join(installedPackageRoot, "semantic-search/runtime/package-lock.json"), "utf8");
   assert(semanticRuntime.dependencies?.["@huggingface/transformers"] === "3.8.1", "Packaged local runtime pin is missing.");
   assert(!installedPackage.dependencies?.["@huggingface/transformers"], "Semantic runtime must stay outside core dependencies.");
-  const discovery = JSON.parse(run(bin, ["list", "procedures", "--query", "系统检索文献并找出研究空白", "--json"], projectDirectory, environment).stdout);
+  const discovery = JSON.parse(runCli(bin, ["list", "procedures", "--query", "系统检索文献并找出研究空白", "--json"], projectDirectory, environment).stdout);
   assert(discovery.ok && discovery.data.retrieval.effective_mode === "offline", "Installed bilingual discovery failed.");
   assert(discovery.data.items.length > 0 && discovery.data.items.every((item) => Array.isArray(item.inputs) && Array.isArray(item.outputs) && item.match), "Installed discovery lost declared roles or match evidence.");
   assert(discovery.data.items.every((item) => item.eligibility?.state), "Installed discovery lost static eligibility facts.");
   const materialsPath = path.join(projectDirectory, "materials.json");
   await writeFile(materialsPath, JSON.stringify({ inputs: [{ role: "manuscript_source", value: "Dialogue draft" }], outputs: [{ role: "intake_report", path: "intake.md" }] }), "utf8");
   const materialSelector = "procedure:design-review-response-intake";
-  const materialPacket = JSON.parse(run(bin, ["instructions", materialSelector, "--input", materialsPath, "--json"], projectDirectory, environment).stdout);
+  const materialPacket = JSON.parse(runCli(bin, ["instructions", materialSelector, "--input", materialsPath, "--json"], projectDirectory, environment).stdout);
   assert(materialPacket.ok && materialPacket.data.packet.material_inspection.outputs[0].status === "planned", "Installed optional planned material binding failed.");
-  const materialCheck = JSON.parse(run(bin, ["check", materialSelector, "--input", materialsPath, "--json"], projectDirectory, environment).stdout);
+  const materialCheck = JSON.parse(runCli(bin, ["check", materialSelector, "--input", materialsPath, "--json"], projectDirectory, environment).stdout);
   assert(materialCheck.ok && materialCheck.data.material_inspection.outputs[0].status === "unavailable", "Installed advisory delivered-output inspection failed.");
   assert(!await pathExists(path.join(projectDirectory, "intake.md")), "Material inspection created a planned output.");
   const beforeSearchPreview = await readFile(path.join(currentWorkspace, "config.yaml"), "utf8");
-  const preview = JSON.parse(run(bin, ["update", "--procedure-search", "hybrid", "--dry-run", "--json"], projectDirectory, environment).stdout);
+  const preview = JSON.parse(runCli(bin, ["update", "--procedure-search", "hybrid", "--dry-run", "--json"], projectDirectory, environment).stdout);
   assert(preview.data?.procedure_search?.preparation === "planned", "Packaged semantic preparation preview is missing.");
   assert(await readFile(path.join(currentWorkspace, "config.yaml"), "utf8") === beforeSearchPreview, "Semantic dry-run changed workspace configuration.");
   assert(equal(currentConfig?.literature_adapters?.selected, ["zotero-library"]), "Installed init did not persist the selected literature adapter.");
@@ -191,7 +192,7 @@ try {
     ? (await readdir(promptRoot)).filter((file) => file.startsWith("researchspec-") && file.endsWith(".md")).sort()
     : [];
   assert(prompts.length === 0, `Legacy Codex prompts were unexpectedly generated: ${prompts.join(", ")}`);
-  run(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
+  runCli(bin, ["check", "all", "--strict", "--json"], projectDirectory, environment);
   await verifyInstalledMinimalJourney(bin, projectDirectory, environment);
   await verifyInstalledAcademicPipelineJourney(bin, projectDirectory, environment);
   const filingSelector = "procedure:generation-chinese-patent-filing";
@@ -201,16 +202,16 @@ try {
     filingBeforeSelectionEnvelope.error?.code === "procedure_domain_selection_required",
     `Packaged Chinese patent filing Procedure was available before domain selection: ${filingBeforeSelection.stdout}${filingBeforeSelection.stderr}`,
   );
-  const ipPreview = JSON.parse(run(bin, ["plugin", "install", "intellectual-property-materials", "--dry-run", "--yes", "--json"], projectDirectory, environment).stdout);
+  const ipPreview = JSON.parse(runCli(bin, ["plugin", "install", "intellectual-property-materials", "--dry-run", "--yes", "--json"], projectDirectory, environment).stdout);
   assert(ipPreview.data?.resolved_capability_ids?.includes("generation-chinese-patent-filing"), "Packaged installation preview did not resolve the Chinese patent filing capability.");
   assert(equal(ipPreview.data.resolved_profile_ids.sort(), [...expectedOptionalProfiles, "plugin-software-copyright-materials"].sort()), "Packaged installation preview has an incomplete materials domain.");
-  run(bin, ["instructions", "profile:patent-informed-paper", "--json"], projectDirectory, environment);
-  const ipInstall = JSON.parse(run(bin, ["plugin", "install", "intellectual-property-materials", "--yes", "--json"], projectDirectory, environment).stdout);
+  runCli(bin, ["instructions", "profile:patent-informed-paper", "--json"], projectDirectory, environment);
+  const ipInstall = JSON.parse(runCli(bin, ["plugin", "install", "intellectual-property-materials", "--yes", "--json"], projectDirectory, environment).stdout);
   assert(ipInstall.data?.resolved_capability_ids?.includes("generation-chinese-patent-filing"), "Packaged installation did not resolve the Chinese patent filing capability.");
-  run(bin, ["instructions", "profile:research-to-patent", "--json"], projectDirectory, environment);
-  run(bin, ["instructions", filingSelector, "--json"], projectDirectory, environment);
+  runCli(bin, ["instructions", "profile:research-to-patent", "--json"], projectDirectory, environment);
+  runCli(bin, ["instructions", filingSelector, "--json"], projectDirectory, environment);
 
-  run(bin, ["init", allToolsProjectDirectory, "--tools", expectedProjectToolIds.join(","), "--delivery", "both", "--json"], installDirectory, environment);
+  runCli(bin, ["init", allToolsProjectDirectory, "--tools", expectedProjectToolIds.join(","), "--delivery", "both", "--json"], installDirectory, environment);
   await verifyAllProjectToolDelivery(allToolsProjectDirectory, handbookDigest);
 
   const installedConfigBeforeRemovedOptions = await readFile(path.join(currentWorkspace, "config.yaml"), "utf8");
@@ -674,12 +675,15 @@ function run(command, args, cwd, env = process.env) {
   return result;
 }
 
+function runCli(bin, args, cwd, env = process.env) {
+  return run(process.execPath, [bin, ...args], cwd, env);
+}
+
 function runExpectFailure(command, args, cwd, env = process.env) {
-  const result = spawnSync(command, args, {
+  const result = spawnSync(process.execPath, [command, ...args], {
     cwd,
     env,
     encoding: "utf8",
-    shell: process.platform === "win32" && command.toLowerCase().endsWith(".cmd"),
     stdio: ["ignore", "pipe", "pipe"],
     maxBuffer: 64 * 1024 * 1024,
   });
@@ -921,7 +925,7 @@ async function verifyInstalledAcademicPipelineJourney(bin, projectDirectory, env
 }
 
 function runJson(command, args, cwd, env = process.env) {
-  const result = run(command, args, cwd, env);
+  const result = runCli(command, args, cwd, env);
   const envelope = JSON.parse(result.stdout);
   assert(envelope.ok === true, `${command} ${args.join(" ")} returned a failed JSON envelope.`);
   return envelope;

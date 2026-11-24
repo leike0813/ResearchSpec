@@ -24,7 +24,7 @@
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json` | `4fedd1bfb0d113b5a26c29e32fa97eaaca6510c2b8d4f629de8b7b391bc9b08b` |
+| parity report | `artifacts/generated/capability-parity-report.json` | `4fedd1bfb0d113b5a26c29e32fa97eaaca6510c2b8d4f629de8b7b391bc9b08b` |
 | parity package slice | `audits/own-vendors/chinese-patent-helper/snapshot-14d40f0/artifacts/parity-packages.json` | `33111e1e99ef1436a8ad7748358680dadbc3aa69d356cc797b05b5f4ea5fde24` |
 
 ## Delivery Assets

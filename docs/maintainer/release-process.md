@@ -15,6 +15,7 @@ vendor paths and reviewed bytes. Run the same gates as the
 Node tests that exercise Python use the shared local uv environment by default.
 The hosted workflow sets `RESEARCHSPEC_TEST_PYTHON_PROJECT` to the locked
 test project in `tests/python` and puts its environment outside the checkout.
+The review workspace tests use Pandoc. Hosted runners install Pandoc 3.8.3.
 
 ```sh
 git submodule update --init

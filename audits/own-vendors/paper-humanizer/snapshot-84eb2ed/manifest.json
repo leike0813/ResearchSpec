@@ -47,7 +47,7 @@
     ]
   },
   "review": {
-    "parity_report_path": "/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json",
+    "parity_report_path": "artifacts/generated/capability-parity-report.json",
     "parity_artifact_path": "audits/own-vendors/paper-humanizer/snapshot-84eb2ed/artifacts/parity-packages.json",
     "parity_artifact_sha256": "8a0fb849e0e23dd71f9c9f4ff4e1233d6bf3e3b6fc66ddbded17a529647d1705",
     "package_count": 4,
@@ -63,6 +63,6 @@
   "maintenance": {
     "skill_sha256": "9f266b590f0a4e0c1c1b13faca9991ac29ccb0e4cc46640dfeca42f456cfa0ab",
     "catalog_sha256": "ebae5463c89f91d75653882f51fa33ee48afe5147c9429886b64ddc4529f59f7",
-    "record_sha256": "7d8b2518b02a3875bc185062c6fc3ed072952e36939b9b069bc7cb07232c5330"
+    "record_sha256": "3a20236792f640cab05ddd8ea7dcb78ee381166e6dac9087542385d7538b4a6b"
   }
 }

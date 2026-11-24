@@ -18,6 +18,8 @@ python3 validators/pdf-read-preflight.py pdf /absolute/request.json --generate
 
 CLI 从当前环境的 `PATH` 调用 `python3`。在 Windows 上如果 Python 只提供 `python.exe`，运行脚本节点前需让同一个 Python 3 环境也提供 `python3` 调用名。使用 JSON 的检查通常只需标准库。YAML 输入需要 PyYAML，PDF 解析需要 pypdf。PDF 解析不可用时报告为 `UNAVAILABLE`。依赖由宿主环境提供。
 
+系统综述筛选需要在支持 POSIX 文件锁的环境中准备和更新筛选工作目录。Windows 用户可在 WSL 中运行这部分流程。
+
 引用与污染检查消费由用户授权的检索工具取得的结构化 resolver 观察，不会自行联网。缺少观察时保留 `unresolvable` 或 `not_checked`。摘要保留这些状态，不把它们算成查证成功。
 
 报告通过重算验证只表示计算一致。报告中的 `FAIL`、`UNAVAILABLE`、`not_checked` 和适用范围仍需阅读；正式 Gate 的人类确认不会被脚本替代。投稿检查仅承诺报告中列出的文件、校验和、披露文件及显式文本格式检查；未提供的期刊政策和未执行的元数据检查保持显式未检查。护照检查是材料记录的一致性检查，不授予恢复运行或研究授权。

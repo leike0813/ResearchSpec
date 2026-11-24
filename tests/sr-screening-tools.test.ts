@@ -12,13 +12,14 @@ const TOOL = path.join(ROOT, "src/arsu-converter/authoring/checkers/sr-screening
 const run = (args: string[]) => spawnSync("uv", uvPythonArgs([TOOL, ...args]), { cwd: ROOT, encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" } });
 const python = (args: string[]) => spawnSync("uv", uvPythonArgs(args), { cwd: ROOT, encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" } });
 const parseJson = (text: string): unknown => JSON.parse(text);
+const requiresPosixLock = { skip: process.platform === "win32" && "Screening workspace writes require a POSIX file lock" };
 const at = <T>(rows: T[], index: number): T => {
   const value = rows[index];
   if (value === undefined) throw new Error(`missing array item ${String(index)}`);
   return value;
 };
 
-void test("SR screening CLI prepares, safely merges, resumes, QC checks, and exports", async () => {
+void test("SR screening CLI prepares, safely merges, resumes, QC checks, and exports", requiresPosixLock, async () => {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-sr-screening-"));
   try {
     const work = path.join(root, "work");
@@ -145,7 +146,7 @@ void test("SR screening CLI prepares, safely merges, resumes, QC checks, and exp
   }
 });
 
-void test("SR screening combines multiple TA batches and merges only retrieved FT records", async () => {
+void test("SR screening combines multiple TA batches and merges only retrieved FT records", requiresPosixLock, async () => {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-sr-screening-multibatch-"));
   try {
     const work = path.join(root, "work"), input = path.join(root, "studies.ris"), config = path.join(root, "config.json"), protocol = path.join(root, "screening_protocol.md");
@@ -230,6 +231,21 @@ void test("SR screening combines multiple TA batches and merges only retrieved F
       const artifact = format === "ris" ? path.join(root, "ft-ris-exclude.ris") : output;
       assert.ok((await readFile(artifact, "utf8")).length > 0, `FT ${format} export is observable`);
     }
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+void test("SR screening refuses to prepare a workspace without a supported file lock", { skip: process.platform !== "win32" }, async () => {
+  const root = await mkdtemp(path.join(tmpdir(), "researchspec-sr-screening-lock-"));
+  try {
+    const work = path.join(root, "work");
+    const input = path.join(root, "studies.ris");
+    await writeFile(input, "TY  - JOUR\nTI  - Trial report\nER  -\n");
+    const prepared = run(["prepare", work, input]);
+    assert.equal(prepared.status, 2, prepared.stderr);
+    assert.match(prepared.stderr, /workspace locking is unavailable/);
+    await assert.rejects(readFile(path.join(work, "records.json")), { code: "ENOENT" });
   } finally {
     await rm(root, { recursive: true, force: true });
   }

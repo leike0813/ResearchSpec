@@ -29,10 +29,10 @@
       "transform-review-response-comment-atomization"
     ],
     "registry_subset_sha256": "3d05991643ea9db66cdefdb0e034673f1325780f52feb008a8543ad9ba183174",
-    "packages_tree_sha256": "b63825b84d287d2d9e66e58a41f950d430fd41fd8910ae0340c0957e68f2b81d"
+    "packages_tree_sha256": "9bdff81e08475670bdc3050c67e956997e573c329f0d78db77a2ea87d0191e92"
   },
   "review": {
-    "parity_report_path": "/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json",
+    "parity_report_path": "artifacts/generated/capability-parity-report.json",
     "parity_artifact_path": "audits/own-vendors/revision-master/snapshot-13e69610/artifacts/parity-packages.json",
     "parity_artifact_sha256": "d73c59a697258db14ca611c576721827b5bfde43907c83f4d759b9eb23974d73",
     "package_count": 5,
@@ -48,6 +48,6 @@
   "maintenance": {
     "skill_sha256": "9f266b590f0a4e0c1c1b13faca9991ac29ccb0e4cc46640dfeca42f456cfa0ab",
     "catalog_sha256": "ebae5463c89f91d75653882f51fa33ee48afe5147c9429886b64ddc4529f59f7",
-    "record_sha256": "676c8eba8d22893ff094615ef46ceac44af001f8b82f3560a0fabd1653daac25"
+    "record_sha256": "27ebcf7c74c7a465cf83ef61f09e52ee25dea995280b223f9660c1cfda536d73"
   }
 }

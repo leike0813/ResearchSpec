@@ -102,11 +102,14 @@ export async function checkZoteroIdempotence(repoRoot: string): Promise<{ ok: bo
 
 async function generateZoteroTree(repoRoot: string, sourceRoot: string, outputRoot: string, audit: ZoteroBundleAudit): Promise<ZoteroConversionManifest> {
   const license = await readFile(path.join(repoRoot, LICENSE_PATH));
+  const generatedExecutablePaths = new Set<string>();
   for (const entry of audit.files.filter((file) => file.disposition === "included")) {
     const targetPath = outputPathFor(entry.path);
     const source = await readFile(path.join(sourceRoot, entry.path));
     const content = adaptIncludedFile(entry.path, source);
-    await writeGeneratedFile(path.join(outputRoot, targetPath), content, entry.path.startsWith("bin/") && !entry.path.endsWith(".sha256"));
+    const executable = entry.path.startsWith("bin/") && !entry.path.endsWith(".sha256");
+    if (executable) generatedExecutablePaths.add(posix(targetPath));
+    await writeGeneratedFile(path.join(outputRoot, targetPath), content, executable);
   }
   await writeGeneratedFile(path.join(outputRoot, "profile.template.json"), await readFile(path.join(sourceRoot, "skills/zotero-bridge-cli/assets/profile.template.json")), false);
 
@@ -123,7 +126,10 @@ async function generateZoteroTree(repoRoot: string, sourceRoot: string, outputRo
     await writeGeneratedFile(path.join(skillRoot, "DERIVATION.json"), `${JSON.stringify({ ...JSON.parse(derivation) as object, generated_skill_id: skillId }, null, 2)}\n`, false);
   }
 
-  const generatedFiles = await fileInventory(outputRoot);
+  const generatedFiles = (await fileInventory(outputRoot)).map((entry) => ({
+    ...entry,
+    executable: generatedExecutablePaths.has(entry.path),
+  }));
   const auditBytes = await readFile(path.join(repoRoot, ZOTERO_BUNDLE_AUDIT_RELATIVE_PATH));
   const manifest: ZoteroConversionManifest = {
     schema_version: "1",

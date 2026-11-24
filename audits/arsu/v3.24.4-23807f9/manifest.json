@@ -16,7 +16,7 @@
     "registry_sha256": "da02eb072eeafec909c0d406cdb30e8cd4cb9c075d3dc4ae481aa08723c8de31",
     "capability_count": 57,
     "operational_count": 57,
-    "packages_tree_sha256": "7648e3141e1d5756ded8494ceceb3c82ba32aa69dbe8314bb1a1b23166149cec"
+    "packages_tree_sha256": "7a3b6232f6bd1dea8624d1810e4898b5ce15ee55d528990917bebd5a907cd6b4"
   },
   "review": {
     "parity_report_sha256": "4fedd1bfb0d113b5a26c29e32fa97eaaca6510c2b8d4f629de8b7b391bc9b08b",
@@ -32,7 +32,7 @@
   },
   "maintenance": {
     "skill_sha256": "64376b16717570647942e654fcc087e65f8ff54dffcab25a3acd09a352ce28a2",
-    "record_sha256": "f765c74d095eb20f2df86ad2f5b7668d6dfe0008e6fdb90f6beba642e30cfb72"
+    "record_sha256": "7445cfc896134a5df41889ce740d73289548b282e6cd62be7a1d18a529d7ebf7"
   },
   "schema_version": "1",
   "anchor_id": "v3.24.4-23807f9",

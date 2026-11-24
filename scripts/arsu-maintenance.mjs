@@ -5,7 +5,7 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
-import { fileSha, sha256 } from "./lib/vendor-maintenance.mjs";
+import { fileSha, isIgnored, sha256 } from "./lib/vendor-maintenance.mjs";
 
 const ROOT = process.cwd();
 const ARS_DIR = path.join(ROOT, "vendor", "ars");
@@ -33,6 +33,7 @@ function treeSha(root, includedRoots, registryContent, trackedFiles) {
   if (!trackedFiles) {
     const walk = (dir) => {
       for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+        if (isIgnored(entry.name)) continue;
         const target = path.join(dir, entry.name);
         if (dir === root && includedRoots && !includedRoots.has(entry.name)) continue;
         if (entry.isDirectory()) walk(target);
@@ -118,6 +119,7 @@ function capabilityRows() {
     const files = [];
     const walk = (dir) => {
       for (const item of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+        if (isIgnored(item.name)) continue;
         const target = path.join(dir, item.name);
         if (item.isDirectory()) walk(target);
         else files.push(path.relative(path.join(PACKAGES, entry.source_path), target).split(path.sep).join("/"));

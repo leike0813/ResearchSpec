@@ -71,10 +71,21 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.longpaths true
 
-      - name: Use the physical temporary directory on macOS
+      - name: Use a physical temporary directory outside the checkout hierarchy on macOS
         if: runner.os == 'macOS'
         shell: bash
-        run: printf 'TMPDIR=%s\n' "$(cd "$RUNNER_TEMP" && pwd -P)" >> "$GITHUB_ENV"
+        run: |
+          test_temp=$(mktemp -d /private/tmp/researchspec-ci.XXXXXX)
+          printf 'TMPDIR=%s\n' "$test_temp" >> "$GITHUB_ENV"
+
+      - name: Use the long temporary directory path on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $testTemp = Join-Path $env:RUNNER_TEMP 'researchspec-tmp'
+          New-Item -ItemType Directory -Force -Path $testTemp | Out-Null
+          "TEMP=$testTemp" >> $env:GITHUB_ENV
+          "TMP=$testTemp" >> $env:GITHUB_ENV
 
       - name: Check out source
         uses: actions/checkout@v6
@@ -115,6 +126,11 @@ jobs:
         run: uv sync --project tests/python --locked
         env:
           UV_PROJECT_ENVIRONMENT: ${{ runner.temp }}/researchspec-test-python
+
+      - name: Set up Pandoc for review workspace tests
+        uses: r-lib/actions/setup-pandoc@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2
+        with:
+          pandoc-version: '3.8.3'
 
       - name: Run public and focused tests
         run: pnpm test

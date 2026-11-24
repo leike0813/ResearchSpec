@@ -27,7 +27,7 @@
 
 | artifact | path | sha256 |
 |---|---|---|
-| parity report | `/home/joshua/Workspace/Code/JavaScript/ResearchSpec/artifacts/generated/capability-parity-report.json` | `4fedd1bfb0d113b5a26c29e32fa97eaaca6510c2b8d4f629de8b7b391bc9b08b` |
+| parity report | `artifacts/generated/capability-parity-report.json` | `4fedd1bfb0d113b5a26c29e32fa97eaaca6510c2b8d4f629de8b7b391bc9b08b` |
 | parity package slice | `audits/own-vendors/paper-humanizer/snapshot-84eb2ed/artifacts/parity-packages.json` | `8a0fb849e0e23dd71f9c9f4ff4e1233d6bf3e3b6fc66ddbded17a529647d1705` |
 
 ## Delivery Assets

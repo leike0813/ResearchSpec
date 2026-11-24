@@ -5,6 +5,7 @@ import { existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, writeFileS
 import path from "node:path";
 import process from "node:process";
 import { parse as parseYaml } from "yaml";
+import { isIgnored } from "./lib/vendor-maintenance.mjs";
 
 const ROOT = process.cwd();
 const AUDIT_ROOT = path.join(ROOT, "audits", "own-vendors");
@@ -12,7 +13,8 @@ const CATALOG_PATH = path.join(AUDIT_ROOT, "catalog.json");
 const MAINTENANCE_SKILL = path.join(ROOT, ".agents", "skills", "own-vendor-maintenance", "SKILL.md");
 const REGISTRY_PATH = path.join(ROOT, "skills", "capabilities", "registry.json");
 const PACKAGES = path.join(ROOT, "skills", "capabilities");
-const PARITY_REPORT_PATH = path.join(ROOT, "artifacts", "generated", "capability-parity-report.json");
+const PARITY_REPORT_RELATIVE = "artifacts/generated/capability-parity-report.json";
+const PARITY_REPORT_PATH = path.join(ROOT, PARITY_REPORT_RELATIVE);
 const RECORD_FILES = ["01-analysis.md", "02-ingestion.md", "03-conversion.md", "04-review.md", "05-semantic-review.md"];
 
 let currentVendor = null;
@@ -128,6 +130,7 @@ function capabilityRows(vendor) {
     const files = [];
     const walk = (dir) => {
       for (const item of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+        if (isIgnored(item.name)) continue;
         const target = path.join(dir, item.name);
         if (item.isDirectory()) walk(target);
         else files.push(path.relative(path.join(PACKAGES, entry.source_path), target).split(path.sep).join("/"));
@@ -186,6 +189,7 @@ function packageTreeSha(vendor) {
     if (!existsSync(root)) throw new Error(`Missing capability package: ${root}`);
     const walk = (dir) => {
       for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+        if (isIgnored(entry.name)) continue;
         const target = path.join(dir, entry.name);
         if (entry.isDirectory()) walk(target);
         else files.push(target);
@@ -232,8 +236,8 @@ function currentState(vendor, anchorId) {
     },
     ...(delivery ? { delivery } : {}),
     review: {
-      parity_report_path: PARITY_REPORT_PATH,
-      parity_artifact_path: path.relative(ROOT, parityArtifact),
+      parity_report_path: PARITY_REPORT_RELATIVE,
+      parity_artifact_path: path.relative(ROOT, parityArtifact).split(path.sep).join("/"),
       parity_artifact_sha256: existsSync(parityArtifact) ? fileSha(parityArtifact) : null,
       ...parity.summary,
     },

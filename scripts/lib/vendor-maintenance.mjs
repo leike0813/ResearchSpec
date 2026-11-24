@@ -11,6 +11,28 @@ export const RECORD_FILES = [
   "05-semantic-review.md",
 ];
 
+const REPOSITORY_PATH_FIELDS = {
+  upstream: ["root", "audit_path", "audit_report_path"],
+  advisory: ["root"],
+  extension: ["root"],
+  review: ["artifact_path"],
+  maintenance: ["skill_path", "catalog_path", "audit_readme_path"],
+};
+
+function canonicalMaintenanceState(state) {
+  const result = { ...state };
+  for (const [sectionName, fields] of Object.entries(REPOSITORY_PATH_FIELDS)) {
+    const section = result[sectionName];
+    if (section === null || typeof section !== "object") continue;
+    result[sectionName] = { ...section };
+    for (const field of fields) {
+      const value = result[sectionName][field];
+      if (typeof value === "string") result[sectionName][field] = value.replaceAll("\\", "/");
+    }
+  }
+  return result;
+}
+
 /**
  * Hash the supplied bytes without decoding them as text. Strings remain
  * supported for the canonical JSON/Markdown serializations built by the
@@ -161,7 +183,8 @@ export function createMaintenanceCommands({
   anchorCreatedAt,
 }) {
   const sync = () => syncTools({ root, catalog, displayName: vendorLabel });
-  const writeArtifact = (anchorId) => writeReviewArtifact({ anchorId, artifactDir, currentState, createdAt: anchorCreatedAt });
+  const canonicalState = (anchorId) => canonicalMaintenanceState(currentState(anchorId));
+  const writeArtifact = (anchorId) => writeReviewArtifact({ anchorId, artifactDir, currentState: canonicalState, createdAt: anchorCreatedAt });
 
   const records = (anchorId) => {
     writeRecords(anchorId);
@@ -177,7 +200,7 @@ export function createMaintenanceCommands({
     sync();
     writeArtifact(anchorId);
     writeRecords(anchorId);
-    const state = currentState(anchorId);
+    const state = canonicalState(anchorId);
     const dir = anchorDir(anchorId);
     mkdirSync(dir, { recursive: true });
     writeFileSync(path.join(dir, "manifest.json"), `${JSON.stringify(state, null, 2)}\n`, "utf8");
@@ -195,7 +218,7 @@ export function createMaintenanceCommands({
     const manifestPath = path.join(anchorDir(anchorId), "manifest.json");
     if (!existsSync(manifestPath)) throw new Error(`Missing anchor manifest: ${manifestPath}`);
     const manifest = json(manifestPath);
-    const state = currentState(anchorId);
+    const state = canonicalState(anchorId);
     const problems = [];
     for (const key of ["release", "revision", "content_file_count", "tree_sha256", "audit_path", "audit_sha256", "audit_report_path", "audit_report_sha256"]) {
       const issue = compareValue(["upstream", key], manifest.upstream?.[key], state.upstream[key]);
