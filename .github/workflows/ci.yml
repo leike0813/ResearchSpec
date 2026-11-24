@@ -78,15 +78,6 @@ jobs:
           test_temp=$(mktemp -d /private/tmp/researchspec-ci.XXXXXX)
           printf 'TMPDIR=%s\n' "$test_temp" >> "$GITHUB_ENV"
 
-      - name: Use the long temporary directory path on Windows
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $testTemp = Join-Path $env:RUNNER_TEMP 'researchspec-tmp'
-          New-Item -ItemType Directory -Force -Path $testTemp | Out-Null
-          "TEMP=$testTemp" >> $env:GITHUB_ENV
-          "TMP=$testTemp" >> $env:GITHUB_ENV
-
       - name: Check out source
         uses: actions/checkout@v6
         with:
@@ -103,6 +94,15 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
+
+      - name: Use a physical temporary directory outside the checkout hierarchy on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $testTemp = node -e "const fs = require('node:fs'); const path = require('node:path'); const root = fs.realpathSync.native(require('node:os').tmpdir()); console.log(fs.mkdtempSync(path.join(root, 'researchspec-ci-')));"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          "TEMP=$testTemp" >> $env:GITHUB_ENV
+          "TMP=$testTemp" >> $env:GITHUB_ENV
 
       - name: Install locked dependencies
         run: pnpm install --frozen-lockfile

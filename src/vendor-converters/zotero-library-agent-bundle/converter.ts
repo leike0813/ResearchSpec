@@ -248,7 +248,7 @@ async function walkFiles(root: string): Promise<string[]> {
     if (entry.isDirectory()) result.push(...await walkFiles(target));
     else if (entry.isFile()) result.push(target);
   }
-  return result.sort(compareText);
+  return result.sort((left, right) => compareText(posix(left), posix(right)));
 }
 
 async function pathExists(target: string): Promise<boolean> {
