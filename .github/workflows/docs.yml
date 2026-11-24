@@ -2,67 +2,50 @@ name: Docs
 
 on:
   push:
-    branches: [main]
-    paths:
-      - "src/cli/command-catalog.ts"
-      - "src/cli/handbook.ts"
-      - "website/**"
-      - "scripts/generate-docs.mjs"
-      - ".github/workflows/docs.yml"
+    branches: [main, dev-refactor]
   pull_request:
-    paths:
-      - "src/cli/command-catalog.ts"
-      - "src/cli/handbook.ts"
-      - "website/**"
-      - "scripts/generate-docs.mjs"
-      - ".github/workflows/docs.yml"
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+  workflow_dispatch:
 
 concurrency:
-  group: pages
+  group: docs-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  check:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v6
         with:
-          version: 10
-      - uses: actions/setup-node@v4
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            website/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile --registry=https://registry.npmjs.org
       - run: pnpm docs:check
-      - run: cd website && pnpm install && pnpm build
+      - run: pnpm install --dir website --frozen-lockfile --registry=https://registry.npmjs.org
+      - run: pnpm --dir website build
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          path: website/build
 
   deploy:
-    if: github.ref == 'refs/heads/main'
-    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-      - run: pnpm install && pnpm docs:generate
-      - run: cd website && pnpm install && pnpm build
-      - uses: actions/configure-pages@v4
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: website/build
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@v4
+        id: deployment

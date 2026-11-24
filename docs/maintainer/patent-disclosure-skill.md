@@ -52,7 +52,7 @@ carry their own upstream notices; MIT identity alone does not replace those
 copyright notices. Binary resources are copied and verified as raw bytes.
 Conditional resources have explicit read/use conditions in generated Skills.
 
-Use the project [maintenance Skill](../../.agents/skills/patent-disclosure-skill-maintenance/SKILL.md)
+Use the project [maintenance Skill](https://github.com/leike0813/ResearchSpec/blob/main/.agents/skills/patent-disclosure-skill-maintenance/SKILL.md)
 for the complete analysis, ingestion, conversion, semantic review and anchor
 lifecycle. `patent:author`, `patent:check` and `patent:idempotence` are deterministic
 authoring commands. `patent-maintenance:artifacts`, `records`, `baseline`, `check`

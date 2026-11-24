@@ -2,15 +2,16 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { cp, mkdir, mkdtemp, readdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
-import { homedir, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { pythonProject, uvExecutable, uvPythonArgs } from "./helpers/python.js";
 
 const ROOT = path.resolve(".");
 const TOOL = path.join(ROOT, "authoring/patent-disclosure-skill/runtime/patent-oa/tools/oa_history.py");
 const BOUNDARY = path.join(ROOT, "authoring/patent-disclosure-skill/runtime/shared/patent_files.py");
-const AR_PROJECT = path.join(homedir(), ".ar");
-const python = existsSync(path.join(AR_PROJECT, "pyproject.toml")) && spawnSync("uv", ["--version"]).status === 0;
+const UV = uvExecutable();
+const python = existsSync(path.join(pythonProject, "pyproject.toml")) && UV !== undefined;
 
 interface Hit {
   case_id: string;
@@ -82,9 +83,10 @@ async function workspace(): Promise<Workspace> {
 }
 
 function run(space: Workspace, args: string[]): { status: number | null; stdout: string } {
+  assert.ok(UV, "uv is required for the office-action history test");
   const result = spawnSync(
-    "uv",
-    ["run", "--project=" + AR_PROJECT, "--locked", "--no-sync", "--", "python", space.tool, ...args],
+    UV,
+    uvPythonArgs([space.tool, ...args]),
     {
       cwd: space.project,
       encoding: "utf8",

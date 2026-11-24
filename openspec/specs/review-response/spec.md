@@ -81,9 +81,10 @@ snapshot preparation and inspection SHALL NOT invoke initialization or repair pa
 
 ### Requirement: Private runtime boundary
 
-The database, local resume material, source snapshots, working manuscript, frozen workbench HTML,
-trusted business snapshots, and exported results SHALL remain below the task-local review-response
-workspace outside `researchspec/`. ResearchSpec SHALL NOT register, hash-bind, copy, or
+Review-response runtime files SHALL remain below the task-local workspace outside
+`researchspec/`. These include the database, local resume material, source snapshots,
+working manuscript, frozen workbench HTML, trusted business snapshots and exported results.
+ResearchSpec SHALL NOT register, hash-bind, copy, or
 lifecycle-manage those files as boundary deliverables.
 
 #### Scenario: Bounded pack

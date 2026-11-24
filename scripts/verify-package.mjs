@@ -1,13 +1,23 @@
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { access, mkdtemp, mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
+import { access, copyFile, mkdtemp, mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
+import { parseArgs } from "node:util";
 import { pathToFileURL } from "node:url";
+import MarkdownIt from "markdown-it";
 import { parse as parseYaml } from "yaml";
 
 const packageRoot = process.cwd();
+const { values: { "output-dir": outputDirectory } } = parseArgs({
+  options: { "output-dir": { type: "string" } },
+});
+const sourcePackage = JSON.parse(await readFile(path.join(packageRoot, "package.json"), "utf8"));
+const source = outputDirectory === undefined ? undefined : {
+  commit: run("git", ["rev-parse", "HEAD"], packageRoot).stdout.trim(),
+  clean: gitWorktreeIsClean(),
+};
 const temporaryRoot = await mkdtemp(path.join(tmpdir(), "researchspec-release-"));
 const packageDirectory = path.join(temporaryRoot, "package");
 const installDirectory = path.join(temporaryRoot, "install");
@@ -47,6 +57,7 @@ try {
 
   const pack = run(npmCommand(), ["pack", "--json", "--pack-destination", packageDirectory], packageRoot);
   const metadata = parsePackMetadata(pack.stdout);
+  assert(metadata.name === sourcePackage.name && metadata.version === sourcePackage.version, "Packed package identity differs from package.json.");
   const sourceSurface = await loadPackagedSurface(packageRoot);
   applyExpectedSurface(sourceSurface);
   await verifyTarballFiles(metadata.files.map((file) => file.path));
@@ -60,6 +71,7 @@ try {
   assert(equal(installedSurface, sourceSurface), "Installed Agent/profile surface registries differ from the packed source surface.");
   applyExpectedSurface(installedSurface);
   const installedPackage = JSON.parse(await readFile(path.join(installedPackageRoot, "package.json"), "utf8"));
+  assert(installedPackage.version === sourcePackage.version, "Installed package version differs from package.json.");
   assert(
     installedPackage.exports?.["./annotation-intake"]?.import === "./dist/src/annotation-intake.js"
       && installedPackage.exports?.["./annotation-intake"]?.types === "./dist/src/annotation-intake.d.ts",
@@ -82,7 +94,7 @@ try {
   const handbookDigest = await verifyPackagedDocumentation(installedPackageRoot, metadata.files.map((file) => file.path));
   const bin = path.join(installDirectory, "node_modules", ".bin", process.platform === "win32" ? "researchspec.cmd" : "researchspec");
   const version = run(bin, ["--version"], installDirectory).stdout.trim();
-  assert(version === "0.1.0", `Installed CLI version mismatch: ${version}`);
+  assert(version === sourcePackage.version, `Installed CLI version mismatch: ${version}`);
   const help = run(bin, ["--help"], installDirectory).stdout;
   const commandSection = help.split(/Commands:\r?\n/)[1] ?? "";
   const commands = [...commandSection.matchAll(/^  ([a-z][a-z-]*)(?:\s|$)/gm)]
@@ -171,6 +183,7 @@ try {
   if (process.platform !== "win32") assert((runtimeInfo.mode & 0o111) !== 0, `Installed Zotero runtime is not executable: ${runtimePath}`);
   if (process.platform === "win32") await readFile(path.join(adapterRoot, "bin", "zotero-bridge.cmd"), "utf8");
   const installationManifest = JSON.parse(await readFile(path.join(projectDirectory, "researchspec", "tool-installation-manifest.json"), "utf8"));
+  assert(installationManifest.package_version === version, "Installed manifest version differs from the CLI version.");
   assert(installationManifest.literature_adapter_resolutions?.length === 1, "Installed manifest has no selected literature adapter resolution.");
   assert(installationManifest.literature_adapter_resolutions[0].projection_state === "complete", "Installed literature adapter Skill projection is incomplete.");
   const promptRoot = path.join(codexHome, "prompts");
@@ -219,7 +232,17 @@ try {
   assert(await readFile(path.join(unsupportedWorkspace, "config.yaml"), "utf8") === unsupportedConfig, "Unsupported config was modified.");
   assert(await readFile(path.join(unsupportedWorkspace, "runs", "current", "state.yaml"), "utf8") === unsupportedState, "Unsupported state was modified.");
 
-  process.stdout.write(`Release package verified: ${metadata.filename} (${String(metadata.files.length)} files, ${String(metadata.unpackedSize)} bytes unpacked)\n`);
+  if (outputDirectory !== undefined && source) {
+    assert(run("git", ["rev-parse", "HEAD"], packageRoot).stdout.trim() === source.commit
+      && gitWorktreeIsClean() === source.clean, "Working tree status changed during package verification.");
+    await mkdir(outputDirectory);
+    await copyFile(tarball, path.join(outputDirectory, metadata.filename));
+    const { name, version: packageVersion, filename, size, unpackedSize, integrity } = metadata;
+    await writeFile(path.join(outputDirectory, "release.json"),
+      `${JSON.stringify({ name, version: packageVersion, ...source, filename, size, unpackedSize, integrity }, null, 2)}\n`);
+  }
+
+  process.stdout.write(`Release package verified: ${metadata.filename} (${String(metadata.files.length)} files, ${String(metadata.size)} bytes compressed, ${String(metadata.unpackedSize)} bytes unpacked)\n`);
 } finally {
   await rm(temporaryRoot, { recursive: true, force: true });
 }
@@ -411,14 +434,19 @@ async function verifyPackagedDocumentation(installedPackageRoot, packagedFiles) 
   assert(typeof handbookModule.renderCliHandbook === "function", "Installed package does not export renderCliHandbook.");
   assert(handbookModule.renderCliHandbook() === sourceHandbook, "Source-controlled CLI handbook differs from its renderer.");
 
-  const packagedReadme = await readFile(path.join(installedPackageRoot, "README.md"), "utf8");
-  const relativeLinks = markdownRepositoryLinks(packagedReadme);
-  assert(relativeLinks.length > 0, "Packaged README contains no repository-relative documentation links.");
-  for (const target of relativeLinks) {
-    const included = target.endsWith("/")
-      ? packagedFiles.some((file) => file.startsWith(target))
-      : packagedFiles.includes(target);
-    assert(included, `Packaged README links to a file outside the tarball: ${target}`);
+  const markdown = new MarkdownIt();
+  const fileSet = new Set(packagedFiles);
+  const pages = packagedFiles.filter((file) => /^docs\/.*\.md$/.test(file) || ["README.md", "CHANGELOG.md", "SECURITY.md"].includes(file));
+  for (const page of pages) {
+    const content = await readFile(path.join(installedPackageRoot, page), "utf8");
+    const relativeLinks = markdownRepositoryLinks(markdown, content);
+    if (page === "README.md") assert(relativeLinks.length > 0, "Packaged README contains no repository-relative documentation links.");
+    for (const link of relativeLinks) {
+      const target = path.posix.join(path.posix.dirname(page), link);
+      const directory = `${target.replace(/\/$/, "")}/`;
+      assert(fileSet.has(target) || packagedFiles.some((file) => file.startsWith(directory)),
+        `Packaged documentation links to a path outside the tarball: ${page} -> ${link}`);
+    }
   }
   await verifyCurrentPublishedGuidance(installedPackageRoot);
   return sha256(Buffer.from(sourceHandbook, "utf8"));
@@ -566,13 +594,12 @@ function uniqueSorted(value, label) {
   return sorted;
 }
 
-function markdownRepositoryLinks(markdown) {
-  return [...markdown.matchAll(/!?\[[^\]]*\]\(([^)]+)\)/g)]
-    .map((match) => match[1]?.trim() ?? "")
-    .filter((target) => target && !/^(?:[a-z][a-z0-9+.-]*:|#)/i.test(target))
-    .map((target) => target.split("#", 1)[0]?.split("?", 1)[0] ?? "")
-    .filter(Boolean)
-    .map((target) => path.posix.normalize(target.replaceAll("\\", "/")).replace(/^\.\//, ""));
+function markdownRepositoryLinks(markdown, content) {
+  return markdown.parse(content, {}).flatMap((token) => token.children ?? [])
+    .map((token) => token.attrGet(token.type === "image" ? "src" : "href"))
+    .filter((link) => link && !/^(?:[a-z][a-z0-9+.-]*:|\/|#)/i.test(link))
+    .map((link) => decodeURIComponent(link.split(/[?#]/, 1)[0]))
+    .filter(Boolean);
 }
 
 
@@ -615,7 +642,9 @@ function parsePackMetadata(stdout) {
   if (start < 0) throw new Error(`npm pack did not return JSON: ${stdout}`);
   const parsed = JSON.parse(stdout.slice(start));
   const metadata = parsed[0];
-  if (!metadata || typeof metadata.filename !== "string" || !Array.isArray(metadata.files)) {
+  if (!metadata || typeof metadata.filename !== "string" || path.basename(metadata.filename) !== metadata.filename
+    || typeof metadata.integrity !== "string" || !Number.isSafeInteger(metadata.size)
+    || !Number.isSafeInteger(metadata.unpackedSize) || !Array.isArray(metadata.files)) {
     throw new Error("npm pack returned an unexpected metadata envelope.");
   }
   return metadata;
@@ -623,6 +652,10 @@ function parsePackMetadata(stdout) {
 
 function npmCommand() {
   return process.platform === "win32" ? "npm.cmd" : "npm";
+}
+
+function gitWorktreeIsClean() {
+  return run("git", ["status", "--porcelain"], packageRoot).stdout.length === 0;
 }
 
 function run(command, args, cwd, env = process.env) {

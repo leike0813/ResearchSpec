@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { tmpdir, homedir } from "node:os";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import { uvPythonArgs } from "./helpers/python.js";
 
 const cases = [
   ["temporal", "check-temporal-integrity-verification", "temporal-integrity", "manuscript_draft", "temporal_audit_report"],
@@ -17,7 +18,7 @@ const cases = [
 
 void test("seven bundled checkers compute real reports and reject modified results", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-checkers-"));
-  const run = (args: string[]) => spawnSync("uv", ["run", `--project=${path.join(homedir(), ".ar")}`, "--locked", "--", "python", ...args], { encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" } });
+  const run = (args: string[]) => spawnSync("uv", uvPythonArgs(args), { encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" } });
   try {
     const corpus = [{ citation_key: "study", title: "A real supplied observation", authors: [{ family: "Author" }], year: 2025, venue: "arXiv", source_pointer: "https://arxiv.org/abs/2501.00001", resolver_outcomes: { crossref: { status: "matched", queried_by: "id" } } }];
     await writeFile(path.join(root, "paper.md"), "# Methods\nCurrently our results are preliminary.\n");

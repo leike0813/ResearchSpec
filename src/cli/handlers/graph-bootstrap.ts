@@ -13,6 +13,7 @@ import { resolveInitTarget } from "../../core/workspace/layout.js";
 import { executeWritePlan, planDirectFileEdit, planFile, type PlannedWrite } from "../../core/workspace/write-plan.js";
 import { assertLiteratureAdapterSelection, LITERATURE_ADAPTER_CATALOG, parseLiteratureAdapterExpression } from "../../literature-adapters/index.js";
 import { fileExists } from "../../utils/fs.js";
+import { readPackageVersion } from "../../utils/package-version.js";
 import { loadProcedureCatalog } from "../../procedures/catalog.js";
 import { buildSearchDocuments } from "../../procedures/search.js";
 import { prepareSemanticSearch, semanticCacheRoot, semanticErrorCode } from "../../procedures/runtime.js";
@@ -102,7 +103,7 @@ async function applyGraphWorkspaceProjection(input: {
   }
   const manifestPath = path.join(input.workspace, "tool-installation-manifest.json");
   const manifestContent = renderToolInstallationManifest({
-    package_version: "0.1.0",
+    package_version: readPackageVersion(),
     plugin_resolutions: deliveryPlan.pluginResolutions,
     literature_adapter_resolutions: deliveryPlan.literatureAdapterResolutions,
     installations: deliveryPlan.installations,

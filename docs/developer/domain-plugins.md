@@ -36,7 +36,7 @@ vendor converter ──► vendor bundle/Skills ◄── source-neutral domain 
 - A **central assembler** validates all isolated vendor bundles against the source-neutral domain catalog and is the only writer of `skills/plugins/registry.json`.
 - The same Skill may be a direct member of several domains. Its bytes and global Skill ID remain unique.
 
-ToolUniverse v1.5.10 contributes 130 admitted Skills. Scientific Agent Skills
+ToolUniverse v1.5.10 contributes 130 admitted Skills from a 229-Skill audit. Scientific Agent Skills
 v2.72.0 contributes 68 reviewed vendor-prefixed Skills, with 177 audit records
 and 56 maintainer security decisions. Materials-Science-Skills-For-LLM
 `snapshot-fafd3ab` contributes seven curated Skills after resolving all twelve
@@ -46,7 +46,8 @@ resolving all 1,049 source entries and 129 knowledge surfaces (56 third-party
 Skill copies remain excluded). HistAgent
 `snapshot-47bbe21` contributes three independently authored, hash-approved
 historical research Skills after resolving all 120 source entries and 21
-admitted capability surfaces. Education Agent Skills `snapshot-32fce5c`
+admitted capability surfaces. Education Agent Skills v3.1.0 (revision
+`c0c82fb682001177b855576e45f27cc5e786e4c4`)
 contributes 136 complete CC BY-SA 4.0 Skills after resolving all 165 admission
 decisions, 872 evidence declarations, and 813 advisory relationships. Together
 the six isolated vendor bundles populate 56 non-empty domains; users still
@@ -86,8 +87,8 @@ Normal `plugin list`, direct `show` and `install`, JSON, status availability, ch
 
 Vendor converters are repo-local maintainer tools, not a public converter ABI. The ToolUniverse converter:
 
-- validates the pinned v1.5.4 submodule and complete 185-Skill audit;
-- admits 130 research Skills and excludes 55 surfaces, including three business candidates awaiting separate admission;
+- validates the pinned v1.5.10 source and complete 229-Skill audit;
+- admits 130 research Skills and excludes 99 surfaces under the reviewed production policy;
 - classifies every audited candidate reference as `required`, `related`, or `routing` with evidence;
 - places only reviewed `required` edges in the dependency graph;
 - normalizes frontmatter and progressive disclosure, retains reviewed resources, and adds license, notice, compatibility, and authority guidance;
@@ -131,7 +132,7 @@ The HistAgent converter independently:
 
 The Education Agent Skills converter independently:
 
-- binds the immutable `snapshot-32fce5c` audit, evidence map, production policy,
+- binds the immutable `snapshot-32fce5c` audit, pinned v3.1.0 source, evidence map, production policy,
   license text, and approved complete-tree aggregate hash;
 - admits 136 Gareth Manning Skills and excludes 19 original-framework Skills
   plus ten Sean Hu Skills whose redistribution authority is not established;

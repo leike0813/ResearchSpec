@@ -2,7 +2,31 @@
 
 ResearchSpec helps an Agent carry out academic and patent research tasks through reusable capabilities and ordinary project files. The user describes a research goal; the Agent finds suitable capabilities, delivers usable results, and saves the progress needed to continue. Formal graph runs provide Gates, Decisions, parallel work, revision rounds, and auditable state when the task calls for them.
 
-Version `0.1.0` is an MVP release candidate. The functional user model is implemented and covered by public-CLI acceptance journeys; publication remains blocked until the hosted CI and manual dogfooding checklist are signed.
+Version `0.1.0` is the first npm release candidate. See the [release checklist](artifacts/release/mvp-release-checklist.md) for its current status.
+
+## 安装与快速入门
+
+运行 CLI 需要 Node.js 22 或 24。npm 发布前可在源码目录用 pnpm 10 安装依赖并构建。
+
+```bash
+pnpm install --frozen-lockfile
+pnpm build
+npm link
+```
+
+发布后可以通过 `npm install --global researchspec` 安装。安装后创建一个研究项目。
+
+```bash
+researchspec --version
+mkdir my-research
+cd my-research
+researchspec init . --tools codex
+researchspec check all --strict
+```
+
+在该项目目录打开 Codex，用自然语言说明目标。
+
+> 请帮我梳理生成式 AI 对高校写作教学的影响。先找近年的研究，说明主要发现、证据限制和仍有争议的问题，再给我一份可继续修改的综述提纲。
 
 ## 它解决什么问题
 
@@ -58,88 +82,45 @@ ResearchSpec 不是从零构建——它吸纳并整合了多个优秀上游项�
 
 | 上游项目 | 版本 | 经审查输出的 Skills 数量 | 覆盖领域 |
 |---|---|---|---|
-| **ToolUniverse** | v1.5.4 | 130 | 28 个 ANZSRC 学科组 + 2 个工具领域 |
-| **Scientific Agent Skills** | v2.53.0 | 49 | 19 个 ANZSRC 学科组 + 5 个工具领域 |
+| **ToolUniverse** | v1.5.10 | 130 | 28 个 ANZSRC 学科组 + 2 个工具领域 |
+| **Scientific Agent Skills** | v2.72.0 | 68 | 32 个 ANZSRC 学科组 + 5 个工具领域 |
 | **Materials-Science-Skills-For-LLM** | snapshot-fafd3ab | 7 | 材料工程、高分子与材料化学、计算建模与模拟 |
 | **FinRobot** | snapshot-2717499 | 6 | 银行金融与投资、会计审计 |
 | **HistAgent** | snapshot-47bbe21 | 3 | 历史研究、遗产档案与博物馆研究 |
-| **Education Agent Skills** | snapshot-32fce5c | 136 | 课程与教学法、教育系统、特殊教育研究 |
+| **Education Agent Skills** | v3.1.0 | 136 | 课程与教学法、教育系统、特殊教育研究 |
 | **Software Copyright Materials Skill** | v4.4.0 | 1 | 知识产权材料，见[软件著作权登记材料](docs/user/software-copyright-materials.md) |
 
 上游内容通过不可变审计和独立转换器管道处理，生产准入由经审阅的决策与内容身份约束。不同来源采用保留指令文本、复制已审阅资源或重新创作执行流程的方式；分发内容保留相应出处记录、许可和署名。
 
-## 环境要求
-
-- Node.js 22 或 24
-- pnpm 10（源码开发）
-- 一个受支持的 Agent 工具；以下示例使用 Codex
-
-Node 20 已结束生命周期，不在发布的 Node/OS 矩阵中。
-
-## 安装
-
-包发布后：
-
-```bash
-npm install --global researchspec
-researchspec --version
-```
-
-本地源码评估：
-
-```bash
-pnpm install --frozen-lockfile
-pnpm build
-npm link
-researchspec --version
-```
-
-`npm link` 仅用于开发和内部试用，不表示 npm 包已正式发布。
-
-生成并检查 CLI 文档，或构建文档站：
-
-```bash
-pnpm docs:generate   # 从 CLI catalog 生成指令参考
-pnpm docs:check      # 验证生成内容未漂移
-pnpm --dir website build
-```
-
-## 快速入门
-
-初始化新研究项目（不启动学术工作）：
-
-```bash
-mkdir my-research
-cd my-research
-researchspec init . --tools codex
-researchspec check all --strict
-```
-
-需要访问 Zotero 馆藏时，先安装 [Zotero-Agents](https://github.com/leike0813/zotero-agents)，再显式选择 Adapter：
-
-```bash
-researchspec init . --tools codex --literature-adapters zotero-library
-```
+## 初始化与恢复
 
 `init` 只创建 schema `"2"` workspace、graph profiles、四份 stable specs 和 Navigate Agent
 投影，不会启动学术工作。旧或未知 workspace 会被报告为 unsupported，且不会被读取、迁移
 或修改。
 
-随后在相同项目中启动 Codex，以自然语言描述研究目标：
-
-> 请帮我梳理生成式 AI 对高校写作教学的影响。先找近年的研究，说明主要发现、证据限制和仍有争议的问题，再给我一份可继续修改的综述提纲。
-
 持续的普通研究工作由 Navigate 主 Agent 用 `work/researchspec-notes/<task-id>.md` 记录目标、材料、
-已完成内容和下一步；新会话可据此继续，不需要为保存或恢复普通工作启动 graph。正式 Gate/Decision、
-并行汇合、重复轮次或可审计状态才需要 graph。具体边界见[用户使用模型](docs/user/usage-model.md)。
+已完成内容和下一步；新会话可据此继续，不需要为保存或恢复普通工作启动 graph。只有正式
+Gate/Decision、并行汇合、重复轮次和可审计状态才需要 graph。具体边界见[用户使用模型](docs/user/usage-model.md)。
 
-ResearchSpec 默认只投影 `researchspec-navigate`。它自带从 typed catalog 生成的 CLI handbook 和 ARSU route reference：主文件负责完整控制流程，详细参数与路由表按需读取。五个 ARSU 工作流、其余三个 Companion、注册的 core capability 与 332 个 plugin extension 通过 `list/show/instructions procedure` 按需发现和加载；预设 graph profiles 保持可组合。
+ResearchSpec 默认只投影 `researchspec-navigate`。它自带从 typed catalog 生成的 CLI handbook 和 ARSU route reference：主文件负责完整控制流程，详细参数与路由表按需读取。五个 ARSU 工作流、其余三个 Companion、注册的 core capability 和经审查的领域插件都属于隐藏 Procedure，按需发现。Procedure 匹配只提供候选；Agent 仍需核对其与当前任务、输入和授权边界是否相符：
 
-可选的 [Zotero 文献系统 Adapter](docs/user/literature-adapters.md) 会额外安装七个 Skill、项目级 `.zotero-bridge` runtime 和配置模板。`update --literature-adapters none` 可取消选择；未修改的托管文件会被移除，发生 drift 的文件会保留并报告。初始化及状态检查阶段不与 Zotero 通信。
+```bash
+researchspec list procedures --query "系统综述的文献筛选"
+researchspec show 'procedure:<id>'
+researchspec instructions 'procedure:<id>'
+```
+
+可选的 [Zotero 文献系统 Adapter](docs/user/literature-adapters.md) 会额外安装七个 Skill、项目级 `.zotero-bridge` runtime 和配置模板。需要访问馆藏时先安装 [Zotero-Agents](https://github.com/leike0813/zotero-agents)，再显式选择：
+
+```bash
+researchspec init . --tools codex --literature-adapters zotero-library
+```
+
+`update --literature-adapters none` 可取消选择；未修改的托管文件会被移除，发生 drift 的文件会保留并报告。初始化及状态检查阶段不与 Zotero 通信。
 
 可选 ResearchSpec 维护的[领域插件](docs/developer/domain-plugins.md)让 workspace 选择经审查的 Procedure 与 graph profile，不向宿主目录批量投影 Skills。用户按稳定 domain 选择；维护者 converter 拥有上游出处和依赖。插件不能修改 stable specs、run/node state、handoff、Gate、Decision 或 graph transition。
 
-这里的“可选”控制 workspace 投影；安装 CLI 仍会下载包含全部插件和 Adapter 资源的离线包。能力包的 `operational` 是已编写完整执行流程的成熟度声明，内容覆盖由独立 parity 检查验证；真实 Agent 的证据质量和交付可用性仍需单独演练、人工签收。
+这里的“可选”控制 workspace 投影；安装 CLI 仍会下载包含全部插件和 Adapter 资源的离线包。能力包的 `operational` 是已编写完整执行流程的成熟度声明；真实 Agent 的证据质量和交付可用性仍需单独演练、人工签收。
 
 `init/update` 默认给经审查的宿主安装项目级写作 guard：完整 guard 与无依赖 publisher 投影到
 `researchspec/hooks/paper-humanizer/`，并在宿主原生 hooks 配置中登记归属条目，不受
@@ -221,4 +202,4 @@ ResearchSpec 使用混合许可证模型：
 
 ## 发布状态
 
-仓库不含自动发布工作流。仅在[发布检查清单](artifacts/release/mvp-release-checklist.md)中的技术 Gate、托管 Node/OS 矩阵、管理控制和人工内部试用完成后方可授权标签或 npm 发布。
+ResearchSpec 尚未发布，当前授权状态为 `BLOCKED`。首个 `0.1.0` 通过独立准备流程产出经验证的 npm tarball，再由维护者手动发布；后续版本可通过独立的受信任发布流程发布。发布不随合并自动发生：只有在[发布检查清单](artifacts/release/mvp-release-checklist.md)中的技术 Gate、托管 Node/OS 矩阵、管理控制和人工内部试用全部完成后，维护者才会授权发布。

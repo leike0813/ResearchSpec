@@ -1,7 +1,7 @@
-import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { Command, CommanderError, InvalidArgumentError } from "commander";
 import { handleSearchCache, type SearchCacheOptions } from "./handlers/search-cache.js";
+import { readPackageVersion } from "../utils/package-version.js";
 
 import {
   handleGraphAdvance,
@@ -52,7 +52,7 @@ export interface CliResult { exitCode: number }
 export async function main(argv = process.argv.slice(2)): Promise<CliResult> {
   const jsonRequested = argv.includes("--json");
   let program: Command;
-  try { program = await createProgram(); }
+  try { program = createProgram(); }
   catch (error) {
     const startup = failure("cli", new CliError("startup_error", error instanceof Error ? error.message : String(error), 4));
     presentResult(startup, jsonRequested);
@@ -155,11 +155,11 @@ function registerCommands(program: Command, run: Runner): void {
     .action(async (pluginIds: string[], _options: Record<string, never>, command: Command) => run("plugin", command, () => handleGraphPluginUpdate(pluginIds, commandContext("plugin", command))));
 }
 
-async function createProgram(): Promise<Command> {
+function createProgram(): Command {
   const program = new Command()
     .name("researchspec")
     .description("Agent-neutral, file-based research contract framework")
-    .version(await readPackageVersion(), "-v, --version")
+    .version(readPackageVersion(), "-v, --version")
     .addHelpText("after", "\nFull documentation: https://leike0813.github.io/ResearchSpec/\n中文文档: https://leike0813.github.io/ResearchSpec/zh-Hans/\n");
   return applyGlobalCliOptions(program).showHelpAfterError();
 }
@@ -205,12 +205,6 @@ function parseLocalDecisionKind(value: string): "scope" | "claim" | "structure" 
 function parseDeliveryMode(value: string): "skills" | "commands" | "both" {
   if (value === "skills" || value === "commands" || value === "both") return value;
   throw new InvalidArgumentError("delivery must be skills, commands, or both");
-}
-
-async function readPackageVersion(): Promise<string> {
-  const packageUrl = new URL("../../../package.json", import.meta.url);
-  const packageJson = JSON.parse(await readFile(packageUrl, "utf8")) as { version?: string };
-  return packageJson.version ?? "0.0.0";
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

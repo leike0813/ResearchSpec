@@ -1,53 +1,51 @@
 ---
 sidebar_position: 99
 title: 常见问题
-description: ResearchSpec 常见问题解答
+description: ResearchSpec 的使用与工作流常见问题
 ---
 
 # 常见问题
 
-## 基础
+### ResearchSpec 做什么？
 
-### ResearchSpec 具体是做什么的？
+它通过可复用能力和普通项目文件承载学术研究任务。你描述目标，由 Agent 发现能力、交付工作并保留继续任务所需的信息。
 
-ResearchSpec 是一个基于文件的框架，用于编排学术论文写作工作流。
-它初始化工作区、安装技能（给 AI 智能体的指令）、管理工作流状态，
-并通过类型化的规约系统强制执行门控和人工决策。
+### 我必须先学会 CLI 吗？
 
-### 我需要会编程吗？
+不必。固定用户入口是 `researchspec-navigate`，Agent 会根据你的请求发现 Procedure。需要检查状态、确认 Gate 或恢复 run 时才会使用 CLI。
 
-不需要。ResearchSpec 通过命令行接口使用，但实际研究工作通过自然语言
-与 AI 智能体交互完成。你只需要确认决策和审阅产出即可。
+### npm 包已经发布了吗？
 
-## 设置
+尚未。0.1.0 是首发候选版本，待发布检查清单签署后才会发布。当前评估请按[安装指南](/installation)从源码安装。
 
-### 我运行了两次 `researchspec init`，会不会有问题？
+### `researchspec init` 会启动研究吗？
 
-不会。`init` 是幂等的——它会安全地扩展现有工作区，不会覆盖你的已做工作。
+不会。它准备 schema `"2"` 工作区、稳定规约、profiles 和 Agent 投影。学术任务从 Agent 对话开始；graph 工作还需确认 profile entry。
 
-### adaptive 和 strict 运行时有什么区别？
+### 普通研究必须使用 graph 吗？
 
-| | Adaptive | Strict |
-|---|---|---|
-| **哈希绑定** | 自动记录 | 每次写入前必须提供 |
-| **灵活性** | 智能体可自由提交 | 每次写入必须匹配预览计划 |
-| **适用场景** | 大多数研究工作 | 高可复现性要求的场景 |
+不需要。普通工作可 standalone 完成，Agent 在 `researchspec/` 外写文件，不创建 run、node、handoff、Gate 或 Decision。只有 formal Gate/Decision、并行汇合、修订轮次或可审计状态需要 graph。
 
-## 技能
+### 稿件和报告存在哪里？
 
-### 我可以添加自己的技能吗？
+放在 `researchspec/` 外的普通项目路径。Run handoff 记录角色和路径；ResearchSpec 不登记、复制或哈希绑定这些文件。
 
-ResearchSpec 的目录包含 213 个 ANZSRC 学科域和 6 个工具域。`researchspec plugin list`
-会列出已提供能力的域，`researchspec plugin install` 可按需安装。
+### 可以直接编辑 ResearchSpec 文件吗？
 
-## 工作流
+stable specs、project changes 和 run handoff 可以直接编辑。Gate、Decision、node 完成等 run/node 状态通过 CLI 修改。
 
-### 我怎么知道下一步该做什么？
+### 确认 Gate 会推进工作流吗？
 
-运行 `researchspec status --json`。对每个返回的选择器运行
-`researchspec instructions <selector> --json` 获取精确的动作描述符。
+不会。它记录 Gate 尝试。随后需运行 `advance node:<run>/<node>` 校验当前要求并完成节点。
 
-### 如果关闭终端，工作流会丢失吗？
+### 如何恢复工作？
 
-不会。ResearchSpec 状态是**基于文件**的。所有工作流状态都在工作区的
-`.researchspec/` 目录中。没有服务器，没有数据库，没有运行时进程。
+Run 工作使用 `researchspec status --json` 获取精确 instance ID，再请求其 instructions。持续普通工作从 task note 恢复，并对照当前材料和产出核对。
+
+### 旧工作区会怎样？
+
+ResearchSpec 会报告不支持并保持原样，不提供迁移或语义修复。
+
+### Doctor 会修复项目吗？
+
+不会。Doctor 只读检查运行环境、路径安全和托管文件漂移。

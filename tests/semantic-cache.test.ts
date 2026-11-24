@@ -132,9 +132,11 @@ void test("concurrent processes recover a dead owner without sharing mutation ow
     const children = Array.from({ length: 4 }, () => spawn(process.execPath, ["--input-type=module", "-e", source, root], { stdio: ["ignore", "ignore", "pipe", "ipc"] }));
     try {
       const states = await Promise.all(children.map((child) => new Promise<unknown>((resolve, reject) => {
+        let stderr = "";
+        child.stderr?.setEncoding("utf8").on("data", (chunk: string) => { stderr += chunk; });
         child.once("message", resolve);
         child.once("error", reject);
-        child.once("exit", () => reject(new Error("Cache contender exited before reporting ownership")));
+        child.once("close", (code, signal) => reject(new Error(`Cache contender exited before reporting ownership (${String(code)}, ${String(signal)}): ${stderr.trim()}`)));
       })));
       assert.equal(states.filter((state) => state === "acquired").length, 1);
       assert.equal(states.filter((state) => state === "busy").length, 3);

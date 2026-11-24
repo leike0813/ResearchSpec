@@ -1,16 +1,16 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { homedir, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import { uvPythonArgs } from "./helpers/python.js";
 
 const ROOT = path.resolve(".");
 const EXPORTER = path.join(ROOT, "src/arsu-converter/authoring/checkers/sr-screening/screening_export.py");
-const SHARED = path.join(homedir(), ".ar");
 type FullTextManifest = { ta_snapshot: string; retrieval_snapshot: string; records: Array<{ id: string }>; not_retrieved: Array<{ id: string }> };
 type PrismaCounts = { provisional: boolean; studies_included: number; pending: number; identified: number; duplicates_removed: number; reports_sought: number; reports_not_retrieved: number; screened: number; title_abstract_excluded: number };
-const python = (code: string, args: string[]) => spawnSync("uv", ["run", `--project=${SHARED}`, "--locked", "--", "python", "-c", `import sys; sys.path.insert(0, sys.argv[1]); ${code}`, path.dirname(EXPORTER), ...args], { cwd: ROOT, encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" } });
+const python = (code: string, args: string[]) => spawnSync("uv", uvPythonArgs(["-c", `import sys; sys.path.insert(0, sys.argv[1]); ${code}`, path.dirname(EXPORTER), ...args]), { cwd: ROOT, encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" } });
 const qcState = (pending: string[] = []) => ({ near_miss: pending, joint_exclusion_sample: [], pending_qc: pending, policy: "advance" });
 
 void test("SR export gates FT on current TA/QC and preserves auditable provisional reports", async () => {

@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
 import { chmod, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
-import { homedir, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
@@ -13,10 +13,10 @@ import { REVISION_MASTER_AUTHORING_OPTIONS, REVISION_MASTER_AUTHORING_SOURCES } 
 import { loadCapabilityRegistry } from "../src/capabilities/registry.js";
 
 import { revisionMasterSchemaSql } from "./helpers/revision-master.js";
+import { uvPythonArgs } from "./helpers/python.js";
 
 const ROOT = process.cwd();
 const TOOL = path.join(ROOT, "authoring/revision-master/workbench/review_workbench.py");
-const AR_PROJECT = path.join(homedir(), ".ar");
 
 const REVIEW_TEXT = "R1 asks to justify the buffer distance. R2 asks for the missing participant counts.";
 const MANUSCRIPT_TEXT = "# Methods\n\nWe used a 500 m buffer around each home address.\n";
@@ -24,7 +24,7 @@ const MANUSCRIPT_TEXT = "# Methods\n\nWe used a 500 m buffer around each home ad
 interface ToolResult { status: number | null; stdout: string; stderr: string }
 
 function python(args: string[], input?: string): ToolResult {
-  const result = spawnSync("uv", ["run", `--project=${AR_PROJECT}`, "--locked", "--", "python", ...args], {
+  const result = spawnSync("uv", uvPythonArgs(args), {
     encoding: "utf8",
     input,
     maxBuffer: 128 * 1024 * 1024,

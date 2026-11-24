@@ -90,7 +90,9 @@ void test("workspace delivery projects Navigate, seven Zotero Skills, and one wr
     assert.equal(delivery.literatureAdapterResolutions[0]?.projection_state, "complete");
     assert.equal(delivery.literatureAdapterResolutions[0]?.runtime_asset?.installed_path, ".zotero-bridge/bin/zotero-bridge");
     await executeWritePlan({ operations: delivery.operations });
-    assert.equal((await lstat(path.join(root, ".zotero-bridge/bin/zotero-bridge"))).mode & 0o777, 0o755);
+    const runtime = await lstat(path.join(root, ".zotero-bridge/bin/zotero-bridge"));
+    assert.ok(runtime.isFile());
+    if (process.platform !== "win32") assert.equal(runtime.mode & 0o777, 0o755);
   } finally {
     await cleanup(root);
   }

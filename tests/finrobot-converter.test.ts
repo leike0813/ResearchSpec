@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { homedir, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 
@@ -11,15 +11,16 @@ import { renderFinRobotCompleteTrees } from "../src/vendor-converters/finrobot/c
 import { checkFinRobotIdempotence, checkFinRobotOutput, type FinRobotConversionManifest } from "../src/vendor-converters/finrobot/converter.js";
 import { assertNoSensitiveValues, loadFinRobotDraftPolicies } from "../src/vendor-converters/finrobot/policy.js";
 import { PRODUCTION_VENDOR_IDS } from "../src/vendor-converters/shared/production-vendors.js";
+import { pythonProject, uvExecutable, uvPythonArgs } from "./helpers/python.js";
 
 const REPO_ROOT = path.resolve(".");
 const PLUGIN_ROOT = path.resolve("skills/plugins");
 const VENDOR_ROOT = path.join(PLUGIN_ROOT, "vendors/finrobot");
 const APPROVED_HASH = "1a101495abecacbc702a8ce8fd3b376631b88e9cc45de3d9a216d6aaedb3a4c6";
 
-const sharedPythonProject = path.join(homedir(), ".ar");
-const python = existsSync(path.join(sharedPythonProject, "pyproject.toml")) && spawnSync("uv", ["--version"]).status === 0
-  ? { command: "uv", prefix: ["run", `--project=${sharedPythonProject}`, "--locked", "--", "python"] }
+const UV = uvExecutable();
+const python = existsSync(path.join(pythonProject, "pyproject.toml")) && UV !== undefined
+  ? { command: UV, prefix: uvPythonArgs([]) }
   : spawnSync("python3", ["--version"]).status === 0
     ? { command: "python3", prefix: [] }
     : undefined;

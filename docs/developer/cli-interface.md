@@ -18,7 +18,7 @@ status --json
 
 运行 selectors 包括 `profile:`、`run:`、`node:`、`gate:`、`decision:` 和 `change:`。
 Inspection 命令另有 stable spec、handoff 与 tool selectors；每个命令只接受 catalog 声明的子集。
-`show` 当前只接受 profile、run、node 和 change。
+`show` 接受 `procedure:`、`profile:`、`run:`、`node:` 和 `change:` selectors。其他命令的 selector 子集以 CLI handbook 和 typed catalog 为准。
 
 ## 十六个顶层命令
 
@@ -32,7 +32,7 @@ Inspection 命令另有 stable spec、handoff 与 tool selectors；每个命令�
 | `advance` | 校验并完成执行节点 |
 | `check` | 对选定 owner 或 workspace 做只读结构检查 |
 | `list` | 稳定排序并以 cursor 分页列出 owner；`list tools` 展示入口机制与发现回退 |
-| `show` | 展示一个 profile、run、node 或 project change |
+| `show` | 展示一个 procedure、profile、run、node 或 project change |
 | `handoff` | 渲染或替换一个 run handoff |
 | `pack` | 为一组 owner 或单个 owner 生成确定性上下文包 |
 | `propose` | 创建 project change |

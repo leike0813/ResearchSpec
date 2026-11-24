@@ -16,7 +16,7 @@ python3 validators/pdf-read-preflight.py pdf /absolute/request.json --generate
 
 将标准输出保存为节点声明的 JSON 报告，然后通过 `advance` 提交报告路径。CLI 会把冻结图解析出的当前输入传给验证器；验证器重新计算并比较报告，拒绝缺失输入、被修改的结果或已不匹配当前材料的报告。验证期间不会改写报告或材料。
 
-Python 使用宿主配置的环境。JSON 输入除 PDF 外使用标准库；YAML 输入需要 PyYAML，PDF 解析需要 pypdf。工具不会自动安装依赖。PDF 解析不可用时明确返回 `UNAVAILABLE`，不会把文件扩展名或 `%%EOF` 当成结构有效的证明。
+CLI 从当前环境的 `PATH` 调用 `python3`。在 Windows 上如果 Python 只提供 `python.exe`，运行脚本节点前需让同一个 Python 3 环境也提供 `python3` 调用名。使用 JSON 的检查通常只需标准库。YAML 输入需要 PyYAML，PDF 解析需要 pypdf。PDF 解析不可用时报告为 `UNAVAILABLE`。依赖由宿主环境提供。
 
 引用与污染检查消费由用户授权的检索工具取得的结构化 resolver 观察，不会自行联网。缺少观察时保留 `unresolvable` 或 `not_checked`。摘要保留这些状态，不把它们算成查证成功。
 

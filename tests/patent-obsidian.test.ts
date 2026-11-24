@@ -2,15 +2,15 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { cp, mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
-import { homedir, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { pythonProject, uvExecutable, uvPythonArgs } from "./helpers/python.js";
 
 const ROOT = path.resolve(".");
 const MANIFEST = path.join(ROOT, "authoring/patent-disclosure-skill/runtime-assets.json");
-const AR_PROJECT = path.join(homedir(), ".ar");
-const UV = spawnSync("sh", ["-c", "command -v uv"], { encoding: "utf8" }).stdout.trim();
-const python = Boolean(UV) && existsSync(path.join(AR_PROJECT, "pyproject.toml")) && spawnSync(UV, ["--version"]).status === 0;
+const UV = uvExecutable();
+const python = existsSync(path.join(pythonProject, "pyproject.toml")) && UV !== undefined;
 
 interface ManifestRow {
   output_path: string;
@@ -120,15 +120,21 @@ function run(box: Sandbox, args: string[], options: { cwd?: string; env?: Record
   stdout: string;
   stderr: string;
 } {
-  const result = spawnSync(UV, ["run", "--project=" + AR_PROJECT, "--locked", "--no-sync", "--", "python", ...args], {
+  assert.ok(UV, "uv is required for the Obsidian test");
+  const result = spawnSync(UV, uvPythonArgs(args), {
     cwd: options.cwd ?? box.work,
     encoding: "utf8",
     maxBuffer: 32 * 1024 * 1024,
     env: {
       PATH: box.emptyPath,
       HOME: box.home,
+      USERPROFILE: box.home,
+      SystemRoot: process.env.SystemRoot,
+      UV_PROJECT_ENVIRONMENT: process.env.UV_PROJECT_ENVIRONMENT,
+      UV_CACHE_DIR: path.join(box.home, ".cache", "uv"),
       LANG: "C.UTF-8",
       LC_ALL: "C.UTF-8",
+      PYTHONUTF8: "1",
       PYTHONDONTWRITEBYTECODE: "1",
       PATENT_READER_OBSIDIAN_VAULT: undefined,
       PATENT_DISCLOSURE_OBSIDIAN_VAULT: undefined,

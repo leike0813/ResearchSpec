@@ -93,7 +93,7 @@ export const CLI_PAYLOADS = {
     field("--cursor", "opaque base64url cursor", false, "Cursor returned by the immediately preceding page for the same unchanged collection."),
     field("--query", "string", false, "Original Chinese, English or mixed natural-language request, used only with procedures."),
   ]),
-  show: payload("selector-options", "One exact stable spec, profile, run, node, Gate, Decision, change, handoff, or tool selector.", [
+  show: payload("selector-options", "One exact procedure, profile, run, node, or project change selector.", [
     field("selector", "procedure:... | profile:... | run:... | node:... | change:...", true, "Exact item to inspect."),
   ]),
   handoff: payload("yaml-json", "Optional YAML or JSON replacement payload supplied through --input; without it the command renders the current handoff.", [

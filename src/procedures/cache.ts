@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { lstat, mkdir, readFile, readdir, realpath, rm, stat, writeFile } from "node:fs/promises";
+import { lstat, mkdir, readFile, readdir, realpath, rename, rm, stat, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import path from "node:path";
 import process from "node:process";
@@ -181,7 +181,11 @@ export async function acquireSemanticCacheLock(cacheRoot: string): Promise<() =>
           if (currentRecovery?.pid !== recoveryOwner.pid || currentRecovery.token !== recoveryOwner.token) {
             throw new SemanticCacheError("cache_busy", `The semantic cache recovery owner changed: ${root}`);
           }
-          await rm(recoveryPath, { recursive: true, force: true });
+          const currentOwner = await lockOwner(lockPath);
+          if (currentOwner?.pid !== previous.pid || currentOwner.token !== previous.token) {
+            throw new SemanticCacheError("cache_busy", `The semantic cache lock changed during recovery: ${root}`);
+          }
+          await discardRecoveredLock(lockPath);
           continue;
         }
         throw new SemanticCacheError("cache_busy", `The semantic cache recovery owner changed: ${root}`);
@@ -205,9 +209,16 @@ export async function acquireSemanticCacheLock(cacheRoot: string): Promise<() =>
       || recoveryStillOurs?.pid !== process.pid || recoveryStillOurs.token !== recoveryToken) {
       throw new SemanticCacheError("cache_busy", `The semantic cache lock changed during recovery: ${root}`);
     }
-    await rm(lockPath, { recursive: true, force: true });
+    await discardRecoveredLock(lockPath);
   }
   throw new SemanticCacheError("cache_busy", `The semantic cache lock changed during recovery: ${root}`);
+}
+
+async function discardRecoveredLock(lockPath: string): Promise<void> {
+  // Detach the directory before deletion so contenders cannot add entries to it.
+  const discarded = `${lockPath}-discarded-${randomUUID()}`;
+  await rename(lockPath, discarded);
+  await rm(discarded, { recursive: true, force: true });
 }
 
 async function assertManagedCandidate(root: string, entry: SemanticCacheEntry): Promise<void> {

@@ -1,9 +1,21 @@
 # ResearchSpec Attribution Notice
 
+ResearchSpec distributes material under several licenses. Each generated vendor
+Skill includes its upstream license and attribution in the package.
+
+- `skills/plugins/vendors/<vendor>/<skill>/LICENSE`
+- `skills/plugins/vendors/<vendor>/<skill>/NOTICE` or `NOTICE.md`
+
+The `vendor/`, `audits/`, `authoring/` and `src/` paths in this notice refer
+to the source repository. The npm package carries the reviewed distribution
+files and their provenance and license records.
+
 ResearchSpec contains material adapted from Academic Research Skills (ARS):
 
 - Copyright: Copyright (c) 2026 Cheng-I Wu
 - Source: https://github.com/Imbad0202/academic-research-skills
+- Release: v3.24.4
+- Revision: 23807f987024f2e038d12fd9e4e5d2a7cc228674
 - Vendored source: `vendor/ars`
 - Upstream sr-screener maintainer: erfanz97 (see `skills/arsu/sr-screener/NOTICE.md`).
 - License: Creative Commons Attribution-NonCommercial 4.0 International
@@ -37,17 +49,47 @@ ResearchSpec's domain taxonomy documentation includes ANZSRC 2020 Fields of Rese
 ResearchSpec distributes reviewed Open Agent Skills adapted from Scientific Agent Skills:
 
 - Source: https://github.com/K-Dense-AI/scientific-agent-skills
-- Release: v2.53.0
-- Revision: 9c9bd2e92af12311ecd0c1a643e0931643f9ea04
+- Release: v2.72.0
+- Revision: 526ebce143bc326f44471554e33d66a19c840360
+- Admitted Skills: 68 of 177 audited Skills
 - Skill content license: MIT, as recorded in each generated Skill's `LICENSE` and `NOTICE.md`
 
 Package, service, dataset, hardware, and runtime licenses referenced by those Skills remain separately applicable. ResearchSpec distributes static reviewed resources and does not execute bundled scripts or install their dependencies.
+
+ResearchSpec distributes reviewed Open Agent Skills adapted from ToolUniverse:
+
+- Source: https://github.com/mims-harvard/ToolUniverse
+- Release: v1.5.10
+- Revision: 6b50abef032a702554e2b34a4f592ee674f12f8f
+- Copyright: Copyright [2025] [ToolUniverse team]
+- Admitted Skills: 130 of 229 audited Skills
+- Skill content license: Apache License 2.0, as recorded in each generated Skill's `LICENSE` and `NOTICE.md`
+
+The conversion preserves each reviewed Skill body and reviewed resource tree at its original relative
+path, and records Skill-level provenance. Upstream tool, service, dataset, and runtime requirements
+remain separately applicable. ResearchSpec distributes static reviewed resources and does not execute
+bundled scripts, install their dependencies, or contact upstream services.
+
+ResearchSpec distributes reviewed Skills adapted from Materials-Science-Skills-For-LLM:
+
+- Source: https://github.com/IntelligentMat/Materials-Science-Skills-For-LLM
+- Release: snapshot-fafd3ab
+- Revision: fafd3ab011e4c363658a39c4bb62fc739839d58c
+- Copyright (c) 2025 IntelligentMat
+- Admitted Skills: 7 of 12 audited Skills
+- Skill content license: MIT, as recorded in each generated Skill's `LICENSE` and `NOTICE.md`
+
+The admitted Skills are instruction-led. The external scientific runtimes they describe remain
+separately applicable and are neither bundled nor provisioned by ResearchSpec, and ResearchSpec does
+not execute upstream commands, install dependencies, configure credentials, or contact remote
+services.
 
 ResearchSpec distributes reviewed Skills derived from FinRobot:
 
 - Source: https://github.com/AI4Finance-Foundation/FinRobot
 - Release: snapshot-2717499
 - Revision: 2717499b8e30f242640af08c4ad9afd1113c2d45
+- Admitted Skills: 6
 - Content license: Apache License 2.0, preserved in every generated Skill's `LICENSE` and `NOTICE`
 
 FinRobot-derived Skills contain ResearchSpec-authored Agent procedures and four
@@ -63,6 +105,7 @@ ResearchSpec distributes independently reimplemented Skills derived from audited
 - Source: https://github.com/CharlesQ9/HistAgent
 - Release: snapshot-47bbe21
 - Revision: 47bbe21dc81618489f5d5929358032883a3fe448
+- Admitted Skills: 3
 - Content license: Apache License 2.0, preserved in every generated Skill's `LICENSE` and `NOTICE`
 
 The HistAgent Skills contain no copied HistAgent, AutoGen, Magentic-One,
@@ -76,8 +119,9 @@ ResearchSpec distributes reviewed Skills adapted from Education Agent Skills:
 
 - Author: Gareth Manning
 - Source: https://github.com/GarethManning/education-agent-skills
-- Release: snapshot-32fce5c
-- Revision: 32fce5c0d097ec675cf81c750a65a379e4d87e3c
+- Release: v3.1.0
+- Revision: c0c82fb682001177b855576e45f27cc5e786e4c4
+- Admitted Skills: 136 of 165 audited Skills
 - Content license: Creative Commons Attribution-ShareAlike 4.0 International
 - License URL: https://creativecommons.org/licenses/by-sa/4.0/
 
@@ -85,7 +129,10 @@ The generated Skills preserve the complete admitted educational body while
 changing the global identifier and frontmatter envelope and adding evidence,
 privacy, learner-safety, wellbeing, human-oversight, and ResearchSpec-authority
 boundaries. Every generated Skill contains a complete `LICENSE` and `NOTICE.md`
-with source and modification details. ResearchSpec does not distribute or
+with source and modification details. The production pin above identifies the
+current release. Unchanged generated notices retain the revision recorded
+when that content was reviewed, including `snapshot-32fce5c`.
+ResearchSpec does not distribute or
 execute the upstream installer, MCP server, tests, scripts, registries, or
 generated caches. ResearchSpec is independent from and not endorsed by Gareth
 Manning or Education Agent Skills.
@@ -177,6 +224,7 @@ Software Copyright Materials Skill
 
 - Source: https://github.com/suling-fun/software-copyright-materials-skill
 - Revision: 6c9e6e72d8afce7aaccc9831ccd645a6ae2ccb16 (v4.4.0)
+- Admitted Skills: 1
 - Copyright (c) 2026 Software Copyright Materials contributors
 - License: MIT, preserved with both derived packages.
 

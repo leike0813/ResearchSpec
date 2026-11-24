@@ -1,16 +1,40 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { adapters } from '../scripts/dogfood/hosts.mjs';
-import { assessmentDir, attemptDir, campaignDir, evidenceHash, loadCatalog, loadCampaignCatalog, loadConfig, matrixCaseDir, resolveSelection, rubricKeys, sha, validateFirstQuery, validateProcedureChain, writeJson } from '../scripts/dogfood/lib.mjs';
+import { assessmentDir, attemptDir, buildHash, campaignDir, evidenceHash, loadCatalog, loadCampaignCatalog, loadConfig, matrixCaseDir, repoRoot, resolveSelection, rubricKeys, sha, validateFirstQuery, validateProcedureChain, writeJson } from '../scripts/dogfood/lib.mjs';
 import { saveAssessment } from '../scripts/dogfood/assessment.mjs';
 import { importReview, report } from '../scripts/dogfood/review.mjs';
 import { startServer } from '../scripts/dogfood/server.mjs';
 
 const config = loadConfig('playbooks/dogfooding/harness.example.yaml');
 const { catalog } = loadCatalog();
+
+test('init matrix verifies native hook ownership and hosts without a reviewed guard', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'researchspec-dogfood-matrix-'));
+  const campaignId = '20260927T000000Z-babcde';
+  const targets = ['codex', 'agents'];
+  writeJson(path.join(campaignDir(root, campaignId), 'campaign.json'), {
+    id: campaignId, schema_version: '2', build_hash: buildHash(),
+    selection: { matrix: { targets, modes: ['skills'] } },
+  });
+  try {
+    for (const target of targets) {
+      const result = spawnSync(process.execPath, ['scripts/dogfood/matrix-worker.mjs', root, campaignId, target, 'skills'], {
+        cwd: repoRoot, encoding: 'utf8', timeout: 60_000,
+      });
+      assert.equal(result.status, 0, result.stderr);
+      const evidence = matrixCaseDir(root, campaignId, target, 'skills');
+      const report = JSON.parse(fs.readFileSync(path.join(evidence, 'report.json'), 'utf8'));
+      assert.equal(report.status, 'pass');
+    }
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
 
 test('campaign review uses its frozen catalog and rejects a damaged copy', () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'researchspec-harness-catalog-'));

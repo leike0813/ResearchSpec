@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { homedir, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, before, test } from "node:test";
 
@@ -21,6 +21,7 @@ import {
 } from "../src/vendor-converters/patent-disclosure-skill/capabilities.js";
 import type { RuntimeAssetGroups } from "../src/vendor-converters/patent-disclosure-skill/capabilities.js";
 import { checkPatentIdempotence, checkPatentOutput, generatePatentPackages, parsePatentArgs } from "../src/vendor-converters/patent-disclosure-skill/cli.js";
+import { uvPythonArgs } from "./helpers/python.js";
 
 const CONTRACT_RESOURCES = ["contracts/patent-file-index.v1.md", "contracts/patent-role-schemas.v1.md"];
 const RUNTIME_ROOT = "authoring/patent-disclosure-skill/runtime";
@@ -307,7 +308,7 @@ after(async () => {
 
 /** Shared uv environment: the project interpreter is never a bare `python`. */
 function sharedPython(scriptArgs: string[], cwd: string): { status: number | null; stdout: string; stderr: string } {
-  const run = spawnSync("uv", ["run", "--project=" + path.join(homedir(), ".ar"), "--locked", "--no-sync", "--", "python", ...scriptArgs], {
+  const run = spawnSync("uv", uvPythonArgs(scriptArgs), {
     encoding: "utf8",
     cwd,
     timeout: 120_000,

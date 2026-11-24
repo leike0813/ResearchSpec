@@ -124,7 +124,7 @@ function renderMdxCommandPage(command: CliCommandDefinition, position: number, g
         "| Option | Required | Description |",
         "| --- | --- | --- |",
         ...command.options.map((opt) =>
-          `| \`${opt.flags}\` | ${opt.required ? "yes" : "no"} | ${opt.description} |`
+          `| \`${tableCell(opt.flags)}\` | ${opt.required ? "yes" : "no"} | ${tableCell(mdxProse(opt.description))} |`
         ),
       ]
     : [];
@@ -140,7 +140,7 @@ function renderMdxCommandPage(command: CliCommandDefinition, position: number, g
     "",
     `# \`${invocation}\``,
     "",
-    command.description,
+    mdxProse(command.description),
     "",
     `- **Group**: ${group}`,
     `- **Workspace**: \`${command.workspace}\``,
@@ -183,7 +183,7 @@ function renderCommandCard(command: CliCommandDefinition): string[] {
       "| Command option | Required | Purpose |",
       "| --- | --- | --- |",
       ...command.options.map((option) =>
-        `| \`${option.flags}\` | ${option.required ? "yes" : "no"} | ${option.description} |`
+        `| \`${tableCell(option.flags)}\` | ${option.required ? "yes" : "no"} | ${tableCell(option.description)} |`
       ),
     );
   }
@@ -194,7 +194,8 @@ function renderCommandCard(command: CliCommandDefinition): string[] {
 
 function renderPayloadSection(command: CliCommandDefinition, mode: "markdown" | "mdx"): string[] {
   const payload = command.payload;
-  const lines = ["", "#### Input shape", "", payload.summary];
+  const prose = mode === "mdx" ? mdxProse : (value: string) => value;
+  const lines = ["", "#### Input shape", "", prose(payload.summary)];
   if (payload.schema) lines.push("", `Runtime schema: \`${payload.schema}\`.`);
   if (payload.fields.length > 0) {
     lines.push(
@@ -202,12 +203,12 @@ function renderPayloadSection(command: CliCommandDefinition, mode: "markdown" | 
       "| Field or option | Type | Required | Meaning |",
       "| --- | --- | --- | --- |",
       ...payload.fields.map((field) =>
-        `| \`${tableCell(field.name)}\` | \`${tableCell(field.type)}\` | ${field.required ? "yes" : "no"} | ${tableCell(field.description)} |`
+        `| \`${tableCell(field.name)}\` | \`${tableCell(field.type)}\` | ${field.required ? "yes" : "no"} | ${tableCell(prose(field.description))} |`
       ),
     );
   }
   if (payload.constraints.length > 0) {
-    lines.push("", "Constraints:", "", ...payload.constraints.map((constraint) => `- ${constraint}`));
+    lines.push("", "Constraints:", "", ...payload.constraints.map((constraint) => `- ${prose(constraint)}`));
   }
   if (mode === "mdx") lines.push("");
   return lines;
@@ -215,4 +216,13 @@ function renderPayloadSection(command: CliCommandDefinition, mode: "markdown" | 
 
 function tableCell(value: string): string {
   return value.replaceAll("|", "\\|").replaceAll("\n", " ");
+}
+
+function mdxProse(value: string): string {
+  return value.replace(/`[^`]*`|[<{}]/g, (token) => {
+    if (token === "<") return "&lt;";
+    if (token === "{") return "&#123;";
+    if (token === "}") return "&#125;";
+    return token;
+  });
 }

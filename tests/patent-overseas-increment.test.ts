@@ -4,14 +4,14 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import { uvPythonArgs } from "./helpers/python.js";
 
 const packageRoot = path.resolve("skills/capabilities");
-const arProject = path.join(process.env.HOME ?? "", ".ar");
 
 void test("packaged overseas search and reading distinguish evidence states and keep project-local outputs", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "researchspec-overseas-fixture-"));
   try {
-    const result = spawnSync("uv", ["run", "--project", arProject, "--locked", "--no-sync", "--", "python", "-", packageRoot, root], {
+    const result = spawnSync("uv", uvPythonArgs(["-", packageRoot, root]), {
       input: `
 import importlib
 import json

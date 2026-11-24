@@ -1,108 +1,114 @@
 ---
 sidebar_position: 3
 title: Installation
-description: Detailed installation instructions for ResearchSpec
+description: How to install the ResearchSpec 0.1.0 release candidate
 ---
 
 # Installation
 
+ResearchSpec 0.1.0 is a release candidate. The npm package is not published until the
+release checklist is signed, so the supported way to evaluate it today is a source
+checkout.
+
 ## Requirements
 
 | Requirement | Version |
-|-------------|---------|
-| Node.js | >= 22 |
-| Package manager | pnpm (recommended) or npm |
+| --- | --- |
+| Node.js | 22 or 24 |
+| Package manager | pnpm 10.13.1 for source installs |
+| Agent | One supported Agent host, for example Codex |
 
-## Global Installation
+Node 20 has reached end of life and is outside the supported Node and OS matrix.
 
-<Tabs>
-<TabItem value="pnpm" label="pnpm">
-
-```bash
-pnpm add -g researchspec
-```
-
-</TabItem>
-<TabItem value="npm" label="npm">
+## Install the release candidate from source
 
 ```bash
-npm install -g researchspec
-```
-
-</TabItem>
-</Tabs>
-
-## Verify
-
-```bash
+git clone https://github.com/leike0813/ResearchSpec.git
+cd ResearchSpec
+corepack enable
+pnpm install --frozen-lockfile
+pnpm build
+npm link
 researchspec --version
 ```
 
-You should see the current version number (e.g., `0.1.0`).
+`npm link` is a local development and internal trial installation. It does not mean
+the npm package has been published.
 
-Run `researchspec --help` to see the full command list.
+## Install the published package
 
-## Workspace Setup
+Once the first release is authorized, the same CLI is installed from npm:
 
-ResearchSpec uses a **workspace root** convention. Any project containing
-`researchspec/` is a workspace. Initialize one:
+```bash
+npm install --global researchspec
+researchspec --version
+```
+
+## Create a workspace
+
+ResearchSpec uses the `researchspec/` directory as its workspace root. Initialize one
+in any project directory:
 
 ```bash
 mkdir my-research && cd my-research
-researchspec init
+researchspec init . --tools codex
 ```
 
 The `init` command:
 
-- Creates the `researchspec/` workspace directory
-- Installs the single base entry, `researchspec-navigate`
-- Keeps ARSU, Companion, core, and plugin Procedures available through on-demand CLI activation
-- Offers the optional seven-Skill Zotero literature Adapter after tool selection
-- Writes initial contract files (`specs/`, `config.yaml`)
-- Refuses a non-empty initialization target; use `update` for an existing workspace
+- creates the `researchspec/` workspace with schema `"2"`;
+- writes four stable specs, preset graph profiles, and the project configuration;
+- installs the single base entry `researchspec-navigate`;
+- keeps ARSU, Companion, core, and plugin Procedures available through on-demand CLI
+  activation instead of projecting them into the host Skill catalog;
+- offers the optional seven-Skill Zotero literature Adapter after tool selection.
+
+`init` initializes a new workspace and reconfigures an existing current workspace.
+Run it again on the same project when the complete tool or Adapter selection should
+change. `researchspec update` refreshes managed projections after a CLI upgrade
+without touching research content.
 
 ### Tool Selection
 
 | Flag | Behavior |
-|------|----------|
+| --- | --- |
 | (interactive default) | Select detected Agent tools, then optionally select literature Adapters |
 | `--tools all` | Project Navigate to all compatible registered Agent tools |
 | `--tools none` | Skip Agent tool projection |
-| `--tools codex,claude` | Select specific Agent tools |
+| `--tools codex,claude` | Replace the selection with specific Agent tools |
+| `--delivery skills` | Project the Skill surface only |
+| `--delivery commands` | Project the command surface only |
+| `--delivery both` | Project both supported entry forms |
 | `--literature-adapters zotero-library` | Install the optional Zotero Adapter |
 | `--literature-adapters none` | Install no literature Adapter |
 
 The `zotero-library` Adapter requires Zotero with the
-[Zotero-Agents plugin](https://github.com/leike0813/zotero-agents). ResearchSpec
-shows this prerequisite during interactive init but does not install or probe it.
+[Zotero-Agents plugin](https://github.com/leike0813/zotero-agents). ResearchSpec shows
+this prerequisite during interactive init but never installs or probes it.
 
-## Updating
+## Update
 
-Update ResearchSpec itself:
-
-```bash
-pnpm update -g researchspec
-```
-
-Refresh workspace files after an update:
+Update the CLI itself, then refresh the workspace projections:
 
 ```bash
 researchspec update
 ```
 
-This regenerates managed agent files without overwriting your research content.
+`update` regenerates managed Agent files without overwriting research content. Old or
+unknown workspaces are reported as unsupported and are left unchanged; ResearchSpec
+provides no migration, rollback, or semantic repair for them.
 
-## Uninstalling
+## Uninstall
 
 ```bash
-pnpm remove -g researchspec
+npm uninstall --global researchspec
 ```
 
 Removing the CLI does not remove project files, Agent projections, or an optional
-`.zotero-bridge/` directory. Use `researchspec update --literature-adapters none`
+`.zotero-bridge/` directory. Run `researchspec update --literature-adapters none`
 before uninstalling when you want ResearchSpec to remove clean managed Adapter files.
 
 ## Troubleshooting
 
-See `researchspec doctor` for runtime diagnostics. See `researchspec check` to
-validate workspace integrity.
+`researchspec doctor` reports runtime diagnostics without repairing anything, and
+`researchspec check` validates workspace integrity.

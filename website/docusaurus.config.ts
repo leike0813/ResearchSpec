@@ -6,7 +6,7 @@ import { cliSidebar } from "./sidebars.cli";
 const config: Config = {
   title: "ResearchSpec",
   tagline: "Agent-neutral, spec-driven academic research framework",
-  favicon: "img/favicon.ico",
+  favicon: "img/logo.svg",
 
   url: "https://leike0813.github.io",
   baseUrl: "/ResearchSpec/",
@@ -15,11 +15,23 @@ const config: Config = {
   projectName: "ResearchSpec",
 
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
+  markdown: {
+    hooks: { onBrokenMarkdownLinks: "throw" },
+  },
 
   i18n: {
     defaultLocale: "en",
     locales: ["en", "zh-Hans"],
+    localeConfigs: {
+      en: {
+        label: "English",
+        htmlLang: "en",
+      },
+      "zh-Hans": {
+        label: "简体中文",
+        htmlLang: "zh-Hans",
+      },
+    },
   },
 
   presets: [
@@ -39,7 +51,6 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: "img/researchspec-social-card.png",
     navbar: {
       title: "ResearchSpec",
       logo: {

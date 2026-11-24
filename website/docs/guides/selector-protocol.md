@@ -1,23 +1,43 @@
 ---
 title: Selector Protocol
-description: Address current ResearchSpec graph runs and owning files with stable selectors
+description: Address procedures, profiles, runs, nodes, and changes with stable selectors
 ---
 
 # Selector Protocol
 
-Use `status --json` to discover exact machine IDs, then request `instructions <selector> --json`.
+Use `researchspec status --json` to discover exact machine IDs, then request
+`researchspec instructions <selector> --json` for the action contract of that item.
 
-| Selector | Purpose |
+## show selectors
+
+`researchspec show <selector>` inspects one exact item:
+
+| Selector | Inspects |
 | --- | --- |
-| `profile:<profile-id>` | Inspect a graph profile or start a confirmed root run |
-| `run:<run-id>` | Inspect one frozen graph run or its handoff |
-| `node:<run-id>/<node-id>[@round]` | Inspect, start a bound child, or advance one node |
-| `gate:<run-id>/<gate-id>[@round]` | Inspect or decide one formal Gate |
-| `decision:<run-id>/<decision-id>[@round]` | Inspect or record one graph Decision |
-| `change:<change-id>` | Inspect or decide a project change |
+| `procedure:<procedure-id>` | One Procedure card |
+| `profile:<profile-id>` | One graph profile |
+| `run:<run-id>` | One frozen graph run |
+| `node:<run-id>/<node-id>[@round]` | One node instance |
+| `change:<change-id>` | One project change |
 
-`show` additionally accepts stable-spec and tool selectors. `handoff` accepts `run:<run-id>`. Never infer a selector
-from a directory name, similar filename, or “latest” timestamp when more than one item exists.
+`show` does not accept stable spec, tool, Gate, or Decision selectors.
 
-Read commands do not modify project files. Mutation commands validate their semantic input against
-the selected current owner.
+## instructions selectors
+
+`researchspec instructions <selector>` returns the contract of the selected item:
+`procedure:<procedure-id>`, `profile:<profile-id>`, `run:<run-id>`,
+`node:<run-id>/<node-id>[@round]`, `gate:<run-id>/<gate-id>[@round]`,
+`decision:<run-id>/<decision-id>[@round]`, and `change:<change-id>`.
+
+## Inspection selectors
+
+Stable specs and tools use their own inspection selectors, for example
+`spec:project`, `spec:sources`, `spec:claims`, `spec:manuscript`, and
+`tool:<tool-id>`. They belong to the inspection commands such as `list` and `check`,
+not to `show`.
+
+`handoff` accepts `run:<run-id>`. Never infer a selector from a directory name, a
+similar file name, or the newest timestamp when more than one item exists.
+
+Read commands do not modify project files. Mutation commands validate their semantic
+input against the selected current owner.

@@ -7,8 +7,8 @@ Anchor manifest 记录 vendored ARSU 中需要由 ResearchSpec current contracts
 
 ## 2. Replacement owner
 
-56 个 anchors 的精确 replacement targets 由
-[`contract-anchors.json`](../../src/arsu-converter/anchors/contract-anchors.json) 维护，分为：
+源码仓库中的 [`contract-anchors.json`](https://github.com/leike0813/ResearchSpec/blob/main/src/arsu-converter/anchors/contract-anchors.json)
+维护 replacement target 的完整清单。
 
 - 四份 stable specs；
 - `profiles/academic-pipeline.yaml`；

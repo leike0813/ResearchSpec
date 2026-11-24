@@ -48,25 +48,20 @@ runtime behavior as supported.
 ### Requirement: GitHub Pages Deployment
 
 The documentation website SHALL be automatically built and deployed to GitHub
-Pages when changes are merged to the main branch.
+Pages on pushes to `main`. The deployment SHALL use the artifact from the
+successful documentation check for that commit.
 
 #### Scenario: PR validation
 
-- **WHEN** a pull request modifies files under `src/cli/command-catalog.ts`,
-  `src/cli/handbook.ts`, `website/`, `scripts/generate-docs.mjs`, or
-  `.github/workflows/docs.yml`
-- **THEN** the CI workflow SHALL run `pnpm docs:check` to verify generated
-  content is in sync
-- **AND** the CI workflow SHALL build the Docusaurus site to verify it compiles
-  without errors
+- **WHEN** a pull request is opened or updated
+- **THEN** the Docs workflow SHALL check the generated documentation
+- **AND** it SHALL build both Docusaurus locales from locked dependencies
 
 #### Scenario: Main branch deployment
 
-- **WHEN** a push to main includes changes to the documentation paths
-- **THEN** the CI workflow SHALL generate docs content, build the site, and
-  deploy to GitHub Pages
-- **AND** the deployment SHALL use the `peaceiris/actions-gh-pages` action
-- **AND** the deployed site SHALL be served from the `gh-pages` branch
+- **WHEN** a push to `main` passes documentation checks and builds
+- **THEN** the workflow SHALL upload the checked output and deploy it through GitHub Pages Actions
+- **AND** the deploy job SHALL use the protected Pages environment
 
 ### Requirement: Durable Documentation Is Organized By Reader
 
@@ -83,10 +78,10 @@ SHALL explain authority and route readers to the canonical source.
 
 ### Requirement: Temporary Work Does Not Compete With Current Documentation
 
-Generated reports, release evidence, superseded proposals, acceptance rehearsals,
-and historical decision logs SHALL live under categorized `artifacts/`
-directories. Archived material SHALL NOT be presented as current product
-authority.
+Generated reports and historical records SHALL live under categorized `artifacts/`
+directories. These include release evidence, superseded proposals, acceptance
+rehearsals and historical decision logs. Archived material SHALL NOT be presented
+as current product authority.
 
 #### Scenario: A historical rehearsal is retained
 

@@ -1015,6 +1015,10 @@ When implementing features:
 
 ## Definition of Done
 
+For npm candidate preparation, hosted checks, publication or repository release
+settings, follow [the release process](docs/maintainer/release-process.md).
+Bind evidence and publication authorization to the verified tarball and commit.
+
 A change is acceptable when:
 
 - it supports the new ARSU-serving ResearchSpec direction;

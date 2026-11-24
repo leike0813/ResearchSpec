@@ -5,6 +5,7 @@ import { parse as parseYaml } from "yaml";
 import { ToolInstallationManifestSchema, type ToolInstallationManifest } from "../../adapters/installations.js";
 import { validateManagedTarget } from "../../adapters/managed-target.js";
 import { INTELLECTUAL_PROPERTY_DOMAIN_ID, OPTIONAL_PATENT_PROFILE_IDS } from "../../graph-profiles/intellectual-property.js";
+import { readPackageVersion } from "../../utils/package-version.js";
 import { CapabilityGraphProfileSchema, type CapabilityGraphProfile } from "../contracts/capability-graph.js";
 import {
   ClaimsSpecV2Schema,
@@ -143,7 +144,7 @@ export async function loadGraphWorkspaceIndex(workspace: string): Promise<GraphW
     }
   }
   const manifest = manifestStatus === "valid" && parsedManifest ? parsedManifest
-    : ToolInstallationManifestSchema.parse({ schema_version: "1", package_version: "0.1.0", plugin_resolutions: [], literature_adapter_resolutions: [], installations: [] });
+    : ToolInstallationManifestSchema.parse({ schema_version: "1", package_version: readPackageVersion(), plugin_resolutions: [], literature_adapter_resolutions: [], installations: [] });
   const project = parseRequired(files, "specs/project.md", parseProjectSpecV2, diagnostics)
     ?? parseProjectSpecV2("---\nschema_version: \"2\"\nproject_id: invalid\n---\n");
   const sources = parseRequired(files, "specs/sources.yaml", (text) => SourcesSpecV2Schema.parse(parseYaml(text)), diagnostics)

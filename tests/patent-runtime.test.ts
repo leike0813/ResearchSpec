@@ -2,14 +2,14 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { mkdir, mkdtemp, readFile, rm, symlink, unlink, writeFile } from "node:fs/promises";
-import { homedir, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { uvPythonArgs } from "./helpers/python.js";
 
 const ROOT = process.cwd();
 const AUTHORING = path.join(ROOT, "authoring/patent-disclosure-skill");
 const MANIFEST = path.join(AUTHORING, "runtime-assets.json");
-const AR_PROJECT = path.join(homedir(), ".ar");
 const BUSINESS = [
   "patent-disclosure",
   "patent-application",
@@ -48,7 +48,7 @@ const manifest = JSON.parse(readFileSync(MANIFEST, "utf8")) as Manifest;
 function python(args: string[], options: { cwd?: string; env?: Record<string, string>; code?: string } = {}): ToolResult {
   const result = spawnSync(
     "uv",
-    ["run", `--project=${AR_PROJECT}`, "--locked", "--no-sync", "--", "python", ...args],
+    uvPythonArgs(args),
     {
       cwd: options.cwd,
       encoding: "utf8",

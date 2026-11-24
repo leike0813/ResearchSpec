@@ -8,6 +8,8 @@ export default tseslint.config(
     ignores: [
       "dist/**",
       "node_modules/**",
+      "website/build/**",
+      "website/.docusaurus/**",
       "vendor/**",
       "references/**",
       ".*/**",

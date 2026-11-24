@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import http from "node:http";
-import { homedir, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, before, test } from "node:test";
 
@@ -10,6 +10,7 @@ import { renderHistAgentCompleteTrees } from "../src/vendor-converters/histagent
 import { HISTAGENT_SKILL_DEFINITIONS } from "../src/vendor-converters/histagent/skill-definitions.js";
 import { loadHistAgentPolicies } from "../src/vendor-converters/histagent/policy.js";
 import { validateNonNativeVendorSkill } from "../src/vendor-converters/shared/non-native-skill-standard/index.js";
+import { uvPythonArgs } from "./helpers/python.js";
 
 const REPO_ROOT = path.resolve(".");
 let temporaryRoot: string;
@@ -232,7 +233,7 @@ interface Invocation { code: number; stdout: Record<string, unknown>; stderr: Re
 async function invoke(skillId: string, script: string, args: string[], environment: Record<string, string> = {}): Promise<Invocation> {
   const root = treeRoots.get(skillId);
   assert.ok(root);
-  const command = ["run", `--project=${path.join(homedir(), ".ar")}`, "--locked", "--", "python", path.join(root, script), ...args];
+  const command = uvPythonArgs([path.join(root, script), ...args]);
   return new Promise((resolve, reject) => {
     execFile("uv", command, { cwd: root, env: { ...process.env, ...environment, PYTHONPATH: "", PYTHONNOUSERSITE: "1", PYTHONDONTWRITEBYTECODE: "1" } }, (error, stdout, stderr) => {
       try {

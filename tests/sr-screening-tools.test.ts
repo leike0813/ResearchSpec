@@ -2,15 +2,15 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { cp, mkdtemp, readFile, rm, unlink, writeFile } from "node:fs/promises";
-import { homedir, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import { uvPythonArgs } from "./helpers/python.js";
 
 const ROOT = path.resolve(".");
 const TOOL = path.join(ROOT, "src/arsu-converter/authoring/checkers/sr-screening/screening_tools.py");
-const SHARED = path.join(homedir(), ".ar");
-const run = (args: string[]) => spawnSync("uv", ["run", `--project=${SHARED}`, "--locked", "--", "python", TOOL, ...args], { cwd: ROOT, encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" } });
-const python = (args: string[]) => spawnSync("uv", ["run", `--project=${SHARED}`, "--locked", "--", "python", ...args], { cwd: ROOT, encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" } });
+const run = (args: string[]) => spawnSync("uv", uvPythonArgs([TOOL, ...args]), { cwd: ROOT, encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" } });
+const python = (args: string[]) => spawnSync("uv", uvPythonArgs(args), { cwd: ROOT, encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" } });
 const parseJson = (text: string): unknown => JSON.parse(text);
 const at = <T>(rows: T[], index: number): T => {
   const value = rows[index];

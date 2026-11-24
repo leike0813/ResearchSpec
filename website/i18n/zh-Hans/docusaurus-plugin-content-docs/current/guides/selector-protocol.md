@@ -1,22 +1,31 @@
 ---
 sidebar_position: 5
 title: Selector 协议
-description: 使用稳定 selector 定位 current ResearchSpec owner
+description: 用稳定 selector 定位 Procedure、profile、run、node 和 change
 ---
 
 # Selector 协议
 
-先运行 `researchspec status --json` 获取精确 machine ID，再运行
-`researchspec instructions <selector> --json`。
+先用 `researchspec status --json` 获取精确 machine ID，再用 `researchspec instructions <selector> --json` 查看该对象的动作契约。
 
-| Selector | 用途 |
+## `show` 支持的 selector
+
+`researchspec show <selector>` 精确查看一个对象：
+
+| Selector | 对象 |
 | --- | --- |
-| `profile:<profile-id>` | 查看 graph profile 或启动已确认的根 run |
-| `run:<run-id>` | 查看 frozen graph run 或 handoff |
-| `node:<run-id>/<node-id>[@round]` | 查看、启动 bound child 或推进节点 |
-| `gate:<run-id>/<gate-id>[@round]` | 查看或决定 formal Gate |
-| `decision:<run-id>/<decision-id>[@round]` | 查看或记录 graph Decision |
-| `change:<change-id>` | 查看或决定 project change |
+| `procedure:<procedure-id>` | Procedure 卡片 |
+| `profile:<profile-id>` | Graph profile |
+| `run:<run-id>` | Frozen graph run |
+| `node:<run-id>/<node-id>[@round]` | Node instance |
+| `change:<change-id>` | Project change |
 
-当多个对象可能匹配时，不能根据目录名、相似文件名或“最近一个”推断 selector。读命令不修改
-workspace；mutation command 只更新所选 owning file。
+`show` 不接受 stable spec、tool、Gate 或 Decision selector。
+
+## `instructions` selector
+
+支持 `procedure:<id>`、`profile:<id>`、`run:<id>`、`node:<run>/<node>[@round]`、`gate:<run>/<gate>[@round]`、`decision:<run>/<decision>[@round]` 和 `change:<id>`。
+
+Stable spec 和 tool 有自己的检查 selector，例如 `spec:project`、`spec:sources`、`spec:claims`、`spec:manuscript` 和 `tool:<tool-id>`，供 `list`、`check` 等检查命令使用，不属于 `show`。
+
+`handoff` 接受 `run:<run-id>`。多个对象可能匹配时，不要根据目录名、相似文件名或最新时间推断 selector。读取命令不修改项目文件；mutation command 会校验所选 owner 的语义输入。

@@ -1,42 +1,45 @@
 ---
 sidebar_position: 1
 title: 项目介绍
-description: ResearchSpec —— 面向智能体的、以规约为驱动的学术研究写作框架
+description: 面向智能体、以规约驱动的学术研究工作框架
 ---
 
 # ResearchSpec
 
-ResearchSpec 是一个**面向智能体的、基于文件的学术研究规约框架**，
-用于编排学术论文写作工作流。它通过结构化规约、显式人工决策和可复现的
-工作流状态来驱动 ARSU（Academic Research Skills Universal）技能包。
+ResearchSpec 是面向智能体的文件式研究框架，用于承载 ARSU（Academic Research Skills Universal）能力，并以稳定文件描述研究意图、来源、声明、稿件和工作流状态。
 
-## 能做什么
+## 工作方式
 
-- **一键初始化研究工作区** —— `researchspec init`
-- **引导智能体执行结构化工作流** —— 文献获取、综合、撰写、审阅和修订
-- **让人类掌控关键决策** —— 通过显式的门控（Gate）和决策账本
-- **与任意 AI 智能体协作** —— 不依赖任何特定平台运行时
-- **维护可复现的论文轨迹** —— 每件制品、决策和门控裁定都通过哈希追踪
+- `researchspec init` 准备 schema `"2"` 工作区，不会启动研究。
+- 唯一固定入口 `researchspec-navigate` 从自然语言任务发现合适能力。
+- 普通研究可以独立完成；只有 formal Gate、Decision、并行汇合、修订轮次或可审计状态需要 graph。
+- 每个 formal Gate 和 graph Decision 都由用户单独确认。
+- 稿件和报告等边界交付物保存在 `researchspec/` 之外，ResearchSpec 不登记或管理这些文件。
 
 ## 核心概念
 
 | 概念 | 说明 |
-|------|------|
-| **规约（Contract）** | 类型化的文件（YAML/JSON/JSONL），保存结构化的研究意图、声明、来源和状态 |
-| **制品（Artifact）** | 草稿、报告、审阅或生成文件，按哈希和类型注册 |
-| **门控（Gate）** | 确定性检查，在条件满足前阻止工作流推进 |
-| **决策（Decision）** | 记录在决策账本中的显式人工选择 |
-| **选择器（Selector）** | 由 `researchspec instructions` 返回的运行时动作令牌 |
+| --- | --- |
+| Stable specs | 保存项目意图、来源、声明和稿件结构的四份稳定规约 |
+| Procedure | 通过 `instructions procedure:<id>` 按需加载的能力 |
+| Gate | 需要人工确认结果的学术检查点 |
+| Boundary deliverable | `researchspec/` 外的普通文件，由 handoff 记录角色和路径 |
+| Selector | 精确定位 procedure、profile、run、node 或 change 的标识 |
 
-## 四个 ARSU 技能
+## 五个 ARSU 工作流
 
-- **deep-research** — 系统性文献发现、获取与综合
-- **academic-paper** — 从研究问题到章节的分步论文撰写
-- **academic-paper-reviewer** — 结构化稿件审阅，附带可追溯的审阅意见
-- **academic-pipeline** — 跨阶段工作流编排
+- `deep-research`：系统性文献发现、获取和综合
+- `academic-paper`：从研究问题到章节的分步论文撰写
+- `academic-paper-reviewer`：结构化稿件审阅
+- `academic-pipeline`：跨阶段工作流编排
+- `sr-screener`：系统综述筛选、排除复核和 PRISMA 报告
 
-## 从哪里开始
+它们都是隐藏的按需 Procedure。CLI 命令参考由源码生成，因此不单独翻译。
 
-- [快速入门](/quick-start) — 安装并运行你的第一个工作区
-- [CLI 命令参考](/cli) — 完整命令参考（从源码自动生成）
-- [工作流指南](/guides/workflow) — 理解研究工作流模型
+## 从这里开始
+
+- [安装](/installation)
+- [快速入门](/quick-start)
+- [CLI 命令参考](/cli)
+- [工作流指南](/guides/workflow)
+- [技能与 Procedure](/guides/skills)

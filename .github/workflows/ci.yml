@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - dev-refactor
   workflow_dispatch:
     inputs:
       semantic_search:
@@ -15,8 +16,12 @@ on:
 permissions:
   contents: read
 
+env:
+  OPENSPEC_TELEMETRY: '0'
+  DO_NOT_TRACK: '1'
+
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -31,11 +36,11 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         node: [22, 24]
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v6
         with:
-          version: 10.13.1
-      - uses: actions/setup-node@v4
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
@@ -47,7 +52,7 @@ jobs:
   verify:
     name: ${{ matrix.os }} / Node ${{ matrix.node }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -60,16 +65,30 @@ jobs:
           - 24
 
     steps:
+      - name: Preserve Git bytes and enable Windows long paths
+        shell: bash
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.longpaths true
+
+      - name: Use the physical temporary directory on macOS
+        if: runner.os == 'macOS'
+        shell: bash
+        run: printf 'TMPDIR=%s\n' "$(cd "$RUNNER_TEMP" && pwd -P)" >> "$GITHUB_ENV"
+
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Check out pinned vendor inputs
+        run: git submodule update --init --jobs 4
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10.13.1
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
@@ -77,10 +96,33 @@ jobs:
       - name: Install locked dependencies
         run: pnpm install --frozen-lockfile
 
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Expose Python 3 to Windows validators
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $python = (Get-Command python.exe -ErrorAction Stop).Source
+          $python3 = Join-Path (Split-Path $python) python3.exe
+          if (!(Test-Path -LiteralPath $python3)) {
+            Copy-Item -LiteralPath $python -Destination $python3
+          }
+      - uses: astral-sh/setup-uv@v7
+        with:
+          version: '0.9.17'
+      - name: Install locked Python test environment
+        run: uv sync --project tests/python --locked
+        env:
+          UV_PROJECT_ENVIRONMENT: ${{ runner.temp }}/researchspec-test-python
+
       - name: Run public and focused tests
         run: pnpm test
         env:
           REQUIRE_REVIEW_BROWSER: ${{ runner.os == 'Linux' && '1' || '' }}
+          RESEARCHSPEC_TEST_PYTHON_PROJECT: ${{ github.workspace }}/tests/python
+          UV_PROJECT_ENVIRONMENT: ${{ runner.temp }}/researchspec-test-python
+          PYTHONUTF8: '1'
 
       - name: Run lint and typecheck
         run: pnpm lint && pnpm check
@@ -91,9 +133,6 @@ jobs:
       - name: Validate converter idempotence
         run: pnpm arsu:idempotence
 
-      - name: Check out fixed Zotero adapter maintenance input
-        run: git submodule update --init vendor/zotero-library-agent-bundle
-
       - name: Validate fixed Zotero adapter output
         run: pnpm zotero-adapter:check && pnpm zotero-adapter:idempotence
 
@@ -102,3 +141,31 @@ jobs:
 
       - name: Validate main OpenSpec capabilities
         run: pnpm dlx @fission-ai/openspec@1.5.0 validate --specs --strict --no-interactive
+
+      - name: Validate reviewed converter and audit inputs
+        if: matrix.os == 'ubuntu-latest' && matrix.node == 24
+        run: |
+          pnpm arsu:anchors:check
+          pnpm arsu:runtime-policy:check
+          pnpm zotero-adapter:audit
+          pnpm tooluniverse:check
+          pnpm tooluniverse:idempotence
+          pnpm scientific-agent-skills:check
+          pnpm scientific-agent-skills:idempotence
+          pnpm materials-science-skills-for-llm:check
+          pnpm materials-science-skills-for-llm:idempotence
+          pnpm finrobot:check
+          pnpm finrobot:idempotence
+          pnpm histagent:check
+          pnpm histagent:idempotence
+          pnpm education-agent-skills:audit:check
+          pnpm education-agent-skills:evidence:check
+          pnpm education-agent-skills:check
+          pnpm education-agent-skills:idempotence
+          pnpm patent:check
+          pnpm patent:idempotence
+          pnpm own-vendor-maintenance:check
+
+      - name: Test the maintainer dogfooding harness
+        if: matrix.os == 'ubuntu-latest' && matrix.node == 24
+        run: node --test tests/dogfood-harness.test.mjs

@@ -122,7 +122,7 @@ Show procedure, profile, run, node, Gate, Decision, or change instructions
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--input <materials.yaml|json>` | no | optional standalone Procedure input and planned output bindings |
+| `--input <materials.yaml\|json>` | no | optional standalone Procedure input and planned output bindings |
 
 #### Input shape
 
@@ -143,7 +143,7 @@ Start a confirmed root run or one graph-authorized child run
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--input <start.yaml|json>` | no | schema 2 root Start input |
+| `--input <start.yaml\|json>` | no | schema 2 root Start input |
 | `--confirmed-by <name>` | no | human who confirmed this exact root run |
 
 #### Input shape
@@ -194,7 +194,7 @@ Validate and complete one eligible graph node
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--input <advance.yaml|json>` | yes | output role submission payload |
+| `--input <advance.yaml\|json>` | yes | output role submission payload |
 | `--transition <id>` | no | reserved for run-level transitions |
 | `--actor-name <name>` | no | action executor name |
 
@@ -221,7 +221,7 @@ Check schema 2 workspace contracts
 | Command option | Required | Purpose |
 | --- | --- | --- |
 | `--strict` | no | treat warnings as failures |
-| `--input <materials.yaml|json>` | no | explicit input and delivered output bindings for procedure:<id> |
+| `--input <materials.yaml\|json>` | no | explicit input and delivered output bindings for procedure:<id> |
 
 #### Input shape
 
@@ -268,7 +268,7 @@ Show one exact procedure, profile, run, node, or project change
 
 #### Input shape
 
-One exact stable spec, profile, run, node, Gate, Decision, change, handoff, or tool selector.
+One exact procedure, profile, run, node, or project change selector.
 
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
@@ -327,7 +327,7 @@ Render or replace one directly editable run handoff
 
 | Command option | Required | Purpose |
 | --- | --- | --- |
-| `--input <handoff.yaml|json>` | no | semantic inputs, outputs, and optional Markdown body |
+| `--input <handoff.yaml\|json>` | no | semantic inputs, outputs, and optional Markdown body |
 
 #### Input shape
 

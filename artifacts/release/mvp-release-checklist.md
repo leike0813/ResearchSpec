@@ -1,15 +1,17 @@
 # ResearchSpec 0.1.0 Release Authorization Checklist
 
-**Current authorization:** `BLOCKED`
+**Default authorization status:** `BLOCKED`
 
-Unchecked items require current evidence from the final release candidate. Earlier control-plane test
-results do not satisfy this checklist.
+Copy this checklist into the evidence record for the final release candidate and
+identify its commit SHA, CI and Docs runs, dogfood campaign, license reviewer,
+release artifact integrity and maintainer approval. See the
+[release process](../../docs/maintainer/release-process.md).
 
 ## Technical readiness
 
 - [ ] Full current release command set passed on the release candidate worktree.
 - [ ] `release:verify` inspected and installed the real npm tarball.
-- [ ] Active OpenSpec change and main specs passed strict validation.
+- [ ] Release OpenSpec change and main specs passed strict validation.
 - [ ] Current user journeys passed through fresh packaged CLI processes.
 - [ ] Final tarball and worktree scope audit found no forbidden or unrelated files.
 
@@ -18,6 +20,7 @@ results do not satisfy this checklist.
 - [ ] Ubuntu / Node 22 and Node 24 passed on the release commit.
 - [ ] macOS / Node 22 and Node 24 passed on the release commit.
 - [ ] Windows / Node 22 and Node 24 passed on the release commit.
+- [ ] The checked English and Simplified Chinese documentation build deployed on Pages.
 
 ## Dogfooding campaign gate
 
@@ -47,12 +50,13 @@ The [four-host change 05 campaign](../../playbooks/dogfooding/host-verification.
 
 - [ ] Canonical Git and package metadata configured.
 - [ ] Private vulnerability reporting channel configured.
-- [ ] npm name and protected publishing path rechecked.
-- [ ] Mixed-license distribution reviewed by the responsible rights holder or adviser.
+- [ ] npm name rechecked and verified tarball retained with SHA, version, sizes and integrity.
+- [ ] npm production environment configured for protected trusted publication of subsequent versions.
+- [ ] Mixed-license distribution, including Zotero Adapter corresponding source, reviewed by the responsible rights holder or adviser.
 - [ ] Exact release commit identified and bound to hosted evidence.
 
 ## Authorization
 
-- [ ] Maintainer explicitly authorized commit, tag, push, GitHub Release, and npm publication.
+- [ ] Maintainer explicitly authorized the tag, GitHub Release and npm publication for the verified candidate.
 
 Until every item is complete, `BLOCKED` is the only valid authorization state.

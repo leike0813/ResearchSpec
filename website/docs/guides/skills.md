@@ -1,87 +1,68 @@
 ---
 sidebar_position: 2
-title: Skills Guide
-description: How ARSU Skills work in ResearchSpec — deep-research, academic-paper, academic-paper-reviewer, academic-pipeline
+title: Skills and Procedures
+description: The single Navigate entry and the on-demand Procedure catalog
 ---
 
-# Skills Guide
+# Skills and Procedures
 
-ARSU (Academic Research Skills Universal) provides the core research
-capabilities that ResearchSpec orchestrates. Each Skill is a bundle of
-instructions the agent follows during a workflow.
+ResearchSpec keeps one Skill in the host catalog and loads everything else on demand.
 
-## The Four ARSU Skills
+## The only entry: researchspec-navigate
 
-### deep-research
+`researchspec-navigate` is the fixed user-visible Agent surface. It routes vague,
+cross-capability, resume, explanation, and export requests, and it reads the CLI
+handbook and the ARSU route reference only when they are needed.
 
-Systematic literature discovery, acquisition, and synthesis.
+```bash
+researchspec list procedures --query "systematic review screening"
+researchspec show procedure:<procedure-id>
+researchspec instructions procedure:<procedure-id>
+```
 
-- Searches and retrieves literature from configured sources
-- Builds a structured bibliography corpus
-- Produces synthesis reports with traceable source evidence
+Discovery starts from the original natural-language request and keeps Chinese,
+English, or mixed wording. `list` returns compact cards with the match reason, `show`
+returns one card, and `instructions` loads the full procedure with its resource
+references and activation packet. The catalog is derived from the existing
+registries at runtime; it is not a second persisted registry.
 
-### academic-paper
+## Five ARSU workflows
 
-Progressive paper drafting from research questions to chapter-level sections.
+| Workflow | Purpose |
+| --- | --- |
+| `deep-research` | Systematic literature discovery, acquisition, and synthesis |
+| `academic-paper` | Progressive paper drafting from research questions to chapters |
+| `academic-paper-reviewer` | Structured manuscript review with traceable comments |
+| `academic-pipeline` | Cross-stage orchestration over research, writing, review, and revision |
+| `sr-screener` | Screening, exclusion review, and PRISMA reporting for a systematic review |
 
-- Designs research questions and paper structure
-- Drafts sections with evidence checks and style profiling
-- Maintains claim traceability throughout the manuscript
+## The hidden inventory
 
-### academic-paper-reviewer
+The five ARSU workflows, the other three Companion workflows, the registered core
+capabilities, and plugin extensions are Procedures. They are not projected into the
+host Skill catalog. A plugin Procedure is activated only after a domain selection, an
+availability check, and a manifest-hash check, and the activated package is reviewed
+static content that ResearchSpec never executes.
 
-Structured manuscript review with traceable comments.
+## The optional Zotero Adapter
 
-- Reviews papers in stages (structure, argumentation, evidence, style)
-- Generates structured review reports
-- Links comments to specific claims and sections
+Selecting `zotero-library` adds seven explicit Skills for library work. The Adapter
+requires Zotero with the [Zotero-Agents plugin](https://github.com/leike0813/zotero-agents):
 
-### academic-pipeline
-
-Coordinates research, writing, review and revision through a frozen capability graph.
-
-- Dispatches between deep-research, academic-paper, and reviewer stages
-- Reads the current frontier and produces semantic work; the CLI records graph state
-- Presents each formal Gate and Decision for human confirmation
-
-## Companion Skills
-
-ResearchSpec also includes five companion Skills that assist with
-framework-level operations:
-
-| Companion | Purpose |
-|-----------|---------|
-| `researchspec-navigate` | Route vague or cross-Skill requests to the right Skill |
-| `researchspec-propose` | Create structured contract change proposals |
-| `researchspec-decide` | Guide human decision-making on proposals |
-| `researchspec-verify` | Verify implementation against contracts |
-| `researchspec-cli-handbook` | Read the current CLI commands and input contracts |
-
-The installed base surface also includes every capability package in the bundled
-capability registry. A package marked `operational` has a curated execution
-procedure; this label does not certify the academic quality of a real Agent run.
-
-## Optional Literature Adapter Skills
-
-Selecting `zotero-library` adds seven Skills for library management and analysis.
-The Adapter requires Zotero with the
-[Zotero-Agents plugin](https://github.com/leike0813/zotero-agents):
-
-| Adapter | Purpose |
-|---------|---------|
+| Adapter Skill | Purpose |
+| --- | --- |
 | `zotero-library-agent` | Route and coordinate library research tasks |
-| `zotero-library-query` | Retrieve and answer questions from library content |
+| `zotero-library-query` | Retrieve current library content for source-grounded answers |
 | `zotero-literature-acquisition` | Discover, evaluate, and import literature |
-| `zotero-literature-analysis` | Analyze literature with traceable evidence |
+| `zotero-literature-analysis` | Analyze literature with traceable source evidence |
 | `zotero-research-synthesis` | Synthesize literature into research context |
-| `zotero-library-curation` | Apply approved library maintenance |
-| `zotero-bridge-cli` | Low-level Zotero operations |
+| `zotero-library-curation` | Plan and apply approved library maintenance |
+| `zotero-bridge-cli` | Low-level Zotero operations and command discovery |
 
-## Skill Discovery
+## Managed worker profiles
 
-Use `researchspec status --json` to discover which Skills are available in
-your workspace. The `instructions` command tells the agent exactly how to use
-each Skill.
-
-Skills are **agent-neutral** — they work with any AI agent that can follow
-structured instructions and operate through the CLI protocol.
+Hosts with project-local custom agent support also receive two non-entry profiles,
+`researchspec-executor` and `researchspec-reviewer`. They add no Skill, Command, or
+Procedure, and they never accept work on their own. Navigate uses one only when the
+current activation packet recommends it, and the worker returns a brief that Navigate
+validates before any CLI mutation happens.

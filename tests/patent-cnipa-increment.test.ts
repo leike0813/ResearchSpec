@@ -1,11 +1,10 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { homedir } from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { uvPythonArgs } from "./helpers/python.js";
 
 const ROOT = process.cwd();
-const AR_PROJECT = path.join(homedir(), ".ar");
 const RUNTIME = path.join(ROOT, "authoring/patent-disclosure-skill/runtime");
 const SHARED = path.join(RUNTIME, "shared");
 const SEARCH_TOOLS = path.join(RUNTIME, "patent-search", "tools");
@@ -353,7 +352,7 @@ const PYTHON_PROBE = [
 function runProbe(): Probe {
   const result = spawnSync(
     "uv",
-    ["run", `--project=${AR_PROJECT}`, "--locked", "--no-sync", "--", "python", "-", RUNTIME],
+    uvPythonArgs(["-", RUNTIME]),
     {
       cwd: ROOT,
       encoding: "utf8",
@@ -435,16 +434,10 @@ void test("提交被拒时保留站点错误来源并用站点下拉框切每页
 void test("公布检索 CLI 的离线 --help 不被帮助文本里的百分号破坏", () => {
   const result = spawnSync(
     "uv",
-    [
-      "run",
-      `--project=${AR_PROJECT}`,
-      "--locked",
-      "--no-sync",
-      "--",
-      "python",
+    uvPythonArgs([
       path.join(SEARCH_TOOLS, "cnipa_search.py"),
       "--help",
-    ],
+    ]),
     {
       cwd: ROOT,
       encoding: "utf8",

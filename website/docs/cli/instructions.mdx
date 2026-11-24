@@ -17,7 +17,7 @@ Show procedure, profile, run, node, Gate, Decision, or change instructions
 
 | Option | Required | Description |
 | --- | --- | --- |
-| `--input <materials.yaml|json>` | no | optional standalone Procedure input and planned output bindings |
+| `--input <materials.yaml\|json>` | no | optional standalone Procedure input and planned output bindings |
 
 #### Input shape
 
@@ -26,4 +26,4 @@ One exact procedure or graph control/inspection selector.
 | Field or option | Type | Required | Meaning |
 | --- | --- | --- | --- |
 | `selector` | `procedure:... \| profile:... \| run:... \| node:<run>/<node>[@round] \| gate:... \| decision:... \| change:...` | yes | Procedure or current graph item whose action contract is needed. |
-| `--input` | `YAML/JSON material bindings` | no | Standalone Procedure context only: inputs[{role,path}\|{role,value}], planned outputs[{role,path}]. Omitted arrays are uninspected; empty arrays inspect declared omissions. |
+| `--input` | `YAML/JSON material bindings` | no | Standalone Procedure context only: inputs[&#123;role,path&#125;\|&#123;role,value&#125;], planned outputs[&#123;role,path&#125;]. Omitted arrays are uninspected; empty arrays inspect declared omissions. |

@@ -1,0 +1,131 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Exact stable npm version from package.json, without a v prefix
+        required: true
+        type: string
+      mode:
+        description: Prepare a verified tarball or publish a later version via npm Trusted Publishing
+        type: choice
+        default: prepare
+        options:
+          - prepare
+          - publish
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: npm-release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Prepare verified npm package
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Require main and successful checks for this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [[ "$GITHUB_REF" != refs/heads/main ]]; then
+            echo "::error::Dispatch the release workflow from main."
+            exit 1
+          fi
+          for workflow in ci.yml docs.yml; do
+            result=$(gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/$workflow/runs" \
+              -f "head_sha=$GITHUB_SHA" -f branch=main -f event=push -F per_page=1 \
+              --jq '.workflow_runs[0].conclusion // ""')
+            if [[ "$result" != success ]]; then
+              echo "::error::$workflow has no successful main push run for $GITHUB_SHA."
+              exit 1
+            fi
+          done
+
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Confirm version and registry availability
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+          RELEASE_MODE: ${{ inputs.mode }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from "node:fs";
+
+          const { name, version } = JSON.parse(readFileSync("package.json", "utf8"));
+          if (name !== "researchspec" || version !== process.env.RELEASE_VERSION
+            || !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version)) {
+            throw new Error("Enter the exact stable researchspec version in package.json.");
+          }
+          const [major, minor, patch] = version.split(".").map(Number);
+          if (process.env.RELEASE_MODE === "publish" && major === 0
+            && (minor === 0 || (minor === 1 && patch === 0))) {
+            throw new Error("Use prepare mode for 0.1.0 and publish its tarball manually.");
+          }
+          NODE
+          status=$(curl --silent --show-error --retry 2 --max-time 20 --output /dev/null \
+            --write-out '%{http_code}' "https://registry.npmjs.org/researchspec/$RELEASE_VERSION")
+          if [[ "$status" != 404 ]]; then
+            echo "::error::Expected an unpublished version (npm registry HTTP $status)."
+            exit 1
+          fi
+          if [[ "$RELEASE_MODE" == publish ]]; then
+            curl --fail --silent --show-error --retry 2 --max-time 20 --output /dev/null \
+              "https://registry.npmjs.org/researchspec/0.1.0"
+          fi
+
+      - run: pnpm install --frozen-lockfile
+      - name: Pack, install, verify and retain the tarball
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          pnpm release:verify --output-dir "$RUNNER_TEMP/npm-release"
+          node scripts/verify-release-artifact.mjs "$RUNNER_TEMP/npm-release" "$RELEASE_VERSION" "$GITHUB_SHA"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: npm-release
+          path: ${{ runner.temp }}/npm-release
+          if-no-files-found: error
+          compression-level: 0
+
+  publish:
+    name: Publish verified package to npm
+    if: inputs.mode == 'publish'
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: npm-production
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          registry-url: https://registry.npmjs.org/
+          package-manager-cache: false
+      - uses: actions/download-artifact@v8
+        with:
+          name: npm-release
+          path: ${{ runner.temp }}/npm-release
+      - name: Publish the verified tarball
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          tarball=$(node scripts/verify-release-artifact.mjs "$RUNNER_TEMP/npm-release" "$RELEASE_VERSION" "$GITHUB_SHA")
+          npm publish "$tarball" --access public --ignore-scripts

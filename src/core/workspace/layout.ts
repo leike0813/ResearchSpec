@@ -1,5 +1,6 @@
 import path from "node:path";
 import { stringify } from "yaml";
+import { readPackageVersion } from "../../utils/package-version.js";
 
 export type WorkspaceFileKind = "markdown" | "yaml" | "json";
 export type OverwritePolicy = "user" | "generated";
@@ -36,7 +37,9 @@ const WORKSPACE_TEMPLATES: readonly WorkspaceTemplateDefinition[] = [
     kind: "json",
     overwritePolicy: "generated",
     required: true,
-    content: `${JSON.stringify({ schema_version: "1", package_version: "0.1.0", plugin_resolutions: [], literature_adapter_resolutions: [], installations: [] }, null, 2)}\n`,
+    get content() {
+      return `${JSON.stringify({ schema_version: "1", package_version: readPackageVersion(), plugin_resolutions: [], literature_adapter_resolutions: [], installations: [] }, null, 2)}\n`;
+    },
   },
   {
     relativePath: "specs/project.md",

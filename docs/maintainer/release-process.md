@@ -1,94 +1,136 @@
-# ResearchSpec MVP Release Process
+# ResearchSpec release process
 
-Passing technical checks does not authorize a Git tag, GitHub Release, or npm publication.
+Record the hosted checks, package integrity, dogfooding results, license
+sign-off and maintainer approval against one commit SHA. Use the
+[release checklist](../../artifacts/release/mvp-release-checklist.md) as the
+template for the candidate's evidence record. Keep review evidence in an
+access-controlled location when it contains transcripts or research materials.
 
-## 1. Technical gates
+## Verify the candidate
 
-Local multilingual discovery has a separate opt-in acceptance check:
-`pnpm semantic-search:smoke` downloads the pinned model and isolated CPU runtime
-to the user cache, builds the public Procedure index, and runs real bilingual
-queries. CI's manual `semantic_search` input runs this on Linux/macOS/Windows
-with Node 22 and 24. Ordinary CI and installed-package verification stay offline;
-record hosted results separately from local smoke and live Agent dogfooding.
+Use Node.js 22 or 24 from a clean checkout. For a Windows checkout, set
+`core.longpaths=true` and `core.autocrlf=false` before checkout to preserve
+vendor paths and reviewed bytes. Run the same gates as the
+[CI workflow](https://github.com/leike0813/ResearchSpec/blob/main/.github/workflows/ci.yml).
+Node tests that exercise Python use the shared local uv environment by default.
+The hosted workflow sets `RESEARCHSPEC_TEST_PYTHON_PROJECT` to the locked
+test project in `tests/python` and puts its environment outside the checkout.
 
-Run from a clean checkout on a supported Node release:
-
-```bash
+```sh
+git submodule update --init
 pnpm install --frozen-lockfile
 pnpm test
 pnpm lint
 pnpm check
 pnpm docs:check
-pnpm arsu:anchors:check
-pnpm arsu:runtime-policy:check
-pnpm arsu:check
-pnpm arsu:idempotence
-pnpm zotero-adapter:audit
-pnpm zotero-adapter:check
-pnpm zotero-adapter:idempotence
-pnpm tooluniverse:check
-pnpm tooluniverse:idempotence
-pnpm scientific-agent-skills:check
-pnpm scientific-agent-skills:idempotence
-pnpm materials-science-skills-for-llm:check
-pnpm materials-science-skills-for-llm:idempotence
-pnpm finrobot:check
-pnpm finrobot:idempotence
-pnpm histagent:check
-pnpm histagent:idempotence
-pnpm education-agent-skills:audit:check
-pnpm education-agent-skills:evidence:check
-pnpm education-agent-skills:check
-pnpm education-agent-skills:idempotence
+pnpm --dir website install --frozen-lockfile
+pnpm --dir website build
 pnpm release:verify
-openspec validate --specs --strict --no-interactive
+pnpm dlx @fission-ai/openspec@1.5.0 validate --specs --strict --no-interactive
 git diff --check
 ```
 
-`release:verify` packs and installs the real tarball in a temporary directory with installation scripts
-disabled. It verifies Navigate-only base delivery, the explicitly selected seven-Skill Zotero Adapter, sixteen top-level commands, one
-Navigate wrapper for each command-capable tool when `delivery` includes commands, selected Zotero runtime metadata, a fresh schema `"2"` workspace, unsupported-workspace zero-write
-behavior, packaged current documentation, and absence of retired public runtime modules.
+Run the converter and audit steps in CI for the same candidate. The hosted
+matrix covers Ubuntu, macOS and Windows on Node.js 22 and 24. Docs checks the
+generated documentation, builds both locales and deploys the checked artifact
+on pushes to `main`. Record separately any opt-in multilingual search smoke
+run, which downloads the pinned model and runtime.
 
-The installed CLI completes both the minimal graph and an academic pipeline with research, writing,
-review, two revision/re-review rounds, Markdown formatting and final integrity. Each command starts a
-fresh process; status and instructions recover work at child, Gate and Decision boundaries. Acceptance
-checks persisted root and child completion, no active runs, an empty frontier and strict workspace
-health. Producer fixtures write external materials through the declared instructions; workflow state
-changes only through public CLI commands. This does not execute research tools or certify the academic
-quality of those fixtures. Tests using `.test-dist` are compiled-CLI tests, not installed-package tests.
+`release:verify` installs the packed tarball with scripts disabled and exercises
+the packaged CLI, including fresh workspace creation, the optional Zotero
+projection, a minimal graph and an academic pipeline with two revision rounds.
+It checks the package contents, docs, asset licenses and runtime closure. The
+compressed and unpacked sizes describe the full offline bundle. Domain and
+Adapter selections affect what is projected into the workspace.
 
-The tarball excludes compiled vendor converters, source audits and evidence-maintenance modules.
-Runtime-referenced ARSU contract modules and reviewed distributable resources remain included.
-Record compressed and unpacked tarball sizes for the release candidate: optional domain and Adapter
-selection controls workspace projection, while installing the CLI downloads the complete offline bundle.
+## Establish main
 
-## 2. Hosted matrix
+For the first release, capture the passing `dev-refactor` commit SHA. Confirm
+it descends from the local `main` and the current remote default branch tip.
+After authorization, fast-forward local `main` to that SHA, create remote
+`main`, and make it the default branch. Keep the existing branch history and
+require the six CI matrix jobs and the Docs build for subsequent pull requests
+into `main`.
 
-Ubuntu, macOS, and Windows must pass on Node 22 and Node 24. Checked-in CI has no publish job; a local
-run cannot replace the hosted matrix.
+In repository settings, choose **GitHub Actions** as the Pages source and
+enable private vulnerability reporting. Run or rerun the `main` push workflows
+if the initial checks ran before Pages was enabled. Verify all six hosted cells
+and the deployed English and Simplified Chinese sites for the candidate SHA.
+Confirm the [private reporting form](https://github.com/leike0813/ResearchSpec/security/advisories/new)
+is reachable. Set up the `npm-production` environment with required reviewers
+and deployments restricted to the `main` branch.
 
-## 3. Manual dogfooding
+## Sign off human acceptance
 
-Use the repository-only [dogfooding playbook](../../playbooks/dogfooding/README.md) in a disposable project and record evidence for standalone resume,
-bounded context export, Gate challenge/reverification/override, and an end-to-end pipeline with at
-least two revision rounds with their own Gate and Decision confirmations. Do not repair a failed journey by editing
-run/node state or generated profile bytes.
+Follow the [dogfooding playbook](https://github.com/leike0813/ResearchSpec/blob/main/playbooks/dogfooding/README.md).
+The init matrix must pass for all registered targets, including shared
+`agents`, in `skills`, `commands` and `both` modes. Run `pnpm dogfood plan`
+and then `pnpm dogfood run --no-ui` for the static matrix. On one selected
+host, complete `natural-18` with two independent human-reviewed passes per scenario.
+Record that host and model versions, session IDs and human corrections,
+successful resumes out of attempts, and evidence and deliverable scores. The
+host verdict applies to the tested host. Record each manual journey in the
+checklist with its evidence.
 
-Record human correction counts, resume attempts and successful resumes alongside evidence-discipline
-and artifact-usability scores. Report the recovery rate as successes/attempts, or not applicable if no
-resume was attempted. The manifest's `operational` maturity means a curated execution procedure is
-present; parity reports establish static content coverage. Neither signs off real-Agent academic
-quality. Keep manual checklist items unsigned until the corresponding evidence is reviewed.
+Have the responsible rights holder or adviser sign off the exact distribution,
+including the ARSU noncommercial terms, the corresponding source for the
+packaged AGPL Zotero Adapter binaries, and the other bundled licenses and
+notices. Record the basis for corresponding-source availability. A check of
+tarball contents establishes which bytes are distributed. Human acceptance and
+permission to distribute require their own evidence.
 
-## 4. Administrative gates
+## Prepare the release artifact
 
-Before publication, establish canonical package metadata and private security reporting, recheck the
-npm name, configure protected provenance-capable publishing, complete required license review, and
-bind hosted CI plus dogfood evidence to the exact release commit.
+Use the GitHub Actions **Release** workflow from `main` with mode `prepare`
+and the exact version in `package.json`. It requires successful CI and Docs
+push runs for that SHA and an unpublished npm version. Download and unzip its
+`npm-release` artifact. It contains the exact tarball that the verifier installed
+and `release.json` with the version, SHA, size and npm integrity. To retain a
+local verification artifact, run `pnpm release:verify --output-dir <new-dir>`.
 
-## 5. Publication boundary
+Verify the downloaded artifact from a checkout of the recorded candidate:
 
-Commit, tag, push, GitHub Release, and npm publication require separate explicit authorization after
-every checklist item is complete. Prefer a fixed patch release and deprecation notice over destructive
-unpublishing, subject to registry policy and incident severity.
+```sh
+node scripts/verify-release-artifact.mjs ./npm-release 0.1.0 <candidate-sha>
+```
+
+The command prints the tarball path after verifying its identity and bytes.
+Treat a changed SHA or tarball as a new candidate and repeat its sign-off.
+
+## Publish 0.1.0
+
+After sign-off and explicit publication authorization, recheck the public npm
+name. A registry 404 indicates no public package at that name. Use the
+maintainer's npm account with two-factor authentication and publish the
+verified tarball from the previous step.
+
+```sh
+npm login --registry https://registry.npmjs.org/
+npm publish ./npm-release/researchspec-0.1.0.tgz --access public --ignore-scripts
+npm view researchspec@0.1.0 dist.integrity --registry https://registry.npmjs.org/
+```
+
+Compare the registry integrity to `release.json`. In a disposable directory,
+install `researchspec@0.1.0` from npm with `--ignore-scripts` and verify the CLI
+version and a minimal workspace smoke test. With authorization, tag the recorded
+SHA as `v0.1.0`, push the tag and create the corresponding GitHub Release from
+the changelog. The first release's identity is recorded through the artifact
+integrity and SHA. GitHub Actions provenance begins with trusted publication.
+
+## Publish later versions with npm Trusted Publishing
+
+In the npm package settings, add a GitHub Actions Trusted Publisher for
+`leike0813/ResearchSpec`, workflow file `release.yml` and environment
+`npm-production`. Allow direct `npm publish` and complete the first trusted
+publication within npm's two-day configuration window. See
+[npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers/).
+
+The publish mode requires `0.1.0` to be present on the registry.
+
+For each subsequent candidate, repeat the checks and human sign-off. Dispatch
+`release.yml` on `main` in mode `publish` and approve the pending deployment
+after matching its SHA and version to the evidence. The publish job verifies the
+downloaded tarball again and uses the GitHub-hosted Node 24 runner's OIDC identity.
+Verify registry integrity, public installation and provenance before creating the
+corresponding tag and GitHub Release. For a faulty release, prefer a fixed patch
+and targeted deprecation when appropriate under npm's policy.

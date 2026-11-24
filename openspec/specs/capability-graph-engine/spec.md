@@ -429,8 +429,8 @@ Status SHALL compare each run's frozen profile identity and hash with the curren
 
 ### Requirement: Capability Input Contracts Are Enforced
 
-Profile admission, root and child run creation, profile/run checking, node instructions and node
-submission SHALL reject missing required input bindings, undeclared roles, disallowed sources and
+Profile admission, root and child run creation, profile/run checking, node instructions and node submission SHALL reject
+missing required input bindings, undeclared roles, disallowed sources and
 unresolvable producer output-role mappings. Diagnostics SHALL identify the affected node and role.
 Only an explicit from_role SHALL rename a node-output role. Static inspection SHALL not read external
 material contents or run validators. Existing frozen graphs SHALL not be repaired automatically.

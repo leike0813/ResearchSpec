@@ -3,6 +3,8 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { entryOwnedBytes } from '../../dist/src/adapters/project-entry.js';
+import { promptGuardOwnedBytes } from '../../dist/src/adapters/prompt-guard.js';
 import { buildHash, campaignDir, matrixCaseDir, readJson, repoRoot, sha, toolCatalog, writeJson } from './lib.mjs';
 
 const [root, campaignId, target, mode] = process.argv.slice(2);
@@ -34,8 +36,10 @@ try {
   check('init', init.schema_version === '2' && init.selected_tools?.length === 1 && init.selected_tools[0] === target && init.delivery === mode, ['init.stdout']);
   const status = call('status', ['status']);
   check('fresh-workspace', status.schema_version === '2' && status.runs?.total === 0 && status.agent_tools?.selected?.length === 1 && status.agent_tools.selected[0] === target && status.agent_tools.delivery === mode, ['status.stdout']);
-  const strict = call('check', ['check', 'all', '--strict']);
-  check('strict-check', strict.diagnostics?.length === 0, ['check.stdout']);
+  const { diagnostics } = call('check', ['check', 'all']);
+  check('strict-check', Array.isArray(diagnostics) && diagnostics.length === Number(!tool.promptGuard)
+    && diagnostics.every(item => item.code === 'prompt_guard_unsupported' && item.severity === 'warning'
+      && item.blocking === false && item.details?.tool_id === target), ['check.stdout']);
   const manifestPath = path.join(project, 'researchspec/tool-installation-manifest.json');
   fs.copyFileSync(manifestPath, path.join(dir, 'manifest.json'));
   const manifest = readJson(manifestPath);
@@ -50,18 +54,26 @@ try {
   check('navigate-command', command.length === Number(wantsCommand), ['manifest.json']);
   check('project-entry', entries.length === Number(tool.entry.mechanism !== 'discovery') && (!entries.length || entries[0].target.path === tool.entry.path), ['manifest.json']);
   check('agent-profiles', JSON.stringify(profiles) === JSON.stringify(tool.agentProfile ? ['researchspec-executor', 'researchspec-reviewer'] : []), ['manifest.json']);
+  const projectInstallations = manifest.installations.filter(item => item.target.scope === 'project');
   const files = [];
-  for (const item of owned) {
+  let installedFilesMatch = true;
+  for (const item of projectInstallations) {
     const relative = item.target.path;
     const source = path.join(project, relative);
-    if (item.target.scope !== 'project' || !fs.existsSync(source) || !fs.lstatSync(source).isFile()) continue;
+    if (!fs.existsSync(source) || !fs.lstatSync(source).isFile()) continue;
     const copy = path.join(dir, 'projected', relative);
+    const bytes = fs.readFileSync(source);
+    const ownedBytes = item.source.kind === 'prompt-guard'
+      ? promptGuardOwnedBytes(bytes, item)
+      : entryOwnedBytes(bytes, item);
+    const ownedHash = ownedBytes ? sha(ownedBytes) : null;
+    installedFilesMatch &&= ownedHash === item.sha256;
     fs.mkdirSync(path.dirname(copy), { recursive: true });
-    fs.copyFileSync(source, copy);
-    files.push({ path: relative, sha256: sha(fs.readFileSync(source)), source: item.source.kind });
+    fs.writeFileSync(copy, bytes);
+    files.push({ path: relative, sha256: sha(bytes), owned_sha256: ownedHash, source: item.source.kind });
   }
   writeJson(path.join(dir, 'files.json'), files);
-  check('installed-files', files.length === owned.filter(item => item.target.scope === 'project').length && files.every(file => owned.some(item => item.target.path === file.path && item.sha256 === file.sha256)), ['manifest.json', 'files.json']);
+  check('installed-files', files.length === projectInstallations.length && installedFilesMatch, ['manifest.json', 'files.json']);
   const listed = call('list-procedures', ['list', 'procedures', '--query', 'verify']);
   const shown = call('show-procedure', ['show', 'procedure:researchspec-verify']);
   const instructions = call('instructions-procedure', ['instructions', 'procedure:researchspec-verify']);

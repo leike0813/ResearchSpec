@@ -2,17 +2,18 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { homedir, tmpdir } from "node:os";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import { pythonProject, uvExecutable, uvPythonArgs } from "./helpers/python.js";
 
 const REPO_ROOT = path.resolve(".");
 const CANDIDATE_SCRIPT = path.join(REPO_ROOT, "audits/finrobot/snapshot-2717499/candidate-authoring/financial-research-relative-valuation/scripts/valuation.py");
 const SUPPORT_LIBRARY = path.join(REPO_ROOT, "src/vendor-converters/finrobot/lib/financial_support.py");
 
-const sharedPythonProject = path.join(homedir(), ".ar");
-const python = existsSync(path.join(sharedPythonProject, "pyproject.toml")) && spawnSync("uv", ["--version"]).status === 0
-  ? { command: "uv", prefix: ["run", `--project=${sharedPythonProject}`, "--locked", "--", "python"] }
+const UV = uvExecutable();
+const python = existsSync(path.join(pythonProject, "pyproject.toml")) && UV !== undefined
+  ? { command: UV, prefix: uvPythonArgs([]) }
   : undefined;
 
 interface MethodMetadata { currency: string | null; as_of: string | null; share_basis: string | null }

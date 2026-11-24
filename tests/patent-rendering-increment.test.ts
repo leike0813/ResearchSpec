@@ -4,9 +4,9 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { uvPythonArgs } from "./helpers/python.js";
 
 const ROOT = process.cwd();
-const AR_PROJECT = path.join(process.env.HOME ?? "", ".ar");
 const RUNTIME = path.join(ROOT, "authoring/patent-disclosure-skill/runtime");
 const SHARED = path.join(RUNTIME, "shared");
 
@@ -33,7 +33,7 @@ interface WorkbookProbe {
 function python(args: string[], options: { cwd?: string; code?: string } = {}): ToolResult {
   const result = spawnSync(
     "uv",
-    ["run", `--project=${AR_PROJECT}`, "--locked", "--no-sync", "--", "python", ...args],
+    uvPythonArgs(args),
     {
       cwd: options.cwd,
       encoding: "utf8",
